@@ -153,3 +153,72 @@ fn contests_compose_without_resetting_seed_or_generated_handoff() {
         placement::compare(&case, &got).unwrap();
     }
 }
+
+#[test]
+fn changed_expected_draw_is_rejected_at_first_divergence() {
+    let mut case = first_case();
+    case.draws[0].value = case.draws[0].value.wrapping_add(1);
+    let error = placement::replay(&case).unwrap_err();
+    assert!(error.contains("draw 0:"), "{error}");
+}
+
+#[test]
+fn changed_input_seed_is_rejected_at_first_divergence() {
+    let mut case = first_case();
+    case.input.seed = case.input.seed.wrapping_add(1);
+    let error = placement::replay(&case).unwrap_err();
+    assert!(error.contains("draw 0:"), "{error}");
+}
+
+#[test]
+fn changed_or_missing_goal_callback_cannot_steer_the_native_algorithm() {
+    let case = corpus()
+        .into_iter()
+        .find(|case| !case.callbacks.is_empty())
+        .unwrap();
+    let actual = placement::goal_placement(&case.input).unwrap();
+    for variant in 0..4 {
+        let mut changed = case.clone();
+        match variant {
+            0 => changed.callbacks.clear(),
+            1 => changed.callbacks[0].coin ^= 1,
+            2 => {
+                changed.callbacks[0].event.actor = changed.callbacks[0].event.actor.wrapping_add(1)
+            }
+            _ => changed.callbacks[0].draws[0].n = 3,
+        }
+        assert!(placement::replay(&changed)
+            .unwrap_err()
+            .contains("goal-effect request"));
+        assert_eq!(placement::goal_placement(&changed.input).unwrap(), actual);
+    }
+}
+
+#[test]
+fn a_wrong_composed_handoff_is_rejected_without_resetting_it_to_the_fixture() {
+    let mut case = first_case();
+    let mut engine = Engine::new(&case.contest.input);
+    engine.quick_contests(case.contest.input.k);
+    case.input.seed = case.input.seed.wrapping_add(1);
+    assert!(engine
+        .place_goals(&case.input)
+        .unwrap_err()
+        .contains("handoff"));
+}
+
+#[test]
+fn no_goal_cases_still_require_complete_original_roster_inputs() {
+    let mut case = first_case();
+    assert!(case.output.goal.is_none());
+    let id = *case
+        .input
+        .rosters
+        .iter()
+        .flatten()
+        .find(|&&id| id != 0)
+        .unwrap();
+    case.input.players.retain(|player| player.id != id);
+    assert!(placement::goal_placement(&case.input)
+        .unwrap_err()
+        .contains("missing player"));
+}
