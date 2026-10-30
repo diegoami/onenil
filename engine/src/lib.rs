@@ -11,6 +11,7 @@ pub mod event_effects;
 pub mod extra_event;
 pub mod goal_effects;
 pub mod placement;
+pub mod post_score;
 pub mod ratings;
 pub mod step_tail;
 
@@ -380,6 +381,30 @@ mod python {
         let out = event_effects::handler(&input).map_err(PyValueError::new_err)?;
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }
+
+    #[pyfunction]
+    fn post_score_strategy(input_json: &str) -> PyResult<String> {
+        let input: post_score::Input =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = post_score::strategy(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
+    fn placement_prefix_post_score(
+        placement_json: &str,
+        prefix_json: &str,
+        input_json: &str,
+    ) -> PyResult<String> {
+        let placement: placement::Input = serde_json::from_str(placement_json)
+            .map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let prefix: step_tail::PrefixInput =
+            serde_json::from_str(prefix_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let input: post_score::Input =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out =
+            post_score::composed(&placement, &prefix, &input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
     #[pyfunction]
     fn placement_prefix_event_effects(
         placement_json: &str,
@@ -453,6 +478,8 @@ mod python {
         module.add_function(wrap_pyfunction!(placement_tail_prefix, module)?)?;
         module.add_function(wrap_pyfunction!(extra_event_decision, module)?)?;
         module.add_function(wrap_pyfunction!(logical_event_effects, module)?)?;
+        module.add_function(wrap_pyfunction!(post_score_strategy, module)?)?;
+        module.add_function(wrap_pyfunction!(placement_prefix_post_score, module)?)?;
         module.add_function(wrap_pyfunction!(placement_prefix_event_effects, module)?)?;
         module.add_function(wrap_pyfunction!(extra_event_helper, module)?)?;
         module.add_function(wrap_pyfunction!(placement_prefix_extra_event, module)?)?;
