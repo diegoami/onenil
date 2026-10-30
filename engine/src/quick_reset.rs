@@ -1,4 +1,4 @@
-//! [confirmed] Named quick52B6 reset closure: archaeology T21/F21.
+//! [confirmed] Named quick52B6 reset closure: archaeology T21/F21 at 3223aa9.
 //! [designed] Rendering/timers,045C buffers,6B2F/78B7 and full DD02 stay external.
 use crate::{goal_effects, placement, post_score, step_tail, Draw, Engine, Input as ContestInput};
 use serde::{Deserialize, Serialize};
