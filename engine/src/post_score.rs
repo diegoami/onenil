@@ -1,4 +1,4 @@
-//! [confirmed] A4F2 post-score strategy closure: archaeology T20/F20.
+//! [confirmed] A4F2 post-score strategy closure: archaeology T20/F20 at 256659e.
 //! [designed] This is not the surrounding 52B6/6B2F/78B7 implementation.
 use crate::{extra_event, placement, step_tail, Draw, Engine, Input as ContestInput};
 use serde::{Deserialize, Serialize};

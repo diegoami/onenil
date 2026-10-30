@@ -277,3 +277,32 @@ Full stream setup, remaining late callees, complete DD02/match/week, physical/sc
 timer and renderer parity remain pending. Routine timing includes bridge parsing, image
 setup, logical effects/selectors/RNG and serialization, with preparation/decoding excluded;
 it makes no whole-match or emulator speed claim.
+
+The post-score strategy slice translates `A4F2` and its baseline, bit-adjustment,
+club-getter and player-flag normalizer closure. It replays 17 original calls, 12 draws,
+32 setters, 566 ordered normalizers and 34 getters. Source cases and the late-call census
+are pinned under `engine/tests/fixtures/post_score/` to archaeology T20/F20 merge
+`256659e351567b9fe8d2f174a05008fb91d15756`. F20 remains proposed.
+
+```sh
+python3 tools/replay_post_score.py --check
+python3 tools/replay_post_score.py --benchmark --out records/T08
+```
+
+`[confirmed]` The ignored argument never selects a path. Signed score subtraction narrows
+to a byte before absolute value; independent unsigned score-byte comparisons choose bit
+direction. Baseline adjustment reads the opposite club getter first and its own club second,
+then compares their wrapping signed difference against the limit byte. Setter `0C23`
+normalizes every nonzero roster entry, including repeated/shared player IDs in order.
+No availability filter applies. Raw club override and first-roster-ID fields supply getter
+inputs; expected getter/normalizer/path answers are assertions only.
+
+`[designed]` The named domain supports clubs 1..176, player IDs 0..3920 and complete
+20-word rosters with unambiguous aliases/lookup cells. Placement/prefix composition guards
+actual shared seed, score, club and roster fields on the quick goal-reset path with a valid
+nonkeeper actor. Keeper preludes diagnose. This composes a strategy footprint; the complete
+`52B6` scene/reset, `6B2F` substitution and `78B7` keyboard effects remain unexecuted.
+The census accounts for all recorded late-gap RNG draws, which does not establish full
+DD02/match/week/setup or physical/scratch/timer/render parity. Routine timing includes bridge
+parsing, image setup, native strategy/flags/RNG and serialization; preparation/decoding are
+excluded, and no full-match or emulator speed comparison is claimed.
