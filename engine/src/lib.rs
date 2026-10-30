@@ -311,6 +311,16 @@ mod python {
     }
 
     #[pyfunction]
+    fn computed_rating_contests(sides_json: &str, request_json: &str) -> PyResult<String> {
+        let sides: [ratings::Input; 2] = serde_json::from_str(sides_json)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?;
+        let request: ratings::ContestRequest = serde_json::from_str(request_json)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?;
+        let result = ratings::computed_contests(&sides, &request).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&result).map_err(|error| PyValueError::new_err(error.to_string()))
+    }
+
+    #[pyfunction]
     fn rate_player(input_json: &str) -> PyResult<String> {
         let input: ratings::PlayerInput = serde_json::from_str(input_json)
             .map_err(|error| PyValueError::new_err(error.to_string()))?;
@@ -343,6 +353,7 @@ mod python {
         module.add_function(wrap_pyfunction!(apply_byte6, module)?)?;
         module.add_function(wrap_pyfunction!(composed_goal_effects, module)?)?;
         module.add_function(wrap_pyfunction!(rate_side, module)?)?;
+        module.add_function(wrap_pyfunction!(computed_rating_contests, module)?)?;
         module.add_function(wrap_pyfunction!(rate_player, module)?)?;
         module.add_function(wrap_pyfunction!(rating_bonus, module)?)?;
         module.add("__version__", env!("CARGO_PKG_VERSION"))?;

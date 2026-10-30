@@ -37,6 +37,20 @@ fn first_original_ratings_replay() {
     ratings::replay(&first_case()).unwrap();
 }
 
+#[test]
+fn changed_expected_ratings_or_helper_outputs_cannot_steer_computation() {
+    let original = first_case();
+    let mut altered = original.clone();
+    altered.output.ratings[usize::from(altered.input.side)] ^= 1;
+    assert!(ratings::replay(&altered).is_err());
+    altered = original.clone();
+    altered.helpers.players[0].output.value ^= 1;
+    assert!(ratings::replay(&altered).is_err());
+    altered = original;
+    altered.input.players[0].p8_4 ^= 1;
+    assert!(ratings::replay(&altered).is_err());
+}
+
 fn corpus() -> (Vec<Case>, Value) {
     let data = fs::read(fixtures().join("index.json")).unwrap();
     let index: Value = serde_json::from_slice(&data).unwrap();

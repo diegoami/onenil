@@ -60,6 +60,21 @@ def load_cases():
         raise ValueError("expected 1,128 original side calls/six weeks/15 traces")
     if sha((FIXTURES.parent / "index.json").read_bytes()) != index["t11_index_sha256"]:
         raise ValueError("T11 index differs from ratings provenance")
+    contest_cases, contest_index, _ = contests()
+    contest_records = {record["week"]: record for record in contest_index["records"]}
+    sources = {}
+
+    def source_matches(case):
+        source = case["source"]
+        original = contest_records[case["week"]]
+        return (source["t11_cases"] == original["cases"]
+                and source["t11_cases_sha256"] == original["cases_sha256"]
+                and source["t11_record"] == original["record"]
+                and source["t11_record_sha256"] == original["record_sha256"]
+                and source["t08_trace"] == original["source_trace"]
+                and source["t08_trace_sha256"] == original["source_trace_sha256"]
+                and HEX64.fullmatch(source["t09_record_sha256"]))
+
     cases, files, weeks = [], set(), set()
     for record in index["records"]:
         name = record["cases"]
@@ -68,8 +83,12 @@ def load_cases():
             raise ValueError("duplicate or incomplete ratings week")
         for n, case in enumerate(measured):
             if (case["schema"] != "ratings-case/1" or case["week"] != record["week"]
-                    or case["call"] != n or case["draw_start"] != case["draw_end"]):
+                    or case["call"] != n or case["draw_start"] != case["draw_end"]
+                    or not source_matches(case)):
                 raise ValueError("ratings call identity/span differs")
+            sources.setdefault(case["week"], case["source"])
+            if not same(sources[case["week"]], case["source"]):
+                raise ValueError("ratings week source provenance changed")
         cases.extend(measured)
         files.add(name)
         weeks.add(record["week"])
@@ -87,13 +106,30 @@ def load_cases():
             or sum(case["kind"] == "player" for case in helpers) != 12614
             or sum(case["kind"] == "bonus" for case in helpers) != 2495):
         raise ValueError("ratings helper/handoff coverage differs")
-    original = {(case["week"], case["call"]): case for case in contests()[0]}
+    by_helper = {}
+    for helper in helpers:
+        key = helper["week"], helper["kind"], helper["call"]
+        if (helper["schema"] != "ratings-helper-case/1" or key in by_helper
+                or not same(helper["source"], sources[helper["week"]])):
+            raise ValueError("ratings helper identity/provenance differs")
+        by_helper[key] = helper
+    for case in cases:
+        span = case["helper_indices"]
+        for kind, plural in (("player", "players"), ("bonus", "bonus")):
+            measured = [by_helper[(case["week"], kind, n)]
+                        for n in range(span[kind + "_start"], span[kind + "_end"])]
+            observed = [{key: helper[key] for key in ("input", "output")} for helper in measured]
+            expected = case["helpers"][plural]
+            if not same(observed, [expected] if kind == "bonus" else expected):
+                raise ValueError("side helper occurrences differ from standalone helpers")
+    original = {(case["week"], case["call"]): case for case in contest_cases}
     seen = set()
     side_map = {(case["week"], case["call"]): case for case in cases}
     for handoff in handoffs:
         key = handoff["week"], handoff["call"]
-        if (key in seen or key not in original
+        if (handoff["schema"] != "ratings-contest-case/1" or key in seen or key not in original
                 or not same(handoff["contest"], original[key])
+                or not same(handoff["source"], sources[handoff["week"]])
                 or len(handoff["sides"]) != 2
                 or any((key[0], n) not in side_map for n in handoff["sides"])):
             raise ValueError("computed-rating handoff differs from literal T11 case")
