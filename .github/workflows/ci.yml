@@ -23,4 +23,5 @@ jobs:
           maturin develop --manifest-path engine/Cargo.toml --features python --release --locked
           python3 tools/replay_contests.py --check
           python3 tools/replay_placement.py --check
+          python3 tools/replay_goal_effects.py --check
       - run: python3 tools/check_originals.py

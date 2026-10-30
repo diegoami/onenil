@@ -88,3 +88,42 @@ The 5083 effect requests contain computed event arguments, its raw random draw a
 and display state are not updated by this projection. The request's coin has already advanced the
 shared seed; applying the remaining external effects must not draw that coin again. Expected callbacks are compared after the
 native computation and are never supplied to the input-only Rust/Python API.
+
+The logical goal-effect slice applies the remaining `5083` updates using the goal request
+already emitted by placement. Its coin draw has already advanced the shared seed. The handler
+must reuse that coin, and the composed replay verifies that it makes no random request and does
+not reset the seed or actor handoff to expected values.
+
+`[confirmed]` The static contract includes shared-player counters/raw byte6 updates, signed
+clamping and cache reloads, event totals and side counters, scorer-log caps/minute encoding, and
+numeric commentary queue bookkeeping. Those caches and counters remain logical state even when
+the original updates them through functions that also draw text. Formatted commentary, render
+buffers, pixels, timer and scratch effects are external. Complete original state is supplied by
+archaeology T14/F14; its source commit and copied index are pinned under
+`engine/tests/fixtures/goal_effects/provenance.json`.
+
+After building the release bridge, check or measure this logical slice:
+
+```sh
+python3 tools/replay_goal_effects.py --check
+python3 tools/replay_goal_effects.py --benchmark --out records/T03
+```
+
+`[designed]` The timing receipt identifies the actual loaded release binary and measures the
+bridge, memory-image setup, native logical updates and output serialization. Input preparation
+and output decoding are excluded. It is a logical-handler baseline, not full-DD02/match/week or
+renderer parity and not an emulator speed comparison. T01/T02 evidence remains immutable.
+
+`[designed]` The effect request's coin remains consumed. The standalone logical API receives a
+before-state plus that request; a composed API executes D983 and placement first, then applies
+the same computed request without reseeding the image. Player records share canonical memory
+by ID, so scorer/keeper aliases observe sequential mutations. Only named logical fields are
+loaded; unrelated bytes are preserved. Typed scene/player/club bounds identify this projection's
+supported input domain, and invalid or incomplete inputs return diagnostics.
+
+The two table rows follow the original helper selectors, not a uniform scoring-side convention.
+Event-total slot `s=1..20` is word `D146+40*side+2*s`; cache slot is byte
+`D197+20*side+s`. Numeric queue rows preserve the entry-selected indices while the head can
+advance or wrap. A duplicate row suppresses queue/count acceptance and the opaque paired-word
+copy, while the weighted event total still changes. The scorer log uses a separate side selector
+and marks the minute with byte addition, preserving the original wrap behavior.

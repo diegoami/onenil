@@ -7,6 +7,7 @@
 
 use serde::{Deserialize, Serialize};
 
+pub mod goal_effects;
 pub mod placement;
 
 const SEED: u16 = 0xA51C;
@@ -256,11 +257,66 @@ mod python {
         })
     }
 
+    #[pyfunction]
+    fn apply_goal_effects(state_json: &str, request_json: &str) -> PyResult<String> {
+        let state: goal_effects::State =
+            serde_json::from_str(state_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let request: placement::GoalEffectRequest =
+            serde_json::from_str(request_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let result =
+            goal_effects::apply_goal_effects(&state, &request).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&result).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+
+    #[pyfunction]
+    fn composed_goal_effects(
+        contest_json: &str,
+        placement_json: &str,
+        state_json: &str,
+    ) -> PyResult<String> {
+        let contest: Input =
+            serde_json::from_str(contest_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let placement_input: placement::Input = serde_json::from_str(placement_json)
+            .map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let state: goal_effects::State =
+            serde_json::from_str(state_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let mut engine = Engine::new(&contest);
+        engine.quick_contests(contest.k);
+        let placement_out = engine
+            .place_goals(&placement_input)
+            .map_err(PyValueError::new_err)?;
+        let request = placement_out
+            .callbacks
+            .first()
+            .ok_or_else(|| PyValueError::new_err("placement emitted no goal"))?;
+        let seed_before = engine.goal_effect_seed();
+        let effects = engine
+            .apply_goal_effects(&state, request)
+            .map_err(PyValueError::new_err)?;
+        let seed_after = engine.goal_effect_seed();
+        serde_json::to_string(
+            &serde_json::json!({"placement": placement_out, "effects": effects,
+            "seed_before": seed_before, "seed_after": seed_after}),
+        )
+        .map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+
+    #[pyfunction]
+    fn apply_byte6(input_json: &str) -> PyResult<String> {
+        let input: goal_effects::Byte6Input =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        serde_json::to_string(&goal_effects::byte6(&input))
+            .map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;
+        module.add_function(wrap_pyfunction!(apply_goal_effects, module)?)?;
+        module.add_function(wrap_pyfunction!(apply_byte6, module)?)?;
+        module.add_function(wrap_pyfunction!(composed_goal_effects, module)?)?;
         module.add("__version__", env!("CARGO_PKG_VERSION"))?;
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }
