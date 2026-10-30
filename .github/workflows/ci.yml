@@ -25,4 +25,5 @@ jobs:
           python3 tools/replay_placement.py --check
           python3 tools/replay_goal_effects.py --check
           python3 tools/replay_ratings.py --check
+          python3 tools/replay_step_tail.py --check
       - run: python3 tools/check_originals.py

@@ -85,8 +85,18 @@ def load_cases():
             seen.add(key)
         cases.extend(rows); files.add(name); weeks.add(record['week'])
     coverage = index['coverage']
+    old_coverage = {r['trace']: r for r in old_index['coverage']}
+    old_weeks = {r['cases']: r['week'] for r in old_index['records']}
+    new_weeks = {r['cases']: r['week'] for r in index['records']}
+    for row in coverage:
+        prior = old_coverage.get(row['trace'])
+        if (prior is None or row['t04_record'] != prior['t04_record']
+                or row['trace_sha256'] != prior['trace_sha256']
+                or new_weeks[row['cases']] != old_weeks[prior['cases']]):
+            raise ValueError('tail T08 reference differs from retained placement coverage')
     if (seen != set(old_map) or len(files) != 6 or len(coverage) != 15
             or len({r['trace'] for r in coverage}) != 15
+            or len({r['t04_record'] for r in coverage}) != 15
             or {r['cases'] for r in coverage} != files
             or any(not HEX64.fullmatch(r['trace_sha256']) for r in coverage)
             or sum(len(c['prefix']['visits']) for c in cases) != 12276

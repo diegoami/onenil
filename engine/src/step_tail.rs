@@ -4,10 +4,11 @@
 //! The prefix and clock remain separate across that unresolved boundary.
 
 use crate::{
-    goal_effects::{Commentary, Queue},
-    placement,
+    goal_effects::{Commentary, Queue, QueueRow},
+    placement, Engine, Input as ContestInput,
 };
 use serde::{Deserialize, Serialize};
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub struct PlacementHandoff {
@@ -160,17 +161,442 @@ pub struct ComposedOutcome {
     pub prefix: PrefixOutcome,
 }
 
-pub fn prefix(_input: &PrefixInput) -> Result<PrefixOutcome, String> {
-    todo!("T05 native deterministic tail prefix")
+// [designed] Named logical pools; actual far segment metadata is returned for
+// assertions, not interpreted as arbitrary physical aliasing with the DS image.
+const HISTORY: usize = 0x10000;
+const P15: usize = 0x20000;
+const CONFIG: usize = 0x49000;
+const SEED: u16 = 0xA51C;
+const GOALS: usize = 0xD086;
+const ACTOR: usize = 0xD09F;
+
+fn blank(seed: u16, generated: [u8; 2]) -> Engine {
+    Engine::new(&ContestInput {
+        k: 0,
+        seed,
+        ratings: [0; 8],
+        goals: generated,
+    })
 }
-pub fn advance_clock(_input: &ClockState) -> Result<ClockOutcome, String> {
-    todo!("T05 native logical caller clock")
+fn player_address(id: u16) -> usize {
+    P15 + usize::from(id) * 15
 }
+fn scene_address(index: u8) -> usize {
+    0xCCEF + usize::from(index) * 25
+}
+fn read_word(engine: &Engine, address: usize) -> u16 {
+    u16::from_le_bytes([engine.image[address], engine.image[address + 1]])
+}
+fn put_word(engine: &mut Engine, address: usize, value: u16) {
+    engine.image[address..address + 2].copy_from_slice(&value.to_le_bytes());
+}
+fn queue_address(index: u16) -> usize {
+    0xA52A + usize::from(index) * 6
+}
+fn next_row(index: u16) -> u16 {
+    if index == 1700 {
+        1
+    } else {
+        index + 1
+    }
+}
+fn queue_row(engine: &Engine, index: u16) -> QueueRow {
+    let a = queue_address(index);
+    QueueRow {
+        index,
+        code: engine.image[a],
+        first_player: read_word(engine, a + 1),
+        second_player: read_word(engine, a + 3),
+        side: engine.image[a + 5],
+    }
+}
+fn put_row(engine: &mut Engine, value: &QueueRow) {
+    let a = queue_address(value.index);
+    engine.image[a] = value.code;
+    put_word(engine, a + 1, value.first_player);
+    put_word(engine, a + 3, value.second_player);
+    engine.image[a + 5] = value.side;
+}
+fn same_entry(a: &QueueRow, b: &QueueRow) -> bool {
+    a.code == b.code
+        && a.first_player == b.first_player
+        && a.second_player == b.second_player
+        && a.side == b.side
+}
+fn validate_prefix(input: &PrefixInput) -> Result<(), String> {
+    if input.mode == 0
+        || input.clubs.iter().any(|id| !(1..=176).contains(id))
+        || input.placement.goal_flag > 1
+        || input.placement.generated.iter().any(|&n| n > 11)
+    {
+        return Err("unsupported quick mode, clubs or placement frame fields".into());
+    }
+    if input.scenes.len() != 22
+        || input
+            .scenes
+            .iter()
+            .enumerate()
+            .any(|(i, s)| usize::from(s.index) != i + 1 || s.player > 3920)
+    {
+        return Err("complete ordered scene inputs required".into());
+    }
+    let mut ids = BTreeSet::new();
+    for player in &input.players {
+        if player.id > 3920 || !ids.insert(player.id) {
+            return Err("unsupported or duplicate shared player record".into());
+        }
+    }
+    if ids != input.scenes.iter().map(|s| s.player).collect() {
+        return Err("missing or unreferenced shared player definition".into());
+    }
+    Ok(())
+}
+fn validate_clock(input: &ClockState) -> Result<(), String> {
+    let q = &input.commentary.queue;
+    if q.head > 1700 || q.rows.len() != 3 {
+        return Err("unsupported numeric queue head/context".into());
+    }
+    let expected = [q.head, next_row(q.head), next_row(next_row(q.head))];
+    if q.rows
+        .iter()
+        .zip(expected)
+        .any(|(row, index)| row.index != index)
+    {
+        return Err("numeric queue context must use entry-selected head and next two rows".into());
+    }
+    Ok(())
+}
+fn pending_calls(goal: u8, extra: u8) -> Vec<PendingCall> {
+    let mut calls = vec![];
+    if goal == 0 {
+        if extra != 0 {
+            calls.push(PendingCall {
+                routine: "0AB9:DBC6".into(),
+                args: vec![],
+            });
+        }
+        calls.push(PendingCall {
+            routine: "0AB9:6B2F".into(),
+            args: vec![],
+        });
+    } else {
+        calls.push(PendingCall {
+            routine: "1998:045C".into(),
+            args: vec![1, 0],
+        });
+        calls.push(PendingCall {
+            routine: "0AB9:52B6".into(),
+            args: vec![],
+        });
+    }
+    calls.push(PendingCall {
+        routine: "0AB9:78B7".into(),
+        args: vec![],
+    });
+    calls
+}
+
+pub fn prefix(input: &PrefixInput) -> Result<PrefixOutcome, String> {
+    let mut engine = blank(input.placement.seed, input.placement.generated);
+    engine.image[ACTOR] = input.placement.actor;
+    engine.finish_prefix(input, &input.placement)
+}
+
 pub fn composed_prefix(
-    _placement: &placement::Input,
-    _input: &PrefixInput,
+    placement_input: &placement::Input,
+    input: &PrefixInput,
 ) -> Result<ComposedOutcome, String> {
-    todo!("T05 actual placement-to-prefix handoff")
+    validate_prefix(input)?;
+    // [designed] Primitive fields read in both stages must name one shared
+    // record; a second expected snapshot cannot silently replace the first.
+    let players: BTreeMap<_, _> = placement_input.players.iter().map(|p| (p.id, p)).collect();
+    for player in &input.players {
+        if player.id == 0 {
+            continue;
+        }
+        let original = players
+            .get(&player.id)
+            .ok_or("prefix player missing from placement input")?;
+        if original.p15_sbyte8 as u8 != player.byte8 || original.p15_byte11 != player.byte11 {
+            return Err("prefix player raw fields conflict with placement input".into());
+        }
+    }
+    let mut engine = blank(placement_input.seed, placement_input.generated);
+    let placement = engine.place_goals(placement_input)?;
+    let actual = PlacementHandoff::from(&placement.output);
+    let prefix = engine.finish_prefix(input, &actual)?;
+    Ok(ComposedOutcome { placement, prefix })
+}
+
+impl Engine {
+    /// Finish only DF35..DFDB using the actual placement frame handoff.
+    /// Pending late calls are returned without executing their logical effects.
+    pub fn finish_prefix(
+        &mut self,
+        input: &PrefixInput,
+        actual: &PlacementHandoff,
+    ) -> Result<PrefixOutcome, String> {
+        validate_prefix(input)?;
+        if &input.placement != actual
+            || self.word(SEED) != actual.seed
+            || [self.image[GOALS], self.image[GOALS + 1]] != actual.generated
+            || self.image[ACTOR] != actual.actor
+        {
+            return Err("actual placement seed/generated/actor/frame handoff differs".into());
+        }
+        // [designed] Load only named raw fields; seed, actor and generated bytes
+        // above remain the actual predecessor's image, never reset to a fixture.
+        self.image[0xD074] = input.mode;
+        self.image[0xD6DD] = input.d6dd;
+        self.put_word(0xD0AE, input.remaining);
+        self.put_word(0x0D32, input.replacement_word);
+        self.put_word(0xD6E6, input.clubs[0]);
+        self.put_word(0xD6E4, input.clubs[1]);
+        self.put_word(0xD7CE, input.history.base_offset);
+        self.put_word(0xD7D0, 0x1000);
+        self.put_word(0xD7D2, 0);
+        self.put_word(0xD7D4, 0x4900);
+        self.image[CONFIG] = input.history.selector;
+        for s in &input.scenes {
+            let a = scene_address(s.index);
+            put_word(self, a, s.word0);
+            put_word(self, a + 14, s.player);
+        }
+        for p in &input.players {
+            let a = player_address(p.id);
+            self.image[a + 8] = p.byte8;
+            self.image[a + 11] = p.byte11;
+        }
+        let history_offset = self
+            .word(0xD7CE)
+            .wrapping_add(self.word(0xD6E6).wrapping_mul(0x3A))
+            .wrapping_add(u16::from(self.image[CONFIG]))
+            .wrapping_sub(0x3B);
+        let history_address = HISTORY + usize::from(history_offset);
+        self.image[history_address] = input.history.value;
+        // [confirmed] DF35..DF40 restore cumulative scores in opposite orders.
+        self.image[GOALS..GOALS + 2].copy_from_slice(&actual.scores);
+        self.image[0xD0C4] = actual.scores[1];
+        self.image[0xD0C5] = actual.scores[0];
+        // 232A:01C5 is ADD, not OR. Only AL is stored, even for large scores.
+        self.image[history_address] =
+            u16::from(actual.scores[0]).wrapping_add(u16::from(actual.scores[1]) << 4) as u8;
+        let mut visits = vec![];
+        for index in 1..=22 {
+            let a = scene_address(index);
+            let id = read_word(self, a + 14);
+            let p = player_address(id);
+            let before = VisitState {
+                word0: read_word(self, a),
+                byte8: self.image[p + 8],
+                byte11: self.image[p + 11],
+            };
+            let unavailable = placement::unavailable(&placement::Player {
+                id,
+                p15_sbyte8: self.image[p + 8] as i8,
+                p15_byte11: self.image[p + 11],
+            });
+            if unavailable != 0 {
+                put_word(self, a, self.word(0x0D32));
+            } else if self.word(0xD0AE) % 5 == 0 && (self.image[p + 8] as i8) > 1 {
+                self.image[p + 8] = self.image[p + 8].wrapping_sub(1);
+            }
+            let after = VisitState {
+                word0: read_word(self, a),
+                byte8: self.image[p + 8],
+                byte11: self.image[p + 11],
+            };
+            visits.push(Visit {
+                index,
+                player: id,
+                unavailable,
+                before,
+                after,
+            });
+        }
+        let scenes = input
+            .scenes
+            .iter()
+            .map(|s| {
+                let a = scene_address(s.index);
+                Scene {
+                    index: s.index,
+                    player: read_word(self, a + 14),
+                    word0: read_word(self, a),
+                }
+            })
+            .collect();
+        let players = input
+            .players
+            .iter()
+            .map(|p| {
+                let a = player_address(p.id);
+                Player {
+                    id: p.id,
+                    byte8: self.image[a + 8],
+                    byte11: self.image[a + 11],
+                }
+            })
+            .collect();
+        Ok(PrefixOutcome {
+            output: PrefixOutput {
+                seed: self.word(SEED),
+                actor: self.image[ACTOR],
+                goal_bytes: [self.image[GOALS], self.image[GOALS + 1]],
+                score_bytes: [self.image[0xD0C4], self.image[0xD0C5]],
+                history_offset,
+                history_segment: input.history.base_segment,
+                history_byte: self.image[history_address],
+                scenes,
+                players,
+            },
+            visits,
+            pending_calls: pending_calls(actual.goal_flag, input.d6dd),
+        })
+    }
+}
+
+fn load_clock(engine: &mut Engine, input: &ClockState) {
+    let c = &input.clock;
+    for (a, v) in [
+        (0xD0AE, c.remaining),
+        (0xD0B0, c.delay),
+        (0xD0B2, c.elapsed),
+        (0xD0B4, c.added),
+        (0xCF51, input.cf51),
+        (0xD16E, input.commentary.event_word),
+    ] {
+        engine.put_word(a, v);
+    }
+    for (a, v) in [
+        (0xD0AC, c.kind),
+        (0xD0B8, c.active),
+        (0xD0B9, c.zero),
+        (0x0D28, input.reload),
+    ] {
+        engine.image[a] = v;
+    }
+    for i in 0..2 {
+        engine.image[0x097A + 63 + i] = input.commentary.weights[i];
+        engine.put_word(0xD1C0 + 2 * i as u16, input.commentary.counts[i]);
+        engine.put_word(0xD08A + 2 * i as u16, input.commentary.source_pair[i]);
+        engine.put_word(0xD09A + 2 * i as u16, input.commentary.target_pair[i]);
+    }
+    engine.put_word(0x0380, input.commentary.queue.head);
+    for r in &input.commentary.queue.rows {
+        put_row(engine, r);
+    }
+}
+fn clock_snapshot(engine: &Engine, context: &ClockState) -> ClockState {
+    ClockState {
+        clock: ClockFields {
+            kind: engine.image[0xD0AC],
+            remaining: engine.word(0xD0AE),
+            delay: engine.word(0xD0B0),
+            elapsed: engine.word(0xD0B2),
+            added: engine.word(0xD0B4),
+            active: engine.image[0xD0B8],
+            zero: engine.image[0xD0B9],
+        },
+        reload: engine.image[0x0D28],
+        cf51: engine.word(0xCF51),
+        seed: engine.word(SEED),
+        commentary: ClockCommentary {
+            event_word: engine.word(0xD16E),
+            counts: [engine.word(0xD1C0), engine.word(0xD1C2)],
+            weights: [engine.image[0x097A + 63], engine.image[0x097A + 64]],
+            queue: Queue {
+                head: engine.word(0x0380),
+                rows: context
+                    .commentary
+                    .queue
+                    .rows
+                    .iter()
+                    .map(|r| queue_row(engine, r.index))
+                    .collect(),
+            },
+            source_pair: [engine.word(0xD08A), engine.word(0xD08C)],
+            target_pair: [engine.word(0xD09A), engine.word(0xD09C)],
+        },
+    }
+}
+fn clock_commentary(engine: &mut Engine, code: u8) -> Commentary {
+    // [confirmed] Actor zero with side1 writes D146+40*1+2*0 = D16E,
+    // aliasing the goal projection's side0 slot20, not side1 slot1.
+    let weight = engine.image[0x097A + usize::from(code)] as i8;
+    engine.put_word(
+        0xD16E,
+        engine.word(0xD16E).wrapping_add(i16::from(weight) as u16),
+    );
+    let head = engine.word(0x0380);
+    let mut candidate = QueueRow {
+        index: head,
+        code,
+        first_player: 0,
+        second_player: 0,
+        side: 1,
+    };
+    let accepted = head == 0 || !same_entry(&queue_row(engine, head), &candidate);
+    if accepted {
+        engine.put_word(0xD1C2, engine.word(0xD1C2).wrapping_add(1));
+        let next = next_row(head);
+        engine.put_word(0x0380, next);
+        candidate.index = next;
+        put_row(engine, &candidate);
+        engine.image[queue_address(next_row(next))] = 255;
+        engine.put_word(0xD09A, engine.word(0xD08A));
+        engine.put_word(0xD09C, engine.word(0xD08C));
+    }
+    Commentary {
+        code,
+        actor_slot: 0,
+        secondary_slot: 0,
+        event_side: 1,
+        accepted: u8::from(accepted),
+    }
+}
+pub fn advance_clock(input: &ClockState) -> Result<ClockOutcome, String> {
+    validate_clock(input)?;
+    let mut engine = blank(input.seed, [0; 2]);
+    load_clock(&mut engine, input);
+    let mut result = 0;
+    let mut event = None;
+    if engine.image[0xD0B8] != 0 {
+        let delay = engine.word(0xD0B0);
+        if delay != 0 {
+            engine.put_word(0xD0B0, delay.wrapping_sub(1));
+        } else {
+            let zero = engine.word(0xD0AE).wrapping_add(engine.word(0xD0B4)) == 0;
+            engine.image[0xD0B9] = u8::from(zero);
+            if !zero {
+                let remaining = engine.word(0xD0AE);
+                if remaining != 0 {
+                    engine.put_word(0xD0AE, remaining.wrapping_sub(1));
+                } else {
+                    engine.put_word(0xD0B4, engine.word(0xD0B4).wrapping_sub(1));
+                }
+                let elapsed = engine.word(0xD0B2);
+                if elapsed < 128 {
+                    engine.put_word(0xD0B2, elapsed.wrapping_add(1));
+                }
+            }
+            // 00D6's formatted output stays external; the logical reload follows it.
+            engine.put_word(0xD0B0, u16::from(engine.image[0x0D28]));
+            // CBW+CWD(kind) is compared to the zero-extended remaining word.
+            let boundary = i32::from(engine.word(0xD0AE)) == i32::from(engine.image[0xD0AC] as i8);
+            if zero || boundary {
+                event = Some(clock_commentary(&mut engine, if zero { 63 } else { 64 }));
+                // This write occurs after numeric commentary even on dedup rejection.
+                engine.put_word(0xCF51, 0);
+                result = 1;
+            }
+        }
+    }
+    Ok(ClockOutcome {
+        output: clock_snapshot(&engine, input),
+        result,
+        event,
+    })
 }
 pub fn replay_prefix(case: &Case) -> Result<(), String> {
     let got = prefix(&case.prefix.input)?;
@@ -545,6 +971,57 @@ mod tests {
             assert_eq!(got.output.commentary, i.commentary);
         }
     }
+    #[test]
+    fn actor_zero_weights_touch_exact_ds_alias_and_preserve_adjacent_words() {
+        let i = clock_input();
+        let mut engine = blank(i.seed, [0; 2]);
+        load_clock(&mut engine, &i);
+        engine.put_word(0xD16C, 0x1234);
+        engine.put_word(0xD170, 0x5678);
+        let event = clock_commentary(&mut engine, 64);
+        assert_eq!(event.actor_slot, 0);
+        assert_eq!(engine.word(0xD16E), 1);
+        assert_eq!(engine.word(0xD16C), 0x1234);
+        assert_eq!(engine.word(0xD170), 0x5678);
+        assert_eq!(engine.word(SEED), i.seed);
+    }
+
+    #[test]
+    fn actual_prefix_image_guards_reject_before_loading_or_resetting_fields() {
+        let i = prefix_input();
+        for corrupt in 0..3 {
+            let mut engine = blank(i.placement.seed, i.placement.generated);
+            engine.image[ACTOR] = i.placement.actor;
+            match corrupt {
+                0 => engine.put_word(SEED, i.placement.seed ^ 1),
+                1 => engine.image[ACTOR] ^= 1,
+                _ => engine.image[GOALS] ^= 1,
+            }
+            let before = engine.image.clone();
+            assert!(engine.finish_prefix(&i, &i.placement).is_err());
+            assert_eq!(engine.image, before);
+        }
+    }
+
+    #[test]
+    fn prefix_preserves_prior_goal_statistics_and_other_history_cells() {
+        let i = prefix_input();
+        let mut engine = blank(i.placement.seed, i.placement.generated);
+        engine.image[ACTOR] = i.placement.actor;
+        let a = player_address(7);
+        put_word(&mut engine, a + 2, 0x1234);
+        engine.image[a + 5] = 23;
+        engine.image[a + 6] = 31;
+        engine.image[HISTORY + 1] = 0xA5;
+        engine.image[HISTORY + 65535] = 0x5A;
+        engine.finish_prefix(&i, &i.placement).unwrap();
+        assert_eq!(read_word(&engine, a + 2), 0x1234);
+        assert_eq!(engine.image[a + 5], 23);
+        assert_eq!(engine.image[a + 6], 31);
+        assert_eq!(engine.image[HISTORY + 1], 0xA5);
+        assert_eq!(engine.image[HISTORY + 65535], 0x5A);
+    }
+
     #[test]
     fn malformed_clock_queue_context_rejects() {
         let mut i = clock_input();
