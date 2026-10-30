@@ -10,3 +10,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T06](T06.md): Native DBC6 decision and direct helpers (#12).
 - [T07](T07.md): Native logical 69B8 quick-event effects (#14).
 - [T08](T08.md): Native post-score strategy and flag normalization (#16).
+- [T09](T09.md): Native complete named quick-reset closure (#18).
