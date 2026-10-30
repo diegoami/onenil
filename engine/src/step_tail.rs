@@ -957,14 +957,14 @@ mod tests {
     }
     #[test]
     fn added_clock_decrements_and_elapsed_saturates_without_event() {
-        for elapsed in [128, 65535] {
+        for (elapsed, expected_elapsed) in [(127, 128), (128, 128), (65535, 65535)] {
             let mut i = clock_input();
             i.clock.remaining = 0;
             i.clock.added = 3;
             i.clock.elapsed = elapsed;
             let got = advance_clock(&i).unwrap();
             assert_eq!(got.output.clock.added, 2);
-            assert_eq!(got.output.clock.elapsed, elapsed);
+            assert_eq!(got.output.clock.elapsed, expected_elapsed);
             assert_eq!(got.output.clock.zero, 0);
             assert_eq!(got.output.clock.delay, 7);
             assert_eq!(got.result, 0);

@@ -155,4 +155,10 @@ fn composed_prefix_rejects_wrong_observed_handoffs_instead_of_resetting_them() {
         }
         assert!(step_tail::composed_prefix(&case.placement.input, &input).is_err());
     }
+    let mut input = case.prefix.input.clone();
+    input.players[0].byte8 ^= 1;
+    assert!(step_tail::composed_prefix(&case.placement.input, &input).is_err());
+    input = case.prefix.input.clone();
+    input.players[0].byte11 ^= 1;
+    assert!(step_tail::composed_prefix(&case.placement.input, &input).is_err());
 }

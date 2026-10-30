@@ -170,7 +170,8 @@ computes the packed history byte and visits all 22 physical scene records in ord
 player IDs use one record, so repeated scene references observe sequential signed-byte updates.
 The separate `7B7B` caller-clock API includes its numeric termination commentary and `CF51`
 clear. Public fixtures and their archaeology commit/index pin are in
-`engine/tests/fixtures/step_tail/`; T16/F16 remains proposed.
+`engine/tests/fixtures/step_tail/`, pinned to archaeology merge `f6841e011485aa84040d48b1e028ebe330c9406c`.
+T16/F16 remains proposed.
 
 After cloning this repository and building the release bridge with the commands above:
 
