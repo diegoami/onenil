@@ -98,6 +98,8 @@ def git(*args):
 
 
 def benchmark(cases, draws, provenance, repetitions, out):
+    from onenil_engine import onenil_engine as backend
+    from importlib.metadata import version
     if git("status", "--porcelain", "--", "engine", "tools/replay_contests.py", "pyproject.toml"):
         raise ValueError("commit engine, fixtures and replay tooling before measuring")
     started = datetime.now(timezone.utc).isoformat()
@@ -114,6 +116,10 @@ def benchmark(cases, draws, provenance, repetitions, out):
            "code_commit": git("rev-parse", "HEAD"), "started": started,
            "ended": datetime.now(timezone.utc).isoformat(), "platform": platform.platform(),
            "python": platform.python_version(),
+           "build": {"crate_version": backend.__version__,
+                     "debug_assertions": backend.__debug_assertions__,
+                     "maturin": version("maturin"),
+                     "extension_sha256": sha(Path(backend.__file__).read_bytes())},
            "rustc": subprocess.check_output(["rustc", "--version"], text=True).strip(),
            "cargo_lock_sha256": sha((ROOT / "engine/Cargo.lock").read_bytes()),
            "archaeology": provenance, "routine": "0AB9:D983", "distinct_cases": len(cases),

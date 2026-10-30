@@ -10,6 +10,9 @@ The first slice is `0AB9:D983`, the quick result's three-contest routine. Its sc
 ratings, random draw sequence, final seed and goal bytes; it is not a complete match/week or a
 timer/CPU-register emulator. Evidence is pinned under `engine/tests/fixtures/`: decoded original
 routine cases from onenil-archaeology T11, linked to the 15 T08 traces (six distinct weeks).
+The [F11 contract and source fixtures](https://github.com/diegoami/onenil-archaeology/tree/78bdebc10d0051fa52b080a72312d894bfab5560/traces/T11)
+are pinned to archaeology commit `78bdebc10d0051fa52b080a72312d894bfab5560`; the local provenance
+file also pins the copied index's SHA-256.
 
 The engine uses a DS memory image with explicit little-endian word access and byte wrapping.
 `[confirmed]` D983's chance loop is unsigned, its three draw comparisons are signed 16-bit and ties
@@ -43,3 +46,5 @@ python3 tools/replay_contests.py --benchmark --out records/T01
 `[designed]` Each benchmark writes a new immutable receipt, including code/platform, fixture pin,
 repetitions and elapsed time. It includes DS image setup, Python/Rust calls, trace collection and
 output serialization. It has no speed threshold and says nothing about full-match or week speed.
+The receipt identifies the loaded extension by SHA-256 and records its compiled debug-assertion
+setting; the binary itself is never committed.

@@ -1,7 +1,7 @@
 //! First One-Nil 96 routine slice, not a whole match or emulator.
 //!
 //! [confirmed] RNG and D983 semantics: onenil-archaeology F02/F07/F09,
-//! commit 7859d7d; T11/F11 provides the independently recorded routine cases.
+//! commit 7859d7d; T11/F11 at 78bdebc provides the recorded routine cases.
 //! [designed] This image represents only the DS state touched by this slice;
 //! scratch registers, stack locals and asynchronous timer writes are excluded.
 
@@ -239,6 +239,8 @@ mod python {
 
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
-        module.add_function(wrap_pyfunction!(quick_contests, module)?)
+        module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
+        module.add("__version__", env!("CARGO_PKG_VERSION"))?;
+        module.add("__debug_assertions__", cfg!(debug_assertions))
     }
 }
