@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 
 pub mod goal_effects;
 pub mod placement;
+pub mod ratings;
 
 const SEED: u16 = 0xA51C;
 const RATINGS: u16 = 0xD674;
@@ -302,6 +303,40 @@ mod python {
     }
 
     #[pyfunction]
+    fn rate_side(input_json: &str) -> PyResult<String> {
+        let input: ratings::Input = serde_json::from_str(input_json)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?;
+        let result = ratings::rate_side(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&result).map_err(|error| PyValueError::new_err(error.to_string()))
+    }
+
+    #[pyfunction]
+    fn computed_rating_contests(sides_json: &str, request_json: &str) -> PyResult<String> {
+        let sides: [ratings::Input; 2] = serde_json::from_str(sides_json)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?;
+        let request: ratings::ContestRequest = serde_json::from_str(request_json)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?;
+        let result = ratings::computed_contests(&sides, &request).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&result).map_err(|error| PyValueError::new_err(error.to_string()))
+    }
+
+    #[pyfunction]
+    fn rate_player(input_json: &str) -> PyResult<String> {
+        let input: ratings::PlayerInput = serde_json::from_str(input_json)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?;
+        let result = ratings::player_value(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&result).map_err(|error| PyValueError::new_err(error.to_string()))
+    }
+
+    #[pyfunction]
+    fn rating_bonus(input_json: &str) -> PyResult<String> {
+        let input: ratings::BonusInput = serde_json::from_str(input_json)
+            .map_err(|error| PyValueError::new_err(error.to_string()))?;
+        let result = ratings::club_bonus(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&result).map_err(|error| PyValueError::new_err(error.to_string()))
+    }
+
+    #[pyfunction]
     fn apply_byte6(input_json: &str) -> PyResult<String> {
         let input: goal_effects::Byte6Input =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -317,6 +352,10 @@ mod python {
         module.add_function(wrap_pyfunction!(apply_goal_effects, module)?)?;
         module.add_function(wrap_pyfunction!(apply_byte6, module)?)?;
         module.add_function(wrap_pyfunction!(composed_goal_effects, module)?)?;
+        module.add_function(wrap_pyfunction!(rate_side, module)?)?;
+        module.add_function(wrap_pyfunction!(computed_rating_contests, module)?)?;
+        module.add_function(wrap_pyfunction!(rate_player, module)?)?;
+        module.add_function(wrap_pyfunction!(rating_bonus, module)?)?;
         module.add("__version__", env!("CARGO_PKG_VERSION"))?;
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }

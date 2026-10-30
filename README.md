@@ -127,3 +127,40 @@ Event-total slot `s=1..20` is word `D146+40*side+2*s`; cache slot is byte
 advance or wrap. A duplicate row suppresses queue/count acceptance and the opaque paired-word
 copy, while the weighted event total still changes. The scorer log uses a separate side selector
 and marks the minute with byte addition, preserving the original wrap behavior.
+
+The ratings slice computes `1B55:50EB` and its player, staff and predicate helpers from
+complete raw roster/player/staff fields and recorded tables. Predicate return values and
+expected ratings enter the tests only as assertions. The source pin and fixture hashes live in
+`engine/tests/fixtures/ratings/provenance.json`, pinned to archaeology merge
+`4f89d245b90053355c6d768bf3367181447920da`. The
+[F15 contract](https://github.com/diegoami/onenil-archaeology/blob/4f89d245b90053355c6d768bf3367181447920da/findings/F15-native-ratings-inputs.md)
+and supplemental T15 corpus contain
+1,128 original side calls, 12,614 player helpers and 2,495 staff-bonus helpers across six weeks.
+F15 remains proposed. The native tests and release bridge also compose computed side ratings
+into all 558 retained D983 calls, preserving their incoming seed and goal bytes. The composed
+request contains only `k`, `seed` and `goals`; D983 reads the actual computed image words.
+
+```sh
+python3 tools/replay_ratings.py --check
+python3 tools/replay_ratings.py --benchmark --out records/T04
+```
+
+`[confirmed]` Player bytes +6 and +8 of the fifteen-byte record are sign-extended; the player
+rating clamps to 0..256, then its predicate may halve it. Side calls always use player mode zero,
+while separate original helper calls cover mode one. The staff bonus is an unsigned word,
+16..38. Split classes discard an odd remainder. A nonzero side flag adds the unsigned quotient
+selected by the club byte. Shared IDs use canonical image records; conflicting shared inputs
+across a composed pair are rejected, and the second side cannot reset the first side's ratings.
+
+`[designed]` The supported decoded domain uses player IDs 0..3920, clubs 1..176, staff IDs
+0..1000, position/style indices 0..13, class values 0..5, selector rows 0..1 and nonzero divisor
+bytes. Roster ID zero is skipped; scalar player ID zero is rejected by the original predicate.
+Raw fields and tables are loaded into the same memory image as ratings; unrelated bytes are
+preserved. No rating helper draws RNG. With eleven bounded player contributions, the raw domain
+cannot overflow a side accumulator: at most 3,234 before the largest possible flag bonus.
+Wrapping instructions remain explicit. The original corpus does not exercise the +16 branch,
+clamps, halving, divisor 64, unusual tables or aliased roster IDs; these have static/synthetic
+coverage. Timing includes bridge parsing, image setup, native ratings/helpers and serialization,
+with input preparation/output decoding excluded. This is routine timing only, not full
+DD02/match/week, renderer/timer parity or an emulator speed comparison. T01–T03 evidence stays
+immutable.

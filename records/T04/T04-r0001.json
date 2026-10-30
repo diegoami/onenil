@@ -1,0 +1,32 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T04-r0001",
+  "code_commit": "49325cd360b3e0e69ab7fa2fb530d176ed2b00cd",
+  "started": "2026-10-30T18:14:17.395152+00:00",
+  "ended": "2026-10-30T18:14:17.715660+00:00",
+  "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "python": "3.14.4",
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "b5e4ca57c1197a5ee4fa8f41e4a1317310037f2d820b1f905686a9fe09585923"
+  },
+  "archaeology": {
+    "repository": "https://github.com/diegoami/onenil-archaeology",
+    "commit": "4f89d245b90053355c6d768bf3367181447920da",
+    "index_sha256": "15c6b26429fc94848264b200ee8b3347ce1c5d2834ffee12f8e9dbde7cbebd2b"
+  },
+  "routine": "1B55:50EB raw-input side ratings and helpers",
+  "distinct_cases": 1128,
+  "source_traces": 15,
+  "repetitions": 20,
+  "calls": 22560,
+  "rng_draws": 0,
+  "elapsed_ns": 318775856,
+  "serialized_output_bytes": 101009080,
+  "method": "Pre-serialized raw input JSON; bridge parsing, image setup, native ratings/helpers, output projection and serialization included; input preparation/output decoding excluded; after untimed full corpus replay",
+  "limits": "Routine ratings timing only; no full-DD02/match/week, renderer/timer parity or emulator speed comparison"
+}
