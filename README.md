@@ -131,7 +131,10 @@ and marks the minute with byte addition, preserving the original wrap behavior.
 The ratings slice computes `1B55:50EB` and its player, staff and predicate helpers from
 complete raw roster/player/staff fields and recorded tables. Predicate return values and
 expected ratings enter the tests only as assertions. The source pin and fixture hashes live in
-`engine/tests/fixtures/ratings/provenance.json`; the supplemental T15/F15 corpus contains
+`engine/tests/fixtures/ratings/provenance.json`, pinned to archaeology merge
+`4f89d245b90053355c6d768bf3367181447920da`. The
+[F15 contract](https://github.com/diegoami/onenil-archaeology/blob/4f89d245b90053355c6d768bf3367181447920da/findings/F15-native-ratings-inputs.md)
+and supplemental T15 corpus contain
 1,128 original side calls, 12,614 player helpers and 2,495 staff-bonus helpers across six weeks.
 F15 remains proposed. The native tests and release bridge also compose computed side ratings
 into all 558 retained D983 calls, preserving their incoming seed and goal bytes. The composed
