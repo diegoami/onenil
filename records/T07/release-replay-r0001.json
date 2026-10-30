@@ -1,0 +1,94 @@
+{
+  "schema": "native-release-validation/1",
+  "code_commit": "8e5052ba3a8de88383b41354249b68d5bef2f821",
+  "date": "2026-10-30T19:59:02.103388+00:00",
+  "python": "3.12.15",
+  "extension_sha256": "2a50ba4e52623a3ec4c49922347671de398eaaf34a4dcfe535390d8cadb0f59e",
+  "debug_assertions": false,
+  "maturin": "1.16.0",
+  "results": [
+    {
+      "command": [
+        "cargo",
+        "fmt",
+        "--manifest-path",
+        "engine/Cargo.toml",
+        "--",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": ""
+    },
+    {
+      "command": [
+        "python",
+        "tools/check_originals.py"
+      ],
+      "exit_code": 0,
+      "stdout": "original-file check: ok\n"
+    },
+    {
+      "command": [
+        "python",
+        "tools/replay_contests.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "Rust bridge replay: 558 original routine calls, 30798 draws, 15 T08 traces covered\n"
+    },
+    {
+      "command": [
+        "python",
+        "tools/replay_placement.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "Rust placement replay: 558 cases / 1804 draws / 17 goal requests / 12276 helper checks / 15 T08 traces\n"
+    },
+    {
+      "command": [
+        "python",
+        "tools/replay_goal_effects.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "Rust goal effects: 17 callbacks / 34 byte6 helpers / 15 T08 traces; composed post-coin seed unchanged\n"
+    },
+    {
+      "command": [
+        "python",
+        "tools/replay_ratings.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "Rust ratings: 1128 sides / 15109 helpers / 558 computed-rating contests / 15 T08 traces\n"
+    },
+    {
+      "command": [
+        "python",
+        "tools/replay_step_tail.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "Rust step tail: 558 prefixes / 558 clocks / 12276 scene visits / 12 numeric events / 15 T08 traces; actual placement handoffs preserved\n"
+    },
+    {
+      "command": [
+        "python",
+        "tools/replay_extra_event.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "Rust DBC6: 184 decisions / 499 draws / 909 helpers / 22 external requests / 15 T08 references; actual placement/prefix handoffs preserved\n"
+    },
+    {
+      "command": [
+        "python",
+        "tools/replay_event_effects.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "Rust event effects: 22 handlers / 17 LCG draws / 44 selectors / 23 helpers / 6 numeric events; computed DBC6 requests preserved\n"
+    }
+  ]
+}
