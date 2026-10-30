@@ -48,3 +48,27 @@ repetitions and elapsed time. It includes DS image setup, Python/Rust calls, tra
 output serialization. It has no speed threshold and says nothing about full-match or week speed.
 The receipt identifies the loaded extension by SHA-256 and records its compiled debug-assertion
 setting; the binary itself is never committed.
+
+The next slice is goal placement (`0AB9:DD7C..DF35`), including native availability and
+first-roster-match helpers. It consumes complete rosters and eligibility fields for every
+recorded entry, including entries that produced no goal. The Rust API receives inputs only;
+expected minute/scorer decisions, draws and goal outcomes never steer the algorithm.
+`[confirmed]` F12 at `77841e9` specifies repeated fills of both minute tables, residual generated
+counts, the cap of 15, and the at-most-one-goal limit. T13/F13 supplies compact original cases.
+
+`[designed]` The `5083` projection computes its verified single `random(2)` draw and emits a
+goal-effect request with the raw draw and the wrapper's boolean coin. Statistics, scorer logs
+and display effects remain external. This slice does not claim a complete DD02 implementation,
+whole-memory/timer equality or whole-match/week parity.
+
+After building the same release bridge:
+
+```sh
+python3 tools/replay_placement.py --check
+python3 tools/replay_placement.py --benchmark --out records/T02
+```
+
+The placement fixtures and separate original helper checks live under
+`engine/tests/fixtures/placement/`; their index and provenance pin the archaeology source.
+The timing receipt includes bridge input parsing, image setup, native placement/helpers/RNG,
+trace/effect collection and serialization; input JSON preparation and output decoding are excluded.
