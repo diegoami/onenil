@@ -291,16 +291,34 @@ fn composed_effects_reject_wrong_handoffs_and_rosters() {
     let prefix = serde_json::from_value(old["prefix"]["input"].clone()).unwrap();
     let decision = crate_decision(&case);
     let state: State = serde_json::from_value(case["input"].clone()).unwrap();
-    for damage in 0..7 {
+    let shared = state.handoff.players[0].id;
+    for damage in 0..9 {
         let mut bad = state.clone();
         match damage {
             0 => bad.handoff.seed ^= 1,
             1 => bad.handoff.actor ^= 1,
             2 => bad.handoff.secondary ^= 1,
             3 => bad.handoff.scenes[0].word0 ^= 1,
-            4 => bad.players[0].p15_6 ^= 1,
+            // Bench-only fields are new raw context. Mutate a field shared
+            // with the actual DBC6 image when testing a rejected handoff.
+            4 => {
+                bad.players
+                    .iter_mut()
+                    .find(|p| p.id == shared)
+                    .unwrap()
+                    .p15_6 ^= 1
+            }
             5 => bad.rosters[0].players.swap(0, 1),
-            _ => bad.handoff.clubs[0].id ^= 1,
+            6 => bad.handoff.clubs[0].id ^= 1,
+            7 => {
+                bad.players
+                    .iter_mut()
+                    .find(|p| p.id == shared)
+                    .unwrap()
+                    .p15_6 ^= 1;
+                bad.handoff.players[0].p15_6 ^= 1;
+            }
+            _ => bad.handoff.scenes[1].slot = 3,
         }
         assert!(
             event_effects::composed(&placement, &prefix, &decision, &bad).is_err(),
