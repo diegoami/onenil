@@ -1,5 +1,5 @@
 //! [confirmed] Logical 5083/67D0 effects: archaeology F12/F13 at a39ac70;
-//! T14/F14 at 2efc69cd2206a9d3c706073d63526885488d4567 supplies original projections.
+//! T14/F14 at da4f9affc0f147c32ba5db132c6cfd5e7db731b4 supplies original projections.
 //! [designed] Text and render buffers stay external; logical cache/totals and
 //! numeric commentary bookkeeping are part of this projection. No RNG is drawn.
 
