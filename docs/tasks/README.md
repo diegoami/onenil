@@ -1,3 +1,5 @@
 # Tasks
 
 One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
+
+- [T01](T01.md): First Rust engine slice replays quick-contest traces (#2).
