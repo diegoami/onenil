@@ -1,0 +1,33 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T08-r0001",
+  "code_commit": "984f664d468424ad1b6ea5633b9c23df56fd1df3",
+  "started": "2026-10-30T20:43:29.529904+00:00",
+  "ended": "2026-10-30T20:43:29.544301+00:00",
+  "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "python": "3.12.15",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "689129ba15add1bd6113e0ab686d554ec11ef88bac4b3dced452cfd2a5d1594f"
+  },
+  "archaeology": {
+    "repository": "https://github.com/diegoami/onenil-archaeology",
+    "commit": "256659e351567b9fe8d2f174a05008fb91d15756",
+    "index_sha256": "116289d6fc9f785836235f2b4be21300c5fa53792edf6acca023b87ff09c167f"
+  },
+  "routine": "A4F2 post-score strategy/flag closure",
+  "distinct_calls": 17,
+  "source_weeks": 6,
+  "source_traces": 15,
+  "repetitions": 20,
+  "calls": 340,
+  "rng_draws": 240,
+  "elapsed_ns": 12701271,
+  "serialized_output_bytes": 5528200,
+  "method": "Pre-serialized raw strategy inputs; bridge parsing, image setup, native strategy/flags/RNG and serialization included; preparation/output decoding excluded; after untimed original/composed replay",
+  "limits": "Shared-field strategy projection only; no complete52B6/6B2F/78B7, DD02/match/week/setup, physical/scratch/timer/render parity or emulator comparison"
+}
