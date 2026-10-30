@@ -348,7 +348,7 @@ impl Engine {
         }
         let other = self.word(0xD6E4 + 2 * (side ^ 1) as u16);
         let first = self.post_rating(other, out);
-        let second = self.post_rating(other, out);
+        let second = self.post_rating(id, out);
         if (second.wrapping_sub(first) as i16) > i16::from(self.image[0x0C66 + side]) {
             for _ in 0..2 {
                 let bit = self.draw(6, "0AB9:A305", &mut out.draws);
