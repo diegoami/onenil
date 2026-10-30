@@ -35,11 +35,14 @@ def load_cases():
     if (index["schema"] != "quick-contests/1" or index["weeks"] != 6
             or index["traces"] != 15 or len(index["records"]) != 6):
         raise ValueError("expected six distinct original weeks and fifteen T08 traces")
-    files, cases = {}, []
+    files, cases, weeks = {}, [], set()
     for record in index["records"]:
         name = record["cases"]
         if Path(name).name != name or name in files:
             raise ValueError(f"invalid or duplicate case file {name}")
+        if record["week"] in weeks:
+            raise ValueError("duplicate original week")
+        weeks.add(record["week"])
         data = (FIXTURES / name).read_bytes()
         if sha(data) != record["cases_sha256"]:
             raise ValueError(f"{name}: fixture digest differs")
@@ -58,7 +61,8 @@ def load_cases():
     coverage = index["coverage"]
     if (len(cases) != 558 or index["calls"] != 558 or len(coverage) != 15
             or len({c["t04_record"] for c in coverage}) != 15
-            or len({c["trace"] for c in coverage}) != 15):
+            or len({c["trace"] for c in coverage}) != 15
+            or {c["cases"] for c in coverage} != set(files)):
         raise ValueError("routine/corpus coverage is incomplete")
     for entry in coverage:
         if entry["cases"] not in files or not HEX64.fullmatch(entry["trace_sha256"]):
