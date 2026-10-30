@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 pub mod goal_effects;
 pub mod placement;
 pub mod ratings;
+pub mod step_tail;
 
 const SEED: u16 = 0xA51C;
 const RATINGS: u16 = 0xD674;
@@ -337,6 +338,32 @@ mod python {
     }
 
     #[pyfunction]
+    fn step_tail_prefix(input_json: &str) -> PyResult<String> {
+        let input: step_tail::PrefixInput =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = step_tail::prefix(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+
+    #[pyfunction]
+    fn logical_clock(input_json: &str) -> PyResult<String> {
+        let input: step_tail::ClockState =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = step_tail::advance_clock(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+
+    #[pyfunction]
+    fn placement_tail_prefix(placement_json: &str, prefix_json: &str) -> PyResult<String> {
+        let placement: placement::Input = serde_json::from_str(placement_json)
+            .map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let input: step_tail::PrefixInput =
+            serde_json::from_str(prefix_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = step_tail::composed_prefix(&placement, &input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+
+    #[pyfunction]
     fn apply_byte6(input_json: &str) -> PyResult<String> {
         let input: goal_effects::Byte6Input =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -356,6 +383,9 @@ mod python {
         module.add_function(wrap_pyfunction!(computed_rating_contests, module)?)?;
         module.add_function(wrap_pyfunction!(rate_player, module)?)?;
         module.add_function(wrap_pyfunction!(rating_bonus, module)?)?;
+        module.add_function(wrap_pyfunction!(step_tail_prefix, module)?)?;
+        module.add_function(wrap_pyfunction!(logical_clock, module)?)?;
+        module.add_function(wrap_pyfunction!(placement_tail_prefix, module)?)?;
         module.add("__version__", env!("CARGO_PKG_VERSION"))?;
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }
