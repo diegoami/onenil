@@ -7,6 +7,7 @@
 
 use serde::{Deserialize, Serialize};
 
+pub mod event_effects;
 pub mod extra_event;
 pub mod goal_effects;
 pub mod placement;

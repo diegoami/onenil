@@ -1,0 +1,28 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-dbc6/engine)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.82s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-99cbb9d2c6c10b0a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 72 filtered out; finished in 0.00s
+
+     Running tests/event_effects.rs (engine/target/debug/deps/event_effects-054594c6e8d4c1fa)
+
+running 1 test
+test first_actual_original_69b8_effect_case_replays ... FAILED
+
+failures:
+
+---- first_actual_original_69b8_effect_case_replays stdout ----
+
+thread 'first_actual_original_69b8_effect_case_replays' (216730) panicked at tests/event_effects.rs:15:46:
+called `Result::unwrap()` on an `Err` value: "T07 69B8 effects not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    first_actual_original_69b8_effect_case_replays
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test event_effects`
