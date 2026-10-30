@@ -179,6 +179,56 @@ fn same_record(a: &QueueRow, b: &QueueRow) -> bool {
         && a.side == b.side
 }
 
+/// [confirmed] Shared 0F94 numeric effects; all slot-zero aliases are explicit.
+/// Formatting is excluded, while weighted totals/counts/queue/pair writes remain.
+pub(crate) fn numeric_commentary(
+    e: &mut Engine,
+    code: u8,
+    actor_slot: u16,
+    secondary_slot: u16,
+    event_side: u8,
+) -> Commentary {
+    let side = usize::from(event_side);
+    let address = 0xD146 + 40 * side + 2 * usize::from(actor_slot);
+    let weight = i16::from(e.image[0x097A + usize::from(code)] as i8) as u16;
+    put_word(e, address, word(e, address).wrapping_add(weight));
+    let head = word(e, 0x0380);
+    let next = next_head(head);
+    let event_club = word(e, if side == 1 { 0xD6E6 } else { 0xD6E4 });
+    let candidate = QueueRow {
+        index: next,
+        code,
+        first_player: if actor_slot == 0 {
+            0
+        } else {
+            word(e, roster(event_club, usize::from(actor_slot) - 1))
+        },
+        second_player: if secondary_slot == 0 {
+            0
+        } else {
+            word(e, roster(event_club, usize::from(secondary_slot) - 1))
+        },
+        side: event_side,
+    };
+    let accepted = head == 0 || !same_record(&queue_row(e, head), &candidate);
+    if accepted {
+        let a = 0xD1C0 + 2 * side;
+        put_word(e, a, word(e, a).wrapping_add(1));
+        put_word(e, 0x0380, next);
+        put_queue_row(e, &candidate);
+        e.image[row(next_head(next))] = 255;
+        put_word(e, 0xD09A, word(e, 0xD08A));
+        put_word(e, 0xD09C, word(e, 0xD08C));
+    }
+    Commentary {
+        code,
+        actor_slot,
+        secondary_slot,
+        event_side,
+        accepted: u8::from(accepted),
+    }
+}
+
 pub fn byte6(input: &Byte6Input) -> Byte6Output {
     // [confirmed] 67E8..6808 and signed word clamp 24BC:03D9.
     let sum = i16::from(input.old_byte6 as i8).wrapping_add(input.delta);
@@ -476,37 +526,13 @@ impl Engine {
         } else {
             normalized(self.image[scene(other) + 7])
         };
-        let event_total = 0xD146 + 40 * event_side + 2 * usize::from(actor_slot);
-        let weight = i16::from(self.image[0x097A + code] as i8) as u16;
-        put_word(
+        let commentary = numeric_commentary(
             self,
-            event_total,
-            word(self, event_total).wrapping_add(weight),
+            code as u8,
+            actor_slot,
+            secondary_slot,
+            event_side as u8,
         );
-        let head = word(self, 0x0380);
-        let next = next_head(head);
-        let event_club = word(self, if event_side == 1 { 0xD6E6 } else { 0xD6E4 });
-        let candidate = QueueRow {
-            index: next,
-            code: code as u8,
-            first_player: word(self, roster(event_club, usize::from(actor_slot) - 1)),
-            second_player: if secondary_slot == 0 {
-                0
-            } else {
-                word(self, roster(event_club, usize::from(secondary_slot) - 1))
-            },
-            side: event_side as u8,
-        };
-        let accepted = head == 0 || !same_record(&queue_row(self, head), &candidate);
-        if accepted {
-            let a = 0xD1C0 + 2 * event_side;
-            put_word(self, a, word(self, a).wrapping_add(1));
-            put_word(self, 0x0380, next);
-            put_queue_row(self, &candidate);
-            self.image[row(next_head(next))] = 255;
-            put_word(self, 0xD09A, word(self, 0xD08A));
-            put_word(self, 0xD09C, word(self, 0xD08C));
-        }
         let actor = request.event.actor;
         let original = usize::from(request.event.side_flag);
         let scorer = word(self, scene(actor) + 14);
@@ -553,13 +579,7 @@ impl Engine {
         debug_assert_eq!(self.word(super::SEED), seed);
         Ok(Outcome {
             state: snapshot(self, state),
-            commentary: Commentary {
-                code: code as u8,
-                actor_slot,
-                secondary_slot,
-                event_side: event_side as u8,
-                accepted: u8::from(accepted),
-            },
+            commentary,
         })
     }
     pub fn goal_effect_seed(&self) -> u16 {

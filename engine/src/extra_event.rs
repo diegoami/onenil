@@ -143,8 +143,7 @@ fn table_cells(s: &State) -> Result<BTreeMap<usize, u8>, String> {
     }
     Ok(cells)
 }
-fn validate(input: &Input) -> Result<(), String> {
-    let s = &input.state;
+pub(crate) fn validate_state(s: &State) -> Result<(), String> {
     if s.scenes.len() != 22
         || s.scenes
             .iter()
@@ -169,6 +168,12 @@ fn validate(input: &Input) -> Result<(), String> {
     {
         return Err("unsupported club/bonus selectors or conflicting club alias".into());
     }
+    table_cells(s)?;
+    Ok(())
+}
+fn validate(input: &Input) -> Result<(), String> {
+    validate_state(&input.state)?;
+    let s = &input.state;
     if s.side_offsets[1] > 11
         || s.opponents[1..]
             .iter()
@@ -180,11 +185,15 @@ fn validate(input: &Input) -> Result<(), String> {
     {
         return Err("candidate outside physical scenes".into());
     }
-    table_cells(s)?;
     Ok(())
 }
+
 fn load(e: &mut Engine, input: &Input, preserve: bool) -> Result<(), String> {
-    let s = &input.state;
+    load_state(e, &input.state, preserve)?;
+    e.image[0x0D0B] = input.opponent_d0b;
+    Ok(())
+}
+pub(crate) fn load_state(e: &mut Engine, s: &State, preserve: bool) -> Result<(), String> {
     if !preserve {
         e.put_word(0xA51C, s.seed);
         e.image[0xD09F] = s.actor;
@@ -196,7 +205,6 @@ fn load(e: &mut Engine, input: &Input, preserve: bool) -> Result<(), String> {
     e.image[0x0D29] = s.home_bonus;
     e.image[0x0D56..0x0D58].copy_from_slice(&s.side_offsets);
     e.image[0x0D01..0x0D0B].copy_from_slice(&s.opponents);
-    e.image[0x0D0B] = input.opponent_d0b;
     e.image[0xD1CE..0xD1D0].copy_from_slice(&s.side_flags);
     for f in &s.skill_bonus_flags {
         e.image[0x09FB + usize::from(f.mode)] = f.value;
@@ -236,7 +244,7 @@ fn load(e: &mut Engine, input: &Input, preserve: bool) -> Result<(), String> {
     }
     Ok(())
 }
-fn project(e: &Engine, template: &State) -> State {
+pub(crate) fn project(e: &Engine, template: &State) -> State {
     let mut s = template.clone();
     s.seed = e.word(0xA51C);
     s.actor = e.image[0xD09F];
@@ -303,7 +311,7 @@ fn predicate(e: &Engine, index: u8) -> u16 {
     };
     u16::from(source & 8 != 0)
 }
-fn threshold(e: &Engine, id: u16) -> u16 {
+pub(crate) fn threshold(e: &Engine, id: u16) -> u16 {
     let age = e.image[p8(id, 1)];
     let n = e.image[p8(id, 5)];
     if age < 18 {
@@ -398,13 +406,20 @@ pub fn composed(
     prefix: &step_tail::PrefixInput,
     input: &Input,
 ) -> Result<ComposedOutcome, String> {
+    composed_engine(placement, prefix, input).map(|(_, outcome)| outcome)
+}
+pub(crate) fn composed_engine(
+    placement: &placement::Input,
+    prefix: &step_tail::PrefixInput,
+    input: &Input,
+) -> Result<(Engine, ComposedOutcome), String> {
     validate(input)?;
     if prefix.placement.goal_flag != 0 || prefix.d6dd == 0 {
         return Err("prefix does not request DBC6".into());
     }
     let (mut e, prefix) = step_tail::composed_prefix_engine(placement, prefix)?;
     let decision = e.apply_extra_event(input)?;
-    Ok(ComposedOutcome { prefix, decision })
+    Ok((e, ComposedOutcome { prefix, decision }))
 }
 impl Engine {
     /// Guard actual T05 fields before loading any additional raw inputs. Errors
