@@ -1,0 +1,25 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - run: cargo fmt --manifest-path engine/Cargo.toml -- --check
+      - run: cargo test --manifest-path engine/Cargo.toml --locked
+      - run: |
+          python3 -m venv .venv
+          .venv/bin/python -m pip install maturin==1.16.0
+          . .venv/bin/activate
+          maturin develop --manifest-path engine/Cargo.toml --features python --release --locked
+          python3 tools/replay_contests.py --check
+      - run: python3 tools/check_originals.py
