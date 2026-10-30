@@ -1,0 +1,58 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-dbc6/engine)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.46s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-99cbb9d2c6c10b0a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 99 filtered out; finished in 0.00s
+
+     Running tests/event_effects.rs (engine/target/debug/deps/event_effects-054594c6e8d4c1fa)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/extra_event.rs (engine/target/debug/deps/extra_event-ff35fcd01b274d84)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+     Running tests/goal_effects.rs (engine/target/debug/deps/goal_effects-62ca81284a1624f5)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+     Running tests/placement.rs (engine/target/debug/deps/placement-4a4c5ec6bf21f028)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.00s
+
+     Running tests/post_score.rs (engine/target/debug/deps/post_score-f9ca023c38d303c1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+
+     Running tests/quick_reset.rs (engine/target/debug/deps/quick_reset-c1a7cc3d21437fd3)
+
+running 1 test
+test first_actual_original_quick_reset_case_replays ... FAILED
+
+failures:
+
+---- first_actual_original_quick_reset_case_replays stdout ----
+
+thread 'first_actual_original_quick_reset_case_replays' (250678) panicked at tests/quick_reset.rs:21:42:
+called `Result::unwrap()` on an `Err` value: "T09 quick reset not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    first_actual_original_quick_reset_case_replays
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test quick_reset`

@@ -306,3 +306,34 @@ The census accounts for all recorded late-gap RNG draws, which does not establis
 DD02/match/week/setup or physical/scratch/timer/render parity. Routine timing includes bridge
 parsing, image setup, native strategy/flags/RNG and serialization; preparation/decoding are
 excluded, and no full-match or emulator speed comparison is claimed.
+
+The named quick `52B6` reset now composes scene position copies, motion marking,
+keeper handling, actual-seed strategy and ordered player updates. It checks 17 original
+resets, 374 position copies, 374 motion visits, 374 availability checks, 373 byte6 updates
+and 12 draws. Source exports/index are pinned under `engine/tests/fixtures/quick_reset/`
+to archaeology T21/F21 merge `3223aa9bf2663d16b436132d1df4bfb7c3e4e9c1`.
+F21 stays proposed.
+
+```sh
+python3 tools/replay_quick_reset.py --check
+python3 tools/replay_quick_reset.py --benchmark --out records/T09
+```
+
+`[confirmed]` Active becomes 1 and all word8 copies precede the zero flag test. Motion
+uses the old actor's physical side and stored scene slots, excluding physical keepers 1/12.
+Keeper handling transforms signed coordinate bytes with the raw direction table, advances
+the shared RNG and resolves cyclic eligibility before strategy. Strategy runs on that
+computed seed; an expected intermediate state cannot reset it. Available shared-player
+byte6 updates reload signed values in order and leave caches unchanged on flag 0.
+
+`[designed]` The projection requires quick mode, physical offsets [11,0], valid
+scene/slot/actor and canonical club/player domains. No eligible keeper cycle returns a
+transactional diagnostic, with the caller image preserved. Keeper and zero branches have
+static/synthetic coverage; all original cases here are nonkeeper with zero flag 0. The new
+reset API handles keepers while the earlier T08 prefix-only strategy projection retains
+its narrower guard. Placement/prefix composition preserves computed seed/actor/score/
+club/scene/eligibility fields; byte6/cache/clock context not computed there is raw input.
+Preceding goal-effect integration and 045C buffers, 6B2F substitutions, 78B7 keyboard,
+continuous DD02/match/week/setup and arbitrary physical/scratch/timer/render parity remain
+separate work. Routine timing includes bridge parsing, image setup, reset/strategy/helpers/
+RNG and serialization; preparation/decoding are excluded, with no emulator speed claim.
