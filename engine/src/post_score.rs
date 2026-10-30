@@ -324,11 +324,11 @@ impl Engine {
         });
     }
     fn post_rating(&self, id: u16, out: &mut Outcome) -> u16 {
-        let captain = self.image[club(id, 54)];
-        let selected = if captain == 0 {
+        let override_value = self.image[club(id, 54)];
+        let selected = if override_value == 0 {
             self.image[p8(word(self, club(id, 0)), 5)]
         } else {
-            captain
+            override_value
         };
         let value = 193u16
             .wrapping_sub(u16::from(self.image[club(id, 51)]))
@@ -410,5 +410,332 @@ impl Engine {
         }
         self.post_set(template, id, self.image[club(id, 57)], out);
         self.image[latch] = 1;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    fn input() -> Input {
+        Input {
+            argument: 1,
+            state: State {
+                seed: 0,
+                scores: [1, 0],
+                managed_clubs: [20, 0],
+                limits: [255, 255],
+                raised: [7, 8],
+                lowered: [9, 10],
+                clubs: [
+                    Club {
+                        id: 10,
+                        roster: [1; 20],
+                        byte51: 100,
+                        byte54: 10,
+                        strategy: 0xC0,
+                        baseline_index: 0,
+                        baseline_value: 4,
+                    },
+                    Club {
+                        id: 20,
+                        roster: [2; 20],
+                        byte51: 100,
+                        byte54: 10,
+                        strategy: 0xC0,
+                        baseline_index: 1,
+                        baseline_value: 8,
+                    },
+                ],
+                players: vec![
+                    Player {
+                        id: 1,
+                        age: 25,
+                        flags3: 0,
+                        level: 10,
+                        position: 0,
+                        flags10: 8,
+                    },
+                    Player {
+                        id: 2,
+                        age: 25,
+                        flags3: 1,
+                        level: 10,
+                        position: 2,
+                        flags10: 0,
+                    },
+                ],
+            },
+        }
+    }
+    fn loaded(s: &State) -> Engine {
+        validate(s).unwrap();
+        let mut e = blank(s);
+        load(&mut e, s, false);
+        e
+    }
+    #[test]
+    fn ignored_argument_and_managed_skips_preserve_the_named_state() {
+        let mut x = input();
+        let a = strategy(&x).unwrap();
+        x.argument = 65535;
+        assert_eq!(strategy(&x).unwrap(), a);
+        x.state.managed_clubs = [10, 20];
+        let got = strategy(&x).unwrap();
+        assert_eq!(got.output, x.state);
+        assert!(
+            got.draws.is_empty()
+                && got.paths.is_empty()
+                && got.setters.is_empty()
+                && got.normalizers.is_empty()
+                && got.getters.is_empty()
+        );
+    }
+    #[test]
+    fn signed_difference_is_narrowed_before_absolute_value() {
+        for (scores, n) in [
+            ([0, 255], 1),
+            ([128, 127], 1),
+            ([127, 255], 128),
+            ([0, 128], 128),
+            ([255, 128], 127),
+        ] {
+            assert_eq!(magnitude(scores), n);
+        }
+        let mut x = input();
+        x.state.scores = [128, 127];
+        let got = strategy(&x).unwrap();
+        assert_eq!(got.paths[0].routine, "0AB9:A23C");
+    }
+    #[test]
+    fn three_bit_paths_use_unsigned_score_order_and_preserve_high_bits() {
+        for (scores, raise) in [([2, 0], false), ([0, 2], true)] {
+            let mut x = input();
+            x.state.scores = scores;
+            x.state.clubs[0].baseline_value = if raise { 0xC0 } else { 255 };
+            let got = strategy(&x).unwrap();
+            assert_eq!(got.draws.len(), 3);
+            assert_eq!(got.paths[0].routine, "0AB9:A34D");
+            assert_eq!(got.paths[0].raise, Some(u8::from(raise)));
+            let mut expected = x.state.clubs[0].baseline_value;
+            for d in &got.draws {
+                assert_eq!(d.n, 6);
+                assert_eq!(d.site, if raise { "0AB9:A38C" } else { "0AB9:A3A4" });
+                let mask = 1u8 << (d.value - 1);
+                if raise {
+                    expected |= mask
+                } else {
+                    expected &= !mask
+                }
+            }
+            assert_eq!(got.output.clubs[0].strategy, expected);
+            assert_eq!(expected & 0xC0, 0xC0);
+            assert_eq!(got.setters.len(), 2);
+        }
+    }
+    #[test]
+    fn five_bit_paths_latch_and_skip_only_their_own_nonzero_flag() {
+        for (scores, raise) in [([3, 0], false), ([0, 3], true)] {
+            let mut x = input();
+            x.state.scores = scores;
+            x.state.raised = [0, 0];
+            x.state.lowered = [0, 0];
+            let got = strategy(&x).unwrap();
+            assert_eq!(got.draws.len(), 5);
+            assert!(got.getters.is_empty());
+            let mut expected = x.state.clubs[0].strategy;
+            for d in &got.draws {
+                assert_eq!(d.n, 5);
+                assert_eq!(d.site, if raise { "0AB9:A417" } else { "0AB9:A4A5" });
+                let mask = 1u8 << (d.value - 1);
+                if raise {
+                    expected |= mask
+                } else {
+                    expected &= !mask
+                }
+            }
+            if raise {
+                expected |= 0x20;
+            } else {
+                expected &= !0x20;
+            }
+            assert_eq!(got.output.clubs[0].strategy, expected);
+            assert_eq!(got.setters.len(), 1);
+            if raise {
+                assert_eq!(got.output.raised[0], 1);
+                x.state.raised[0] = 255;
+            } else {
+                assert_eq!(got.output.lowered[0], 1);
+                x.state.lowered[0] = 255;
+            }
+            let skipped = strategy(&x).unwrap();
+            assert!(skipped.draws.is_empty() && skipped.setters.is_empty());
+            assert_eq!(skipped.output, x.state);
+        }
+    }
+    #[test]
+    fn opposite_then_own_rating_and_strict_positive_limit_can_add_two_draws() {
+        let mut x = input();
+        x.state.clubs[0].byte51 = 0;
+        x.state.clubs[1].byte51 = 20;
+        x.state.limits[0] = 19;
+        let got = strategy(&x).unwrap();
+        assert_eq!(
+            got.getters,
+            [
+                Getter {
+                    club: 20,
+                    value: 163
+                },
+                Getter {
+                    club: 10,
+                    value: 183
+                }
+            ]
+        );
+        assert_eq!(got.draws.len(), 2);
+        assert!(got.draws.iter().all(|d| d.site == "0AB9:A305" && d.n == 6));
+        assert_eq!(got.setters.len(), 2);
+        x.state.limits[0] = 20;
+        assert!(strategy(&x).unwrap().draws.is_empty());
+    }
+    #[test]
+    fn rating_subtraction_wraps_before_its_signed_comparison() {
+        let mut x = input();
+        x.state.limits[0] = 0;
+        x.state.clubs[0].byte51 = 255;
+        x.state.clubs[0].byte54 = 255;
+        let got = strategy(&x).unwrap();
+        assert_eq!(got.getters[1].value, 65219);
+        assert!(got.draws.is_empty());
+        x.state.clubs.swap(0, 1);
+        x.state.managed_clubs = [10, 0];
+        let got = strategy(&x).unwrap();
+        assert_eq!(got.getters[0].value, 65219);
+        assert_eq!(got.getters[1].value, 83);
+        assert_eq!(got.draws.len(), 2);
+    }
+    #[test]
+    fn zero_keeper_lookup_is_raw_but_zero_roster_entries_are_not_normalized() {
+        let mut x = input();
+        x.state.clubs[0].roster[0] = 0;
+        x.state.clubs[1].roster[0] = 0;
+        x.state.clubs[1].byte54 = 0;
+        x.state.players.insert(
+            0,
+            Player {
+                id: 0,
+                age: 0,
+                flags3: 0,
+                level: 255,
+                position: 0,
+                flags10: 0xEE,
+            },
+        );
+        let got = strategy(&x).unwrap();
+        assert_eq!(got.getters[0].value, 65374);
+        assert_eq!(got.normalizers.len(), 19);
+        assert_eq!(got.output.players[0].flags10, 0xEE);
+        x.state.clubs[1].byte54 = 12;
+        assert_eq!(strategy(&x).unwrap().getters[0].value, 81);
+    }
+    #[test]
+    fn normalizer_handles_threshold_underflow_clamp_and_every_position_group() {
+        for position in [0, 1, 2, 3, 4, 5, 13, 255] {
+            let mut x = input();
+            x.state.players[0].position = position;
+            x.state.players[0].level = 0;
+            let got = strategy(&x).unwrap();
+            let expected = match position {
+                0 | 1 | 3 | 4 => 0x91,
+                2 => 0xB2,
+                _ => 0x80,
+            };
+            assert_eq!(got.output.players[0].flags10, expected);
+            x.state.players[0].flags3 = 1; // older branch wraps 0-1 to255; no low-threshold override
+            let got = strategy(&x).unwrap();
+            let expected = 8 | match position {
+                0 | 1 | 3 | 4 => 0x11,
+                2 => 0x32,
+                _ => 0,
+            };
+            assert_eq!(got.output.players[0].flags10, expected);
+        }
+        let mut x = input();
+        x.state.players[0].age = 17;
+        x.state.players[0].level = 5;
+        assert_eq!(strategy(&x).unwrap().output.players[0].flags10, 0x91);
+    }
+    #[test]
+    fn side_one_baseline_bit_and_shared_player_visits_follow_actual_order() {
+        let mut x = input();
+        x.state.managed_clubs = [10, 0];
+        x.state.clubs[1].roster = [1; 20];
+        x.state.players.pop();
+        let got = strategy(&x).unwrap();
+        assert_eq!(got.output.clubs[1].strategy, 9);
+        assert_eq!(got.setters.len(), 2);
+        assert_eq!(got.normalizers.len(), 40);
+        assert_eq!(got.normalizers[0].before, 8);
+        assert_eq!(got.normalizers[0].after, 0x19);
+        assert_eq!(got.normalizers[1].before, 0x19);
+        assert_eq!(got.setters[1].input.clubs[1].strategy, 9);
+        assert_eq!(got.output.raised[1], 0);
+        assert_eq!(got.output.lowered[1], 0);
+    }
+    #[test]
+    fn aliased_clubs_share_one_strategy_and_conflicting_aliases_are_rejected() {
+        let mut x = input();
+        x.state.clubs[1] = x.state.clubs[0].clone();
+        x.state.players.pop();
+        x.state.managed_clubs = [0, 0];
+        let got = strategy(&x).unwrap();
+        assert_eq!(got.output.clubs[0].strategy, 5);
+        assert_eq!(got.output.clubs[1].strategy, 5);
+        assert_eq!(got.setters.len(), 3);
+        assert_eq!(got.normalizers.len(), 60);
+        x.state.clubs[1].strategy ^= 1;
+        assert!(strategy(&x).is_err());
+    }
+    #[test]
+    fn malformed_inputs_and_expected_outputs_are_not_accepted() {
+        for damage in 0..5 {
+            let mut x = input();
+            match damage {
+                0 => x.state.clubs[0].id = 0,
+                1 => {
+                    x.state.players.pop();
+                }
+                2 => x.state.clubs[0].roster[0] = 3921,
+                3 => {
+                    x.state.players.push(x.state.players[0].clone());
+                }
+                _ => {
+                    x.state.clubs[1].baseline_index = 0;
+                    x.state.clubs[1].baseline_value = 5;
+                }
+            }
+            assert!(strategy(&x).is_err());
+        }
+        let mut value = serde_json::to_value(input()).unwrap();
+        value["expected_getters"] = serde_json::json!([]);
+        assert!(serde_json::from_value::<Input>(value).is_err());
+        let mut value = serde_json::to_value(input()).unwrap();
+        value["state"]["players"][0]["level"] = serde_json::json!(256);
+        assert!(serde_json::from_value::<Input>(value).is_err());
+    }
+    #[test]
+    fn failed_shared_footprints_preserve_the_image_and_success_preserves_unrelated_bytes() {
+        let x = input();
+        let mut e = loaded(&x.state);
+        e.image[0x11000] = 0xAA;
+        e.image[P15 + 15 + 8] = 99;
+        let before = e.image.clone();
+        let mut bad = x.clone();
+        bad.state.seed ^= 1;
+        assert!(e.apply_post_score(&bad).is_err());
+        assert_eq!(e.image, before);
+        e.apply_post_score(&x).unwrap();
+        assert_eq!(e.image[0x11000], 0xAA);
+        assert_eq!(e.image[P15 + 15 + 8], 99);
     }
 }
