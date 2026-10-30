@@ -7,6 +7,8 @@
 
 use serde::{Deserialize, Serialize};
 
+pub mod placement;
+
 const SEED: u16 = 0xA51C;
 const RATINGS: u16 = 0xD674;
 const GOALS: u16 = 0xD086;
@@ -237,9 +239,28 @@ mod python {
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }
 
+    #[pyfunction]
+    fn goal_placement(input_json: &str) -> PyResult<String> {
+        let input: placement::Input =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = placement::goal_placement(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+
+    #[pyfunction]
+    fn player_unavailable(id: u16, p15_sbyte8: i8, p15_byte11: u8) -> u8 {
+        placement::unavailable(&placement::Player {
+            id,
+            p15_sbyte8,
+            p15_byte11,
+        })
+    }
+
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
+        module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
+        module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;
         module.add("__version__", env!("CARGO_PKG_VERSION"))?;
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }
