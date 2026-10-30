@@ -1,0 +1,13 @@
+[build-system]
+requires = ["maturin==1.16.0"]
+build-backend = "maturin"
+
+[project]
+name = "onenil-engine"
+version = "0.1.0"
+requires-python = ">=3.12"
+description = "Trace-checked One-Nil 96 routine slices in Rust"
+
+[tool.maturin]
+manifest-path = "engine/Cargo.toml"
+features = ["python"]
