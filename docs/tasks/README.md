@@ -8,3 +8,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T04](T04.md): Native ratings and computed-rating contest handoff (#8).
 - [T05](T05.md): Native quick-step tail prefix and logical caller clock (#10).
 - [T06](T06.md): Native DBC6 decision and direct helpers (#12).
+- [T07](T07.md): Native logical 69B8 quick-event effects (#14).
