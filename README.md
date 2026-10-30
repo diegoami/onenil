@@ -70,6 +70,9 @@ python3 tools/replay_placement.py --benchmark --out records/T02
 
 The placement fixtures and separate original helper checks live under
 `engine/tests/fixtures/placement/`; their index and provenance pin the archaeology source.
+The [F13 input contract](https://github.com/diegoami/onenil-archaeology/blob/a39ac703c09f0981e073d471d61f7bce0f3642e7/findings/F13-goal-placement-inputs.md)
+and [source fixtures](https://github.com/diegoami/onenil-archaeology/tree/a39ac703c09f0981e073d471d61f7bce0f3642e7/traces/T13)
+are pinned to merge `a39ac703c09f0981e073d471d61f7bce0f3642e7` and the copied index's SHA-256.
 The timing receipt includes bridge input parsing, image setup, native placement/helpers/RNG,
 trace/effect collection and serialization; input JSON preparation and output decoding are excluded.
 

@@ -1,5 +1,5 @@
 //! [confirmed] DD7C..DF35 and 4F89/5C6E: archaeology F12 at 77841e9;
-//! T13/F13 supplies complete original inputs and the callback observations.
+//! T13/F13 at a39ac70 supplies complete original inputs and callback observations.
 //!
 //! [designed] The persistent seed/generated/actor fields use the existing DS image.
 //! Saved scores and minute arrays represent temporary Pascal frame fields. A goal
