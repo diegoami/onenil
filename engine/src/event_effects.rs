@@ -1,4 +1,4 @@
-//! [confirmed] 69B8 quick logical effect closure: archaeology T19/F19.
+//! [confirmed] 69B8 quick logical effect closure: archaeology T19/F19 at 6804fbb.
 //! [designed] AI roster-changing calls diagnose; render/timer effects stay external.
 use crate::{
     extra_event,

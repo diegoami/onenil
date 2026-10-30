@@ -243,3 +243,37 @@ return snapshot is not claimed as native output. Remaining event/substitution/re
 full DD02/match/week, watched-engine and timer/render parity are pending. Timing includes bridge
 parsing, image setup, decisions/helpers/RNG and serialization; preparation/decoding and external
 handler execution are excluded. It is routine timing with no emulator speed claim.
+
+The logical `69B8` slice applies the effect request computed by DBC6. It checks all
+22 retained handler calls, 44 cyclic selectors, 17 LCG draws, six numeric events and
+23 ordered availability/byte6 helpers. The separately generated cyclic stream is a
+raw input, distinct from the LCG seed. Raw weights, queue acceptance, paired-word copies,
+player flags, counters, added time, cache and scene clearing are logical engine state.
+Source exports and their index are pinned under `engine/tests/fixtures/event_effects/`
+to archaeology T19/F19 merge `6804fbb3d5985a45f0553fb1afb5ddcd37c08add`.
+F19 remains proposed.
+
+```sh
+python3 tools/replay_event_effects.py --check
+python3 tools/replay_event_effects.py --benchmark --out records/T07
+```
+
+`[confirmed]` Numeric helper `1DE2` reverses actor-slot arguments relative to `1DB7`.
+Weighted writes occur even on rejected duplicates. Ordered `67D0` updates read shared
+player state after earlier writes, including signed byte reloads. The native projection
+supports observed `63E3`, managed `6589` and statically read managed `6849` behavior.
+Reached AI roster-changing `A837/A94B` branches return transactional diagnostics;
+ordinary AI caution-flag updates are implemented. Original cases contain no injury or
+AI rearrangement; those branches have static/synthetic coverage or diagnostics as stated.
+
+`[designed]` Inputs require quick mode, valid scene/slot and canonical player/club domains,
+two selector cells at the entry-selected indices (head 1..255), and four numeric queue rows
+(head 0..1700). Return/intermediate snapshots retain those indices as heads advance.
+Composition runs actual placement, prefix and DBC6 first, then checks the computed request
+and all shared handoff fields before loading additional raw context. Bench-only fields are
+new context, rather than values already computed by DBC6. AI/invalid-handoff errors preserve
+the caller image. Expected selectors/events/helpers/after-states never steer computation.
+Full stream setup, remaining late callees, complete DD02/match/week, physical/scratch,
+timer and renderer parity remain pending. Routine timing includes bridge parsing, image
+setup, logical effects/selectors/RNG and serialization, with preparation/decoding excluded;
+it makes no whole-match or emulator speed claim.
