@@ -11,6 +11,7 @@ pub mod event_effects;
 pub mod extra_event;
 pub mod goal_effects;
 pub mod placement;
+pub mod post_score;
 pub mod ratings;
 pub mod step_tail;
 
