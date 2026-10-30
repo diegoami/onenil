@@ -1,0 +1,48 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling version_check v0.9.5
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling typenum v1.20.1
+   Compiling zmij v1.0.23
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.154
+   Compiling itoa v1.0.18
+   Compiling memchr v2.8.3
+   Compiling cpufeatures v0.2.17
+   Compiling cfg-if v1.0.5
+   Compiling generic-array v0.14.7
+   Compiling syn v3.0.9
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling serde_derive v1.0.229
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-dbc6/engine)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.56s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-99cbb9d2c6c10b0a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 59 filtered out; finished in 0.00s
+
+     Running tests/extra_event.rs (engine/target/debug/deps/extra_event-ff35fcd01b274d84)
+
+running 1 test
+test first_actual_original_dbc6_case_replays ... FAILED
+
+failures:
+
+---- first_actual_original_dbc6_case_replays stdout ----
+
+thread 'first_actual_original_dbc6_case_replays' (199865) panicked at tests/extra_event.rs:23:45:
+called `Result::unwrap()` on an `Err` value: "T06 DBC6 decision not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    first_actual_original_dbc6_case_replays
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test extra_event`
