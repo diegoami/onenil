@@ -399,3 +399,339 @@ impl Engine {
         out.helpers.push(json!({"kind":"byte6","scene":index,"player":id,"cache_side":side,"cache_slot":norm,"input":input,"output":output}));
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    fn input() -> State {
+        let c: serde_json::Value = serde_json::from_str(
+            include_str!("../tests/fixtures/quick_reset/T21-r0001.jsonl")
+                .lines()
+                .next()
+                .unwrap(),
+        )
+        .unwrap();
+        let mut s: State = serde_json::from_value(c["input"].clone()).unwrap();
+        s.strategy.seed = 0;
+        s.strategy.managed_clubs = [s.strategy.clubs[0].id as u8, s.strategy.clubs[1].id as u8];
+        s.actor = 2;
+        s.active = 0;
+        s.zero = 0;
+        s.alternate = 0;
+        s.kind = 45;
+        s.remaining = 44;
+        s.signs = [255, 1];
+        s.cache = [[17; 20]; 2];
+        for r in &mut s.scenes {
+            r.slot = r.index;
+            r.word0 = 1000 + u16::from(r.index);
+            r.word8 = 2000 + u16::from(r.index);
+            r.word10 = 0x7F80;
+            r.motion = 99;
+        }
+        for p in &mut s.players {
+            p.byte6 = 10;
+            p.byte8 = 10;
+            p.flags11 = 0;
+        }
+        s
+    }
+    fn id(s: &State, index: u8) -> u16 {
+        s.scenes[usize::from(index) - 1].player
+    }
+    fn p_mut(s: &mut State, id: u16) -> &mut Player {
+        s.players.iter_mut().find(|p| p.id == id).unwrap()
+    }
+    fn p(s: &State, id: u16) -> &Player {
+        s.players.iter().find(|p| p.id == id).unwrap()
+    }
+    fn loaded(s: &State) -> Engine {
+        validate(s).unwrap();
+        let mut e = blank(s);
+        load(&mut e, s, false);
+        e
+    }
+    #[test]
+    fn zero_flag_sets_active_and_copies_every_position_without_other_work() {
+        let mut s = input();
+        s.actor = 1;
+        s.zero = 2;
+        for p in &mut s.players {
+            p.byte8 = 0;
+        }
+        let got = reset(&s).unwrap();
+        assert_eq!(got.output.active, 1);
+        assert_eq!(got.copies.len(), 22);
+        assert!(
+            got.motions.is_empty()
+                && got.keeper.is_none()
+                && got.strategy.is_none()
+                && got.helpers.is_empty()
+                && got.draws.is_empty()
+        );
+        assert_eq!(got.output.players, s.players);
+        assert_eq!(got.output.cache, s.cache);
+        assert_eq!(got.output.actor, 1);
+        for (a, b) in got.output.scenes.iter().zip(&s.scenes) {
+            assert_eq!(a.word8, b.word0);
+            assert_eq!(a.motion, b.motion);
+        }
+    }
+    #[test]
+    fn physical_keeper_exclusion_and_stored_slot_sides_are_independent() {
+        let mut s = input();
+        s.scenes[1].slot = 13;
+        s.scenes[12].slot = 2;
+        let got = reset(&s).unwrap();
+        assert_eq!(got.output.scenes[0].motion, 0);
+        assert_eq!(got.output.scenes[11].motion, 0);
+        assert_eq!(got.output.scenes[1].motion, 0);
+        assert_eq!(got.output.scenes[12].motion, 6);
+        assert_eq!(p(&got.output, id(&s, 2)).byte6, 9);
+        assert_eq!(p(&got.output, id(&s, 13)).byte6, 11);
+        assert_eq!(got.output.cache, s.cache);
+    }
+    #[test]
+    fn both_keeper_preludes_transform_the_pair_and_select_on_the_shared_seed() {
+        for (actor, replacement, coordinate) in [(1, 3, 0x7F80), (12, 14, 0x8180)] {
+            let mut s = input();
+            s.actor = actor;
+            let got = reset(&s).unwrap();
+            assert_eq!(got.draws.len(), 1);
+            assert_eq!(
+                (
+                    got.draws[0].site.as_str(),
+                    got.draws[0].n,
+                    got.draws[0].value,
+                    got.draws[0].seed_after
+                ),
+                ("0AB9:4FDF", 10, 2, 0x1B0F)
+            );
+            let k = got.keeper.as_ref().unwrap();
+            assert_eq!(
+                (k.input.actor, k.output.actor, k.draw_start, k.draw_end),
+                (actor, replacement, 0, 1)
+            );
+            assert_eq!(k.input.strategy.seed, 0);
+            assert_eq!(k.output.strategy.seed, 0x1B0F);
+            assert_eq!(got.strategy_input.as_ref().unwrap().strategy.seed, 0x1B0F);
+            assert_eq!(got.output.scenes[usize::from(actor) - 1].word8, coordinate);
+            assert_eq!(
+                got.output.scenes[usize::from(replacement) - 1].word8,
+                1000 + u16::from(replacement)
+            );
+            assert_eq!(got.output.actor, replacement);
+        }
+    }
+    #[test]
+    fn pair_factor_uses_signed_kind_signed_bytes_and_low_byte_products() {
+        let mut s = input();
+        s.actor = 1;
+        s.kind = 128;
+        s.remaining = 0;
+        assert_eq!(reset(&s).unwrap().output.scenes[0].word8, 0x8180);
+        s.signs = [128, 3];
+        assert_eq!(reset(&s).unwrap().output.scenes[0].word8, 0x8000);
+        s.signs = [255, 1];
+        s.kind = 45;
+        s.remaining = 45;
+        assert_eq!(reset(&s).unwrap().output.scenes[0].word8, 0x7F80);
+        s.remaining = 46;
+        assert_eq!(reset(&s).unwrap().output.scenes[0].word8, 0x8180);
+        s.remaining = 44;
+        s.scenes[0].slot = 13;
+        assert_eq!(reset(&s).unwrap().output.scenes[0].word8, 0x8180);
+    }
+    #[test]
+    fn keeper_retry_observes_current_eligibility_without_redrawing() {
+        let mut s = input();
+        s.actor = 1;
+        for (index, byte8, flags11) in [(3, 0, 0), (4, 10, 0x20), (5, 255, 0)] {
+            let id = id(&s, index);
+            let q = p_mut(&mut s, id);
+            q.byte8 = byte8;
+            q.flags11 = flags11;
+        }
+        let got = reset(&s).unwrap();
+        assert_eq!(got.output.actor, 6);
+        assert_eq!(got.draws.len(), 1);
+        let scenes: Vec<_> = got
+            .helpers
+            .iter()
+            .take(4)
+            .map(|h| h["scene"].as_u64().unwrap())
+            .collect();
+        assert_eq!(scenes, [3, 4, 5, 6]);
+        assert_eq!(got.keeper.unwrap().output.actor, 6);
+    }
+    #[test]
+    fn keeper_cycle_wraps_from_eleven_back_to_two() {
+        let mut s = input();
+        s.actor = 1;
+        for seed in 0..100 {
+            s.strategy.seed = seed;
+            let baseline = reset(&s).unwrap();
+            if baseline.draws[0].value == 10 {
+                for index in [11, 2] {
+                    let id = id(&s, index);
+                    p_mut(&mut s, id).byte8 = 0;
+                }
+                let got = reset(&s).unwrap();
+                assert_eq!(got.output.actor, 3);
+                assert_eq!(
+                    got.helpers
+                        .iter()
+                        .take(3)
+                        .map(|h| h["scene"].as_u64().unwrap())
+                        .collect::<Vec<_>>(),
+                    [11, 2, 3]
+                );
+                return;
+            }
+        }
+        panic!("no wrap candidate exercised");
+    }
+    #[test]
+    fn no_eligible_keeper_cycle_is_a_transactional_diagnostic() {
+        for actor in [1, 12] {
+            let mut s = input();
+            s.actor = actor;
+            let indices = if actor == 1 { 2..=11 } else { 13..=22 };
+            for i in indices {
+                let id = id(&s, i);
+                p_mut(&mut s, id).byte8 = 0;
+            }
+            let mut e = loaded(&s);
+            let before = e.image.clone();
+            assert!(e.apply_quick_reset(&s).unwrap_err().contains("no eligible"));
+            assert_eq!(e.image, before);
+            s.zero = 1;
+            assert!(reset(&s).is_ok());
+        }
+    }
+    #[test]
+    fn strategy_uses_actual_post_keeper_seed_without_resetting_it() {
+        let mut s = input();
+        s.actor = 1;
+        s.strategy.managed_clubs = [0, 0];
+        s.strategy.scores = [0, 2];
+        s.strategy.limits = [255, 255];
+        let got = reset(&s).unwrap();
+        let strategy = got.strategy.as_ref().unwrap();
+        assert_eq!(strategy.draws.len(), 6);
+        assert_eq!(got.draws.len(), 7);
+        assert_eq!(strategy.draws[0].seed_before, got.draws[0].seed_after);
+        assert_eq!(
+            got.output.strategy.seed,
+            got.draws.last().unwrap().seed_after
+        );
+        assert_eq!(strategy.output.seed, got.output.strategy.seed);
+        assert_ne!(
+            got.strategy_input.as_ref().unwrap().strategy.seed,
+            s.strategy.seed
+        );
+    }
+    #[test]
+    fn unavailable_and_zero_id_players_are_skipped_but_still_have_motion() {
+        for (byte8, flags11) in [(0, 0), (128, 0), (10, 0x80), (10, 0x20), (10, 2), (10, 4)] {
+            let mut s = input();
+            let id = id(&s, 2);
+            let q = p_mut(&mut s, id);
+            q.byte8 = byte8;
+            q.flags11 = flags11;
+            let got = reset(&s).unwrap();
+            assert_eq!(p(&got.output, id).byte6, 10);
+            assert_eq!(got.output.scenes[1].motion, 6);
+            assert!(!got
+                .helpers
+                .iter()
+                .any(|h| h["kind"] == "byte6" && h["scene"] == 2));
+        }
+        let mut s = input();
+        s.scenes[1].player = 0;
+        if !s.players.iter().any(|p| p.id == 0) {
+            s.players.push(Player {
+                id: 0,
+                byte6: 10,
+                byte8: 10,
+                flags11: 0,
+            });
+        }
+        let got = reset(&s).unwrap();
+        assert_eq!(p(&got.output, 0).byte6, 10);
+    }
+    #[test]
+    fn repeated_ids_reload_signed_byte6_and_never_write_the_cache() {
+        let mut s = input();
+        let shared = id(&s, 2);
+        for r in &mut s.scenes[1..11] {
+            r.player = shared;
+        }
+        p_mut(&mut s, shared).byte6 = 127;
+        let got = reset(&s).unwrap();
+        assert_eq!(p(&got.output, shared).byte6, 9);
+        assert_eq!(got.output.cache, s.cache);
+        let updates: Vec<_> = got
+            .helpers
+            .iter()
+            .filter(|h| h["kind"] == "byte6" && h["player"] == shared)
+            .map(|h| h["output"]["byte6"].as_u64().unwrap())
+            .collect();
+        assert_eq!(updates, [128, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    }
+    #[test]
+    fn alternate_inverts_live_table_delta_and_all_clamps_remain_signed() {
+        let mut s = input();
+        s.alternate = 1;
+        let got = reset(&s).unwrap();
+        assert_eq!(p(&got.output, id(&s, 2)).byte6, 9);
+        assert_eq!(p(&got.output, id(&s, 13)).byte6, 11);
+        let own = id(&s, 2);
+        p_mut(&mut s, own).byte6 = 200;
+        assert_eq!(p(&reset(&s).unwrap().output, own).byte6, 1);
+        s.alternate = 0;
+        p_mut(&mut s, own).byte6 = 0;
+        assert_eq!(p(&reset(&s).unwrap().output, own).byte6, 1);
+    }
+    #[test]
+    fn malformed_domains_and_expected_intermediate_fields_are_rejected() {
+        for damage in 0..7 {
+            let mut s = input();
+            match damage {
+                0 => s.mode = 0,
+                1 => s.actor = 0,
+                2 => s.side_offsets = [0, 11],
+                3 => s.scenes[0].slot = 0,
+                4 => {
+                    s.scenes.pop();
+                }
+                5 => {
+                    s.players.push(s.players[0].clone());
+                }
+                _ => s.scenes.swap(0, 1),
+            }
+            assert!(reset(&s).is_err(), "damage {damage}");
+        }
+        let mut value = serde_json::to_value(input()).unwrap();
+        value["strategy_input"] = json!({});
+        assert!(serde_json::from_value::<State>(value).is_err());
+        let mut value = serde_json::to_value(input()).unwrap();
+        value["players"][0]["byte8"] = json!(256);
+        assert!(serde_json::from_value::<State>(value).is_err());
+    }
+    #[test]
+    fn invalid_handoffs_preserve_the_entire_image_and_success_preserves_unowned_fields() {
+        let s = input();
+        let mut e = loaded(&s);
+        e.image[0x11000] = 0xAA;
+        put(&mut e, player(s.players[0].id, 2), 0xBEEF);
+        let before = e.image.clone();
+        let mut bad = s.clone();
+        bad.strategy.seed ^= 1;
+        assert!(e.apply_quick_reset(&bad).is_err());
+        assert_eq!(e.image, before);
+        e.apply_quick_reset(&s).unwrap();
+        assert_eq!(e.image[0x11000], 0xAA);
+        assert_eq!(word(&e, player(s.players[0].id, 2)), 0xBEEF);
+    }
+}
