@@ -678,3 +678,505 @@ impl Engine {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    fn synchronize(s: &mut State) {
+        let ids = s
+            .handoff
+            .scenes
+            .iter()
+            .map(|r| r.player)
+            .collect::<BTreeSet<_>>();
+        s.handoff.players = ids
+            .into_iter()
+            .map(|id| {
+                let p = s.players.iter().find(|p| p.id == id).unwrap();
+                extra_event::Player {
+                    id,
+                    p8_0: p.p8_0,
+                    p8_1: p.p8_1,
+                    p8_3: p.p8_3,
+                    p8_4: p.p8_4,
+                    p8_5: p.p8_5,
+                    p8_7: p.p8_7,
+                    p15_6: p.p15_6,
+                    p15_8: p.p15_8,
+                    p15_10: p.p15_10,
+                    p15_11: p.p15_11,
+                    skills: [
+                        extra_event::Skill {
+                            mode: 6,
+                            style_cell: 6,
+                            level_cell: 32,
+                        },
+                        extra_event::Skill {
+                            mode: 14,
+                            style_cell: 14,
+                            level_cell: 32,
+                        },
+                    ],
+                }
+            })
+            .collect();
+    }
+    fn state() -> State {
+        let c: serde_json::Value = serde_json::from_str(
+            include_str!("../tests/fixtures/event_effects/T19-r0002.jsonl")
+                .lines()
+                .next()
+                .unwrap(),
+        )
+        .unwrap();
+        let mut s: State = serde_json::from_value(c["input"].clone()).unwrap();
+        s.managed_clubs = [s.handoff.clubs[0].id as u8, s.handoff.clubs[1].id as u8];
+        s.selectors.cells[0].value = 0;
+        s.selectors.cells[1].value = 0;
+        s.handoff.seed = 0;
+        s.counters = [[0; 3]; 2];
+        s.cache = [[17; 20]; 2];
+        s.event_totals = [[0; 20]; 2];
+        s.event_counts = [0, 0];
+        s.source_pair = [3, 4];
+        s.target_pair = [8, 9];
+        s.added = 0;
+        s.pending = 0;
+        s.cf53 = 0;
+        s.reserves = [1, 1];
+        s.active = 7;
+        s.control = 9;
+        s.clear_word = 0x1234;
+        s.target_word = 0x4567;
+        for p in &mut s.players {
+            p.p8_1 = 25;
+            p.p8_3 = 0;
+            p.p8_5 = 10;
+            p.p8_6 = 3;
+            p.p15_6 = 10;
+            p.p15_8 = 10;
+            p.p15_10 = 0;
+            p.p15_11 = 0;
+        }
+        synchronize(&mut s);
+        validate(&s).unwrap();
+        s
+    }
+    fn id(s: &State, index: u8) -> u16 {
+        s.handoff.scenes[usize::from(index) - 1].player
+    }
+    fn player_mut(s: &mut State, id: u16) -> &mut Player {
+        s.players.iter_mut().find(|p| p.id == id).unwrap()
+    }
+    fn loaded(s: &State) -> Engine {
+        validate(s).unwrap();
+        let mut e = blank(s);
+        load(&mut e, s, false).unwrap();
+        e
+    }
+    fn target_side(s: &State) -> usize {
+        usize::from(s.handoff.scenes[usize::from(s.handoff.secondary) - 1].slot < 12)
+    }
+    fn red_state() -> State {
+        let mut s = state();
+        let id = id(&s, s.handoff.secondary);
+        player_mut(&mut s, id).p15_11 = 0x10;
+        synchronize(&mut s);
+        s
+    }
+    #[test]
+    fn selector_wrap_is_independent_of_the_lcg() {
+        let mut s = state();
+        s.selectors = Selectors {
+            head: 255,
+            cells: [
+                Cell {
+                    index: 255,
+                    value: 0,
+                },
+                Cell { index: 1, value: 0 },
+            ],
+        };
+        let got = handler(&s).unwrap();
+        assert_eq!(got.output.selectors.head, 2);
+        assert_eq!(got.output.handoff.seed, s.handoff.seed);
+        assert!(got.draws.is_empty());
+        assert_eq!(got.selectors[0].head_after, 1);
+        assert_eq!(got.selectors[1].head_before, 1);
+    }
+    #[test]
+    fn chance_short_circuit_has_both_lcg_paths_and_seed_wrap() {
+        let mut s = state();
+        s.selectors.cells[0].value = 15;
+        let mut seen = BTreeSet::new();
+        for seed in 0..500 {
+            s.handoff.seed = seed;
+            let got = handler(&s).unwrap();
+            assert_eq!(got.draws.len(), 1);
+            assert_eq!(got.draws[0].site, "0AB9:6A15");
+            assert_eq!(got.draws[0].n, 32);
+            assert_eq!(got.selectors.len(), 2);
+            seen.insert(!got.actions.is_empty());
+            if got.draws[0].value == 1 {
+                assert_eq!(got.actions[0].routine, "0AB9:6589");
+            } else {
+                assert!(got.actions.is_empty());
+            }
+            if seen.len() == 2 {
+                break;
+            }
+        }
+        assert_eq!(seen.len(), 2);
+        s.handoff.seed = 65535;
+        let got = handler(&s).unwrap();
+        assert_eq!(got.draws[0].seed_after, 0xA052);
+    }
+    #[test]
+    fn ai_caution_updates_raw_flags_while_managed_caution_preserves_them() {
+        let mut s = state();
+        s.managed_clubs = [0, 0];
+        let target = id(&s, s.handoff.secondary);
+        player_mut(&mut s, target).p15_10 = 8;
+        synchronize(&mut s);
+        let got = handler(&s).unwrap();
+        let p = got.output.players.iter().find(|p| p.id == target).unwrap();
+        assert_eq!(p.p15_10, 0x80);
+        assert_eq!(p.p15_11, 0x10);
+        s.managed_clubs = [s.handoff.clubs[0].id as u8, s.handoff.clubs[1].id as u8];
+        let got = handler(&s).unwrap();
+        assert_eq!(
+            got.output
+                .players
+                .iter()
+                .find(|p| p.id == target)
+                .unwrap()
+                .p15_10,
+            8
+        );
+    }
+    #[test]
+    fn signed_event_weights_counter_wrap_queue_wrap_and_added_cap() {
+        let mut s = state();
+        s.queue.head = 1700;
+        for (r, i) in s.queue.rows.iter_mut().zip([1700, 1, 2, 3]) {
+            r.index = i;
+        }
+        let side = target_side(&s);
+        s.counters[side][0] = 255;
+        s.event_counts[side] = 65535;
+        s.event_totals[side][5] = 10;
+        s.added = 4;
+        let got = handler(&s).unwrap();
+        assert_eq!(got.output.queue.head, 1);
+        assert_eq!(got.output.queue.rows[1].code, 50);
+        assert_eq!(got.output.queue.rows[2].code, 255);
+        assert_eq!(
+            got.output.queue.rows[2].first_player,
+            s.queue.rows[2].first_player
+        );
+        assert_eq!(got.output.counters[side][0], 0);
+        assert_eq!(got.output.event_counts[side], 0);
+        assert_eq!(got.output.event_totals[side][5], 65526);
+        assert_eq!(got.output.target_pair, s.source_pair);
+        assert_eq!(got.output.added, 5);
+        for added in [5, 6, 65535] {
+            s.added = added;
+            assert_eq!(handler(&s).unwrap().output.added, added);
+        }
+    }
+    #[test]
+    fn duplicate_numeric_event_still_weights_and_applies_player_effects() {
+        let mut s = state();
+        let side = usize::from(s.handoff.secondary < 12);
+        let target_slot = s.handoff.scenes[usize::from(s.handoff.secondary) - 1].slot;
+        let target_slot = usize::from(if target_slot > 11 {
+            target_slot - 11
+        } else {
+            target_slot
+        });
+        let actor_slot = s.handoff.scenes[usize::from(s.handoff.actor) - 1].slot;
+        let actor_slot = usize::from(if actor_slot > 11 {
+            actor_slot - 11
+        } else {
+            actor_slot
+        });
+        let r = &mut s.queue.rows[0];
+        r.code = 50;
+        r.side = side as u8;
+        r.first_player = s.rosters[side].players[target_slot - 1];
+        r.second_player = s.rosters[side].players[actor_slot - 1];
+        s.event_totals[side][target_slot - 1] = 10;
+        s.event_counts[side] = 9;
+        let got = handler(&s).unwrap();
+        assert_eq!(got.events[0].accepted, 0);
+        assert_eq!(got.output.queue, s.queue);
+        assert_eq!(got.output.event_totals[side][target_slot - 1], 65526);
+        assert_eq!(got.output.event_counts[side], 9);
+        assert_eq!(got.output.target_pair, s.target_pair);
+        assert_eq!(got.output.counters[target_side(&s)][0], 1);
+        assert_eq!(
+            got.output
+                .players
+                .iter()
+                .find(|p| p.id == id(&s, s.handoff.secondary))
+                .unwrap()
+                .p15_11,
+            0x10
+        );
+    }
+    #[test]
+    fn physical_event_side_and_scene_slot_counter_side_are_distinct() {
+        let mut s = state();
+        let i = usize::from(s.handoff.secondary) - 1;
+        s.handoff.scenes[i].slot = 2;
+        let got = handler(&s).unwrap();
+        assert_eq!(
+            (
+                got.events[0].event_side,
+                got.events[0].actor_slot,
+                got.events[0].secondary_slot
+            ),
+            (0, 2, 7)
+        );
+        assert_eq!(got.output.counters[1][0], 1);
+        assert_eq!(got.output.counters[0][0], 0);
+    }
+    #[test]
+    fn dismissal_updates_shared_ids_sequentially_and_skips_newly_unavailable_aliases() {
+        for alias_target in [false, true] {
+            let mut s = red_state();
+            let shared = if alias_target {
+                id(&s, s.handoff.secondary)
+            } else {
+                id(&s, s.handoff.actor)
+            };
+            for r in &mut s.handoff.scenes[..11] {
+                r.player = shared;
+            }
+            player_mut(&mut s, shared).p15_6 = 127;
+            synchronize(&mut s);
+            let got = handler(&s).unwrap();
+            let p = got.output.players.iter().find(|p| p.id == shared).unwrap();
+            if alias_target {
+                assert_eq!(p.p15_6, 125);
+                assert_eq!(got.helpers.len(), 12);
+                assert!(got.helpers.iter().skip(1).all(|h| h["result"] == 1));
+            } else {
+                assert_eq!(p.p15_6, 19);
+                assert_eq!(got.helpers.len(), 23);
+                let updates: Vec<_> = got
+                    .helpers
+                    .iter()
+                    .filter(|h| h["kind"] == "byte6" && h["player"] == shared)
+                    .map(|h| h["output"]["byte6"].as_u64().unwrap())
+                    .collect();
+                assert_eq!(updates, [129, 1, 3, 5, 7, 9, 11, 13, 15, 17, 19]);
+            }
+        }
+    }
+    #[test]
+    fn scene_clear_uses_the_passed_slot_preserves_clock_fields_and_is_idempotent() {
+        let mut s = red_state();
+        let target = usize::from(s.handoff.secondary) - 1;
+        s.handoff.scenes[target].slot = 18;
+        s.handoff.scenes[17].word0 = s.clear_word ^ 1;
+        s.scene_extra[17].word8 = 65535;
+        s.scene_extra[17].motion = 9;
+        s.scene_extra[17].motion_word = 65535;
+        let old = s.handoff.scenes[target].word0;
+        let got = handler(&s).unwrap();
+        assert_eq!(got.output.handoff.scenes[target].word0, old);
+        assert_eq!(got.output.handoff.scenes[17].word0, s.clear_word);
+        assert_eq!(
+            (
+                got.output.scene_extra[17].word8,
+                got.output.scene_extra[17].motion,
+                got.output.scene_extra[17].motion_word
+            ),
+            (s.target_word, 0, 0)
+        );
+        assert_eq!(
+            (got.output.active, got.output.control, got.output.cf53),
+            (s.active, s.control, 1)
+        );
+        s.handoff.scenes[17].word0 = s.clear_word;
+        s.cf53 = 77;
+        let got = handler(&s).unwrap();
+        assert_eq!(got.output.scene_extra[17], s.scene_extra[17]);
+        assert_eq!(got.output.cf53, 77);
+    }
+    #[test]
+    fn managed_budget_blocks_effects_and_uses_word_sum_not_byte_wrap() {
+        for (dismissed, injured) in [(2, 1), (255, 1)] {
+            let mut s = red_state();
+            let side = target_side(&s);
+            s.counters[side][1] = dismissed;
+            s.counters[side][2] = injured;
+            let got = handler(&s).unwrap();
+            assert_eq!(got.actions.len(), 1);
+            assert!(got.events.is_empty());
+            assert!(got.helpers.is_empty());
+            assert_eq!(got.actions[0].input, got.actions[0].output);
+            assert_eq!(got.output.players, s.players);
+        }
+    }
+    fn injury_state() -> State {
+        let mut s = state();
+        s.selectors.cells[0].value = 15;
+        s.selectors.cells[1].value = 1;
+        s
+    }
+    #[test]
+    fn managed_injury_draws_updates_cache_and_preserves_tie_choice() {
+        let s = injury_state();
+        let target = id(&s, s.handoff.actor);
+        let got = handler(&s).unwrap();
+        assert_eq!(got.actions.len(), 1);
+        assert_eq!(got.actions[0].routine, "0AB9:6849");
+        assert_eq!(got.actions[0].scene, s.handoff.actor);
+        assert_eq!(
+            got.draws
+                .iter()
+                .map(|d| d.site.as_str())
+                .collect::<Vec<_>>(),
+            ["0AB9:6A15", "1998:13EE"]
+        );
+        assert_eq!(got.draws[1].n, 10);
+        let p = got.output.players.iter().find(|p| p.id == target).unwrap();
+        assert_eq!(
+            (p.p15_8, p.p15_6, p.p15_14),
+            (0, 8, got.draws[1].value as u8)
+        );
+        assert_eq!(
+            (
+                got.output.cache[1][6],
+                got.output.counters[1][2],
+                got.output.added,
+                got.output.pending
+            ),
+            (8, 1, 1, 0)
+        );
+        assert_eq!(
+            (
+                got.events[0].code,
+                got.events[0].actor_slot,
+                got.events[0].secondary_slot
+            ),
+            (52, 7, 0)
+        );
+    }
+    #[test]
+    fn injury_bounds_zero_and_underflow_are_word_sized_and_store_the_low_byte() {
+        for (level, flag, bound) in [(20, 0, 0), (0, 1, 65301)] {
+            let mut s = injury_state();
+            for p in &mut s.players {
+                p.p8_5 = level;
+                p.p8_3 = flag;
+            }
+            synchronize(&mut s);
+            let got = handler(&s).unwrap();
+            assert_eq!(got.draws[1].n, bound);
+            let p = got
+                .output
+                .players
+                .iter()
+                .find(|p| p.id == id(&s, s.handoff.actor))
+                .unwrap();
+            assert_eq!(p.p15_14, got.draws[1].value as u8);
+            if bound == 0 {
+                assert_eq!(p.p15_14, 1);
+            }
+        }
+    }
+    #[test]
+    fn injury_availability_budget_and_pending_flags_take_their_own_paths() {
+        let mut s = injury_state();
+        let id = id(&s, s.handoff.actor);
+        player_mut(&mut s, id).p15_8 = 0;
+        synchronize(&mut s);
+        let got = handler(&s).unwrap();
+        assert!(got.events.is_empty());
+        assert_eq!(got.draws.len(), 1);
+        s = injury_state();
+        s.counters[1][1] = 3;
+        assert!(handler(&s).unwrap().events.is_empty());
+        for (position, reserve) in [(0, 1), (3, 0)] {
+            s = injury_state();
+            player_mut(&mut s, id).p8_6 = position;
+            s.reserves[1] = reserve;
+            assert_eq!(handler(&s).unwrap().output.pending, 1);
+        }
+    }
+    #[test]
+    fn caution_then_injury_can_accept_two_numeric_events_in_one_window() {
+        let mut s = state();
+        s.selectors.cells[1].value = 1;
+        let got = handler(&s).unwrap();
+        assert_eq!(
+            got.events.iter().map(|e| e.code).collect::<Vec<_>>(),
+            [50, 52]
+        );
+        assert_eq!(got.output.queue.head, s.queue.head + 2);
+        assert_eq!(got.output.queue.rows[3].code, 255);
+        assert_eq!(got.selectors.len(), 2);
+        assert_eq!(got.draws.len(), 1);
+    }
+    #[test]
+    fn reached_ai_roster_changes_and_wrong_requests_are_transactional_diagnostics() {
+        for injury in [false, true] {
+            let mut s = if injury { injury_state() } else { red_state() };
+            s.managed_clubs = [0, 0];
+            let mut e = loaded(&s);
+            let before = e.image.clone();
+            let request = extra_event::Request {
+                routine: "0AB9:69B8".into(),
+                input: s.handoff.clone(),
+            };
+            assert!(e
+                .apply_event_effects(&s, &request)
+                .unwrap_err()
+                .contains("AI"));
+            assert_eq!(e.image, before);
+        }
+        let s = state();
+        let mut e = loaded(&s);
+        e.image[0x11000] = 0xAA;
+        let before = e.image.clone();
+        let mut request = extra_event::Request {
+            routine: "0AB9:69B8".into(),
+            input: s.handoff.clone(),
+        };
+        request.input.seed ^= 1;
+        assert!(e.apply_event_effects(&s, &request).is_err());
+        assert_eq!(e.image, before);
+        request.input = s.handoff.clone();
+        e.apply_event_effects(&s, &request).unwrap();
+        assert_eq!(e.image[0x11000], 0xAA);
+    }
+    #[test]
+    fn malformed_context_aliases_and_expected_inputs_are_rejected() {
+        for damage in 0..8 {
+            let mut s = state();
+            match damage {
+                0 => s.mode = 0,
+                1 => s.selectors.head = 0,
+                2 => s.selectors.cells[1].index = s.selectors.head,
+                3 => {
+                    s.queue.rows.pop();
+                }
+                4 => s.queue.head = 1701,
+                5 => {
+                    s.scene_extra.pop();
+                }
+                6 => s.weights[0].code = 49,
+                _ => {
+                    s.players.push(s.players[0].clone());
+                }
+            }
+            assert!(handler(&s).is_err(), "damage {damage}");
+        }
+        let mut raw = serde_json::to_value(state()).unwrap();
+        raw["expected_events"] = json!([]);
+        assert!(serde_json::from_value::<State>(raw).is_err());
+    }
+}
