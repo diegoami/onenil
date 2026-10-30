@@ -97,7 +97,7 @@ fn word(e: &Engine, a: usize) -> u16 {
 fn put(e: &mut Engine, a: usize, v: u16) {
     e.image[a..a + 2].copy_from_slice(&v.to_le_bytes());
 }
-fn validate(s: &State) -> Result<(), String> {
+pub(crate) fn validate(s: &State) -> Result<(), String> {
     let mut ids = BTreeSet::new();
     let mut clubs = BTreeMap::new();
     let mut cells = BTreeMap::new();
@@ -135,7 +135,7 @@ fn blank(s: &State) -> Engine {
         goals: [0; 2],
     })
 }
-fn load(e: &mut Engine, s: &State, preserve: bool) {
+pub(crate) fn load(e: &mut Engine, s: &State, preserve: bool) {
     if !preserve {
         e.put_word(0xA51C, s.seed);
         e.image[0xD0C4..0xD0C6].copy_from_slice(&s.scores);
@@ -164,7 +164,7 @@ fn load(e: &mut Engine, s: &State, preserve: bool) {
         e.image[flags(p.id)] = p.flags10;
     }
 }
-fn project(e: &Engine, template: &State) -> State {
+pub(crate) fn project(e: &Engine, template: &State) -> State {
     let mut s = template.clone();
     s.seed = e.word(0xA51C);
     s.scores.copy_from_slice(&e.image[0xD0C4..0xD0C6]);
@@ -252,7 +252,7 @@ impl Engine {
         *self = trial;
         Ok(result)
     }
-    fn post_score_loaded(&mut self, template: &State) -> Outcome {
+    pub(crate) fn post_score_loaded(&mut self, template: &State) -> Outcome {
         let mut out = Outcome {
             output: template.clone(),
             draws: vec![],
