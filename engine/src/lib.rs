@@ -55,13 +55,13 @@ pub struct Outcome {
 }
 
 pub struct Engine {
-    image: Box<[u8; 65536]>,
+    image: Box<[u8]>,
 }
 
 impl Engine {
     pub fn new(input: &Input) -> Self {
         let mut engine = Self {
-            image: Box::new([0; 65536]),
+            image: vec![0; 0x50000].into_boxed_slice(),
         };
         engine.put_word(SEED, input.seed);
         for (i, value) in input.ratings.iter().enumerate() {

@@ -46,7 +46,10 @@ fn all_original_goal_effects_replay() {
         pin["repository"],
         "https://github.com/diegoami/onenil-archaeology"
     );
-    assert_eq!(pin["commit"].as_str().unwrap().len(), 40);
+    let commit = pin["commit"].as_str().unwrap();
+    assert_eq!(commit.len(), 40);
+    assert!(commit.bytes().all(|b| b.is_ascii_hexdigit()));
+    assert_eq!(index["schema"], "goal-effects-corpus/1");
     let mut count = 0;
     for r in index["records"].as_array().unwrap() {
         let data = fs::read(fixtures().join(r["cases"].as_str().unwrap())).unwrap();

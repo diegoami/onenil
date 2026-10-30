@@ -99,7 +99,7 @@ clamping and cache reloads, event totals and side counters, scorer-log caps/minu
 numeric commentary queue bookkeeping. Those caches and counters remain logical state even when
 the original updates them through functions that also draw text. Formatted commentary, render
 buffers, pixels, timer and scratch effects are external. Complete original state is supplied by
-archaeology T14/F14; its source commit and copied index are pinned under
+[archaeology T14/F14](https://github.com/diegoami/onenil-archaeology/blob/2efc69cd2206a9d3c706073d63526885488d4567/findings/F14-logical-goal-effects.md); its source commit and copied index are pinned under
 `engine/tests/fixtures/goal_effects/provenance.json`.
 
 After building the release bridge, check or measure this logical slice:

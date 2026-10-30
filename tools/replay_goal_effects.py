@@ -49,6 +49,10 @@ def load_cases():
     if (index["schema"] != "goal-effects-corpus/1"
             or (index["calls"], index["weeks"], index["traces"]) != (17, 6, 15)):
         raise ValueError("expected 17 effects / six weeks / 15 source traces")
+    placement_raw = (ROOT / "engine/tests/fixtures/placement/index.json").read_bytes()
+    if sha(placement_raw) != index["t13_index_sha256"]:
+        raise ValueError("placement source index digest differs")
+    placement_records = {r["week"]: r for r in json.loads(placement_raw)["records"]}
     cases, files, weeks = [], set(), set()
     for record in index["records"]:
         name = record["cases"]
@@ -56,8 +60,19 @@ def load_cases():
         if name in files or record["week"] in weeks or len(rows) != record["calls"]:
             raise ValueError("duplicate or incomplete goal-effect record")
         for case in rows:
-            if case["schema"] != "goal-effects-case/1" or case["week"] != record["week"]:
-                raise ValueError("goal-effect case provenance differs")
+            source = case["source"]
+            placement = placement_records[case["week"]]
+            if (case["schema"] != "goal-effects-case/1" or case["week"] != record["week"]
+                    or source["t13_step"] != case["step"]
+                    or Path(source["t13_cases"]).name != placement["cases"]
+                    or source["t13_cases_sha256"] != placement["cases_sha256"]
+                    or source["t13_record"] != placement["record"]
+                    or source["t13_record_sha256"] != placement["record_sha256"]
+                    or any(not HEX64.fullmatch(source[key]) for key in
+                           ("t12_record_sha256", "t13_record_sha256", "t13_cases_sha256", "t08_sha256"))
+                    or source["draw_end"] - source["draw_start"] != 1
+                    or len(case["request"]["draws"]) != 1 or len(case["helper_calls"]) != 2):
+                raise ValueError("goal-effect case provenance or boundary differs")
         files.add(name)
         weeks.add(record["week"])
         cases.extend(rows)
@@ -67,10 +82,14 @@ def load_cases():
             or len({c["t04_record"] for c in coverage}) != 15
             or {c["cases"] for c in coverage} != files):
         raise ValueError("incomplete goal-effect corpus coverage")
+    if any(not HEX64.fullmatch(entry["trace_sha256"]) for entry in coverage):
+        raise ValueError("invalid source trace digest")
     helper = index["helper_checks"]
     checks = read_file(helper["file"], helper["sha256"])
     if len(checks) != 34 or helper["cases"] != 34:
         raise ValueError("expected 34 original byte6 helpers")
+    if any(h["schema"] != "byte6-case/1" for h in checks):
+        raise ValueError("invalid byte6 helper schema")
     return cases, checks, index, pin
 
 
@@ -111,6 +130,15 @@ def check(cases, helpers):
             json.dumps(helper["input"], separators=(",", ":"))))
         if not same(got, helper["output"]):
             raise ValueError(f"{helper['week']} step {helper['step']}: byte6 helper differs")
+    # Exercise rejection across the serialized bridge as well as Rust unit tests.
+    bad_request = dict(cases[0]["request"])
+    bad_request["coin"] ^= 1
+    try:
+        onenil_engine.apply_goal_effects(json.dumps(cases[0]["before"]), json.dumps(bad_request))
+    except ValueError:
+        pass
+    else:
+        raise ValueError("Rust bridge accepted a coin inconsistent with the consumed draw")
     print(f"Rust goal effects: {len(cases)} callbacks / {len(helpers)} byte6 helpers / "
           "15 T08 traces; composed post-coin seed unchanged")
 
