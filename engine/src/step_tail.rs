@@ -306,6 +306,13 @@ pub fn composed_prefix(
     placement_input: &placement::Input,
     input: &PrefixInput,
 ) -> Result<ComposedOutcome, String> {
+    composed_prefix_engine(placement_input, input).map(|(_, outcome)| outcome)
+}
+
+pub(crate) fn composed_prefix_engine(
+    placement_input: &placement::Input,
+    input: &PrefixInput,
+) -> Result<(Engine, ComposedOutcome), String> {
     validate_prefix(input)?;
     // [designed] Primitive fields read in both stages must name one shared
     // record; a second expected snapshot cannot silently replace the first.
@@ -325,7 +332,7 @@ pub fn composed_prefix(
     let placement = engine.place_goals(placement_input)?;
     let actual = PlacementHandoff::from(&placement.output);
     let prefix = engine.finish_prefix(input, &actual)?;
-    Ok(ComposedOutcome { placement, prefix })
+    Ok((engine, ComposedOutcome { placement, prefix }))
 }
 
 impl Engine {

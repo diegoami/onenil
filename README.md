@@ -210,3 +210,36 @@ those intervening effects; this is not a direct prefix-to-clock or complete DD02
 replay. The timing receipt measures independent prefix and clock routine calls, including
 bridge parsing, image setup, native updates and serialization, with input preparation/output
 decoding excluded. It identifies the actual release binary and makes no emulator speed claim.
+
+The DBC6 slice translates the quick-step extra-event decision and its direct availability,
+scene-rating, predicate and threshold helpers. It checks 184 original calls, 499 decision
+draws, 909 helpers and 22 computed requests to the still external `69B8` handler. Source pins
+are in `engine/tests/fixtures/extra_event/`: archaeology T17/F17 at
+`321b49556c0acc10576057bc820ff8ecee2d15f7`, supplemented by T18/F18 at
+`59eb0c485d65956cb77283d7061542c20a75c624`. Both findings remain proposed.
+T17's original array contains D01..D0A, while DBC6 actually reads D02..D0B; the reached
+last cell comes from T18's separately captured raw input. All copied exports are byte-identical.
+
+```sh
+python3 tools/replay_extra_event.py --check
+python3 tools/replay_extra_event.py --benchmark --out records/T06
+```
+
+`[confirmed]` The decision preserves wrapper booleans, short circuit draw order, unsigned
+rating comparison, signed final threshold comparison and one-based predicate bits. The raw
+scene-rating helper preserves signed bytes and low-word products. Its stack-dependent branch
+can use an explicitly supplied preexisting word in an isolated helper call; composed DBC6
+returns a diagnostic when that branch is reached because scratch propagation is not yet modeled.
+All original composed cases avoid it. Expected helpers/draws/results never enter the decision API.
+
+`[designed]` The decoded domain supports ordered scenes 1..22, canonical player IDs 0..3920,
+clubs 1..176, style indices 0..13, level indices 0..20 and modes 6/14. Lookup cells sharing an
+address and aliased club/player records must agree. Named pools share the existing engine image;
+arbitrary physical far-pointer/scratch aliases are outside this projection. Composition runs
+native placement and prefix first, then guards actual seed, actor, scene/player and club fields
+before loading additional inputs. Failed handoffs and unsupported scratch paths preserve the
+caller's image. `69B8` is returned as a request at its computed pre-handler state; its observed
+return snapshot is not claimed as native output. Remaining event/substitution/reset/input effects,
+full DD02/match/week, watched-engine and timer/render parity are pending. Timing includes bridge
+parsing, image setup, decisions/helpers/RNG and serialization; preparation/decoding and external
+handler execution are excluded. It is routine timing with no emulator speed claim.

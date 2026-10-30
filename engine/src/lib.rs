@@ -365,6 +365,42 @@ mod python {
     }
 
     #[pyfunction]
+    fn extra_event_decision(input_json: &str) -> PyResult<String> {
+        let input: extra_event::Input =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = extra_event::decision(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
+    fn extra_event_helper(
+        input_json: &str,
+        kind: &str,
+        argument: u16,
+        mode: u16,
+        stack_word: Option<u16>,
+    ) -> PyResult<u16> {
+        let input: extra_event::Input =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        extra_event::helper(&input, kind, argument, mode, stack_word).map_err(PyValueError::new_err)
+    }
+    #[pyfunction]
+    fn placement_prefix_extra_event(
+        placement_json: &str,
+        prefix_json: &str,
+        input_json: &str,
+    ) -> PyResult<String> {
+        let placement: placement::Input = serde_json::from_str(placement_json)
+            .map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let prefix: step_tail::PrefixInput =
+            serde_json::from_str(prefix_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let input: extra_event::Input =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out =
+            extra_event::composed(&placement, &prefix, &input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+
+    #[pyfunction]
     fn apply_byte6(input_json: &str) -> PyResult<String> {
         let input: goal_effects::Byte6Input =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -387,6 +423,9 @@ mod python {
         module.add_function(wrap_pyfunction!(step_tail_prefix, module)?)?;
         module.add_function(wrap_pyfunction!(logical_clock, module)?)?;
         module.add_function(wrap_pyfunction!(placement_tail_prefix, module)?)?;
+        module.add_function(wrap_pyfunction!(extra_event_decision, module)?)?;
+        module.add_function(wrap_pyfunction!(extra_event_helper, module)?)?;
+        module.add_function(wrap_pyfunction!(placement_prefix_extra_event, module)?)?;
         module.add("__version__", env!("CARGO_PKG_VERSION"))?;
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }
