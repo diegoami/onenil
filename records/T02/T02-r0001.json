@@ -1,0 +1,33 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T02-r0001",
+  "code_commit": "6d55c2437ca9e52ec8a1df40bab67193c93b2ff9",
+  "started": "2026-10-30T13:36:23.433851+00:00",
+  "ended": "2026-10-30T13:36:23.493330+00:00",
+  "platform": "Linux-6.18.54.1-microsoft-standard-WSL2-x86_64-with-glibc2.43",
+  "python": "3.14.4",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "ad6a40a6c387929e8141e81397490602c5b6cdf09e3cb5cab6fe858e61b99dde"
+  },
+  "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "archaeology": {
+    "repository": "https://github.com/diegoami/onenil-archaeology",
+    "commit": "a39ac703c09f0981e073d471d61f7bce0f3642e7",
+    "index_sha256": "b46311b5519e65e520bf630740d15abc10739e7f2ab5f0e4bdb3dc4849ee1aa4"
+  },
+  "routine": "0AB9:DD7C..DF35 placement and 5083 RNG projection",
+  "distinct_cases": 558,
+  "source_traces": 15,
+  "repetitions": 20,
+  "calls": 11160,
+  "draws": 36080,
+  "goal_effect_requests": 340,
+  "elapsed_ns": 52034143,
+  "serialized_output_bytes": 6604080,
+  "method": "Pre-serialized input JSON; timed Python/Rust bridge parsing, DS-image setup, native placement/helpers/RNG, trace/effect collection and output serialization; after untimed full replay; output decoding excluded",
+  "limits": "Placement projection only; remaining 5083 statistics/log/display effects external; not full DD02, match/week or original-emulator speed"
+}
