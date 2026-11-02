@@ -24,7 +24,11 @@ remote `onenildrive` ([docs/artifacts.md](docs/artifacts.md)). They never enter 
   refactor behind passing tests.
 - **Harness**: the engine is exposed to Python (PyO3, built with maturin in CI), so the Python tools
   can run the original and the engine on the same inputs and compare them record by record.
-- **Game shell and UI**: a design decision for the owner when the engine runs its first season.
+- **Game shell and UI**: full-game design remains a decision for the owner when the engine runs its first season.
+  [designed: delivery plan,2026-11-02,following the owner's playable-first request] A minimal
+  text quick-result prototype may precede that season;the next product target is
+  [one complete playable match](docs/first-playable.md),tracked in issue35. Report progress
+  against its end-to-end gates,not routine/test counts alone.
 - Speed is measured from the first runnable slice: a simulated week, a season, a matchday's results.
 
 ## Working rules
