@@ -86,7 +86,7 @@ impl Session {
             }
         }
         extra_event::validate(&a.extra)?;
-        event_effects::validate(&a.event)?;
+        event_effects::validate_storage(&a.event)?;
         quick_reset::validate(&a.reset)?;
         step_tail::validate_clock(&a.clock)?;
         if a.goal.clubs.iter().any(|id| !(1..=176).contains(id))
@@ -437,6 +437,7 @@ impl Session {
                 draws.extend(out.draws);
                 if out.dispatch.is_some() {
                     let current = self.event();
+                    event_effects::validate(&current)?;
                     let out = self.e.logical_event_loaded(&current)?;
                     if !out.external_calls.is_empty() {
                         return Err("unresolved reached event-effect callee".into());

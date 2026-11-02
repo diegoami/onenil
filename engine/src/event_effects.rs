@@ -159,10 +159,18 @@ fn queue_row(e: &Engine, i: u16) -> QueueRow {
     }
 }
 pub(crate) fn validate(s: &State) -> Result<(), String> {
+    if s.handoff.secondary == 0 {
+        return Err("unsupported zero secondary actor at69B8 entry".into());
+    }
+    validate_storage(s)
+}
+// [derived] Initial match storage may have secondary0 before DBC6 selects it.
+// The actual69B8 entry guard above is retained for every reached call.
+pub(crate) fn validate_storage(s: &State) -> Result<(), String> {
     extra_event::validate_state(&s.handoff)?;
     if s.mode == 0
         || !(1..=22).contains(&s.handoff.actor)
-        || !(1..=22).contains(&s.handoff.secondary)
+        || s.handoff.secondary > 22
         || s.handoff.scenes.iter().any(|r| !(1..=22).contains(&r.slot))
         || s.handoff.side_offsets.iter().any(|&v| v > 11)
     {
