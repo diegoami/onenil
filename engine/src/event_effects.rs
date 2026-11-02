@@ -158,11 +158,19 @@ fn queue_row(e: &Engine, i: u16) -> QueueRow {
         side: e.image[a + 5],
     }
 }
-fn validate(s: &State) -> Result<(), String> {
+pub(crate) fn validate(s: &State) -> Result<(), String> {
+    if s.handoff.secondary == 0 {
+        return Err("unsupported zero secondary actor at69B8 entry".into());
+    }
+    validate_storage(s)
+}
+// [derived] Initial match storage may have secondary0 before DBC6 selects it.
+// The actual69B8 entry guard above is retained for every reached call.
+pub(crate) fn validate_storage(s: &State) -> Result<(), String> {
     extra_event::validate_state(&s.handoff)?;
     if s.mode == 0
         || !(1..=22).contains(&s.handoff.actor)
-        || !(1..=22).contains(&s.handoff.secondary)
+        || s.handoff.secondary > 22
         || s.handoff.scenes.iter().any(|r| !(1..=22).contains(&r.slot))
         || s.handoff.side_offsets.iter().any(|&v| v > 11)
     {
@@ -230,7 +238,7 @@ fn validate(s: &State) -> Result<(), String> {
     }
     Ok(())
 }
-fn load(e: &mut Engine, s: &State, preserve: bool) -> Result<(), String> {
+pub(crate) fn load(e: &mut Engine, s: &State, preserve: bool) -> Result<(), String> {
     if !preserve {
         extra_event::load_state(e, &s.handoff, false)?;
     }
@@ -331,7 +339,7 @@ fn load(e: &mut Engine, s: &State, preserve: bool) -> Result<(), String> {
     }
     Ok(())
 }
-fn project(e: &Engine, template: &State) -> State {
+pub(crate) fn project(e: &Engine, template: &State) -> State {
     let mut s = template.clone();
     s.handoff = extra_event::project(e, &template.handoff);
     for p in &mut s.players {
@@ -463,7 +471,7 @@ impl Engine {
         *self = trial;
         Ok(out)
     }
-    fn logical_event_loaded(&mut self, template: &State) -> Result<Outcome, String> {
+    pub(crate) fn logical_event_loaded(&mut self, template: &State) -> Result<Outcome, String> {
         let mut out = Outcome {
             output: template.clone(),
             selectors: vec![],

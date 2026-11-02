@@ -76,7 +76,7 @@ fn available(e: &Engine, id: u16) -> u8 {
         p15_byte11: e.image[a + 11],
     })
 }
-fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
     let mut events = vec![];
     let mut calls = vec![];
     let mut presentation = vec![];

@@ -251,7 +251,7 @@ fn validate_prefix(input: &PrefixInput) -> Result<(), String> {
     }
     Ok(())
 }
-fn validate_clock(input: &ClockState) -> Result<(), String> {
+pub(crate) fn validate_clock(input: &ClockState) -> Result<(), String> {
     let q = &input.commentary.queue;
     if q.head > 1700 || q.rows.len() != 3 {
         return Err("unsupported numeric queue head/context".into());
@@ -463,7 +463,7 @@ impl Engine {
     }
 }
 
-fn load_clock(engine: &mut Engine, input: &ClockState) {
+pub(crate) fn load_clock(engine: &mut Engine, input: &ClockState) {
     let c = &input.clock;
     for (a, v) in [
         (0xD0AE, c.remaining),
@@ -494,7 +494,7 @@ fn load_clock(engine: &mut Engine, input: &ClockState) {
         put_row(engine, r);
     }
 }
-fn clock_snapshot(engine: &Engine, context: &ClockState) -> ClockState {
+pub(crate) fn clock_snapshot(engine: &Engine, context: &ClockState) -> ClockState {
     ClockState {
         clock: ClockFields {
             kind: engine.image[0xD0AC],
@@ -566,6 +566,10 @@ pub fn advance_clock(input: &ClockState) -> Result<ClockOutcome, String> {
     validate_clock(input)?;
     let mut engine = blank(input.seed, [0; 2]);
     load_clock(&mut engine, input);
+    Ok(clock_loaded(&mut engine, input))
+}
+// [derived] Same7B7B kernel on a continuing image;the caller provides current context.
+pub(crate) fn clock_loaded(engine: &mut Engine, input: &ClockState) -> ClockOutcome {
     let mut result = 0;
     let mut event = None;
     if engine.image[0xD0B8] != 0 {
@@ -592,18 +596,18 @@ pub fn advance_clock(input: &ClockState) -> Result<ClockOutcome, String> {
             // CBW+CWD(kind) is compared to the zero-extended remaining word.
             let boundary = i32::from(engine.word(0xD0AE)) == i32::from(engine.image[0xD0AC] as i8);
             if zero || boundary {
-                event = Some(clock_commentary(&mut engine, if zero { 63 } else { 64 }));
+                event = Some(clock_commentary(engine, if zero { 63 } else { 64 }));
                 // This write occurs after numeric commentary even on dedup rejection.
                 engine.put_word(0xCF51, 0);
                 result = 1;
             }
         }
     }
-    Ok(ClockOutcome {
-        output: clock_snapshot(&engine, input),
+    ClockOutcome {
+        output: clock_snapshot(engine, input),
         result,
         event,
-    })
+    }
 }
 pub fn replay_prefix(case: &Case) -> Result<(), String> {
     let got = prefix(&case.prefix.input)?;
