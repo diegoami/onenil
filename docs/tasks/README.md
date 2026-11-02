@@ -19,3 +19,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T15](T15.md): Native1539 player-cache parent and nested role composition (#31).
 - [T16](T16.md): Native role pairing and ordered range helper (#33).
 - [T17](T17.md): First-playable gate1 — scene/cache code closure (#36).
+- [T18](T18.md): First-playable gate1 — scene assignment and rebuild closure (#38).
