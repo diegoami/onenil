@@ -24,3 +24,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T20](T20.md): First-playable gate1 — logical replacement composition (#42).
 - [T21](T21.md): First-playable gate1 — selection-to-replacement composition (#44).
 - [T22](T22.md): First-playable integration — substitution dispatcher (#46).
+- [T23](T23.md): First-playable integration — neutral match input (#48).
