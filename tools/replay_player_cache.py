@@ -35,6 +35,7 @@ def outer(s):return s['context']['rebuild']['outer']
 def closure(parent,roles):
     result={};tables=[];cells={};trace=[]
     for c in roles:
+        if c['schema']!='role-scoring-case/1' or (c['draw_start'],c['draw_end'])!=(4025,4025):raise ValueError('joined role identity/span differs')
         e=parent['events'][c['event']]
         if e['kind']!='role' or e['arguments']!=c['arguments'] or e['input']!=c['input']['context'] or e['output']!=c['output']['context']:raise ValueError('exact T31/T33 role join differs')
         raw=c['input'];criterion=c['arguments'][1]

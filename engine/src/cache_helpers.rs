@@ -105,28 +105,28 @@ pub(crate) fn slot_image(e: &Engine, side: u8, kind: u8) -> u16 {
     12
 }
 // [confirmed] F31/1625–163E: every call uses kind1 cached player,not target player.
-pub(crate) fn boost_image(e: &mut Engine, side: u8) -> Vec<Visit> {
-    let mut visits = Vec::new();
-    for slot in 1..=11 {
-        let index = e.image[0xD56 + usize::from(side)] + slot;
-        let input = Scene::read(e, index);
-        let id = word(e, cache_address(side, 1));
-        let rating = cache_selection::rating_image(e, id);
-        let a = 0xCCEF + 25 * usize::from(index) + 18;
-        e.image[a] = e.image[a].wrapping_add(rating.wrapping_shl(1) as u8);
-        visits.push(Visit {
-            site: "0AB9:1630",
-            store_site: "0AB9:163E",
-            arguments: [u16::from(slot), u16::from(index), id],
-            input,
-            rating,
-            output: Scene::read(e, index),
-            draw_start: 0,
-            draw_end: 0,
-        });
+pub(crate) fn boost_one(e: &mut Engine, side: u8, slot: u8) -> Visit {
+    let index = e.image[0xD56 + usize::from(side)] + slot;
+    let input = Scene::read(e, index);
+    let id = word(e, cache_address(side, 1));
+    let rating = cache_selection::rating_image(e, id);
+    let a = 0xCCEF + 25 * usize::from(index) + 18;
+    e.image[a] = e.image[a].wrapping_add(rating.wrapping_shl(1) as u8);
+    Visit {
+        site: "0AB9:1630",
+        store_site: "0AB9:163E",
+        arguments: [u16::from(slot), u16::from(index), id],
+        input,
+        rating,
+        output: Scene::read(e, index),
+        draw_start: 0,
+        draw_end: 0,
     }
-    visits
 }
+pub(crate) fn boost_image(e: &mut Engine, side: u8) -> Vec<Visit> {
+    (1..=11).map(|slot| boost_one(e, side, slot)).collect()
+}
+
 fn slot_machine(s: &SlotInput) -> Result<Engine, String> {
     if s.side > 1
         || !(1..=5).contains(&s.kind)
