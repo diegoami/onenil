@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 pub mod ai_selection;
 pub mod cache_helpers;
 pub mod cache_selection;
+pub mod continuous;
 pub mod event_effects;
 pub mod extra_event;
 pub mod goal_effects;
@@ -242,6 +243,30 @@ mod python {
     use super::*;
     use pyo3::exceptions::PyValueError;
     use pyo3::prelude::*;
+
+    #[pyclass]
+    struct NativeQuickSession {
+        session: continuous::Session,
+    }
+    #[pymethods]
+    impl NativeQuickSession {
+        #[new]
+        fn new(admission_json: &str) -> PyResult<Self> {
+            let admission: continuous::Admission = serde_json::from_str(admission_json)
+                .map_err(|e| PyValueError::new_err(e.to_string()))?;
+            Ok(Self {
+                session: continuous::Session::new(admission).map_err(PyValueError::new_err)?,
+            })
+        }
+        fn snapshot(&self) -> PyResult<String> {
+            serde_json::to_string(&self.session.snapshot())
+                .map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn step(&mut self) -> PyResult<String> {
+            let out = self.session.step().map_err(PyValueError::new_err)?;
+            serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+    }
 
     #[pyfunction]
     fn quick_contests(k: u16, seed: u16, ratings: Vec<u16>, goals: Vec<u8>) -> PyResult<String> {
@@ -670,6 +695,7 @@ mod python {
     }
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
+        module.add_class::<NativeQuickSession>()?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;

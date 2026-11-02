@@ -230,7 +230,7 @@ fn validate(s: &State) -> Result<(), String> {
     }
     Ok(())
 }
-fn load(e: &mut Engine, s: &State, preserve: bool) -> Result<(), String> {
+pub(crate) fn load(e: &mut Engine, s: &State, preserve: bool) -> Result<(), String> {
     if !preserve {
         extra_event::load_state(e, &s.handoff, false)?;
     }
@@ -331,7 +331,7 @@ fn load(e: &mut Engine, s: &State, preserve: bool) -> Result<(), String> {
     }
     Ok(())
 }
-fn project(e: &Engine, template: &State) -> State {
+pub(crate) fn project(e: &Engine, template: &State) -> State {
     let mut s = template.clone();
     s.handoff = extra_event::project(e, &template.handoff);
     for p in &mut s.players {
@@ -463,7 +463,7 @@ impl Engine {
         *self = trial;
         Ok(out)
     }
-    fn logical_event_loaded(&mut self, template: &State) -> Result<Outcome, String> {
+    pub(crate) fn logical_event_loaded(&mut self, template: &State) -> Result<Outcome, String> {
         let mut out = Outcome {
             output: template.clone(),
             selectors: vec![],

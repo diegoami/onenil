@@ -306,7 +306,7 @@ fn validate_pair(sides: &[Input; 2]) -> Result<(), String> {
     Ok(())
 }
 
-fn load_player(engine: &mut Engine, player: &Player) {
+pub(crate) fn load_player(engine: &mut Engine, player: &Player) {
     for (offset, value) in [(4, player.p8_4), (6, player.p8_6), (7, player.p8_7)] {
         engine.image[p8(player.id, offset)] = value;
     }
@@ -315,7 +315,7 @@ fn load_player(engine: &mut Engine, player: &Player) {
     }
 }
 
-fn load_tables(engine: &mut Engine, tables: &Tables) {
+pub(crate) fn load_tables(engine: &mut Engine, tables: &Tables) {
     for (base, values) in [
         (0x12BA, tables.halving_group.as_slice()),
         (0x12BE, tables.position_class.as_slice()),
@@ -339,7 +339,7 @@ pub(crate) fn load_bonus(engine: &mut Engine, input: &BonusInput) {
 }
 
 impl Engine {
-    fn ratings_snapshot(&self) -> [u16; 8] {
+    pub(crate) fn ratings_snapshot(&self) -> [u16; 8] {
         std::array::from_fn(|index| self.word(RATINGS + 2 * index as u16))
     }
 

@@ -188,7 +188,7 @@ fn validate(input: &Input) -> Result<(), String> {
     Ok(())
 }
 
-fn load(e: &mut Engine, input: &Input, preserve: bool) -> Result<(), String> {
+pub(crate) fn load(e: &mut Engine, input: &Input, preserve: bool) -> Result<(), String> {
     load_state(e, &input.state, preserve)?;
     e.image[0x0D0B] = input.opponent_d0b;
     Ok(())
@@ -449,7 +449,7 @@ impl Engine {
         *self = candidate;
         Ok(out)
     }
-    fn decide_loaded(&mut self, template: &State) -> Result<Outcome, String> {
+    pub(crate) fn decide_loaded(&mut self, template: &State) -> Result<Outcome, String> {
         let mut draws = vec![];
         let mut helpers = vec![];
         let initial = self.draw(10, "0AB9:DBD1", &mut draws).wrapping_add(1);

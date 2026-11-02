@@ -334,7 +334,7 @@ fn validate(state: &State, request: &GoalEffectRequest) -> Result<(), String> {
     Ok(())
 }
 
-fn load(e: &mut Engine, s: &State) {
+pub(crate) fn load(e: &mut Engine, s: &State) {
     e.image[0xD0A0] = s.secondary_actor;
     for (a, v) in [
         (0xD6E6, s.clubs[0]),
@@ -409,7 +409,7 @@ fn load(e: &mut Engine, s: &State) {
     }
 }
 
-fn snapshot(e: &Engine, template: &State) -> State {
+pub(crate) fn snapshot(e: &Engine, template: &State) -> State {
     let mut s = template.clone();
     s.global_actor = e.image[0xD09F];
     s.secondary_actor = e.image[0xD0A0];

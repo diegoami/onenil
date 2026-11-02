@@ -124,7 +124,7 @@ fn blank(s: &State) -> Engine {
         goals: [0; 2],
     })
 }
-fn load(e: &mut Engine, s: &State, preserve: bool) {
+pub(crate) fn load(e: &mut Engine, s: &State, preserve: bool) {
     post_score::load(e, &s.strategy, preserve);
     if !preserve {
         e.image[0xD09F] = s.actor;
@@ -165,7 +165,7 @@ fn load(e: &mut Engine, s: &State, preserve: bool) {
         e.image[0xD198 + 20 * side..0xD198 + 20 * (side + 1)].copy_from_slice(&s.cache[side]);
     }
 }
-fn project(e: &Engine, template: &State) -> State {
+pub(crate) fn project(e: &Engine, template: &State) -> State {
     let mut s = template.clone();
     s.strategy = post_score::project(e, &template.strategy);
     s.mode = e.image[0xD074];
@@ -262,7 +262,7 @@ impl Engine {
         *self = trial;
         Ok(result)
     }
-    fn reset_loaded(&mut self, template: &State) -> Result<Outcome, String> {
+    pub(crate) fn reset_loaded(&mut self, template: &State) -> Result<Outcome, String> {
         let mut out = Outcome {
             output: template.clone(),
             copies: vec![],
