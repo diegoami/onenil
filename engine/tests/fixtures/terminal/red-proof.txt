@@ -1,0 +1,10 @@
+T10 actual-original red proof, before implementation
+
+Source: archaeology218490d846e365babdd158d09c5ab865124e30ed,T34/T35 byte-identical fixtures.
+Command: cargo test --manifest-path engine/Cargo.toml --locked --test terminal actual_original_terminal_cases_replay -- --exact
+Local toolchain: rustc1.99.1,temporary GCC13/linker sysroot;no original game execution.
+Result: exit101;1 failed,0 passed.
+Failure: called Result::unwrap() on Err("T10 native3155 not implemented")
+Location: engine/tests/terminal.rs, actual_original_terminal_cases_replay.
+The test deserializes raw input-only State from the first original case and calls the stub.
+No expected result is supplied to the API. Both originals and both helpers remain in the same test.

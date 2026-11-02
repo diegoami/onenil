@@ -337,3 +337,59 @@ Preceding goal-effect integration and 045C buffers, 6B2F substitutions, 78B7 key
 continuous DD02/match/week/setup and arbitrary physical/scratch/timer/render parity remain
 separate work. Routine timing includes bridge parsing, image setup, reset/strategy/helpers/
 RNG and serialization; preparation/decoding are excluded, with no emulator speed claim.
+
+The T10 terminal rearrangement slice computes `0AB9:3155` scene positions and
+`0AB9:21D7` proximity selectors, including `1CA1/4F89/1ECC/1CBB`, on the same DS
+memory image. This is the first split of the reviewed r0017 substitution target;
+A94B, AEB8 and the earlier rearrangement/cache/scoring helpers are still outside
+this slice. It does not replay substitutions, DD02, a match or a week.
+
+`[confirmed]` Archaeology F34/F35 at
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+supply two original calls per helper:44 position visits,40 selector candidates,
+224 direct/nested helper observations,four selector initializations,four nearest
+stores and zero draws. Byte-identical source fixtures/indexes and their pins
+live under `engine/tests/fixtures/terminal/`. Python reconstructs the compact
+projection from those raw inputs/observations and compares results; it contains
+no position,distance,direction or winner arithmetic. Expected outputs are never
+arguments to Rust. The actual-case failure at the initial stub is retained in
+`red-proof.txt` and commit `4e2a5eb`.
+
+```sh
+python3 tools/replay_terminal.py --check
+python3 tools/replay_terminal.py --benchmark --out records/T10
+```
+
+`[confirmed]`3155 assigns each indexed position word,then adjusts adjacent
+duplicates using separate low/high byte operations. Its initial scratch-derived
+previous-scene local is dead before any output-relevant use; no extra scratch
+input or fabricated zero is supplied.21D7 uses signed coordinate/direction bytes,
+unsigned distance thresholds and signed low-word product comparisons. Defaults
+are offset+1,while stores copy scene.byte7. Equal outer input/output states do
+not conceal native intermediate stores:all visits,paired rows,helper returns and
+selector stores are compared with the original. The composed API runs both
+helpers on one image without reloading expected intermediate fields.
+
+`[designed]` Supported inputs have all22 ordered full25-byte scene rows,physical
+offsets[11,0] or[0,11],actor and scene.byte7 values1–22,raw initial selector bytes,
+unique player IDs0–3920,complete
+canonical position/availability bytes and unique position cells for every
+canonical position code. Raw sign/coordinate/phase bytes and time words retain
+their widths. Missing,ambiguous,out-of-domain or extra expected-result fields
+return diagnostics before image setup. Invalid input leaves the caller's input
+unchanged;unowned image bytes and seed are preserved. Synthetic tests cover wide
+and near duplicate adjustments,byte wraps,shared IDs,ahead stores,actor/byte19/
+availability skips,ties,signed extremes,direction boundaries and actual handoff;
+these are static/synthetic checks,not new original coverage.
+
+`[designed]` The original specimens cover only r0017's two enclosing replacements,
+not the other23 replacements across six weeks. The wide duplicate/sign branch,
+ahead stores and byte19==13 skip have synthetic rather than original coverage.
+Review requirements
+[#120](https://github.com/diegoami/onenil-archaeology/issues/120) and
+[#121](https://github.com/diegoami/onenil-archaeology/issues/121) remain open for
+broader native composition. Undefined 0207/13B8/1AE2 domains are not translated
+here and must be diagnosed when those routines are added. The release receipt
+measures bridge parsing,image setup,computed helper observations and serialization;
+input preparation/output decoding are excluded. It is routine timing only,with
+no speed threshold or emulator comparison. Previous native evidence stays immutable.
