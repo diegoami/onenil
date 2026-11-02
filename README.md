@@ -771,3 +771,56 @@ and serialization,without an emulator/full-game speed claim. All seventeen
 replay tools run locally;CI still runs all Rust tests/release build plus its
 first five bridge tools under native22. Earlier evidence and Cargo.lock remain
 unchanged.
+
+T18 closes scene assignment8599 and its rebuild wrapper8663, a prerequisite
+for composing first-playable rearrangement164F. `[confirmed]` F26/T26 and
+F28/T28 at archaeology
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provide44 assignment boundaries and two rebuilds with20 recorded nested helpers
+for the fixed Sheffield Wednesday–Blackburn reference. Source files/indexes are
+pinned byte for byte;Python projects raw fields and recorded observations only.
+Both original tests failed against the stubs at0793ae3 (retained exit101 proof).
+
+```sh
+python3 tools/replay_scene_assignment.py --check
+python3 tools/replay_scene_assignment.py --benchmark --out records/T18
+```
+
+`[confirmed]`8599 stores the supplied selector, derives slot/side from that
+selector independently of the physical scene index, reads the actual roster
+player and that player's club-count table, computes a signed32 minimum, applies
+unsigned age thresholds and computes the handedness/role predicate.8663 then
+sets position words, selects keeper/ordinary direction and resets its specified
+fields. Its caller's later word2 restore remains the caller's responsibility.
+Nested routines share one live image. Snapshot values are read back from it;
+no recorded count, minimum, flag or intermediate state drives computation.
+
+`[designed]` Inputs admit22 ordered scenes, distinct header clubs1–176,
+selectors/physical indices1–22, unique canonical players0–3920 with roles/styles
+0–13, eleven roster words per header and raw count indices/cells for each
+nonzero canonical player's club. All references and overlapping raw bytes
+validate before image allocation. Unselected player0 remains a sentinel;
+a reached player0 or unsupported club lookup diagnoses. Wrapped count-table
+indices share actual bytes in a separate normalized64K pool at50000, disjoint
+from pairing locals. Handedness table/selector aliases must also agree. Extra
+expected/intermediate fields reject. Whole-image checks limit writes to each
+routine's specified scene fields, preserving seed and other pools.
+
+`[designed]` Synthetic coverage separately tests selector/roster handoff,
+player-club versus header-club identity, word-index aliases, signed32 high/low
+comparisons, age thresholds, raw nonzero hand values, early/second predicate
+branches, keeper directions, reset order, malformed domains and live-state
+composition. These add no original dynamic coverage. Original draws4025→4025
+normalize to0;T28 nested assignment helpers are computed diagnostics, whereas
+T26's20 nested observations are compared in full.
+
+`[designed]` Next is parent164F composition using assignment plus the existing
+pairing, scene-code, position, proximity and player-cache stages. Replacement/
+selection integration, continuous DD02/clock, setup→final-score execution and
+controls/commentary remain later first-playable gates. This slice does not run
+a complete match. Pitch graphics remain a preferred stretch goal. All eighteen
+bridge tools run locally;CI retains all Rust tests/release build and its first
+five bridge tools under permission follow-up22. The immutable committed-source
+release receipt includes parsing, image setup, native calculation/observations
+and serialization;it makes no emulator/full-game speed claim. Earlier fixtures,
+receipts and Cargo.lock remain unchanged.
