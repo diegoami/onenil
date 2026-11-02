@@ -1,0 +1,35 @@
+Command: cargo test --manifest-path engine/Cargo.toml --test cache_helpers --locked -q
+Exit: 101
+
+running 3 tests
+actual_original_managed_club_calls --- FAILED
+actual_original_cached_roster_slot_calls --- FAILED
+actual_original_side_phases_and_all_rating_store_continuations --- FAILED
+
+failures:
+
+---- actual_original_managed_club_calls stdout ----
+
+thread 'actual_original_managed_club_calls' (610) panicked at tests/cache_helpers.rs:7:150:
+called `Result::unwrap()` on an `Err` value: "T14 native0E7A not implemented"
+
+---- actual_original_cached_roster_slot_calls stdout ----
+
+thread 'actual_original_cached_roster_slot_calls' (609) panicked at tests/cache_helpers.rs:12:144:
+called `Result::unwrap()` on an `Err` value: "T14 native577F not implemented"
+
+---- actual_original_side_phases_and_all_rating_store_continuations stdout ----
+
+thread 'actual_original_side_phases_and_all_rating_store_continuations' (611) panicked at tests/cache_helpers.rs:17:122:
+called `Result::unwrap()` on an `Err` value: "T14 native1539 rating stores not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    actual_original_cached_roster_slot_calls
+    actual_original_managed_club_calls
+    actual_original_side_phases_and_all_rating_store_continuations
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--test cache_helpers`
