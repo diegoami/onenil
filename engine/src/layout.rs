@@ -8,7 +8,8 @@ pub(crate) const PAIR_OWN: usize = 0x40000;
 pub(crate) const PAIR_OPP: usize = 0x40010;
 pub(crate) const PAIR_ASSIGNED: usize = 0x40020;
 pub(crate) const SCENE_MODE: usize = 0x40080;
-pub(crate) const STAFF: usize = 0x48000;
+// [confirmed] Ratings4A37 and assignment4A37 share original DCC8.
+pub(crate) const STAFF: usize = CLUB_COUNTS;
 pub(crate) const CONFIG: usize = 0x49000;
 pub(crate) const SPEED: usize = CONFIG + 2;
 pub(crate) const CLUB_COUNTS: usize = 0x50000;
@@ -28,7 +29,6 @@ mod tests {
             (PAIR_OPP, PAIR_OPP + 11),
             (PAIR_ASSIGNED, PAIR_ASSIGNED + 11),
             (SCENE_MODE, SCENE_MODE + 1),
-            (STAFF, STAFF + 4 * 1000 + 3),
             (CONFIG, CONFIG + 256),
             (CLUB_COUNTS, CLUB_COUNTS + 0x10000),
             (HISTORY, HISTORY + 0x10000),
@@ -42,6 +42,8 @@ mod tests {
         assert!(P8 + 8 * 3920 + 7 < P8 + 0x10000);
         assert!(P15 + 15 * 3920 + 14 < P15 + 0x10000);
         assert!(CLUB + 62 * 175 + 61 < CLUB + 0x10000);
+        assert_eq!(STAFF, CLUB_COUNTS);
+        assert!(STAFF + 4 * 1000 + 2 < CLUB_COUNTS + 0x10000);
         assert_eq!(SPEED, CONFIG + 2);
         assert_eq!(HISTORY + 0x10000, IMAGE_LEN);
     }

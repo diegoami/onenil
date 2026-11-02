@@ -203,7 +203,8 @@ fn club(id: u16, field: usize) -> usize {
     CLUB + (usize::from(id) - 1) * 62 + field
 }
 fn staff(id: u16) -> usize {
-    STAFF + usize::from(id) * 4 + 2
+    // [confirmed]4A37 shifts the index as a word before reading entry byte2.
+    STAFF + usize::from(id.wrapping_shl(2).wrapping_add(2))
 }
 fn word(engine: &Engine, address: usize) -> u16 {
     u16::from_le_bytes([engine.image[address], engine.image[address + 1]])
