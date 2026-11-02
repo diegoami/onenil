@@ -483,3 +483,59 @@ comparison or full-game speed claims. Prior evidence and Cargo.lock remain
 immutable. All twelve release replays run locally; native #22 tracks the CI
 workflow permission gap (CI currently runs only the first five bridge tools,
 alongside all Rust tests and a release bridge build).
+
+T13 adds `0AB9:1455` role-cache selection with its reached `0AB9:8973`
+player-to-scene lookup. `[confirmed]` Archaeology F33/T33 at
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provides eight role roots from r0017:82 availability visits,74 slot lookups,
+148 scene scores with148 table children,and27 stores. Native output matches
+all ordered helper arguments/results, scene snapshots, cache clears and store
+continuations. The original draw counter4025 is normalized to routine-local0.
+
+```sh
+python3 tools/replay_role_cache.py --check
+python3 tools/replay_role_cache.py --benchmark --out records/T13
+```
+
+`[confirmed]` Selection clears the requested cache word, visits slots after
+09F6 (09F7 for kind5), skips unavailable players, and stores the first eligible
+player. Later candidates replace only on a strictly greater unsigned score;
+ties retain the cached player.8973 scans the first eleven player-club roster
+words and uses the last match plus the offset selected by club==D6E6. An absent
+match returns0. Native availability, slot lookup,1AE2 and9F6E operate on one
+image. Scores and store decisions are computed from raw bytes; no expected
+helper result enters the API. Only the selected cache word may change; full-image
+checks on all eight originals preserve every other byte and the RNG seed.
+
+`[designed]` The input projects relevant raw fields from the complete T33 state:
+22 complete scenes, canonical player IDs/P8/table/P15 fields, player-club rosters,
+both five-word caches, six captured criterion bytes, side offsets, match clubs,
+seed and score bonus bytes. It omits unrelated outer state. Canonical records
+are unique and include every referenced scene/roster/cache player; extra canonical
+records from the original snapshot are retained and validated. Side0/1,kind1–5,
+criteria0–255,offsets[0,11]/[11,0],distinct clubs1–176 and IDs0–3920 are admitted.
+Raw indexed-cell witnesses and shared-byte aliases must agree before image setup.
+Reached scores retain T12's P15+6 admission0–31; unavailable or unscored players
+do not reach that guard. A reached missing/mismatched cached-player scene returns
+a diagnostic rather than scoring row0.8973 is exposed only through this bounded
+selection contract, not as an arbitrary-state/zero-player lookup API.
+
+`[designed]` The six-byte criterion shape was corrected after the first tests
+stopped at deserialization (`713df7c`). Both actual-root/census tests then failed
+at the missing selector in `8e32e6f`; `stub-red-proof.txt` retains the valid red
+proof, alongside the initial failure record. The source/index already pinned
+by T12 are reused unchanged. T13's raw projection independently regenerates
+from those original rows and checks its own digest.
+
+`[designed]` Synthetic tests separately cover blocked/zero/all-blocked candidates,
+empty ranges, kind5, first/tie/improvement, repeated roster IDs/last match,
+alternate side/offset/club/player limits, absent/mismatched scenes, reached-only
+score guards, contradictory aliases, malformed canonical inputs, extra result
+fields and actual raw-cell handoff. These do not add original dynamic coverage:
+all82 original availability returns were0. Full1539/164F,role pairing/scene
+codes,A94B/AEB8,the other23 replacements and full AI/match/week parity remain
+later work under archaeology #120/#121. The immutable receipt measures release
+bridge parsing, validated setup, actual nested computation and serialization;
+it makes no emulator or full-game speed claim. All thirteen replay tools run
+locally; CI still runs the first five plus all Rust tests/release build under
+permission follow-up #22. Previous evidence and Cargo.lock remain unchanged.

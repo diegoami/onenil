@@ -51,8 +51,8 @@ pub struct SceneOutcome {
     pub draws: Vec<Draw>,
 }
 // [derived] Validate every raw-byte alias before allocating/loading the guest image.
-type Cells = BTreeMap<usize, u8>;
-fn insert(c: &mut Cells, a: usize, value: u8) -> Result<(), String> {
+pub(crate) type Cells = BTreeMap<usize, u8>;
+pub(crate) fn insert(c: &mut Cells, a: usize, value: u8) -> Result<(), String> {
     if let Some(old) = c.insert(a, value) {
         if old != value {
             return Err(format!("conflicting raw alias at {a:04X}"));
@@ -60,7 +60,7 @@ fn insert(c: &mut Cells, a: usize, value: u8) -> Result<(), String> {
     }
     Ok(())
 }
-fn table_cells(t: &TableInput) -> Result<Cells, String> {
+pub(crate) fn table_cells(t: &TableInput) -> Result<Cells, String> {
     if t.player.id > 3920 {
         return Err("unsupported player ID".into());
     }
@@ -117,7 +117,7 @@ fn scene_cells(s: &SceneInput) -> Result<Cells, String> {
     }
     Ok(c)
 }
-fn image(c: Cells) -> Engine {
+pub(crate) fn image(c: Cells) -> Engine {
     let mut e = Engine::new(&ContestInput {
         k: 0,
         seed: 0x1234,
@@ -148,7 +148,7 @@ fn table_image(e: &Engine, id: u16, criterion: u16) -> TableOutcome {
     }
 }
 // [confirmed] F33/1AE2: supported baseline branch; nested native score on this image.
-fn scene_image(e: &Engine, index: u8, criterion: u16) -> SceneOutcome {
+pub(crate) fn scene_image(e: &Engine, index: u8, criterion: u16) -> SceneOutcome {
     let row = Scene::read(e, index);
     let a = 0x20000 + 15 * usize::from(row.word14);
     let mut baseline = (i16::from(e.image[a + 6] as i8) + 1) as u16;

@@ -1,0 +1,28 @@
+Command: cargo test --manifest-path engine/Cargo.toml --test role_cache --locked -q
+Before implementation; actual original eight-root fixtures and nested census, both fail at stubs.
+
+running 2 tests
+actual_original_role_roots_and_all_continuations_replay --- FAILED
+actual_original_nested_helper_and_store_census --- FAILED
+
+failures:
+
+---- actual_original_role_roots_and_all_continuations_replay stdout ----
+
+thread 'actual_original_role_roots_and_all_continuations_replay' (620) panicked at tests/role_cache.rs:14:71:
+called `Result::unwrap()` on an `Err` value: Error("invalid length 6, expected fewer elements in array", line: 0, column: 0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- actual_original_nested_helper_and_store_census stdout ----
+
+thread 'actual_original_nested_helper_and_store_census' (619) panicked at tests/role_cache.rs:25:71:
+called `Result::unwrap()` on an `Err` value: Error("invalid length 6, expected fewer elements in array", line: 0, column: 0)
+
+
+failures:
+    actual_original_nested_helper_and_store_census
+    actual_original_role_roots_and_all_continuations_replay
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--test role_cache`
