@@ -644,3 +644,62 @@ there is no emulator/full-game speed claim. All fifteen local replay tools are
 checked;CI still runs all Rust tests/release build and its first five bridge tools
 under permission follow-up #22. Earlier fixtures/provenance/receipts/lock remain
 immutable. This closes the bounded player-cache stage,not complete AI replay.
+
+T16 adds bounded `0AB9:10B9` role pairing and its `0AB9:1000` range helper.
+`[confirmed]` F29/T29 at archaeology
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provides two original parents and20 range boundaries from successful T29-r0002.
+Those source/index bytes are pinned in `engine/tests/fixtures/role_pairing/`;
+aborted r0001 is not used. The projection independently copies raw52 preference
+cells,canonical role/availability fields,club flags/rosters,complete scenes and
+actual range arrays. Both original-case tests failed at stubs in `070bc9f`,
+exit101;`red-proof.txt` retains that evidence.
+
+```sh
+python3 tools/replay_role_pairing.py --check
+python3 tools/replay_role_pairing.py --benchmark --out records/T16
+```
+
+`[confirmed]` Native1000 visits four preference passes and descending opponent
+slots11–2,searches the ten Pascal data bytes for the first matching singleton
+character,and clears/stores the selected cells. NUL is a valid character;there
+is no assigned-slot or zero-byte skip.10B9 generates its own arrays,excludes own
+role1/reserved/unavailable players and unavailable opponents,then excludes every
+reserved roster-word match. It calls ranges12–13,9–11,5–8,1–1,2–4 in order on
+the same image/frame. Early keeper/second-role1 clears,player flag0x40 retention,
+club byte57 bit0x80 and actual opposing roster words determine scene.word20.
+The existing native availability predicate is reused. No expected local arrays
+enter the parent API;standalone range arrays are actual caller-entry inputs.
+
+`[designed]` Caller arrays use normalized image addresses,with explicit length10
+and assignment sentinels. Singleton Pascal conversion/search is represented by
+exact byte comparisons,including embedded NUL;physical stack/register/scratch
+parity is outside this contract. Inputs require roles0–13,all52 raw preference
+bytes,unique canonical IDs0–3920,distinct clubs1–176,their eleven roster words,
+22 complete ordered scenes and offsets[0,11]/[11,0]. Referenced players must
+exist;extra original canonical records are retained/validated. Stored word20
+values remain raw words,not additional player lookups. Range bounds require
+1<=low<=high<=13;local sentinels and assignment values0/2–11 validate explicitly.
+Malformed/extra expected-result or parent-local fields diagnose before setup.
+
+`[designed]` Full-image checks permit only caller-array cells for standalone
+ranges,and those arrays plus scene.word20 for the parent,preserving seed,
+preferences and all other bytes. Prefilled frame tests verify caller initialization
+without assumed zero scratch. Synthetic tests separately cover pass/reverse-slot/
+first-match order,endpoints,NUL overwrite/miss,keeper/role1 handling,flag-bit and
+signed availability distinctions,reserved duplicate roster exclusions,club gate,
+actual roster handoff,offset/club/player limits and malformed/extra inputs.
+They add no original dynamic coverage. Original final assignments have9/8 nonzero
+entries per side;named word20 differences are2 then1. These are value changes,
+not an observed instruction-write or primitive-call census. Original draw4025
+normalizes to0. The20 ranges are replayed standalone and composed without becoming
+40 new original observations.
+
+`[designed]` This closes the bounded pairing stage for r0017's two replacements;
+full164F,scene/cache codes,A94B/AEB8,the other23 replacements and full AI/match/
+week parity remain later under archaeology #120/#121. The immutable release
+receipt follows a committed-source build and includes parsing,setup,native
+computation/observations and serialization;no emulator/full-game speed claim.
+All sixteen tools run locally;CI still runs all Rust tests/release build and its
+first five bridge checks under permission follow-up #22. Earlier evidence and
+Cargo.lock remain unchanged.

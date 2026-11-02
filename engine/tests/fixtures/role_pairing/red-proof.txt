@@ -1,0 +1,28 @@
+Command: cargo test --manifest-path engine/Cargo.toml --test role_pairing --locked -q
+Exit: 101
+
+running 2 tests
+actual_original_parent_pairings_and_every_ordered_range --- FAILED
+actual_original_twenty_standalone_range_boundaries --- FAILED
+
+failures:
+
+---- actual_original_parent_pairings_and_every_ordered_range stdout ----
+
+thread 'actual_original_parent_pairings_and_every_ordered_range' (614) panicked at tests/role_pairing.rs:7:113:
+called `Result::unwrap()` on an `Err` value: "T16 native10B9 not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- actual_original_twenty_standalone_range_boundaries stdout ----
+
+thread 'actual_original_twenty_standalone_range_boundaries' (615) panicked at tests/role_pairing.rs:13:145:
+called `Result::unwrap()` on an `Err` value: "T16 native1000 not implemented"
+
+
+failures:
+    actual_original_parent_pairings_and_every_ordered_range
+    actual_original_twenty_standalone_range_boundaries
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test role_pairing`
