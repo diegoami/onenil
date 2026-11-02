@@ -328,7 +328,7 @@ fn load_tables(engine: &mut Engine, tables: &Tables) {
     }
 }
 
-fn load_bonus(engine: &mut Engine, input: &BonusInput) {
+pub(crate) fn load_bonus(engine: &mut Engine, input: &BonusInput) {
     for (i, &id) in input.staff_ids.iter().enumerate() {
         put(engine, club(input.club, 0x28 + 2 * i), id);
     }
@@ -342,7 +342,7 @@ impl Engine {
         std::array::from_fn(|index| self.word(RATINGS + 2 * index as u16))
     }
 
-    fn rating_bonus(&self, id: u16) -> u16 {
+    pub(crate) fn rating_bonus(&self, id: u16) -> u16 {
         // [confirmed] 4A37 loads both bytes unsigned and returns AX, not AL.
         let a = self.image[staff(word(self, club(id, 0x28)))];
         let b = self.image[staff(word(self, club(id, 0x2A)))];

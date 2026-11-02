@@ -142,3 +142,53 @@ fn shared_image_neutral_speed_reads_the_config_object_used_by_prefix() {
     assert_eq!(out.output.speed, 37);
     assert_eq!(e.image[0x40081], 5);
 }
+
+fn bonus(c: &scene_assignment::Count) -> crate::ratings::BonusInput {
+    crate::ratings::BonusInput {
+        club: c.id,
+        staff_ids: [c.index40, c.index42],
+        staff: vec![
+            crate::ratings::Staff {
+                id: c.index40,
+                byte2: c.cell40,
+            },
+            crate::ratings::Staff {
+                id: c.index42,
+                byte2: c.cell42,
+            },
+        ],
+    }
+}
+#[test]
+fn shared_staff_count_cells_feed_the_existing_rating_bonus_reader() {
+    let new = assignment();
+    let c = &new.club_counts[0];
+    let expected = crate::ratings::club_bonus(&bonus(c)).unwrap().bonus;
+    let e = role_scores::image(scene_assignment::cells(&new).unwrap());
+    assert_eq!(e.rating_bonus(c.id), expected);
+}
+#[test]
+fn shared_staff_legacy_loader_updates_assignment_count_cells() {
+    let mut new = assignment();
+    new.club_counts[0].cell40 = 0;
+    new.club_counts[0].cell42 = 0;
+    let mut b = bonus(&new.club_counts[0]);
+    b.staff[0].byte2 = 0xA5;
+    b.staff[1].byte2 = 0x5A;
+    let mut e = role_scores::image(scene_assignment::cells(&new).unwrap());
+    crate::ratings::load_bonus(&mut e, &b);
+    let got = scene_assignment::snapshot(&e, &new);
+    assert_eq!(got.club_counts[0].cell40, 0xA5);
+    assert_eq!(got.club_counts[0].cell42, 0x5A);
+}
+#[test]
+fn shared_staff_count_high_index_bits_alias_the_same_original_word_shifted_entry() {
+    let mut new = assignment();
+    let expected = crate::ratings::club_bonus(&bonus(&new.club_counts[0]))
+        .unwrap()
+        .bonus;
+    new.club_counts[0].index40 += 0x4000;
+    new.club_counts[0].index42 += 0x4000;
+    let e = role_scores::image(scene_assignment::cells(&new).unwrap());
+    assert_eq!(e.rating_bonus(new.club_counts[0].id), expected);
+}
