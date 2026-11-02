@@ -1,0 +1,22 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+error[E0599]: no method named `view_state` found for struct `match_session::Session` in the current scope
+   --> src/match_session.rs:465:22
+    |
+ 47 | pub struct Session {
+    | ------------------ method `view_state` not found for this struct
+...
+465 |         let view = s.view_state();
+    |                      ^^^^^^^^^^ method not found in `match_session::Session`
+
+error[E0599]: no method named `view_state` found for struct `match_session::Session` in the current scope
+   --> src/match_session.rs:474:20
+    |
+ 47 | pub struct Session {
+    | ------------------ method `view_state` not found for this struct
+...
+474 |         let view=s.view_state();
+    |                    ^^^^^^^^^^ method not found in `match_session::Session`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `onenil-engine` (lib test) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...

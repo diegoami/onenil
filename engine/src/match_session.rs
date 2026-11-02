@@ -459,6 +459,25 @@ mod tests {
         assert_eq!(s.points[2]["selection"]["key"], json!(2));
     }
     #[test]
+    fn presentation_reads_live_signed_coordinates_without_mutation() {
+        let mut s = Session::new(admission()).unwrap();
+        let original = s.inner.e.image.clone();
+        let view = s.view_state();
+        assert_eq!(view["formation"].as_array().unwrap().len(),22);
+        assert_eq!(view["formation"][0]["player"],json!(2661));
+        assert_eq!(view["formation"][0]["x"],json!(0));
+        assert_eq!(view["formation"][0]["y"],json!(-37));
+        assert_eq!(s.inner.e.image,original);
+        put(&mut s.inner.e,scene(1)+10,0x7F80);
+        put(&mut s.inner.e,scene(1)+14,2672);
+        let changed=s.inner.e.image.clone();
+        let view=s.view_state();
+        assert_eq!(view["formation"][0]["x"],json!(-128));
+        assert_eq!(view["formation"][0]["y"],json!(127));
+        assert_eq!(view["formation"][0]["player"],json!(2672));
+        assert_eq!(s.inner.e.image,changed);
+    }
+    #[test]
     fn static_unsigned_display_cap_edges() {
         let mut s = Session::new(admission()).unwrap();
         for class in 0..4 {
