@@ -1,0 +1,6 @@
+Before implementation: 3389175 (stubs and actual original cases)
+Command: cargo test --manifest-path engine/Cargo.toml --test role_scores --locked -q
+Exit: 101; 0 passed, 2 failed
+actual_original_scene_scores_and_nested_handoff_replay: Err("T12 native1AE2 not implemented")
+actual_original_table_scores_replay: Err("T12 native9F6E not implemented")
+Both tests load the pinned 148 actual original cases; no synthetic expected score was substituted.

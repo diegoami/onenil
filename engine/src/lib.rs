@@ -15,6 +15,7 @@ pub mod placement;
 pub mod post_score;
 pub mod quick_reset;
 pub mod ratings;
+pub mod role_scores;
 pub mod step_tail;
 pub mod terminal;
 
@@ -393,6 +394,20 @@ mod python {
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }
     #[pyfunction]
+    fn role_table_rating(input_json: &str) -> PyResult<String> {
+        let input: role_scores::TableInput =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = role_scores::table(&input).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
+    fn role_scene_rating(input_json: &str) -> PyResult<String> {
+        let input: role_scores::SceneInput =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = role_scores::scene(&input).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
     fn cached_player_rating(input_json: &str) -> PyResult<String> {
         let input: cache_selection::RatingInput =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -541,6 +556,8 @@ mod python {
         module.add_function(wrap_pyfunction!(logical_event_effects, module)?)?;
         module.add_function(wrap_pyfunction!(post_score_strategy, module)?)?;
         module.add_function(wrap_pyfunction!(quick_goal_reset, module)?)?;
+        module.add_function(wrap_pyfunction!(role_table_rating, module)?)?;
+        module.add_function(wrap_pyfunction!(role_scene_rating, module)?)?;
         module.add_function(wrap_pyfunction!(cached_player_rating, module)?)?;
         module.add_function(wrap_pyfunction!(cached_player_selector, module)?)?;
         module.add_function(wrap_pyfunction!(scene_positions, module)?)?;

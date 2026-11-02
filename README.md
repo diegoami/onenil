@@ -439,3 +439,47 @@ input preparation/output decoding are excluded. It is a routine baseline only,
 not an emulator comparison or full-game performance claim. Prior fixtures,
 provenance,receipts and Cargo.lock remain immutable. All eleven release replays
 are checked locally;native #22 tracks the CI workflow permission gap.
+
+
+T12 adds read-only role scoring `0AB9:9F6E` and `0AB9:1AE2`.
+`[confirmed]` F33 at archaeology
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provides148 scene-score observations and148 nested table calls from eight role
+boundaries in r0017. Byte-identical T33 source/index, source pin and independently
+regenerated raw-field projection live in `engine/tests/fixtures/role_scores/`.
+Both original-case tests failed at stubs in `3389175`; `red-proof.txt` retains
+the failure. These are helper observations, not complete role-cache replay.
+
+```sh
+python3 tools/replay_role_scores.py --check
+python3 tools/replay_role_scores.py --benchmark --out records/T12
+```
+
+`[confirmed]` Native9F6E computes wrapped16-bit indices and DS addresses from
+canonical P8 bytes and the criterion, then reads the two actual raw table cells.
+Native1AE2 calls it on the same image; expected scores and intermediate results
+never enter the API. Signed-byte baseline addition, low-word product truncation,
+logical halving/shifts, unsigned scene/side bonuses and minimum1 retain guest
+widths. Both helpers preserve the entire image and consume no RNG draws.
+
+`[designed]` Scene inputs admit raw P15+6 only0–31 and criteria0–255; all other
+P15+6 values diagnose explicitly. Signed32–127 can reach an uninitialized local
+in the original; negative signed bytes are defined on another branch but remain
+outside this capture's admitted domain. No zero scratch is assumed. Standalone
+table criteria permit all16-bit words. Raw table-index witnesses are validated,
+canonical player IDs stay0–3920, scene indices1–22 and scene.word14 must match
+the player. Conflicting byte aliases reject before image setup; consistent
+aliases share the actual image byte. Extra expected/intermediate fields reject.
+
+`[designed]` The recorded scores/table words span5–131/17–175; all observed
+scene.byte22 values are0. Synthetic tests separately cover halving, signed bytes,
+word truncation, bonuses, minimum, wrapped indices/addresses, aliases and domain
+errors. They add no original dynamic coverage. Full1455/8973 role selection,
+1539/164F, A94B/AEB8 and the other23 replacements remain later work under
+archaeology review requirements #120/#121. Timing includes bridge parsing,
+validated image setup, nested native calculation and serialization; preparation
+and output decoding are excluded. This is a routine baseline without emulator
+comparison or full-game speed claims. Prior evidence and Cargo.lock remain
+immutable. All twelve release replays run locally; native #22 tracks the CI
+workflow permission gap (CI currently runs only the first five bridge tools,
+alongside all Rust tests and a release bridge build).
