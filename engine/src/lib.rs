@@ -13,6 +13,7 @@ pub mod cache_selection;
 pub mod event_effects;
 pub mod extra_event;
 pub mod goal_effects;
+pub mod neutral_input;
 pub mod placement;
 pub mod player_cache;
 pub mod post_score;
