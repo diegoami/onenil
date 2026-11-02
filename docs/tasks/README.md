@@ -16,3 +16,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T12](T12.md): Native role table and scene-scoring helpers from T33 (#25).
 - [T13](T13.md): Native role-cache candidate selection and T33 continuations (#27).
 - [T14](T14.md): Native managed/cache-slot helpers and caller rating stores (#29).
+- [T15](T15.md): Native1539 player-cache parent and nested role composition (#31).
