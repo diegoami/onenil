@@ -1,0 +1,28 @@
+Command:cargo test --manifest-path engine/Cargo.toml --test replacement --locked -q
+Exit:101
+
+running 2 tests
+original_twenty_five_compact_rating_flags --- FAILED
+original_two_replacements_and_twenty_six_helpers --- FAILED
+
+failures:
+
+---- original_twenty_five_compact_rating_flags stdout ----
+
+thread 'original_twenty_five_compact_rating_flags' (645) panicked at tests/replacement.rs:31:57:
+called `Result::unwrap()` on an `Err` value: "T20 native53FB not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- original_two_replacements_and_twenty_six_helpers stdout ----
+
+thread 'original_two_replacements_and_twenty_six_helpers' (646) panicked at tests/replacement.rs:18:59:
+called `Result::unwrap()` on an `Err` value: "T20 nativeAEB8 not implemented"
+
+
+failures:
+    original_twenty_five_compact_rating_flags
+    original_two_replacements_and_twenty_six_helpers
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+error: test failed, to rerun pass `--test replacement`
