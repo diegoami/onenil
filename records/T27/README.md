@@ -13,3 +13,9 @@ These are screenshots of this project's own SVG/CSS interface,not original
 assets. The pitch shows mirrored raw formation coordinates,not watched-engine
 motion. Clock-only messages report unchanged score rather than fabricated play.
 Native setup and broader configurations remain pending under35.
+
+[confirmed] T27-r0003 is the final layout acceptance:source3476b7f,freshly
+installed release binary00277b82…,Chromium145.0.7632.6. All controls,explicit
+halftime,95 native steps,four goals/two substitutions,full time,restart and
+mobile single-line score pass. Desktop/mobile screenshots were also visually
+inspected. Earlier run files remain unchanged.
