@@ -1133,3 +1133,30 @@ emulator/full-game speed claim follows from this storage migration.
 acceptance from one state,then native setup/kickoff and the commentary shell.
 Per-step captured states cannot serve as runtime inputs. First playable remains
 unfinished;clock/commentary minimum,pitch graphics preferred stretch.
+
+### Continuous first-half debug session (T25)
+
+[confirmed: archaeologyT36 at1415668,nativeT25] One `NativeQuickSession`
+admits a named original initial state once;successive `step()` calls take no
+inputs. The Rust image/RNG executes ratings,contest,placement/goal effects,
+prefix,extra-event handlers,substitution dispatch or goal reset,neutral input
+and caller clock. The fixed reference matches46 complete transitions through
+the actual halftime return,including three goals/resets and every RNG draw.
+No intermediate expected state enters the session.
+
+```sh
+.cache/venv/bin/python tools/replay_continuous_step.py --check
+```
+
+[designed] This is a debug admission after setup,not the playable shell. The
+session stops when the clock returns its first real boundary;it does not use a
+46-step runtime loop. Native258-draw setup,halftime/second-half control and the
+later actual AI substitutions still need end-to-end integration before a
+complete native match can be accepted. Running commentary and a preferred
+simple pitch follow that complete match under issue35.
+
+The admission joinsT36 with the first T12/T15 contest/rating inputs for the
+selected chance8 and club-byte55 read sets,not later fixture states. Remaining
+numeric queue rows use the original86E9 FF initialization,checked in
+`seg_0AB9_14.asm:8700–870E` at archaeology218490d and separately hash-pinned.
+Earlier source fixtures,receipts,lock and workflow remain unchanged.

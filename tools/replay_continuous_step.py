@@ -37,6 +37,7 @@ def load():
     if not common.same(json.loads(projected),admission):raise ValueError('initial admission projection differs')
     dp=json.loads((FIXTURES/'draws-provenance.json').read_text())
     if common.sha((FIXTURES/'draws.jsonl').read_bytes())!=dp['projection_sha256'] or dp['trace_sha256']!='66fe8ba4c5cbc6af163ebcbe1e5ba815a89abfd5df755818cabe5a8968ef68ef':raise ValueError('fixed original draw provenance differs')
+    if dp['repository']!=pin['repository'] or dp['commit']!='218490d846e365babdd158d09c5ab865124e30ed' or dp['draws']!=6216:raise ValueError('draw source identity differs')
     pin['draws_provenance']=dp
     return admission,rows[1:],pin
 
@@ -61,6 +62,14 @@ def check(admission,expected):
         if got['clock']['result']:break
         if count>=len(expected):raise ValueError('native sequence failed to terminate')
     if count!=46:raise ValueError('observed first-half boundary count differs')
+    try:session.step()
+    except ValueError:pass
+    else:raise ValueError('session advanced past its actual first-half boundary')
+    for key in ('expected','output','intermediate'):
+        bad=copy.deepcopy(admission);bad[key]=expected[0]
+        try:native.NativeQuickSession(common.encoded(bad))
+        except ValueError:pass
+        else:raise ValueError('session accepted an expected-state input')
     print('One admitted native image/RNG matches46 complete DD02/clock transitions through actual halftime,including three goals/resets;not setup/full-match/playable acceptance.')
 
 def benchmark(admission,pin,repetitions,directory):
