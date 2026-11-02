@@ -224,7 +224,14 @@ fn accounting(e: &mut Engine, incoming: u16, side: usize) {
         e.image[0xD6E0 + side] = e.image[0xD6E0 + side].wrapping_sub(1);
     }
 }
+// [designed] Standalone slices retain typed adapter events;the continuing image owns0F94 state.
 pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+    run_image(e, s, false)
+}
+pub(crate) fn run_with_commentary(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+    run_image(e, s, true)
+}
+fn run_image(e: &mut Engine, s: &State, compose_commentary: bool) -> Result<Outcome, String> {
     let side = usize::from(s.side);
     let a = addr(s.index);
     let outgoing = word(e, a + 14);
@@ -278,6 +285,10 @@ pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
             &mut helpers,
             &mut events,
         );
+        if compose_commentary {
+            // [confirmed:F14/F25] Execute atAF7F,before164F can reorder the roster.
+            goal_effects::numeric_commentary(e, 0, u16::from(slot), u16::from(s.incoming), s.side);
+        }
     }
     let old = word(e, a + 2);
     let saved = if old == word(e, 0xD2E) {

@@ -38,9 +38,9 @@ pub struct Admission {
     pub replacement_word: u16,
 }
 pub struct Session {
-    e: Engine,
-    a: Admission,
-    ended: bool,
+    pub(crate) e: Engine,
+    pub(crate) a: Admission,
+    pub(crate) ended: bool,
 }
 fn word(e: &Engine, a: usize) -> u16 {
     u16::from_le_bytes([e.image[a], e.image[a + 1]])
@@ -239,8 +239,51 @@ impl Session {
         t.queue = queue(&self.e, 3);
         goal_effects::snapshot(&self.e, &t)
     }
+    // [derived] Roster/scene references may change after an actual substitution.
+    fn extra(&self) -> extra_event::State {
+        let e = &self.e;
+        let mut state = self.a.extra.state.clone();
+        let ids = (1..=22)
+            .map(|i| word(e, scene(i) + 14))
+            .collect::<BTreeSet<_>>();
+        state.players = ids
+            .into_iter()
+            .map(|id| {
+                let a = layout::P8 + 8 * usize::from(id);
+                let b = layout::P15 + 15 * usize::from(id);
+                let skills = [6u16, 14u16].map(|mode| {
+                    let style = e.image
+                        [(0x957D + 22 * usize::from(e.image[a + 7]) + usize::from(mode)) & 65535];
+                    extra_event::Skill {
+                        mode,
+                        style_cell: style,
+                        level_cell: e.image[(0x96B1
+                            + 22 * usize::from(e.image[a + 5])
+                            + usize::from(style))
+                            & 65535],
+                    }
+                });
+                extra_event::Player {
+                    id,
+                    p8_0: e.image[a],
+                    p8_1: e.image[a + 1],
+                    p8_3: e.image[a + 3],
+                    p8_4: e.image[a + 4],
+                    p8_5: e.image[a + 5],
+                    p8_7: e.image[a + 7],
+                    p15_6: e.image[b + 6],
+                    p15_8: e.image[b + 8],
+                    p15_10: e.image[b + 10],
+                    p15_11: e.image[b + 11],
+                    skills,
+                }
+            })
+            .collect();
+        extra_event::project(e, &state)
+    }
     fn event(&self) -> event_effects::State {
         let mut t = self.a.event.clone();
+        t.handoff = self.extra();
         t.queue = queue(&self.e, 4);
         let head = word(&self.e, 0xD072);
         t.selectors.head = head;
@@ -261,7 +304,7 @@ impl Session {
         t.commentary.queue = queue(&self.e, 3);
         step_tail::clock_snapshot(&self.e, &t)
     }
-    fn rating(&self, side: usize) -> ratings::Input {
+    pub(crate) fn rating(&self, side: usize) -> ratings::Input {
         let e = &self.e;
         let mut r = self.a.ratings[side].clone();
         r.seed = e.word(crate::SEED);
@@ -322,7 +365,7 @@ impl Session {
             .copy_from_slice(&e.image[0x12CC..0x12CE]);
         r
     }
-    fn validate_admission(&self) -> Result<(), String> {
+    pub(crate) fn validate_admission(&self) -> Result<(), String> {
         let e = &self.e;
         if !same(&self.goal(), &self.a.goal)
             || !same(&self.event(), &self.a.event)
@@ -375,6 +418,13 @@ impl Session {
         json!({"clock":c.clock,"seed":e.word(crate::SEED),"score_side":[e.image[0xD0C5],e.image[0xD0C4]],"goal_bytes":[e.image[0xD086],e.image[0xD087]],"ratings":e.ratings_snapshot(),"clubs":g.clubs,"flags":{"DS:D074":e.image[0xD074],"DS:D09F":e.image[0xD09F],"DS:D0A0":e.image[0xD0A0],"DS:D0B7":e.image[0xD0B7],"DS:D1CA":e.image[0xD1CA],"DS:D6DD":e.image[0xD6DD]},"history_byte":e.image[Self::history_address(e)],"scorer_logs":logs,"players":players})
     }
     pub fn step(&mut self) -> Result<Value, String> {
+        self.step_with_readset(None, None)
+    }
+    pub(crate) fn step_with_readset(
+        &mut self,
+        replacement: Option<&ai_selection::ReadSet>,
+        ai_trace: Option<&mut Vec<Value>>,
+    ) -> Result<Value, String> {
         if self.ended {
             return Err("first-half session has reached its actual clock boundary".into());
         }
@@ -465,7 +515,7 @@ impl Session {
         self.e.finish_prefix(&prefix, &actual)?;
         if actual.goal_flag == 0 {
             if self.e.image[0xD6DD] != 0 {
-                let current = extra_event::project(&self.e, &self.a.extra.state);
+                let current = self.extra();
                 let out = self.e.decide_loaded(&current)?;
                 draws.extend(out.draws);
                 if out.dispatch.is_some() {
@@ -485,9 +535,16 @@ impl Session {
             }
             let sub = substitution::State {
                 context: ai_selection::snapshot(&self.e, &self.a.substitution.context),
-                replacement: None,
+                replacement: replacement.cloned(),
             };
-            let out = substitution::run(&mut self.e, &sub)?;
+            let out = if replacement.is_some() {
+                substitution::run_with_commentary(&mut self.e, &sub)?
+            } else {
+                substitution::run(&mut self.e, &sub)?
+            };
+            if let Some(trace) = ai_trace {
+                trace.extend(out.ai.clone());
+            }
             draws.extend(out.draws);
             events.extend(out.presentation);
         } else {

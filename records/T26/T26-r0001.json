@@ -1,0 +1,62 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T26-r0001",
+  "code_commit": "857855f1de082fd180ad2c0e477b7780f0a74df2",
+  "started": "2026-11-02T22:23:29.403577+00:00",
+  "ended": "2026-11-02T22:23:31.406904+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "62006c1fe8cd6f137ab996704bbf835e38bf2c5271c875113daeb438f78cf9a6"
+  },
+  "source_pins": {
+    "repository": "https://github.com/diegoami/onenil-archaeology",
+    "commit": "461ceb79a3074bfec04d9c5858226e87e45d9c9f",
+    "producer_commit": "092841a062cdd1120996a970d2089ebbba2d3995",
+    "sources": {
+      "index.json": "23658acd0d1586d12def24a6acc263528a453a9f5b003507b9329534cb46c958",
+      "T37-r0001.jsonl": "206f097686e48f79f54c64bf85d9a131382d29e11f5cce9e5e834651fcb0d7bc"
+    },
+    "first_half_pin_sha256": "7da8d7d234cddc608119bfaac485b9c3673e8c2258de7fab066940261ebff586",
+    "scope": "One continuing fixed quick match after setup;neutral no-edit halftime;not native setup or playable shell",
+    "first_half": {
+      "repository": "https://github.com/diegoami/onenil-archaeology",
+      "commit": "1415668bcd3ef075d32ece4fe3a95e1becaec3a6",
+      "producer_commit": "2822908b1ad071ab667bb510ea2b2081df19587c",
+      "sources": {
+        "index.json": "1eca2d455057e582f1386f4856741808644c2949a24d09354ffe705abdedf945",
+        "T36-r0001.jsonl": "2601fcfa9ef525b0c0e329c15ea11fb0daff42250ddd427e809d559feabbe437"
+      },
+      "additional_static": {
+        "static/1-0-exe/code/seg_0AB9_14.asm": "e4f9a622942f648e16f15ec1cca7e8df16b7c47b110ae6779b2b87c1ae500c88"
+      },
+      "prior_native_pins": {
+        "ratings": "679e856a622c9ed53fbf6316fb7dfd8968ac23fcaf15a1f0aafc2a974b3f392c",
+        "placement": "3d06698550ff4787f9b2260bda3c5109b05bf68d994bc59b16ae816520805c45",
+        "step_tail": "c9b28de4f535a812f700db7c4468bae044fe6693ed76d1df573e9c104013bcd1"
+      },
+      "scope": "One admission,continuing DD02/clock through first halftime;not native setup or complete match",
+      "draws_provenance": {
+        "repository": "https://github.com/diegoami/onenil-archaeology",
+        "commit": "218490d846e365babdd158d09c5ab865124e30ed",
+        "trace": "traces/T08/2f634978859f7c07-week-r0002.jsonl",
+        "trace_sha256": "66fe8ba4c5cbc6af163ebcbe1e5ba815a89abfd5df755818cabe5a8968ef68ef",
+        "projection_sha256": "166ebb21bd28326451c8bb9800f5bff966ffc4ea012b59e1aacbc0bb9050f421",
+        "draws": 6216,
+        "normalization": "quick_step.draw_view;literal original caller identity and numeric draw fields,not an engine model"
+      }
+    }
+  },
+  "routine": "one admitted continuing DD02/7B7B full-match session",
+  "repetitions": 10,
+  "steps": 950,
+  "elapsed_ns": 2001272116,
+  "serialized_output_bytes": 18137430,
+  "method": "Pre-serialized initial admission;release parse/setup/native successive steps/serialization and phase queries for termination included",
+  "limits": "Fixed reference full match after setup with explicit no-edit halftime;not native setup,playable acceptance,arbitrary seeds or emulator/full-game speed comparison"
+}

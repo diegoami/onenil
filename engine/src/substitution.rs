@@ -76,7 +76,14 @@ fn available(e: &Engine, id: u16) -> u8 {
         p15_byte11: e.image[a + 11],
     })
 }
+// [designed] Standalone slices retain typed adapter events;the continuing image owns0F94 state.
 pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+    run_image(e, s, false)
+}
+pub(crate) fn run_with_commentary(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+    run_image(e, s, true)
+}
+fn run_image(e: &mut Engine, s: &State, compose_commentary: bool) -> Result<Outcome, String> {
     let mut events = vec![];
     let mut calls = vec![];
     let mut presentation = vec![];
@@ -138,7 +145,11 @@ pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
                     scene: selector,
                 };
                 let before = ai_selection::snapshot(e, &s.context);
-                let out = ai_selection::run(e, &state)?;
+                let out = if compose_commentary {
+                    ai_selection::run_with_commentary(e, &state)?
+                } else {
+                    ai_selection::run(e, &state)?
+                };
                 calls.push(json!({"event":events.len(),"input":before,"output":out.output,"helpers":out.helpers,"presentation":out.presentation,"draws":out.draws}));
                 presentation.extend(out.presentation);
                 events.push(json!({"site":"0AB9:6CA5","kind":"ai","side":side,"arguments":[0,side,selector,club],"input":compact(&before),"output":compact(&out.output),"draw_start":0,"draw_end":0}));
