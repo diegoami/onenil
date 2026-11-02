@@ -9,7 +9,8 @@ repository; see [docs/artifacts.md](docs/artifacts.md). Rules: [CLAUDE.md](CLAUD
 The next product target is [one playable quick-result match](docs/first-playable.md),
 tracked in [issue35](https://github.com/diegoami/onenil/issues/35):choose a supported
 lineup/seed,kick off,follow a match clock and text commentary,and reach a final
-score through one continuing native state. Pitch graphics are deferred.
+score through one continuing native state. Commentary is the minimum; a simple
+pitch view is the preferred stretch goal.
 The current routine harness is not yet playable. Progress is tracked through
 match-state closure,a continuous quick step,a complete match,and text controls.
 
