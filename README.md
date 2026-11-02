@@ -936,3 +936,62 @@ replacement. Continuous DD02/clock,setup→complete match and the commentary she
 remain later gates. This is not a complete playable match;pitch graphics remain
 the preferred stretch goal. Other23 full replacements/six-week breadth remain
 under archaeology120/121.
+
+T21 connectsA94B selection to nativeAEB8 replacement. `[confirmed]` F23–F28 at
+archaeology
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provide37 calls in the r0017 week and33 observed helper boundaries:five candidate
+scans,five limits,fifteen availability calls,five preferred selections,one hand
+lookup and two replacements. The two replacements occur in the chosen first
+match;other early-return calls are inexpensive regression evidence,not a larger
+playable scope. Each zero-draw interval normalizes its own original start to0.
+Both replacements join T25 exactly and execute on the selection caller's image.
+The original test failed atf72a28c's stub(exit101,retained proof).
+
+```sh
+python3 tools/replay_ai_selection.py --check
+python3 tools/replay_ai_selection.py --benchmark --out records/T21
+```
+
+`[confirmed]` Capacity includes the conditional keeper allowance. Its exhausted
+branch tests signed roster P15+8 alone. Candidate scans overwrite by raw style
+in increasing reserve order and skip unavailable players. Preferred selection
+retains the last nonzero match;Pascal-character search returns a one-based index,
+including NUL,and handedness must equal the index-above-three predicate as a
+raw byte. Weighted fallback retains the first strict weight improvement and
+halves on hand mismatch. A chosen player's role is copied before roster,event
+and cache-selector swaps and the native replacement call.
+
+`[confirmed: listing0AB9:A8CF–A8DD]` The scan's exclusion lookup subtracts the
+side offset before reading the scene player. It therefore reads the normalized
+scene index,which differs from the physical caller scene when the offset is11.
+The retained five scans use offset0;the offset11 behavior has static/synthetic
+coverage only. Do not simplify that instruction sequence to a physical-scene
+lookup or claim a new dynamic observation.
+
+`[designed]` The compact T23 context admits complete canonical references,
+ordered preference rows,Latin1 Pascal text,raw hand cells,reserve limits and
+candidate cells. Optional supplemental replacement read sets supply full scene,
+player,club and downstream tables;they contain no chosen slot or expected
+helper result. Earlier raw T23 values reconcile their aliases before a single
+image allocation. Missing reached replacement inputs and unreachedA837 paths
+diagnose explicitly. Unsupported indexed domains/extra-result fields reject.
+Earlier public APIs and evidence remain unchanged.
+
+`[designed]` Synthetic tests separately cover candidate overwrite/exclusion,
+raw handedness and NUL search,preferred-last versus weighted-first ties,
+halving,signed exhausted-capacity and keeper gates,both offsets,missing/invalid
+read sets,A837 diagnostics,canonical/table aliases,live counter mutation across
+replacement and whole-image write ownership. Original weighted/A837 branches
+remain unreached. The implemented weighted path has synthetic coverage only;
+A837 remains unsupported. Presentation events follow the T20 adapter contract,
+excluding original hardware/display/log-scratch/timer parity.
+
+`[designed]` All twenty-one release tools run locally;CI retains all Rust tests,
+release build and its first five bridges under22. Earlier evidence,lock and
+workflow remain unchanged. The immutable committed-source receipt measures
+JSON/setup/native computation/observations,not emulator/full-game speed.
+Next is auditing reached state changes and connecting the substitution/input
+callers to a continuous DD02+clock transition. This is not a complete playable
+match. Commentary+clock remain the minimum,pitch graphics the preferred stretch;
+other-week/full-game parity remains separate under archaeology120/121.

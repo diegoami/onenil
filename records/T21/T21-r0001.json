@@ -1,0 +1,36 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T21-r0001",
+  "code_commit": "e03d1d66ad45cfe8505923484513857ed76e4a23",
+  "started": "2026-11-02T19:07:42.349899+00:00",
+  "ended": "2026-11-02T19:07:43.905206+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "2f6a377c64e9db197e73e9f29c84704b46c5bf2a47fc01af203cda53db56a9eb"
+  },
+  "archaeology": {
+    "repository": "https://github.com/diegoami/onenil-archaeology",
+    "commit": "218490d846e365babdd158d09c5ab865124e30ed",
+    "index_sha256": "54ce26092e7bdf7425618b8b58399aa85f9cb7af012a5be0d25bbd9d0592c595",
+    "replacement_pin": "bc8fbb37b61ce0c3b490a45678e23fe5b9d3b77096e8281dfa8099f323aa082e",
+    "projection_sha256": "6fd7031f79ad6d019989ffc2fc73a26657dc99fb499858341391a0d633d9c2ae"
+  },
+  "routine": "A94B selection with nativeAEB8 replacements",
+  "source_weeks": 1,
+  "recorded_roots": 37,
+  "recorded_helpers": 33,
+  "recorded_replacements": 2,
+  "repetitions": 20,
+  "calls": 740,
+  "rng_draws": 0,
+  "elapsed_ns": 1553169246,
+  "serialized_output_bytes": 7505780,
+  "method": "Pre-serialized raw inputs; release bridge parsing,validated memory setup,native role/cache/slot/score computation and serialization included; preparation/output decoding excluded",
+  "limits": "Fixedr0017 only;A837 unsupported;static weighted fallback separate from observed preferred path;presentation adapter excludes original hardware/render/log scratch/timer parity;not a complete match/week or emulator comparison"
+}

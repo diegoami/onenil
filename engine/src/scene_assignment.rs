@@ -199,7 +199,7 @@ fn scalar(
     let row = Scene::read(e, index);
     node(site, kind, args, &row, &row, result, children)
 }
-fn hand(e: &Engine, id: u16) -> u8 {
+pub(crate) fn hand(e: &Engine, id: u16) -> u8 {
     let selector = e.image[0x12BA + usize::from(id % 3)];
     e.image[hand_address(selector, e.image[0x10000 + 8 * usize::from(id) + 7])]
 }
