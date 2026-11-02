@@ -1,0 +1,21 @@
+Command:cargo test --manifest-path engine/Cargo.toml --test neutral_input --locked -q
+Exit:101
+
+running 1 test
+fourteen_static_neutral_branch_cases_are_not_original_observations --- FAILED
+
+failures:
+
+---- fourteen_static_neutral_branch_cases_are_not_original_observations stdout ----
+
+thread 'fourteen_static_neutral_branch_cases_are_not_original_observations' (638) panicked at tests/neutral_input.rs:10:61:
+called `Result::unwrap()` on an `Err` value: "T23 neutral78B7 not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    fourteen_static_neutral_branch_cases_are_not_original_observations
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test neutral_input`
