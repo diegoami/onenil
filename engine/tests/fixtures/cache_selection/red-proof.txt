@@ -1,0 +1,8 @@
+T11 actual-original red proof,before implementation
+Source: archaeology218490d846e365babdd158d09c5ab865124e30ed,T32 streams/index byte-identical.
+Command: cargo test --manifest-path engine/Cargo.toml --locked --test cache_selection -q
+Result: exit101;0 passed,2 failed.
+actual_original_cached_selectors_replay: Err("T11 native13B8 not implemented")
+actual_original_cached_ratings_replay: Err("T11 native4EBF not implemented")
+Both tests pass only raw input structs to Rust;expected results are assertion-only.
+No original game execution or synthetic inputs were needed for this red proof.
