@@ -86,7 +86,7 @@ fn word(e: &Engine, a: usize) -> u16 {
 fn put(e: &mut Engine, a: usize, v: u16) {
     e.image[a..a + 2].copy_from_slice(&v.to_le_bytes());
 }
-fn validate(s: &State) -> Result<(), String> {
+pub(crate) fn validate(s: &State) -> Result<(), String> {
     post_score::validate(&s.strategy)?;
     if s.mode == 0
         || !(1..=22).contains(&s.actor)

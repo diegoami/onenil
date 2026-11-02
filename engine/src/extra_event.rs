@@ -171,7 +171,7 @@ pub(crate) fn validate_state(s: &State) -> Result<(), String> {
     table_cells(s)?;
     Ok(())
 }
-fn validate(input: &Input) -> Result<(), String> {
+pub(crate) fn validate(input: &Input) -> Result<(), String> {
     validate_state(&input.state)?;
     let s = &input.state;
     if s.side_offsets[1] > 11

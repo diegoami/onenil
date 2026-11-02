@@ -158,7 +158,7 @@ fn queue_row(e: &Engine, i: u16) -> QueueRow {
         side: e.image[a + 5],
     }
 }
-fn validate(s: &State) -> Result<(), String> {
+pub(crate) fn validate(s: &State) -> Result<(), String> {
     extra_event::validate_state(&s.handoff)?;
     if s.mode == 0
         || !(1..=22).contains(&s.handoff.actor)

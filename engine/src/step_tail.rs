@@ -251,7 +251,7 @@ fn validate_prefix(input: &PrefixInput) -> Result<(), String> {
     }
     Ok(())
 }
-fn validate_clock(input: &ClockState) -> Result<(), String> {
+pub(crate) fn validate_clock(input: &ClockState) -> Result<(), String> {
     let q = &input.commentary.queue;
     if q.head > 1700 || q.rows.len() != 3 {
         return Err("unsupported numeric queue head/context".into());

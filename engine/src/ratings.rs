@@ -255,7 +255,7 @@ fn bonus_input(input: &Input) -> BonusInput {
     }
 }
 
-fn validate(input: &Input) -> Result<(), String> {
+pub(crate) fn validate(input: &Input) -> Result<(), String> {
     if input.side > 1 {
         return Err("unsupported rating side".into());
     }

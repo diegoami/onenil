@@ -79,6 +79,27 @@ fn same<A: Serialize, B: Serialize>(a: &A, b: &B) -> bool {
 }
 impl Session {
     pub fn new(a: Admission) -> Result<Self, String> {
+        for (side, r) in a.ratings.iter().enumerate() {
+            ratings::validate(r)?;
+            if usize::from(r.side) != side {
+                return Err("admission rating side order differs".into());
+            }
+        }
+        extra_event::validate(&a.extra)?;
+        event_effects::validate(&a.event)?;
+        quick_reset::validate(&a.reset)?;
+        step_tail::validate_clock(&a.clock)?;
+        if a.goal.clubs.iter().any(|id| !(1..=176).contains(id))
+            || a.goal
+                .players
+                .iter()
+                .any(|p| p.id > 3920 || p.p8_position > 13)
+            || a.goal.queue.head > 1700
+            || a.goal.queue.rows.iter().any(|r| r.index > 1700)
+            || a.goal.log_counts.iter().any(|n| *n > 11)
+        {
+            return Err("invalid goal admission domain".into());
+        }
         if a.selectors.len() != 255
             || a.config[0] != a.history.selector
             || a.config[2] != a.neutral.speed
@@ -446,7 +467,9 @@ impl Session {
         let current = self.clock();
         let clock = step_tail::clock_loaded(&mut self.e, &current);
         self.ended = clock.result != 0;
-        Ok(json!({"input":input,"output":output,"clock":clock,"draws":draws,"events":events}))
+        Ok(
+            json!({"input":input,"output":output,"clock_input":current,"clock":clock,"draws":draws,"events":events}),
+        )
     }
 }
 
@@ -512,5 +535,20 @@ mod tests {
         }
         assert_eq!(n, 46);
         assert!(s.step().is_err())
+    }
+    #[test]
+    fn invalid_admission_domains_are_diagnostics() {
+        let mut a = admission();
+        a.ratings[0].club = 0;
+        assert!(Session::new(a).is_err());
+        let mut a = admission();
+        a.goal.players[0].id = u16::MAX;
+        assert!(Session::new(a).is_err());
+        let mut a = admission();
+        a.clock.commentary.queue.head = 1701;
+        assert!(Session::new(a).is_err());
+        let mut a = admission();
+        a.ratings[0].side = 1;
+        assert!(Session::new(a).is_err());
     }
 }
