@@ -22,3 +22,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T18](T18.md): First-playable gate1 — scene assignment and rebuild closure (#38).
 - [T19](T19.md): First-playable gate1 — shared-state rearrangement parent (#40).
 - [T20](T20.md): First-playable gate1 — logical replacement composition (#42).
+- [T21](T21.md): First-playable gate1 — selection-to-replacement composition (#44).
