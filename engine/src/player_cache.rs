@@ -68,7 +68,7 @@ fn add_word(c: &mut role_scores::Cells, a: usize, v: u16) -> Result<(), String> 
     }
     Ok(())
 }
-fn machine(s: &State) -> Result<Engine, String> {
+pub(crate) fn cells(s: &State) -> Result<role_scores::Cells, String> {
     if !matches!(s.side_offsets, [0, 11] | [11, 0])
         || s.clubs.iter().any(|id| !(1..=176).contains(id))
         || s.clubs[0] == s.clubs[1]
@@ -192,7 +192,10 @@ fn machine(s: &State) -> Result<Engine, String> {
         role_scores::insert(&mut bytes, a, v)?;
     }
     add_word(&mut bytes, 0xA51C, s.seed)?;
-    Ok(role_scores::image(bytes))
+    Ok(bytes)
+}
+fn machine(s: &State) -> Result<Engine, String> {
+    Ok(role_scores::image(cells(s)?))
 }
 // [derived] Closed helpers preserve all validated input fields except caches/byte18.
 // Full-image tests check that invariant,including seed; snapshots read current mutable cells.
@@ -230,7 +233,7 @@ fn readonly(
     let state = snapshot(e, s);
     event(site, kind, side, args, state.clone(), state, Some(result))
 }
-fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
     let mut events = vec![];
     let mut roles = vec![];
     // [confirmed] F31/1539: managed/gate,kind1 alias,roles,then eleven caller stores per side.

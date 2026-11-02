@@ -147,7 +147,7 @@ impl Scene {
         e.image[a..a + 25].copy_from_slice(&self.bytes());
     }
 }
-fn validate(s: &State) -> Result<(), String> {
+pub(crate) fn validate(s: &State) -> Result<(), String> {
     if !matches!(s.side_offsets, [0, 11] | [11, 0])
         || !(1..=22).contains(&s.actor)
         || s.scenes.len() != 22
@@ -177,11 +177,11 @@ fn validate(s: &State) -> Result<(), String> {
     }
     Ok(())
 }
-struct Machine {
-    engine: Engine,
+struct Machine<E: std::ops::DerefMut<Target = Engine>> {
+    engine: E,
     header: State,
 }
-impl Machine {
+impl Machine<Box<Engine>> {
     fn new(s: &State) -> Result<Self, String> {
         validate(s)?;
         let mut e = Engine::new(&ContestInput {
@@ -212,10 +212,12 @@ impl Machine {
         e.image[0xD0AC] = s.phase;
         put(&mut e, 0xD0AE, s.time);
         Ok(Self {
-            engine: e,
+            engine: Box::new(e),
             header: s.clone(),
         })
     }
+}
+impl<E: std::ops::DerefMut<Target = Engine>> Machine<E> {
     fn selectors(&self) -> Selectors {
         let e = &self.engine;
         Selectors {
@@ -420,6 +422,27 @@ fn observation(
     children: Vec<Value>,
 ) -> Value {
     json!({"site":site,"kind":kind,"arguments":[argument],"input":row,"draw_start":0,"children":children,"output":row,"result":result,"draw_end":0})
+}
+pub(crate) fn positions_image(e: &mut Engine, s: &State) -> PositionsOutcome {
+    Machine {
+        engine: e,
+        header: s.clone(),
+    }
+    .positions()
+}
+pub(crate) fn proximity_image(e: &mut Engine, s: &State) -> ProximityOutcome {
+    Machine {
+        engine: e,
+        header: s.clone(),
+    }
+    .proximity()
+}
+pub(crate) fn snapshot(e: &mut Engine, s: &State) -> State {
+    Machine {
+        engine: e,
+        header: s.clone(),
+    }
+    .state()
 }
 pub fn positions(input: &State) -> Result<PositionsOutcome, String> {
     Ok(Machine::new(input)?.positions())
