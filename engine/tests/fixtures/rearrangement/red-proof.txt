@@ -1,0 +1,21 @@
+Command:cargo test --manifest-path engine/Cargo.toml --test rearrangement --locked -q
+Exit:101
+
+running 1 test
+original_two_parents_and_all_164_caller_observations --- FAILED
+
+failures:
+
+---- original_two_parents_and_all_164_caller_observations stdout ----
+
+thread 'original_two_parents_and_all_164_caller_observations' (638) panicked at tests/rearrangement.rs:9:48:
+called `Result::unwrap()` on an `Err` value: "T19 native164F not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_two_parents_and_all_164_caller_observations
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+error: test failed, to rerun pass `--test rearrangement`

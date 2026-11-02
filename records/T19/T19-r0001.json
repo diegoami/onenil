@@ -1,0 +1,41 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T19-r0001",
+  "code_commit": "e3e17218b554098d56af3068612b38539ffa2a19",
+  "started": "2026-11-02T18:42:52.927423+00:00",
+  "ended": "2026-11-02T18:42:55.286082+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "4bf643f9049b498e557424f3f0dd170a4e1a3f3965b02009b638b95354119129"
+  },
+  "archaeology": {
+    "repository": "https://github.com/diegoami/onenil-archaeology",
+    "commit": "218490d846e365babdd158d09c5ab865124e30ed",
+    "prior_pins": {
+      "scene_assignment": "0f49b246e9cab548beeca497e025bacf3e2e26716c2eff9f0524a8d3e2c1a35f",
+      "role_pairing": "a50bf3eb11effa30b0f4df5a132f27c2df474f67ce5d6a9648be51b1ad0660ee",
+      "scene_codes": "91dbf5818c07398ee4e76cf7560ef658b66730271b77b9f2c18f17b5f3e04799",
+      "player_cache": "215378d58000c351f1b39e54f1938cae0a2ffb48cea39abe7b2d00860e6d4840",
+      "terminal": "76479342f6910dec7be795a2aa82e27f76b6893b58d77c8c3c195521cb231647"
+    },
+    "projection_sha256": "9103c6a5f6654026e1bfbf2d7a1b68ef2086d535bb7c5a715bcfc95d01ea69dd"
+  },
+  "routine": "164F rearrangement with assignment and five native tail stages",
+  "source_weeks": 1,
+  "recorded_roots": 2,
+  "recorded_direct_events": 164,
+  "recorded_tail_boundaries": 10,
+  "repetitions": 20,
+  "calls": 40,
+  "rng_draws": 0,
+  "elapsed_ns": 2353305809,
+  "serialized_output_bytes": 30264880,
+  "method": "Pre-serialized raw inputs; release bridge parsing,validated memory setup,native role/cache/slot/score computation and serialization included; preparation/output decoding excluded",
+  "limits": "Fixedr0017 only;static/synthetic edges separate from original;noA94B/AEB8/full AI/match/week/render/timer/scratch parity or emulator comparison"
+}

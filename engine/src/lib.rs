@@ -17,6 +17,7 @@ pub mod player_cache;
 pub mod post_score;
 pub mod quick_reset;
 pub mod ratings;
+pub mod rearrangement;
 pub mod role_cache;
 pub mod role_pairing;
 pub mod role_scores;
@@ -620,6 +621,13 @@ mod python {
         let out = scene_assignment::rebuild(&input).map_err(PyValueError::new_err)?;
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }
+    #[pyfunction]
+    fn rearrange(input_json: &str) -> PyResult<String> {
+        let input: rearrangement::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = rearrangement::rearrange(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
@@ -663,6 +671,7 @@ mod python {
         module.add_function(wrap_pyfunction!(placement_prefix_extra_event, module)?)?;
         module.add_function(wrap_pyfunction!(assign_scene, module)?)?;
         module.add_function(wrap_pyfunction!(rebuild_scene, module)?)?;
+        module.add_function(wrap_pyfunction!(rearrange, module)?)?;
         module.add("__version__", env!("CARGO_PKG_VERSION"))?;
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }

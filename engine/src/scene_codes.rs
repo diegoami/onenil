@@ -125,7 +125,7 @@ fn code_machine(s: &CodeInput) -> Result<Engine, String> {
     e.image[0x096A..0x096C].copy_from_slice(&s.codes);
     Ok(e)
 }
-fn machine(s: &State) -> Result<Engine, String> {
+pub(crate) fn validate(s: &State) -> Result<(), String> {
     if s.mode > 4 {
         return Err("unsupported0207 mode:original local is undefined above4".into());
     }
@@ -151,6 +151,10 @@ fn machine(s: &State) -> Result<Engine, String> {
     {
         return Err("missing or unordered scene-code canonical input".into());
     }
+    Ok(())
+}
+fn machine(s: &State) -> Result<Engine, String> {
+    validate(s)?;
     let mut e = blank(s.seed);
     load_direction(&mut e, s.threshold, s.clock, s.direction_signs);
     e.image[0xD56..0xD58].copy_from_slice(&s.side_offsets);

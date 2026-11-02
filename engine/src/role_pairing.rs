@@ -148,7 +148,7 @@ fn range_machine(s: &RangeInput) -> Result<Engine, String> {
     load_preferences(&mut e, &s.preferences);
     Ok(e)
 }
-fn machine(s: &State) -> Result<Engine, String> {
+pub(crate) fn validate(s: &State) -> Result<(), String> {
     if !matches!(s.side_offsets, [0, 11] | [11, 0])
         || s.clubs.iter().any(|c| !(1..=176).contains(&c.id))
         || s.clubs[0].id == s.clubs[1].id
@@ -173,6 +173,10 @@ fn machine(s: &State) -> Result<Engine, String> {
     {
         return Err("missing or unordered pairing canonical input".into());
     }
+    Ok(())
+}
+fn machine(s: &State) -> Result<Engine, String> {
+    validate(s)?;
     let mut e = blank(s.seed);
     e.image[0xD56..0xD58].copy_from_slice(&s.side_offsets);
     for (side, c) in s.clubs.iter().enumerate() {

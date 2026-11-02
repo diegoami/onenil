@@ -824,3 +824,56 @@ five bridge tools under permission follow-up22. The immutable committed-source
 release receipt includes parsing, image setup, native calculation/observations
 and serialization;it makes no emulator/full-game speed claim. Earlier fixtures,
 receipts and Cargo.lock remain unchanged.
+
+T19 composes164F rearrangement for the fixed first-match reference. `[confirmed]`
+F28–F35 at archaeology
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provide two parent observations and164 direct caller events:44 availability
+sum calls,44 role calls,four signed divisions,44 assignments,fifteen typed
+exchanges,three selector marks and ten tail boundaries. Their five native
+callees execute in order on the parent's live image:10B9 pairing,03BB scene
+codes,1539 player cache,3155 positions and21D7 proximity. The parent then clears
+word12 of physical keeper scenes1 and12. No tail input state is reloaded.
+
+```sh
+python3 tools/replay_rearrangement.py --check
+python3 tools/replay_rearrangement.py --benchmark --out records/T19
+```
+
+`[confirmed]` Availability gates unsigned P8+4 additions and maps unavailable
+players to local role14. The signed32 quotient of sum/22 plus one updates the
+opposite club total. Strict unsigned role comparisons drive ordered exchanges
+of roster words,local roles,complete25-byte scenes,event words and cache-selector
+bytes;only after all five does the caller reindex actor/secondary. Supplied
+physical indices and stored selectors retain their separate meanings. CPU-class
+instruction selection is normalized to logical signed division;zero/overflow
+diagnose. The actual specimen uses CPU2 and positive small operands.
+
+`[designed]` Raw supplemental inputs join exact T28 tail boundaries against
+T29/T30/T31/T33/T34/T35. Earlier independent source/projection pins are verified
+before the join. Redundant typed component inputs reconcile through raw-byte
+alias checks before allocating a single image. Canonical player sets must agree;
+full P8/P15 records,twenty roster words,two event/cache-selector arrays and
+reached tables travel in the parent core. Expected results,division outputs,
+sorted roles and per-tail observations are not runtime inputs. Named caller
+projections and full final component state are compared;unneeded T28 selection/UI
+fields are outside the projected input contract. Computed nested diagnostics do
+not add original observations. Both parents failed against69b08f5's stub with
+retained exit101 proof. Original draw4025 normalizes to0.
+
+`[designed]` Synthetic tests cover equal/mixed/unavailable ordering,non-stable
+strict exchanges,unsigned sums,signed division exceptions,both offsets,selector
+exchange timing,whole-scene transfers,canonical/table aliases,unsupported/extra
+inputs,live-image mutations and final keeper clears. Whole-image checks preserve
+seed,all canonical player bytes,unowned roster/event/cache entries and other
+pools. Earlier public APIs retain their contracts;terminal execution can borrow
+the caller image. These tests add no original dynamic breadth.
+
+`[designed]` This closes the fixed-reference rearrangement dependency in
+first-playable gate1. Next are reached A94B/AEB8 selection/replacement paths,
+then continuous DD02/clock and setup→final-match integration. It is not a complete
+playable match. All nineteen release tools run locally;CI retains all Rust tests,
+release build and its first five bridges under22. Earlier evidence,lock and
+workflow remain unchanged. The immutable committed-source release receipt covers
+parsing/setup/native computation/serialization and makes no emulator/full-game
+speed claim. Other23 replacements/six-week breadth remain under archaeology120/121.

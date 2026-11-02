@@ -92,7 +92,7 @@ fn domains(index: u8, selector: u8) -> Result<(), String> {
     Ok(())
 }
 // [derived] Admit all canonical identities and raw aliases before image allocation.
-fn cells(s: &State) -> Result<Cells, String> {
+pub(crate) fn cells(s: &State) -> Result<Cells, String> {
     domains(s.index, s.selector)?;
     if s.clubs[0].id == s.clubs[1].id || s.clubs.iter().any(|c| !(1..=176).contains(&c.id)) {
         return Err("unsupported header clubs".into());
@@ -375,7 +375,7 @@ pub(crate) fn rebuild_image(e: &mut Engine, index: u8, selector: u8) -> Result<V
     Ok(nodes)
 }
 // [derived] Identity lists select records; values are reread from the live image.
-fn snapshot(e: &Engine, s: &State) -> State {
+pub(crate) fn snapshot(e: &Engine, s: &State) -> State {
     let mut out = s.clone();
     out.seed = word(e, 0xA51C);
     out.position_default = word(e, 0xD32);
