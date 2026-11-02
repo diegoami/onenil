@@ -1188,3 +1188,38 @@ projection. Later snapshots never enter the engine.
 owner review remain first-playable acceptance work. A local viewer of this
 prepared session is the next visible deliverable. Receipts measure release
 admission/native progression/serialization only,with no full-game speed claim.
+
+### Run the local match viewer (T27)
+
+After building the Python extension with the installation steps above:
+
+```sh
+.cache/venv/bin/python tools/play_match.py
+# Open http://127.0.0.1:8040 ; Ctrl-C stops the server.
+```
+
+[designed] Kick off,pause/resume,change pace,restart,or explicitly continue
+at halftime. The running clock,score,goals/scorers,actual substitutions and
+phase commentary follow one continuing Rust session. The pitch reads actual
+signed formation coordinates and current player identities;the shell mirrors
+the two teams for display. A gold ring identifies the engine's match focus.
+There is no invented ball tracking or watched-engine animation. Names are
+narrowly decoded facts with source digests in `demo/metadata.json`;all graphics
+are newly drawn SVG/CSS. No original game assets are required.
+
+[designed] This preview admits the single initial T26 state from
+`demo/reference.json`,without loading replay/expected streams at runtime.
+It offers the fixed Sheffield Wed–Blackburn R reference only. Native258-draw
+setup,lineup/seed choices,supported-session breadth and owner-run first-playable
+review are still pending under#35. Repeating the same prepared configuration
+is deterministic. This is visible prototype progress,not completed acceptance.
+
+Checks:
+
+```sh
+.cache/venv/bin/python tools/test_play_match.py
+# Optional real-browser smoke (separate test dependency):
+.cache/venv/bin/python -m pip install playwright==1.58.0
+.cache/venv/bin/python -m playwright install chromium
+.cache/venv/bin/python tools/smoke_match_viewer.py
+```

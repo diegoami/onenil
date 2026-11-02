@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>One–Nil · Match centre</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<header><a class="brand" href="/">ONE<span>–</span>NIL<span class="brand-note">MATCH CENTRE</span></a><span class="preview">NATIVE EXHIBITION PREVIEW</span></header>
+<main>
+<section class="scoreboard" aria-label="Scoreboard">
+<div class="fixture-label">ENGLISH CLUB FOOTBALL <span>·</span> PREPARED REFERENCE</div>
+<div class="score-row"><div class="team home"><span class="badge blue">SW</span><h1 id="home">Sheffield Wed</h1></div><div class="score"><strong id="score">0 <span>:</span> 0</strong><div id="clock">0′</div></div><div class="team away"><span class="badge red">BR</span><h1 id="away">Blackburn R</h1></div></div>
+<div class="status"><span id="status-dot"></span><span id="phase">Ready for kickoff</span></div>
+</section>
+<div class="toolbar"><button id="primary">Kick off</button><button id="restart" class="secondary">Restart</button><label for="speed">Match pace</label><select id="speed"><option value="900">Steady</option><option value="300" selected>Quick</option><option value="30">Fast</option></select><span class="connection" id="connection">Local native engine</span></div>
+<p class="error" id="error" role="alert" hidden></p>
+<div class="match-grid">
+<section class="pitch-card"><div class="section-head"><h2>The pitch</h2><span>FORMATION VIEW</span></div>
+<svg id="pitch" viewBox="0 0 1000 600" role="img" aria-label="Current native formation positions">
+<defs><pattern id="grass" width="180" height="600" patternUnits="userSpaceOnUse"><rect width="90" height="600" fill="#1b644b"/><rect x="90" width="90" height="600" fill="#1d6b50"/></pattern></defs>
+<rect width="1000" height="600" rx="12" fill="#174f3e"/><rect x="50" y="50" width="900" height="500" fill="url(#grass)"/>
+<g fill="none" stroke="#c0d7c3" stroke-width="2" opacity=".7"><rect x="50" y="50" width="900" height="500"/><path d="M500 50V550"/><circle cx="500" cy="300" r="70"/><rect x="50" y="160" width="140" height="280"/><rect x="810" y="160" width="140" height="280"/><rect x="50" y="230" width="50" height="140"/><rect x="900" y="230" width="50" height="140"/><path d="M50 275H35V325H50 M950 275H965V325H950"/><circle cx="500" cy="300" r="2" fill="#c0d7c3"/></g>
+<g id="players"></g></svg>
+<p class="pitch-note">Current formation coordinates, mirrored by team. Gold ring = match focus. No ball tracking or simulated movement.</p>
+<div class="lineups" id="lineups"></div>
+</section>
+<section class="commentary-card"><div class="section-head"><h2>Live commentary</h2><span id="live-label">AWAITING KICKOFF</span></div><div id="commentary" role="log" aria-live="polite" aria-relevant="additions"><p class="empty">The teams are ready.<br>Kick off to follow the match.</p></div></section>
+</div>
+<footer><strong>A first look at the native match.</strong> One fixed squad and seed; the session starts from prepared data after setup. Goals, substitutions, clock and formation come from the continuing Rust engine. Lineup/seed selection and native setup are still to come.</footer>
+</main></body></html>

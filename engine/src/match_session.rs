@@ -148,6 +148,24 @@ impl Session {
     pub fn snapshot(&self) -> Value {
         self.inner.snapshot()
     }
+    /// [confirmed:F34/T36] Raw signed coordinate bytes and current identities.
+    /// [designed] Read-only presentation;screen projection belongs to the shell.
+    pub fn view_state(&self) -> Value {
+        let e = &self.inner.e;
+        let mut value = self.snapshot();
+        let formation = (1..=22)
+            .map(|i| {
+                let a = scene(i);
+                let id = word(e, a + 14);
+                json!({"scene":i,"player":id,"club":e.image[layout::P8+8*usize::from(id)],
+                   "x":e.image[a+10] as i8,"y":e.image[a+11] as i8,
+                   "focus":e.image[0xD09F]==i})
+            })
+            .collect::<Vec<_>>();
+        value["formation"] = json!(formation);
+        value["phase"] = json!(self.phase());
+        value
+    }
     fn gates(&self) -> Gates {
         let e = &self.inner.e;
         Gates {
@@ -463,19 +481,19 @@ mod tests {
         let mut s = Session::new(admission()).unwrap();
         let original = s.inner.e.image.clone();
         let view = s.view_state();
-        assert_eq!(view["formation"].as_array().unwrap().len(),22);
-        assert_eq!(view["formation"][0]["player"],json!(2661));
-        assert_eq!(view["formation"][0]["x"],json!(0));
-        assert_eq!(view["formation"][0]["y"],json!(-37));
-        assert_eq!(s.inner.e.image,original);
-        put(&mut s.inner.e,scene(1)+10,0x7F80);
-        put(&mut s.inner.e,scene(1)+14,2672);
-        let changed=s.inner.e.image.clone();
-        let view=s.view_state();
-        assert_eq!(view["formation"][0]["x"],json!(-128));
-        assert_eq!(view["formation"][0]["y"],json!(127));
-        assert_eq!(view["formation"][0]["player"],json!(2672));
-        assert_eq!(s.inner.e.image,changed);
+        assert_eq!(view["formation"].as_array().unwrap().len(), 22);
+        assert_eq!(view["formation"][0]["player"], json!(2661));
+        assert_eq!(view["formation"][0]["x"], json!(0));
+        assert_eq!(view["formation"][0]["y"], json!(-37));
+        assert_eq!(s.inner.e.image, original);
+        put(&mut s.inner.e, scene(1) + 10, 0x7F80);
+        put(&mut s.inner.e, scene(1) + 14, 2672);
+        let changed = s.inner.e.image.clone();
+        let view = s.view_state();
+        assert_eq!(view["formation"][0]["x"], json!(-128));
+        assert_eq!(view["formation"][0]["y"], json!(127));
+        assert_eq!(view["formation"][0]["player"], json!(2672));
+        assert_eq!(s.inner.e.image, changed);
     }
     #[test]
     fn static_unsigned_display_cap_edges() {
