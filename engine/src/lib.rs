@@ -15,6 +15,7 @@ pub mod post_score;
 pub mod quick_reset;
 pub mod ratings;
 pub mod step_tail;
+pub mod terminal;
 
 const SEED: u16 = 0xA51C;
 const RATINGS: u16 = 0xD674;
