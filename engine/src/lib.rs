@@ -13,6 +13,7 @@ pub mod event_effects;
 pub mod extra_event;
 pub mod goal_effects;
 pub mod placement;
+pub mod player_cache;
 pub mod post_score;
 pub mod quick_reset;
 pub mod ratings;
