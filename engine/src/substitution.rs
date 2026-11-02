@@ -69,7 +69,7 @@ fn cap_event(e: &Engine, side: usize, site: &str) -> Value {
     json!({"site":site,"kind":"capacity","side":side,"argument":side,"allowance":e.image[0xD6DD],"sub_flag":e.image[0xD6DE+side],"reserves":e.image[0xD6E0+side],"result":capacity(e,side)})
 }
 fn available(e: &Engine, id: u16) -> u8 {
-    let a = 0x20000 + 15 * usize::from(id);
+    let a = crate::layout::P15 + 15 * usize::from(id);
     placement::unavailable(&placement::Player {
         id,
         p15_sbyte8: e.image[a + 8] as i8,
@@ -88,7 +88,7 @@ fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
         if managed != 0 {
             let id = word(e, addr(offset + 1) + 14);
             let unavailable = available(e, id);
-            let a = 0x20000 + 15 * usize::from(id);
+            let a = crate::layout::P15 + 15 * usize::from(id);
             events.push(json!({"site":"0AB9:6B68","kind":"keeper","side":side,"argument":id,"byte8":e.image[a+8],"flags11":e.image[a+11],"result":unavailable}));
             if e.image[0xD6E2] != 0 {
                 if unavailable == 0 {
@@ -114,7 +114,7 @@ fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
             for slot in (1..=11).rev() {
                 let index = offset + slot;
                 let id = word(e, addr(index) + 14);
-                let a = 0x20000 + 15 * usize::from(id);
+                let a = crate::layout::P15 + 15 * usize::from(id);
                 if e.image[a + 11] & 0x20 != 0 || (e.image[a + 8] as i8) <= 0 {
                     continue;
                 }
@@ -189,9 +189,9 @@ mod tests {
         e.image[0xBF6 + 16] = 0;
         for slot in 1..=11 {
             let id = word(e, addr(slot) + 14);
-            e.image[0x10000 + 8 * usize::from(id) + 6] = 2;
-            e.image[0x20000 + 15 * usize::from(id) + 8] = 1;
-            e.image[0x20000 + 15 * usize::from(id) + 11] = 0;
+            e.image[crate::layout::P8 + 8 * usize::from(id) + 6] = 2;
+            e.image[crate::layout::P15 + 15 * usize::from(id) + 8] = 1;
+            e.image[crate::layout::P15 + 15 * usize::from(id) + 11] = 0;
             put(e, 0xD146 + 40 + 2 * usize::from(slot), 0);
         }
     }
@@ -217,7 +217,7 @@ mod tests {
         let s = sample(0);
         let mut e = machine(&s).unwrap();
         let id = word(&e, addr(12) + 14);
-        let a = 0x20000 + 15 * usize::from(id);
+        let a = crate::layout::P15 + 15 * usize::from(id);
         e.image[a + 8] = 0;
         e.image[0xD6E2] = 0;
         let out = run(&mut e, &s).unwrap();
@@ -283,7 +283,7 @@ mod tests {
             prepare(&mut e, 2);
             for slot in 2..=11 {
                 let id = word(&e, addr(slot) + 14);
-                let a = 0x20000 + 15 * usize::from(id);
+                let a = crate::layout::P15 + 15 * usize::from(id);
                 e.image[a + 8] = byte8;
                 e.image[a + 11] = flags;
             }
@@ -340,7 +340,7 @@ mod tests {
         let s = sample(57);
         let mut e = machine(&s).unwrap();
         let id = s.context.clubs[1].roster[13];
-        put(&mut e, 0x20000 + 15 * usize::from(id), 65535);
+        put(&mut e, crate::layout::P15 + 15 * usize::from(id), 65535);
         let out = run(&mut e, &s).unwrap();
         assert_eq!(out.ai.len(), 5);
         assert_eq!(
@@ -351,7 +351,7 @@ mod tests {
                 .count(),
             2
         );
-        assert_eq!(word(&e, 0x20000 + 15 * usize::from(id)), 0);
+        assert_eq!(word(&e, crate::layout::P15 + 15 * usize::from(id)), 0);
         assert_eq!(out.output.reserves[1], 0);
         let final_state = out.replacement.unwrap();
         let p = final_state
@@ -409,7 +409,7 @@ mod tests {
             }
             let scene = (1..=22).any(|i| a >= addr(i) && a < addr(i) + 25);
             let roster = s.context.clubs.iter().any(|c| {
-                let base = 0x30000 + 62 * usize::from(c.id - 1);
+                let base = crate::layout::CLUB + 62 * usize::from(c.id - 1);
                 a >= base && a < base + 40
             });
             let cache = (0..3).any(|i| a == 0xCF32 + 7 * i || a == 0xCF33 + 7 * i)
@@ -424,13 +424,13 @@ mod tests {
                 || (0x40010..0x4001B).contains(&a)
                 || (0x40020..0x4002B).contains(&a);
             let player = new_ids.iter().any(|id| {
-                a == 0x10000 + 8 * usize::from(*id) + 6
+                a == crate::layout::P8 + 8 * usize::from(*id) + 6
                     || [0, 1, 4, 6, 10]
                         .iter()
-                        .any(|i| a == 0x20000 + 15 * usize::from(*id) + i)
+                        .any(|i| a == crate::layout::P15 + 15 * usize::from(*id) + i)
             }) || old_ids
                 .iter()
-                .any(|id| a == 0x20000 + 15 * usize::from(*id) + 11);
+                .any(|id| a == crate::layout::P15 + 15 * usize::from(*id) + 11);
             assert!(
                 scene || roster || cache || globals || local || player,
                 "unexpected write {a:X}"

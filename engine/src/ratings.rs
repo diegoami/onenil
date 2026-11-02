@@ -179,10 +179,10 @@ pub fn club_bonus(input: &BonusInput) -> Result<BonusOutput, String> {
     })
 }
 
-const P15: usize = 0x20000;
-const P8: usize = 0x30000;
-const CLUB: usize = 0x40000;
-const STAFF: usize = 0x48000;
+const P15: usize = crate::layout::P15;
+const P8: usize = crate::layout::P8;
+const CLUB: usize = crate::layout::CLUB;
+const STAFF: usize = crate::layout::STAFF;
 
 fn blank_engine(seed: u16, ratings: [u16; 8]) -> Engine {
     Engine::new(&ContestInput {

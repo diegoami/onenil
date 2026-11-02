@@ -57,13 +57,13 @@ pub struct Outcome {
 use crate::{placement, Engine, Input as ContestInput};
 use serde_json::json;
 use std::collections::BTreeSet;
-const P8: usize = 0x10000;
-const P15: usize = 0x20000;
-const CLUB: usize = 0x30000;
+const P8: usize = crate::layout::P8;
+const P15: usize = crate::layout::P15;
+const CLUB: usize = crate::layout::CLUB;
 // [designed] Normalized caller-frame arrays,not physical guest stack addresses.
-const OWN: usize = 0x40000;
-const OPP: usize = 0x40010;
-const ASSIGNED: usize = 0x40020;
+const OWN: usize = crate::layout::PAIR_OWN;
+const OPP: usize = crate::layout::PAIR_OPP;
+const ASSIGNED: usize = crate::layout::PAIR_ASSIGNED;
 fn blank(seed: u16) -> Engine {
     Engine::new(&ContestInput {
         k: 0,

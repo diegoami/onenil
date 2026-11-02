@@ -63,8 +63,8 @@ pub struct BoostOutcome {
 
 use crate::{cache_selection, Engine, Input as ContestInput};
 use std::collections::BTreeSet;
-const P8: usize = 0x10000;
-const CLUB: usize = 0x30000;
+const P8: usize = crate::layout::P8;
+const CLUB: usize = crate::layout::CLUB;
 fn word(e: &Engine, a: usize) -> u16 {
     u16::from_le_bytes([e.image[a], e.image[a + 1]])
 }

@@ -78,8 +78,8 @@ pub struct TerminalOutcome {
     pub positions: PositionsOutcome,
     pub proximity: ProximityOutcome,
 }
-const P8: usize = 0x10000;
-const P15: usize = 0x20000;
+const P8: usize = crate::layout::P8;
+const P15: usize = crate::layout::P15;
 fn address(index: u8) -> usize {
     0xCCEF + 25 * usize::from(index)
 }

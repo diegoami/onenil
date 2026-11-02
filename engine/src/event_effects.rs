@@ -110,9 +110,9 @@ pub struct Outcome {
     pub events: Vec<Commentary>,
     pub external_calls: Vec<serde_json::Value>,
 }
-const P8: usize = 0x30000;
-const P15: usize = 0x20000;
-const CLUB: usize = 0x40000;
+const P8: usize = crate::layout::P8;
+const P15: usize = crate::layout::P15;
+const CLUB: usize = crate::layout::CLUB;
 fn scene(i: u8) -> usize {
     0xCCEF + usize::from(i) * 25
 }

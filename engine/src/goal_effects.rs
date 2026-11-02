@@ -121,9 +121,9 @@ pub struct HelperCase {
 
 // [designed] Canonical far pools for this bounded projection. DS remains zero
 // based; only named fields are loaded and unmodelled bytes are preserved.
-const P15_BASE: usize = 0x20000;
-const P8_BASE: usize = 0x30000;
-const CLUB_BASE: usize = 0x40000;
+const P15_BASE: usize = crate::layout::P15;
+const P8_BASE: usize = crate::layout::P8;
+const CLUB_BASE: usize = crate::layout::CLUB;
 fn word(e: &Engine, address: usize) -> u16 {
     u16::from_le_bytes([e.image[address], e.image[address + 1]])
 }
@@ -340,11 +340,11 @@ fn load(e: &mut Engine, s: &State) {
         (0xD6E6, s.clubs[0]),
         (0xD6E4, s.clubs[1]),
         (0xD7BA, 0),
-        (0xD7BC, 0x3000),
+        (0xD7BC, (P8_BASE >> 4) as u16),
         (0xD7BE, 0),
-        (0xD7C0, 0x2000),
+        (0xD7C0, (P15_BASE >> 4) as u16),
         (0xD7C2, 0),
-        (0xD7C4, 0x4000),
+        (0xD7C4, (CLUB_BASE >> 4) as u16),
     ] {
         put_word(e, a, v);
     }

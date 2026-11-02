@@ -74,7 +74,7 @@ pub(crate) fn table_cells(t: &TableInput) -> Result<Cells, String> {
         return Err("indexed table witness differs".into());
     }
     let mut c = Cells::new();
-    let a = 0x10000 + 8 * usize::from(t.player.id);
+    let a = crate::layout::P8 + 8 * usize::from(t.player.id);
     for (offset, value) in [(4, t.player.p8_4), (5, t.player.p8_5), (7, t.player.p8_7)] {
         insert(&mut c, a + offset, value)?;
     }
@@ -106,7 +106,7 @@ fn scene_cells(s: &SceneInput) -> Result<Cells, String> {
             value,
         )?;
     }
-    let a = 0x20000 + 15 * usize::from(s.table.player.id);
+    let a = crate::layout::P15 + 15 * usize::from(s.table.player.id);
     for (address, value) in [
         (a + 6, s.byte6),
         (a + 8, s.byte8),
@@ -131,7 +131,7 @@ pub(crate) fn image(c: Cells) -> Engine {
 }
 // [confirmed] F33/9F6E: both index additions and DS addresses wrap as words.
 fn table_image(e: &Engine, id: u16, criterion: u16) -> TableOutcome {
-    let a = 0x10000 + 8 * usize::from(id);
+    let a = crate::layout::P8 + 8 * usize::from(id);
     let first = u16::from(e.image[a + 7])
         .wrapping_mul(22)
         .wrapping_add(criterion);
@@ -150,7 +150,7 @@ fn table_image(e: &Engine, id: u16, criterion: u16) -> TableOutcome {
 // [confirmed] F33/1AE2: supported baseline branch; nested native score on this image.
 pub(crate) fn scene_image(e: &Engine, index: u8, criterion: u16) -> SceneOutcome {
     let row = Scene::read(e, index);
-    let a = 0x20000 + 15 * usize::from(row.word14);
+    let a = crate::layout::P15 + 15 * usize::from(row.word14);
     let mut baseline = (i16::from(e.image[a + 6] as i8) + 1) as u16;
     baseline = baseline.wrapping_add(if criterion >= 21 {
         32

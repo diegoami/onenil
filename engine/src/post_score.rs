@@ -79,9 +79,9 @@ pub struct Outcome {
     pub normalizers: Vec<Normalizer>,
     pub getters: Vec<Getter>,
 }
-const P8: usize = 0x30000;
-const P15: usize = 0x20000;
-const CLUB: usize = 0x40000;
+const P8: usize = crate::layout::P8;
+const P15: usize = crate::layout::P15;
+const CLUB: usize = crate::layout::CLUB;
 fn p8(id: u16, f: usize) -> usize {
     P8 + usize::from(id) * 8 + f
 }
