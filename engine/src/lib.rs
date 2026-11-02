@@ -13,6 +13,7 @@ pub mod cache_selection;
 pub mod event_effects;
 pub mod extra_event;
 pub mod goal_effects;
+mod layout;
 pub mod neutral_input;
 pub mod placement;
 pub mod player_cache;
@@ -81,7 +82,7 @@ pub struct Engine {
 impl Engine {
     pub fn new(input: &Input) -> Self {
         let mut engine = Self {
-            image: vec![0; 0x60000].into_boxed_slice(),
+            image: vec![0; layout::IMAGE_LEN].into_boxed_slice(),
         };
         engine.put_word(SEED, input.seed);
         for (i, value) in input.ratings.iter().enumerate() {
@@ -720,3 +721,6 @@ mod python {
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }
 }
+
+#[cfg(test)]
+mod shared_image_tests;

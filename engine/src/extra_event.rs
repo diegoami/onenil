@@ -94,9 +94,9 @@ pub struct Outcome {
     pub dispatch: Option<Request>,
 }
 
-const P8: usize = 0x30000;
-const P15: usize = 0x20000;
-const CLUB: usize = 0x40000;
+const P8: usize = crate::layout::P8;
+const P15: usize = crate::layout::P15;
+const CLUB: usize = crate::layout::CLUB;
 fn scene(index: u8) -> usize {
     0xCCEF + usize::from(index) * 25
 }

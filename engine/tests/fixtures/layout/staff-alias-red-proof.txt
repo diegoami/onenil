@@ -1,0 +1,42 @@
+Command:cargo test --manifest-path engine/Cargo.toml shared_staff_ --locked -q
+Exit:101
+
+running 4 tests
+. 1/4
+shared_image_tests::shared_staff_count_high_index_bits_alias_the_same_original_word_shifted_entry --- FAILED
+shared_image_tests::shared_staff_legacy_loader_updates_assignment_count_cells --- FAILED
+shared_image_tests::shared_staff_count_cells_feed_the_existing_rating_bonus_reader --- FAILED
+
+failures:
+
+---- shared_image_tests::shared_staff_count_high_index_bits_alias_the_same_original_word_shifted_entry stdout ----
+
+thread 'shared_image_tests::shared_staff_count_high_index_bits_alias_the_same_original_word_shifted_entry' (3495) panicked at src/shared_image_tests.rs:193:5:
+assertion `left == right` failed
+  left: 16
+ right: 27
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- shared_image_tests::shared_staff_legacy_loader_updates_assignment_count_cells stdout ----
+
+thread 'shared_image_tests::shared_staff_legacy_loader_updates_assignment_count_cells' (3496) panicked at src/shared_image_tests.rs:181:5:
+assertion `left == right` failed
+  left: 0
+ right: 165
+
+---- shared_image_tests::shared_staff_count_cells_feed_the_existing_rating_bonus_reader stdout ----
+
+thread 'shared_image_tests::shared_staff_count_cells_feed_the_existing_rating_bonus_reader' (3494) panicked at src/shared_image_tests.rs:168:5:
+assertion `left == right` failed
+  left: 16
+ right: 27
+
+
+failures:
+    shared_image_tests::shared_staff_count_cells_feed_the_existing_rating_bonus_reader
+    shared_image_tests::shared_staff_count_high_index_bits_alias_the_same_original_word_shifted_entry
+    shared_image_tests::shared_staff_legacy_loader_updates_assignment_count_cells
+
+test result: FAILED. 1 passed; 3 failed; 0 ignored; 0 measured; 276 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`

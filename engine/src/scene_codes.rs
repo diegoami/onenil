@@ -64,9 +64,9 @@ pub struct Outcome {
 use crate::{terminal, Engine, Input as ContestInput};
 use serde_json::json;
 use std::collections::BTreeSet;
-const P8: usize = 0x10000;
+const P8: usize = crate::layout::P8;
 // [designed] Canonical storage for the byte pointed to by original D0C0.
-const MODE: usize = 0x40080;
+const MODE: usize = crate::layout::SCENE_MODE;
 fn blank(seed: u16) -> Engine {
     Engine::new(&ContestInput {
         k: 0,

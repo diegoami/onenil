@@ -46,9 +46,9 @@ pub struct Outcome {
 use crate::{placement, role_scores, Engine};
 use serde_json::json;
 use std::collections::{BTreeMap, BTreeSet};
-const P8: usize = 0x10000;
-const P15: usize = 0x20000;
-const CLUB: usize = 0x30000;
+const P8: usize = crate::layout::P8;
+const P15: usize = crate::layout::P15;
+const CLUB: usize = crate::layout::CLUB;
 fn word(e: &Engine, a: usize) -> u16 {
     u16::from_le_bytes([e.image[a], e.image[a + 1]])
 }

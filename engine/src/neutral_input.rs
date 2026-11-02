@@ -26,8 +26,8 @@ use crate::{
     Engine,
 };
 use serde_json::json;
-// [designed] Canonical pointed speed byte,adjacent to but disjoint from scene-code mode.
-const SPEED: usize = 0x40081;
+// [designed] The speed byte shares the configuration object with selector/seed bytes.
+const SPEED: usize = crate::layout::SPEED;
 fn word(e: &Engine, a: usize) -> u16 {
     u16::from_le_bytes([e.image[a], e.image[a + 1]])
 }

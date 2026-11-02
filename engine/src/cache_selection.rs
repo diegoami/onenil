@@ -56,8 +56,8 @@ pub struct SelectorOutcome {
     pub visits: Vec<Visit>,
     pub draws: Vec<Draw>,
 }
-const P8: usize = 0x10000;
-const P15: usize = 0x20000;
+const P8: usize = crate::layout::P8;
+const P15: usize = crate::layout::P15;
 const CLUBS: usize = 0x30000;
 fn word(e: &Engine, a: usize) -> u16 {
     u16::from_le_bytes([e.image[a], e.image[a + 1]])

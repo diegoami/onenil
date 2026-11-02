@@ -179,10 +179,10 @@ pub fn club_bonus(input: &BonusInput) -> Result<BonusOutput, String> {
     })
 }
 
-const P15: usize = 0x20000;
-const P8: usize = 0x30000;
-const CLUB: usize = 0x40000;
-const STAFF: usize = 0x48000;
+const P15: usize = crate::layout::P15;
+const P8: usize = crate::layout::P8;
+const CLUB: usize = crate::layout::CLUB;
+const STAFF: usize = crate::layout::STAFF;
 
 fn blank_engine(seed: u16, ratings: [u16; 8]) -> Engine {
     Engine::new(&ContestInput {
@@ -203,7 +203,8 @@ fn club(id: u16, field: usize) -> usize {
     CLUB + (usize::from(id) - 1) * 62 + field
 }
 fn staff(id: u16) -> usize {
-    STAFF + usize::from(id) * 4 + 2
+    // [confirmed]4A37 shifts the index as a word before reading entry byte2.
+    STAFF + usize::from(id.wrapping_shl(2).wrapping_add(2))
 }
 fn word(engine: &Engine, address: usize) -> u16 {
     u16::from_le_bytes([engine.image[address], engine.image[address + 1]])
@@ -328,7 +329,7 @@ fn load_tables(engine: &mut Engine, tables: &Tables) {
     }
 }
 
-fn load_bonus(engine: &mut Engine, input: &BonusInput) {
+pub(crate) fn load_bonus(engine: &mut Engine, input: &BonusInput) {
     for (i, &id) in input.staff_ids.iter().enumerate() {
         put(engine, club(input.club, 0x28 + 2 * i), id);
     }
@@ -342,7 +343,7 @@ impl Engine {
         std::array::from_fn(|index| self.word(RATINGS + 2 * index as u16))
     }
 
-    fn rating_bonus(&self, id: u16) -> u16 {
+    pub(crate) fn rating_bonus(&self, id: u16) -> u16 {
         // [confirmed] 4A37 loads both bytes unsigned and returns AX, not AL.
         let a = self.image[staff(word(self, club(id, 0x28)))];
         let b = self.image[staff(word(self, club(id, 0x2A)))];

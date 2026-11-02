@@ -56,12 +56,12 @@ pub struct Outcome {
 }
 
 // [designed] Separate normalized far-table pool, disjoint from pairing's frame.
-const TABLE: usize = 0x50000;
+const TABLE: usize = crate::layout::CLUB_COUNTS;
 fn addr(index: u8) -> usize {
     0xCCEF + 25 * usize::from(index)
 }
 fn club(id: u16) -> usize {
-    0x30000 + 62 * usize::from(id - 1)
+    crate::layout::CLUB + 62 * usize::from(id - 1)
 }
 fn table(index: u16) -> usize {
     TABLE + usize::from(index.wrapping_shl(2).wrapping_add(2))
@@ -121,11 +121,11 @@ pub(crate) fn cells(s: &State) -> Result<Cells, String> {
         if p.id != 0 {
             clubs.insert(u16::from(p.club));
         }
-        let a = 0x10000 + 8 * usize::from(p.id);
+        let a = crate::layout::P8 + 8 * usize::from(p.id);
         for (i, v) in [(0, p.club), (1, p.age), (6, p.role), (7, p.style)] {
             insert(&mut c, a + i, v)?;
         }
-        cell_word(&mut c, 0x20000 + 15 * usize::from(p.id), p.value)?;
+        cell_word(&mut c, crate::layout::P15 + 15 * usize::from(p.id), p.value)?;
         insert(&mut c, 0x12BA + usize::from(p.id % 3), p.hand_selector)?;
         insert(&mut c, hand_address(p.hand_selector, p.style), p.hand_cell)?;
     }
@@ -201,10 +201,13 @@ fn scalar(
 }
 pub(crate) fn hand(e: &Engine, id: u16) -> u8 {
     let selector = e.image[0x12BA + usize::from(id % 3)];
-    e.image[hand_address(selector, e.image[0x10000 + 8 * usize::from(id) + 7])]
+    e.image[hand_address(
+        selector,
+        e.image[crate::layout::P8 + 8 * usize::from(id) + 7],
+    )]
 }
 fn half(e: &Engine, index: u8, id: u16) -> (u8, Vec<Value>) {
-    let p = 0x10000 + 8 * usize::from(id);
+    let p = crate::layout::P8 + 8 * usize::from(id);
     let role = e.image[p + 6];
     let style = e.image[p + 7];
     let h = hand(e, id);
@@ -275,7 +278,7 @@ pub(crate) fn assign_image(e: &mut Engine, index: u8, selector: u8) -> Result<Ve
         return Err("selected player zero/unsupported".into());
     }
     put(e, a + 14, id);
-    let p = 0x10000 + 8 * usize::from(id);
+    let p = crate::layout::P8 + 8 * usize::from(id);
     let player_club = u16::from(e.image[p]);
     if !(1..=176).contains(&player_club) {
         return Err("unsupported selected player club lookup".into());
@@ -292,7 +295,7 @@ pub(crate) fn assign_image(e: &mut Engine, index: u8, selector: u8) -> Result<Ve
         json!(count),
         vec![],
     ));
-    let value = word(e, 0x20000 + 15 * usize::from(id));
+    let value = word(e, crate::layout::P15 + 15 * usize::from(id));
     let minimum = minimum32(u32::from(value), u32::from(count));
     nodes.push(scalar(
         e,
@@ -388,12 +391,12 @@ pub(crate) fn snapshot(e: &Engine, s: &State) -> State {
         }
     }
     for p in &mut out.players {
-        let a = 0x10000 + 8 * usize::from(p.id);
+        let a = crate::layout::P8 + 8 * usize::from(p.id);
         p.club = e.image[a];
         p.age = e.image[a + 1];
         p.role = e.image[a + 6];
         p.style = e.image[a + 7];
-        p.value = word(e, 0x20000 + 15 * usize::from(p.id));
+        p.value = word(e, crate::layout::P15 + 15 * usize::from(p.id));
         p.hand_selector = e.image[0x12BA + usize::from(p.id % 3)];
         p.hand_cell = e.image[hand_address(p.hand_selector, p.style)];
     }
@@ -768,7 +771,7 @@ mod tests {
                 }
             }
             assert_eq!(word(&e, 0xA51C), 0x1234);
-            assert_eq!(e.image.len(), 0x60000);
+            assert_eq!(e.image.len(), crate::layout::IMAGE_LEN);
         }
     }
     #[test]

@@ -1,0 +1,69 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T24-r0001",
+  "code_commit": "b2506d0d109db183fc3e5c36796fd0d757ab2aac",
+  "started": "2026-11-02T20:15:23.731457+00:00",
+  "ended": "2026-11-02T20:15:26.727769+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "bbe49210d89fe69b9d17d415d21b4d43e1508774053b6217f8cfd353a5fb4419"
+  },
+  "source_pins": {
+    "prefix": {
+      "repository": "https://github.com/diegoami/onenil-archaeology",
+      "commit": "f6841e011485aa84040d48b1e028ebe330c9406c",
+      "index_sha256": "8b62af3c80441a5236bbf8c09566127206247e603362055de89e79a522412bb6"
+    },
+    "extra_event": {
+      "decisions": {
+        "repository": "https://github.com/diegoami/onenil-archaeology",
+        "commit": "321b49556c0acc10576057bc820ff8ecee2d15f7",
+        "index_sha256": "002d7363fc6b768b46de36058eac20c0d47cf4f66664e5ad4a82471ee6ee2598"
+      },
+      "supplementary_inputs": {
+        "repository": "https://github.com/diegoami/onenil-archaeology",
+        "commit": "59eb0c485d65956cb77283d7061542c20a75c624",
+        "index_sha256": "58f74c281c430cd04fdcbbf9a16b9a69a1bbd021ebaf4127c57f09af165bcc66"
+      }
+    },
+    "substitution": {
+      "repository": "https://github.com/diegoami/onenil-archaeology",
+      "commit": "218490d846e365babdd158d09c5ab865124e30ed",
+      "index_sha256": "28122b0112fac70566547860b02e95307e214d603c832050fd1aa7e9d05327b5",
+      "selection_pin": "b8b1cf4621ae2637d5de3db8c21df4c7ec3c3f0da533bcdfda1c4cd38954afdc",
+      "projection_sha256": "ae42447b69d6a4e41dc8bfee6853d48a4f5dc752689d7d350daf9ec14e5f583e"
+    },
+    "neutral_static": {
+      "repository": "https://github.com/diegoami/onenil-archaeology",
+      "commit": "218490d846e365babdd158d09c5ab865124e30ed",
+      "coverage": "static/synthetic",
+      "original_observations": 0,
+      "sources": {
+        "static/1-0-exe/code/seg_0AB9_13.asm": "4318632415043eb7dbbe490ce7d637d720423466e2792dc1b584b91507a8e9cc",
+        "static/1-0-exe/code/seg_0AB9_20.asm": "263fbe73489ef8e34f6e36a5b5b15c36b2174eb6dd032820b240d1f717c24c4c"
+      },
+      "cases": 14,
+      "cases_sha256": "dbf6a2b88e53ff96cba1f80a1b01fc4854b0b2583bf68030edff6ed24f1c438e"
+    }
+  },
+  "routine": "mixed standalone bridges after canonical shared-pool migration",
+  "profiles": [
+    "original-prefix",
+    "original-extra-event",
+    "original-substitution",
+    "static-neutral"
+  ],
+  "new_original_observations": 0,
+  "repetitions": 20,
+  "calls": 80,
+  "elapsed_ns": 2993711032,
+  "serialized_output_bytes": 3944340,
+  "method": "Pre-serialized inputs;release parsing,image setup,native calculation/observations and serialization included;preparation/output decoding excluded",
+  "limits": "Independent public bridge calls,not a single continuing match;shared-image correctness tested separately in Rust;reused observations plus static neutral case;no new original census or emulator/full-game speed comparison"
+}

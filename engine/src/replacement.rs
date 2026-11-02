@@ -48,13 +48,13 @@ fn addr(index: u8) -> usize {
     0xCCEF + 25 * usize::from(index)
 }
 fn club(id: u16) -> usize {
-    0x30000 + 62 * usize::from(id - 1)
+    crate::layout::CLUB + 62 * usize::from(id - 1)
 }
 fn p8(id: u16) -> usize {
-    0x10000 + 8 * usize::from(id)
+    crate::layout::P8 + 8 * usize::from(id)
 }
 fn p15(id: u16) -> usize {
-    0x20000 + 15 * usize::from(id)
+    crate::layout::P15 + 15 * usize::from(id)
 }
 fn word(e: &Engine, a: usize) -> u16 {
     u16::from_le_bytes([e.image[a], e.image[a + 1]])

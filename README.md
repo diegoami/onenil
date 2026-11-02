@@ -1066,8 +1066,8 @@ They first failed atdd9886a's stub(exit101,retained proof). Six additional tests
 cover current-image reads,no-request behavior,DB68's direct hint path,guard/word
 endpoints,extra/keyboard-field rejection and whole-image ownership. The adapter
 writes only D074,D075 andD1CC;seed,clock fields,scene-code mode,other pools and
-raw configuration remain unchanged. The pointed speed byte has normalized
-storage40081,disjoint from scene-code mode40080 and pairing/table pools.
+raw configuration remain unchanged. The pointed speed byte shares the canonical configuration object at
+config+2 afterT24 integration,disjoint from scene-code mode and pairing/table pools.
 
 `[designed]` Speed status,speaker calls and quick-screen buffer refresh emit
 structured presentation events in source order. Buffer-refresh arguments are
@@ -1086,3 +1086,50 @@ Next is a complete initial read set and continuous DD02/clock acceptance from
 one state,then native kickoff/setup and a commentary shell. No per-step fixture
 backend or hardcoded match score is permitted. A complete playable match remains
 unproven;commentary+clock minimum,pitch graphics preferred stretch.
+
+T24 gives all native slices one canonical logical pool layout before continuous
+DD02 integration. `[designed]` Earlier standalone slices used different player/
+club offsets,and prefix history overlapped the newer player pool. Six retained
+cross-slice failures at63ba06f expose those mismatches. Three additional failures
+at1a0d646 expose staff/count aliases. These are native integration tests,reusing
+existing decoded observations;they add no original dynamic census.
+
+| Logical storage | Canonical offset |
+| --- | --- |
+| DS named fields/tables | 00000 |
+| P8 players | 10000 |
+| P15 players | 20000 |
+| Clubs | 30000 |
+| Pairing locals / scene-code mode | 40000–4002A / 40080 |
+| Configuration / speed | 49000 / config+2 |
+| Shared staff/count table | 50000 |
+| History | 60000 |
+| Image end | 70000 |
+
+`[confirmed]` Ratings and assignment both call original4A37 and read DCC8's
+same staff entries. Their raw club indices shift as words;high index bits alias
+within the shared64K pool. The main task definition was corrected at1b44470
+from the checked ratings/rebuild contracts. Public bounded staff-input validation
+is unchanged. Canonical player/club views now agree in both directions,and
+history writes preserve player bytes. Synthetic far descriptors use the same
+layout;original far metadata returned by existing contracts remains unchanged.
+Central range/end-point tests check disjoint pools while intentionally sharing
+the staff/count views. Full-image ownership still checks every allocated byte.
+
+```sh
+cargo test --manifest-path engine/Cargo.toml shared_image_ --locked
+python3 tools/benchmark_shared_layout.py --check
+python3 tools/benchmark_shared_layout.py --benchmark --out records/T24
+```
+
+`[designed]` All23 existing release replays must retain exact decoded results;
+the mixed smoke reuses original prefix/extra-event/substitution and static-neutral
+cases. Its receipt measures independent public calls,not a continuous match;
+actual same-image agreement is tested in Rust. Earlier fixtures,provenance,
+receipts,lock and workflow remain unchanged. No new original observation or
+emulator/full-game speed claim follows from this storage migration.
+
+`[designed]` Next is the first complete initial read set and continuousDD02/clock
+acceptance from one state,then native setup/kickoff and the commentary shell.
+Per-step captured states cannot serve as runtime inputs. First playable remains
+unfinished;clock/commentary minimum,pitch graphics preferred stretch.

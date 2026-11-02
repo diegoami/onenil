@@ -163,9 +163,9 @@ pub struct ComposedOutcome {
 
 // [designed] Named logical pools; actual far segment metadata is returned for
 // assertions, not interpreted as arbitrary physical aliasing with the DS image.
-const HISTORY: usize = 0x10000;
-const P15: usize = 0x20000;
-const CONFIG: usize = 0x49000;
+const HISTORY: usize = crate::layout::HISTORY;
+const P15: usize = crate::layout::P15;
+const CONFIG: usize = crate::layout::CONFIG;
 const SEED: u16 = 0xA51C;
 const GOALS: usize = 0xD086;
 const ACTOR: usize = 0xD09F;
@@ -360,9 +360,9 @@ impl Engine {
         self.put_word(0xD6E6, input.clubs[0]);
         self.put_word(0xD6E4, input.clubs[1]);
         self.put_word(0xD7CE, input.history.base_offset);
-        self.put_word(0xD7D0, 0x1000);
+        self.put_word(0xD7D0, (HISTORY >> 4) as u16);
         self.put_word(0xD7D2, 0);
-        self.put_word(0xD7D4, 0x4900);
+        self.put_word(0xD7D4, (CONFIG >> 4) as u16);
         self.image[CONFIG] = input.history.selector;
         for s in &input.scenes {
             let a = scene_address(s.index);

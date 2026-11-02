@@ -50,7 +50,7 @@ fn addr(index: u8) -> usize {
     0xCCEF + 25 * usize::from(index)
 }
 fn club(id: u16) -> usize {
-    0x30000 + 62 * usize::from(id - 1)
+    crate::layout::CLUB + 62 * usize::from(id - 1)
 }
 fn word(e: &Engine, a: usize) -> u16 {
     u16::from_le_bytes([e.image[a], e.image[a + 1]])
@@ -106,8 +106,8 @@ pub(crate) fn cells(s: &State) -> Result<Cells, String> {
         return Err("duplicate164F full canonical player".into());
     }
     for p in &r.players {
-        bytes(&mut c, 0x10000 + 8 * usize::from(p.id), &p.p8)?;
-        bytes(&mut c, 0x20000 + 15 * usize::from(p.id), &p.p15)?;
+        bytes(&mut c, crate::layout::P8 + 8 * usize::from(p.id), &p.p8)?;
+        bytes(&mut c, crate::layout::P15 + 15 * usize::from(p.id), &p.p15)?;
     }
     for (side, h) in r.assignment.clubs.iter().enumerate() {
         for (i, id) in r.rosters[side].iter().enumerate() {
@@ -141,9 +141,21 @@ pub(crate) fn cells(s: &State) -> Result<Cells, String> {
         bytes(&mut c, addr(r.index), &r.bytes())?;
     }
     for p in &p.players {
-        insert(&mut c, 0x10000 + 8 * usize::from(p.id) + 6, p.role)?;
-        insert(&mut c, 0x20000 + 15 * usize::from(p.id) + 8, p.byte8)?;
-        insert(&mut c, 0x20000 + 15 * usize::from(p.id) + 11, p.flags11)?;
+        insert(
+            &mut c,
+            crate::layout::P8 + 8 * usize::from(p.id) + 6,
+            p.role,
+        )?;
+        insert(
+            &mut c,
+            crate::layout::P15 + 15 * usize::from(p.id) + 8,
+            p.byte8,
+        )?;
+        insert(
+            &mut c,
+            crate::layout::P15 + 15 * usize::from(p.id) + 11,
+            p.flags11,
+        )?;
     }
     for (pass, row) in p.preferences.iter().enumerate() {
         bytes(&mut c, 0x09B0 + 14 * (pass + 1) + 1, row)?;
@@ -152,7 +164,7 @@ pub(crate) fn cells(s: &State) -> Result<Cells, String> {
     cw(&mut c, 0xA51C, p.seed)?;
     bytes(&mut c, 0xD56, &p.side_offsets)?;
     insert(&mut c, 0xD09F, p.actor)?;
-    insert(&mut c, 0x40080, p.mode)?;
+    insert(&mut c, crate::layout::SCENE_MODE, p.mode)?;
     insert(&mut c, 0xD0AC, p.threshold)?;
     cw(&mut c, 0xD0AE, p.clock)?;
     bytes(&mut c, 0xA338, &p.direction_signs)?;
@@ -163,7 +175,11 @@ pub(crate) fn cells(s: &State) -> Result<Cells, String> {
         bytes(&mut c, addr(r.index), &r.bytes())?;
     }
     for p in &p.players {
-        insert(&mut c, 0x10000 + 8 * usize::from(p.id) + 6, p.role)?;
+        insert(
+            &mut c,
+            crate::layout::P8 + 8 * usize::from(p.id) + 6,
+            p.role,
+        )?;
     }
     for cache in &p.cache {
         for (offset, value) in [(0, cache.word0), (2, cache.word2), (4, cache.word4)] {
@@ -191,9 +207,21 @@ pub(crate) fn cells(s: &State) -> Result<Cells, String> {
         bytes(&mut c, addr(r.index), &r.bytes())?;
     }
     for p in &p.players {
-        insert(&mut c, 0x10000 + 8 * usize::from(p.id) + 6, p.position)?;
-        insert(&mut c, 0x20000 + 15 * usize::from(p.id) + 8, p.byte8)?;
-        insert(&mut c, 0x20000 + 15 * usize::from(p.id) + 11, p.flags11)?;
+        insert(
+            &mut c,
+            crate::layout::P8 + 8 * usize::from(p.id) + 6,
+            p.position,
+        )?;
+        insert(
+            &mut c,
+            crate::layout::P15 + 15 * usize::from(p.id) + 8,
+            p.byte8,
+        )?;
+        insert(
+            &mut c,
+            crate::layout::P15 + 15 * usize::from(p.id) + 11,
+            p.flags11,
+        )?;
     }
     Ok(c)
 }
@@ -202,10 +230,12 @@ pub(crate) fn core(e: &Engine, s: &Core) -> Core {
     out.assignment = scene_assignment::snapshot(e, &s.assignment);
     for p in &mut out.players {
         p.p8.copy_from_slice(
-            &e.image[0x10000 + 8 * usize::from(p.id)..0x10000 + 8 * usize::from(p.id) + 8],
+            &e.image[crate::layout::P8 + 8 * usize::from(p.id)
+                ..crate::layout::P8 + 8 * usize::from(p.id) + 8],
         );
         p.p15.copy_from_slice(
-            &e.image[0x20000 + 15 * usize::from(p.id)..0x20000 + 15 * usize::from(p.id) + 15],
+            &e.image[crate::layout::P15 + 15 * usize::from(p.id)
+                ..crate::layout::P15 + 15 * usize::from(p.id) + 15],
         );
     }
     out.actor = e.image[0xD09F];
@@ -237,9 +267,9 @@ pub(crate) fn snapshot(e: &mut Engine, s: &State) -> State {
         c.byte57 = e.image[club(c.id) + 57];
     }
     for p in &mut out.pairing.players {
-        p.role = e.image[0x10000 + 8 * usize::from(p.id) + 6];
-        p.byte8 = e.image[0x20000 + 15 * usize::from(p.id) + 8];
-        p.flags11 = e.image[0x20000 + 15 * usize::from(p.id) + 11];
+        p.role = e.image[crate::layout::P8 + 8 * usize::from(p.id) + 6];
+        p.byte8 = e.image[crate::layout::P15 + 15 * usize::from(p.id) + 8];
+        p.flags11 = e.image[crate::layout::P15 + 15 * usize::from(p.id) + 11];
     }
     out.cache.seed = out.core.assignment.seed;
     out.cache.side_offsets = out.core.side_offsets;
@@ -251,8 +281,8 @@ pub(crate) fn snapshot(e: &mut Engine, s: &State) -> State {
         }
     }
     for p in &mut out.cache.players {
-        let a = 0x10000 + 8 * usize::from(p.id);
-        let b = 0x20000 + 15 * usize::from(p.id);
+        let a = crate::layout::P8 + 8 * usize::from(p.id);
+        let b = crate::layout::P15 + 15 * usize::from(p.id);
         p.club = e.image[a];
         p.p8_1 = e.image[a + 1];
         p.p8_3 = e.image[a + 3];
@@ -280,7 +310,7 @@ fn event(site: &str, kind: &str, args: Value, input: Value, output: Value, resul
     json!({"site":site,"kind":kind,"arguments":args,"input":input,"output":output,"result":result,"draw_start":0,"draw_end":0})
 }
 fn unavailable(e: &Engine, id: u16) -> u8 {
-    let a = 0x20000 + 15 * usize::from(id);
+    let a = crate::layout::P15 + 15 * usize::from(id);
     placement::unavailable(&placement::Player {
         id,
         p15_sbyte8: e.image[a + 8] as i8,
@@ -288,8 +318,8 @@ fn unavailable(e: &Engine, id: u16) -> u8 {
     })
 }
 fn availability(e: &Engine, base: usize, id: u16) -> Value {
-    let a = 0x10000 + 8 * usize::from(id);
-    let b = 0x20000 + 15 * usize::from(id);
+    let a = crate::layout::P8 + 8 * usize::from(id);
+    let b = crate::layout::P15 + 15 * usize::from(id);
     json!({"actor":e.image[0xD09F],"secondary":e.image[0xD0A0],"club_totals":[word(e,0xD12A),word(e,0xD12C)],"roster":(0..20).map(|i|word(e,base+2*i)).collect::<Vec<_>>(),"player":id,"p8_4":e.image[a+4],"position":e.image[a+6],"byte8":e.image[b+8],"flags11":e.image[b+11]})
 }
 // [confirmed] Logical26C9:0A67 signed32 quotient/remainder. CPU-specific instruction path normalized.
@@ -339,7 +369,7 @@ fn prefix(e: &mut Engine, s: &State) -> Result<Vec<Value>, String> {
                 json!(value),
             ));
             if value == 0 {
-                sum += i32::from(e.image[0x10000 + 8 * usize::from(id) + 4]);
+                sum += i32::from(e.image[crate::layout::P8 + 8 * usize::from(id) + 4]);
             }
         }
         let (quotient, remainder) = divide(sum, 22)?;
@@ -373,7 +403,7 @@ fn prefix(e: &mut Engine, s: &State) -> Result<Vec<Value>, String> {
             roles[slot - 1] = if value != 0 {
                 14
             } else {
-                e.image[0x10000 + 8 * usize::from(id) + 6]
+                e.image[crate::layout::P8 + 8 * usize::from(id) + 6]
             };
         }
         let offset = e.image[0xD56 + side];
@@ -518,8 +548,8 @@ mod tests {
             let base = club(word(e, 0xD6E4 + 2 * side));
             for i in 0..11 {
                 let id = word(e, base + 2 * i);
-                let p = 0x10000 + 8 * usize::from(id);
-                let q = 0x20000 + 15 * usize::from(id);
+                let p = crate::layout::P8 + 8 * usize::from(id);
+                let q = crate::layout::P15 + 15 * usize::from(id);
                 e.image[p + 6] = i as u8;
                 e.image[q + 8] = 1;
                 e.image[q + 11] = 0;
@@ -535,8 +565,9 @@ mod tests {
             let base = club(word(&e, 0xD6E4 + 2 * side));
             for i in 0..11 {
                 let id = word(&e, base + 2 * i);
-                e.image[0x10000 + 8 * usize::from(id) + 6] = 3;
-                e.image[0x10000 + 8 * usize::from(id) + 4] = if side == 0 { 255 } else { 0 };
+                e.image[crate::layout::P8 + 8 * usize::from(id) + 6] = 3;
+                e.image[crate::layout::P8 + 8 * usize::from(id) + 4] =
+                    if side == 0 { 255 } else { 0 };
             }
         }
         let trace = prefix(&mut e, &s).unwrap();
@@ -570,7 +601,7 @@ mod tests {
             ordinary(&mut e);
             let base = club(word(&e, 0xD6E4));
             let id = word(&e, base);
-            let q = 0x20000 + 15 * usize::from(id);
+            let q = crate::layout::P15 + 15 * usize::from(id);
             e.image[q + 8] = byte8;
             e.image[q + 11] = flags;
             let trace = prefix(&mut e, &s).unwrap();
@@ -590,7 +621,7 @@ mod tests {
         let before: Vec<_> = (0..11).map(|i| word(&e, base + 2 * i)).collect();
         for (i, role) in [0, 3, 3, 2, 5, 6, 7, 8, 9, 10, 11].into_iter().enumerate() {
             let id = before[i];
-            e.image[0x10000 + 8 * usize::from(id) + 6] = role;
+            e.image[crate::layout::P8 + 8 * usize::from(id) + 6] = role;
         }
         let trace = prefix(&mut e, &s).unwrap();
         let swaps: Vec<_> = trace.iter().filter(|e| e["kind"] == "roster").collect();
@@ -612,8 +643,8 @@ mod tests {
             let base = club(word(&e, 0xD6E4));
             let p1 = word(&e, base);
             let p2 = word(&e, base + 2);
-            e.image[0x10000 + 8 * usize::from(p1) + 6] = 1;
-            e.image[0x10000 + 8 * usize::from(p2) + 6] = 0;
+            e.image[crate::layout::P8 + 8 * usize::from(p1) + 6] = 1;
+            e.image[crate::layout::P8 + 8 * usize::from(p2) + 6] = 0;
             let lo = offset + 1;
             let hi = offset + 2;
             e.image[0xD09F] = lo;
@@ -775,7 +806,7 @@ mod tests {
         // A live raw byte supplied by a caller reaches the sum, independently of observation templates.
         let mut e = image(cells(&s).unwrap());
         let id = word(&e, club(word(&e, 0xD6E4)));
-        e.image[0x10000 + 8 * usize::from(id) + 4] = 0;
+        e.image[crate::layout::P8 + 8 * usize::from(id) + 4] = 0;
         let t = prefix(&mut e, &s).unwrap();
         assert_eq!(t[0]["input"]["p8_4"], 0);
     }
@@ -818,11 +849,13 @@ mod tests {
         assert!(out.draws.is_empty());
         for p in &s.core.players {
             assert_eq!(
-                &e.image[0x10000 + 8 * usize::from(p.id)..0x10000 + 8 * usize::from(p.id) + 8],
+                &e.image[crate::layout::P8 + 8 * usize::from(p.id)
+                    ..crate::layout::P8 + 8 * usize::from(p.id) + 8],
                 &p.p8
             );
             assert_eq!(
-                &e.image[0x20000 + 15 * usize::from(p.id)..0x20000 + 15 * usize::from(p.id) + 15],
+                &e.image[crate::layout::P15 + 15 * usize::from(p.id)
+                    ..crate::layout::P15 + 15 * usize::from(p.id) + 15],
                 &p.p15
             );
         }
