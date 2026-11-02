@@ -392,6 +392,27 @@ mod python {
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }
     #[pyfunction]
+    fn scene_positions(input_json: &str) -> PyResult<String> {
+        let input: terminal::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = terminal::positions(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
+    fn proximity_selectors(input_json: &str) -> PyResult<String> {
+        let input: terminal::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = terminal::proximity(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
+    fn terminal_rearrangement(input_json: &str) -> PyResult<String> {
+        let input: terminal::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = terminal::terminal(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
     fn quick_goal_reset(input_json: &str) -> PyResult<String> {
         let input: quick_reset::State =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -505,6 +526,10 @@ mod python {
         module.add_function(wrap_pyfunction!(logical_event_effects, module)?)?;
         module.add_function(wrap_pyfunction!(post_score_strategy, module)?)?;
         module.add_function(wrap_pyfunction!(quick_goal_reset, module)?)?;
+        module.add_function(wrap_pyfunction!(scene_positions, module)?)?;
+        module.add_function(wrap_pyfunction!(proximity_selectors, module)?)?;
+        module.add_function(wrap_pyfunction!(terminal_rearrangement, module)?)?;
+
         module.add_function(wrap_pyfunction!(placement_prefix_quick_reset, module)?)?;
         module.add_function(wrap_pyfunction!(placement_prefix_post_score, module)?)?;
         module.add_function(wrap_pyfunction!(placement_prefix_event_effects, module)?)?;

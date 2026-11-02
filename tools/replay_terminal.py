@@ -18,13 +18,14 @@ def sources():
         path=FIXTURES/directory/'index.json';data=path.read_bytes()
         if sha(data)!=pin['indices'][directory+'/index.json']:raise ValueError('terminal source index differs')
         index=json.loads(data);indices[directory]=index
+        if index['schema']!=('scene-positions-corpus/1' if directory=='positions' else 'proximity-selectors-corpus/1'):raise ValueError('terminal corpus schema differs')
         if (index['weeks'],index['calls'],index['draws'])!=(1,2,0) or len(index['records'])!=1:raise ValueError('terminal source coverage differs')
         meta=index['records'][0];name=meta['cases']
         if Path(name).name!=name or not name.startswith(experiment+'-r'):raise ValueError('terminal source path differs')
         data=(FIXTURES/directory/name).read_bytes()
         if sha(data)!=meta['cases_sha256']:raise ValueError('terminal original fixture differs')
         rows=[json.loads(s) for s in data.splitlines()]
-        if len(rows)!=2 or any(c['week']!='T04-week-r0017' for c in rows):raise ValueError('terminal original week differs')
+        if len(rows)!=2 or [c['replacement'] for c in rows]!=[0,1] or any(c['week']!='T04-week-r0017' or c['schema']!=('scene-positions-case/1' if directory=='positions' else 'proximity-selectors-case/1') for c in rows):raise ValueError('terminal original week differs')
         records.append(rows)
     if indices['proximity']['t34_index_sha256']!=pin['indices']['positions/index.json']:raise ValueError('terminal T34 handoff provenance differs')
     return records,pin
