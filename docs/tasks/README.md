@@ -27,3 +27,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T23](T23.md): First-playable integration — neutral match input (#48).
 - [T24](T24.md): Continuous-step prerequisite — canonical shared image pools (#50).
 - [T25](T25.md): Continuous native quick steps through the real halftime clock return (#52).
+- [T26](T26.md): Continue one native reference match through actual halftime/full time (#54).
