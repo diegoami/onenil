@@ -629,6 +629,20 @@ mod python {
         let out = rearrangement::rearrange(&input).map_err(PyValueError::new_err)?;
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }
+    #[pyfunction]
+    fn rating_flags(input_json: &str) -> PyResult<String> {
+        let input: replacement::FlagsInput =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = replacement::flags(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
+    fn replace_player(input_json: &str) -> PyResult<String> {
+        let input: replacement::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = replacement::replace(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
@@ -673,6 +687,8 @@ mod python {
         module.add_function(wrap_pyfunction!(assign_scene, module)?)?;
         module.add_function(wrap_pyfunction!(rebuild_scene, module)?)?;
         module.add_function(wrap_pyfunction!(rearrange, module)?)?;
+        module.add_function(wrap_pyfunction!(rating_flags, module)?)?;
+        module.add_function(wrap_pyfunction!(replace_player, module)?)?;
         module.add("__version__", env!("CARGO_PKG_VERSION"))?;
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }

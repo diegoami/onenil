@@ -74,7 +74,7 @@ fn ids<I: Iterator<Item = u16>>(it: I) -> BTreeSet<u16> {
     it.collect()
 }
 // [derived] Reconcile every redundant component and raw table before allocating one image.
-fn cells(s: &State) -> Result<Cells, String> {
+pub(crate) fn cells(s: &State) -> Result<Cells, String> {
     let r = &s.core;
     if !(1..=22).contains(&r.actor)
         || r.secondary > 22
@@ -197,7 +197,7 @@ fn cells(s: &State) -> Result<Cells, String> {
     }
     Ok(c)
 }
-fn core(e: &Engine, s: &Core) -> Core {
+pub(crate) fn core(e: &Engine, s: &Core) -> Core {
     let mut out = s.clone();
     out.assignment = scene_assignment::snapshot(e, &s.assignment);
     for p in &mut out.players {
@@ -223,7 +223,7 @@ fn core(e: &Engine, s: &Core) -> Core {
     }
     out
 }
-fn snapshot(e: &mut Engine, s: &State) -> State {
+pub(crate) fn snapshot(e: &mut Engine, s: &State) -> State {
     let mut out = s.clone();
     out.core = core(e, &s.core);
     out.codes = scene_codes::snapshot(e, &s.codes);
@@ -249,6 +249,19 @@ fn snapshot(e: &mut Engine, s: &State) -> State {
         for i in 0..5 {
             out.cache.cache[side][i] = word(e, 0xCF5E + 10 * side + 2 * i);
         }
+    }
+    for p in &mut out.cache.players {
+        let a = 0x10000 + 8 * usize::from(p.id);
+        let b = 0x20000 + 15 * usize::from(p.id);
+        p.club = e.image[a];
+        p.p8_1 = e.image[a + 1];
+        p.p8_3 = e.image[a + 3];
+        p.p8_4 = e.image[a + 4];
+        p.p8_5 = e.image[a + 5];
+        p.p8_7 = e.image[a + 7];
+        p.byte6 = e.image[b + 6];
+        p.byte8 = e.image[b + 8];
+        p.flags11 = e.image[b + 11];
     }
     for r in &mut out.cache.rosters {
         for (i, id) in r.roster.iter_mut().enumerate() {
@@ -437,7 +450,7 @@ fn prefix(e: &mut Engine, s: &State) -> Result<Vec<Value>, String> {
     }
     Ok(events)
 }
-fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
     let mut events = prefix(e, s)?;
     for site in [
         "0AB9:1985",

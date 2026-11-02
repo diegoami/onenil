@@ -877,3 +877,62 @@ release build and its first five bridges under22. Earlier evidence,lock and
 workflow remain unchanged. The immutable committed-source release receipt covers
 parsing/setup/native computation/serialization and makes no emulator/full-game
 speed claim. Other23 replacements/six-week breadth remain under archaeology120/121.
+
+T20 composes logicalAEB8 replacement for the two fixedr0017 substitutions.
+`[confirmed]` F24–F28 at archaeology
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provide their26 direct helper observations andT27's25 compact53FB observations.
+Both original tests failed againstc74719b's stubs(exit101,retained proof).
+
+```sh
+python3 tools/replay_replacement.py --check
+python3 tools/replay_replacement.py --benchmark --out records/T20
+```
+
+`[confirmed]` AEB8 distinguishes the bench slot,physical scene,outgoing scene
+player and incoming first-eleven roster player after its caller's swap. It sets
+the outgoing flag bit,tests managed clubs,saves word2 with its sentinel rule,
+rebuilds through8663,applies67D0's signed clamp/cache store,conditionally clears
+and recomputes incoming53FB flags,updates event/season counters,accounts for
+reserves/substitution flags and restores word2. Managed cached players that are
+unavailable are temporarily replaced by their club's first roster player during
+native164F,then cleared. Both scene assignment and the complete rearrangement
+run on the same live image;no observed helper output initializes a later call.
+
+`[confirmed]`53FB computes4E0C from P8+1/+3/+5:the younger path retains a signed
+word intermediate and signed32 maximum with zero;the adult path returns raw AL
+with byte wrapping. A result below4 sets flag bit8 and clears bit4. Roles0/1/3/4
+add bits5/1;role2 adds5/6/2;other bits are preserved.67D0 reuses the existing
+signed byte6 clamp and signed cache reload.186C increments byte4/word0 with
+wrapping only for nonzero allowance. T27's25 observations verify this helper
+only;they do not expand the two-replacement full-context coverage.
+
+`[designed]` Inputs add explicit replacement arguments and allowance,reserve,
+substitution,mode,sentinel and speaker context to the existing shared-state
+read set. Exact T25/T27 source/index pins and the supplemental rearrangement
+projection are checked. All canonical aliases validate before allocation;
+unsupported/mismatched identities and extra expected/helper fields diagnose.
+Snapshots reread canonical player/cache values after replacement mutations.
+Named helper projections and full supported final state match the observations.
+
+`[designed]` Reached port61 speaker,ADD0 message and0F94 log boundaries emit
+structured presentation events in observed order. These preserve logical reach
+and semantic arguments for a future commentary adapter;they do not reproduce
+original hardware,display/log scratch or timer state. They are separate from
+engine requests,with no opaque reached engine callee. The optional message
+branch is synthetic only. No original hardware/display parity is claimed.
+
+`[designed]` Synthetic tests cover young/adult thresholds,preset role flags,
+signed motion/cache routing,counter wrapping,managed replacement,saved-word2
+sentinel,substitution/reserve choices,temporary cache handoff,presentation
+branches,malformed/extra inputs and whole-image write ownership. These add no
+original dynamic observations. Original draws4025 normalize to0. All twenty
+release tools run locally;CI retains all Rust tests/release build and its first
+five bridges under22. Earlier evidence,lock and workflow remain unchanged;
+the immutable committed-source receipt makes no emulator/full-game speed claim.
+
+`[designed]` First-playable gate1 next needsA94B selection connected to this
+replacement. Continuous DD02/clock,setup→complete match and the commentary shell
+remain later gates. This is not a complete playable match;pitch graphics remain
+the preferred stretch goal. Other23 full replacements/six-week breadth remain
+under archaeology120/121.
