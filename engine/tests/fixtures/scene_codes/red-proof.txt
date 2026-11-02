@@ -1,0 +1,28 @@
+Command:cargo test --manifest-path engine/Cargo.toml --test scene_codes --locked -q
+Exit:101
+
+running 2 tests
+actual_original_six_code_calls_and_scene_results --- FAILED
+actual_original_scene_cache_parents_and_every_continuation --- FAILED
+
+failures:
+
+---- actual_original_six_code_calls_and_scene_results stdout ----
+
+thread 'actual_original_six_code_calls_and_scene_results' (621) panicked at tests/scene_codes.rs:15:141:
+called `Result::unwrap()` on an `Err` value: "T17 native0143 not implemented"
+
+---- actual_original_scene_cache_parents_and_every_continuation stdout ----
+
+thread 'actual_original_scene_cache_parents_and_every_continuation' (620) panicked at tests/scene_codes.rs:7:114:
+called `Result::unwrap()` on an `Err` value: "T17 native03BB not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    actual_original_scene_cache_parents_and_every_continuation
+    actual_original_six_code_calls_and_scene_results
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test scene_codes`
