@@ -71,6 +71,7 @@ def smoke(out):
             assert page.locator('#score').inner_text() == '1 : 3'
             assert page.get_by_role('button', name='Match finished', exact=True).is_disabled()
             page.set_viewport_size({'width':390,'height':844})
+            page.locator('#commentary').evaluate('(e) => { e.scrollTop = e.scrollHeight; }')
             mobile = out/f'{stem}-mobile.png'
             page.screenshot(path=str(mobile), full_page=True)
             assert page.locator('#score').bounding_box()['height'] < 60, 'mobile score wraps onto two lines'
