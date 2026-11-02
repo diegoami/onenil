@@ -18,6 +18,7 @@ pub mod post_score;
 pub mod quick_reset;
 pub mod ratings;
 pub mod role_cache;
+pub mod role_pairing;
 pub mod role_scores;
 pub mod step_tail;
 pub mod terminal;
