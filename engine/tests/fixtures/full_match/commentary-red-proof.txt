@@ -1,0 +1,21 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.16s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 1 test
+
+thread 'match_session::tests::substitution_numeric_queue_is_live_at_clock_boundary' (3403) panicked at src/match_session.rs:475:9:
+assertion `left == right` failed
+  left: Object {"cf51": Number(0), "clock": Object {"active": Number(1), "added": Number(2), "delay": Number(0), "elapsed": Number(57), "kind": Number(45), "remaining": Number(34), "zero": Number(0)}, "commentary": Object {"counts": Array [Number(4), Number(3)], "event_word": Number(55), "queue": Object {"head": Number(7), "rows": Array [Object {"code": Number(51), "first_player": Number(2588), "index": Number(7), "second_player": Number(2585), "side": Number(0)}, Object {"code": Number(255), "first_player": Number(65535), "index": Number(8), "second_player": Number(65535), "side": Number(255)}, Object {"code": Number(255), "first_player": Number(65535), "index": Number(9), "second_player": Number(65535), "side": Number(255)}]}, "source_pair": Array [Number(0), Number(47104)], "target_pair": Array [Number(0), Number(47104)], "weights": Array [Number(0), Number(0)]}, "reload": Number(32), "seed": Number(46023)}
+ right: Object {"cf51": Number(0), "clock": Object {"active": Number(1), "added": Number(2), "delay": Number(0), "elapsed": Number(57), "kind": Number(45), "remaining": Number(34), "zero": Number(0)}, "commentary": Object {"counts": Array [Number(4), Number(5)], "event_word": Number(55), "queue": Object {"head": Number(9), "rows": Array [Object {"code": Number(0), "first_player": Number(2672), "index": Number(9), "second_player": Number(2666), "side": Number(1)}, Object {"code": Number(255), "first_player": Number(65535), "index": Number(10), "second_player": Number(65535), "side": Number(255)}, Object {"code": Number(255), "first_player": Number(65535), "index": Number(11), "second_player": Number(65535), "side": Number(255)}]}, "source_pair": Array [Number(0), Number(47104)], "target_pair": Array [Number(0), Number(47104)], "weights": Array [Number(0), Number(0)]}, "reload": Number(32), "seed": Number(46023)}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test match_session::tests::substitution_numeric_queue_is_live_at_clock_boundary ... FAILED
+
+failures:
+
+failures:
+    match_session::tests::substitution_numeric_queue_is_live_at_clock_boundary
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 295 filtered out; finished in 0.73s
+
+error: test failed, to rerun pass `--lib`

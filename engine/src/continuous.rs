@@ -537,7 +537,11 @@ impl Session {
                 context: ai_selection::snapshot(&self.e, &self.a.substitution.context),
                 replacement: replacement.cloned(),
             };
-            let out = substitution::run(&mut self.e, &sub)?;
+            let out = if replacement.is_some() {
+                substitution::run_with_commentary(&mut self.e, &sub)?
+            } else {
+                substitution::run(&mut self.e, &sub)?
+            };
             if let Some(trace) = ai_trace {
                 trace.extend(out.ai.clone());
             }

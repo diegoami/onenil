@@ -423,7 +423,14 @@ fn exchange(e: &mut Engine, a: usize, b: usize, n: usize) {
         e.image.swap(a + i, b + i);
     }
 }
+// [designed] Standalone slices retain typed adapter events;the continuing image owns0F94 state.
 pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+    run_image(e, s, false)
+}
+pub(crate) fn run_with_commentary(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+    run_image(e, s, true)
+}
+fn run_image(e: &mut Engine, s: &State, compose_commentary: bool) -> Result<Outcome, String> {
     let side = usize::from(s.side);
     let id = word(e, addr(s.scene) + 14);
     let role = e.image[p8(id) + 6];
@@ -521,7 +528,11 @@ pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
                 position_sentinel: extra.position_sentinel,
                 speaker_gate: extra.speaker_gate,
             };
-            let out = replacement::run(e, &r)?;
+            let out = if compose_commentary {
+                replacement::run_with_commentary(e, &r)?
+            } else {
+                replacement::run(e, &r)?
+            };
             presentation = out.presentation;
             let mut h = trace(
                 "0AB9:ABAF",

@@ -118,6 +118,9 @@ impl Session {
         ] {
             inner.e.image[address] = value;
         }
+        // [derived:F14/F25] AF7F code0 leaves the captured weighted actor total unchanged;
+        // numeric_commentary's signed-byte delta therefore has weight0 in this fixed profile.
+        inner.e.image[0x097A] = 0;
         put(&mut inner.e, 0xD0BE, a.gates.delay_word);
         inner.validate_admission()?;
         let managed = inner
@@ -276,7 +279,7 @@ impl Session {
             context: ai_selection::snapshot(&self.inner.e, &self.inner.a.substitution.context),
             replacement: Some(self.current()),
         };
-        let out = substitution::run(&mut self.inner.e, &sub)?;
+        let out = substitution::run_with_commentary(&mut self.inner.e, &sub)?;
         if !out.draws.is_empty() {
             return Err("unexpected caller dispatch RNG".into());
         }
@@ -466,5 +469,25 @@ mod tests {
         play(&mut second);
         assert_eq!(first.inner.e.image, second.inner.e.image);
         assert_eq!(first.result().unwrap(), second.result().unwrap());
+    }
+    #[test]
+    fn substitution_numeric_queue_is_live_at_clock_boundary() {
+        let expected: Value = include_str!("../tests/fixtures/continuous/T36-r0001.jsonl")
+            .lines()
+            .map(|l| serde_json::from_str::<Value>(l).unwrap())
+            .find(|v| v.get("step") == Some(&json!(57)))
+            .unwrap();
+        let mut s = Session::new(admission()).unwrap();
+        let mut got = Value::Null;
+        for step in 0..=57 {
+            if s.phase() == "half-time" {
+                s.continue_without_changes().unwrap();
+            }
+            let v = s.step().unwrap();
+            if step == 57 {
+                got = v["clock_input"].clone();
+            }
+        }
+        assert_eq!(got, expected["clock"]["input"]);
     }
 }
