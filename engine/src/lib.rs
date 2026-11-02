@@ -20,6 +20,7 @@ pub mod ratings;
 pub mod role_cache;
 pub mod role_pairing;
 pub mod role_scores;
+pub mod scene_codes;
 pub mod step_tail;
 pub mod terminal;
 
@@ -398,6 +399,20 @@ mod python {
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }
     #[pyfunction]
+    fn scene_code(input_json: &str) -> PyResult<String> {
+        let input: scene_codes::CodeInput =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = scene_codes::code(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
+    fn scene_codes_refresh(input_json: &str) -> PyResult<String> {
+        let input: scene_codes::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = scene_codes::refresh(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
     fn pairing_range(input_json: &str) -> PyResult<String> {
         let input: role_pairing::RangeInput =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -609,6 +624,8 @@ mod python {
         module.add_function(wrap_pyfunction!(logical_event_effects, module)?)?;
         module.add_function(wrap_pyfunction!(post_score_strategy, module)?)?;
         module.add_function(wrap_pyfunction!(quick_goal_reset, module)?)?;
+        module.add_function(wrap_pyfunction!(scene_code, module)?)?;
+        module.add_function(wrap_pyfunction!(scene_codes_refresh, module)?)?;
         module.add_function(wrap_pyfunction!(pairing_range, module)?)?;
         module.add_function(wrap_pyfunction!(apply_role_pairing, module)?)?;
         module.add_function(wrap_pyfunction!(player_cache_refresh, module)?)?;

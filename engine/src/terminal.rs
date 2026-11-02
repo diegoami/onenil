@@ -307,14 +307,7 @@ impl Machine {
         })
     }
     fn direction(&self, row: &Scene) -> (u8, u8) {
-        // [confirmed] F35/1ECC: unsigned time versus sign-extended phase, then XOR side.
-        let flip =
-            i32::from(word(&self.engine, 0xD0AE)) > i32::from(self.engine.image[0xD0AC] as i8);
-        let side = row.byte7 < 12;
-        (
-            self.engine.image[0xA338 + usize::from(flip ^ side)],
-            u8::from(side),
-        )
+        direction_image(&self.engine, row)
     }
     fn proximity(&mut self) -> ProximityOutcome {
         let mut visits = Vec::new();
@@ -411,6 +404,12 @@ impl Machine {
             draws: Vec::new(),
         }
     }
+}
+pub(crate) fn direction_image(e: &Engine, row: &Scene) -> (u8, u8) {
+    // [confirmed] F35/1ECC: unsigned time versus sign-extended phase, then XOR side.
+    let flip = i32::from(word(e, 0xD0AE)) > i32::from(e.image[0xD0AC] as i8);
+    let side = row.byte7 < 12;
+    (e.image[0xA338 + usize::from(flip ^ side)], u8::from(side))
 }
 fn observation(
     site: &str,

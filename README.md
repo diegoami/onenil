@@ -6,6 +6,12 @@ checked against the original through a Python harness. No byte of the original g
 repository; see [docs/artifacts.md](docs/artifacts.md). Rules: [CLAUDE.md](CLAUDE.md). Process:
 [docs/process.md](docs/process.md).
 
+The next product target is [one playable quick-result match](docs/first-playable.md),
+tracked in [issue35](https://github.com/diegoami/onenil/issues/35):choose a supported
+lineup/seed,kick off,and reach a final score through one continuing native state.
+The current routine harness is not yet playable. Progress is tracked through
+match-state closure,a continuous quick step,a complete match,and text controls.
+
 The first slice is `0AB9:D983`, the quick result's three-contest routine. Its scope is the input
 ratings, random draw sequence, final seed and goal bytes; it is not a complete match/week or a
 timer/CPU-register emulator. Evidence is pinned under `engine/tests/fixtures/`: decoded original
@@ -703,3 +709,63 @@ computation/observations and serialization;no emulator/full-game speed claim.
 All sixteen tools run locally;CI still runs all Rust tests/release build and its
 first five bridge checks under permission follow-up #22. Earlier evidence and
 Cargo.lock remain unchanged.
+
+
+T17 advances first-playable gate1 by closing the scene/cache code dependency
+`0AB9:03BB`,with0143/0207/02D7/033E on one image.
+`[confirmed]` F30/T30 at archaeology
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provides two parents,44 scene boundaries,two cache boundaries and six nested0143
+returns. These and the six standalone code replays match complete projected
+state. T30 source/index are byte-identical and pinned;Python independently
+projects raw data/observations,with clock/role aliases validated. Both actual
+original tests failed at stubs in `2fdc167`,exit101;`red-proof.txt` retains proof.
+
+```sh
+python3 tools/replay_scene_codes.py --check
+python3 tools/replay_scene_codes.py --benchmark --out records/T17
+```
+
+`[confirmed]` Native0143 reuses the existing1ECC direction function:unsigned
+clock versus signed phase,stored-selector side predicate,raw signed direction
+and signed high-byte arguments. Products retain low words before signed
+comparison. The helper returns its word using old byte6,then logically negates
+byte6 only for unequal packed arguments. Mode0 passes A=scene.word2,B=word0
+and truncates only the resulting low code to AL. Modes1–4 preserve selector
+indirection,raw role-code lookup,boolean code tables and word-wrapped modulo.
+Keeper selectors1/12 use their separate high bytes.033E passes cache.word2
+then word0,performs three ordered calls on the same actor-selected keeper
+scene,and stores full word returns plus0500 in each cache.word4. Physical scene
+indices and stored selectors remain separate inputs. Snapshots read the current
+image,including mode,clock and canonical role bytes,for future caller integration.
+
+`[designed]` The pointed mode byte uses canonical image storage,not an asserted
+original pointer. Parent inputs require mode0–4,22 ordered complete scenes,
+canonical IDs0–3920/roles0–13,offsets[0,11]/[11,0],all14 role-code cells,six
+code bytes,three ordered caches and raw actor/clock/phase/direction bytes.
+Mode>4 diagnoses the original undefined local;reached mode1 selectors outside
+1–22 diagnose. Other modes retain raw u8 selectors,including0. Scalar0143
+accepts a complete physical scene and its raw packed/context inputs only.
+Malformed/extra expected-result fields reject;no observed scalar return is fed
+back into the engine. Whole-image checks allow only scene bytes4/5/6 and three
+cache words4;scalar calls may change only their scene.byte6. Seed/unowned bytes
+and cache padding are preserved.
+
+`[designed]` Synthetic tests separately cover modes0–4,signed direction/high
+bytes/word comparisons,argument order,full-word return versus AL truncation,
+logical byte6 toggle/return order,selector identity,keepers,target1/12,all three
+cache handoffs,word-wrapped selector0,undefined/malformed domains and actual
+current-image reads. Original cases only show mode0/equal position/cache words,
+unchanged parent projections,code156/cache1436 and zero draws. Unchanged named
+values are not a write-free claim;other branches have synthetic/static coverage.
+
+`[designed]` Gate1 still needs remaining rearrangement and selection/replacement
+paths reached by the first whole-match reference. Continuous DD02/clock/setup/
+match integration and text controls remain explicit later gates in issue35.
+This task is not called playable. Other23 replacements/six-week breadth and
+full AI/match/week acceptance remain under archaeology120/121. The committed-
+source release receipt includes parsing,setup,native calculation/observations
+and serialization,without an emulator/full-game speed claim. All seventeen
+replay tools run locally;CI still runs all Rust tests/release build plus its
+first five bridge tools under native22. Earlier evidence and Cargo.lock remain
+unchanged.
