@@ -591,3 +591,56 @@ native computation/observations and serialization;there is no emulator or
 full-game speed claim. All fourteen local bridge checks pass;CI runs all Rust
 tests/release build and its first five bridge checks under permission follow-up
 #22. Earlier evidence and Cargo.lock remain unchanged.
+
+T15 composes the bounded `0AB9:1539` player-cache parent on one guest image.
+`[confirmed]` F31–F33 at archaeology
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provide two original parents with106 ordered direct events,eight role selections,
+82 candidate visits,74 cached-scene lookups,148 scene/table score pairs,27 role
+stores and44 caller byte18 updates. The native parent computes every reached
+helper result through existing Rust code;helper states are not reloaded from
+recorded boundaries. It preserves managed/gate branching,kind1 caller stores,
+role criteria/order and cached-player rating/store continuations across both sides.
+
+```sh
+python3 tools/replay_player_cache.py --check
+python3 tools/replay_player_cache.py --benchmark --out records/T15
+```
+
+`[derived]` T31 parent snapshots join all eight exact T33 role entry/exit states.
+Raw multi-criterion tables,bonus and criterion cells captured at those boundaries
+close the extra read set at parent entry:the preceding closed helpers do not
+write those cells. Canonical aliases agree at every projected boundary;no cell
+is inferred from a score. The T31/T33 exports/indexes already pinned by T14/T12
+are reused unchanged. T15's source/projection digests and exact parent/role joins
+are verified independently;Python projects raw inputs and observations only.
+Both original parent/continuation and nested-census tests failed at the stub in
+`59c7543`,exit101;`engine/tests/fixtures/player_cache/red-proof.txt` retains proof.
+
+`[designed]` Inputs carry both caches,22 complete scenes,unique canonical P8/P15
+fields,first-eleven player-club rosters,managed bytes,gate,six criterion bytes,
+clubs,side offsets,seed and complete indexed table witnesses for every canonical
+player and distinct role criterion. Missing/duplicate/unreferenced read sets,
+contradictory canonical/table/global aliases and invalid domains reject before
+image allocation. IDs0–3920,distinct match clubs1–176,offsets[0,11]/[11,0] and
+byte-width role criteria are admitted. Original extra canonical records remain
+validated. Immutable input fields remain fixed through this closed graph;
+snapshots reread current caches,scenes and seed. Full-image tests check that
+invariant and permit writes only to ten cache words and22 scene.byte18 cells.
+
+`[designed]` Reached B6BD managed/UI fallback returns a diagnostic. Undefined
+13B8 selection with no eligible player,and the existing reached P15+6/missing
+cached-scene guards,remain explicit;no zero scratch or fallback player is
+invented. Expected results/events/nested scores are rejected as inputs.
+Synthetic tests separately cover managed/gate branch combinations,caller kind1
+and role handoffs,side ordering,empty ranges,byte wrapping,zero cached ratings,
+unsupported fallback/noeligible/score domains,canonical/multi-criterion aliases
+and memory ownership. These add no original dynamic coverage. The original
+parents cover only r0017's two replacements. Full164F,10B9/1000 pairing,scene
+codes,A94B/AEB8,the other23 replacements and full AI/match/week parity remain
+later under archaeology #120/#121. The release receipt follows a clean committed
+build and includes parsing,setup,native calculations/observations and serialization;
+there is no emulator/full-game speed claim. All fifteen local replay tools are
+checked;CI still runs all Rust tests/release build and its first five bridge tools
+under permission follow-up #22. Earlier fixtures/provenance/receipts/lock remain
+immutable. This closes the bounded player-cache stage,not complete AI replay.

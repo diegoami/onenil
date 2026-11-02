@@ -140,7 +140,7 @@ fn selector_image(input: &SelectorInput) -> Result<Engine, String> {
     }
     Ok(engine)
 }
-fn select_image(engine: &Engine, side: u8) -> Result<SelectorOutcome, String> {
+pub(crate) fn select_image(engine: &Engine, side: u8) -> Result<SelectorOutcome, String> {
     let club = word(engine, 0xD6E4 + 2 * usize::from(side));
     let mut current = 0xffffu16;
     let mut chosen = None;

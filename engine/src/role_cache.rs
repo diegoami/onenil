@@ -160,105 +160,128 @@ impl Machine {
             s: s.clone(),
         })
     }
-    // [confirmed] F33/8973: last matching first-eleven roster word; zero if absent.
+    #[cfg(test)]
     fn slot(&self, id: u16) -> u16 {
-        let club = self.e.image[P8 + 8 * usize::from(id)];
-        let mut last = 0;
-        for slot in 1..=11 {
-            if word(&self.e, CLUB + 62 * usize::from(club - 1) + 2 * (slot - 1)) == id {
-                last = slot as u16;
-            }
-        }
-        if last != 0 {
-            last += u16::from(
-                self.e.image[0xD56 + usize::from(u16::from(club) == word(&self.e, 0xD6E6))],
-            );
-        }
-        last
-    }
-    fn lookup(&self, id: u16) -> Value {
-        let a = P8 + 8 * usize::from(id);
-        let p4 = self.e.image[a + 4];
-        let p5 = self.e.image[a + 5];
-        let p7 = self.e.image[a + 7];
-        let first = u16::from(p7)
-            .wrapping_mul(22)
-            .wrapping_add(self.s.criterion);
-        let first_cell = self.e.image[usize::from(0x957Du16.wrapping_add(first))];
-        let second = u16::from(p5)
-            .wrapping_mul(22)
-            .wrapping_add(u16::from(first_cell));
-        let second_cell = self.e.image[usize::from(0x96B1u16.wrapping_add(second))];
-        json!({"player":id,"p8_4":p4,"p8_5":p5,"p8_7":p7,"first_index":first,"first_cell":first_cell,"second_index":second,"second_cell":second_cell})
-    }
-    fn score(&self, index: u8, site: &str, kind: &str) -> Result<(u16, Value), String> {
-        let row = Scene::read(&self.e, index);
-        let id = row.word14;
-        if self.e.image[P15 + 15 * usize::from(id) + 6] > 31 {
-            return Err("unsupported role score P15+6 domain".into());
-        }
-        let score = role_scores::scene_image(&self.e, index, self.s.criterion);
-        let child = json!({"site":"0AB9:1B60","kind":"table","arguments":[self.s.criterion,id],"draw_start":0,"children":[],"input":self.lookup(id),"result":score.table.output.value,"draw_end":0});
-        let h = json!({"site":site,"kind":kind,"arguments":[index,self.s.criterion],"draw_start":0,"children":[child],"scene_input":row,"scene_output":score.scene,"result":score.output.value,"draw_end":0});
-        Ok((score.output.value, h))
+        player_slot(&self.e, id)
     }
     fn run(&mut self) -> Result<Outcome, String> {
-        let a = cache_address(self.s.side, self.s.kind);
-        let before = word(&self.e, a);
-        put(&mut self.e, a, 0);
-        let clear = json!({"before":before,"after":0,"draw":0});
-        let mut visits = vec![];
-        let first = u16::from(self.e.image[0x09F6 + usize::from(self.s.kind == 5)]) + 1;
-        for slot in first..=11 {
-            let index = self.e.image[0xD56 + usize::from(self.s.side)] + slot as u8;
-            let row = Scene::read(&self.e, index);
-            let id = row.word14;
-            let p = P15 + 15 * usize::from(id);
-            let av = placement::unavailable(&placement::Player {
-                id,
-                p15_sbyte8: self.e.image[p + 8] as i8,
-                p15_byte11: self.e.image[p + 11],
-            });
-            let cache_before = word(&self.e, a);
-            let mut stored = 0;
-            let mut helpers = vec![
-                json!({"site":"0AB9:14B8","kind":"available","arguments":[id],"draw_start":0,"children":[],"result":av,"draw_end":0}),
-            ];
-            if av == 0 {
-                let improve = if cache_before == 0 {
-                    true
-                } else {
-                    let old = self.slot(cache_before);
-                    if !(1..=22).contains(&old)
-                        || Scene::read(&self.e, old as u8).word14 != cache_before
-                    {
-                        return Err("missing or mismatched cached-player scene".into());
-                    }
-                    helpers.push(json!({"site":"0AB9:14EF","kind":"slot","arguments":[cache_before],"draw_start":0,"children":[],"result":old,"draw_end":0}));
-                    let (old_score, h) = self.score(old as u8, "0AB9:14FC", "old-score")?;
-                    helpers.push(h);
-                    let (new_score, h) = self.score(index, "0AB9:1509", "new-score")?;
-                    helpers.push(h);
-                    new_score > old_score
-                };
-                if improve {
-                    put(&mut self.e, a, id);
-                    stored = 1;
-                }
-            }
-            visits.push(json!({"slot":slot,"scene":index,"player":id,"cache_before":cache_before,"scene_input":row,"draw_start":0,"helpers":helpers,"stored":stored,"cache_after":word(&self.e,a),"scene_output":Scene::read(&self.e,index),"draw_end":0}));
-        }
+        let trace = select_image(&mut self.e, self.s.side, self.s.kind, self.s.criterion)?;
         let mut output = self.s.clone();
-        output.cache[usize::from(self.s.side)][usize::from(self.s.kind - 1)] = word(&self.e, a);
+        output.cache[usize::from(self.s.side)][usize::from(self.s.kind - 1)] =
+            word(&self.e, cache_address(self.s.side, self.s.kind));
         output.scenes = (1..=22).map(|i| Scene::read(&self.e, i)).collect();
         Ok(Outcome {
             output,
-            clear,
-            visits,
+            clear: trace.clear,
+            visits: trace.visits,
             draws: vec![],
         })
     }
 }
+// [confirmed] F33/8973: last matching first-eleven roster word; zero if absent.
+fn player_slot(e: &Engine, id: u16) -> u16 {
+    let club = e.image[P8 + 8 * usize::from(id)];
+    let mut last = 0;
+    for slot in 1..=11 {
+        if word(e, CLUB + 62 * usize::from(club - 1) + 2 * (slot - 1)) == id {
+            last = slot as u16;
+        }
+    }
+    if last != 0 {
+        last += u16::from(e.image[0xD56 + usize::from(u16::from(club) == word(e, 0xD6E6))]);
+    }
+    last
+}
+fn lookup(e: &Engine, id: u16, criterion: u16) -> Value {
+    let a = P8 + 8 * usize::from(id);
+    let p4 = e.image[a + 4];
+    let p5 = e.image[a + 5];
+    let p7 = e.image[a + 7];
+    let first = u16::from(p7).wrapping_mul(22).wrapping_add(criterion);
+    let first_cell = e.image[usize::from(0x957Du16.wrapping_add(first))];
+    let second = u16::from(p5)
+        .wrapping_mul(22)
+        .wrapping_add(u16::from(first_cell));
+    let second_cell = e.image[usize::from(0x96B1u16.wrapping_add(second))];
+    json!({"player":id,"p8_4":p4,"p8_5":p5,"p8_7":p7,"first_index":first,"first_cell":first_cell,"second_index":second,"second_cell":second_cell})
+}
+fn score(
+    e: &Engine,
+    index: u8,
+    criterion: u16,
+    site: &str,
+    kind: &str,
+) -> Result<(u16, Value), String> {
+    let row = Scene::read(e, index);
+    let id = row.word14;
+    if e.image[P15 + 15 * usize::from(id) + 6] > 31 {
+        return Err("unsupported role score P15+6 domain".into());
+    }
+    let score = role_scores::scene_image(e, index, criterion);
+    let child = json!({"site":"0AB9:1B60","kind":"table","arguments":[criterion,id],"draw_start":0,"children":[],"input":lookup(e,id,criterion),"result":score.table.output.value,"draw_end":0});
+    let h = json!({"site":site,"kind":kind,"arguments":[index,criterion],"draw_start":0,"children":[child],"scene_input":row,"scene_output":score.scene,"result":score.output.value,"draw_end":0});
+    Ok((score.output.value, h))
+}
+#[derive(Debug, Serialize)]
+pub(crate) struct Trace {
+    pub clear: Value,
+    pub visits: Vec<Value>,
+}
+pub(crate) fn select_image(
+    e: &mut Engine,
+    side: u8,
+    kind: u8,
+    criterion: u16,
+) -> Result<Trace, String> {
+    if side > 1 || !(1..=5).contains(&kind) || criterion > 255 {
+        return Err("unsupported role image arguments".into());
+    }
+    let a = cache_address(side, kind);
+    let before = word(e, a);
+    put(e, a, 0);
+    let clear = json!({"before":before,"after":0,"draw":0});
+    let mut visits = vec![];
+    let first = u16::from(e.image[0x09F6 + usize::from(kind == 5)]) + 1;
+    for slot in first..=11 {
+        let index = e.image[0xD56 + usize::from(side)] + slot as u8;
+        let row = Scene::read(e, index);
+        let id = row.word14;
+        let p = P15 + 15 * usize::from(id);
+        let av = placement::unavailable(&placement::Player {
+            id,
+            p15_sbyte8: e.image[p + 8] as i8,
+            p15_byte11: e.image[p + 11],
+        });
+        let cache_before = word(e, a);
+        let mut stored = 0;
+        let mut helpers = vec![
+            json!({"site":"0AB9:14B8","kind":"available","arguments":[id],"draw_start":0,"children":[],"result":av,"draw_end":0}),
+        ];
+        if av == 0 {
+            let improve = if cache_before == 0 {
+                true
+            } else {
+                let old = player_slot(e, cache_before);
+                if !(1..=22).contains(&old) || Scene::read(e, old as u8).word14 != cache_before {
+                    return Err("missing or mismatched cached-player scene".into());
+                }
+                helpers.push(json!({"site":"0AB9:14EF","kind":"slot","arguments":[cache_before],"draw_start":0,"children":[],"result":old,"draw_end":0}));
+                let (old_score, h) = score(e, old as u8, criterion, "0AB9:14FC", "old-score")?;
+                helpers.push(h);
+                let (new_score, h) = score(e, index, criterion, "0AB9:1509", "new-score")?;
+                helpers.push(h);
+                new_score > old_score
+            };
+            if improve {
+                put(e, a, id);
+                stored = 1;
+            }
+        }
+        visits.push(json!({"slot":slot,"scene":index,"player":id,"cache_before":cache_before,"scene_input":row,"draw_start":0,"helpers":helpers,"stored":stored,"cache_after":word(e,a),"scene_output":Scene::read(e,index),"draw_end":0}));
+    }
+    Ok(Trace { clear, visits })
+}
+
 pub fn select(s: &State) -> Result<Outcome, String> {
     Machine::new(s)?.run()
 }

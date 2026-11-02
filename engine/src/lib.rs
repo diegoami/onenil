@@ -13,6 +13,7 @@ pub mod event_effects;
 pub mod extra_event;
 pub mod goal_effects;
 pub mod placement;
+pub mod player_cache;
 pub mod post_score;
 pub mod quick_reset;
 pub mod ratings;
@@ -396,6 +397,13 @@ mod python {
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }
     #[pyfunction]
+    fn player_cache_refresh(input_json: &str) -> PyResult<String> {
+        let input: player_cache::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = player_cache::refresh(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
     fn managed_club(input_json: &str) -> PyResult<String> {
         let input: cache_helpers::ManagedInput =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -586,6 +594,7 @@ mod python {
         module.add_function(wrap_pyfunction!(logical_event_effects, module)?)?;
         module.add_function(wrap_pyfunction!(post_score_strategy, module)?)?;
         module.add_function(wrap_pyfunction!(quick_goal_reset, module)?)?;
+        module.add_function(wrap_pyfunction!(player_cache_refresh, module)?)?;
         module.add_function(wrap_pyfunction!(managed_club, module)?)?;
         module.add_function(wrap_pyfunction!(cached_roster_slot, module)?)?;
         module.add_function(wrap_pyfunction!(cached_side_boost, module)?)?;

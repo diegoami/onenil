@@ -1,0 +1,28 @@
+Command: cargo test --manifest-path engine/Cargo.toml --test player_cache --locked -q
+Exit: 101
+
+running 2 tests
+actual_original_parent_roots_and_every_continuation_replay --- FAILED
+actual_original_parent_direct_and_nested_census --- FAILED
+
+failures:
+
+---- actual_original_parent_roots_and_every_continuation_replay stdout ----
+
+thread 'actual_original_parent_roots_and_every_continuation_replay' (609) panicked at tests/player_cache.rs:7:143:
+called `Result::unwrap()` on an `Err` value: "T15 native1539 parent not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- actual_original_parent_direct_and_nested_census stdout ----
+
+thread 'actual_original_parent_direct_and_nested_census' (608) panicked at tests/player_cache.rs:12:120:
+called `Result::unwrap()` on an `Err` value: "T15 native1539 parent not implemented"
+
+
+failures:
+    actual_original_parent_direct_and_nested_census
+    actual_original_parent_roots_and_every_continuation_replay
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.43s
+
+error: test failed, to rerun pass `--test player_cache`
