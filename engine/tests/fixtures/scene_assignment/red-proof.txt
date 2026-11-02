@@ -1,0 +1,28 @@
+Command:cargo test --manifest-path engine/Cargo.toml --test scene_assignment --locked -q
+Exit:101
+
+running 2 tests
+actual_original_forty_four_assignment_boundaries --- FAILED
+actual_original_two_rebuilds_and_twenty_observed_helpers --- FAILED
+
+failures:
+
+---- actual_original_forty_four_assignment_boundaries stdout ----
+
+thread 'actual_original_forty_four_assignment_boundaries' (619) panicked at tests/scene_assignment.rs:7:118:
+called `Result::unwrap()` on an `Err` value: "T18 native8599 not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- actual_original_two_rebuilds_and_twenty_observed_helpers stdout ----
+
+thread 'actual_original_two_rebuilds_and_twenty_observed_helpers' (620) panicked at tests/scene_assignment.rs:13:119:
+called `Result::unwrap()` on an `Err` value: "T18 native8663 not implemented"
+
+
+failures:
+    actual_original_forty_four_assignment_boundaries
+    actual_original_two_rebuilds_and_twenty_observed_helpers
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
+
+error: test failed, to rerun pass `--test scene_assignment`

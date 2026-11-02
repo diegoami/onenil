@@ -20,6 +20,7 @@ pub mod ratings;
 pub mod role_cache;
 pub mod role_pairing;
 pub mod role_scores;
+pub mod scene_assignment;
 pub mod scene_codes;
 pub mod step_tail;
 pub mod terminal;
