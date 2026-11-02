@@ -1,0 +1,29 @@
+Corrected six-byte criteria shape after initial713df7c deserialization failure.
+Command: cargo test --manifest-path engine/Cargo.toml --test role_cache --locked -q
+Exit: 101
+
+running 2 tests
+actual_original_nested_helper_and_store_census --- FAILED
+actual_original_role_roots_and_all_continuations_replay --- FAILED
+
+failures:
+
+---- actual_original_nested_helper_and_store_census stdout ----
+
+thread 'actual_original_nested_helper_and_store_census' (54619) panicked at tests/role_cache.rs:26:46:
+called `Result::unwrap()` on an `Err` value: "T13 native1455/8973 not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- actual_original_role_roots_and_all_continuations_replay stdout ----
+
+thread 'actual_original_role_roots_and_all_continuations_replay' (54620) panicked at tests/role_cache.rs:16:61:
+called `Result::unwrap()` on an `Err` value: "T13 native1455/8973 not implemented"
+
+
+failures:
+    actual_original_nested_helper_and_store_census
+    actual_original_role_roots_and_all_continuations_replay
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--test role_cache`

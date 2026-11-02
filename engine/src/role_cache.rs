@@ -27,7 +27,7 @@ pub struct State {
     pub seed: u16,
     pub side_offsets: [u8; 2],
     pub clubs: [u16; 2],
-    pub starts: [u8; 2],
+    pub starts: [u8; 6],
     pub cache: [[u16; 5]; 2],
     pub scenes: Vec<Scene>,
     pub players: Vec<Player>,
