@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Admit original starting data once;compare native full-match steps and caller effects."""
-import argparse,copy,json
+import argparse,copy,json,platform,subprocess,time
+from datetime import datetime,timezone
+from importlib.metadata import version
+from pathlib import Path
 import replay_continuous_step as half
 import replay_rearrangement as rearrangement
 import replay_role_pairing as pairing
@@ -37,6 +40,7 @@ def load():
     g=raw['rebuild']['outer']['globals']
     readset={'match_state':state,'display_mode':g['mode'],'position_sentinel':g['position_sentinel'],'speaker_gate':g['speaker_gate']}
     admission={'first_half':first,'replacement':readset,'gates':initial['gates'],'skill_tables':table_rows([s for s in a['skills'] if s['criterion'] in (6,14)])}
+    if not common.same(admission,json.loads((FIXTURES/'admission.json').read_text())):raise ValueError('initial full-match admission projection differs')
     phases=[r for r in rows if r['schema']=='caller-phase/1']
     if [r['site'] for r in phases]!=['0AB9:7DD3','0AB9:7E4C','0AB9:7E4F','0AB9:7E6E','0AB9:7E71']:raise ValueError('caller continuation coverage differs')
     pin['first_half']=oldpin
@@ -65,6 +69,33 @@ def check(admission,steps,phases):
     if result!={'clubs':steps[-1]['output']['clubs'],'goals':steps[-1]['output']['score_side']}:raise ValueError('original final result differs (verification only)')
     print('One admitted native match:95 exact DD02/clock/RNG boundaries,actual halftime,1-3 original final result;after setup,not yet playable.')
 
+def benchmark(admission,pin,repetitions,directory):
+    from onenil_engine import onenil_engine as native
+    if common.git('status','--porcelain','--','engine','tools/replay_continuous_match.py','pyproject.toml'):raise ValueError('commit source before measuring')
+    if native.__debug_assertions__:raise ValueError('release extension required')
+    value=common.encoded(admission);started=datetime.now(timezone.utc).isoformat();begin=time.perf_counter_ns();steps=0;size=0
+    for _ in range(repetitions):
+        session=native.NativeMatchSession(value)
+        while True:
+            if session.phase()=='half-time':session.continue_without_changes()
+            result=session.step();size+=len(result);steps+=1
+            if session.phase()=='full-time':break
+    elapsed=time.perf_counter_ns()-begin;out=ROOT/directory;out.mkdir(parents=True,exist_ok=True)
+    n=max((int(p.stem.split('-r')[-1]) for p in out.glob('T26-r*.json')),default=0)+1;path=out/f'T26-r{n:04d}.json'
+    rec={'schema':'routine-benchmark/1','run_id':path.stem,'code_commit':common.git('rev-parse','HEAD'),'started':started,'ended':datetime.now(timezone.utc).isoformat(),
+         'platform':platform.platform(),'python':platform.python_version(),'rustc':subprocess.check_output(['rustc','--version'],text=True).strip(),
+         'cargo_lock_sha256':common.sha((ROOT/'engine/Cargo.lock').read_bytes()),'build':{'crate_version':native.__version__,'debug_assertions':native.__debug_assertions__,'maturin':version('maturin'),'extension_sha256':common.sha(Path(native.__file__).read_bytes())},
+         'source_pins':pin,'routine':'one admitted continuing DD02/7B7B full-match session','repetitions':repetitions,'steps':steps,'elapsed_ns':elapsed,'serialized_output_bytes':size,
+         'method':'Pre-serialized initial admission;release parse/setup/native successive steps/serialization and phase queries for termination included',
+         'limits':'Fixed reference full match after setup with explicit no-edit halftime;not native setup,playable acceptance,arbitrary seeds or emulator/full-game speed comparison'}
+    with path.open('x') as f:json.dump(rec,f,indent=2);f.write('\n')
+    print(path.relative_to(ROOT))
+
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--check',action='store_true',required=True);ap.parse_args();a,s,p,_=load();check(a,s,p)
+    ap=argparse.ArgumentParser(description=__doc__);g=ap.add_mutually_exclusive_group(required=True)
+    g.add_argument('--check',action='store_true');g.add_argument('--benchmark',action='store_true')
+    ap.add_argument('--out',default='records/T26');ap.add_argument('--repetitions',type=int,default=10);args=ap.parse_args()
+    if args.repetitions<1:raise ValueError('positive repetitions required')
+    a,s,p,pin=load();check(a,s,p)
+    if args.benchmark:benchmark(a,pin,args.repetitions,args.out)
 if __name__=='__main__':main()

@@ -1160,3 +1160,31 @@ selected chance8 and club-byte55 read sets,not later fixture states. Remaining
 numeric queue rows use the original86E9 FF initialization,checked in
 `seg_0AB9_14.asm:8700–870E` at archaeology218490d and separately hash-pinned.
 Earlier source fixtures,receipts,lock and workflow remain unchanged.
+
+### Continuous full-match debug session (T26)
+
+[confirmed: archaeologyT37 at461ceb7,nativeT26] `NativeMatchSession` now
+continues the same image through halftime and full time. One admission,then
+input-free steps and an explicit `continue_without_changes()` action match all95
+original DD02/clock/RNG boundaries,the five caller projections,both actual
+substitutions and the final1–3 result. The expected result is verification only.
+
+```sh
+.cache/venv/bin/python tools/replay_continuous_match.py --check
+.cache/venv/bin/python tools/replay_continuous_match.py --benchmark --out records/T26
+```
+
+[confirmed:T37/F14/F25] Halftime restores unsigned condition1..30 by2,
+runs both managed164F calls and actual50EB/quarter/cap writes,then resolves
+kickoff/physical availability from current state. The explicit presentation
+adapter acknowledges the board with Space. Full replacements also call0F94
+before rearranging the roster,so numeric queue/count changes reach the caller
+clock. Code0's fixed-profile weight is0,derived from its unchanged weighted
+actor total. Standalone bounded replacement APIs retain their old presentation
+projection. Later snapshots never enter the engine.
+
+[designed] This remains a fixed-reference debug session after setup. Native
+258-draw setup,supported-session breadth,and the commentary/pitch shell and
+owner review remain first-playable acceptance work. A local viewer of this
+prepared session is the next visible deliverable. Receipts measure release
+admission/native progression/serialization only,with no full-game speed claim.

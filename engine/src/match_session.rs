@@ -256,6 +256,9 @@ impl Session {
         if self.inner.e.image[0xD1CB] != 1 {
             return Err("unsupported halftime editor branch".into());
         }
+        // [confirmed:T37;1998:080D ->232A:099B ->24BC:0C17/0C53]
+        // Explicit presentation response:Space acknowledges the halftime board.
+        put(&mut self.inner.e, 0xDE8A, 0x3920);
         let p = self.point();
         self.points.push(p); //7E4C,beforeD5D6.
         self.rearrange()?; //D5F4.
@@ -442,6 +445,15 @@ mod tests {
         let mut a = admission();
         a.replacement.match_state.core.actor ^= 1;
         assert!(Session::new(a).is_err());
+    }
+    #[test]
+    fn halftime_continue_records_the_actual_space_response() {
+        let mut s = Session::new(admission()).unwrap();
+        while s.phase() != "half-time" {
+            s.step().unwrap();
+        }
+        s.continue_without_changes().unwrap();
+        assert_eq!(s.points[1]["selection"]["key"], json!(32));
     }
     #[test]
     fn static_unsigned_display_cap_edges() {
