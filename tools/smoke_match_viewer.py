@@ -73,6 +73,7 @@ def smoke(out):
             page.set_viewport_size({'width':390,'height':844})
             mobile = out/f'{stem}-mobile.png'
             page.screenshot(path=str(mobile), full_page=True)
+            assert page.locator('#score').bounding_box()['height'] < 60, 'mobile score wraps onto two lines'
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
             assert page.locator('#pitch').is_visible()
             page.get_by_role('button', name='Restart', exact=True).click()
