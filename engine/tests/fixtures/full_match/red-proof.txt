@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/replay_continuous_match.py", line 67, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/replay_continuous_match.py", line 66, in main
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--check',action='store_true',required=True);ap.parse_args();a,s,p,_=load();check(a,s,p)
+                                                                                                                                                ^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/replay_continuous_match.py", line 46, in check
+    session=native.NativeMatchSession(common.encoded(admission))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'onenil_engine' has no attribute 'NativeMatchSession'. Did you mean: 'NativeQuickSession'?
