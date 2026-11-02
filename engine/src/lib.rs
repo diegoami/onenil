@@ -26,6 +26,7 @@ pub mod role_scores;
 pub mod scene_assignment;
 pub mod scene_codes;
 pub mod step_tail;
+pub mod substitution;
 pub mod terminal;
 
 const SEED: u16 = 0xA51C;
