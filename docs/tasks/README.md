@@ -13,3 +13,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T09](T09.md): Native complete named quick-reset closure (#18).
 - [T10](T10.md): Native terminal rearrangement helpers and original T34/T35 replay (#20).
 - [T11](T11.md): Native cached-player selector and remainder-rating replay (#23).
+- [T12](T12.md): Native role table and scene-scoring helpers from T33 (#25).
