@@ -1,0 +1,35 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T16-r0001",
+  "code_commit": "e824a87c99c64584d3396fb75d108f8cfd21dd7f",
+  "started": "2026-11-02T17:07:02.007286+00:00",
+  "ended": "2026-11-02T17:07:02.015176+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "0fcfc4a22074f8059dc00ee59c3c43b5237960990f8d3f339cd01e8c49140067"
+  },
+  "archaeology": {
+    "repository": "https://github.com/diegoami/onenil-archaeology",
+    "commit": "218490d846e365babdd158d09c5ab865124e30ed",
+    "index_sha256": "7c381a9c81ced8660c8c3073725d076bfe42fed2fe026364a86421adfe2dfb04",
+    "review": "https://github.com/diegoami/onenil-archaeology/issues/119#issuecomment-6566004705",
+    "projection_sha256": "1522bd737b862c246811542daeba7d5d50a09615dc4e9717acc8f7e1194482e5"
+  },
+  "routine": "10B9 role pairing with composed1000 and standalone ranges",
+  "source_weeks": 1,
+  "recorded_parents": 2,
+  "recorded_ranges": 20,
+  "repetitions": 20,
+  "calls": 440,
+  "rng_draws": 0,
+  "elapsed_ns": 5820098,
+  "serialized_output_bytes": 444360,
+  "method": "Pre-serialized raw inputs; release bridge parsing,image setup,native computation and observations/serialization included; preparation/output decoding excluded",
+  "limits": "T29 pairing slice only; synthetic edge cases separate from original evidence; no164F/scene codes/A94B/AEB8/full AI/match/week/render/timer/scratch parity or emulator comparison"
+}
