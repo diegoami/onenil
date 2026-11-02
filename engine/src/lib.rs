@@ -660,6 +660,13 @@ mod python {
         let out = substitution::dispatch(&input).map_err(PyValueError::new_err)?;
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }
+    #[pyfunction]
+    fn neutral_match_input(input_json: &str) -> PyResult<String> {
+        let input: neutral_input::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = neutral_input::neutral(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
@@ -708,6 +715,7 @@ mod python {
         module.add_function(wrap_pyfunction!(replace_player, module)?)?;
         module.add_function(wrap_pyfunction!(ai_select, module)?)?;
         module.add_function(wrap_pyfunction!(substitutions, module)?)?;
+        module.add_function(wrap_pyfunction!(neutral_match_input, module)?)?;
         module.add("__version__", env!("CARGO_PKG_VERSION"))?;
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }

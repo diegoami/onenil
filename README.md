@@ -1046,3 +1046,43 @@ claim. Neutral78B7 input handling,its conditionalDB68 auto-switch and continuous
 DD02/clock remain next;they are not assumed no-ops. This is not a continuous
 complete match or playable shell. Commentary+clock remain the minimum,pitch the
 preferred stretch,and broader parity remains under archaeology120/121.
+
+T23 implements the explicit no-pending-key branch of78B7 and conditionalDB68.
+`[confirmed static]` Listings78B7–79EC andDB68–DBC5 at archaeology
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+show that no key does not imply no state change:nonzero D1CC requestsDB68,
+which can set quick/mirror modes and clear or normalize the auto-switch flag.
+Quick mode,remaining zero or nonzero D0B9 block that transition. Raw nonboolean
+bytes retain their original tests and writes.
+
+```sh
+python3 tools/replay_neutral_input.py --check
+python3 tools/replay_neutral_input.py --benchmark --out records/T23
+```
+
+`[designed]` Fourteen immutable hand-specified cases pin this static contract,
+with source listing hashes and explicit **zero new original observations**.
+They first failed atdd9886a's stub(exit101,retained proof). Six additional tests
+cover current-image reads,no-request behavior,DB68's direct hint path,guard/word
+endpoints,extra/keyboard-field rejection and whole-image ownership. The adapter
+writes only D074,D075 andD1CC;seed,clock fields,scene-code mode,other pools and
+raw configuration remain unchanged. The pointed speed byte has normalized
+storage40081,disjoint from scene-code mode40080 and pairing/table pools.
+
+`[designed]` Speed status,speaker calls and quick-screen buffer refresh emit
+structured presentation events in source order. Buffer-refresh arguments are
+semantic(1,0),not push order. Original formatted text,hardware,display/log scratch
+and timer parity remain outside the adapter. Keyboard acquisition is an explicit
+caller responsibility:this API represents no pending key and rejects keyboard
+fields;it does not silently accept keyboard-present paths. A borrowed-image
+entrypoint allows the future whole-step caller to retain its current state.
+
+`[designed]` All twenty-three local release tools pass;this count includes the
+static-only adapter check,not23 original corpora. CI retains all Rust tests,
+release build and its first five bridges under issue22. Prior evidence,lock and
+workflow remain unchanged. The immutable committed-source measurement identifies
+its static-only limits and makes no original-call or emulator/full-game claim.
+Next is a complete initial read set and continuous DD02/clock acceptance from
+one state,then native kickoff/setup and a commentary shell. No per-step fixture
+backend or hardcoded match score is permitted. A complete playable match remains
+unproven;commentary+clock minimum,pitch graphics preferred stretch.
