@@ -267,6 +267,8 @@ impl Session {
         self.inner.e.rate_side(&r)?;
         self.project_display_ratings();
         // [designed] The supported external response is explicitly no lineup changes.
+        // [confirmed:T37] Editor response leaves normalized key2 before its final164F.
+        self.inner.e.image[0xDE8A] = 2;
         self.inner.e.image[0xD18] = 1;
         self.rearrange()?; //D8F8/D8FD.
         let p = self.point();
@@ -454,6 +456,7 @@ mod tests {
         }
         s.continue_without_changes().unwrap();
         assert_eq!(s.points[1]["selection"]["key"], json!(32));
+        assert_eq!(s.points[2]["selection"]["key"], json!(2));
     }
     #[test]
     fn static_unsigned_display_cap_edges() {
