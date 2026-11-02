@@ -7,6 +7,7 @@
 
 use serde::{Deserialize, Serialize};
 
+pub mod ai_selection;
 pub mod cache_helpers;
 pub mod cache_selection;
 pub mod event_effects;

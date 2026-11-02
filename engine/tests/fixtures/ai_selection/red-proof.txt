@@ -1,0 +1,21 @@
+Command:cargo test --manifest-path engine/Cargo.toml --test ai_selection --locked -q
+Exit:101
+
+running 1 test
+original_thirty_seven_calls_and_thirty_three_helpers --- FAILED
+
+failures:
+
+---- original_thirty_seven_calls_and_thirty_three_helpers stdout ----
+
+thread 'original_thirty_seven_calls_and_thirty_three_helpers' (645) panicked at tests/ai_selection.rs:10:59:
+called `Result::unwrap()` on an `Err` value: "T21 nativeA94B not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_thirty_seven_calls_and_thirty_three_helpers
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test ai_selection`
