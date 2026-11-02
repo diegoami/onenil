@@ -15,7 +15,8 @@ def table_rows(skills):
     return [{'criterion':s['criterion'],'player':{'id':p['player'],**{k:p[k] for k in ('p8_4','p8_5','p8_7')}},'first':{'index':p['first_index'],'value':p['first_cell']},'second':{'index':p['second_index'],'value':p['second_cell']}} for s in skills for p in s['state']['lookups']]
 
 def normalize(s):
-    return {'core':rearrangement.core(s['pairing']['context']),'pairing':pairing.state(s['pairing']),'codes':codes.state(s['codes']),'gates':s['gates'],'ratings':s['ratings'],'seed':s['seed']}
+    raw=s['pairing']['context'];g=raw['rebuild']['outer']['globals']
+    return {'core':rearrangement.core(raw),'pairing':pairing.state(s['pairing']),'codes':codes.state(s['codes']),'selection':raw['rebuild']['outer']['selection'],'global_read_set':{'display_mode':g['mode'],'position_sentinel':g['position_sentinel'],'speaker_gate':g['speaker_gate']},'gates':s['gates'],'ratings':s['ratings'],'seed':s['seed']}
 
 def load():
     first,steps,oldpin=half.load();pin=json.loads((FIXTURES/'provenance.json').read_text())
@@ -56,10 +57,12 @@ def check(admission,steps,phases):
         ai.extend(got['ai']);count+=1
         if count>len(steps):raise ValueError('native match failed to terminate')
     if count!=95:raise ValueError('original full-match boundary count differs')
+    replacements=[h['arguments'] for c in ai for h in c['helpers'] if h['kind']=='replace']
+    if len(ai)!=37 or replacements!=[[14,8,1],[13,6,1]]:raise ValueError('actual native AI/replacement census differs')
     actual=json.loads(session.caller_points())
     if not common.same(actual,[normalize(p['state']) for p in phases]):raise ValueError('actual halftime/caller projections differ')
     result=json.loads(session.result())
-    if result!={'clubs':[130,134],'goals':[1,3]}:raise ValueError('original final result differs (verification only)')
+    if result!={'clubs':steps[-1]['output']['clubs'],'goals':steps[-1]['output']['score_side']}:raise ValueError('original final result differs (verification only)')
     print('One admitted native match:95 exact DD02/clock/RNG boundaries,actual halftime,1-3 original final result;after setup,not yet playable.')
 
 def main():

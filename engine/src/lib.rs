@@ -15,6 +15,7 @@ pub mod event_effects;
 pub mod extra_event;
 pub mod goal_effects;
 mod layout;
+pub mod match_session;
 pub mod neutral_input;
 pub mod placement;
 pub mod player_cache;
@@ -244,6 +245,47 @@ mod python {
     use pyo3::exceptions::PyValueError;
     use pyo3::prelude::*;
 
+    #[pyclass]
+    struct NativeMatchSession {
+        session: match_session::Session,
+    }
+    #[pymethods]
+    impl NativeMatchSession {
+        #[new]
+        fn new(admission_json: &str) -> PyResult<Self> {
+            let a: match_session::Admission = serde_json::from_str(admission_json)
+                .map_err(|e| PyValueError::new_err(e.to_string()))?;
+            Ok(Self {
+                session: match_session::Session::new(a).map_err(PyValueError::new_err)?,
+            })
+        }
+        fn phase(&self) -> &'static str {
+            self.session.phase()
+        }
+        fn snapshot(&self) -> PyResult<String> {
+            serde_json::to_string(&self.session.snapshot())
+                .map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn step(&mut self) -> PyResult<String> {
+            let v = self.session.step().map_err(PyValueError::new_err)?;
+            serde_json::to_string(&v).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn continue_without_changes(&mut self) -> PyResult<String> {
+            let v = self
+                .session
+                .continue_without_changes()
+                .map_err(PyValueError::new_err)?;
+            serde_json::to_string(&v).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn caller_points(&self) -> PyResult<String> {
+            serde_json::to_string(self.session.caller_points())
+                .map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn result(&self) -> PyResult<String> {
+            let v = self.session.result().map_err(PyValueError::new_err)?;
+            serde_json::to_string(&v).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+    }
     #[pyclass]
     struct NativeQuickSession {
         session: continuous::Session,
@@ -696,6 +738,7 @@ mod python {
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
         module.add_class::<NativeQuickSession>()?;
+        module.add_class::<NativeMatchSession>()?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;
