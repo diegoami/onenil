@@ -265,7 +265,7 @@ impl Engine {
         let gap = magnitude(scores);
         for side in 0..2 {
             let id = self.word(0xD6E4 + 2 * side as u16);
-            if [u16::from(self.image[0xDCBA]), u16::from(self.image[0xDCBB])].contains(&id) {
+            if crate::cache_helpers::managed_image(self, id) != 0 {
                 continue;
             }
             if gap < 2 {

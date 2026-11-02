@@ -79,7 +79,7 @@ fn load_rating(e: &mut Engine, id: u16, input: &RatingInput) {
     e.image[a + 3] = input.p8_3;
     e.image[a + 5] = input.p8_5
 }
-fn rating_image(e: &Engine, id: u16) -> u16 {
+pub(crate) fn rating_image(e: &Engine, id: u16) -> u16 {
     // [confirmed] F32/4EBF: IDIV's signed remainder is exchanged into AX,not quotient.
     let a = P8 + 8 * usize::from(id);
     let difference = i16::from(e.image[a + 3]).wrapping_sub(i16::from(e.image[a + 5]));

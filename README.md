@@ -539,3 +539,55 @@ bridge parsing, validated setup, actual nested computation and serialization;
 it makes no emulator or full-game speed claim. All thirteen replay tools run
 locally; CI still runs the first five plus all Rust tests/release build under
 permission follow-up #22. Previous evidence and Cargo.lock remain unchanged.
+
+T14 closes the remaining non-selection helpers and caller rating stores needed
+by1539. `[confirmed]` Archaeology F31/T31 and F32 at
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provide four managed-club0E7A calls,two577F cached roster lookups,and four
+side phases with44 actual4EBF calls and44 caller byte18 stores. T31 source/index
+are pinned byte-identically in `engine/tests/fixtures/cache_helpers/`;the raw
+projection regenerates independently. All three original-case tests failed at
+stubs in `12bd6f9`,exit101;`red-proof.txt` retains the evidence.
+
+```sh
+python3 tools/replay_cache_helpers.py --check
+python3 tools/replay_cache_helpers.py --benchmark --out records/T14
+```
+
+`[confirmed]`0E7A compares the full16-bit query against two zero-extended managed
+bytes;it now also supplies post-score strategy's existing predicate.577F reads
+the selected cache kind/side and match-club roster,returns the first matching
+slot among eleven (including zero IDs),or12. This helper has different semantics
+from8973's last-match search and zero miss. The side phase repeatedly calls the
+existing native4EBF with its kind1 cached player,not the scene's own player.
+It doubles the returned word,adds AL to scene.byte18 with byte wrapping,and
+records actual arguments/rating/before/after rows in original order. The original
+counter4025 is normalized to routine-local0. Each side phase uses one image;
+the reusable image-level functions support later parent composition.
+
+`[designed]`Managed queries admit all u16 words and both raw u8 bytes,including
+literal zero;no inactive-slot convention changes equality. Cached-slot inputs
+require side0/1,kind1–5,club1–176 and raw roster/cache IDs0–3920. No availability
+filter is applied to the search. Side-phase inputs require side0/1,offsets
+[0,11]/[11,0],22 complete ordered scenes,both caches and unique canonical player
+rating bytes;every referenced scene/cache ID must exist. Extra source canonical
+records are retained and validated. The phase has no availability filter either:
+ID0 has its own raw rating bytes. Expected returns,stores and nested rating
+results are rejected as inputs. Unrelated parent state is outside this projection.
+
+`[designed]`Full-image tests preserve everything for the read-only primitives
+and permit only the selected side's eleven byte18 stores for each original
+phase,preserving seed and caches. Synthetic tests separately cover both managed
+bytes/full-word equality,duplicates/zero/last-slot/missing roster IDs,all cache
+kinds,alternate sides/offsets and club/player limits,actual cached-player handoff,
+negative remainders/logical shifts,byte overflow,malformed/extra fields and two
+side phases on one image. Original managed returns are1/0;both slot results are9
+for side0/kind1/club130;recorded ratings are3/7. Synthetic cases add no original
+dynamic coverage. Full1539 selection composition,B6BD managed/UI fallback,
+164F,role pairing,scene codes,A94B/AEB8,the other23 replacements and full AI/
+match/week parity remain later under archaeology #120/#121. The immutable timing
+receipt follows a committed-source release build and includes parsing,setup,
+native computation/observations and serialization;there is no emulator or
+full-game speed claim. All fourteen local bridge checks pass;CI runs all Rust
+tests/release build and its first five bridge checks under permission follow-up
+#22. Earlier evidence and Cargo.lock remain unchanged.
