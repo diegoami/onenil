@@ -1,0 +1,45 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T18-r0001",
+  "code_commit": "6f148b026037f0931cc1d7db5eb4c1d82517e62e",
+  "started": "2026-11-02T18:24:37.193009+00:00",
+  "ended": "2026-11-02T18:24:37.293448+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "fca389420fc01b397928bdfb679ec0ec4a21b32e8f928c17acd4fc023457b2d1"
+  },
+  "archaeology": {
+    "repository": "https://github.com/diegoami/onenil-archaeology",
+    "commit": "218490d846e365babdd158d09c5ab865124e30ed",
+    "sources": {
+      "T26": {
+        "index_sha256": "1686f6872b7d53d9865797d820d2411cbd6b5281401d2565b53d96e058ee17d6",
+        "cases": "T26-r0006.jsonl"
+      },
+      "T28": {
+        "index_sha256": "db516a2799b549a7a8d6e2146002628b1938b8bb0ebece2aebc65d01f6a647ae",
+        "cases": "T28-r0001.jsonl"
+      }
+    },
+    "review": "https://github.com/diegoami/onenil-archaeology/issues/119#issuecomment-6566004705",
+    "projection_sha256": "36fc031aabcd7e47e87b0cec4feb4bdee8b743c8a65d4f0d2d875fb793de0eed"
+  },
+  "routine": "8599 assignment and8663 rebuild with actual native lookups/predicates",
+  "source_weeks": 1,
+  "recorded_assignments": 44,
+  "recorded_rebuilds": 2,
+  "recorded_rebuild_helpers": 20,
+  "repetitions": 20,
+  "calls": 920,
+  "rng_draws": 0,
+  "elapsed_ns": 98398643,
+  "serialized_output_bytes": 11486640,
+  "method": "Pre-serialized raw inputs; release bridge parsing,image setup,native computation and observations/serialization included; preparation/output decoding excluded",
+  "limits": "T26/T28 fixed-match assignment slice;not a complete playable match; synthetic edge cases separate from original evidence; no164F/A94B/AEB8/full AI/match/week/render/timer/scratch parity or emulator comparison"
+}
