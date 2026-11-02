@@ -1,0 +1,21 @@
+Command:cargo test --manifest-path engine/Cargo.toml --test substitution --locked -q
+Exit:101
+
+running 1 test
+original_ninety_one_dispatchers_401_events_and_37_ai_continuations --- FAILED
+
+failures:
+
+---- original_ninety_one_dispatchers_401_events_and_37_ai_continuations stdout ----
+
+thread 'original_ninety_one_dispatchers_401_events_and_37_ai_continuations' (651) panicked at tests/substitution.rs:10:61:
+called `Result::unwrap()` on an `Err` value: "T22 native6B2F not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    original_ninety_one_dispatchers_401_events_and_37_ai_continuations
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--test substitution`

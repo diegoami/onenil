@@ -113,7 +113,7 @@ fn cw(c: &mut Cells, a: usize, v: u16) -> Result<(), String> {
 fn limit_address(allowance: u8) -> usize {
     usize::from(0xD58u16.wrapping_add(i16::from(allowance as i8) as u16))
 }
-fn cells(s: &State) -> Result<Cells, String> {
+pub(crate) fn cells(s: &State) -> Result<Cells, String> {
     let x = &s.context;
     if s.side > 1
         || !(1..=22).contains(&s.scene)
@@ -240,7 +240,7 @@ fn cells(s: &State) -> Result<Cells, String> {
     cw(&mut c, 0xD0B4, x.added)?;
     Ok(c)
 }
-fn snapshot(e: &Engine, x: &Context) -> Context {
+pub(crate) fn snapshot(e: &Engine, x: &Context) -> Context {
     let mut o = x.clone();
     o.seed = word(e, 0xA51C);
     o.remaining = word(e, 0xD0AE);
@@ -423,7 +423,7 @@ fn exchange(e: &mut Engine, a: usize, b: usize, n: usize) {
         e.image.swap(a + i, b + i);
     }
 }
-fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
     let side = usize::from(s.side);
     let id = word(e, addr(s.scene) + 14);
     let role = e.image[p8(id) + 6];

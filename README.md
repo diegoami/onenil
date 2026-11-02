@@ -995,3 +995,54 @@ Next is auditing reached state changes and connecting the substitution/input
 callers to a continuous DD02+clock transition. This is not a complete playable
 match. Commentary+clock remain the minimum,pitch graphics the preferred stretch;
 other-week/full-game parity remains separate under archaeology120/121.
+
+T22 connects6B2F substitution dispatch to the native selection/replacement chain.
+`[confirmed]` F22/F23 at archaeology
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provide91 dispatchers at first-match steps0–94(excluding four goal-reset steps),
+401 direct observations and37 nested selections. Direct observations include182
+managed checks,91 keeper checks,91 capacity checks and37 AI boundaries. Exact
+T22/T23 joins also compare each nested full selection continuation and its33
+observed helpers. The original test failed at58bf69b's stub(exit101,retained proof).
+
+```sh
+python3 tools/replay_substitution.py --check
+python3 tools/replay_substitution.py --benchmark --out records/T22
+```
+
+`[confirmed]` The dispatcher visits sides0 then1. Capacity adds zero-extended
+reserves/allowance and subtracts substitution flags with word wrapping;unsigned
+nonzero tests retain underflow. Managed sides check keeper availability before
+the pending gate. Available keepers additionally test wrapping remaining+added
+and capacity before prompt work. AI sides scan physical slots11 down to1,skip
+mask20/nonpositive signed byte8,and require remaining2–34,slot>1 and a signed
+event-total word below zero-extended90-minus-remaining. A94B receives the scene's
+stored selector and roster identity. Zero reserves after the call end the scan.
+
+`[designed]` Each dispatcher initializes one image from its named context and
+supplemental raw read set. Selection tables and fields join the adjacent T23
+observations;T22 supplies every dispatcher field. Unread supplementary fields
+carried outside those boundaries do not establish new original observations.
+The one step57 parent supplies full replacement inputs once and computes five
+selection calls including both substitutions without child-state reloads.
+Expected decisions,slots and helper outputs are never inputs. Raw aliases and
+canonical/indexed domains validate before allocation;bad reached stored-selector
+side mappings diagnose rather than underflow.
+
+`[designed]` No original prompt/editor is reached in this reference. Their static
+pending/keeper/time/capacity gates are retained;an eligible6A7A/D5D6 UI path
+diagnoses explicitly instead of fabricating a response. This is the supported
+fixed-reference closure,not arbitrary managed-UI parity. Twelve synthetic tests
+cover capacity wrapping,managed gates,side/reverse-scan order,precise mask20 and
+signed byte thresholds,time/event boundaries,stored selector identity,reserve
+break,live counter mutations through both replacements,missing/aliased inputs
+and whole-image ownership. Seed and unrelated pools are preserved.
+
+`[designed]` All twenty-two release tools run locally;CI retains all Rust tests,
+release build and its first five bridges under issue22. Earlier evidence,lock
+and workflow remain unchanged. The immutable committed-source receipt includes
+JSON/setup/native computation/observations,without an emulator/full-game speed
+claim. Neutral78B7 input handling,its conditionalDB68 auto-switch and continuous
+DD02/clock remain next;they are not assumed no-ops. This is not a continuous
+complete match or playable shell. Commentary+clock remain the minimum,pitch the
+preferred stretch,and broader parity remains under archaeology120/121.
