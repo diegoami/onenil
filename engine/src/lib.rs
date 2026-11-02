@@ -393,6 +393,20 @@ mod python {
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }
     #[pyfunction]
+    fn cached_player_rating(input_json: &str) -> PyResult<String> {
+        let input: cache_selection::RatingInput =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = cache_selection::rating(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
+    fn cached_player_selector(input_json: &str) -> PyResult<String> {
+        let input: cache_selection::SelectorInput =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = cache_selection::select(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
     fn scene_positions(input_json: &str) -> PyResult<String> {
         let input: terminal::State =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -527,6 +541,8 @@ mod python {
         module.add_function(wrap_pyfunction!(logical_event_effects, module)?)?;
         module.add_function(wrap_pyfunction!(post_score_strategy, module)?)?;
         module.add_function(wrap_pyfunction!(quick_goal_reset, module)?)?;
+        module.add_function(wrap_pyfunction!(cached_player_rating, module)?)?;
+        module.add_function(wrap_pyfunction!(cached_player_selector, module)?)?;
         module.add_function(wrap_pyfunction!(scene_positions, module)?)?;
         module.add_function(wrap_pyfunction!(proximity_selectors, module)?)?;
         module.add_function(wrap_pyfunction!(terminal_rearrangement, module)?)?;

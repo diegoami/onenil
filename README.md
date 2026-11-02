@@ -393,3 +393,49 @@ here and must be diagnosed when those routines are added. The release receipt
 measures bridge parsing,image setup,computed helper observations and serialization;
 input preparation/output decoding are excluded. It is routine timing only,with
 no speed threshold or emulator comparison. Previous native evidence stays immutable.
+
+T11 adds the read-only cached-player selector `0AB9:13B8` and its
+`1B55:4EBF` remainder rating, reusing the native availability predicate.
+`[confirmed]` Archaeology F32 at
+[`218490d`](https://github.com/diegoami/onenil-archaeology/tree/218490d846e365babdd158d09c5ab865124e30ed)
+provides two selector results and44 standalone rating words in r0017.
+Their byte-identical T32 exports/index and source pin are under
+`engine/tests/fixtures/cache_selection/`. Two actual-original tests failed at
+the initial stubs in commit `0c6ac1a`; `red-proof.txt` retains that evidence.
+
+```sh
+python3 tools/replay_cache_selection.py --check
+python3 tools/replay_cache_selection.py --benchmark --out records/T11
+```
+
+`[confirmed]` The rating returns signed division's remainder, not quotient.
+Below21 it logically shifts the complete16-bit word. Negative remainders retain
+their bit patterns. Selection compares the sign-extended current score against
+a zero-extended candidate, so a negative current word can be replaced even by a
+lower unsigned value. Ordinary nonnegative ties retain the first player; equal
+raw high-bit words need not. Native computed visits preserve unavailable skips
+and the repeated rating call on improvement. Those visits are diagnostic output,
+not an independently recorded original nested-call census. Neither helper writes
+logical game state or advances RNG; a full-image preservation test checks this.
+
+`[designed]` Inputs require side0/1,club1–176,eleven roster words,IDs0–3920 and
+exactly one complete canonical record per referenced ID. Duplicate roster IDs
+share that record. Missing,duplicate,unreferenced or out-of-range inputs and
+extra expected-result fields diagnose explicitly. With no eligible candidate,
+13B8's original result local is undefined; native code returns a diagnostic
+instead of player0 or invented scratch. Rating inputs retain their three raw
+unsigned byte widths. Python validates source hashes/order and compares only;
+expected results never enter the native API.
+
+`[designed]` Original selector specimens choose2661 for side1/club134;the44
+rating calls contain only the original returns3/7. Negative/shift/high-bit,
+zero/blocked/shared/no-eligible and alternate-side/club cases have separately
+labelled synthetic/static tests,not new original coverage.1455/1AE2/9F6E,
+1539/164F,role pairing/scene codes,A94B/AEB8,the other23 replacements and full
+AI/match/week/render/timer/scratch parity remain later slices. Review notes
+archaeology #120/#121 still constrain that composition. The timing receipt
+includes parsing,memory setup,native computation and observation serialization;
+input preparation/output decoding are excluded. It is a routine baseline only,
+not an emulator comparison or full-game performance claim. Prior fixtures,
+provenance,receipts and Cargo.lock remain immutable. All eleven release replays
+are checked locally;native #22 tracks the CI workflow permission gap.
