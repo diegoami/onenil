@@ -17,6 +17,7 @@ pub mod player_cache;
 pub mod post_score;
 pub mod quick_reset;
 pub mod ratings;
+pub mod rearrangement;
 pub mod role_cache;
 pub mod role_pairing;
 pub mod role_scores;
