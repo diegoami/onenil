@@ -20,6 +20,7 @@ pub mod ratings;
 pub mod role_cache;
 pub mod role_pairing;
 pub mod role_scores;
+pub mod scene_assignment;
 pub mod scene_codes;
 pub mod step_tail;
 pub mod terminal;
@@ -75,7 +76,7 @@ pub struct Engine {
 impl Engine {
     pub fn new(input: &Input) -> Self {
         let mut engine = Self {
-            image: vec![0; 0x50000].into_boxed_slice(),
+            image: vec![0; 0x60000].into_boxed_slice(),
         };
         engine.put_word(SEED, input.seed);
         for (i, value) in input.ratings.iter().enumerate() {
@@ -605,6 +606,20 @@ mod python {
             .map_err(|e| PyValueError::new_err(e.to_string()))
     }
 
+    #[pyfunction]
+    fn assign_scene(input_json: &str) -> PyResult<String> {
+        let input: scene_assignment::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = scene_assignment::assign(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
+    fn rebuild_scene(input_json: &str) -> PyResult<String> {
+        let input: scene_assignment::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = scene_assignment::rebuild(&input).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
@@ -646,6 +661,8 @@ mod python {
         module.add_function(wrap_pyfunction!(placement_prefix_event_effects, module)?)?;
         module.add_function(wrap_pyfunction!(extra_event_helper, module)?)?;
         module.add_function(wrap_pyfunction!(placement_prefix_extra_event, module)?)?;
+        module.add_function(wrap_pyfunction!(assign_scene, module)?)?;
+        module.add_function(wrap_pyfunction!(rebuild_scene, module)?)?;
         module.add("__version__", env!("CARGO_PKG_VERSION"))?;
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }
