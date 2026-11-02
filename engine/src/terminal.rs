@@ -90,7 +90,7 @@ fn put(e: &mut Engine, a: usize, v: u16) {
     e.image[a..a + 2].copy_from_slice(&v.to_le_bytes())
 }
 impl Scene {
-    fn read(e: &Engine, index: u8) -> Self {
+    pub(crate) fn read(e: &Engine, index: u8) -> Self {
         let a = address(index);
         Self {
             index,
@@ -113,8 +113,8 @@ impl Scene {
             word23: word(e, a + 23),
         }
     }
-    fn load(&self, e: &mut Engine) {
-        let a = address(self.index);
+    pub(crate) fn bytes(&self) -> [u8; 25] {
+        let mut bytes = [0; 25];
         for (offset, v) in [
             (0, self.word0),
             (2, self.word2),
@@ -125,7 +125,7 @@ impl Scene {
             (20, self.word20),
             (23, self.word23),
         ] {
-            put(e, a + offset, v)
+            bytes[offset..offset + 2].copy_from_slice(&v.to_le_bytes())
         }
         for (offset, v) in [
             (4, self.byte4),
@@ -138,8 +138,13 @@ impl Scene {
             (19, self.byte19),
             (22, self.byte22),
         ] {
-            e.image[a + offset] = v
+            bytes[offset] = v
         }
+        bytes
+    }
+    fn load(&self, e: &mut Engine) {
+        let a = address(self.index);
+        e.image[a..a + 25].copy_from_slice(&self.bytes());
     }
 }
 fn validate(s: &State) -> Result<(), String> {
