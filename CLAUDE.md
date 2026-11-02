@@ -27,7 +27,9 @@ remote `onenildrive` ([docs/artifacts.md](docs/artifacts.md)). They never enter 
 - **Game shell and UI**: full-game design remains a decision for the owner when the engine runs its first season.
   [designed: delivery plan,2026-11-02,following the owner's playable-first request] A minimal
   text quick-result prototype may precede that season;the next product target is
-  [one complete playable match](docs/first-playable.md),tracked in issue35. Report progress
+  [one complete playable match](docs/first-playable.md),tracked in issue35.
+  [designed: owner clarification,2026-11-02] A match clock and running text commentary
+  are sufficient for this first playable; pitch graphics are deferred. Report progress
   against its end-to-end gates,not routine/test counts alone.
 - Speed is measured from the first runnable slice: a simulated week, a season, a matchday's results.
 
