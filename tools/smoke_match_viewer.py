@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 import sys
 import time
@@ -22,7 +23,7 @@ def smoke(out):
     if git('status', '--porcelain', '--', 'engine/src', 'tools/play_match.py', 'tools/smoke_match_viewer.py', 'web', 'demo'):
         raise ValueError('commit viewer source before recording smoke')
     out.mkdir(parents=True, exist_ok=True)
-    num = max((int(p.stem.split('-r')[-1]) for p in out.glob('T27-r*.json')), default=0) + 1
+    num = max((int(re.search(r'T27-r(\d+)', p.name)[1]) for p in out.glob('T27-r*')), default=0) + 1
     stem = f'T27-r{num:04d}'
     process = subprocess.Popen([sys.executable, str(ROOT/'tools/play_match.py'), '--port', '0'],
                                cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
