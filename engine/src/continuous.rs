@@ -120,6 +120,39 @@ impl Session {
         {
             return Err("incomplete/ambiguous admission players/scenes".into());
         }
+        let goal_ids = a.goal.players.iter().map(|p| p.id).collect::<BTreeSet<_>>();
+        let required_goal_ids = a
+            .goal
+            .rosters
+            .iter()
+            .flatten()
+            .copied()
+            .chain(a.goal.scenes.iter().map(|s| s.player))
+            .collect::<BTreeSet<_>>();
+        let head = a.goal.queue.head;
+        let next = if head == 1700 { 1 } else { head + 1 };
+        let after = if next == 1700 { 1 } else { next + 1 };
+        if a.goal.scenes.len() != 22
+            || a.goal
+                .scenes
+                .iter()
+                .enumerate()
+                .any(|(i, s)| usize::from(s.index) != i + 1 || !(1..=22).contains(&s.slot))
+            || goal_ids.len() != a.goal.players.len()
+            || goal_ids != required_goal_ids
+            || !ids.is_superset(&goal_ids)
+            || a.goal
+                .queue
+                .rows
+                .iter()
+                .map(|r| r.index)
+                .collect::<Vec<_>>()
+                != [head, next, after]
+            || a.history.club != a.goal.clubs[0]
+            || a.scorer_slots.iter().any(|s| !(1..=11).contains(s))
+        {
+            return Err("incomplete/contradictory goal,history or scorer admission".into());
+        }
         let mut e = Engine::new(&a.contest);
         // [confirmed static:F07/F14,seg_0AB9_14.asm8700-870E@218490d] Setup fills all1700 numeric rows FF.
         // [designed] Initial-state bootstrap only;does not claim native setup/RNG execution.
@@ -550,6 +583,24 @@ mod tests {
         assert!(Session::new(a).is_err());
         let mut a = admission();
         a.ratings[0].side = 1;
+        assert!(Session::new(a).is_err());
+    }
+    #[test]
+    fn missing_redundant_goal_fields_cannot_hide_behind_other_views() {
+        let mut a = admission();
+        a.goal.scenes.clear();
+        assert!(Session::new(a).is_err());
+        let mut a = admission();
+        a.goal.queue.rows.pop();
+        assert!(Session::new(a).is_err());
+        let mut a = admission();
+        a.goal.players.push(a.goal.players[0].clone());
+        assert!(Session::new(a).is_err());
+        let mut a = admission();
+        a.history.club ^= 1;
+        assert!(Session::new(a).is_err());
+        let mut a = admission();
+        a.scorer_slots[0] = 0;
         assert!(Session::new(a).is_err());
     }
 }

@@ -1,0 +1,19 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.61s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 1 test
+
+thread 'continuous::tests::missing_redundant_goal_fields_cannot_hide_behind_other_views' (3433) panicked at src/continuous.rs:559:9:
+assertion failed: Session::new(a).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test continuous::tests::missing_redundant_goal_fields_cannot_hide_behind_other_views ... FAILED
+
+failures:
+
+failures:
+    continuous::tests::missing_redundant_goal_fields_cannot_hide_behind_other_views
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 287 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--lib`
