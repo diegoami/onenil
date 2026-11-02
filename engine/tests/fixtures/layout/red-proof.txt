@@ -1,0 +1,68 @@
+Command:cargo test --manifest-path engine/Cargo.toml shared_image_ --locked -q
+Exit:101
+
+running 6 tests
+shared_image_tests::shared_image_neutral_speed_reads_the_config_object_used_by_prefix --- FAILED
+shared_image_tests::shared_image_legacy_player_load_is_visible_to_new_assignment_snapshot --- FAILED
+shared_image_tests::shared_image_prefix_history_write_preserves_canonical_player_bytes --- FAILED
+shared_image_tests::shared_image_new_player_load_is_visible_to_legacy_extra_event_projection --- FAILED
+shared_image_tests::shared_image_legacy_club_load_is_visible_to_new_pairing_snapshot --- FAILED
+shared_image_tests::shared_image_new_club_is_visible_to_legacy_extra_event_projection --- FAILED
+
+failures:
+
+---- shared_image_tests::shared_image_neutral_speed_reads_the_config_object_used_by_prefix stdout ----
+
+thread 'shared_image_tests::shared_image_neutral_speed_reads_the_config_object_used_by_prefix' (3493) panicked at src/shared_image_tests.rs:142:5:
+assertion `left == right` failed
+  left: 5
+ right: 37
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- shared_image_tests::shared_image_legacy_player_load_is_visible_to_new_assignment_snapshot stdout ----
+
+thread 'shared_image_tests::shared_image_legacy_player_load_is_visible_to_new_assignment_snapshot' (3492) panicked at src/shared_image_tests.rs:59:5:
+assertion `left == right` failed
+  left: 0
+ right: 2
+
+---- shared_image_tests::shared_image_prefix_history_write_preserves_canonical_player_bytes stdout ----
+
+thread 'shared_image_tests::shared_image_prefix_history_write_preserves_canonical_player_bytes' (3496) panicked at src/shared_image_tests.rs:130:5:
+assertion `left == right` failed: history pool overlaps canonicalP8 player1
+  left: 0
+ right: 171
+
+---- shared_image_tests::shared_image_new_player_load_is_visible_to_legacy_extra_event_projection stdout ----
+
+thread 'shared_image_tests::shared_image_new_player_load_is_visible_to_legacy_extra_event_projection' (3495) panicked at src/shared_image_tests.rs:73:5:
+assertion `left == right` failed
+  left: 0
+ right: 2
+
+---- shared_image_tests::shared_image_legacy_club_load_is_visible_to_new_pairing_snapshot stdout ----
+
+thread 'shared_image_tests::shared_image_legacy_club_load_is_visible_to_new_pairing_snapshot' (3491) panicked at src/shared_image_tests.rs:95:5:
+assertion `left == right` failed
+  left: 0
+ right: 165
+
+---- shared_image_tests::shared_image_new_club_is_visible_to_legacy_extra_event_projection stdout ----
+
+thread 'shared_image_tests::shared_image_new_club_is_visible_to_legacy_extra_event_projection' (3494) panicked at src/shared_image_tests.rs:83:5:
+assertion `left == right` failed
+  left: 0
+ right: 165
+
+
+failures:
+    shared_image_tests::shared_image_legacy_club_load_is_visible_to_new_pairing_snapshot
+    shared_image_tests::shared_image_legacy_player_load_is_visible_to_new_assignment_snapshot
+    shared_image_tests::shared_image_neutral_speed_reads_the_config_object_used_by_prefix
+    shared_image_tests::shared_image_new_club_is_visible_to_legacy_extra_event_projection
+    shared_image_tests::shared_image_new_player_load_is_visible_to_legacy_extra_event_projection
+    shared_image_tests::shared_image_prefix_history_write_preserves_canonical_player_bytes
+
+test result: FAILED. 0 passed; 6 failed; 0 ignored; 0 measured; 270 filtered out; finished in 0.06s
+
+error: test failed, to rerun pass `--lib`

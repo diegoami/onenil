@@ -720,3 +720,6 @@ mod python {
         module.add("__debug_assertions__", cfg!(debug_assertions))
     }
 }
+
+#[cfg(test)]
+mod shared_image_tests;
