@@ -251,6 +251,10 @@ mod python {
     }
     #[pymethods]
     impl NativeMatchSession {
+        fn view_state(&self) -> PyResult<String> {
+            serde_json::to_string(&self.session.view_state())
+                .map_err(|e| PyValueError::new_err(e.to_string()))
+        }
         #[new]
         fn new(admission_json: &str) -> PyResult<Self> {
             let a: match_session::Admission = serde_json::from_str(admission_json)

@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/smoke_match_viewer.py", line 106, in <module>
+    smoke(parser.parse_args().out)
+  File "/tmp/onenil-native/tools/smoke_match_viewer.py", line 76, in smoke
+    assert page.locator('#score').bounding_box()['height'] < 60, 'mobile score wraps onto two lines'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: mobile score wraps onto two lines
