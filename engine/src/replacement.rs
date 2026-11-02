@@ -224,7 +224,7 @@ fn accounting(e: &mut Engine, incoming: u16, side: usize) {
         e.image[0xD6E0 + side] = e.image[0xD6E0 + side].wrapping_sub(1);
     }
 }
-fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
+pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
     let side = usize::from(s.side);
     let a = addr(s.index);
     let outgoing = word(e, a + 14);
