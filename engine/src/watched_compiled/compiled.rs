@@ -79,8 +79,18 @@ impl Cpu {
         let v=i64::from(self.get32(0)as i32)*i64::from(value as i32);
         self.set32(0,v as u32);self.set32(2,(v>>32)as u32);self.cf=v!=i64::from(v as i32);self.of=self.cf;
     }
-    pub fn divide_signed32(&mut self,_value:u32)->Result<(),String>{Err("unported signed32 divide".into())}
-    pub fn rcl(&mut self,_value:u16,_count:u16,_width:u8)->u16{0}
+    pub fn divide_signed32(&mut self,value:u32)->Result<(),String>{
+        let dividend=((u64::from(self.get32(2))<<32)|u64::from(self.get32(0)))as i64;
+        let divisor=i64::from(value as i32);
+        let quotient=dividend.checked_div(divisor).ok_or("signed32 divide zero/overflow")?;
+        let q=i32::try_from(quotient).map_err(|_|"signed32 quotient overflow")?;
+        let remainder=dividend%divisor;self.set32(0,q as u32);self.set32(2,remainder as u32);Ok(())
+    }
+    pub fn rcl(&mut self,value:u16,count:u16,width:u8)->u16{
+        let n=(count&31)%(u16::from(width)+1);let mask=Self::mask(width)as u16;let mut v=value&mask;
+        for _ in 0..n{let carry=self.cf;self.cf=v&(1u16<<(width-1))!=0;v=((v<<1)|u16::from(carry))&mask;}
+        if n==1{self.of=(v&(1u16<<(width-1))!=0)^self.cf;}v
+    }
     pub fn exchange_registers(&mut self,first:usize,second:usize){self.r.swap(first,second);}
     fn string_advance(&mut self,register:usize,width:u8){
         let n=u16::from(width/8);self.r[register]=if self.df{self.r[register].wrapping_sub(n)}else{self.r[register].wrapping_add(n)};
