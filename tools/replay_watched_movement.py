@@ -6,14 +6,18 @@ import replay_step_tail as common
 ROOT=common.ROOT;FIXTURES=ROOT/'engine/tests/fixtures/watched_movement'
 STATIC=('static/1-0-exe/code/seg_0AB9_12.asm','static/1-0-exe/code/seg_1998_01.asm','static/1-0-exe/code/seg_26C9_02.asm')
 def load():
-    pin=json.loads((FIXTURES/'provenance.json').read_text())
-    raw=(FIXTURES/'cases.jsonl').read_bytes()
-    if common.sha(raw)!=pin['cases_sha256']:raise ValueError('movement original cases digest differs')
-    if common.sha((ROOT/pin['capture']).read_bytes())!=pin['capture_sha256']:raise ValueError('movement capture digest differs')
-    cases=[json.loads(line) for line in raw.splitlines()]
-    if len(cases)!=64 or [c['case'] for c in cases]!=list(range(64)):raise ValueError('64 original movement calls required')
-    if any(c['draw_start']!=c['draw_end'] or c['input']['seed']!=c['output']['output']['seed'] or c['output']['draws'] for c in cases):raise ValueError('original6F98 unexpectedly drew RNG')
-    return cases,pin
+    cases=[];pins=[]
+    for prefix in ('','active-'):
+        pin=json.loads((FIXTURES/(prefix+'provenance.json')).read_text())
+        raw=(FIXTURES/(prefix+'cases.jsonl')).read_bytes()
+        if common.sha(raw)!=pin['cases_sha256']:raise ValueError('movement original cases digest differs')
+        if common.sha((ROOT/pin['capture']).read_bytes())!=pin['capture_sha256']:raise ValueError('movement capture digest differs')
+        rows=[json.loads(line) for line in raw.splitlines()]
+        if len(rows)!=64 or [c['case'] for c in rows]!=list(range(64)):raise ValueError('64 original movement calls per stream required')
+        if any(c['draw_start']!=c['draw_end'] or c['input']['seed']!=c['output']['output']['seed'] or c['output']['draws'] for c in rows):raise ValueError('original6F98 unexpectedly drew RNG')
+        if prefix and any(c['input']['active']==0 for c in rows):raise ValueError('active stream contains inactive calls')
+        cases.extend(rows);pins.append(pin)
+    return cases,pins
 
 def check(cases):
     import onenil_engine as native
@@ -22,9 +26,11 @@ def check(cases):
         if not common.same(got,c['output']):raise ValueError(f'original movement case{c["case"]} differs')
     print('Native watched movement:64 exact original candidate/legality/seed cases,no RNG;standalone kernel,not a watched match.')
 
-def capture(research_root):
+def capture(research_root,active_only=False):
     if common.git('status','--porcelain','--','tools/replay_watched_movement.py'):raise ValueError('commit observer before capture')
-    if (FIXTURES/'provenance.json').exists():load();print('original movement capture unchanged');return
+    pin_name='active-provenance.json' if active_only else 'provenance.json'
+    case_name='active-cases.jsonl' if active_only else 'cases.jsonl'
+    if (FIXTURES/pin_name).exists():load();print('original movement capture unchanged');return
     root=research_root.resolve();sys.path.insert(0,str(root/'runtime/emul'))
     import watched_actions as observer
     source=observer.check();record=json.loads((root/source['record']).read_text());reference=observer.setup.contests.outputs(record)
@@ -43,6 +49,7 @@ def capture(research_root):
             joined=True
     def enter(g):
         nonlocal pending
+        if active_only and g.rd(0xD0B8,1)==0:return
         if pending is not None:raise ValueError('nested6F98')
         ss=g.reg('ss')*16;parent=g.stack_word(2);owner=g.word_at(ss+parent+4)
         address=g.word_at(ss+owner+6)+16*g.word_at(ss+owner+8)
@@ -78,20 +85,20 @@ def capture(research_root):
     number=max((int(p.stem.split('-r')[-1]) for p in directory.glob('capture-r*.json')),default=0)+1;path=directory/f'capture-r{number:04d}.json'
     result={'schema':'watched-movement-capture/1','code_commit':producer,'started':started,'ended':observer.match.utc(),
             'status':status,'reason':reason,'source':{'repository':'https://github.com/diegoami/onenil-archaeology','commit':observer.match.git('rev-parse','HEAD'),'prefix_record':source['record'],'prefix_record_sha256':source['record_sha256'],'start_state_sha256':record['start_state']['sha256'],'static_sources':{p:common.sha((root/p).read_bytes()) for p in STATIC}},
-            'first_tick_join':joined,'ticks':ticks,'draws':week.draws,'cases':cases,
+            'first_tick_join':joined,'ticks':ticks,'draws':week.draws,'active_only':active_only,'cases':cases,
             'scope':'64 original6F98 calls from same watched admission/RNG prefix;raw indexed occupancy witnesses only,expected candidate/result never inputs;not a complete watched simulation'}
     with path.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
     print(path.relative_to(ROOT),status,reason,flush=True)
     if status!='completed':raise SystemExit(1)
     FIXTURES.mkdir(parents=True,exist_ok=True);raw=''.join(common.encoded(c)+'\n' for c in cases).encode()
-    with (FIXTURES/'cases.jsonl').open('xb') as f:f.write(raw)
+    with (FIXTURES/case_name).open('xb') as f:f.write(raw)
     pin={'schema':'watched-movement-source/1','capture':str(path.relative_to(ROOT)),'capture_sha256':common.sha(path.read_bytes()),'cases_sha256':common.sha(raw),'source':result['source']}
-    with (FIXTURES/'provenance.json').open('x') as f:json.dump(pin,f,indent=2);f.write('\n')
+    with (FIXTURES/pin_name).open('x') as f:json.dump(pin,f,indent=2);f.write('\n')
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);g=p.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--capture',action='store_true');p.add_argument('--research-root',type=Path);args=p.parse_args()
-    if args.capture:
+    p=argparse.ArgumentParser(description=__doc__);g=p.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--capture',action='store_true');g.add_argument('--capture-active',action='store_true');p.add_argument('--research-root',type=Path);args=p.parse_args()
+    if args.capture or args.capture_active:
         if args.research_root is None:p.error('--capture requires --research-root')
-        capture(args.research_root);return
+        capture(args.research_root,args.capture_active);return
     cases,_=load();check(cases)
 if __name__=='__main__':main()
