@@ -1,0 +1,44 @@
+{
+  "schema": "validation/1",
+  "code_commit": "f50edea1f63e3d1061eb572303b4add0615ab7a8",
+  "rust_tests": 429,
+  "original_unique_parent_calls": 592,
+  "warm_overlapping_cases": 64,
+  "total_replay_cases": 656,
+  "first_active_tick": 48,
+  "original_draw_cursor": 943,
+  "arrival_transitions": 22,
+  "original_commentary": {
+    "code": 49,
+    "tick": 12,
+    "actor_slot": 10,
+    "secondary_slot": 0,
+    "event_side": 0,
+    "accepted": 1
+  },
+  "all_prior_replay_tools": 28,
+  "shared_layout": "passed",
+  "controller_tests": 5,
+  "fmt": "passed",
+  "py_compile": "passed",
+  "diff_check": "passed",
+  "original_scan": "passed",
+  "embedding_scan": {
+    "changed_files_at_producer": 14,
+    "private_files": 30,
+    "method": "No NUL or matching high-entropy aligned128-byte original block"
+  },
+  "baseline_preservation": {
+    "commit": "d4def23",
+    "unchanged_files": 397,
+    "intentional_changes": [
+      "README.md",
+      "engine/src/lib.rs",
+      "engine/src/layout.rs"
+    ]
+  },
+  "new_evidence_first_addition": "unchanged",
+  "static_source_digests": "match research originals",
+  "evidence_correction": "Main commit d4def23 replaced speculative active-only sampling with every original positioning call through first active tick. Aborted r0002 retained/excluded;no partial decoded coverage claimed.",
+  "limits": "Only561E preparation and reached numeric helpers;dedup/wrap/nonzero weights synthetic/static only. No complete72BB dispatch,ball/watched clock/ticks or detailed browser commentary."
+}
