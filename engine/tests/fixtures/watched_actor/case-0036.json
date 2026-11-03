@@ -1,0 +1,907 @@
+{
+  "case": 36,
+  "admission": "derived-with-mode-intervention",
+  "source_sha256": "0fe65afd172c5de1439f2a9d3654f98967eac1e4869903d1c6573bc6206b85d2",
+  "input": {
+    "kind": "actor",
+    "scene": {
+      "index": 21,
+      "word0": 65280,
+      "word2": 65280,
+      "word8": 65280,
+      "word10": 60160,
+      "word12": 4864,
+      "word14": 2590,
+      "word20": 0,
+      "word23": 10,
+      "byte4": 156,
+      "byte5": 12,
+      "byte6": 0,
+      "byte7": 21,
+      "byte16": 5,
+      "byte17": 0,
+      "byte18": 65,
+      "byte19": 7,
+      "byte22": 0
+    },
+    "seed": 44794,
+    "regs": [
+      38661,
+      2,
+      2,
+      0,
+      16006,
+      16022,
+      199,
+      52988,
+      12423,
+      4828,
+      16447,
+      12423
+    ],
+    "flags": 29254,
+    "stack_words": [
+      31547,
+      4828,
+      52988,
+      12423
+    ],
+    "pointers": [
+      {
+        "kind": "p8",
+        "offset": 8,
+        "segment": 19139
+      },
+      {
+        "kind": "p15",
+        "offset": 0,
+        "segment": 21100
+      },
+      {
+        "kind": "club",
+        "offset": 0,
+        "segment": 24776
+      },
+      {
+        "kind": "config",
+        "offset": 0,
+        "segment": 28142
+      },
+      {
+        "kind": "main",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "main_shown",
+        "offset": 0,
+        "segment": 17471
+      },
+      {
+        "kind": "background",
+        "offset": 0,
+        "segment": 31014
+      },
+      {
+        "kind": "background_shown",
+        "offset": 0,
+        "segment": 17721
+      },
+      {
+        "kind": "commentary",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "seed",
+        "offset": 42268,
+        "segment": 12423
+      },
+      {
+        "kind": "style",
+        "offset": 31,
+        "segment": 28274
+      }
+    ],
+    "cells": [
+      {
+        "area": "ds",
+        "offset": 53407,
+        "value": 21
+      },
+      {
+        "area": "ds",
+        "offset": 53430,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53075,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 53408,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 55012,
+        "value": 130
+      },
+      {
+        "area": "ds",
+        "offset": 55013,
+        "value": 0
+      },
+      {
+        "area": "club",
+        "offset": 8016,
+        "value": 30
+      },
+      {
+        "area": "club",
+        "offset": 8017,
+        "value": 10
+      },
+      {
+        "area": "ds",
+        "offset": 53426,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 53427,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 896,
+        "value": 2
+      },
+      {
+        "area": "ds",
+        "offset": 897,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 3414,
+        "value": 11
+      },
+      {
+        "area": "ds",
+        "offset": 2468,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53594,
+        "value": 55
+      },
+      {
+        "area": "ds",
+        "offset": 53595,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 42294,
+        "value": 49
+      },
+      {
+        "area": "ds",
+        "offset": 53696,
+        "value": 2
+      },
+      {
+        "area": "ds",
+        "offset": 53697,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 42300,
+        "value": 255
+      },
+      {
+        "area": "ds",
+        "offset": 42301,
+        "value": 255
+      },
+      {
+        "area": "ds",
+        "offset": 42302,
+        "value": 255
+      },
+      {
+        "area": "ds",
+        "offset": 42303,
+        "value": 255
+      },
+      {
+        "area": "ds",
+        "offset": 42304,
+        "value": 255
+      },
+      {
+        "area": "ds",
+        "offset": 42305,
+        "value": 255
+      },
+      {
+        "area": "ds",
+        "offset": 42306,
+        "value": 255
+      },
+      {
+        "area": "ds",
+        "offset": 3378,
+        "value": 247
+      },
+      {
+        "area": "ds",
+        "offset": 3379,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53078,
+        "value": 247
+      },
+      {
+        "area": "ds",
+        "offset": 53079,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53364,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53081,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53080,
+        "value": 247
+      },
+      {
+        "area": "ds",
+        "offset": 53082,
+        "value": 254
+      },
+      {
+        "area": "ds",
+        "offset": 53083,
+        "value": 14
+      },
+      {
+        "area": "main",
+        "offset": 878,
+        "value": 223
+      },
+      {
+        "area": "main",
+        "offset": 879,
+        "value": 2
+      },
+      {
+        "area": "background",
+        "offset": 878,
+        "value": 223
+      },
+      {
+        "area": "background",
+        "offset": 879,
+        "value": 2
+      },
+      {
+        "area": "ds",
+        "offset": 53436,
+        "value": 0
+      },
+      {
+        "area": "style",
+        "offset": 0,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53420,
+        "value": 45
+      },
+      {
+        "area": "ds",
+        "offset": 53422,
+        "value": 90
+      },
+      {
+        "area": "ds",
+        "offset": 53423,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 41785,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 2410,
+        "value": 150
+      },
+      {
+        "area": "ds",
+        "offset": 53448,
+        "value": 12
+      },
+      {
+        "area": "ds",
+        "offset": 3374,
+        "value": 11
+      },
+      {
+        "area": "ds",
+        "offset": 3375,
+        "value": 0
+      },
+      {
+        "area": "main",
+        "offset": 2316,
+        "value": 156
+      },
+      {
+        "area": "main",
+        "offset": 2317,
+        "value": 12
+      },
+      {
+        "area": "ds",
+        "offset": 53062,
+        "value": 255
+      },
+      {
+        "area": "ds",
+        "offset": 53063,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53064,
+        "value": 255
+      },
+      {
+        "area": "ds",
+        "offset": 53065,
+        "value": 0
+      },
+      {
+        "area": "main",
+        "offset": 2158,
+        "value": 7
+      },
+      {
+        "area": "background",
+        "offset": 2158,
+        "value": 179
+      },
+      {
+        "area": "background",
+        "offset": 2159,
+        "value": 7
+      },
+      {
+        "area": "main",
+        "offset": 2159,
+        "value": 15
+      },
+      {
+        "area": "ds",
+        "offset": 53076,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 3440,
+        "value": 7
+      },
+      {
+        "area": "ds",
+        "offset": 53066,
+        "value": 7
+      },
+      {
+        "area": "background",
+        "offset": 2318,
+        "value": 9
+      },
+      {
+        "area": "background",
+        "offset": 2319,
+        "value": 7
+      },
+      {
+        "area": "main",
+        "offset": 2318,
+        "value": 9
+      },
+      {
+        "area": "main",
+        "offset": 2319,
+        "value": 7
+      },
+      {
+        "area": "ds",
+        "offset": 53067,
+        "value": 15
+      },
+      {
+        "area": "ds",
+        "offset": 53432,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 3368,
+        "value": 32
+      }
+    ]
+  },
+  "expected": {
+    "scene": {
+      "index": 21,
+      "word0": 65280,
+      "word2": 65280,
+      "word8": 65280,
+      "word10": 60160,
+      "word12": 4864,
+      "word14": 2590,
+      "word20": 0,
+      "word23": 10,
+      "byte4": 156,
+      "byte5": 12,
+      "byte6": 0,
+      "byte7": 21,
+      "byte16": 5,
+      "byte17": 0,
+      "byte18": 65,
+      "byte19": 7,
+      "byte22": 0
+    },
+    "seed": 44794,
+    "pointers": [
+      {
+        "kind": "p8",
+        "offset": 8,
+        "segment": 19139
+      },
+      {
+        "kind": "p15",
+        "offset": 0,
+        "segment": 21100
+      },
+      {
+        "kind": "club",
+        "offset": 0,
+        "segment": 24776
+      },
+      {
+        "kind": "config",
+        "offset": 0,
+        "segment": 28142
+      },
+      {
+        "kind": "main",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "main_shown",
+        "offset": 0,
+        "segment": 17471
+      },
+      {
+        "kind": "background",
+        "offset": 0,
+        "segment": 31014
+      },
+      {
+        "kind": "background_shown",
+        "offset": 0,
+        "segment": 17721
+      },
+      {
+        "kind": "commentary",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "seed",
+        "offset": 42268,
+        "segment": 12423
+      },
+      {
+        "kind": "style",
+        "offset": 31,
+        "segment": 28274
+      }
+    ],
+    "cells": [
+      {
+        "area": "ds",
+        "offset": 53407,
+        "value": 21
+      },
+      {
+        "area": "ds",
+        "offset": 53430,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 53075,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53408,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 55012,
+        "value": 130
+      },
+      {
+        "area": "ds",
+        "offset": 55013,
+        "value": 0
+      },
+      {
+        "area": "club",
+        "offset": 8016,
+        "value": 30
+      },
+      {
+        "area": "club",
+        "offset": 8017,
+        "value": 10
+      },
+      {
+        "area": "ds",
+        "offset": 53426,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 53427,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 896,
+        "value": 3
+      },
+      {
+        "area": "ds",
+        "offset": 897,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 3414,
+        "value": 11
+      },
+      {
+        "area": "ds",
+        "offset": 2468,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53594,
+        "value": 55
+      },
+      {
+        "area": "ds",
+        "offset": 53595,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 42294,
+        "value": 49
+      },
+      {
+        "area": "ds",
+        "offset": 53696,
+        "value": 3
+      },
+      {
+        "area": "ds",
+        "offset": 53697,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 42300,
+        "value": 42
+      },
+      {
+        "area": "ds",
+        "offset": 42301,
+        "value": 30
+      },
+      {
+        "area": "ds",
+        "offset": 42302,
+        "value": 10
+      },
+      {
+        "area": "ds",
+        "offset": 42303,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 42304,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 42305,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 42306,
+        "value": 255
+      },
+      {
+        "area": "ds",
+        "offset": 3378,
+        "value": 247
+      },
+      {
+        "area": "ds",
+        "offset": 3379,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53078,
+        "value": 247
+      },
+      {
+        "area": "ds",
+        "offset": 53079,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53364,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53081,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53080,
+        "value": 247
+      },
+      {
+        "area": "ds",
+        "offset": 53082,
+        "value": 254
+      },
+      {
+        "area": "ds",
+        "offset": 53083,
+        "value": 14
+      },
+      {
+        "area": "main",
+        "offset": 878,
+        "value": 223
+      },
+      {
+        "area": "main",
+        "offset": 879,
+        "value": 2
+      },
+      {
+        "area": "background",
+        "offset": 878,
+        "value": 223
+      },
+      {
+        "area": "background",
+        "offset": 879,
+        "value": 2
+      },
+      {
+        "area": "ds",
+        "offset": 53436,
+        "value": 0
+      },
+      {
+        "area": "style",
+        "offset": 0,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53420,
+        "value": 45
+      },
+      {
+        "area": "ds",
+        "offset": 53422,
+        "value": 90
+      },
+      {
+        "area": "ds",
+        "offset": 53423,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 41785,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 2410,
+        "value": 150
+      },
+      {
+        "area": "ds",
+        "offset": 53448,
+        "value": 12
+      },
+      {
+        "area": "ds",
+        "offset": 3374,
+        "value": 11
+      },
+      {
+        "area": "ds",
+        "offset": 3375,
+        "value": 0
+      },
+      {
+        "area": "main",
+        "offset": 2316,
+        "value": 156
+      },
+      {
+        "area": "main",
+        "offset": 2317,
+        "value": 12
+      },
+      {
+        "area": "ds",
+        "offset": 53062,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53063,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53064,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53065,
+        "value": 0
+      },
+      {
+        "area": "main",
+        "offset": 2158,
+        "value": 179
+      },
+      {
+        "area": "background",
+        "offset": 2158,
+        "value": 179
+      },
+      {
+        "area": "background",
+        "offset": 2159,
+        "value": 7
+      },
+      {
+        "area": "main",
+        "offset": 2159,
+        "value": 7
+      },
+      {
+        "area": "ds",
+        "offset": 53076,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 3440,
+        "value": 7
+      },
+      {
+        "area": "ds",
+        "offset": 53066,
+        "value": 7
+      },
+      {
+        "area": "background",
+        "offset": 2318,
+        "value": 9
+      },
+      {
+        "area": "background",
+        "offset": 2319,
+        "value": 7
+      },
+      {
+        "area": "main",
+        "offset": 2318,
+        "value": 7
+      },
+      {
+        "area": "main",
+        "offset": 2319,
+        "value": 15
+      },
+      {
+        "area": "ds",
+        "offset": 53067,
+        "value": 15
+      },
+      {
+        "area": "ds",
+        "offset": 53432,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 3368,
+        "value": 32
+      }
+    ],
+    "draws": [],
+    "events": [
+      {
+        "code": 42,
+        "actor_slot": 10,
+        "secondary_slot": 0,
+        "side": 0,
+        "club": 130,
+        "player": 2590,
+        "secondary": 0,
+        "minute": 1,
+        "draw_start": 0,
+        "seed_before": 44794,
+        "head_before": 2,
+        "caller": "0AB9:1DDE",
+        "draw_end": 0,
+        "seed_after": 44794,
+        "queue": {
+          "index": 3,
+          "code": 42,
+          "player": 2590,
+          "secondary": 0,
+          "side": 0
+        }
+      }
+    ]
+  }
+}

@@ -510,10 +510,19 @@ impl Cpu {
     pub fn xor(&mut self, x: u16, y: u16, w: u8) -> u16 {
         self.logic(x ^ y, w)
     }
-    pub fn rol(&mut self,value:u16,count:u16,width:u8)->u16{
-        let n=(count&31)%u16::from(width);let mask=Self::mask(width)as u16;let mut v=value&mask;
-        for _ in 0..n{let carry=v&(1u16<<(width-1))!=0;v=((v<<1)|u16::from(carry))&mask;self.cf=carry;}
-        if count&31==1{self.of=(v&(1u16<<(width-1))!=0)^self.cf;}v
+    pub fn rol(&mut self, value: u16, count: u16, width: u8) -> u16 {
+        let n = (count & 31) % u16::from(width);
+        let mask = Self::mask(width) as u16;
+        let mut v = value & mask;
+        for _ in 0..n {
+            let carry = v & (1u16 << (width - 1)) != 0;
+            v = ((v << 1) | u16::from(carry)) & mask;
+            self.cf = carry;
+        }
+        if count & 31 == 1 {
+            self.of = (v & (1u16 << (width - 1)) != 0) ^ self.cf;
+        }
+        v
     }
     pub fn shl(&mut self, x: u16, y: u16, w: u8) -> u16 {
         let n = y & 31;
@@ -919,12 +928,20 @@ mod tests {
         assert!(!c.cf);
     }
     #[test]
-    fn rotate_left_forms_original_membership_bits_without_changing_status_flags(){
-        let mut c=cpu();c.z=true;c.sf=true;c.pf=false;
-        assert_eq!(c.rol(1,2,8),4);assert!(c.z&&c.sf&&!c.pf);
-        c.cf=true;c.of=true;assert_eq!(c.rol(0x1234,0,16),0x1234);assert!(c.cf&&c.of);
-        assert_eq!(c.rol(0x80,1,8),1);assert!(c.cf&&c.of);
-        assert_eq!(c.rol(0x8000,1,16),1);assert!(c.cf&&c.of);
+    fn rotate_left_forms_original_membership_bits_without_changing_status_flags() {
+        let mut c = cpu();
+        c.z = true;
+        c.sf = true;
+        c.pf = false;
+        assert_eq!(c.rol(1, 2, 8), 4);
+        assert!(c.z && c.sf && !c.pf);
+        c.cf = true;
+        c.of = true;
+        assert_eq!(c.rol(0x1234, 0, 16), 0x1234);
+        assert!(c.cf && c.of);
+        assert_eq!(c.rol(0x80, 1, 8), 1);
+        assert!(c.cf && c.of);
+        assert_eq!(c.rol(0x8000, 1, 16), 1);
+        assert!(c.cf && c.of);
     }
-
 }

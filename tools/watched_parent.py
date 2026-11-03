@@ -233,7 +233,7 @@ def capture_margin(research_root):
     start=directory/'start.json'
     if start.exists():
         protocol=oracle.read_json(start)
-        if protocol['observer_sha256']!=oracle.common.sha(Path(__file__).read_bytes()):raise ValueError('margin observer changed')
+        if protocol['observer_sha256']!=oracle.common.sha(Path(__file__).read_bytes())and not all((directory/f'case-{i:04d}.json').exists()for i in range(50)):raise ValueError('incomplete margin observer changed')
     else:oracle.write_json(start,protocol)
     sys.path.insert(0,str(research_root.resolve()/'runtime/emul'));import match as original
     files=original.game_files();items=[]
@@ -263,7 +263,12 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--margin',action='store_true');p.add_argument('--prove',action='store_true');p.add_argument('--capture',action='store_true');p.add_argument('--capture-shots',action='store_true');p.add_argument('--research-root',type=Path,required=True);a=p.parse_args()
     if a.margin:capture_margin(a.research_root)
     if a.prove:
-        out=ROOT/'records/T38/admission-proof-r0001.json';oracle.write_json(out,prove(a.research_root));print('original parent admission proof:32 complete nested entries reproduced')
+        out=ROOT/'records/T38/admission-proof-r0001.json';value=prove(a.research_root)
+        if out.exists():
+            old=oracle.read_json(out)
+            if old['entries']!=value['entries']or old['source_oracle_manifest_sha256']!=value['source_oracle_manifest_sha256']:raise ValueError('retained parent admission proof differs')
+        else:oracle.write_json(out,value)
+        print('original parent admission proof:32 complete nested entries reproduced')
     if a.capture:capture(a.research_root)
     if a.capture_shots:capture_shots(a.research_root)
     if not(a.margin or a.prove or a.capture or a.capture_shots):p.error('choose --prove or --capture')

@@ -1,0 +1,441 @@
+{
+  "case": 37,
+  "admission": "derived-with-mode-intervention",
+  "source_sha256": "bc243d5e091e9bb14204ba7509c2bb917fc0655961162fb696129733fd932d83",
+  "input": {
+    "kind": "actor",
+    "scene": {
+      "index": 21,
+      "word0": 65280,
+      "word2": 65280,
+      "word8": 65280,
+      "word10": 60160,
+      "word12": 4864,
+      "word14": 2590,
+      "word20": 0,
+      "word23": 10,
+      "byte4": 156,
+      "byte5": 12,
+      "byte6": 0,
+      "byte7": 21,
+      "byte16": 5,
+      "byte17": 0,
+      "byte18": 65,
+      "byte19": 8,
+      "byte22": 0
+    },
+    "seed": 44794,
+    "regs": [
+      38661,
+      2,
+      2,
+      0,
+      16006,
+      16022,
+      199,
+      52988,
+      12423,
+      4828,
+      16447,
+      12423
+    ],
+    "flags": 29254,
+    "stack_words": [
+      31547,
+      4828,
+      52988,
+      12423
+    ],
+    "pointers": [
+      {
+        "kind": "p8",
+        "offset": 8,
+        "segment": 19139
+      },
+      {
+        "kind": "p15",
+        "offset": 0,
+        "segment": 21100
+      },
+      {
+        "kind": "club",
+        "offset": 0,
+        "segment": 24776
+      },
+      {
+        "kind": "config",
+        "offset": 0,
+        "segment": 28142
+      },
+      {
+        "kind": "main",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "main_shown",
+        "offset": 0,
+        "segment": 17471
+      },
+      {
+        "kind": "background",
+        "offset": 0,
+        "segment": 31014
+      },
+      {
+        "kind": "background_shown",
+        "offset": 0,
+        "segment": 17721
+      },
+      {
+        "kind": "commentary",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "seed",
+        "offset": 42268,
+        "segment": 12423
+      },
+      {
+        "kind": "style",
+        "offset": 31,
+        "segment": 28274
+      }
+    ],
+    "cells": [
+      {
+        "area": "ds",
+        "offset": 53407,
+        "value": 21
+      },
+      {
+        "area": "ds",
+        "offset": 53416,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53417,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53408,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53075,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 53420,
+        "value": 45
+      },
+      {
+        "area": "ds",
+        "offset": 53422,
+        "value": 90
+      },
+      {
+        "area": "ds",
+        "offset": 53423,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 41785,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 53063,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53432,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 53062,
+        "value": 255
+      },
+      {
+        "area": "style",
+        "offset": 0,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 2410,
+        "value": 150
+      },
+      {
+        "area": "ds",
+        "offset": 53448,
+        "value": 12
+      },
+      {
+        "area": "ds",
+        "offset": 3374,
+        "value": 11
+      },
+      {
+        "area": "ds",
+        "offset": 3375,
+        "value": 0
+      },
+      {
+        "area": "background",
+        "offset": 2316,
+        "value": 32
+      },
+      {
+        "area": "background",
+        "offset": 2317,
+        "value": 7
+      },
+      {
+        "area": "main",
+        "offset": 2316,
+        "value": 156
+      },
+      {
+        "area": "main",
+        "offset": 2317,
+        "value": 12
+      },
+      {
+        "area": "main",
+        "offset": 2318,
+        "value": 9
+      },
+      {
+        "area": "main",
+        "offset": 2319,
+        "value": 7
+      },
+      {
+        "area": "ds",
+        "offset": 3368,
+        "value": 32
+      }
+    ]
+  },
+  "expected": {
+    "scene": {
+      "index": 21,
+      "word0": 0,
+      "word2": 0,
+      "word8": 0,
+      "word10": 60160,
+      "word12": 4864,
+      "word14": 2590,
+      "word20": 0,
+      "word23": 11,
+      "byte4": 156,
+      "byte5": 12,
+      "byte6": 1,
+      "byte7": 21,
+      "byte16": 4,
+      "byte17": 0,
+      "byte18": 65,
+      "byte19": 8,
+      "byte22": 0
+    },
+    "seed": 28065,
+    "pointers": [
+      {
+        "kind": "p8",
+        "offset": 8,
+        "segment": 19139
+      },
+      {
+        "kind": "p15",
+        "offset": 0,
+        "segment": 21100
+      },
+      {
+        "kind": "club",
+        "offset": 0,
+        "segment": 24776
+      },
+      {
+        "kind": "config",
+        "offset": 0,
+        "segment": 28142
+      },
+      {
+        "kind": "main",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "main_shown",
+        "offset": 0,
+        "segment": 17471
+      },
+      {
+        "kind": "background",
+        "offset": 0,
+        "segment": 31014
+      },
+      {
+        "kind": "background_shown",
+        "offset": 0,
+        "segment": 17721
+      },
+      {
+        "kind": "commentary",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "seed",
+        "offset": 42268,
+        "segment": 12423
+      },
+      {
+        "kind": "style",
+        "offset": 31,
+        "segment": 28274
+      }
+    ],
+    "cells": [
+      {
+        "area": "ds",
+        "offset": 53407,
+        "value": 21
+      },
+      {
+        "area": "ds",
+        "offset": 53416,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53417,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53408,
+        "value": 21
+      },
+      {
+        "area": "ds",
+        "offset": 53075,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 53420,
+        "value": 45
+      },
+      {
+        "area": "ds",
+        "offset": 53422,
+        "value": 90
+      },
+      {
+        "area": "ds",
+        "offset": 53423,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 41785,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 53063,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53432,
+        "value": 1
+      },
+      {
+        "area": "ds",
+        "offset": 53062,
+        "value": 255
+      },
+      {
+        "area": "style",
+        "offset": 0,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 2410,
+        "value": 150
+      },
+      {
+        "area": "ds",
+        "offset": 53448,
+        "value": 12
+      },
+      {
+        "area": "ds",
+        "offset": 3374,
+        "value": 11
+      },
+      {
+        "area": "ds",
+        "offset": 3375,
+        "value": 0
+      },
+      {
+        "area": "background",
+        "offset": 2316,
+        "value": 32
+      },
+      {
+        "area": "background",
+        "offset": 2317,
+        "value": 7
+      },
+      {
+        "area": "main",
+        "offset": 2316,
+        "value": 32
+      },
+      {
+        "area": "main",
+        "offset": 2317,
+        "value": 7
+      },
+      {
+        "area": "main",
+        "offset": 2318,
+        "value": 156
+      },
+      {
+        "area": "main",
+        "offset": 2319,
+        "value": 12
+      },
+      {
+        "area": "ds",
+        "offset": 3368,
+        "value": 32
+      }
+    ],
+    "draws": [
+      {
+        "n": 2,
+        "seed_before": 44794,
+        "seed_after": 28065,
+        "value": 1,
+        "site": "0AB9:7217"
+      }
+    ],
+    "events": []
+  }
+}

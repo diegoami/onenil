@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """[designed] Native72BB replay against independently computed original microkernels."""
-import argparse,hashlib,json,time,subprocess
+import argparse,hashlib,json,time,subprocess,platform
+from datetime import datetime,timezone
+from importlib.metadata import version
 from pathlib import Path
 import watched_oracle as oracle
 import watched_action_export as facts
@@ -10,6 +12,8 @@ DIRECTORY=ROOT/'records/T38/oracle-r0002'
 FIXTURES=ROOT/'engine/tests/fixtures/watched_actor'
 MARGIN_SHA256='590b9ec023f70ff22fad6fef444a225aa221516c0e329ba829f0bd22679d65ef'
 CORPUS_SHA256='f0dc8f33fce736501835c4b19e50a3ca98ee0a20b9ec46980b7580811f0945c8'
+
+FIXTURE_SHA256='c7ff374c68d4237d440a775a54b6b512d594ccf996cbd22059ce1833c487b46d'
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def read(path):return json.loads(path.read_text())
@@ -132,7 +136,9 @@ def export(probe=None):
     return check()
 
 def check():
-    originals_values,original_manifest=originals();manifest=read(FIXTURES/'manifest.json')
+    originals_values,original_manifest=originals()
+    if sha(FIXTURES/'manifest.json')!=FIXTURE_SHA256:raise ValueError('decoded actor manifest pin differs')
+    manifest=read(FIXTURES/'manifest.json')
     if manifest['original_manifest_sha256']!=CORPUS_SHA256 or len(manifest['cases'])!=50:raise ValueError('decoded parent provenance/coverage differs')
     values=[]
     for (c,anchor),item in zip(originals_values,manifest['cases'],strict=True):
@@ -148,6 +154,20 @@ def check():
             if out[key]!=want:raise ValueError('decoded original parent expected '+key+' differs')
         values.append(value)
     return values
+
+def verify_private(values):
+    sources,_=originals()
+    for (c,anchor),value in zip(sources,values,strict=True):
+        raw,context=admitted(c,anchor);state=value['input']
+        for key in context:
+            if key!='cells'and state[key]!=context[key]:raise ValueError('private parent entry context differs')
+        seen=set()
+        for f in state['cells']:
+            at=address(state,f['area'],f['offset'])
+            if at in seen or named(state,at)!=(f['area'],f['offset'])or raw[at]!=f['value']:raise ValueError('private original parent ENTRY fact differs')
+            seen.add(at)
+        if expected(c,raw,state)!=value['expected']:raise ValueError('original parent exit/ownership differs')
+    print('private original parent ENTRY facts and original changed gameplay ownership:',len(values),'verified',flush=True)
 
 def check_research(research_root):
     values,_=originals()
@@ -167,12 +187,34 @@ def replay(values):
         if got.get('ok')!=c['expected']:raise ValueError(f'native parent{c["case"]} mismatch: '+str(got.get('error')))
     print('native watched actor:',len(values),'original parent transitions matched')
 
+def benchmark(values,repetitions):
+    from onenil_engine import onenil_engine as native
+    source_paths=['engine','tools/replay_watched_actor.py','tools/watched_parent.py','tools/watched_oracle.py','tools/compile_watched.py','pyproject.toml']
+    if oracle.common.git('status','--porcelain','--',*source_paths):raise ValueError('commit source and decoded fixtures before measurement')
+    if native.__debug_assertions__:raise ValueError('release extension required')
+    inputs=[json.dumps(c['input'],sort_keys=True,separators=(',',':'))for c in values];size=0
+    started=datetime.now(timezone.utc).isoformat();begin=time.perf_counter_ns()
+    for _ in range(repetitions):
+        for value in inputs:size+=len(native.watched_action(value))
+    elapsed=time.perf_counter_ns()-begin;out=ROOT/'records/T38'
+    number=max((int(p.stem.split('-r')[-1])for p in out.glob('T38-r*.json')),default=0)+1;path=out/f'T38-r{number:04d}.json'
+    result={'schema':'routine-benchmark/1','run_id':path.stem,'code_commit':oracle.common.git('rev-parse','HEAD'),'started':started,'ended':datetime.now(timezone.utc).isoformat(),'platform':platform.platform(),'python':platform.python_version(),'rustc':subprocess.check_output(['rustc','--version'],text=True).strip(),'cargo_lock_sha256':sha(ROOT/'engine/Cargo.lock'),
+      'build':{'crate_version':native.__version__,'debug_assertions':native.__debug_assertions__,'maturin':version('maturin'),'extension_sha256':sha(Path(native.__file__))},
+      'source_pins':{'oracle_manifest_sha256':CORPUS_SHA256,'decoded_manifest_sha256':sha(FIXTURES/'manifest.json'),'margin_manifest_sha256':MARGIN_SHA256},'routine':'native72BB full actor dispatch and movement graph','repetitions':repetitions,'cases':len(values),'calls':len(values)*repetitions,'elapsed_ns':elapsed,'serialized_output_bytes':size,
+      'compiler_boundary':'Cpu.invoke/invoke_entry use inline(never) to bound LLVM optimization of the static procedure graph;no semantic change',
+      'method':'Pre-serialized inputs;release parsing,one native data image,compiled arithmetic/control flow/native helpers/RNG/commentary and serialization included;fixture preparation/output decoding excluded',
+      'limits':'Action/contact root kernels only;not a continuous watched tick,clock,full native match or emulator speed comparison'}
+    oracle.write_json(path,result);print(path.relative_to(ROOT))
+
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--export',action='store_true');p.add_argument('--probe',type=Path);p.add_argument('--check',action='store_true');p.add_argument('--replay',action='store_true');p.add_argument('--check-research',type=Path);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--export',action='store_true');p.add_argument('--probe',type=Path);p.add_argument('--check-private',action='store_true');p.add_argument('--benchmark',action='store_true');p.add_argument('--repetitions',type=int,default=5);p.add_argument('--check',action='store_true');p.add_argument('--replay',action='store_true');p.add_argument('--check-research',type=Path);a=p.parse_args()
+    if a.repetitions<1:p.error("positive repetitions required")
     if a.export:export(a.probe)
     if a.check_research:check_research(a.check_research)
-    if a.check or a.replay:
+    if a.check or a.replay or a.check_private or a.benchmark:
         values=check();print('decoded actor corpus:',len(values),'roots verified')
-        if a.replay:replay(values)
-    if not(a.export or a.check or a.replay or a.check_research):p.error('choose export/check/replay/check-research')
+        if a.check_private:verify_private(values)
+        if a.replay or a.benchmark:replay(values)
+        if a.benchmark:benchmark(values,a.repetitions)
+    if not(a.export or a.check or a.replay or a.check_research or a.check_private or a.benchmark):p.error('choose export/check/replay/check-research')
 if __name__=='__main__':main()

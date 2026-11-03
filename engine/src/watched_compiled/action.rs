@@ -174,7 +174,12 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
     if matches!(
         f.area,
         Area::Main | Area::MainShown | Area::Background | Area::BackgroundShown
-    ) && !(pitch_offset(f.offset) || (s.kind == Kind::Actor && [-9,9].into_iter().any(|row| { let start=0x90E+160*row-74;(start..start+150).contains(&f.offset) })))
+    ) && !(pitch_offset(f.offset)
+        || (s.kind == Kind::Actor
+            && [-9, 9].into_iter().any(|row| {
+                let start = 0x90E + 160 * row - 74;
+                (start..start + 150).contains(&f.offset)
+            })))
     {
         return Err("non-gameplay screen cell".into());
     }
@@ -224,8 +229,23 @@ fn machine(s: &State) -> Result<Cpu, String> {
             }
         }
     }
-    let mut required:std::collections::BTreeSet<_>=[PointerKind::P8,PointerKind::P15,PointerKind::Club,PointerKind::Config,PointerKind::Main,PointerKind::MainShown,PointerKind::Background,PointerKind::BackgroundShown,PointerKind::Commentary,PointerKind::Seed].into_iter().collect();
-    if s.kind==Kind::Actor{required.insert(PointerKind::Style);}
+    let mut required: std::collections::BTreeSet<_> = [
+        PointerKind::P8,
+        PointerKind::P15,
+        PointerKind::Club,
+        PointerKind::Config,
+        PointerKind::Main,
+        PointerKind::MainShown,
+        PointerKind::Background,
+        PointerKind::BackgroundShown,
+        PointerKind::Commentary,
+        PointerKind::Seed,
+    ]
+    .into_iter()
+    .collect();
+    if s.kind == Kind::Actor {
+        required.insert(PointerKind::Style);
+    }
     if kinds != required {
         return Err("missing named action pointer".into());
     }
@@ -240,7 +260,11 @@ fn machine(s: &State) -> Result<Cpu, String> {
             let pool = |k| {
                 matches!(
                     k,
-                    PointerKind::P8 | PointerKind::P15 | PointerKind::Club | PointerKind::Config | PointerKind::Style
+                    PointerKind::P8
+                        | PointerKind::P15
+                        | PointerKind::Club
+                        | PointerKind::Config
+                        | PointerKind::Style
                 )
             };
             if (pool(p.kind) || pool(q.kind))
@@ -335,7 +359,12 @@ pub fn advance(s: &State) -> Result<Outcome, Fault> {
         message,
         missing: None,
     })?;
-    let style=if s.kind==Kind::Actor{let a=find_pointer(s,PointerKind::Style).unwrap().address();Some((a,c.e.image[a]))}else{None};
+    let style = if s.kind == Kind::Actor {
+        let a = find_pointer(s, PointerKind::Style).unwrap().address();
+        Some((a, c.e.image[a]))
+    } else {
+        None
+    };
     let entry = match s.kind {
         Kind::Action5 => super::action_graph::p_0ab9_448c,
         Kind::Contact => super::action_graph::p_0ab9_4dff,
@@ -353,7 +382,14 @@ pub fn advance(s: &State) -> Result<Outcome, Fault> {
             missing: None,
         });
     }
-    if let Some((a,before))=style{if c.e.image[a]!=before{return Err(Fault{message:"actor modified readonly logical style".into(),missing:None});}}
+    if let Some((a, before)) = style {
+        if c.e.image[a] != before {
+            return Err(Fault {
+                message: "actor modified readonly logical style".into(),
+                missing: None,
+            });
+        }
+    }
     let mut output = s.clone();
     let ds = 16 * usize::from(s.regs[11]);
     let at = ds + 0xCCEF + 25 * usize::from(s.scene.index);
@@ -603,32 +639,92 @@ mod tests {
         }
     }
     #[test]
-    fn actor_entry_requires_an_explicit_logical_render_style_pointer(){
-        let mut s=context();s.kind=Kind::Actor;
-        assert!(machine(&s).is_err(),"actor entry accepted no typed renderer-style pointer");
-        s.pointers.push(Pointer{kind:PointerKind::Style,offset:31,segment:28274});
-        s.cells.push(ByteFact{area:Area::Style,offset:0,value:0});
-        let c=machine(&s).unwrap();let at=16*28274+31;assert!(c.known[at]);assert_eq!(c.e.image[at],0);
-        let mut extra=s.clone();extra.cells[0].offset=1;assert!(machine(&extra).is_err());
-        let mut wrong=s.clone();wrong.kind=Kind::Action5;assert!(machine(&wrong).is_err());
-        let mut missing=s.clone();missing.pointers.retain(|p|p.kind!=PointerKind::P8);assert!(machine(&missing).is_err());
+    fn actor_entry_requires_an_explicit_logical_render_style_pointer() {
+        let mut s = context();
+        s.kind = Kind::Actor;
+        assert!(
+            machine(&s).is_err(),
+            "actor entry accepted no typed renderer-style pointer"
+        );
+        s.pointers.push(Pointer {
+            kind: PointerKind::Style,
+            offset: 31,
+            segment: 28274,
+        });
+        s.cells.push(ByteFact {
+            area: Area::Style,
+            offset: 0,
+            value: 0,
+        });
+        let c = machine(&s).unwrap();
+        let at = 16 * 28274 + 31;
+        assert!(c.known[at]);
+        assert_eq!(c.e.image[at], 0);
+        let mut extra = s.clone();
+        extra.cells[0].offset = 1;
+        assert!(machine(&extra).is_err());
+        let mut wrong = s.clone();
+        wrong.kind = Kind::Action5;
+        assert!(machine(&wrong).is_err());
+        let mut missing = s.clone();
+        missing.pointers.retain(|p| p.kind != PointerKind::P8);
+        assert!(machine(&missing).is_err());
     }
 
     #[test]
-    fn actor_set_piece_margin_keeps_logical_occupancy_and_prior_bounds(){
-        let mut s=context();s.kind=Kind::Actor;
-        s.pointers.push(Pointer{kind:PointerKind::Style,offset:31,segment:28274});
-        let p=find_pointer(&s,PointerKind::Main).unwrap().address();
-        let fact=ByteFact{area:Area::Main,offset:0x36e,value:0};
-        assert_eq!(cell_address(&s,&fact).unwrap(),p+0x36e);
-        s.kind=Kind::Action5;assert!(cell_address(&s,&fact).is_err());
+    fn actor_set_piece_margin_keeps_logical_occupancy_and_prior_bounds() {
+        let mut s = context();
+        s.kind = Kind::Actor;
+        s.pointers.push(Pointer {
+            kind: PointerKind::Style,
+            offset: 31,
+            segment: 28274,
+        });
+        let p = find_pointer(&s, PointerKind::Main).unwrap().address();
+        let fact = ByteFact {
+            area: Area::Main,
+            offset: 0x36e,
+            value: 0,
+        };
+        assert_eq!(cell_address(&s, &fact).unwrap(), p + 0x36e);
+        s.kind = Kind::Action5;
+        assert!(cell_address(&s, &fact).is_err());
     }
     #[test]
-    fn valid_original_parent_fixture_replays(){
-        let path=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/watched_actor/case-0000.json");
-        let case:serde_json::Value=serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
-        let input:State=serde_json::from_value(case["input"].clone()).unwrap();
-        assert_eq!(serde_json::to_value(advance(&input).unwrap()).unwrap(),case["expected"]);
+    fn all_original_parent_dispatch_and_shot_fixtures_replay() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap();
+        let manifest: serde_json::Value = serde_json::from_slice(
+            &std::fs::read(root.join("engine/tests/fixtures/watched_actor/manifest.json")).unwrap(),
+        )
+        .unwrap();
+        let items = manifest["cases"].as_array().unwrap();
+        assert_eq!(items.len(), 50);
+        for item in items {
+            let case: serde_json::Value = serde_json::from_slice(
+                &std::fs::read(root.join(item["path"].as_str().unwrap())).unwrap(),
+            )
+            .unwrap();
+            let state: State = serde_json::from_value(case["input"].clone()).unwrap();
+            assert_eq!(
+                serde_json::to_value(advance(&state).unwrap()).unwrap(),
+                case["expected"],
+                "original parent{}",
+                case["case"]
+            );
+        }
     }
-
+    #[test]
+    fn valid_original_parent_fixture_replays() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/watched_actor/case-0000.json");
+        let case: serde_json::Value =
+            serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
+        let input: State = serde_json::from_value(case["input"].clone()).unwrap();
+        assert_eq!(
+            serde_json::to_value(advance(&input).unwrap()).unwrap(),
+            case["expected"]
+        );
+    }
 }
