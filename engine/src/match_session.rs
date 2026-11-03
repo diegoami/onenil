@@ -45,8 +45,8 @@ impl Phase {
     }
 }
 pub struct Session {
-    inner: continuous::Session,
-    replacement: ai_selection::ReadSet,
+    pub(crate) inner: continuous::Session,
+    pub(crate) replacement: ai_selection::ReadSet,
     phase: Phase,
     points: Vec<Value>,
 }
@@ -142,6 +142,63 @@ impl Session {
             points: vec![],
         })
     }
+    pub(crate) fn from_legacy(
+        legacy: continuous::Admission,
+        replacement: ai_selection::ReadSet,
+        gates: Gates,
+        tables: Vec<role_scores::TableInput>,
+    ) -> Result<Self, String> {
+        let mut inner = continuous::Session::new(legacy)?;
+        let expected = inner
+            .a
+            .players
+            .iter()
+            .flat_map(|p| [(6, p.id), (14, p.id)])
+            .collect::<BTreeSet<_>>();
+        let found = tables
+            .iter()
+            .map(|t| (t.criterion, t.player.id))
+            .collect::<BTreeSet<_>>();
+        if found != expected || found.len() != tables.len() {
+            return Err("incomplete setup skill read set".into());
+        }
+        let probe = ai_selection::State {
+            context: inner.a.substitution.context.clone(),
+            replacement: Some(replacement.clone()),
+            mode: 0,
+            scene: inner.a.substitution.context.side_offsets[0] + 1,
+            side: 0,
+        };
+        let mut cells = ai_selection::cells(&probe)?;
+        for t in &tables {
+            for (address, value) in role_scores::table_cells(t)? {
+                role_scores::insert(&mut cells, address, value)?;
+            }
+        }
+        for (address, value) in cells {
+            inner.e.image[address] = value;
+        }
+        for (address, value) in [
+            (0xD18, gates.cache_gate),
+            (0xD1CB, gates.editor),
+            (0xD0AD, gates.kickoff_side),
+            (0xD0BA, gates.control),
+            (0xD0A1, gates.d0a1),
+            (0xCF53, gates.cf53),
+            (0xD0B8, gates.active),
+            (0xD074, gates.quick),
+        ] {
+            inner.e.image[address] = value;
+        }
+        put(&mut inner.e, 0xD0BE, gates.delay_word);
+        inner.validate_admission()?;
+        Ok(Self {
+            inner,
+            replacement,
+            phase: Phase::FirstHalf,
+            points: vec![],
+        })
+    }
     pub fn phase(&self) -> &'static str {
         self.phase.name()
     }
@@ -166,7 +223,7 @@ impl Session {
         value["phase"] = json!(self.phase());
         value
     }
-    fn gates(&self) -> Gates {
+    pub(crate) fn gates(&self) -> Gates {
         let e = &self.inner.e;
         Gates {
             cache_gate: e.image[0xD18],
@@ -180,8 +237,43 @@ impl Session {
             quick: e.image[0xD074],
         }
     }
-    fn current(&mut self) -> ai_selection::ReadSet {
-        let state = rearrangement::snapshot(&mut self.inner.e, &self.replacement.match_state);
+    pub(crate) fn current(&mut self) -> ai_selection::ReadSet {
+        let mut state = rearrangement::snapshot(&mut self.inner.e, &self.replacement.match_state);
+        let ids = self.inner.current_ids(true);
+        state.core.players.retain(|p| ids.contains(&p.id));
+        state
+            .core
+            .assignment
+            .players
+            .retain(|p| ids.contains(&p.id));
+        state.pairing.players.retain(|p| ids.contains(&p.id));
+        state.codes.players.retain(|p| ids.contains(&p.id));
+        state.cache.players.retain(|p| ids.contains(&p.id));
+        state.cache.tables.retain(|p| ids.contains(&p.player.id));
+        state.terminal.players.retain(|p| ids.contains(&p.id));
+        let clubs = state
+            .core
+            .players
+            .iter()
+            .filter(|p| p.id != 0)
+            .map(|p| u16::from(p.p8[0]))
+            .collect::<BTreeSet<_>>();
+        state
+            .core
+            .assignment
+            .club_counts
+            .retain(|c| clubs.contains(&c.id));
+        state.cache.rosters.retain(|c| clubs.contains(&c.club));
+        let positions = state
+            .terminal
+            .players
+            .iter()
+            .map(|p| p.position)
+            .collect::<BTreeSet<_>>();
+        state
+            .terminal
+            .positions
+            .retain(|p| positions.contains(&p.position));
         ai_selection::ReadSet {
             match_state: state,
             display_mode: self.inner.e.image[0xD074],
@@ -189,10 +281,10 @@ impl Session {
             speaker_gate: self.inner.e.image[0xA2EC],
         }
     }
-    fn point(&mut self) -> Value {
+    pub(crate) fn point(&mut self) -> Value {
         let r = self.current();
         let e = &self.inner.e;
-        json!({"core":r.match_state.core,"pairing":r.match_state.pairing,"codes":r.match_state.codes,"selection":ai_selection::snapshot(e,&self.inner.a.substitution.context),"global_read_set":{"display_mode":r.display_mode,"position_sentinel":r.position_sentinel,"speaker_gate":r.speaker_gate},"gates":self.gates(),"ratings":e.ratings_snapshot(),"seed":e.word(crate::SEED)})
+        json!({"core":r.match_state.core,"pairing":r.match_state.pairing,"codes":r.match_state.codes,"selection":self.inner.selection(),"global_read_set":{"display_mode":r.display_mode,"position_sentinel":r.position_sentinel,"speaker_gate":r.speaker_gate},"gates":self.gates(),"ratings":e.ratings_snapshot(),"seed":e.word(crate::SEED)})
     }
     fn transaction(
         &mut self,
@@ -249,7 +341,7 @@ impl Session {
     pub fn continue_without_changes(&mut self) -> Result<Value, String> {
         self.transaction(Self::continue_inner)
     }
-    fn rearrange(&mut self) -> Result<(), String> {
+    pub(crate) fn rearrange(&mut self) -> Result<(), String> {
         let r = self.current();
         rearrangement::run(&mut self.inner.e, &r.match_state)?;
         self.replacement = self.current();
@@ -299,7 +391,7 @@ impl Session {
         self.inner.e.image[0xD0BA] = 0;
         self.inner.e.image[0xD0A1] = 0;
         let sub = substitution::State {
-            context: ai_selection::snapshot(&self.inner.e, &self.inner.a.substitution.context),
+            context: self.inner.selection(),
             replacement: Some(self.current()),
         };
         let out = substitution::run_with_commentary(&mut self.inner.e, &sub)?;
@@ -315,7 +407,7 @@ impl Session {
             json!({"phase":self.phase.name(),"presentation":[{"kind":"halftime-no-lineup-changes"}],"draws":[]}),
         )
     }
-    fn project_display_ratings(&mut self) {
+    pub(crate) fn project_display_ratings(&mut self) {
         for class in 1..4 {
             let a = usize::from(crate::RATINGS) + 4 * class + 2;
             let value = word(&self.inner.e, a) >> 2;
@@ -327,7 +419,7 @@ impl Session {
             put(&mut self.inner.e, a, value);
         }
     }
-    fn resolve_actor(&mut self) -> Result<(), String> {
+    pub(crate) fn resolve_actor(&mut self) -> Result<(), String> {
         // [confirmed:F21/1D3A] Physical cyclic availability fallback;bounded unsupported case.
         if self.inner.e.image[0xD09F] == 0 {
             return Ok(());

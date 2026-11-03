@@ -29,6 +29,7 @@ pub mod role_pairing;
 pub mod role_scores;
 pub mod scene_assignment;
 pub mod scene_codes;
+pub mod setup;
 pub mod step_tail;
 pub mod substitution;
 pub mod terminal;

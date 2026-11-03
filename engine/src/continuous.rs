@@ -234,13 +234,33 @@ impl Session {
                     .wrapping_sub(0x3B),
             )
     }
-    fn goal(&self) -> goal_effects::State {
+    pub(crate) fn current_ids(&self, cached: bool) -> BTreeSet<u16> {
+        let e = &self.e;
+        let mut ids = BTreeSet::new();
+        for side in 0..2 {
+            let base = club(word(e, 0xD6E4 + 2 * side));
+            for i in 0..20 {
+                ids.insert(word(e, base + 2 * i));
+            }
+            if cached {
+                ids.insert(word(e, 0xCF5E + 10 * side));
+            }
+        }
+        for i in 1..=22 {
+            ids.insert(word(e, scene(i) + 14));
+        }
+        ids
+    }
+    pub(crate) fn goal(&self) -> goal_effects::State {
         let mut t = self.a.goal.clone();
         t.queue = queue(&self.e, 3);
-        goal_effects::snapshot(&self.e, &t)
+        let mut out = goal_effects::snapshot(&self.e, &t);
+        let ids = self.current_ids(false);
+        out.players.retain(|p| ids.contains(&p.id));
+        out
     }
     // [derived] Roster/scene references may change after an actual substitution.
-    fn extra(&self) -> extra_event::State {
+    pub(crate) fn extra(&self) -> extra_event::State {
         let e = &self.e;
         let mut state = self.a.extra.state.clone();
         let ids = (1..=22)
@@ -281,7 +301,7 @@ impl Session {
             .collect();
         extra_event::project(e, &state)
     }
-    fn event(&self) -> event_effects::State {
+    pub(crate) fn event(&self) -> event_effects::State {
         let mut t = self.a.event.clone();
         t.handoff = self.extra();
         t.queue = queue(&self.e, 4);
@@ -297,9 +317,24 @@ impl Session {
                 value: 0,
             },
         ];
-        event_effects::project(&self.e, &t)
+        let mut out = event_effects::project(&self.e, &t);
+        let ids = self.current_ids(false);
+        out.players.retain(|p| ids.contains(&p.id));
+        out
     }
-    fn clock(&self) -> step_tail::ClockState {
+    pub(crate) fn reset(&self) -> quick_reset::State {
+        let mut out = quick_reset::project(&self.e, &self.a.reset);
+        let ids = self.current_ids(false);
+        out.players.retain(|p| ids.contains(&p.id));
+        out
+    }
+    pub(crate) fn selection(&self) -> ai_selection::Context {
+        let mut out = ai_selection::snapshot(&self.e, &self.a.substitution.context);
+        let ids = self.current_ids(false);
+        out.players.retain(|p| ids.contains(&p.id));
+        out
+    }
+    pub(crate) fn clock(&self) -> step_tail::ClockState {
         let mut t = self.a.clock.clone();
         t.commentary.queue = queue(&self.e, 3);
         step_tail::clock_snapshot(&self.e, &t)
@@ -367,20 +402,59 @@ impl Session {
     }
     pub(crate) fn validate_admission(&self) -> Result<(), String> {
         let e = &self.e;
-        if !same(&self.goal(), &self.a.goal)
-            || !same(&self.event(), &self.a.event)
-            || !same(
-                &extra_event::project(e, &self.a.extra.state),
-                &self.a.extra.state,
-            )
-            || !same(&quick_reset::project(e, &self.a.reset), &self.a.reset)
-            || !same(&self.clock(), &self.a.clock)
-            || !same(
-                &ai_selection::snapshot(e, &self.a.substitution.context),
-                &self.a.substitution.context,
-            )
-        {
-            return Err("contradictory admission image aliases".into());
+        fn difference(a: &Value, b: &Value) -> String {
+            if let (Some(a), Some(b)) = (a.as_object(), b.as_object()) {
+                if a.len() != b.len() {
+                    return "/keys".into();
+                }
+                for (k, v) in a {
+                    if b.get(k) != Some(v) {
+                        return format!(
+                            "/{}{}",
+                            k,
+                            b.get(k).map(|w| difference(v, w)).unwrap_or_default()
+                        );
+                    }
+                }
+            } else if let (Some(a), Some(b)) = (a.as_array(), b.as_array()) {
+                if a.len() != b.len() {
+                    return "/length".into();
+                }
+                for (i, (v, w)) in a.iter().zip(b).enumerate() {
+                    if v != w {
+                        return format!("/{}{}", i, difference(v, w));
+                    }
+                }
+            }
+            String::new()
+        }
+        for (name, actual, expected) in [
+            ("goal", json!(self.goal()), json!(self.a.goal)),
+            ("event", json!(self.event()), json!(self.a.event)),
+            (
+                "extra",
+                json!(extra_event::project(e, &self.a.extra.state)),
+                json!(self.a.extra.state),
+            ),
+            (
+                "reset",
+                json!(quick_reset::project(e, &self.a.reset)),
+                json!(self.a.reset),
+            ),
+            ("clock", json!(self.clock()), json!(self.a.clock)),
+            (
+                "selection",
+                json!(ai_selection::snapshot(e, &self.a.substitution.context)),
+                json!(self.a.substitution.context),
+            ),
+        ] {
+            if actual != expected {
+                return Err(format!(
+                    "contradictory admission image aliases: {}{}",
+                    name,
+                    difference(&actual, &expected)
+                ));
+            }
         }
         for i in 0..2 {
             if !same(&self.rating(i), &self.a.ratings[i]) {
@@ -534,7 +608,7 @@ impl Session {
                 }
             }
             let sub = substitution::State {
-                context: ai_selection::snapshot(&self.e, &self.a.substitution.context),
+                context: self.selection(),
                 replacement: replacement.cloned(),
             };
             let out = if replacement.is_some() {
@@ -548,7 +622,7 @@ impl Session {
             draws.extend(out.draws);
             events.extend(out.presentation);
         } else {
-            let current = quick_reset::project(&self.e, &self.a.reset);
+            let current = self.reset();
             let out = self.e.reset_loaded(&current)?;
             draws.extend(out.draws);
         }

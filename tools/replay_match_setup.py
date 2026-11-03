@@ -35,7 +35,7 @@ def initial_data(points,inputs):
         if out.get('club') in clubs and 'players' in out and all(isinstance(i,int) for i in out['players']):out['players']=clubs[out['club']][:len(out['players'])]
         if 'directions' in out and isinstance(out['directions'],list) and len(out['directions'])==4:out['directions']=raw_selected['directions']
         return out
-    old=project(old);a=old['initial'];c=old['caller'];raw=c['pairing']['context'];outer=raw['rebuild']['outer']
+    old=project(old);a=old['initial'];a['goals']['rosters']=[clubs[i] for i in a['goals']['clubs']];c=old['caller'];raw=c['pairing']['context'];outer=raw['rebuild']['outer']
     core=match.rearrangement.core(raw)
     ratings=[];fields={f['club']:f for f in selected['setup_cells']['club_fields']}
     for side,club in enumerate(reversed(outer['selection']['clubs'])):
