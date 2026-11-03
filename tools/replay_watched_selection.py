@@ -39,12 +39,13 @@ def capture(research_root):
     import watched_actions as observer
     source=observer.check();record=json.loads((root/source['record']).read_text());reference=observer.setup.contests.outputs(record)
     _,data=observer.match.find_state(record['start_state']['sha256']);week=observer.match.Week(data)
-    pending=None;cases=[];ticks=0;joined=False;entry_memory={};regions=[];hook=None;entry_sp=0;memory_callback=None
+    pending=None;cases=[];ticks=0;joined=False;entry_memory={};regions=[];hook=None;entry_sp=0;memory_callback=None;hooks_installed=False
     class Complete(Exception):pass
     def scene(g,index):
         a=0xCCEF+25*index
         return {'index':index,**{f'word{k}':g.rd(a+k) for k in (0,2,8,10,12,14,20,23)},**{f'byte{k}':g.rd(a+k,1) for k in (4,5,6,7,16,17,18,19,22)}}
-    def enable(g):g.put(g.far(0xD7D2)+0xF2,b'\x01')
+    def enable(g):
+        g.put(g.far(0xD7D2)+0xF2,b'\x01');install_operand_hooks();print('selection watched mode enabled;operand hooks installed',flush=True)
     def tick(g):
         nonlocal ticks,joined
         ticks+=1
@@ -80,7 +81,7 @@ def capture(research_root):
         for linear in range(address,address+size):
             found=next(((name,linear-base)for name,base,length in regions if base<=linear<base+length),None)
             if found is None:raise ValueError(f'unmapped original decoded data {g.where()} {linear:06X}')
-            name,offset=found;owned=name=='ds' and offset in (scene_at+8,scene_at+9,scene_at+20,scene_at+21,0xA51C,0xA51D)
+            name,offset=found;owned=name=='ds' and offset in (scene_at+8,scene_at+9,scene_at+12,scene_at+20,scene_at+21,0xA51C,0xA51D)
             if writing:
                 if not owned:raise ValueError(f'unexpected original3846 write {g.where()} {name}:{offset:04X}')
                 continue
@@ -104,15 +105,26 @@ def capture(research_root):
         if len(cases)==64:raise Complete()
     week.g.code_hook('0AB9:E24C',enable);week.g.code_hook('0AB9:7A02',tick)
     week.g.code_hook('0AB9:3846',enter);week.g.code_hook('0AB9:3973',leave)
-    visited=set()
-    for (segment,entry),rows in procedures.items():
-        for ip,(op,args,nxt,path) in rows.items():
-            if (segment,ip) in visited:continue
-            visited.add((segment,ip));operands=[a.strip() for a in args.split(',')]
-            for i,operand in enumerate(operands):
-                if '[' not in operand:continue
-                writing=i==0 and op in ('mov','add','sub','adc','sbb','xor','or','and','inc','dec','neg','not','shl','shr','sar','stosw')
-                week.g.code_hook(f'{segment:04X}:{ip:04X}',lambda g,o=operand,w=writing:observe(g,o,w))
+    def install_operand_hooks():
+        nonlocal hooks_installed
+        if hooks_installed:return
+        hooks_installed=True
+        visited=set()
+        for (segment,entry),rows in procedures.items():
+            for ip,(op,args,nxt,path) in rows.items():
+                if (segment,ip) in visited:continue
+                visited.add((segment,ip));operands=[a.strip() for a in args.split(',')]
+                for i,operand in enumerate(operands):
+                    if '[' not in operand:continue
+                    writing=i==0 and op in ('mov','add','sub','adc','sbb','xor','or','and','inc','dec','neg','not','shl','shr','sar','stosw')
+                    week.g.code_hook(f'{segment:04X}:{ip:04X}',lambda g,o=operand,w=writing:observe(g,o,w))
+    import signal
+    cancelled=[False]
+    def request_cancel(signum,frame):cancelled[0]=True
+    def check_cancel(g):
+        if cancelled[0]:raise RuntimeError('original selection capture cancelled at safe observer boundary')
+    signal.signal(signal.SIGINT,request_cancel);signal.signal(signal.SIGTERM,request_cancel)
+    week.g.code_hook('24BC:0CDC',check_cancel)
     producer=common.git('rev-parse','HEAD');started=observer.match.utc();status='completed';reason=None
     try:
         try:week.play()
