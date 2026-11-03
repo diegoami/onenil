@@ -33,3 +33,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T29](T29.md): Choose lineup and seed in the native setup viewer (#60).
 - [T30](T30.md): Native watched player movement and legality kernel (#63).
 - [T31](T31.md): Original watched direction selection and movement retries (#65).
+
+- [T32 Original watched action-one target preparation](T32.md)
