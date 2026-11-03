@@ -7,7 +7,7 @@ from pathlib import Path
 import replay_step_tail as common
 ROOT=common.ROOT;FIXTURES=ROOT/'engine/tests/fixtures/watched_selection'
 STATIC=tuple('static/1-0-exe/code/seg_'+n+'.asm' for n in ('0AB9_01','0AB9_03','0AB9_04','0AB9_05','0AB9_06','0AB9_15','1B55_08','232A_01','24BC_01','24BC_02'))
-def load():
+def load_baseline():
     cases=[];pins=[]
     for prefix in ('',):
         pin=json.loads((FIXTURES/(prefix+'provenance.json')).read_text())
@@ -23,6 +23,27 @@ def load():
         cases.extend(rows);pins.append(pin)
     return cases,pins
 
+def load():
+    cases,pins=load_baseline()
+    pin=json.loads((FIXTURES/'frames-provenance.json').read_text())
+    raw=(FIXTURES/'frames.jsonl').read_bytes();capture_raw=(ROOT/pin['capture']).read_bytes()
+    if common.sha(raw)!=pin['cases_sha256'] or common.sha(capture_raw)!=pin['capture_sha256']:raise ValueError('frame witness digest differs')
+    capture_record=json.loads(capture_raw);frames=[json.loads(line)for line in raw.splitlines()]
+    if capture_record['status']!='completed' or not capture_record['first_tick_join'] or capture_record['source']!=pin['source'] or not common.same(frames,capture_record['cases']):raise ValueError('frame witness provenance differs')
+    if len(frames)!=64:raise ValueError('frame witness count differs')
+    core=lambda source:{k:v for k,v in source.items()if k!='commit'}
+    if not common.same(core(pin['source']),core(pins[0]['source'])):raise ValueError('frame and baseline source differs')
+    for c,f in zip(cases,frames):
+        for k in ('case','tick','draw_start','draw_end'):
+            if c[k]!=f[k]:raise ValueError('frame original boundary join differs')
+        for k in ('scene','seed'):
+            if not common.same(c['input'][k],f['input'][k]) or not common.same(c['output']['output'][k],f['output']['output'][k]):raise ValueError('frame original state join differs')
+        if not common.same(c['output']['draws'],f['output']['draws']) or f['input']['cells'] or f['output']['output']['cells']:raise ValueError('frame original draw/fact join differs')
+        value=f['input']['frame_byte5']
+        if type(value)is not int or not 0<=value<=255:raise ValueError('invalid raw entry frame byte')
+        c['input']['frame_byte5']=value
+    return cases,pins+[pin]
+
 def check(cases):
     import onenil_engine as native
     for number,c in enumerate(cases):
@@ -30,11 +51,12 @@ def check(cases):
         if not common.same(got,c['output']):raise ValueError(f'original selection case{number} differs')
     print(f'Native watched selection:{len(cases)} exact original scenes/seeds/ordered draws from original3846 calls;standalone kernel,not a watched match.')
 
-def capture(research_root):
+def capture(research_root,frames_only=False):
     if common.git('status','--porcelain','--','tools/replay_watched_selection.py'):raise ValueError('commit observer before capture')
-    pin_name='provenance.json'
-    case_name='cases.jsonl'
-    if (FIXTURES/pin_name).exists():load();print('original selection capture unchanged');return
+    pin_name='frames-provenance.json' if frames_only else 'provenance.json'
+    case_name='frames.jsonl' if frames_only else 'cases.jsonl'
+    if (FIXTURES/pin_name).exists():
+        (load if frames_only else load_baseline)();print('original selection capture unchanged');return
     root=research_root.resolve();sys.path.insert(0,str(root/'runtime/emul'))
     import watched_actions as observer
     source=observer.check();record=json.loads((root/source['record']).read_text());reference=observer.setup.contests.outputs(record)
@@ -45,7 +67,9 @@ def capture(research_root):
         a=0xCCEF+25*index
         return {'index':index,**{f'word{k}':g.rd(a+k) for k in (0,2,8,10,12,14,20,23)},**{f'byte{k}':g.rd(a+k,1) for k in (4,5,6,7,16,17,18,19,22)}}
     def enable(g):
-        g.put(g.far(0xD7D2)+0xF2,b'\x01');install_operand_hooks();print('selection watched mode enabled;operand hooks installed',flush=True)
+        g.put(g.far(0xD7D2)+0xF2,b'\x01')
+        if not frames_only:install_operand_hooks()
+        print('selection watched mode enabled;frame-only='+str(frames_only),flush=True)
     def tick(g):
         nonlocal ticks,joined
         ticks+=1
@@ -55,7 +79,9 @@ def capture(research_root):
             if not common.same(observer.snapshot(g),reference['first_ticks'][0]['state']):raise ValueError('selection reached different watched admission')
             joined=True
     import compile_watched as compiler
-    code,_=compiler.listing(root);procedures=compiler.graph(code,[(0x0AB9,0x3846)])
+    if frames_only:procedures={}
+    else:
+        code,_=compiler.listing(root);procedures=compiler.graph(code,[(0x0AB9,0x3846)])
     builtin=set(range(0xD7BA,0xD7C6))|set(range(0xDE84,0xDE88))
     def enter(g):
         nonlocal pending,entry_memory,regions,entry_sp
@@ -66,6 +92,7 @@ def capture(research_root):
         regions=[('p8',g.far(0xD7BA),8*3921),('p15',g.far(0xD7BE),15*3921),('club',g.far(0xD7C2),62*175),('ds',g.DS*16,65536)]
         entry_memory={name:g.mem(base,length) for name,base,length in regions};entry_sp=g.reg('sp')
         pending={'case':len(cases),'tick':ticks,'draw_start':week.draws,'input':{'scene':scene(g,index),'seed':g.rd(0xA51C),'cells':[]}}
+        if frames_only:pending['input']['frame_byte5']=g.mem(g.reg('ss')*16+((g.reg('sp')-7)&65535),1)[0]
     def observe(g,operand,writing):
         if pending is None:return
         import re
@@ -93,7 +120,7 @@ def capture(research_root):
         nonlocal pending,hook
         if pending is None:return
         c=pending;pending=None;c['input']['cells'].sort(key=lambda r:(r['region'],r['offset']))
-        output=json.loads(json.dumps(c['input']));output['scene']=scene(g,output['scene']['index']);output['seed']=g.rd(0xA51C)
+        output=json.loads(json.dumps(c['input']));output.pop('frame_byte5',None);output['scene']=scene(g,output['scene']['index']);output['seed']=g.rd(0xA51C)
         for field in output['cells']:
             base=next(base for name,base,length in regions if name==field['region']);actual=g.mem(base+field['offset'],1)[0]
             if actual!=field['value']:raise ValueError('readonly selection entry fact changed')
@@ -136,11 +163,12 @@ def capture(research_root):
         if len(cases)!=64:raise ValueError('selection call count differs')
     except (Exception,KeyboardInterrupt) as e:status='aborted';reason=f'{type(e).__name__}: {e}'
     directory=ROOT/'records/T36';directory.mkdir(parents=True,exist_ok=True)
-    number=max((int(p.stem.split('-r')[-1]) for p in directory.glob('capture-r*.json')),default=0)+1;path=directory/f'capture-r{number:04d}.json'
-    result={'schema':'watched-selection-capture/1','code_commit':producer,'started':started,'ended':observer.match.utc(),
+    prefix='frames-capture' if frames_only else 'capture'
+    number=max((int(p.stem.split('-r')[-1]) for p in directory.glob(prefix+'-r*.json')),default=0)+1;path=directory/f'{prefix}-r{number:04d}.json'
+    result={'schema':'watched-selection-frame-capture/1' if frames_only else 'watched-selection-capture/1','code_commit':producer,'started':started,'ended':observer.match.utc(),
             'status':status,'reason':reason,'source':{'repository':'https://github.com/diegoami/onenil-archaeology','commit':observer.match.git('rev-parse','HEAD'),'prefix_record':source['record'],'prefix_record_sha256':source['record_sha256'],'start_state_sha256':record['start_state']['sha256'],'static_sources':{p:common.sha((root/p).read_bytes()) for p in STATIC}},
             'pending_on_abort':pending if status!='completed' else None,'first_tick_join':joined,'ticks':ticks,'draws':week.draws,'cases':cases,
-            'scope':'First64 original3846 roots;readonly root-entry decoded data witnesses,canonical pointers external;full scenes/seeds/ordered draws separate'}
+            'scope':('First64 original3846 raw entry SS:(SP-7),futureBP-5 byte witnesses;independent full scene/seed/draw join to baseline;not helper outcomes' if frames_only else 'First64 original3846 roots;readonly root-entry decoded data witnesses,canonical pointers external;full scenes/seeds/ordered draws separate')}
     with path.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
     print(path.relative_to(ROOT),status,reason,flush=True)
     if status!='completed':raise SystemExit(1)
@@ -171,10 +199,10 @@ def benchmark(cases,pins,repetitions,directory):
     print(path.relative_to(ROOT))
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);g=p.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--benchmark',action='store_true');p.add_argument('--out',default='records/T36');p.add_argument('--repetitions',type=int,default=100);g.add_argument('--capture',action='store_true');p.add_argument('--research-root',type=Path);args=p.parse_args()
-    if args.capture:
+    p=argparse.ArgumentParser(description=__doc__);g=p.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--benchmark',action='store_true');p.add_argument('--out',default='records/T36');p.add_argument('--repetitions',type=int,default=100);g.add_argument('--capture',action='store_true');g.add_argument('--capture-frames',action='store_true');p.add_argument('--research-root',type=Path);args=p.parse_args()
+    if args.capture or args.capture_frames:
         if args.research_root is None:p.error('--capture requires --research-root')
-        capture(args.research_root);return
+        capture(args.research_root,args.capture_frames);return
     if args.repetitions<1:p.error("positive repetitions required")
     cases,pins=load();check(cases)
     if args.benchmark:benchmark(cases,pins,args.repetitions,args.out)
