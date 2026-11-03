@@ -16,6 +16,9 @@ pub(crate) const WATCHED_SCORE_PRESENT: usize = 0x400C0;
 pub(crate) const WATCHED_PLAYER_PRESENT: usize = 0x43000;
 pub(crate) const PITCH: usize = 0x41000;
 pub(crate) const PITCH_PRESENT: usize = 0x42000;
+// [designed] Decoded background words used by original ball transport.
+pub(crate) const PITCH_BACKGROUND: usize = 0x45000;
+pub(crate) const PITCH_BACKGROUND_PRESENT: usize = 0x46000;
 pub(crate) const PITCH_CELLS: usize = 17 * 75;
 // [confirmed] Ratings4A37 and assignment4A37 share original DCC8.
 pub(crate) const STAFF: usize = CLUB_COUNTS;
@@ -43,6 +46,11 @@ mod tests {
             (WATCHED_IDENTITY_PRESENT, WATCHED_IDENTITY_PRESENT + 23),
             (PITCH, PITCH + 2 * PITCH_CELLS),
             (PITCH_PRESENT, PITCH_PRESENT + PITCH_CELLS),
+            (PITCH_BACKGROUND, PITCH_BACKGROUND + 2 * PITCH_CELLS),
+            (
+                PITCH_BACKGROUND_PRESENT,
+                PITCH_BACKGROUND_PRESENT + PITCH_CELLS,
+            ),
             (CONFIG, CONFIG + 256),
             (CLUB_COUNTS, CLUB_COUNTS + 0x10000),
             (HISTORY, HISTORY + 0x10000),

@@ -1375,3 +1375,35 @@ fields D088/D5A/DE26 remain outside this projection. Matching these gameplay
 fields does not claim full physical sound/timer execution. Other watched
 actions,ball flight and clock/tick/viewer integration remain before detailed
 browser commentary is available.
+
+### Original in-bounds ball flight and pitch transport (T34)
+
+[confirmed: archaeologyF39/c7637bd and7423/1998:081B/084B/0A16/0B3F at
+d9e20a4] Rust computes independent wrapped coordinate movement,distance decay,
+the original low-word flight metric and air/glyph guards. Logical pitch
+transport restores an old7/9 marker from the indexed background and stamps
+the selected glyph word where foreground equals background. Player movement
+legality and ball transport use the same canonical main occupancy image.
+Raw indexed main/background cells are inputs;no bounds,metric,coordinate or
+helper result is injected. Missing reached cells diagnose.
+
+```sh
+.cache/venv/bin/python tools/replay_watched_ball.py --check
+.cache/venv/bin/python tools/replay_watched_ball.py --benchmark --out records/T34
+```
+
+[designed] This covers the in-bounds gameplay/occupancy branch. Outside-pitch
+restarts diagnose pending their original routines. Pixel/audio/timer transport
+is external;the logical occupancy writes used by gameplay stay inside this
+projection. Other watched actions,restarts and clock/tick/viewer integration
+remain before detailed browser play-by-play is available.
+
+[confirmed: T34 capture-r0002] All32 original7423 roots through tick107/draw3666
+match full ball/main/background/metric/bounds/seed/draw observations. They
+include14 air-flag entries,28 metric calls,64 main/58 background indexed
+witnesses and56 changed main cells;no RNG is drawn. All32 remain inside the
+playing pitch. Signed metric extremes,bounds rejection and other guard
+endpoints have synthetic/static coverage. Aborted r0001 is retained/excluded:
+the observer initially failed to wrap effective pitch-buffer offsets to16 bits;
+accepted r0002 uses corrected segmented addresses and verifies every indexed
+read against the original ES:DI address.

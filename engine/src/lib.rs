@@ -33,6 +33,7 @@ pub mod setup;
 pub mod step_tail;
 pub mod substitution;
 pub mod terminal;
+pub mod watched_ball;
 pub mod watched_direction;
 pub mod watched_kickoff;
 pub mod watched_movement;
@@ -378,6 +379,13 @@ mod python {
         }
     }
 
+    #[pyfunction]
+    fn watched_advance_ball(input_json: &str) -> PyResult<String> {
+        let state: watched_ball::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = watched_ball::advance(&state).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
     #[pyfunction(name = "watched_kickoff")]
     fn initial_kickoff(input_json: &str) -> PyResult<String> {
         let state: watched_kickoff::State =
@@ -840,6 +848,7 @@ mod python {
         module.add_function(wrap_pyfunction!(watched_choose_direction, module)?)?;
         module.add_function(wrap_pyfunction!(watched_prepare_target, module)?)?;
         module.add_function(wrap_pyfunction!(initial_kickoff, module)?)?;
+        module.add_function(wrap_pyfunction!(watched_advance_ball, module)?)?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;

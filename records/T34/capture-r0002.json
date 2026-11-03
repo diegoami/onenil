@@ -1,0 +1,3178 @@
+{
+  "schema": "watched-ball-capture/1",
+  "code_commit": "81eb2187bc43910014e1a7e81423fcb72a3825bf",
+  "started": "2026-11-03T14:49:21Z",
+  "ended": "2026-11-03T14:54:08Z",
+  "status": "completed",
+  "reason": null,
+  "source": {
+    "repository": "https://github.com/diegoami/onenil-archaeology",
+    "commit": "c7637bdb08f49c8c6de862c5fba9fe3dacd2228f",
+    "prefix_record": "runs/T39/T39-r0003.json",
+    "prefix_record_sha256": "b7f170d8f5229046717354a973e1a121eb61dacf2f716856efe461bacce6f99c",
+    "start_state_sha256": "2f634978859f7c07b3519e4278d8aaf70c2c70b93ad48362408fbcfa210576a1",
+    "static_sources": {
+      "static/1-0-exe/code/seg_0AB9_12.asm": "af2630092912280994154772ec15a46d8be8983c9478bc7d738e302222f9b937",
+      "static/1-0-exe/code/seg_1998_01.asm": "8975e7992cc991c92d6a05b8875eb0960c2893ed122314f984bed4eb77d17148",
+      "static/1-0-exe/code/seg_1998_02.asm": "7db3b484368ec70c2187ce4c90906d3e863cb20034e7c94bed8bacf188d61f05",
+      "static/1-0-exe/code/seg_26C9_01.asm": "ce5a800cf4450d399392ecbfd5a481e95c0bde5aade38867b8421d6dddddf6f4"
+    }
+  },
+  "pending_on_abort": null,
+  "first_tick_join": true,
+  "ticks": 107,
+  "draws": 3666,
+  "cases": [
+    {
+      "case": 0,
+      "tick": 48,
+      "draw_start": 943,
+      "input": {
+        "ball": {
+          "word0": 0,
+          "word2": 0,
+          "word7": 65535,
+          "word9": 0,
+          "word11": 2,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 47669,
+        "main": [
+          {
+            "coordinate": 0,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 255,
+            "occupant": 179,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 0,
+            "occupant": 9,
+            "tag": 7
+          },
+          {
+            "coordinate": 255,
+            "occupant": 179,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 943,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 255,
+            "word2": 255,
+            "word7": 65535,
+            "word9": 0,
+            "word11": 1,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 47669,
+          "main": [
+            {
+              "coordinate": 0,
+              "occupant": 9,
+              "tag": 7
+            },
+            {
+              "coordinate": 255,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 0,
+              "occupant": 9,
+              "tag": 7
+            },
+            {
+              "coordinate": 255,
+              "occupant": 179,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 1,
+      "tick": 49,
+      "draw_start": 983,
+      "input": {
+        "ball": {
+          "word0": 255,
+          "word2": 255,
+          "word7": 65535,
+          "word9": 0,
+          "word11": 1,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 12125,
+        "main": [
+          {
+            "coordinate": 255,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 254,
+            "occupant": 156,
+            "tag": 12
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 255,
+            "occupant": 179,
+            "tag": 7
+          },
+          {
+            "coordinate": 254,
+            "occupant": 179,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 983,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 254,
+            "word2": 254,
+            "word7": 65535,
+            "word9": 0,
+            "word11": 0,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 12125,
+          "main": [
+            {
+              "coordinate": 255,
+              "occupant": 179,
+              "tag": 7
+            },
+            {
+              "coordinate": 254,
+              "occupant": 156,
+              "tag": 12
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 255,
+              "occupant": 179,
+              "tag": 7
+            },
+            {
+              "coordinate": 254,
+              "occupant": 179,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 2,
+      "tick": 49,
+      "draw_start": 1003,
+      "input": {
+        "ball": {
+          "word0": 254,
+          "word2": 254,
+          "word7": 0,
+          "word9": 1,
+          "word11": 5,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 51153,
+        "main": [
+          {
+            "coordinate": 254,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 510,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 254,
+            "occupant": 179,
+            "tag": 7
+          },
+          {
+            "coordinate": 510,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1003,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 510,
+            "word2": 510,
+            "word7": 0,
+            "word9": 1,
+            "word11": 4,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 51153,
+          "main": [
+            {
+              "coordinate": 254,
+              "occupant": 179,
+              "tag": 7
+            },
+            {
+              "coordinate": 510,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 254,
+              "occupant": 179,
+              "tag": 7
+            },
+            {
+              "coordinate": 510,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 3,
+      "tick": 50,
+      "draw_start": 1023,
+      "input": {
+        "ball": {
+          "word0": 510,
+          "word2": 510,
+          "word7": 0,
+          "word9": 1,
+          "word11": 4,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 31109,
+        "main": [
+          {
+            "coordinate": 510,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 766,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 510,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 766,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1023,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 766,
+            "word2": 766,
+            "word7": 0,
+            "word9": 1,
+            "word11": 3,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 31109,
+          "main": [
+            {
+              "coordinate": 510,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 766,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 510,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 766,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 4,
+      "tick": 51,
+      "draw_start": 1064,
+      "input": {
+        "ball": {
+          "word0": 766,
+          "word2": 766,
+          "word7": 0,
+          "word9": 1,
+          "word11": 3,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 25800,
+        "main": [
+          {
+            "coordinate": 766,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 1022,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 766,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 1022,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1064,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1022,
+            "word2": 1022,
+            "word7": 0,
+            "word9": 1,
+            "word11": 2,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 25800,
+          "main": [
+            {
+              "coordinate": 766,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1022,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 766,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1022,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 5,
+      "tick": 52,
+      "draw_start": 1111,
+      "input": {
+        "ball": {
+          "word0": 1022,
+          "word2": 1022,
+          "word7": 0,
+          "word9": 1,
+          "word11": 2,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 18397,
+        "main": [
+          {
+            "coordinate": 1022,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 1278,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 1022,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 1278,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1111,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1278,
+            "word2": 1278,
+            "word7": 0,
+            "word9": 1,
+            "word11": 1,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 18397,
+          "main": [
+            {
+              "coordinate": 1022,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1278,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 1022,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1278,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 6,
+      "tick": 53,
+      "draw_start": 1155,
+      "input": {
+        "ball": {
+          "word0": 1278,
+          "word2": 1278,
+          "word7": 0,
+          "word9": 1,
+          "word11": 1,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 21737,
+        "main": [
+          {
+            "coordinate": 1278,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 1534,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 1278,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 1534,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1155,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1534,
+            "word2": 1534,
+            "word7": 0,
+            "word9": 1,
+            "word11": 0,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 21737,
+          "main": [
+            {
+              "coordinate": 1278,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1534,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 1278,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1534,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 7,
+      "tick": 57,
+      "draw_start": 1371,
+      "input": {
+        "ball": {
+          "word0": 766,
+          "word2": 766,
+          "word7": 65535,
+          "word9": 65535,
+          "word11": 4,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 46913,
+        "main": [
+          {
+            "coordinate": 766,
+            "occupant": 148,
+            "tag": 12
+          },
+          {
+            "coordinate": 509,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 509,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1371,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 509,
+            "word2": 509,
+            "word7": 65535,
+            "word9": 65535,
+            "word11": 3,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 46913,
+          "main": [
+            {
+              "coordinate": 766,
+              "occupant": 148,
+              "tag": 12
+            },
+            {
+              "coordinate": 509,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 509,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 8,
+      "tick": 58,
+      "draw_start": 1394,
+      "input": {
+        "ball": {
+          "word0": 509,
+          "word2": 509,
+          "word7": 65535,
+          "word9": 65535,
+          "word11": 3,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 22418,
+        "main": [
+          {
+            "coordinate": 509,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 252,
+            "occupant": 179,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 509,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 252,
+            "occupant": 179,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1394,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 252,
+            "word2": 252,
+            "word7": 65535,
+            "word9": 65535,
+            "word11": 2,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 22418,
+          "main": [
+            {
+              "coordinate": 509,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 252,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 509,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 252,
+              "occupant": 179,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 9,
+      "tick": 59,
+      "draw_start": 1427,
+      "input": {
+        "ball": {
+          "word0": 252,
+          "word2": 252,
+          "word7": 65535,
+          "word9": 65535,
+          "word11": 2,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 51705,
+        "main": [
+          {
+            "coordinate": 252,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 65531,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 252,
+            "occupant": 179,
+            "tag": 7
+          },
+          {
+            "coordinate": 65531,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1427,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 65531,
+            "word2": 65531,
+            "word7": 65535,
+            "word9": 65535,
+            "word11": 1,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 51705,
+          "main": [
+            {
+              "coordinate": 252,
+              "occupant": 179,
+              "tag": 7
+            },
+            {
+              "coordinate": 65531,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 252,
+              "occupant": 179,
+              "tag": 7
+            },
+            {
+              "coordinate": 65531,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 10,
+      "tick": 60,
+      "draw_start": 1459,
+      "input": {
+        "ball": {
+          "word0": 65531,
+          "word2": 65531,
+          "word7": 65535,
+          "word9": 65535,
+          "word11": 1,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 3609,
+        "main": [
+          {
+            "coordinate": 65531,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 65274,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 65531,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 65274,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1459,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 65274,
+            "word2": 65274,
+            "word7": 65535,
+            "word9": 65535,
+            "word11": 0,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 3609,
+          "main": [
+            {
+              "coordinate": 65531,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 65274,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 65531,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 65274,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 11,
+      "tick": 69,
+      "draw_start": 1815,
+      "input": {
+        "ball": {
+          "word0": 250,
+          "word2": 250,
+          "word7": 0,
+          "word9": 1,
+          "word11": 3,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 44701,
+        "main": [
+          {
+            "coordinate": 250,
+            "occupant": 147,
+            "tag": 9
+          },
+          {
+            "coordinate": 506,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 506,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1815,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 506,
+            "word2": 506,
+            "word7": 0,
+            "word9": 1,
+            "word11": 2,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 44701,
+          "main": [
+            {
+              "coordinate": 250,
+              "occupant": 147,
+              "tag": 9
+            },
+            {
+              "coordinate": 506,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 506,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 12,
+      "tick": 70,
+      "draw_start": 1860,
+      "input": {
+        "ball": {
+          "word0": 506,
+          "word2": 506,
+          "word7": 0,
+          "word9": 1,
+          "word11": 2,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 38100,
+        "main": [
+          {
+            "coordinate": 506,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 762,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 506,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 762,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1860,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 762,
+            "word2": 762,
+            "word7": 0,
+            "word9": 1,
+            "word11": 1,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 38100,
+          "main": [
+            {
+              "coordinate": 506,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 762,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 506,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 762,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 13,
+      "tick": 71,
+      "draw_start": 1907,
+      "input": {
+        "ball": {
+          "word0": 762,
+          "word2": 762,
+          "word7": 0,
+          "word9": 1,
+          "word11": 1,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 6105,
+        "main": [
+          {
+            "coordinate": 762,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 1018,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 762,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 1018,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 1907,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1018,
+            "word2": 1018,
+            "word7": 0,
+            "word9": 1,
+            "word11": 0,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 6105,
+          "main": [
+            {
+              "coordinate": 762,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1018,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 762,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1018,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 14,
+      "tick": 76,
+      "draw_start": 2154,
+      "input": {
+        "ball": {
+          "word0": 1530,
+          "word2": 1530,
+          "word7": 1,
+          "word9": 65534,
+          "word11": 2,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 11114,
+        "main": [
+          {
+            "coordinate": 1530,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 1019,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 1530,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 1019,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 2154,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1019,
+            "word2": 1019,
+            "word7": 1,
+            "word9": 65534,
+            "word11": 1,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 11114,
+          "main": [
+            {
+              "coordinate": 1530,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1019,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 1530,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1019,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 15,
+      "tick": 77,
+      "draw_start": 2202,
+      "input": {
+        "ball": {
+          "word0": 1019,
+          "word2": 1019,
+          "word7": 1,
+          "word9": 65534,
+          "word11": 1,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 60762,
+        "main": [
+          {
+            "coordinate": 1019,
+            "occupant": 148,
+            "tag": 9
+          },
+          {
+            "coordinate": 508,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 508,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 2202,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 508,
+            "word2": 508,
+            "word7": 1,
+            "word9": 65534,
+            "word11": 0,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 60762,
+          "main": [
+            {
+              "coordinate": 1019,
+              "occupant": 148,
+              "tag": 9
+            },
+            {
+              "coordinate": 508,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 508,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 16,
+      "tick": 80,
+      "draw_start": 2358,
+      "input": {
+        "ball": {
+          "word0": 1020,
+          "word2": 1020,
+          "word7": 65535,
+          "word9": 0,
+          "word11": 3,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 9286,
+        "main": [
+          {
+            "coordinate": 1020,
+            "occupant": 157,
+            "tag": 12
+          },
+          {
+            "coordinate": 1019,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 1019,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 2358,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1019,
+            "word2": 1019,
+            "word7": 65535,
+            "word9": 0,
+            "word11": 2,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 9286,
+          "main": [
+            {
+              "coordinate": 1020,
+              "occupant": 157,
+              "tag": 12
+            },
+            {
+              "coordinate": 1019,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 1019,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 17,
+      "tick": 81,
+      "draw_start": 2410,
+      "input": {
+        "ball": {
+          "word0": 1019,
+          "word2": 1019,
+          "word7": 65535,
+          "word9": 0,
+          "word11": 2,
+          "byte4": 7,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 0
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 32874,
+        "main": [
+          {
+            "coordinate": 1019,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 1018,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 1019,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 1018,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 2410,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1018,
+            "word2": 1018,
+            "word7": 65535,
+            "word9": 0,
+            "word11": 1,
+            "byte4": 7,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 0
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 32874,
+          "main": [
+            {
+              "coordinate": 1019,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1018,
+              "occupant": 7,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 1019,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1018,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [],
+        "draws": []
+      }
+    },
+    {
+      "case": 18,
+      "tick": 101,
+      "draw_start": 3424,
+      "input": {
+        "ball": {
+          "word0": 4603,
+          "word2": 4603,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 19,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 65056,
+        "main": [
+          {
+            "coordinate": 4603,
+            "occupant": 7,
+            "tag": 15
+          },
+          {
+            "coordinate": 4347,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 4603,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 4347,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3424,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 4347,
+            "word2": 4347,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 18,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 65056,
+          "main": [
+            {
+              "coordinate": 4603,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 4347,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 4603,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 4347,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          18,
+          18
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 19,
+      "tick": 102,
+      "draw_start": 3433,
+      "input": {
+        "ball": {
+          "word0": 4347,
+          "word2": 4347,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 18,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 53751,
+        "main": [
+          {
+            "coordinate": 4347,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 4091,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 4347,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 4091,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3433,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 4091,
+            "word2": 4091,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 17,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 53751,
+          "main": [
+            {
+              "coordinate": 4347,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 4091,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 4347,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 4091,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          17,
+          17
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 20,
+      "tick": 102,
+      "draw_start": 3456,
+      "input": {
+        "ball": {
+          "word0": 4091,
+          "word2": 4091,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 17,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 20416,
+        "main": [
+          {
+            "coordinate": 4091,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 3835,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 4091,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 3835,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3456,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 3835,
+            "word2": 3835,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 16,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 20416,
+          "main": [
+            {
+              "coordinate": 4091,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 3835,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 4091,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 3835,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          16,
+          16
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 21,
+      "tick": 102,
+      "draw_start": 3470,
+      "input": {
+        "ball": {
+          "word0": 3835,
+          "word2": 3835,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 16,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 40574,
+        "main": [
+          {
+            "coordinate": 3835,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 3579,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 3835,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 3579,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3470,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 3579,
+            "word2": 3579,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 15,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 40574,
+          "main": [
+            {
+              "coordinate": 3835,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 3579,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 3835,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 3579,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          15,
+          15
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 22,
+      "tick": 103,
+      "draw_start": 3477,
+      "input": {
+        "ball": {
+          "word0": 3579,
+          "word2": 3579,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 15,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 53347,
+        "main": [
+          {
+            "coordinate": 3579,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 3323,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 3579,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 3323,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3477,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 3323,
+            "word2": 3323,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 14,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 53347,
+          "main": [
+            {
+              "coordinate": 3579,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 3323,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 3579,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 3323,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          14,
+          14
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 23,
+      "tick": 103,
+      "draw_start": 3501,
+      "input": {
+        "ball": {
+          "word0": 3323,
+          "word2": 3323,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 14,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 28859,
+        "main": [
+          {
+            "coordinate": 3323,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 3067,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 3323,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 3067,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3501,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 3067,
+            "word2": 3067,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 13,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 28859,
+          "main": [
+            {
+              "coordinate": 3323,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 3067,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 3323,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 3067,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          13,
+          13
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 24,
+      "tick": 103,
+      "draw_start": 3515,
+      "input": {
+        "ball": {
+          "word0": 3067,
+          "word2": 3067,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 13,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 30625,
+        "main": [
+          {
+            "coordinate": 3067,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 2811,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 3067,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 2811,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3515,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 2811,
+            "word2": 2811,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 12,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 30625,
+          "main": [
+            {
+              "coordinate": 3067,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 2811,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 3067,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 2811,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          12,
+          12
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 25,
+      "tick": 104,
+      "draw_start": 3521,
+      "input": {
+        "ball": {
+          "word0": 2811,
+          "word2": 2811,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 12,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 29199,
+        "main": [
+          {
+            "coordinate": 2811,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 2555,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 2811,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 2555,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3521,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 2555,
+            "word2": 2555,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 11,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 29199,
+          "main": [
+            {
+              "coordinate": 2811,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 2555,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 2811,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 2555,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          11,
+          11
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 26,
+      "tick": 104,
+      "draw_start": 3545,
+      "input": {
+        "ball": {
+          "word0": 2555,
+          "word2": 2555,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 11,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 24807,
+        "main": [
+          {
+            "coordinate": 2555,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 2299,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 2555,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 2299,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3545,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 2299,
+            "word2": 2299,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 10,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 24807,
+          "main": [
+            {
+              "coordinate": 2555,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 2299,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 2555,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 2299,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          10,
+          10
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 27,
+      "tick": 105,
+      "draw_start": 3566,
+      "input": {
+        "ball": {
+          "word0": 2299,
+          "word2": 2299,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 10,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 19550,
+        "main": [
+          {
+            "coordinate": 2299,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 2043,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 2299,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 2043,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3566,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 2043,
+            "word2": 2043,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 9,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 19550,
+          "main": [
+            {
+              "coordinate": 2299,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 2043,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 2299,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 2043,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          9,
+          9
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 28,
+      "tick": 105,
+      "draw_start": 3593,
+      "input": {
+        "ball": {
+          "word0": 2043,
+          "word2": 2043,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 9,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 42391,
+        "main": [
+          {
+            "coordinate": 2043,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 1787,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 2043,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 1787,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3593,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1787,
+            "word2": 1787,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 8,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 42391,
+          "main": [
+            {
+              "coordinate": 2043,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1787,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 2043,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1787,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          8,
+          8
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 29,
+      "tick": 106,
+      "draw_start": 3617,
+      "input": {
+        "ball": {
+          "word0": 1787,
+          "word2": 1787,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 8,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 47983,
+        "main": [
+          {
+            "coordinate": 1787,
+            "occupant": 157,
+            "tag": 12
+          },
+          {
+            "coordinate": 1531,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 1531,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3617,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1531,
+            "word2": 1531,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 7,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 47983,
+          "main": [
+            {
+              "coordinate": 1787,
+              "occupant": 157,
+              "tag": 12
+            },
+            {
+              "coordinate": 1531,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 1531,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          7,
+          7
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 30,
+      "tick": 106,
+      "draw_start": 3642,
+      "input": {
+        "ball": {
+          "word0": 1531,
+          "word2": 1531,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 7,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 52090,
+        "main": [
+          {
+            "coordinate": 1531,
+            "occupant": 9,
+            "tag": 15
+          },
+          {
+            "coordinate": 1275,
+            "occupant": 149,
+            "tag": 9
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 1531,
+            "occupant": 32,
+            "tag": 7
+          },
+          {
+            "coordinate": 1275,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3642,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1275,
+            "word2": 1275,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 6,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 52090,
+          "main": [
+            {
+              "coordinate": 1531,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1275,
+              "occupant": 149,
+              "tag": 9
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 1531,
+              "occupant": 32,
+              "tag": 7
+            },
+            {
+              "coordinate": 1275,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          6,
+          6
+        ],
+        "draws": []
+      }
+    },
+    {
+      "case": 31,
+      "tick": 107,
+      "draw_start": 3666,
+      "input": {
+        "ball": {
+          "word0": 1275,
+          "word2": 1275,
+          "word7": 0,
+          "word9": 65535,
+          "word11": 6,
+          "byte4": 9,
+          "byte5": 15,
+          "byte6": 0,
+          "byte13": 1,
+          "byte14": 1
+        },
+        "sentinel": 11,
+        "glyphs": [
+          7,
+          9
+        ],
+        "seed": 28146,
+        "main": [
+          {
+            "coordinate": 1275,
+            "occupant": 149,
+            "tag": 9
+          },
+          {
+            "coordinate": 1019,
+            "occupant": 32,
+            "tag": 7
+          }
+        ],
+        "background": [
+          {
+            "coordinate": 1019,
+            "occupant": 32,
+            "tag": 7
+          }
+        ]
+      },
+      "draw_end": 3666,
+      "output": {
+        "output": {
+          "ball": {
+            "word0": 1019,
+            "word2": 1019,
+            "word7": 0,
+            "word9": 65535,
+            "word11": 5,
+            "byte4": 9,
+            "byte5": 15,
+            "byte6": 0,
+            "byte13": 1,
+            "byte14": 1
+          },
+          "sentinel": 11,
+          "glyphs": [
+            7,
+            9
+          ],
+          "seed": 28146,
+          "main": [
+            {
+              "coordinate": 1275,
+              "occupant": 149,
+              "tag": 9
+            },
+            {
+              "coordinate": 1019,
+              "occupant": 9,
+              "tag": 15
+            }
+          ],
+          "background": [
+            {
+              "coordinate": 1019,
+              "occupant": 32,
+              "tag": 7
+            }
+          ]
+        },
+        "within": 1,
+        "metrics": [
+          5,
+          5
+        ],
+        "draws": []
+      }
+    }
+  ],
+  "scope": "First32 original7423 roots from retained admission/RNG prefix;raw reached indexed main/background facts and separate state/bounds/metric/draw assertions"
+}
