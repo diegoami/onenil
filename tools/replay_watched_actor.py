@@ -8,6 +8,7 @@ import watched_parent as parent
 ROOT=oracle.ROOT
 DIRECTORY=ROOT/'records/T38/oracle-r0002'
 FIXTURES=ROOT/'engine/tests/fixtures/watched_actor'
+MARGIN_SHA256='590b9ec023f70ff22fad6fef444a225aa221516c0e329ba829f0bd22679d65ef'
 CORPUS_SHA256='f0dc8f33fce736501835c4b19e50a3ca98ee0a20b9ec46980b7580811f0945c8'
 
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -33,6 +34,18 @@ def originals():
         for change in c['changes']:
             if set(change)!={'area','offset','before','after'}or not all(type(change[k])is int and 0<=change[k]<=255 for k in('before','after')):raise ValueError('undecoded parent change')
         result.append((c,anchor))
+    margin_dir=ROOT/'records/T38/margin-r0001'
+    if sha(margin_dir/'manifest.json')!=MARGIN_SHA256:raise ValueError('original logical margin pin differs')
+    margin=read(margin_dir/'manifest.json')
+    if len(margin['cases'])!=50:raise ValueError('original logical margin coverage differs')
+    for (c,anchor),item in zip(result,margin['cases'],strict=True):
+        path=ROOT/item['path']
+        if sha(path)!=item['sha256']:raise ValueError('original logical margin case digest differs')
+        value=read(path)
+        if value['case']!=c['case']or value['original_sha256']!=manifest['cases'][c['case']]['sha256']or value['prior_outcomes_equal']is not True:raise ValueError('original margin provenance differs')
+        for d in value['changes']:
+            if set(d)!={'area','offset','before','after'}or d['area']not in('main','main_shown','background','background_shown')or facts.pitch(d['offset'])or not pitch(d['offset']):raise ValueError('unexpected original logical margin fact')
+        c['changes']+=value['changes']
     return result,manifest
 
 def admitted(c,anchor):
@@ -47,8 +60,13 @@ def address(state,area,offset):
         return p['offset']+16*p['segment']
     return facts.address(state,area,offset)
 
+def pitch(offset):return any(0x90E+160*row-74<=offset<0x90E+160*row+76 for row in range(-9,10))
+
 def named(state,at):
     if at==address(state,'style',0):return 'style',0
+    for area in ('main','main_shown','background','background_shown'):
+        offset=at-address(state,area,0)
+        if 0<=offset<4000 and pitch(offset):return area,offset
     return facts.named(state,at)
 
 def select_entry(c,anchor,native):

@@ -174,7 +174,7 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
     if matches!(
         f.area,
         Area::Main | Area::MainShown | Area::Background | Area::BackgroundShown
-    ) && !pitch_offset(f.offset)
+    ) && !(pitch_offset(f.offset) || (s.kind == Kind::Actor && [-9,9].into_iter().any(|row| { let start=0x90E+160*row-74;(start..start+150).contains(&f.offset) })))
     {
         return Err("non-gameplay screen cell".into());
     }
@@ -614,6 +614,15 @@ mod tests {
         let mut missing=s.clone();missing.pointers.retain(|p|p.kind!=PointerKind::P8);assert!(machine(&missing).is_err());
     }
 
+    #[test]
+    fn actor_set_piece_margin_keeps_logical_occupancy_and_prior_bounds(){
+        let mut s=context();s.kind=Kind::Actor;
+        s.pointers.push(Pointer{kind:PointerKind::Style,offset:31,segment:28274});
+        let p=find_pointer(&s,PointerKind::Main).unwrap().address();
+        let fact=ByteFact{area:Area::Main,offset:0x36e,value:0};
+        assert_eq!(cell_address(&s,&fact).unwrap(),p+0x36e);
+        s.kind=Kind::Action5;assert!(cell_address(&s,&fact).is_err());
+    }
     #[test]
     fn valid_original_parent_fixture_replays(){
         let path=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/watched_actor/case-0000.json");
