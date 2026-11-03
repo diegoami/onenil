@@ -120,17 +120,29 @@ pub fn advance(s: &State) -> Result<Outcome, String> {
         draws: c.draws,
     })
 }
-fn run_selection(c:&mut compiled::Cpu,index:u8)->Result<(),String>{
-    let sp=c.r[4];c.push(0)?;c.push(0xCCEF+25*u16::from(index))?;
-    c.invoke(selection::p_0ab9_3846,true,0x0AB9,0x3846,0)?;
-    if c.r[4]!=sp||c.r[5]!=0||c.r[11]!=0{return Err("compiled selection Pascal frame/DS handoff differs".into());}
+fn run_selection(c: &mut compiled::Cpu, index: u8) -> Result<(), String> {
+    let sp = c.r[4];
+    c.push(0)?;
+    c.push(0xCCEF + 25 * u16::from(index))?;
+    c.invoke(selection::p_0ab9_3846, true, 0x0AB9, 0x3846, 0)?;
+    if c.r[4] != sp || c.r[5] != 0 || c.r[11] != 0 {
+        return Err("compiled selection Pascal frame/DS handoff differs".into());
+    }
     Ok(())
 }
 pub fn select_target(s: &State) -> Result<Outcome, String> {
-    let mut c=machine(s)?;run_selection(&mut c,s.scene.index)?;
-    let mut output=s.clone();output.scene=Scene::read(&c.e,s.scene.index);output.seed=c.e.word(crate::SEED);
-    for field in &mut output.cells{field.value=c.e.image[location(field)?];}
-    Ok(Outcome{output,draws:c.draws})
+    let mut c = machine(s)?;
+    run_selection(&mut c, s.scene.index)?;
+    let mut output = s.clone();
+    output.scene = Scene::read(&c.e, s.scene.index);
+    output.seed = c.e.word(crate::SEED);
+    for field in &mut output.cells {
+        field.value = c.e.image[location(field)?];
+    }
+    Ok(Outcome {
+        output,
+        draws: c.draws,
+    })
 }
 #[cfg(test)]
 mod tests {
@@ -319,36 +331,81 @@ mod tests {
     }
     #[test]
     fn selection_active_side_random_short_circuit() {
-        let mut s=synthetic();
-        s.seed=100;
-        s.cells.push(Cell{region:Region::P15,offset:23,value:0});
-        let o=select_target(&s).unwrap();
-        assert_eq!(o.output.scene,s.scene);
-        assert_eq!(o.draws.len(),1);
-        assert_ne!(o.output.seed,s.seed);
+        let mut s = synthetic();
+        s.seed = 100;
+        s.cells.push(Cell {
+            region: Region::P15,
+            offset: 23,
+            value: 0,
+        });
+        let o = select_target(&s).unwrap();
+        assert_eq!(o.output.scene, s.scene);
+        assert_eq!(o.draws.len(), 1);
+        assert_ne!(o.output.seed, s.seed);
     }
     #[test]
     fn selection_missing_and_alias_guards() {
         assert!(select_target(&sample()).unwrap_err().contains("missing"));
-        for offset in [0xA51C,0xA51D,0xD7BA,0xDE84,0xCCEF+25] {
-            let mut s=synthetic();
-            s.cells.push(Cell{region:Region::Ds,offset,value:42});
+        for offset in [0xA51C, 0xA51D, 0xD7BA, 0xDE84, 0xCCEF + 25] {
+            let mut s = synthetic();
+            s.cells.push(Cell {
+                region: Region::Ds,
+                offset,
+                value: 42,
+            });
             assert!(select_target(&s).is_err());
         }
     }
     #[test]
     fn original_selection_roots() {
-        let source=std::fs::read_to_string(format!("{}/tests/fixtures/watched_selection/cases.jsonl",env!("CARGO_MANIFEST_DIR"))).unwrap();
-        for line in source.lines(){
-            let row:serde_json::Value=serde_json::from_str(line).unwrap();
-            let s:State=serde_json::from_value(row["input"].clone()).unwrap();
-            assert_eq!(serde_json::to_value(select_target(&s).unwrap()).unwrap(),row["output"]);
-            let mut c=machine(&s).unwrap();let before=c.e.image.clone();run_selection(&mut c,s.scene.index).unwrap();
-            let root=0xCCEF+25*usize::from(s.scene.index);
-            for (i,(a,b)) in before.iter().zip(&c.e.image).enumerate(){
-                if ![root+8,root+9,root+20,root+21,usize::from(crate::SEED),usize::from(crate::SEED)+1].contains(&i){assert_eq!(a,b,"selection unexpected write {i:05X}");}
+        let source = std::fs::read_to_string(format!(
+            "{}/tests/fixtures/watched_selection/cases.jsonl",
+            env!("CARGO_MANIFEST_DIR")
+        ))
+        .unwrap();
+        for line in source.lines() {
+            let row: serde_json::Value = serde_json::from_str(line).unwrap();
+            let s: State = serde_json::from_value(row["input"].clone()).unwrap();
+            assert_eq!(
+                serde_json::to_value(select_target(&s).unwrap()).unwrap(),
+                row["output"]
+            );
+            let mut c = machine(&s).unwrap();
+            let before = c.e.image.clone();
+            run_selection(&mut c, s.scene.index).unwrap();
+            let root = 0xCCEF + 25 * usize::from(s.scene.index);
+            for (i, (a, b)) in before.iter().zip(&c.e.image).enumerate() {
+                if ![
+                    root + 8,
+                    root + 9,
+                    root + 12,
+                    root + 20,
+                    root + 21,
+                    usize::from(crate::SEED),
+                    usize::from(crate::SEED) + 1,
+                ]
+                .contains(&i)
+                {
+                    assert_eq!(a, b, "selection unexpected write {i:05X}");
+                }
             }
         }
     }
 
+    #[test]
+    fn selection_formation_updates_offset_and_target() {
+        let mut s = synthetic();
+        s.seed = 4;
+        s.cells.push(Cell {
+            region: Region::P15,
+            offset: 23,
+            value: 0,
+        });
+        set(&mut s, Region::P8, 14, 0);
+        let o = select_target(&s).unwrap();
+        assert_eq!(o.output.scene.word12, 0x0500);
+        // Original1F5E negates both signed target bytes for this orientation.
+        assert_eq!(o.output.scene.word8, 0xF7FD);
+        assert_eq!(o.draws.len(), 1);
+    }
 }
