@@ -6,6 +6,7 @@ from functools import lru_cache
 from pathlib import Path
 import replay_step_tail as common
 ROOT=common.ROOT
+MANIFEST_SHA256='4cfe86ebfed710044e7aa91081b9f376186507254f650950ed27d31f7c84b0dc'
 ROOTS={'action5':(0x448C,0x4610),'contact':(0x4DFF,0x4E59)}
 REGS=('ax','cx','dx','bx','sp','bp','si','di','es','cs','ss','ds')
 def write_json(path,value):
@@ -52,7 +53,10 @@ def normalized(draw):
     callers=draw['callers'];site=callers[1]if callers[0]=='24BC:0D4F'else callers[2]
     return {k:draw[k]for k in('n','seed_before','seed_after','value')}|{'site':site}
 def validate(directory):
-    manifest=read_json(directory/'manifest.json')
+    manifest_path=directory/'manifest.json'
+    if common.sha(manifest_path.read_bytes())!=MANIFEST_SHA256:raise ValueError('original oracle manifest pin differs')
+    manifest=read_json(manifest_path)
+    if len(manifest['cases'])!=3768 or manifest['next_tick_entry']!=129:raise ValueError('original root corpus completeness differs')
     if manifest['status']!='completed' or not manifest['first_tick_join'] or manifest['window']!=[47,128]:raise ValueError('incomplete/wrong original action window')
     cases=[]
     for number,item in enumerate(manifest['cases']):

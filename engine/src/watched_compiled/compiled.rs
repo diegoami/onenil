@@ -7,6 +7,7 @@ pub(super) struct Missing {pub scratch:bool,pub address:usize,pub writing:bool,p
 pub(super) type Proc = fn(&mut Cpu) -> Result<(), String>;
 pub(super) struct Cpu {
     pub r: [u16; 12],
+    pub upper:[u16;8],
     pub pc: (u16, u16),
     pub cf: bool,
     pub z: bool,
@@ -34,6 +35,7 @@ impl Cpu {
         let n = e.image.len();
         let mut c = Self {
             r: [0; 12],
+            upper:[0;8],
             pc: (0, 0),
             cf: false,
             z: false,
@@ -61,6 +63,11 @@ impl Cpu {
         c.r[10] = 0xF000;
         c
     }
+    pub fn get32(&self,index:usize)->u32{u32::from(self.r[index])|(u32::from(self.upper[index])<<16)}
+    pub fn set32(&mut self,index:usize,value:u32){self.r[index]=value as u16;self.upper[index]=(value>>16)as u16;}
+    pub fn shl32(&mut self,_value:u32,_count:u16)->u32{0}
+    pub fn double_shift32(&mut self,_left:bool,_value:u32,_source:u32,_count:u16)->u32{0}
+    pub fn multiply_signed32(&mut self,_value:u32){}
     pub fn exchange_registers(&mut self,first:usize,second:usize){self.r.swap(first,second);}
     fn string_advance(&mut self,register:usize,width:u8){
         let n=u16::from(width/8);self.r[register]=if self.df{self.r[register].wrapping_sub(n)}else{self.r[register].wrapping_add(n)};
@@ -588,6 +595,24 @@ mod tests {
         assert_eq!((c.cf,c.z,c.sf,c.of,c.pf),(true,true,false,true,false));
         c.r[11]=0xFFFF;c.r[6]=0xFFFF;c.r[8]=0xFFFF;c.r[7]=0xFFFF;c.missing.set(None);
         c.repeat_movs(16).unwrap();assert!(c.missing.get().is_none());
+    }
+
+    #[test]
+    fn thirty_two_bit_pair_multiply_keeps_carries_sign_and_word_aliases(){
+        let mut c=cpu();c.r[0]=0xFFFF;c.r[2]=0x1234;c.r[1]=3;c.r[3]=1;
+        let ax=c.shl32(c.get32(0),16);c.set32(0,ax);
+        let ax=c.double_shift32(false,c.get32(0),c.get32(2),16);c.set32(0,ax);
+        let cx=c.shl32(c.get32(1),16);c.set32(1,cx);
+        let cx=c.double_shift32(false,c.get32(1),c.get32(3),16);c.set32(1,cx);
+        assert_eq!(c.get32(0),0x1234FFFF);assert_eq!(c.get32(1),0x00010003);
+        c.multiply_signed32(c.get32(1));
+        let product=0x1234FFFFi64*0x10003i64;
+        assert_eq!(c.get32(0),product as u32);assert_eq!(c.get32(2),(product>>32)as u32);
+        let dx=c.double_shift32(true,c.get32(2),c.get32(0),16);c.set32(2,dx);
+        assert_eq!((u32::from(c.r[2])<<16)|u32::from(c.r[0]),product as u32);
+        c.set32(0,(-7i32)as u32);c.multiply_signed32(9);assert_eq!(c.get32(0),(-63i32)as u32);assert_eq!(c.get32(2),u32::MAX);assert!(!c.cf&&!c.of);
+        c.set32(0,0x7FFFFFFF);c.multiply_signed32(2);assert!(c.cf&&c.of);
+        c.cf=true;c.z=false;assert_eq!(c.double_shift32(true,42,3,0),42);assert!(c.cf&&!c.z);
     }
 
 }
