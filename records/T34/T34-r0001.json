@@ -1,0 +1,46 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T34-r0001",
+  "code_commit": "7d0119e760aa9292cf14bfb6ee97921ca874fdfe",
+  "started": "2026-11-03T14:57:23.756311+00:00",
+  "ended": "2026-11-03T14:57:23.786194+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "c366ac915e0f7c6a3706f5cfeefc49ffaef0977138923299fa7e304c0f2b9a80"
+  },
+  "source_pins": [
+    {
+      "schema": "watched-ball-source/1",
+      "capture": "records/T34/capture-r0002.json",
+      "capture_sha256": "0fff1e7ab7f92b742feaf080b897e160e23e20b0deb193aa69ed5fd849d9f08b",
+      "cases_sha256": "5df29f4382c23963dfa7609699a08117d7730b27e0c8ccb9de535e248fe737aa",
+      "source": {
+        "repository": "https://github.com/diegoami/onenil-archaeology",
+        "commit": "c7637bdb08f49c8c6de862c5fba9fe3dacd2228f",
+        "prefix_record": "runs/T39/T39-r0003.json",
+        "prefix_record_sha256": "b7f170d8f5229046717354a973e1a121eb61dacf2f716856efe461bacce6f99c",
+        "start_state_sha256": "2f634978859f7c07b3519e4278d8aaf70c2c70b93ad48362408fbcfa210576a1",
+        "static_sources": {
+          "static/1-0-exe/code/seg_0AB9_12.asm": "af2630092912280994154772ec15a46d8be8983c9478bc7d738e302222f9b937",
+          "static/1-0-exe/code/seg_1998_01.asm": "8975e7992cc991c92d6a05b8875eb0960c2893ed122314f984bed4eb77d17148",
+          "static/1-0-exe/code/seg_1998_02.asm": "7db3b484368ec70c2187ce4c90906d3e863cb20034e7c94bed8bacf188d61f05",
+          "static/1-0-exe/code/seg_26C9_01.asm": "ce5a800cf4450d399392ecbfd5a481e95c0bde5aade38867b8421d6dddddf6f4"
+        }
+      }
+    }
+  ],
+  "routine": "original7423 in-bounds ball flight and0A16 logical pitch transport",
+  "repetitions": 100,
+  "cases": 32,
+  "calls": 3200,
+  "elapsed_ns": 27895839,
+  "serialized_output_bytes": 1269500,
+  "method": "Pre-serialized inputs;release parsing,one native image/setup,ball flight/metric/bounds/logical pitch transport and serialization included;fixture preparation and output decoding excluded",
+  "limits": "In-bounds ball transport only,no outside restarts/full72BB/clock,complete watched ticks or detailed commentary;no full-match/emulator speed comparison"
+}

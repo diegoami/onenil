@@ -1,0 +1,40 @@
+{
+  "schema": "validation/1",
+  "code_commit": "7d0119e760aa9292cf14bfb6ee97921ca874fdfe",
+  "rust_tests": 443,
+  "original_parent_calls": 32,
+  "original_end_tick": 107,
+  "original_draw_cursor": 3666,
+  "original_metric_calls": 28,
+  "original_air_entries": 14,
+  "original_indexed_main_witnesses": 64,
+  "original_indexed_background_witnesses": 58,
+  "original_changed_main_cells": 56,
+  "original_rng_draws": 0,
+  "prior_replay_tools": 30,
+  "shared_layout": "passed",
+  "controller_tests": 5,
+  "fmt": "passed",
+  "py_compile": "passed",
+  "diff_check": "passed",
+  "original_scan": "passed",
+  "embedding_scan": {
+    "changed_files_at_producer": 11,
+    "private_files": 30,
+    "method": "No NUL or matching high-entropy aligned128-byte original block"
+  },
+  "baseline_preservation": {
+    "commit": "af03078",
+    "unchanged_files": 421,
+    "intentional_changes": [
+      "README.md",
+      "engine/src/lib.rs",
+      "engine/src/layout.rs"
+    ]
+  },
+  "new_evidence_first_addition": "unchanged",
+  "static_source_digests": "match research originals",
+  "red_proof": "Five actual synthetic stub failures;the sixth original test initially failed because capture had not yet exported fixtures and is not counted as a behavior red. Installed T33 missing API retained before new release install.",
+  "excluded_capture": "r0001 aborted at first root with indexed-pointer mismatch;no completed root. r0002 corrects16-bit segmented effective addresses and verifies each raw read against ES:DI.",
+  "limits": "In-bounds7423/0A16 gameplay and logical main/background transport only. Outside-pitch restart graph rejects;pixel/audio/timer transport external. Metric/bounds extrema synthetic/static only. No complete watched ticks or detailed browser commentary."
+}
