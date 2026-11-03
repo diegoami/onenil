@@ -51,14 +51,45 @@ def export_one(case,native,prior=()):
         if len(seen)==before:raise ValueError('native repeated admitted missing fact:'+str(fault))
     raise ValueError('native fact admission did not converge')
 
+def expected(case,state):
+    raw=oracle.memory(case['exit']);out={'scene':case['output_scene'],'seed':case['seed_after'],'pointers':[],'cells':[],'draws':case['draws'],'events':[]}
+    ds=16*state['regs'][11]
+    for kind,slot in SLOTS.items():out['pointers'].append({'kind':kind,'offset':word(raw,ds+slot),'segment':word(raw,ds+slot+2)})
+    for f in state['cells']:
+        if f['area']!='frame':out['cells'].append({**f,'value':raw[address(state,f['area'],f['offset'])]})
+    for event in case['events']:
+        e={k:v for k,v in event.items()if k not in('tick','event')}
+        for key in('draw_start','draw_end'):e[key]-=case['draw_start']
+        out['events'].append(e)
+    return out
+
+def validate_ownership(case,state):
+    entry=oracle.memory(case['entry']);exit=oracle.memory(case['exit']);ds=16*state['regs'][11]
+    known={address(state,f['area'],f['offset'])for f in state['cells']}
+    known.update(range(ds+0xCCEF+25*state['scene']['index'],ds+0xCCEF+25*state['scene']['index']+25));known.update(range(ds+0xA51C,ds+0xA51E))
+    for slot in SLOTS.values():known.update(range(ds+slot,ds+slot+4))
+    spans=[(ds+lo,ds+hi)for lo,hi in [(0x380,0x382),(0x900,0xC00),(0xD00,0xD80),(0x957D,0xAD9B),(0xCCEF,0xD7BA)]]
+    for area,n in LENGTHS.items():
+        start=address(state,area,0)
+        if area in('p8','p15','club','config'):spans.append((start,start+n))
+        else:spans.extend((start+0x90E+160*r-74,start+0x90E+160*r+76)for r in range(-8,9))
+    for lo,hi in spans:
+        for a in range(lo,hi):
+            if entry[a]!=exit[a]and a not in known:raise ValueError(f'original changed undeclared gameplay fact {a:05X} case{case["case"]}')
+
 def main():
     import argparse,onenil_engine
-    p=argparse.ArgumentParser();p.add_argument('--limit',type=int,default=1);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--limit',type=int,default=1);p.add_argument('--compare',action='store_true');a=p.parse_args()
     cases,_=oracle.validate(ROOT/'records/T37/oracle-r0001');prior={}
     directory=ROOT/'.cache/T37/export-dev';directory.mkdir(parents=True,exist_ok=True)
     for case in cases[:a.limit]:
         state,out,selected,attempts=export_one(case,onenil_engine,prior.get(case['kind'],()))
         prior[case['kind']]=selected
+        if a.compare:
+            want=expected(case,state)
+            for key in want:
+                if want[key]!=out[key]:raise ValueError(f'case{case["case"]} {key} differs: '+str({'expected':want[key],'actual':out[key]}))
+            validate_ownership(case,state)
         (directory/f'case-{case["case"]:05d}.json').write_text(json.dumps({'input':state,'actual':out},indent=2)+'\n')
         print('native case',case['case'],'kind',case['kind'],'facts',len(selected),'restarts',attempts,'draws',len(out['draws']),flush=True)
 if __name__=='__main__':main()

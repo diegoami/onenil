@@ -82,7 +82,7 @@ fn machine(s:&State)->Result<Cpu,String>{
  for f in &s.cells{let a=cell_address(s,f)?;initial(&mut image,&mut known,&mut seen,a,&[f.value])?;}
  let mut e=crate::role_scores::image(Default::default());e.image=image.into_boxed_slice();let mut c=Cpu::new(e);c.known=known;c.flat_memory=true;c.code_base=s.regs[9].wrapping_sub(0x0AB9);c.r=s.regs;
  c.stack_bounds=Some((stack-4096,stack+8));c.cf=s.flags&1!=0;c.pf=s.flags&4!=0;c.z=s.flags&0x40!=0;c.sf=s.flags&0x80!=0;c.of=s.flags&0x800!=0;c.df=s.flags&0x400!=0;
- c.require_write_baseline=true;Ok(c)
+ c.track_events=true;c.require_write_baseline=true;Ok(c)
 }
 pub fn advance(s:&State)->Result<Outcome,Fault>{
  let mut c=machine(s).map_err(|message|Fault{message,missing:None})?;
@@ -98,7 +98,7 @@ pub fn advance(s:&State)->Result<Outcome,Fault>{
  output.cells.retain(|f|f.area!=Area::Frame);
  for f in &mut output.cells{f.value=c.e.image[cell_address(s,f).map_err(|message|Fault{message,missing:None})?];}
  for p in &mut output.pointers{let a=ds+usize::from(p.kind.slot());p.offset=u16::from_le_bytes([c.e.image[a],c.e.image[a+1]]);p.segment=u16::from_le_bytes([c.e.image[a+2],c.e.image[a+3]]);}
- Ok(Outcome{scene:output.scene,seed:output.seed,pointers:output.pointers,cells:output.cells,draws:c.draws,events:vec![]})
+ Ok(Outcome{scene:output.scene,seed:output.seed,pointers:output.pointers,cells:output.cells,draws:c.draws,events:c.events})
 }
 #[cfg(test)]
 mod tests{

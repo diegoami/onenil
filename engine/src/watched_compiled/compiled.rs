@@ -22,6 +22,8 @@ pub(super) struct Cpu {
     pub code_base:u16,
     pub stack_bounds:Option<(usize,usize)>,
     pub df:bool,
+    pub track_events:bool,
+    pub events:Vec<serde_json::Value>,
     stack: Vec<u8>,
     stack_known: Vec<bool>,
     frames: Vec<(u16, u16)>,
@@ -47,6 +49,8 @@ impl Cpu {
             code_base:0,
             stack_bounds:None,
             df:false,
+            track_events:false,
+            events:vec![],
             stack: vec![0; 65540],
             stack_known: vec![false; 65540],
             frames: vec![],
@@ -214,7 +218,17 @@ impl Cpu {
         };
         let seed_pointer=if rng{Some(self.far(self.r[10],self.r[4].wrapping_add(6))?)}else{None};
         let before=if let Some((offset,segment))=seed_pointer{self.read(segment,offset,16)?}else{0};
+        let commentary=if self.track_events&&(cs,ip)==(0x0AB9,0x0F94){Some(self.commentary_entry(caller,ret)?)}else{None};
         f(self)?;
+        if let Some(mut event)=commentary{
+            let head=self.read(self.r[11],0x380,16)?;
+            if event["head_before"].as_u64()!=Some(u64::from(head)){
+                let a=0xA52Au16.wrapping_add(6*head);let ds=self.r[11];
+                event["queue"]=serde_json::json!({"index":head,"code":self.read(ds,a,8)?,"player":self.read(ds,a.wrapping_add(1),16)?,"secondary":self.read(ds,a.wrapping_add(3),16)?,"side":self.read(ds,a.wrapping_add(5),8)?});
+                event["draw_end"]=serde_json::json!(self.draws.len());event["seed_after"]=serde_json::json!(self.read(ds,crate::SEED,16)?);
+                self.events.push(event);
+            }
+        }
         if rng {
             let count = self.frames.len();
             let site = if self.frames[count - 1] == (0x24BC, 0x0D4F) {
@@ -232,6 +246,14 @@ impl Cpu {
         }
         self.frames.pop();
         Ok(())
+    }
+    fn commentary_entry(&self,caller:u16,ret:u16)->Result<serde_json::Value,String>{
+        let ss=self.r[10];let sp=self.r[4];let ds=self.r[11];
+        let code=self.read(ss,sp.wrapping_add(2),8)?;let actor=self.read(ss,sp.wrapping_add(6),16)?;
+        let secondary=self.read(ss,sp.wrapping_add(4),16)?;let side=self.read(ss,sp.wrapping_add(8),8)?;
+        let club=self.read(ds,0xD6E4u16.wrapping_add(2*side),16)?;let(off,seg)=self.far(ds,0xD7C2)?;
+        let player=|slot:u16|->Result<u16,String>{if slot==0{Ok(0)}else{self.read(seg,off.wrapping_add(62u16.wrapping_mul(club.wrapping_sub(1))).wrapping_add(2u16.wrapping_mul(slot.wrapping_sub(1))),16)}};
+        Ok(serde_json::json!({"code":code,"actor_slot":actor,"secondary_slot":secondary,"side":side,"club":club,"player":player(actor)?,"secondary":player(secondary)?,"minute":self.read(ds,0xD0B2,16)?,"head_before":self.read(ds,0x380,16)?,"caller":format!("{caller:04X}:{ret:04X}"),"draw_start":self.draws.len(),"seed_before":self.read(ds,crate::SEED,16)?}))
     }
     fn mask(w: u8) -> u32 {
         if w == 8 {
