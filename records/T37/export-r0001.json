@@ -1,0 +1,21 @@
+{
+  "schema": "decoded-action-export-receipt/1",
+  "status": "completed",
+  "roots": 3768,
+  "fixture_manifest_sha256": "8349aba70941f35c7e849e1182d49bcf8a2437286cc0a401ac00296422f2fd7f",
+  "manifest_completion_checkpoint": "ea659515d9ec35aa5e980467ed731913ad097507",
+  "exporter_python_source_commit": "54f1ce0c67c6a05a2f0fe4c1a89192bd1bdc0477",
+  "python_files": {
+    "tools/replay_watched_action.py": "c5090b70cfee232a07320edd1acd1762e073dae79798a36e54bb5e90a21b0f17",
+    "tools/watched_action_export.py": "e5a19fdd39367be6c03c69283ebae0e66de4cb8e9497175bdba6192b25c2b13c",
+    "tools/watched_oracle.py": "453addf16c4cfc8e748bce31e9acc6c9d2a316c063e269f7bf40a1fa39d00942"
+  },
+  "selection_native_build_source_commit": "40808530ebcab0b1e9786612f63f67ed8960eb7c",
+  "selection_native_extension_sha256": "0a1d15aa974e99c5ca863c778f6cd6e8ec87c5cff7e1359ab57d7ee047847a2a",
+  "oracle_manifest_sha256": "4cfe86ebfed710044e7aa91081b9f376186507254f650950ed27d31f7c84b0dc",
+  "ordered_draws_across_roots": 2307,
+  "accepted_events_across_roots": 25,
+  "entry_fact_count": 79279,
+  "method": "Fresh native whole-kernel retries select missing read/first-write baselines from original ENTRY only. Expected values independently decoded from EXIT. Incomplete earlier exports resumed without rewriting existing cases. Original whole declared gameplay changes verified before accepting each case.",
+  "limits": "Manifest producer is repository checkpoint at completion,not the installed extension build source. Source changed only tests/format/alias rejection during export;runtime was the pinned native shared library and committed Python above. Final source is separately rebuilt and replayed. Presentation countdown/ISR phase is separately scoped by main8fdce1d."
+}

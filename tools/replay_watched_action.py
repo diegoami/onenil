@@ -8,9 +8,11 @@ import watched_oracle as oracle
 import watched_action_export as export
 ROOT=oracle.ROOT
 FIXTURES=ROOT/'engine/tests/fixtures/watched_action'
+FIXTURE_MANIFEST_SHA256='8349aba70941f35c7e849e1182d49bcf8a2437286cc0a401ac00296422f2fd7f'
 
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def generate(directory=FIXTURES):
+    if(directory/'manifest.json').exists():return check(directory)
     import onenil_engine as native
     cases,manifest=oracle.validate(ROOT/'records/T37/oracle-r0001')
     directory.mkdir(parents=True,exist_ok=True);items=[];started=time.monotonic()
@@ -34,6 +36,7 @@ def generate(directory=FIXTURES):
 
 def check(directory=FIXTURES):
     cases,original=oracle.validate(ROOT/'records/T37/oracle-r0001')
+    if digest(directory/'manifest.json')!=FIXTURE_MANIFEST_SHA256:raise ValueError('decoded fixture manifest pin differs')
     manifest=json.loads((directory/'manifest.json').read_text())
     if manifest['schema']!='decoded-watched-actions/1'or manifest['oracle_manifest_sha256']!=oracle.MANIFEST_SHA256 or len(manifest['cases'])!=len(cases):raise ValueError('decoded fixture provenance/completeness differs')
     values=[]
@@ -52,6 +55,19 @@ def check(directory=FIXTURES):
         if out['events']!=events:raise ValueError('decoded expected commentary differs')
         values.append(c)
     return values
+
+def verify_private(values):
+    cases,_=oracle.validate(ROOT/'records/T37/oracle-r0001')
+    for source,value in zip(cases,values,strict=True):
+        state=value['input'];entry=oracle.memory(source['entry']);context=export.context(source,entry)
+        for key in context:
+            if key!='cells'and state[key]!=context[key]:raise ValueError('private decoded entry context differs')
+        for f in state['cells']:
+            a=export.address(state,f['area'],f['offset'])
+            if export.named(state,a)!=(f['area'],f['offset'])or entry[a]!=f['value']:raise ValueError('private decoded entry fact differs')
+        if export.expected(source,state)!=value['expected']:raise ValueError('private expected exit facts differ')
+        export.validate_ownership(source,state)
+    print('private entry/exit facts and gameplay ownership:',len(values),'original roots verified',flush=True)
 
 def replay(values):
     import onenil_engine as native
@@ -79,15 +95,16 @@ def benchmark(values,repetitions):
     oracle.write_json(path,result);print(path.relative_to(ROOT))
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--capture',action='store_true');p.add_argument('--research-root',type=Path);p.add_argument('--export',action='store_true');p.add_argument('--check',action='store_true');p.add_argument('--replay',action='store_true');p.add_argument('--benchmark',action='store_true');p.add_argument('--repetitions',type=int,default=3);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--capture',action='store_true');p.add_argument('--research-root',type=Path);p.add_argument('--export',action='store_true');p.add_argument('--check',action='store_true');p.add_argument('--check-private',action='store_true');p.add_argument('--replay',action='store_true');p.add_argument('--benchmark',action='store_true');p.add_argument('--repetitions',type=int,default=3);a=p.parse_args()
     if a.repetitions<1:p.error('positive repetitions required')
     if a.capture:
         if a.research_root is None:p.error('--capture requires --research-root')
         oracle.capture(a.research_root)
     if a.export:generate()
-    if a.check or a.replay or a.benchmark:
+    if a.check or a.check_private or a.replay or a.benchmark:
         values=check();print('decoded watched-action corpus:',len(values),'roots verified')
+        if a.check_private:verify_private(values)
         if a.replay or a.benchmark:replay(values)
         if a.benchmark:benchmark(values,a.repetitions)
-    if not any((a.capture,a.export,a.check,a.replay,a.benchmark)):p.error('choose --capture/--export/--check/--replay')
+    if not any((a.capture,a.export,a.check,a.check_private,a.replay,a.benchmark)):p.error('choose --capture/--export/--check/--replay')
 if __name__=='__main__':main()

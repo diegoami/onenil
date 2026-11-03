@@ -1461,3 +1461,43 @@ python3 tools/compile_watched.py --research-root ../onenil-archaeology --root 0A
 
 [designed] This closes target selection only. Action dispatch,continuous watched
 clock/phase flow and detailed browser commentary remain under milestone35.
+
+### Watched passing and contact actions (T37)
+
+[confirmed: F39/c7637bd,static d9e20a4 and T37 original oracle] Native448C
+and4DFF match all3768 original calls during watched ticks47–128,including2307
+ordered draws and25 accepted commentary entries. The events include actual
+passes,receptions,runs,tackles,ball wins,evasion,interception and collection.
+Scenes,seeds,all declared gameplay changes and logical pitch occupancy compare
+against independent original entry/exit observations. This closes these action
+kernels;it does not establish a continuous watched match or update the browser.
+
+[designed] Inputs are strict named decoded entry facts,original register/stack
+context and typed pointers in one native data image. Missing reads/first-write
+baselines diagnose;the exporter may select facts only from original ENTRY RAM.
+Expected EXIT values and helper outcomes never enter the engine. Public fixtures
+need no original bytes. Private original snapshots are archived in the owner's
+`1-0` Drive folder as `T37-oracle-r0001.tar.gz`;their digests/provenance are in
+`records/T37`. The runtime loads no original executable or opcode stream.
+
+```sh
+.cache/venv/bin/python tools/replay_watched_action.py --check --replay
+.cache/venv/bin/python tools/replay_watched_action.py --benchmark
+python3 records/T37/validate_provenance.py
+```
+
+[designed: main amendment8fdce1d] Numeric0F94/0E45/0F42 remains native.
+09BD text drawing and1998:00D6/01E0 sound waits are presentation boundaries;
+waits emit native duration requests. D088 countdown and ISR phase0D5A cannot be
+action inputs or outputs. Other reached unsupported instructions fail explicitly.
+Clock/ISR composition,remaining action/shot branches,continuous watched ticks
+and detailed browser commentary remain required by milestone35.
+
+[designed] With the private archive downloaded to `.cache/T37/T37-oracle-r0001.tar.gz`,
+restore its `oracle-r0001` directory and repeat the independent entry/exit fact
+and whole-gameplay ownership checks:
+
+```sh
+tar -xzf .cache/T37/T37-oracle-r0001.tar.gz -C .cache/T37
+.cache/venv/bin/python tools/replay_watched_action.py --check-private
+```
