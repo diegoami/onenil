@@ -1,0 +1,74 @@
+contests 0 Rust bridge replay: 558 original routine calls, 30798 draws, 15 T08 traces covered
+
+placement 0 Rust placement replay: 558 cases / 1804 draws / 17 goal requests / 12276 helper checks / 15 T08 traces
+
+goal_effects 0 Rust goal effects: 17 callbacks / 34 byte6 helpers / 15 T08 traces; composed post-coin seed unchanged
+
+ratings 0 Rust ratings: 1128 sides / 15109 helpers / 558 computed-rating contests / 15 T08 traces
+
+step_tail 0 Rust step tail: 558 prefixes / 558 clocks / 12276 scene visits / 12 numeric events / 15 T08 traces; actual placement handoffs preserved
+
+extra_event 0 Rust DBC6: 184 decisions / 499 draws / 909 helpers / 22 external requests / 15 T08 references; actual placement/prefix handoffs preserved
+
+event_effects 0 Rust event effects: 22 handlers / 17 LCG draws / 44 selectors / 23 helpers / 6 numeric events; computed DBC6 requests preserved
+
+post_score 0 Rust post-score: 17 strategies / 12 draws / 32 setters / 566 normalizers / 34 getters; shared prefix footprint preserved
+
+quick_reset 0 Rust quick reset: 17 resets / 12 draws / 374 copies / 374 motions / 747 helpers; computed prefix and strategy boundaries preserved
+
+terminal 0 Rust terminal helpers: 2 positions / 44 visits; 2 selectors / 40 visits / 224 helpers / 4 stores; zero draws; actual shared-image handoff
+
+cache_selection 0 Rust cache selection: 2 original selectors / 44 original ratings / zero draws; native visits are not an original nested-call census
+
+role_scores 0 Rust role scores: 148 original scene scores / 148 original table calls; actual table composition,read-only scenes,zero draws
+
+role_cache 0 Rust role cache: 8 original roots / 82 visits / 74 slot lookups / 148 scene/table pairs / 27 stores; ordered actual native helper composition,zero draws
+
+cache_helpers 0 Rust cache helpers: 4 original managed calls / 2 first-slot lookups / 4 side phases / 44 actual ratings and byte18 stores;zero draws
+
+player_cache 0 Rust1539 parent: 2 original roots / 106 direct events / 8 role selections / 82 visits / 148 scene-table pairs / 27 role stores / 44 caller stores;one image,zero draws
+
+role_pairing 0 Rust pairing: 2 original parents / 20 ordered composed and standalone ranges / zero draws;actual local-array handoff and scene.word20 results
+
+scene_codes 0 Rust scene codes:2 original parents/44 scenes/2 cache boundaries/6 nested and standalone code calls;zero draws. First-playable gate1 dependency only,not a complete match.
+
+scene_assignment 0 Rust scene assignment:44 original T28 boundaries/2 T26 rebuilds/20 observed rebuild helpers;T28 nested helpers are computed diagnostics. First-playable gate1 prerequisite,not a complete match.
+
+rearrangement 0 Rust164F:2 original parents/164 caller events/10 native tail boundaries on one image; first-playable gate1,not a complete match.
+
+replacement 0 RustAEB8:2 original replacements/26 helpers with8663/164F on one image;25 T27 flags;explicit presentation events;not a complete playable match.
+
+ai_selection 0 RustA94B:37 original calls/33 observed helpers/two native replacements on one image;no chosen-slot inputs. Not a complete playable match.
+
+substitution 0 Rust6B2F:91 original dispatchers/401 direct events/37 native A94B continuations;two replacements on one parent image;no prompt/editor reach. Not a continuous match.
+
+neutral_input 0 Rust neutral78B7/DB68:14 hand-specified static/synthetic cases;zero new original observations;no keyboard-present or continuous-match claim.
+
+continuous_step 0 One admitted native image/RNG matches46 complete DD02/clock transitions through actual halftime,including three goals/resets;not setup/full-match/playable acceptance.
+
+continuous_match 0 One admitted native match:95 exact DD02/clock/RNG boundaries,actual halftime,1-3 original final result;after setup,not yet playable.
+
+match_setup 0 Native preparation:11 setup boundaries/258 draws,then same image through95 DD02/clock/RNG steps,37 AI calls,two replacements,final1-3.
+
+watched_movement 0 Native watched movement:128 exact original candidate/legality/seed cases,no RNG;standalone kernel,not a watched match.
+
+watched_direction 0 Native watched direction:128 exact original scene/seed/ordered RNG/attempt cases;standalone kernel,not a watched match.
+
+watched_target 0 Native watched target:656 exact original scene/seed/numeric commentary cases;standalone kernel,not a watched match.
+
+watched_kickoff 0 Native watched kickoff:35 exact original readiness/scenes/ball/seed/ordered RNG cases;standalone kernel,not a watched match.
+
+watched_ball 0 Native watched ball:32 exact original ball/pitch/metric/bounds/seed/draw cases;standalone kernel,not a watched match.
+
+watched_adjustment 0 Native watched adjustment:64 exact original scenes/seeds/ordered draws from original35F8 calls;standalone kernel,not a watched match.
+
+watched_selection 0 Native watched selection:64 exact original scenes/seeds/ordered draws from original3846 calls;standalone kernel,not a watched match.
+
+tools/benchmark_shared_layout.py 0 Shared-layout bridge smoke:reused original prefix/extra-event/substitution and static neutral case match. Same-image contracts are tested in Rust;no new original observations or continuous-match claim.
+
+tools/test_play_match.py 0 .....
+----------------------------------------------------------------------
+Ran 5 tests in 34.313s
+
+OK
+
