@@ -1,0 +1,78 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+warning: constant `PITCH_CELLS` is never used
+  --> src/layout.rs:19:18
+   |
+19 | pub(crate) const PITCH_CELLS: usize = 17 * 75;
+   |                  ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `machine` is never used
+  --> src/watched_ball.rs:16:4
+   |
+16 | fn machine(_s:&State)->Result<Engine,String>{Err("7423 not implemented".into())}
+   |    ^^^^^^^
+
+warning: function `advance_image` is never used
+  --> src/watched_ball.rs:17:4
+   |
+17 | fn advance_image(_e:&mut Engine)->Result<Vec<u16>,String>{Err("7423 not implemented".into())}
+   |    ^^^^^^^^^^^^^
+
+warning: `onenil-engine` (lib) generated 3 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.22s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 6 tests
+test watched_ball::tests::distance_air_metrics_overflow_and_second_helper_call ... FAILED
+test watched_ball::tests::independent_wrapping_extended_move_guard_and_playing_bounds ... FAILED
+test watched_ball::tests::original_ball_roots ... FAILED
+test watched_ball::tests::original_restore_stamp_and_owned_packet_fields ... FAILED
+test watched_ball::tests::restore_guards_sentinel_same_coordinate_and_codes ... FAILED
+test watched_ball::tests::strict_input_missing_reached_cells_and_aliases ... FAILED
+
+failures:
+
+---- watched_ball::tests::distance_air_metrics_overflow_and_second_helper_call stdout ----
+
+thread 'watched_ball::tests::distance_air_metrics_overflow_and_second_helper_call' (3436) panicked at src/watched_ball.rs:50:83:
+called `Result::unwrap()` on an `Err` value: "7423 not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- watched_ball::tests::independent_wrapping_extended_move_guard_and_playing_bounds stdout ----
+
+thread 'watched_ball::tests::independent_wrapping_extended_move_guard_and_playing_bounds' (3437) panicked at src/watched_ball.rs:63:79:
+called `Result::unwrap()` on an `Err` value: "7423 not implemented"
+
+---- watched_ball::tests::original_ball_roots stdout ----
+
+thread 'watched_ball::tests::original_ball_roots' (3438) panicked at src/watched_ball.rs:33:120:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+
+---- watched_ball::tests::original_restore_stamp_and_owned_packet_fields stdout ----
+
+thread 'watched_ball::tests::original_restore_stamp_and_owned_packet_fields' (3439) panicked at src/watched_ball.rs:38:36:
+called `Result::unwrap()` on an `Err` value: "7423 not implemented"
+
+---- watched_ball::tests::restore_guards_sentinel_same_coordinate_and_codes stdout ----
+
+thread 'watched_ball::tests::restore_guards_sentinel_same_coordinate_and_codes' (3440) panicked at src/watched_ball.rs:42:96:
+called `Result::unwrap()` on an `Err` value: "7423 not implemented"
+
+---- watched_ball::tests::strict_input_missing_reached_cells_and_aliases stdout ----
+
+thread 'watched_ball::tests::strict_input_missing_reached_cells_and_aliases' (3441) panicked at src/watched_ball.rs:69:37:
+assertion failed: advance(&s).unwrap_err().contains("witness")
+
+
+failures:
+    watched_ball::tests::distance_air_metrics_overflow_and_second_helper_call
+    watched_ball::tests::independent_wrapping_extended_move_guard_and_playing_bounds
+    watched_ball::tests::original_ball_roots
+    watched_ball::tests::original_restore_stamp_and_owned_packet_fields
+    watched_ball::tests::restore_guards_sentinel_same_coordinate_and_codes
+    watched_ball::tests::strict_input_missing_reached_cells_and_aliases
+
+test result: FAILED. 0 passed; 6 failed; 0 ignored; 0 measured; 332 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
