@@ -381,6 +381,12 @@ mod python {
     }
 
     #[pyfunction]
+    fn watched_select_target(input_json:&str)->PyResult<String>{
+        let state:watched_compiled::State=serde_json::from_str(input_json).map_err(|e|PyValueError::new_err(e.to_string()))?;
+        let out=watched_compiled::select_target(&state).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e|PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
     fn watched_adjust_target(input_json: &str) -> PyResult<String> {
         let state: watched_compiled::State =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -858,6 +864,7 @@ mod python {
         module.add_function(wrap_pyfunction!(initial_kickoff, module)?)?;
         module.add_function(wrap_pyfunction!(watched_advance_ball, module)?)?;
         module.add_function(wrap_pyfunction!(watched_adjust_target, module)?)?;
+        module.add_function(wrap_pyfunction!(watched_select_target, module)?)?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;

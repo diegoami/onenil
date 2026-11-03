@@ -2,6 +2,7 @@
 //! [designed] Typed root facts and temporary Pascal frames;no runtime decoding.
 mod adjustment;
 mod compiled;
+mod selection;
 use crate::{terminal::Scene, Draw};
 use serde::{Deserialize, Serialize};
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord)]
@@ -37,7 +38,7 @@ fn location(cell: &Cell) -> Result<usize, String> {
         Region::Ds => {
             if !((0x900..=0xBFF).contains(&offset)
                 || (0xD00..=0xD7F).contains(&offset)
-                || (0xA338..=0xA339).contains(&offset)
+                || ((0x957D..=0xAD9A).contains(&offset) && !(0xA51C..=0xA51D).contains(&offset))
                 || (0xCCEF..0xD7BA).contains(&offset))
             {
                 return Err("unsupported compiled data field".into());
@@ -119,8 +120,17 @@ pub fn advance(s: &State) -> Result<Outcome, String> {
         draws: c.draws,
     })
 }
-pub fn select_target(_s: &State) -> Result<Outcome, String> {
-    Err("T36 selection not implemented".into())
+fn run_selection(c:&mut compiled::Cpu,index:u8)->Result<(),String>{
+    let sp=c.r[4];c.push(0)?;c.push(0xCCEF+25*u16::from(index))?;
+    c.invoke(selection::p_0ab9_3846,true,0x0AB9,0x3846,0)?;
+    if c.r[4]!=sp||c.r[5]!=0||c.r[11]!=0{return Err("compiled selection Pascal frame/DS handoff differs".into());}
+    Ok(())
+}
+pub fn select_target(s: &State) -> Result<Outcome, String> {
+    let mut c=machine(s)?;run_selection(&mut c,s.scene.index)?;
+    let mut output=s.clone();output.scene=Scene::read(&c.e,s.scene.index);output.seed=c.e.word(crate::SEED);
+    for field in &mut output.cells{field.value=c.e.image[location(field)?];}
+    Ok(Outcome{output,draws:c.draws})
 }
 #[cfg(test)]
 mod tests {
@@ -333,6 +343,11 @@ mod tests {
             let row:serde_json::Value=serde_json::from_str(line).unwrap();
             let s:State=serde_json::from_value(row["input"].clone()).unwrap();
             assert_eq!(serde_json::to_value(select_target(&s).unwrap()).unwrap(),row["output"]);
+            let mut c=machine(&s).unwrap();let before=c.e.image.clone();run_selection(&mut c,s.scene.index).unwrap();
+            let root=0xCCEF+25*usize::from(s.scene.index);
+            for (i,(a,b)) in before.iter().zip(&c.e.image).enumerate(){
+                if ![root+8,root+9,root+20,root+21,usize::from(crate::SEED),usize::from(crate::SEED)+1].contains(&i){assert_eq!(a,b,"selection unexpected write {i:05X}");}
+            }
         }
     }
 
