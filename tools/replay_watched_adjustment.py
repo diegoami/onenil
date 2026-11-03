@@ -39,7 +39,7 @@ def capture(research_root):
     import watched_actions as observer
     source=observer.check();record=json.loads((root/source['record']).read_text());reference=observer.setup.contests.outputs(record)
     _,data=observer.match.find_state(record['start_state']['sha256']);week=observer.match.Week(data)
-    pending=None;cases=[];ticks=0;joined=False;entry_memory={};regions=[];hook=None;entry_sp=0
+    pending=None;cases=[];ticks=0;joined=False;entry_memory={};regions=[];hook=None;entry_sp=0;memory_callback=None
     class Complete(Exception):pass
     def scene(g,index):
         a=0xCCEF+25*index
@@ -56,7 +56,7 @@ def capture(research_root):
     from unicorn import UC_HOOK_MEM_READ,UC_HOOK_MEM_WRITE,UC_MEM_WRITE
     builtin=set(range(0xD7BA,0xD7C6))|set(range(0xDE84,0xDE88))
     def enter(g):
-        nonlocal pending,entry_memory,regions,hook,entry_sp
+        nonlocal pending,entry_memory,regions,hook,entry_sp,memory_callback
         if pending is not None:raise ValueError('nested35F8')
         address=g.stack_word(4)+16*g.stack_word(6);offset=address-g.DS*16-0xCCEF
         if offset%25 or not 1<=offset//25<=22:raise ValueError('adjustment scene pointer differs')
@@ -82,11 +82,11 @@ def capture(research_root):
                 cell={'region':name,'offset':offset,'value':entry_memory[name][offset]}
                 cells=pending['input']['cells']
                 if not any(c['region']==name and c['offset']==offset for c in cells):cells.append(cell)
-        hook=g.mu.hook_add(UC_HOOK_MEM_READ|UC_HOOK_MEM_WRITE,memory)
+        memory_callback=memory
     def leave(g):
         nonlocal pending,hook
         if pending is None:return
-        g.mu.hook_del(hook);hook=None;c=pending;pending=None;c['input']['cells'].sort(key=lambda r:(r['region'],r['offset']))
+        c=pending;pending=None;c['input']['cells'].sort(key=lambda r:(r['region'],r['offset']))
         output=json.loads(json.dumps(c['input']));output['scene']=scene(g,output['scene']['index']);output['seed']=g.rd(0xA51C)
         for field in output['cells']:
             base=next(base for name,base,length in regions if name==field['region']);actual=g.mem(base+field['offset'],1)[0]
@@ -97,6 +97,9 @@ def capture(research_root):
             return {k:d[k] for k in ('n','seed_before','seed_after','value')}|{'site':site}
         c.update(draw_end=week.draws,output={'output':output,'draws':[normalize(d) for d in draws]});cases.append(c)
         if len(cases)==64:raise Complete()
+    def dispatch(uc,access,address,size,value,user):
+        if pending is not None:memory_callback(uc,access,address,size,value,user)
+    week.g.mu.hook_add(UC_HOOK_MEM_READ|UC_HOOK_MEM_WRITE,dispatch)
     week.g.code_hook('0AB9:E24C',enable);week.g.code_hook('0AB9:7A02',tick)
     week.g.code_hook('0AB9:35F8',enter);week.g.code_hook('0AB9:365F',leave)
     producer=common.git('rev-parse','HEAD');started=observer.match.utc();status='completed';reason=None
