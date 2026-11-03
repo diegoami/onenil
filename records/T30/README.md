@@ -31,3 +31,10 @@ watched tick or complete match,and supplies no emulator/full-game speed claim.
 70D5 direction/retries,72BB action dispatch,ball work and the watched clock
 remain before detailed player commentary. The existing browser still uses the
 quick-result summary backend. Native62/35 remain open.
+
+[confirmed] Final release receipt `T30-r0001.json` uses clean producer
+`d15456b8adb37687a9ec4d17b3088c2b88f03845`,freshly compiled/installed release
+binary`54a988d2734114accfc3f03f4a63431f3d6f21b67a3cc2d06c531d6491d893fa`.
+The exact receipt records12,800 standalone calls and93,156,936ns. All27 prior
+bridge/setup checks,the new128-case replay and five controller tests passed
+against that binary;416 Rust tests pass. This is not full watched-match timing.
