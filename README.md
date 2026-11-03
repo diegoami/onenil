@@ -1340,3 +1340,12 @@ raw table/identity/roster facts;no target or commentary outcome is supplied.
 and the watched clock/tick driver remain before detailed player-action
 commentary can run in the browser. Numeric code49 alone does not deliver that
 experience;the summary preview remains unchanged.
+
+[confirmed: T32 capture-r0003] The complete admission stream contains592561E
+calls through the first active tick48/draw943,including all22 arrival
+transitions and one accepted code49 event at tick12(primary slot10,secondary0,
+side0). All full projected states and numeric effects match Rust. The separate
+64-call warm fixture overlaps this sequence;656 replay cases represent592
+unique original calls. Original deduplication,queue wrapping and nonzero
+weights are not exercised by this stream;synthetic/static tests cover them.
+The aborted active-only run is retained and excluded from accepted evidence.
