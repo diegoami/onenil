@@ -32,6 +32,10 @@ remote `onenildrive` ([docs/artifacts.md](docs/artifacts.md)). They never enter 
   are the minimum for this first playable; a simple pitch view is the preferred
   stretch goal. Report progress
   against its end-to-end gates,not routine/test counts alone.
+  [designed: owner clarification,2026-11-03] Commentary means detailed player actions
+  (passes,tackles,shots and their outcomes),not repeated "Play continues" messages.
+  The quick-result summary preview does not satisfy that requirement;extend the
+  original watched/action-producing path rather than inventing actions in prose.
 - Speed is measured from the first runnable slice: a simulated week, a season, a matchday's results.
 
 ## Working rules

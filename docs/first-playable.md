@@ -6,6 +6,12 @@ match with running commentary and a preferred simple pitch view. Track live prog
 [issue35](https://github.com/diegoami/onenil/issues/35). Routine/test counts are
 regression evidence;they do not establish this milestone's completion.
 
+[designed: owner clarification2026-11-03] Running commentary must describe actual
+player actions. Generic "Play continues" messages and a goals/substitutions feed
+do not satisfy this requirement. T29 delivered a quick-result summary preview;
+detailed pass/tackle/shot events require the original watched/action-producing
+engine. The earlier review prompt is superseded until this gap is addressed.
+
 The player chooses a supported lineup and seed,starts the match,and receives
 a running match clock, chronological text commentary, and a final score.
 [designed: owner clarification,2026-11-02] Text commentary is sufficient for the
