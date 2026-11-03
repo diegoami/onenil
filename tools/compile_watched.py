@@ -3,6 +3,8 @@
 import argparse,hashlib,json,re
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
+SOURCE_ADDRESSES=False
+RELOCATED=set()
 REGS={'ax':0,'cx':1,'dx':2,'bx':3,'sp':4,'bp':5,'si':6,'di':7,'es':8,'cs':9,'ss':10,'ds':11}
 BYTES={a+b:(i,shift) for a,i in [('a',0),('c',1),('d',2),('b',3)] for b,shift in [('l',0),('h',8)]}
 def listing(root):
@@ -79,19 +81,35 @@ def emit_instruction(seg,ip,row):
     if op in ('ret','retf'):return prefix+f'c.ret({str(op=="retf").lower()},{int(args,0) if args else 0})?;return Ok(());'
     if op=='jmp':return prefix+f'label={target(seg,args)[0][1]};continue;'
     if op.startswith('j'):
-        condition={'je':'c.z','jne':'!c.z','ja':'!c.cf&&!c.z','jae':'!c.cf','jb':'c.cf','jbe':'c.cf||c.z','jg':'!c.z&&(c.sf==c.of)','jge':'c.sf==c.of','jl':'c.sf!=c.of','jle':'c.z||(c.sf!=c.of)','js':'c.sf','jns':'!c.sf','jo':'c.of','jno':'!c.of','jp':'c.pf','jnp':'!c.pf'}.get(op)
+        condition={'je':'c.z','jne':'!c.z','ja':'!c.cf&&!c.z','jae':'!c.cf','jb':'c.cf','jbe':'c.cf||c.z','jg':'!c.z&&(c.sf==c.of)','jge':'c.sf==c.of','jl':'c.sf!=c.of','jle':'c.z||(c.sf!=c.of)','js':'c.sf','jns':'!c.sf','jo':'c.of','jno':'!c.of','jp':'c.pf','jnp':'!c.pf','jcxz':'c.r[1]==0'}.get(op)
         if condition is None:raise ValueError(f'unsupported conditional {seg:04X}:{ip:04X} {op}')
         return prefix+f'label=if {condition}{{{target(seg,args)[0][1]}}}else{{{nxt}}};continue;'
     if op=='call':
         (cs,off),far=target(seg,args);return prefix+f'c.invoke({name(cs,off)},{str(far).lower()},{cs},{off},{nxt})?;label={nxt};continue;'
     if op=='enter':return prefix+f'c.enter({int(a[0],0)})?;'
     if op=='leave':return prefix+'c.r[4]=c.r[5];c.r[5]=c.pop()?;'
-    if op=='push':return prefix+f'let v={read(a[0])};c.push(v)?;'
+    if op=='push':
+        value=read(a[0]);value=f'c.segment_const({value})'if (seg,ip)in RELOCATED else value
+        return prefix+f'let v={value};c.push(v)?;'
     if op=='pop':return prefix+'let v=c.pop()?;'+write(a[0],'v')
     if op in ('les','lds'):
         ss,off=ea(a[1]);return prefix+f'let o={off};let s={ss};let(v,g)=c.far(s,o)?;'+write(a[0],'v')+f'c.r[{8 if op=="les" else 11}]=g;'
     if op=='lea':return prefix+write(a[0],ea(a[1])[1])
-    if op=='mov':return prefix+f'let v={read(a[1],width(a[0]))};'+write(a[0],'v')
+    if op=='mov':
+        value=read(a[1],width(a[0]));value=f'c.segment_const({value})'if (seg,ip)in RELOCATED else value
+        return prefix+f'let v={value};'+write(a[0],'v')
+    if op=='xchg':
+        if not all(v in REGS and REGS[v]<8 for v in a):raise ValueError('unsupported exchange operand:'+args)
+        return prefix+f'c.exchange_registers({REGS[a[0]]},{REGS[a[1]]});'
+    if SOURCE_ADDRESSES and op in ('cld','std'):return prefix+f'c.df={str(op=="std").lower()};'
+    if op=='nop':return prefix
+    if SOURCE_ADDRESSES and op in ('lodsb','lodsw'):return prefix+f'c.load_string({8 if op=="lodsb"else 16})?;'
+    if SOURCE_ADDRESSES and op in ('stosb','stosw'):return prefix+f'c.store_string({8 if op=="stosb"else 16})?;'
+    if SOURCE_ADDRESSES and op=='rep':
+        operation=args.split()[0]
+        if operation in ('movsb','movsw'):return prefix+f'c.repeat_movs({8 if operation=="movsb"else 16})?;'
+        if operation in ('stosb','stosw'):return prefix+f'c.repeat_stos({8 if operation=="stosb"else 16})?;'
+        raise ValueError('unsupported repeat operation:'+operation)
     if op in ('cwde','cbw'):return prefix+'c.r[0]=i16::from(c.r[0] as u8 as i8) as u16;'
     if op in ('cdq','cwd'):return prefix+'c.r[2]=if (c.r[0] as i16)<0 {65535}else{0};'
     if op in ('lodsw','stosw'):
@@ -159,9 +177,17 @@ def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roo
     return '\n'.join(out)+'\n'
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',action='append');p.add_argument('--defer',action='append',default=[]);p.add_argument('--projection',action='append',default=[]);p.add_argument('--defer-unsupported',action='store_true');args=p.parse_args()
+    global SOURCE_ADDRESSES,RELOCATED
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',action='append');p.add_argument('--defer',action='append',default=[]);p.add_argument('--projection',action='append',default=[]);p.add_argument('--defer-unsupported',action='store_true');p.add_argument('--source-addresses',action='store_true');args=p.parse_args()
     code,files=listing(args.research_root);roots=args.root or ['0AB9:35F8'];parse=lambda value:tuple(int(v,16)for v in value.split(':'))
-    deferred={parse(v)for v in args.defer};adapters={}
+    SOURCE_ADDRESSES=args.source_addresses
+    if SOURCE_ADDRESSES:
+        for path in files:
+            segment=int(Path(path).name.split('_')[1],16)
+            for line in(args.research_root/path).read_text().splitlines():
+                m=re.match(r'^([0-9A-F]{4}).*; relocated segment word ',line)
+                if m:RELOCATED.add((segment,int(m[1],16)))
+    deferred={parse(v)for v in args.defer};adapters={} 
     for item in args.projection:
         address,function=item.split('=')
         if not re.fullmatch('[a-z_][a-z_0-9]*',function):raise ValueError('invalid projection name')
@@ -176,5 +202,6 @@ def main():
     used={row[3] for rows in g.values()for row in rows.values()}
     result={'roots':roots,'procedures':len(g),'instructions':sum(map(len,g.values())),'listing_digests':{p:files[p] for p in sorted(used)},'generated_sha256':hashlib.sha256(source).hexdigest()}
     if report:result['boundaries']=report
+    if SOURCE_ADDRESSES:result['source_addresses']=True
     print(json.dumps(result,indent=2))
 if __name__=='__main__':main()

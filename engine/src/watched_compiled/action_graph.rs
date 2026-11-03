@@ -523,8 +523,444 @@ pub(super) fn p_0ab9_0143(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_0ab9_0207(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 0AB9:0207".into())
+pub(super) fn p_0ab9_0207(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 519u16;
+    loop {
+        match label {
+            519 => {
+                c.pc = (2745, 519);
+                c.step()?;
+                c.enter(2)?;
+                c.pc = (2745, 523);
+                c.step()?;
+                let o = 0u16.wrapping_add(53440u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 527);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 530);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 532);
+                c.step()?;
+                label = if !c.z { 560 } else { 534 };
+                continue;
+            }
+            534 => {
+                c.pc = (2745, 534);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[7] = v;
+                c.pc = (2745, 537);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 541);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 544);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(2u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 548);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (2745, 549);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 550);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 551);
+                c.step()?;
+                c.invoke(p_0ab9_0143, false, 2745, 323, 554)?;
+                label = 554;
+                continue;
+            }
+            554 => {
+                c.pc = (2745, 554);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
+                c.pc = (2745, 557);
+                c.step()?;
+                label = 720;
+                continue;
+            }
+            560 => {
+                c.pc = (2745, 560);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 1u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 562);
+                c.step()?;
+                label = if !c.z { 602 } else { 564 };
+                continue;
+            }
+            564 => {
+                c.pc = (2745, 564);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[7] = v;
+                c.pc = (2745, 567);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[7]).wrapping_sub(2u16), 16)?;
+                let y = 25u16;
+                let v = c.imul3(x, y);
+                c.r[7] = v;
+                c.pc = (2745, 572);
+                c.step()?;
+                let v = c.read(
+                    c.r[11],
+                    0u16.wrapping_add(c.r[7]).wrapping_sub(13059u16),
+                    16,
+                )?;
+                c.r[0] = v;
+                c.pc = (2745, 576);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 579);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 583);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 585);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 589);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 591);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 593);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_sub(30954u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 597);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
+                c.pc = (2745, 600);
+                c.step()?;
+                label = 720;
+                continue;
+            }
+            602 => {
+                c.pc = (2745, 602);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 2u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 604);
+                c.step()?;
+                label = if !c.z { 665 } else { 606 };
+                continue;
+            }
+            606 => {
+                c.pc = (2745, 606);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(53420u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 609);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 610);
+                c.step()?;
+                c.r[2] = if (c.r[0] as i16) < 0 { 65535 } else { 0 };
+                c.pc = (2745, 611);
+                c.step()?;
+                let v = c.r[0];
+                c.r[1] = v;
+                c.pc = (2745, 613);
+                c.step()?;
+                let v = c.r[2];
+                c.r[3] = v;
+                c.pc = (2745, 615);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(53422u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 618);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 620);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[3];
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 622);
+                c.step()?;
+                label = if !c.z && (c.sf == c.of) { 634 } else { 624 };
+                continue;
+            }
+            624 => {
+                c.pc = (2745, 624);
+                c.step()?;
+                label = if c.sf != c.of { 630 } else { 626 };
+                continue;
+            }
+            626 => {
+                c.pc = (2745, 626);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[1];
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 628);
+                c.step()?;
+                label = if !c.cf && !c.z { 634 } else { 630 };
+                continue;
+            }
+            630 => {
+                c.pc = (2745, 630);
+                c.step()?;
+                let v = 0u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 632);
+                c.step()?;
+                label = 636;
+                continue;
+            }
+            634 => {
+                c.pc = (2745, 634);
+                c.step()?;
+                let v = 1u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 636;
+                continue;
+            }
+            636 => {
+                c.pc = (2745, 636);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[2] = (c.r[2] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 638);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[7] = v;
+                c.pc = (2745, 641);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[7]).wrapping_sub(2u16), 16)?;
+                let y = 12u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 646);
+                c.step()?;
+                let v = 0u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 648);
+                c.step()?;
+                label = if !c.cf { 651 } else { 650 };
+                continue;
+            }
+            650 => {
+                c.pc = (2745, 650);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                label = 651;
+                continue;
+            }
+            651 => {
+                c.pc = (2745, 651);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[2] >> 0) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 653);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 654);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 656);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_add(2414u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 660);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
+                c.pc = (2745, 663);
+                c.step()?;
+                label = 720;
+                continue;
+            }
+            665 => {
+                c.pc = (2745, 665);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 3u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 667);
+                c.step()?;
+                label = if !c.z { 694 } else { 669 };
+                continue;
+            }
+            669 => {
+                c.pc = (2745, 669);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[7] = v;
+                c.pc = (2745, 672);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[7]).wrapping_sub(2u16), 16)?;
+                let y = 12u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 677);
+                c.step()?;
+                let v = 0u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 679);
+                c.step()?;
+                label = if !c.cf { 682 } else { 681 };
+                continue;
+            }
+            681 => {
+                c.pc = (2745, 681);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                label = 682;
+                continue;
+            }
+            682 => {
+                c.pc = (2745, 682);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 683);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 685);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_add(2412u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 689);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
+                c.pc = (2745, 692);
+                c.step()?;
+                label = 720;
+                continue;
+            }
+            694 => {
+                c.pc = (2745, 694);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 4u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 696);
+                c.step()?;
+                label = if !c.z { 720 } else { 698 };
+                continue;
+            }
+            698 => {
+                c.pc = (2745, 698);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[7] = v;
+                c.pc = (2745, 701);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[7]).wrapping_sub(2u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 705);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.dec(x, 16);
+                c.r[0] = v;
+                c.pc = (2745, 706);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 708);
+                c.step()?;
+                let v = 11u16;
+                c.r[1] = v;
+                c.pc = (2745, 711);
+                c.step()?;
+                let v = c.r[1];
+                c.divide(v, false)?;
+                c.pc = (2745, 713);
+                c.step()?;
+                c.exchange_registers(2, 0);
+                c.pc = (2745, 714);
+                c.step()?;
+                let x = c.r[0];
+                let y = 47u16;
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 717);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
+                label = 720;
+                continue;
+            }
+            720 => {
+                c.pc = (2745, 720);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 723);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (2745, 724);
+                c.step()?;
+                c.ret(false, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_0ab9_02d7(c: &mut Cpu) -> Result<(), String> {
     let mut label = 727u16;
@@ -55450,8 +55886,5780 @@ pub(super) fn p_0ab9_8973(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_0ab9_8d6f(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 0AB9:8D6F".into())
+pub(super) fn p_0ab9_8a0f(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 35343u16;
+    loop {
+        match label {
+            35343 => {
+                c.pc = (2745, 35343);
+                c.step()?;
+                let v = c.r[5];
+                c.push(v)?;
+                c.pc = (2745, 35344);
+                c.step()?;
+                let v = c.r[4];
+                c.r[5] = v;
+                c.pc = (2745, 35346);
+                c.step()?;
+                let x = c.read(c.r[11], 0u16.wrapping_add(3473u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 35351);
+                c.step()?;
+                label = if c.z { 35380 } else { 35353 };
+                continue;
+            }
+            35353 => {
+                c.pc = (2745, 35353);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 35357);
+                c.step()?;
+                label = if c.z { 35380 } else { 35359 };
+                continue;
+            }
+            35359 => {
+                c.pc = (2745, 35359);
+                c.step()?;
+                let v = 35330u16;
+                c.r[7] = v;
+                c.pc = (2745, 35362);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 35363);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35364);
+                c.step()?;
+                let v = 18u16;
+                c.push(v)?;
+                c.pc = (2745, 35366);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 35368);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 35371);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35372);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35373);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 35378)?;
+                label = 35378;
+                continue;
+            }
+            35378 => {
+                c.pc = (2745, 35378);
+                c.step()?;
+                label = 35407;
+                continue;
+            }
+            35380 => {
+                c.pc = (2745, 35380);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35383);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 35384);
+                c.step()?;
+                let x = c.r[0];
+                let y = 11u16;
+                let v = c.imul3(x, y);
+                c.r[7] = v;
+                c.pc = (2745, 35387);
+                c.step()?;
+                let x = c.r[7];
+                let y = 2906u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35391);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35392);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35393);
+                c.step()?;
+                let v = 18u16;
+                c.push(v)?;
+                c.pc = (2745, 35395);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 35397);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 35400);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35401);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35402);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 35407)?;
+                label = 35407;
+                continue;
+            }
+            35407 => {
+                c.pc = (2745, 35407);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (2745, 35408);
+                c.step()?;
+                c.ret(false, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_0ab9_8a62(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 35426u16;
+    loop {
+        match label {
+            35426 => {
+                c.pc = (2745, 35426);
+                c.step()?;
+                c.enter(8)?;
+                c.pc = (2745, 35430);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[7] = v;
+                c.pc = (2745, 35433);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[7]).wrapping_add(4u16), 16)?;
+                let y = 15u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (2745, 35438);
+                c.step()?;
+                let o = 0u16.wrapping_add(55230u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35442);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35444);
+                c.step()?;
+                let v = c.r[7];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16, v)?;
+                c.pc = (2745, 35447);
+                c.step()?;
+                let v = c.r[8];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (2745, 35450);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[7] = v;
+                c.pc = (2745, 35453);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[7]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 35457);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35460);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35464);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35466);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                let y = 2u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 35471);
+                c.step()?;
+                label = if !c.cf { 35475 } else { 35473 };
+                continue;
+            }
+            35473 => {
+                c.pc = (2745, 35473);
+                c.step()?;
+                label = 35589;
+                continue;
+            }
+            35475 => {
+                c.pc = (2745, 35475);
+                c.step()?;
+                let v = 7u16;
+                c.push(v)?;
+                c.pc = (2745, 35477);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35480);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(11u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35484);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 35486);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35487);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 35492)?;
+                label = 35492;
+                continue;
+            }
+            35492 => {
+                c.pc = (2745, 35492);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35494);
+                c.step()?;
+                label = if c.z { 35536 } else { 35496 };
+                continue;
+            }
+            35496 => {
+                c.pc = (2745, 35496);
+                c.step()?;
+                let v = 35411u16;
+                c.r[7] = v;
+                c.pc = (2745, 35499);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 35500);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35501);
+                c.step()?;
+                let v = 18u16;
+                c.push(v)?;
+                c.pc = (2745, 35503);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 35505);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 35508);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35509);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35510);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 35515)?;
+                label = 35515;
+                continue;
+            }
+            35515 => {
+                c.pc = (2745, 35515);
+                c.step()?;
+                let v = 35424u16;
+                c.r[7] = v;
+                c.pc = (2745, 35518);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 35519);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35520);
+                c.step()?;
+                let v = 18u16;
+                c.push(v)?;
+                c.pc = (2745, 35522);
+                c.step()?;
+                let v = 35u16;
+                c.push(v)?;
+                c.pc = (2745, 35524);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 35527);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35528);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35529);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 35534)?;
+                label = 35534;
+                continue;
+            }
+            35534 => {
+                c.pc = (2745, 35534);
+                c.step()?;
+                label = 35589;
+                continue;
+            }
+            35536 => {
+                c.pc = (2745, 35536);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[7] = v;
+                c.pc = (2745, 35539);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[7]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 35543);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35546);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35550);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35552);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35555);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 35557);
+                c.step()?;
+                let x = c.r[0];
+                let y = 62u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (2745, 35560);
+                c.step()?;
+                let o = 0u16.wrapping_add(55234u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35564);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35566);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65474u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35570);
+                c.step()?;
+                let v = 8u16;
+                c.push(v)?;
+                c.pc = (2745, 35572);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(57u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35576);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 35578);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35579);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 35584)?;
+                label = 35584;
+                continue;
+            }
+            35584 => {
+                c.pc = (2745, 35584);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35585);
+                c.step()?;
+                let v = c.r[5];
+                c.push(v)?;
+                c.pc = (2745, 35586);
+                c.step()?;
+                c.invoke(p_0ab9_8a0f, false, 2745, 35343, 35589)?;
+                label = 35589;
+                continue;
+            }
+            35589 => {
+                c.pc = (2745, 35589);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (2745, 35590);
+                c.step()?;
+                c.ret(false, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_0ab9_8b0b(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 35595u16;
+    loop {
+        match label {
+            35595 => {
+                c.pc = (2745, 35595);
+                c.step()?;
+                c.enter(526)?;
+                c.pc = (2745, 35599);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                let y = 15u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (2745, 35603);
+                c.step()?;
+                let o = 0u16.wrapping_add(55230u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35607);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35609);
+                c.step()?;
+                let v = c.r[7];
+                c.write(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5]).wrapping_sub(266u16),
+                    16,
+                    v,
+                )?;
+                c.pc = (2745, 35613);
+                c.step()?;
+                let v = c.r[8];
+                c.write(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5]).wrapping_sub(264u16),
+                    16,
+                    v,
+                )?;
+                c.pc = (2745, 35617);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 35620);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35623);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35627);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35629);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 35634);
+                c.step()?;
+                label = if !c.z { 35689 } else { 35636 };
+                continue;
+            }
+            35636 => {
+                c.pc = (2745, 35636);
+                c.step()?;
+                let v = 34312u16;
+                c.r[7] = v;
+                c.pc = (2745, 35639);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35640);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35641);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(262u16);
+                c.pc = (2745, 35645);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 35646);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35647);
+                c.step()?;
+                let v = 256u16;
+                c.push(v)?;
+                c.pc = (2745, 35650);
+                c.step()?;
+                c.invoke(p_24bc_01c2, true, 9404, 450, 35655)?;
+                label = 35655;
+                continue;
+            }
+            35655 => {
+                c.pc = (2745, 35655);
+                c.step()?;
+                let v = 2928u16;
+                c.r[7] = v;
+                c.pc = (2745, 35658);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35659);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35660);
+                c.step()?;
+                let v = 34312u16;
+                c.r[7] = v;
+                c.pc = (2745, 35663);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35664);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35665);
+                c.step()?;
+                let v = 32u16;
+                c.push(v)?;
+                c.pc = (2745, 35667);
+                c.step()?;
+                c.invoke(p_24bc_01c2, true, 9404, 450, 35672)?;
+                label = 35672;
+                continue;
+            }
+            35672 => {
+                c.pc = (2745, 35672);
+                c.step()?;
+                let v = 2960u16;
+                c.r[7] = v;
+                c.pc = (2745, 35675);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35676);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35677);
+                c.step()?;
+                let v = 34376u16;
+                c.r[7] = v;
+                c.pc = (2745, 35680);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35681);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35682);
+                c.step()?;
+                let v = 32u16;
+                c.push(v)?;
+                c.pc = (2745, 35684);
+                c.step()?;
+                c.invoke(p_24bc_01c2, true, 9404, 450, 35689)?;
+                label = 35689;
+                continue;
+            }
+            35689 => {
+                c.pc = (2745, 35689);
+                c.step()?;
+                let v = 1u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (2745, 35694);
+                c.step()?;
+                label = 35699;
+                continue;
+            }
+            35696 => {
+                c.pc = (2745, 35696);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                let v = c.inc(x, 16);
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                label = 35699;
+                continue;
+            }
+            35699 => {
+                c.pc = (2745, 35699);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 35702);
+                c.step()?;
+                let x = c.r[0];
+                let y = 4u16;
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35705);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35706);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(266u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35710);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35714);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 35716);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35717);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 35722)?;
+                label = 35722;
+                continue;
+            }
+            35722 => {
+                c.pc = (2745, 35722);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35724);
+                c.step()?;
+                label = if c.z { 35808 } else { 35726 };
+                continue;
+            }
+            35726 => {
+                c.pc = (2745, 35726);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 35729);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(266u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35733);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35737);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 35739);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35740);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 35745)?;
+                label = 35745;
+                continue;
+            }
+            35745 => {
+                c.pc = (2745, 35745);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 35746);
+                c.step()?;
+                let x = c.r[0];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35749);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[7] = v;
+                c.pc = (2745, 35752);
+                c.step()?;
+                let x = c.r[7];
+                let y = 5u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35755);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35757);
+                c.step()?;
+                let x = c.r[7];
+                let y = 34280u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35761);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35762);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35763);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 35766);
+                c.step()?;
+                let x = c.r[0];
+                let y = 13u16;
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35769);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35770);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 35772);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 35775);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35776);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35777);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 35782)?;
+                label = 35782;
+                continue;
+            }
+            35782 => {
+                c.pc = (2745, 35782);
+                c.step()?;
+                let v = 35593u16;
+                c.r[7] = v;
+                c.pc = (2745, 35785);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 35786);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35787);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 35790);
+                c.step()?;
+                let x = c.r[0];
+                let y = 13u16;
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35793);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35794);
+                c.step()?;
+                let v = 35u16;
+                c.push(v)?;
+                c.pc = (2745, 35796);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 35799);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35800);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35801);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 35806)?;
+                label = 35806;
+                continue;
+            }
+            35806 => {
+                c.pc = (2745, 35806);
+                c.step()?;
+                label = 35890;
+                continue;
+            }
+            35808 => {
+                c.pc = (2745, 35808);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 35811);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35814);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35818);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35820);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35823);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 35825);
+                c.step()?;
+                let x = c.r[0];
+                let y = 62u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (2745, 35828);
+                c.step()?;
+                let o = 0u16.wrapping_add(55234u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35832);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35834);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65474u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35838);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 35841);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(57u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35845);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 35847);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35848);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 35853)?;
+                label = 35853;
+                continue;
+            }
+            35853 => {
+                c.pc = (2745, 35853);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 35854);
+                c.step()?;
+                let x = c.r[0];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35857);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[7] = v;
+                c.pc = (2745, 35860);
+                c.step()?;
+                let x = c.r[7];
+                let y = 5u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35863);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35865);
+                c.step()?;
+                let x = c.r[7];
+                let y = 34280u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35869);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35870);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35871);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 35874);
+                c.step()?;
+                let x = c.r[0];
+                let y = 13u16;
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35877);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35878);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 35880);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 35883);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35884);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 35885);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 35890)?;
+                label = 35890;
+                continue;
+            }
+            35890 => {
+                c.pc = (2745, 35890);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                let y = 4u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 35894);
+                c.step()?;
+                label = if c.z { 35899 } else { 35896 };
+                continue;
+            }
+            35896 => {
+                c.pc = (2745, 35896);
+                c.step()?;
+                label = 35696;
+                continue;
+            }
+            35899 => {
+                c.pc = (2745, 35899);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[0];
+                let v = c.xor(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35901);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16), 16, v)?;
+                c.pc = (2745, 35904);
+                c.step()?;
+                let x = c.read(c.r[11], 0u16.wrapping_add(3473u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 35909);
+                c.step()?;
+                label = if !c.z { 35918 } else { 35911 };
+                continue;
+            }
+            35911 => {
+                c.pc = (2745, 35911);
+                c.step()?;
+                let v = c.r[5];
+                c.push(v)?;
+                c.pc = (2745, 35912);
+                c.step()?;
+                c.invoke(p_0ab9_8a62, false, 2745, 35426, 35915)?;
+                label = 35915;
+                continue;
+            }
+            35915 => {
+                c.pc = (2745, 35915);
+                c.step()?;
+                label = 36138;
+                continue;
+            }
+            35918 => {
+                c.pc = (2745, 35918);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 35921);
+                c.step()?;
+                c.invoke(p_0ab9_8973, false, 2745, 35187, 35924)?;
+                label = 35924;
+                continue;
+            }
+            35924 => {
+                c.pc = (2745, 35924);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16), 16, v)?;
+                c.pc = (2745, 35927);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16), 16)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 35931);
+                c.step()?;
+                label = if c.z { 35944 } else { 35933 };
+                continue;
+            }
+            35933 => {
+                c.pc = (2745, 35933);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16), 16)?;
+                let y = 25u16;
+                let v = c.imul3(x, y);
+                c.r[7] = v;
+                c.pc = (2745, 35937);
+                c.step()?;
+                let x = c.read(
+                    c.r[11],
+                    0u16.wrapping_add(c.r[7]).wrapping_sub(13053u16),
+                    16,
+                )?;
+                let y = 0u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 35942);
+                c.step()?;
+                label = if !c.z { 35951 } else { 35944 };
+                continue;
+            }
+            35944 => {
+                c.pc = (2745, 35944);
+                c.step()?;
+                let v = c.r[5];
+                c.push(v)?;
+                c.pc = (2745, 35945);
+                c.step()?;
+                c.invoke(p_0ab9_8a62, false, 2745, 35426, 35948)?;
+                label = 35948;
+                continue;
+            }
+            35948 => {
+                c.pc = (2745, 35948);
+                c.step()?;
+                label = 36138;
+                continue;
+            }
+            35951 => {
+                c.pc = (2745, 35951);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16), 16)?;
+                let y = 25u16;
+                let v = c.imul3(x, y);
+                c.r[7] = v;
+                c.pc = (2745, 35955);
+                c.step()?;
+                let x = c.r[7];
+                let y = 52463u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35959);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 35960);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[8] = v;
+                c.pc = (2745, 35961);
+                c.step()?;
+                let v = c.r[7];
+                c.write(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5]).wrapping_sub(270u16),
+                    16,
+                    v,
+                )?;
+                c.pc = (2745, 35965);
+                c.step()?;
+                let v = c.r[8];
+                c.write(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5]).wrapping_sub(268u16),
+                    16,
+                    v,
+                )?;
+                c.pc = (2745, 35969);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(56676u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 35972);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16, v)?;
+                c.pc = (2745, 35975);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(20u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 35979);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(20u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 35983);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 35986);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 35990);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 35992);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 35996);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 35998);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 35999);
+                c.step()?;
+                c.invoke(p_1b55_724a, true, 6997, 29258, 36004)?;
+                label = 36004;
+                continue;
+            }
+            36004 => {
+                c.pc = (2745, 36004);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36005);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(526u16);
+                c.pc = (2745, 36009);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 36010);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36011);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(270u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36015);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(20u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 36019);
+                c.step()?;
+                c.invoke(p_1b55_44dc, true, 6997, 17628, 36024)?;
+                label = 36024;
+                continue;
+            }
+            36024 => {
+                c.pc = (2745, 36024);
+                c.step()?;
+                let v = 18u16;
+                c.push(v)?;
+                c.pc = (2745, 36026);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 36028);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36031);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36032);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36033);
+                c.step()?;
+                c.invoke(p_232a_041b, true, 9002, 1051, 36038)?;
+                label = 36038;
+                continue;
+            }
+            36038 => {
+                c.pc = (2745, 36038);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(526u16);
+                c.pc = (2745, 36042);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 36043);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36044);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(270u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36048);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(20u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 36052);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 36055);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36059);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36061);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36065);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36067);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36069);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_sub(30954u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36073);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36074);
+                c.step()?;
+                c.invoke(p_26c9_0c6f, true, 9929, 3183, 36079)?;
+                label = 36079;
+                continue;
+            }
+            36079 => {
+                c.pc = (2745, 36079);
+                c.step()?;
+                let v = 18u16;
+                c.push(v)?;
+                c.pc = (2745, 36081);
+                c.step()?;
+                let v = 33u16;
+                c.push(v)?;
+                c.pc = (2745, 36083);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36086);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36087);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36088);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36093)?;
+                label = 36093;
+                continue;
+            }
+            36093 => {
+                c.pc = (2745, 36093);
+                c.step()?;
+                let v = 7u16;
+                c.push(v)?;
+                c.pc = (2745, 36095);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(266u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36099);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(11u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36103);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36105);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36106);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 36111)?;
+                label = 36111;
+                continue;
+            }
+            36111 => {
+                c.pc = (2745, 36111);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36113);
+                c.step()?;
+                label = if c.z { 36138 } else { 36115 };
+                continue;
+            }
+            36115 => {
+                c.pc = (2745, 36115);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36118);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36119);
+                c.step()?;
+                let v = 35593u16;
+                c.r[7] = v;
+                c.pc = (2745, 36122);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 36123);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36124);
+                c.step()?;
+                let v = 18u16;
+                c.push(v)?;
+                c.pc = (2745, 36126);
+                c.step()?;
+                let v = 35u16;
+                c.push(v)?;
+                c.pc = (2745, 36128);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36131);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36132);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36133);
+                c.step()?;
+                c.invoke(p_232a_041b, true, 9002, 1051, 36138)?;
+                label = 36138;
+                continue;
+            }
+            36138 => {
+                c.pc = (2745, 36138);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 36141);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 36144);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36148);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36150);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 36155);
+                c.step()?;
+                label = if !c.z { 36176 } else { 36157 };
+                continue;
+            }
+            36157 => {
+                c.pc = (2745, 36157);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(262u16);
+                c.pc = (2745, 36161);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 36162);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36163);
+                c.step()?;
+                let v = 34312u16;
+                c.r[7] = v;
+                c.pc = (2745, 36166);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36167);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36168);
+                c.step()?;
+                let v = 256u16;
+                c.push(v)?;
+                c.pc = (2745, 36171);
+                c.step()?;
+                c.invoke(p_24bc_01c2, true, 9404, 450, 36176)?;
+                label = 36176;
+                continue;
+            }
+            36176 => {
+                c.pc = (2745, 36176);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (2745, 36177);
+                c.step()?;
+                c.ret(false, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_0ab9_8d6f(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 36207u16;
+    loop {
+        match label {
+            36207 => {
+                c.pc = (2745, 36207);
+                c.step()?;
+                c.enter(524)?;
+                c.pc = (2745, 36211);
+                c.step()?;
+                let v = 26420u16;
+                c.r[7] = v;
+                c.pc = (2745, 36214);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36215);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36216);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36219);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36220);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36221);
+                c.step()?;
+                c.invoke(p_232a_052f, true, 9002, 1327, 36226)?;
+                label = 36226;
+                continue;
+            }
+            36226 => {
+                c.pc = (2745, 36226);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 36230);
+                c.step()?;
+                label = if !c.z { 36241 } else { 36232 };
+                continue;
+            }
+            36232 => {
+                c.pc = (2745, 36232);
+                c.step()?;
+                let v = 1u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36234);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36236);
+                c.step()?;
+                label = if c.z { 36241 } else { 36238 };
+                continue;
+            }
+            36238 => {
+                c.pc = (2745, 36238);
+                c.step()?;
+                label = 38319;
+                continue;
+            }
+            36241 => {
+                c.pc = (2745, 36241);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 36244);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 36247);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36251);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36253);
+                c.step()?;
+                let v = c.r[7];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16), 16, v)?;
+                c.pc = (2745, 36256);
+                c.step()?;
+                let v = c.r[8];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16), 16, v)?;
+                c.pc = (2745, 36259);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                let y = 15u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (2745, 36263);
+                c.step()?;
+                let o = 0u16.wrapping_add(55230u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36267);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36269);
+                c.step()?;
+                let v = c.r[7];
+                c.write(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5]).wrapping_sub(12u16),
+                    16,
+                    v,
+                )?;
+                c.pc = (2745, 36272);
+                c.step()?;
+                let v = c.r[8];
+                c.write(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5]).wrapping_sub(10u16),
+                    16,
+                    v,
+                )?;
+                c.pc = (2745, 36275);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 36278);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36281);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36285);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36287);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36288);
+                c.step()?;
+                c.invoke(p_1b55_724a, true, 6997, 29258, 36293)?;
+                label = 36293;
+                continue;
+            }
+            36293 => {
+                c.pc = (2745, 36293);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36294);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 36298);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 36299);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36300);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 36303);
+                c.step()?;
+                let o = 0u16.wrapping_add(55210u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36307);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36309);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36312);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36313);
+                c.step()?;
+                c.invoke(p_26c9_0c6f, true, 9929, 3183, 36318)?;
+                label = 36318;
+                continue;
+            }
+            36318 => {
+                c.pc = (2745, 36318);
+                c.step()?;
+                let v = 2u16;
+                c.push(v)?;
+                c.pc = (2745, 36320);
+                c.step()?;
+                let v = 3u16;
+                c.push(v)?;
+                c.pc = (2745, 36322);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36325);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36326);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36327);
+                c.step()?;
+                c.invoke(p_232a_041b, true, 9002, 1051, 36332)?;
+                label = 36332;
+                continue;
+            }
+            36332 => {
+                c.pc = (2745, 36332);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 36336);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 36337);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36338);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 36341);
+                c.step()?;
+                c.invoke(p_1b55_44dc, true, 6997, 17628, 36346)?;
+                label = 36346;
+                continue;
+            }
+            36346 => {
+                c.pc = (2745, 36346);
+                c.step()?;
+                let v = 2u16;
+                c.push(v)?;
+                c.pc = (2745, 36348);
+                c.step()?;
+                let v = 5u16;
+                c.push(v)?;
+                c.pc = (2745, 36350);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36353);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36354);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36355);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36360)?;
+                label = 36360;
+                continue;
+            }
+            36360 => {
+                c.pc = (2745, 36360);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36363);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36367);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36369);
+                c.step()?;
+                let x = c.r[0];
+                let y = 19u16;
+                let v = c.imul3(x, y);
+                c.r[7] = v;
+                c.pc = (2745, 36372);
+                c.step()?;
+                let x = c.r[7];
+                let y = 34596u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36376);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36377);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36378);
+                c.step()?;
+                let v = 3u16;
+                c.push(v)?;
+                c.pc = (2745, 36380);
+                c.step()?;
+                let v = 8u16;
+                c.push(v)?;
+                c.pc = (2745, 36382);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36385);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36386);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36387);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36392)?;
+                label = 36392;
+                continue;
+            }
+            36392 => {
+                c.pc = (2745, 36392);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 36395);
+                c.step()?;
+                let o = 0u16.wrapping_add(55214u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36399);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36401);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36404);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36406);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36408);
+                c.step()?;
+                let x = c.r[7];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36411);
+                c.step()?;
+                let x = c.r[7];
+                let y = 39468u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36415);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36416);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36417);
+                c.step()?;
+                let v = 4u16;
+                c.push(v)?;
+                c.pc = (2745, 36419);
+                c.step()?;
+                let v = 11u16;
+                c.push(v)?;
+                c.pc = (2745, 36421);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36424);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36425);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36426);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36431)?;
+                label = 36431;
+                continue;
+            }
+            36431 => {
+                c.pc = (2745, 36431);
+                c.step()?;
+                let v = 0u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36433);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36435);
+                c.step()?;
+                label = if c.z { 36449 } else { 36437 };
+                continue;
+            }
+            36437 => {
+                c.pc = (2745, 36437);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36440);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 36444);
+                c.step()?;
+                label = if !c.z { 36449 } else { 36446 };
+                continue;
+            }
+            36446 => {
+                c.pc = (2745, 36446);
+                c.step()?;
+                label = 38319;
+                continue;
+            }
+            36449 => {
+                c.pc = (2745, 36449);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 36453);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 36454);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36455);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36458);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(1u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36462);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36464);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 36466);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 36467);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36468);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 36473)?;
+                label = 36473;
+                continue;
+            }
+            36473 => {
+                c.pc = (2745, 36473);
+                c.step()?;
+                let v = 2u16;
+                c.push(v)?;
+                c.pc = (2745, 36475);
+                c.step()?;
+                let v = 23u16;
+                c.push(v)?;
+                c.pc = (2745, 36477);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36480);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36481);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36482);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36487)?;
+                label = 36487;
+                continue;
+            }
+            36487 => {
+                c.pc = (2745, 36487);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 36491);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 36492);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36493);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36496);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(9u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36500);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36502);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36503);
+                c.step()?;
+                c.invoke(p_1b55_483c, true, 6997, 18492, 36508)?;
+                label = 36508;
+                continue;
+            }
+            36508 => {
+                c.pc = (2745, 36508);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 36509);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36510);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 36515)?;
+                label = 36515;
+                continue;
+            }
+            36515 => {
+                c.pc = (2745, 36515);
+                c.step()?;
+                let v = 4u16;
+                c.push(v)?;
+                c.pc = (2745, 36517);
+                c.step()?;
+                let v = 47u16;
+                c.push(v)?;
+                c.pc = (2745, 36519);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36522);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36523);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36524);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36529)?;
+                label = 36529;
+                continue;
+            }
+            36529 => {
+                c.pc = (2745, 36529);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 36533);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 36534);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36535);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 36538);
+                c.step()?;
+                c.invoke(p_1b55_4dc2, true, 6997, 19906, 36543)?;
+                label = 36543;
+                continue;
+            }
+            36543 => {
+                c.pc = (2745, 36543);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 36545);
+                c.step()?;
+                let v = 12u16;
+                c.r[1] = v;
+                c.pc = (2745, 36548);
+                c.step()?;
+                let v = c.r[1];
+                c.divide(v, false)?;
+                c.pc = (2745, 36550);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 36552);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 36553);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36554);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 36559)?;
+                label = 36559;
+                continue;
+            }
+            36559 => {
+                c.pc = (2745, 36559);
+                c.step()?;
+                let v = 4u16;
+                c.push(v)?;
+                c.pc = (2745, 36561);
+                c.step()?;
+                let v = 34u16;
+                c.push(v)?;
+                c.pc = (2745, 36563);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36566);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36567);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36568);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36573)?;
+                label = 36573;
+                continue;
+            }
+            36573 => {
+                c.pc = (2745, 36573);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 36577);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 36578);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36579);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 36582);
+                c.step()?;
+                c.invoke(p_1b55_4dc2, true, 6997, 19906, 36587)?;
+                label = 36587;
+                continue;
+            }
+            36587 => {
+                c.pc = (2745, 36587);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 36589);
+                c.step()?;
+                let v = 12u16;
+                c.r[1] = v;
+                c.pc = (2745, 36592);
+                c.step()?;
+                let v = c.r[1];
+                c.divide(v, false)?;
+                c.pc = (2745, 36594);
+                c.step()?;
+                c.exchange_registers(2, 0);
+                c.pc = (2745, 36595);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 36597);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 36598);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36599);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 36604)?;
+                label = 36604;
+                continue;
+            }
+            36604 => {
+                c.pc = (2745, 36604);
+                c.step()?;
+                let v = 4u16;
+                c.push(v)?;
+                c.pc = (2745, 36606);
+                c.step()?;
+                let v = 37u16;
+                c.push(v)?;
+                c.pc = (2745, 36608);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36611);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36612);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36613);
+                c.step()?;
+                c.invoke(p_232a_0283, true, 9002, 643, 36618)?;
+                label = 36618;
+                continue;
+            }
+            36618 => {
+                c.pc = (2745, 36618);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36621);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(2u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36625);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36627);
+                c.step()?;
+                let x = c.r[0];
+                let y = 5u16;
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 36630);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (2745, 36632);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(1u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36636);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36638);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[2];
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 36640);
+                c.step()?;
+                label = if c.sf != c.of { 36661 } else { 36642 };
+                continue;
+            }
+            36642 => {
+                c.pc = (2745, 36642);
+                c.step()?;
+                let v = 36180u16;
+                c.r[7] = v;
+                c.pc = (2745, 36645);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 36646);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36647);
+                c.step()?;
+                let v = 11u16;
+                c.push(v)?;
+                c.pc = (2745, 36649);
+                c.step()?;
+                let v = 32u16;
+                c.push(v)?;
+                c.pc = (2745, 36651);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36654);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36655);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36656);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36661)?;
+                label = 36661;
+                continue;
+            }
+            36661 => {
+                c.pc = (2745, 36661);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36664);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36668);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 36669);
+                c.step()?;
+                c.r[2] = if (c.r[0] as i16) < 0 { 65535 } else { 0 };
+                c.pc = (2745, 36670);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 36671);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36672);
+                c.step()?;
+                let v = 0u16;
+                c.push(v)?;
+                c.pc = (2745, 36674);
+                c.step()?;
+                let v = 32u16;
+                c.push(v)?;
+                c.pc = (2745, 36676);
+                c.step()?;
+                c.invoke(p_24bc_04fa, true, 9404, 1274, 36681)?;
+                label = 36681;
+                continue;
+            }
+            36681 => {
+                c.pc = (2745, 36681);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36683);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_sub(27813u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36687);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36689);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36691);
+                c.step()?;
+                let x = c.r[7];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36694);
+                c.step()?;
+                let x = c.r[7];
+                let y = 35340u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36698);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36699);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36700);
+                c.step()?;
+                let v = 6u16;
+                c.push(v)?;
+                c.pc = (2745, 36702);
+                c.step()?;
+                let v = 14u16;
+                c.push(v)?;
+                c.pc = (2745, 36704);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36707);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36708);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36709);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36714)?;
+                label = 36714;
+                continue;
+            }
+            36714 => {
+                c.pc = (2745, 36714);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36717);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(8u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 36722);
+                c.step()?;
+                label = if !c.z { 36764 } else { 36724 };
+                continue;
+            }
+            36724 => {
+                c.pc = (2745, 36724);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36728);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 36729);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36731);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_sub(27744u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36735);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36737);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36739);
+                c.step()?;
+                let x = c.r[7];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36742);
+                c.step()?;
+                let x = c.r[7];
+                let y = 35340u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36746);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36747);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36748);
+                c.step()?;
+                let v = 7u16;
+                c.push(v)?;
+                c.pc = (2745, 36750);
+                c.step()?;
+                let v = 14u16;
+                c.push(v)?;
+                c.pc = (2745, 36752);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36755);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36756);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36757);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36762)?;
+                label = 36762;
+                continue;
+            }
+            36762 => {
+                c.pc = (2745, 36762);
+                c.step()?;
+                label = 36805;
+                continue;
+            }
+            36764 => {
+                c.pc = (2745, 36764);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36767);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(7u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36771);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 36772);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36774);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_sub(27744u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36778);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36780);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36782);
+                c.step()?;
+                let x = c.r[7];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36785);
+                c.step()?;
+                let x = c.r[7];
+                let y = 35340u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36789);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36790);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36791);
+                c.step()?;
+                let v = 7u16;
+                c.push(v)?;
+                c.pc = (2745, 36793);
+                c.step()?;
+                let v = 14u16;
+                c.push(v)?;
+                c.pc = (2745, 36795);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36798);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36799);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36800);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36805)?;
+                label = 36805;
+                continue;
+            }
+            36805 => {
+                c.pc = (2745, 36805);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36808);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36812);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 36813);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36815);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_sub(27710u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36819);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36821);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36823);
+                c.step()?;
+                let x = c.r[7];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36826);
+                c.step()?;
+                let x = c.r[7];
+                let y = 35340u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36830);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36831);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36832);
+                c.step()?;
+                let v = 8u16;
+                c.push(v)?;
+                c.pc = (2745, 36834);
+                c.step()?;
+                let v = 14u16;
+                c.push(v)?;
+                c.pc = (2745, 36836);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36839);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36840);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36841);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36846)?;
+                label = 36846;
+                continue;
+            }
+            36846 => {
+                c.pc = (2745, 36846);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 36849);
+                c.step()?;
+                c.invoke(p_1b55_4e0c, true, 6997, 19980, 36854)?;
+                label = 36854;
+                continue;
+            }
+            36854 => {
+                c.pc = (2745, 36854);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36856);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36858);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_sub(27780u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36862);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 36864);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 36866);
+                c.step()?;
+                let x = c.r[7];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36869);
+                c.step()?;
+                let x = c.r[7];
+                let y = 35340u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36873);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36874);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36875);
+                c.step()?;
+                let v = 9u16;
+                c.push(v)?;
+                c.pc = (2745, 36877);
+                c.step()?;
+                let v = 14u16;
+                c.push(v)?;
+                c.pc = (2745, 36879);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 36882);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 36883);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36884);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 36889)?;
+                label = 36889;
+                continue;
+            }
+            36889 => {
+                c.pc = (2745, 36889);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36892);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                let y = 32u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 36897);
+                c.step()?;
+                label = if c.sf == c.of { 36932 } else { 36899 };
+                continue;
+            }
+            36899 => {
+                c.pc = (2745, 36899);
+                c.step()?;
+                let o = 0u16.wrapping_add(56668u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36903);
+                c.step()?;
+                let x = c.r[7];
+                let y = 826u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36907);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (2745, 36908);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36909);
+                c.step()?;
+                let v = 112u16;
+                c.push(v)?;
+                c.pc = (2745, 36911);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36914);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36918);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 36919);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                c.pc = (2745, 36920);
+                c.step()?;
+                c.r[2] = if (c.r[0] as i16) < 0 { 65535 } else { 0 };
+                c.pc = (2745, 36921);
+                c.step()?;
+                let v = 2u16;
+                c.r[1] = v;
+                c.pc = (2745, 36924);
+                c.step()?;
+                let v = c.r[1];
+                c.divide(v, true)?;
+                c.pc = (2745, 36926);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36927);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 36932)?;
+                label = 36932;
+                continue;
+            }
+            36932 => {
+                c.pc = (2745, 36932);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36935);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(8u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 36940);
+                c.step()?;
+                label = if !c.z { 36982 } else { 36942 };
+                continue;
+            }
+            36942 => {
+                c.pc = (2745, 36942);
+                c.step()?;
+                let o = 0u16.wrapping_add(56668u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36946);
+                c.step()?;
+                let x = c.r[7];
+                let y = 986u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36950);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (2745, 36951);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36952);
+                c.step()?;
+                let v = 64u16;
+                c.push(v)?;
+                c.pc = (2745, 36954);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36957);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(14u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 36961);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 36962);
+                c.step()?;
+                c.r[2] = if (c.r[0] as i16) < 0 { 65535 } else { 0 };
+                c.pc = (2745, 36963);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 36964);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36965);
+                c.step()?;
+                let v = 0u16;
+                c.push(v)?;
+                c.pc = (2745, 36967);
+                c.step()?;
+                let v = 16u16;
+                c.push(v)?;
+                c.pc = (2745, 36969);
+                c.step()?;
+                c.invoke(p_24bc_04fa, true, 9404, 1274, 36974)?;
+                label = 36974;
+                continue;
+            }
+            36974 => {
+                c.pc = (2745, 36974);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 36975);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 36980)?;
+                label = 36980;
+                continue;
+            }
+            36980 => {
+                c.pc = (2745, 36980);
+                c.step()?;
+                label = 37015;
+                continue;
+            }
+            36982 => {
+                c.pc = (2745, 36982);
+                c.step()?;
+                let o = 0u16.wrapping_add(56668u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36986);
+                c.step()?;
+                let x = c.r[7];
+                let y = 986u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 36990);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (2745, 36991);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 36992);
+                c.step()?;
+                let v = 112u16;
+                c.push(v)?;
+                c.pc = (2745, 36994);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 36997);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(7u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37001);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 37002);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                c.pc = (2745, 37003);
+                c.step()?;
+                c.r[2] = if (c.r[0] as i16) < 0 { 65535 } else { 0 };
+                c.pc = (2745, 37004);
+                c.step()?;
+                let v = 2u16;
+                c.r[1] = v;
+                c.pc = (2745, 37007);
+                c.step()?;
+                let v = c.r[1];
+                c.divide(v, true)?;
+                c.pc = (2745, 37009);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37010);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 37015)?;
+                label = 37015;
+                continue;
+            }
+            37015 => {
+                c.pc = (2745, 37015);
+                c.step()?;
+                let o = 0u16.wrapping_add(56668u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37019);
+                c.step()?;
+                let x = c.r[7];
+                let y = 1146u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37023);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (2745, 37024);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37025);
+                c.step()?;
+                let v = 112u16;
+                c.push(v)?;
+                c.pc = (2745, 37027);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37030);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37034);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 37035);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                c.pc = (2745, 37036);
+                c.step()?;
+                c.r[2] = if (c.r[0] as i16) < 0 { 65535 } else { 0 };
+                c.pc = (2745, 37037);
+                c.step()?;
+                let v = 2u16;
+                c.r[1] = v;
+                c.pc = (2745, 37040);
+                c.step()?;
+                let v = c.r[1];
+                c.divide(v, true)?;
+                c.pc = (2745, 37042);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37043);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 37048)?;
+                label = 37048;
+                continue;
+            }
+            37048 => {
+                c.pc = (2745, 37048);
+                c.step()?;
+                let o = 0u16.wrapping_add(56668u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37052);
+                c.step()?;
+                let x = c.r[7];
+                let y = 1306u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37056);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (2745, 37057);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37058);
+                c.step()?;
+                let v = 112u16;
+                c.push(v)?;
+                c.pc = (2745, 37060);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37063);
+                c.step()?;
+                c.invoke(p_1b55_4e0c, true, 6997, 19980, 37068)?;
+                label = 37068;
+                continue;
+            }
+            37068 => {
+                c.pc = (2745, 37068);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37070);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37071);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 37076)?;
+                label = 37076;
+                continue;
+            }
+            37076 => {
+                c.pc = (2745, 37076);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37079);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(13u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37083);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37085);
+                c.step()?;
+                let x = c.r[0];
+                let y = 11u16;
+                let v = c.imul3(x, y);
+                c.r[7] = v;
+                c.pc = (2745, 37088);
+                c.step()?;
+                let x = c.r[7];
+                let y = 3004u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37092);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37093);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37094);
+                c.step()?;
+                let v = 11u16;
+                c.push(v)?;
+                c.pc = (2745, 37096);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 37098);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37101);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37102);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37103);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 37108)?;
+                label = 37108;
+                continue;
+            }
+            37108 => {
+                c.pc = (2745, 37108);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 37112);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 37113);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37114);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37117);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37121);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37123);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 37125);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 37126);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37127);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 37132)?;
+                label = 37132;
+                continue;
+            }
+            37132 => {
+                c.pc = (2745, 37132);
+                c.step()?;
+                let v = 12u16;
+                c.push(v)?;
+                c.pc = (2745, 37134);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 37136);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37139);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37140);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37141);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 37146)?;
+                label = 37146;
+                continue;
+            }
+            37146 => {
+                c.pc = (2745, 37146);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 37150);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 37151);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37152);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37155);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(4u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37159);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37161);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 37163);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 37164);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37165);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 37170)?;
+                label = 37170;
+                continue;
+            }
+            37170 => {
+                c.pc = (2745, 37170);
+                c.step()?;
+                let v = 20u16;
+                c.push(v)?;
+                c.pc = (2745, 37172);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 37174);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37177);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37178);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37179);
+                c.step()?;
+                c.invoke(p_232a_0283, true, 9002, 643, 37184)?;
+                label = 37184;
+                continue;
+            }
+            37184 => {
+                c.pc = (2745, 37184);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 37188);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 37189);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37190);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37193);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 37196);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 37198);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 37199);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37200);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 37205)?;
+                label = 37205;
+                continue;
+            }
+            37205 => {
+                c.pc = (2745, 37205);
+                c.step()?;
+                let v = 21u16;
+                c.push(v)?;
+                c.pc = (2745, 37207);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 37209);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37212);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37213);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37214);
+                c.step()?;
+                c.invoke(p_232a_0283, true, 9002, 643, 37219)?;
+                label = 37219;
+                continue;
+            }
+            37219 => {
+                c.pc = (2745, 37219);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37222);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(7u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 37227);
+                c.step()?;
+                label = if c.z { 37232 } else { 37229 };
+                continue;
+            }
+            37229 => {
+                c.pc = (2745, 37229);
+                c.step()?;
+                label = 37370;
+                continue;
+            }
+            37232 => {
+                c.pc = (2745, 37232);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(524u16);
+                c.pc = (2745, 37236);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 37237);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37238);
+                c.step()?;
+                let v = 36201u16;
+                c.r[7] = v;
+                c.pc = (2745, 37241);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 37242);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37243);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 37248)?;
+                label = 37248;
+                continue;
+            }
+            37248 => {
+                c.pc = (2745, 37248);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 37252);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 37253);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37254);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37257);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(5u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37261);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37263);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 37265);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 37266);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37267);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 37272)?;
+                label = 37272;
+                continue;
+            }
+            37272 => {
+                c.pc = (2745, 37272);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 37277)?;
+                label = 37277;
+                continue;
+            }
+            37277 => {
+                c.pc = (2745, 37277);
+                c.step()?;
+                let v = 36203u16;
+                c.r[7] = v;
+                c.pc = (2745, 37280);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 37281);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37282);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 37287)?;
+                label = 37287;
+                continue;
+            }
+            37287 => {
+                c.pc = (2745, 37287);
+                c.step()?;
+                let v = 20u16;
+                c.push(v)?;
+                c.pc = (2745, 37289);
+                c.step()?;
+                let v = 27u16;
+                c.push(v)?;
+                c.pc = (2745, 37291);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37294);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37295);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37296);
+                c.step()?;
+                c.invoke(p_232a_0283, true, 9002, 643, 37301)?;
+                label = 37301;
+                continue;
+            }
+            37301 => {
+                c.pc = (2745, 37301);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(524u16);
+                c.pc = (2745, 37305);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 37306);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37307);
+                c.step()?;
+                let v = 36201u16;
+                c.r[7] = v;
+                c.pc = (2745, 37310);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 37311);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37312);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 37317)?;
+                label = 37317;
+                continue;
+            }
+            37317 => {
+                c.pc = (2745, 37317);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 37321);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 37322);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37323);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37326);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(2u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 37330);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 37332);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 37333);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37334);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 37339)?;
+                label = 37339;
+                continue;
+            }
+            37339 => {
+                c.pc = (2745, 37339);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 37344)?;
+                label = 37344;
+                continue;
+            }
+            37344 => {
+                c.pc = (2745, 37344);
+                c.step()?;
+                let v = 36203u16;
+                c.r[7] = v;
+                c.pc = (2745, 37347);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 37348);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37349);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 37354)?;
+                label = 37354;
+                continue;
+            }
+            37354 => {
+                c.pc = (2745, 37354);
+                c.step()?;
+                let v = 21u16;
+                c.push(v)?;
+                c.pc = (2745, 37356);
+                c.step()?;
+                let v = 27u16;
+                c.push(v)?;
+                c.pc = (2745, 37358);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37361);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37362);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37363);
+                c.step()?;
+                c.invoke(p_232a_0283, true, 9002, 643, 37368)?;
+                label = 37368;
+                continue;
+            }
+            37368 => {
+                c.pc = (2745, 37368);
+                c.step()?;
+                label = 37444;
+                continue;
+            }
+            37370 => {
+                c.pc = (2745, 37370);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 37374);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 37375);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37376);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37379);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(5u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37383);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37385);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 37387);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 37388);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37389);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 37394)?;
+                label = 37394;
+                continue;
+            }
+            37394 => {
+                c.pc = (2745, 37394);
+                c.step()?;
+                let v = 20u16;
+                c.push(v)?;
+                c.pc = (2745, 37396);
+                c.step()?;
+                let v = 27u16;
+                c.push(v)?;
+                c.pc = (2745, 37398);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37401);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37402);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37403);
+                c.step()?;
+                c.invoke(p_232a_0283, true, 9002, 643, 37408)?;
+                label = 37408;
+                continue;
+            }
+            37408 => {
+                c.pc = (2745, 37408);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 37412);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 37413);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37414);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37417);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(2u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 37421);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (2745, 37423);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 37424);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37425);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 37430)?;
+                label = 37430;
+                continue;
+            }
+            37430 => {
+                c.pc = (2745, 37430);
+                c.step()?;
+                let v = 21u16;
+                c.push(v)?;
+                c.pc = (2745, 37432);
+                c.step()?;
+                let v = 27u16;
+                c.push(v)?;
+                c.pc = (2745, 37434);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37437);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37438);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37439);
+                c.step()?;
+                c.invoke(p_232a_0283, true, 9002, 643, 37444)?;
+                label = 37444;
+                continue;
+            }
+            37444 => {
+                c.pc = (2745, 37444);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37447);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(7u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37451);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37453);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37454);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37457);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(5u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37461);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37463);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37464);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(4u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37468);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37470);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37471);
+                c.step()?;
+                let v = 20u16;
+                c.push(v)?;
+                c.pc = (2745, 37473);
+                c.step()?;
+                let v = 34u16;
+                c.push(v)?;
+                c.pc = (2745, 37475);
+                c.step()?;
+                c.invoke(p_1998_0b9e, true, 6552, 2974, 37480)?;
+                label = 37480;
+                continue;
+            }
+            37480 => {
+                c.pc = (2745, 37480);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37483);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(7u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37487);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37489);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37490);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37493);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(2u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37497);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37500);
+                c.step()?;
+                let v = 21u16;
+                c.push(v)?;
+                c.pc = (2745, 37502);
+                c.step()?;
+                let v = 34u16;
+                c.push(v)?;
+                c.pc = (2745, 37504);
+                c.step()?;
+                c.invoke(p_1998_0b9e, true, 6552, 2974, 37509)?;
+                label = 37509;
+                continue;
+            }
+            37509 => {
+                c.pc = (2745, 37509);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37512);
+                c.step()?;
+                let v = 23u16;
+                c.push(v)?;
+                c.pc = (2745, 37514);
+                c.step()?;
+                let v = 10u16;
+                c.push(v)?;
+                c.pc = (2745, 37516);
+                c.step()?;
+                c.invoke(p_1b55_4c4a, true, 6997, 19530, 37521)?;
+                label = 37521;
+                continue;
+            }
+            37521 => {
+                c.pc = (2745, 37521);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37524);
+                c.step()?;
+                c.invoke(p_1b55_4e81, true, 6997, 20097, 37529)?;
+                label = 37529;
+                continue;
+            }
+            37529 => {
+                c.pc = (2745, 37529);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 37530);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 37532);
+                c.step()?;
+                let x = c.r[7];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37534);
+                c.step()?;
+                let v = c.r[7];
+                c.r[6] = v;
+                c.pc = (2745, 37536);
+                c.step()?;
+                let x = c.r[7];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37538);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[6];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37540);
+                c.step()?;
+                let x = c.r[7];
+                let y = 2992u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37544);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37545);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37546);
+                c.step()?;
+                let v = 6u16;
+                c.push(v)?;
+                c.pc = (2745, 37548);
+                c.step()?;
+                let v = 42u16;
+                c.push(v)?;
+                c.pc = (2745, 37550);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37553);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37554);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37555);
+                c.step()?;
+                c.invoke(p_232a_0283, true, 9002, 643, 37560)?;
+                label = 37560;
+                continue;
+            }
+            37560 => {
+                c.pc = (2745, 37560);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37563);
+                c.step()?;
+                c.invoke(p_1b55_4ebf, true, 6997, 20159, 37568)?;
+                label = 37568;
+                continue;
+            }
+            37568 => {
+                c.pc = (2745, 37568);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 37570);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_sub(27676u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37574);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37576);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (2745, 37578);
+                c.step()?;
+                let x = c.r[7];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37581);
+                c.step()?;
+                let x = c.r[7];
+                let y = 35340u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37585);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37586);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37587);
+                c.step()?;
+                let v = 7u16;
+                c.push(v)?;
+                c.pc = (2745, 37589);
+                c.step()?;
+                let v = 42u16;
+                c.push(v)?;
+                c.pc = (2745, 37591);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37594);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37595);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37596);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 37601)?;
+                label = 37601;
+                continue;
+            }
+            37601 => {
+                c.pc = (2745, 37601);
+                c.step()?;
+                let o = 0u16.wrapping_add(56668u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37605);
+                c.step()?;
+                let x = c.r[7];
+                let y = 1042u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37609);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (2745, 37610);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37611);
+                c.step()?;
+                let v = 112u16;
+                c.push(v)?;
+                c.pc = (2745, 37613);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37616);
+                c.step()?;
+                c.invoke(p_1b55_4ebf, true, 6997, 20159, 37621)?;
+                label = 37621;
+                continue;
+            }
+            37621 => {
+                c.pc = (2745, 37621);
+                c.step()?;
+                let x = c.r[0];
+                let y = 10u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (2745, 37624);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shr(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 37627);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37628);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 37633)?;
+                label = 37633;
+                continue;
+            }
+            37633 => {
+                c.pc = (2745, 37633);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37636);
+                c.step()?;
+                c.invoke(p_0ab9_8b0b, false, 2745, 35595, 37639)?;
+                label = 37639;
+                continue;
+            }
+            37639 => {
+                c.pc = (2745, 37639);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37642);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37645);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37647);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37648);
+                c.step()?;
+                let v = 2u16;
+                c.push(v)?;
+                c.pc = (2745, 37650);
+                c.step()?;
+                let v = 32u16;
+                c.push(v)?;
+                c.pc = (2745, 37652);
+                c.step()?;
+                c.invoke(p_1b55_0ee3, true, 6997, 3811, 37657)?;
+                label = 37657;
+                continue;
+            }
+            37657 => {
+                c.pc = (2745, 37657);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37660);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(1u16), 8)?;
+                let y = 17u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 37665);
+                c.step()?;
+                label = if c.cf || c.z { 37769 } else { 37667 };
+                continue;
+            }
+            37667 => {
+                c.pc = (2745, 37667);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37670);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(7u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37674);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37676);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37677);
+                c.step()?;
+                c.invoke(p_1b55_724a, true, 6997, 29258, 37682)?;
+                label = 37682;
+                continue;
+            }
+            37682 => {
+                c.pc = (2745, 37682);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37683);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37686);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(7u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37690);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37692);
+                c.step()?;
+                let x = c.r[0];
+                let y = 19u16;
+                let v = c.imul3(x, y);
+                c.r[7] = v;
+                c.pc = (2745, 37695);
+                c.step()?;
+                let x = c.r[7];
+                let y = 34596u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 37699);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37700);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37701);
+                c.step()?;
+                let v = 3u16;
+                c.push(v)?;
+                c.pc = (2745, 37703);
+                c.step()?;
+                let v = 35u16;
+                c.push(v)?;
+                c.pc = (2745, 37705);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37708);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37709);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37710);
+                c.step()?;
+                c.invoke(p_232a_041b, true, 9002, 1051, 37715)?;
+                label = 37715;
+                continue;
+            }
+            37715 => {
+                c.pc = (2745, 37715);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37718);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37721);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37725);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37727);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37728);
+                c.step()?;
+                c.invoke(p_1b55_724a, true, 6997, 29258, 37733)?;
+                label = 37733;
+                continue;
+            }
+            37733 => {
+                c.pc = (2745, 37733);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37734);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(268u16);
+                c.pc = (2745, 37738);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (2745, 37739);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37740);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 37743);
+                c.step()?;
+                c.invoke(p_1b55_485d, true, 6997, 18525, 37748)?;
+                label = 37748;
+                continue;
+            }
+            37748 => {
+                c.pc = (2745, 37748);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (2745, 37749);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37750);
+                c.step()?;
+                c.invoke(p_1b55_0f95, true, 6997, 3989, 37755)?;
+                label = 37755;
+                continue;
+            }
+            37755 => {
+                c.pc = (2745, 37755);
+                c.step()?;
+                let v = 12u16;
+                c.push(v)?;
+                c.pc = (2745, 37757);
+                c.step()?;
+                let v = 38u16;
+                c.push(v)?;
+                c.pc = (2745, 37759);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37762);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37763);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37764);
+                c.step()?;
+                c.invoke(p_232a_041b, true, 9002, 1051, 37769)?;
+                label = 37769;
+                continue;
+            }
+            37769 => {
+                c.pc = (2745, 37769);
+                c.step()?;
+                let v = 14u16;
+                c.write(c.r[11], 0u16.wrapping_add(56676u16), 16, v)?;
+                c.pc = (2745, 37775);
+                c.step()?;
+                let v = 4u16;
+                c.push(v)?;
+                c.pc = (2745, 37777);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37780);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(11u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37784);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37786);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37787);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 37792)?;
+                label = 37792;
+                continue;
+            }
+            37792 => {
+                c.pc = (2745, 37792);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37794);
+                c.step()?;
+                label = if c.z { 37815 } else { 37796 };
+                continue;
+            }
+            37796 => {
+                c.pc = (2745, 37796);
+                c.step()?;
+                let v = 36205u16;
+                c.r[7] = v;
+                c.pc = (2745, 37799);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 37800);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37801);
+                c.step()?;
+                let v = 14u16;
+                c.push(v)?;
+                c.pc = (2745, 37803);
+                c.step()?;
+                let v = 53u16;
+                c.push(v)?;
+                c.pc = (2745, 37805);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37808);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37809);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37810);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 37815)?;
+                label = 37815;
+                continue;
+            }
+            37815 => {
+                c.pc = (2745, 37815);
+                c.step()?;
+                let v = 8u16;
+                c.push(v)?;
+                c.pc = (2745, 37817);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37820);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(11u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37824);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37826);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37827);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 37832)?;
+                label = 37832;
+                continue;
+            }
+            37832 => {
+                c.pc = (2745, 37832);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37834);
+                c.step()?;
+                label = if c.z { 37855 } else { 37836 };
+                continue;
+            }
+            37836 => {
+                c.pc = (2745, 37836);
+                c.step()?;
+                let v = 36205u16;
+                c.r[7] = v;
+                c.pc = (2745, 37839);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 37840);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37841);
+                c.step()?;
+                let v = 15u16;
+                c.push(v)?;
+                c.pc = (2745, 37843);
+                c.step()?;
+                let v = 53u16;
+                c.push(v)?;
+                c.pc = (2745, 37845);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37848);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37849);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37850);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 37855)?;
+                label = 37855;
+                continue;
+            }
+            37855 => {
+                c.pc = (2745, 37855);
+                c.step()?;
+                let v = 2u16;
+                c.push(v)?;
+                c.pc = (2745, 37857);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37860);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(11u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37864);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37866);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37867);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 37872)?;
+                label = 37872;
+                continue;
+            }
+            37872 => {
+                c.pc = (2745, 37872);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37874);
+                c.step()?;
+                label = if c.z { 37895 } else { 37876 };
+                continue;
+            }
+            37876 => {
+                c.pc = (2745, 37876);
+                c.step()?;
+                let v = 36205u16;
+                c.r[7] = v;
+                c.pc = (2745, 37879);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 37880);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37881);
+                c.step()?;
+                let v = 16u16;
+                c.push(v)?;
+                c.pc = (2745, 37883);
+                c.step()?;
+                let v = 53u16;
+                c.push(v)?;
+                c.pc = (2745, 37885);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37888);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37889);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37890);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 37895)?;
+                label = 37895;
+                continue;
+            }
+            37895 => {
+                c.pc = (2745, 37895);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37898);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(8u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 37903);
+                c.step()?;
+                label = if !c.z { 37924 } else { 37905 };
+                continue;
+            }
+            37905 => {
+                c.pc = (2745, 37905);
+                c.step()?;
+                let v = 36205u16;
+                c.r[7] = v;
+                c.pc = (2745, 37908);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 37909);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37910);
+                c.step()?;
+                let v = 17u16;
+                c.push(v)?;
+                c.pc = (2745, 37912);
+                c.step()?;
+                let v = 53u16;
+                c.push(v)?;
+                c.pc = (2745, 37914);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37917);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37918);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37919);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 37924)?;
+                label = 37924;
+                continue;
+            }
+            37924 => {
+                c.pc = (2745, 37924);
+                c.step()?;
+                let v = 3u16;
+                c.push(v)?;
+                c.pc = (2745, 37926);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37929);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(11u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37933);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37935);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37936);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 37941)?;
+                label = 37941;
+                continue;
+            }
+            37941 => {
+                c.pc = (2745, 37941);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37943);
+                c.step()?;
+                label = if c.z { 37964 } else { 37945 };
+                continue;
+            }
+            37945 => {
+                c.pc = (2745, 37945);
+                c.step()?;
+                let v = 36205u16;
+                c.r[7] = v;
+                c.pc = (2745, 37948);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 37949);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37950);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (2745, 37952);
+                c.step()?;
+                let v = 53u16;
+                c.push(v)?;
+                c.pc = (2745, 37954);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37957);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37958);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37959);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 37964)?;
+                label = 37964;
+                continue;
+            }
+            37964 => {
+                c.pc = (2745, 37964);
+                c.step()?;
+                let v = 5u16;
+                c.push(v)?;
+                c.pc = (2745, 37966);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 37969);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(11u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37973);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 37975);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 37976);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 37981)?;
+                label = 37981;
+                continue;
+            }
+            37981 => {
+                c.pc = (2745, 37981);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 37983);
+                c.step()?;
+                label = if c.z { 38004 } else { 37985 };
+                continue;
+            }
+            37985 => {
+                c.pc = (2745, 37985);
+                c.step()?;
+                let v = 36205u16;
+                c.r[7] = v;
+                c.pc = (2745, 37988);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 37989);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37990);
+                c.step()?;
+                let v = 20u16;
+                c.push(v)?;
+                c.pc = (2745, 37992);
+                c.step()?;
+                let v = 53u16;
+                c.push(v)?;
+                c.pc = (2745, 37994);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 37997);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 37998);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 37999);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 38004)?;
+                label = 38004;
+                continue;
+            }
+            38004 => {
+                c.pc = (2745, 38004);
+                c.step()?;
+                let v = 6u16;
+                c.push(v)?;
+                c.pc = (2745, 38006);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 38009);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(11u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38013);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 38015);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 38016);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 38021)?;
+                label = 38021;
+                continue;
+            }
+            38021 => {
+                c.pc = (2745, 38021);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38023);
+                c.step()?;
+                label = if c.z { 38044 } else { 38025 };
+                continue;
+            }
+            38025 => {
+                c.pc = (2745, 38025);
+                c.step()?;
+                let v = 36205u16;
+                c.r[7] = v;
+                c.pc = (2745, 38028);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (2745, 38029);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 38030);
+                c.step()?;
+                let v = 21u16;
+                c.push(v)?;
+                c.pc = (2745, 38032);
+                c.step()?;
+                let v = 53u16;
+                c.push(v)?;
+                c.pc = (2745, 38034);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 38037);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 38038);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 38039);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 38044)?;
+                label = 38044;
+                continue;
+            }
+            38044 => {
+                c.pc = (2745, 38044);
+                c.step()?;
+                let v = 1u16;
+                c.push(v)?;
+                c.pc = (2745, 38046);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 38049);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(11u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38053);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 38055);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 38056);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 38061)?;
+                label = 38061;
+                continue;
+            }
+            38061 => {
+                c.pc = (2745, 38061);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38063);
+                c.step()?;
+                label = if !c.z { 38080 } else { 38065 };
+                continue;
+            }
+            38065 => {
+                c.pc = (2745, 38065);
+                c.step()?;
+                let v = 16048u16;
+                c.r[7] = v;
+                c.pc = (2745, 38068);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 38069);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 38070);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 38073);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 38074);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 38075);
+                c.step()?;
+                c.invoke(p_232a_052f, true, 9002, 1327, 38080)?;
+                label = 38080;
+                continue;
+            }
+            38080 => {
+                c.pc = (2745, 38080);
+                c.step()?;
+                let x = c.read(c.r[11], 0u16.wrapping_add(3352u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 38085);
+                c.step()?;
+                label = if !c.z { 38090 } else { 38087 };
+                continue;
+            }
+            38087 => {
+                c.pc = (2745, 38087);
+                c.step()?;
+                label = 38319;
+                continue;
+            }
+            38090 => {
+                c.pc = (2745, 38090);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 38093);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 38096);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 38100);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 38102);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38105);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 38107);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.read(c.r[11], 0u16.wrapping_add(55014u16), 16)?;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 38111);
+                c.step()?;
+                let v = 0u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38113);
+                c.step()?;
+                label = if !c.z { 38116 } else { 38115 };
+                continue;
+            }
+            38115 => {
+                c.pc = (2745, 38115);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                label = 38116;
+                continue;
+            }
+            38116 => {
+                c.pc = (2745, 38116);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 38117);
+                c.step()?;
+                let x = c.r[0];
+                let y = 10u16;
+                let v = c.imul3(x, y);
+                c.r[7] = v;
+                c.pc = (2745, 38120);
+                c.step()?;
+                let v = c.read(
+                    c.r[11],
+                    0u16.wrapping_add(c.r[7]).wrapping_sub(12450u16),
+                    16,
+                )?;
+                c.r[0] = v;
+                c.pc = (2745, 38124);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 38127);
+                c.step()?;
+                label = if !c.z { 38144 } else { 38129 };
+                continue;
+            }
+            38129 => {
+                c.pc = (2745, 38129);
+                c.step()?;
+                let v = 7480u16;
+                c.r[7] = v;
+                c.pc = (2745, 38132);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 38133);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 38134);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 38137);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 38138);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 38139);
+                c.step()?;
+                c.invoke(p_232a_052f, true, 9002, 1327, 38144)?;
+                label = 38144;
+                continue;
+            }
+            38144 => {
+                c.pc = (2745, 38144);
+                c.step()?;
+                let x = c.read(c.r[11], 0u16.wrapping_add(53365u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (2745, 38149);
+                c.step()?;
+                label = if c.z { 38154 } else { 38151 };
+                continue;
+            }
+            38151 => {
+                c.pc = (2745, 38151);
+                c.step()?;
+                label = 38319;
+                continue;
+            }
+            38154 => {
+                c.pc = (2745, 38154);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 38157);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 38160);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 38163);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 38167);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 38169);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38172);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 38174);
+                c.step()?;
+                let x = c.r[0];
+                let y = 62u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (2745, 38177);
+                c.step()?;
+                let o = 0u16.wrapping_add(55234u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 38181);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 38183);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65474u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 38187);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (2745, 38188);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 38189);
+                c.step()?;
+                c.invoke(p_1b55_5c6e, true, 6997, 23662, 38194)?;
+                label = 38194;
+                continue;
+            }
+            38194 => {
+                c.pc = (2745, 38194);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16, v)?;
+                c.pc = (2745, 38197);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16)?;
+                let y = 12u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 38201);
+                c.step()?;
+                label = if c.cf { 38231 } else { 38203 };
+                continue;
+            }
+            38203 => {
+                c.pc = (2745, 38203);
+                c.step()?;
+                let v = 3u16;
+                c.push(v)?;
+                c.pc = (2745, 38205);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                let y = 15u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (2745, 38209);
+                c.step()?;
+                let o = 0u16.wrapping_add(55230u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 38213);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 38215);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(11u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38219);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 38221);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (2745, 38222);
+                c.step()?;
+                c.invoke(p_24bc_0259, true, 9404, 601, 38227)?;
+                label = 38227;
+                continue;
+            }
+            38227 => {
+                c.pc = (2745, 38227);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38229);
+                c.step()?;
+                label = if c.z { 38319 } else { 38231 };
+                continue;
+            }
+            38231 => {
+                c.pc = (2745, 38231);
+                c.step()?;
+                let v = 25432u16;
+                c.r[7] = v;
+                c.pc = (2745, 38234);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 38235);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 38236);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (2745, 38239);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (2745, 38240);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (2745, 38241);
+                c.step()?;
+                c.invoke(p_232a_052f, true, 9002, 1327, 38246)?;
+                label = 38246;
+                continue;
+            }
+            38246 => {
+                c.pc = (2745, 38246);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 38249);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 38251);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (2745, 38253);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (2745, 38256);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 38259);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (2745, 38263);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 38265);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38268);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (2745, 38270);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.read(c.r[11], 0u16.wrapping_add(55014u16), 16)?;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 38274);
+                c.step()?;
+                let v = 0u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (2745, 38276);
+                c.step()?;
+                label = if !c.z { 38279 } else { 38278 };
+                continue;
+            }
+            38278 => {
+                c.pc = (2745, 38278);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                label = 38279;
+                continue;
+            }
+            38279 => {
+                c.pc = (2745, 38279);
+                c.step()?;
+                c.r[0] = i16::from(c.r[0] as u8 as i8) as u16;
+                c.pc = (2745, 38280);
+                c.step()?;
+                let x = c.r[0];
+                let y = 40u16;
+                let v = c.imul3(x, y);
+                c.r[7] = v;
+                c.pc = (2745, 38283);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (2745, 38285);
+                c.step()?;
+                let v = c.read(
+                    c.r[11],
+                    0u16.wrapping_add(c.r[7]).wrapping_sub(11962u16),
+                    16,
+                )?;
+                c.r[0] = v;
+                c.pc = (2745, 38289);
+                c.step()?;
+                let x = c.r[0];
+                let y = 55u16;
+                let v = c.sub(x, y, 16);
+                c.r[0] = v;
+                c.pc = (2745, 38292);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (2745, 38295);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                let y = 5000u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (2745, 38300);
+                c.step()?;
+                label = if c.z || (c.sf != c.of) { 38307 } else { 38302 };
+                continue;
+            }
+            38302 => {
+                c.pc = (2745, 38302);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                let y = 10000u16;
+                let v = c.sub(x, y, 16);
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                label = 38307;
+                continue;
+            }
+            38307 => {
+                c.pc = (2745, 38307);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.push(v)?;
+                c.pc = (2745, 38310);
+                c.step()?;
+                let v = 23u16;
+                c.push(v)?;
+                c.pc = (2745, 38312);
+                c.step()?;
+                let v = 41u16;
+                c.push(v)?;
+                c.pc = (2745, 38314);
+                c.step()?;
+                c.invoke(p_1b55_4d0c, true, 6997, 19724, 38319)?;
+                label = 38319;
+                continue;
+            }
+            38319 => {
+                c.pc = (2745, 38319);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (2745, 38320);
+                c.step()?;
+                c.ret(false, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_0ab9_95b3(c: &mut Cpu) -> Result<(), String> {
     let mut label = 38323u16;
@@ -87219,6 +93427,279 @@ pub(super) fn p_1998_0b76(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
+pub(super) fn p_1998_0b9e(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 2974u16;
+    loop {
+        match label {
+            2974 => {
+                c.pc = (6552, 2974);
+                c.step()?;
+                c.enter(512)?;
+                c.pc = (6552, 2978);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(14u16), 16)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6552, 2982);
+                c.step()?;
+                label = if !c.z { 3060 } else { 2984 };
+                continue;
+            }
+            2984 => {
+                c.pc = (6552, 2984);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(512u16);
+                c.pc = (6552, 2988);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (6552, 2989);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 2990);
+                c.step()?;
+                let v = 2970u16;
+                c.r[7] = v;
+                c.pc = (6552, 2993);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (6552, 2994);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 2995);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 3000)?;
+                label = 3000;
+                continue;
+            }
+            3000 => {
+                c.pc = (6552, 3000);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (6552, 3004);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (6552, 3005);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 3006);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6552, 3009);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (6552, 3011);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (6552, 3012);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6552, 3013);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6552, 3016);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (6552, 3018);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (6552, 3019);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6552, 3020);
+                c.step()?;
+                c.invoke(p_1b55_5634, true, 6997, 22068, 3025)?;
+                label = 3025;
+                continue;
+            }
+            3025 => {
+                c.pc = (6552, 3025);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 3030)?;
+                label = 3030;
+                continue;
+            }
+            3030 => {
+                c.pc = (6552, 3030);
+                c.step()?;
+                let v = 2972u16;
+                c.r[7] = v;
+                c.pc = (6552, 3033);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (6552, 3034);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 3035);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 3040)?;
+                label = 3040;
+                continue;
+            }
+            3040 => {
+                c.pc = (6552, 3040);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 3043);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6552, 3044);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 3047);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6552, 3048);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (6552, 3051);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (6552, 3052);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 3053);
+                c.step()?;
+                c.invoke(p_232a_0283, true, 9002, 643, 3058)?;
+                label = 3058;
+                continue;
+            }
+            3058 => {
+                c.pc = (6552, 3058);
+                c.step()?;
+                label = 3103;
+                continue;
+            }
+            3060 => {
+                c.pc = (6552, 3060);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (6552, 3064);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (6552, 3065);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 3066);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6552, 3069);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (6552, 3071);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (6552, 3072);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6552, 3073);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6552, 3076);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (6552, 3078);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (6552, 3079);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6552, 3080);
+                c.step()?;
+                c.invoke(p_1b55_5634, true, 6997, 22068, 3085)?;
+                label = 3085;
+                continue;
+            }
+            3085 => {
+                c.pc = (6552, 3085);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 3088);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6552, 3089);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 3092);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6552, 3093);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (6552, 3096);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (6552, 3097);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 3098);
+                c.step()?;
+                c.invoke(p_232a_0283, true, 9002, 643, 3103)?;
+                label = 3103;
+                continue;
+            }
+            3103 => {
+                c.pc = (6552, 3103);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (6552, 3104);
+                c.step()?;
+                c.ret(true, 10)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
 pub(super) fn p_1998_0d79(c: &mut Cpu) -> Result<(), String> {
     let mut label = 3449u16;
     loop {
@@ -98689,6 +105170,867 @@ pub(super) fn p_1b55_4b4a(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
+pub(super) fn p_1b55_4c4a(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 19530u16;
+    loop {
+        match label {
+            19530 => {
+                c.pc = (6997, 19530);
+                c.step()?;
+                c.enter(2)?;
+                c.pc = (6997, 19534);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                c.push(v)?;
+                c.pc = (6997, 19537);
+                c.step()?;
+                let v = 1u16;
+                c.push(v)?;
+                c.pc = (6997, 19539);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (6997, 19540);
+                c.step()?;
+                c.invoke(p_1b55_4b4a, false, 6997, 19274, 19543)?;
+                label = 19543;
+                continue;
+            }
+            19543 => {
+                c.pc = (6997, 19543);
+                c.step()?;
+                let x = c.r[0];
+                let y = 4u16;
+                let v = c.shr(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 19546);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 19549);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                let y = 16u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6997, 19553);
+                c.step()?;
+                label = if c.cf || c.z { 19560 } else { 19555 };
+                continue;
+            }
+            19555 => {
+                c.pc = (6997, 19555);
+                c.step()?;
+                let v = 16u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                label = 19560;
+                continue;
+            }
+            19560 => {
+                c.pc = (6997, 19560);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6997, 19564);
+                c.step()?;
+                label = if !c.z { 19602 } else { 19566 };
+                continue;
+            }
+            19566 => {
+                c.pc = (6997, 19566);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                c.push(v)?;
+                c.pc = (6997, 19569);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (6997, 19570);
+                c.step()?;
+                c.invoke(p_1b55_4f89, false, 6997, 20361, 19573)?;
+                label = 19573;
+                continue;
+            }
+            19573 => {
+                c.pc = (6997, 19573);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.or(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19575);
+                c.step()?;
+                label = if c.z { 19602 } else { 19577 };
+                continue;
+            }
+            19577 => {
+                c.pc = (6997, 19577);
+                c.step()?;
+                let v = 19501u16;
+                c.r[7] = v;
+                c.pc = (6997, 19580);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (6997, 19581);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 19582);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19585);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 19586);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19589);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 19590);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (6997, 19593);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (6997, 19594);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 19595);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 19600)?;
+                label = 19600;
+                continue;
+            }
+            19600 => {
+                c.pc = (6997, 19600);
+                c.step()?;
+                label = 19720;
+                continue;
+            }
+            19602 => {
+                c.pc = (6997, 19602);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 19605);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 19608);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6997, 19612);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19614);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(1u16), 8)?;
+                let y = 18u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6997, 19619);
+                c.step()?;
+                label = if !c.cf { 19646 } else { 19621 };
+                continue;
+            }
+            19621 => {
+                c.pc = (6997, 19621);
+                c.step()?;
+                let v = 19512u16;
+                c.r[7] = v;
+                c.pc = (6997, 19624);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (6997, 19625);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 19626);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19629);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 19630);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19633);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 19634);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (6997, 19637);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (6997, 19638);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 19639);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 19644)?;
+                label = 19644;
+                continue;
+            }
+            19644 => {
+                c.pc = (6997, 19644);
+                c.step()?;
+                label = 19720;
+                continue;
+            }
+            19646 => {
+                c.pc = (6997, 19646);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[7] = v;
+                c.pc = (6997, 19649);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_sub(27762u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19653);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6997, 19655);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (6997, 19657);
+                c.step()?;
+                let x = c.r[7];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19660);
+                c.step()?;
+                let x = c.r[7];
+                let y = 35340u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19664);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (6997, 19665);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 19666);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19669);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 19670);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19673);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 19674);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (6997, 19677);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (6997, 19678);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 19679);
+                c.step()?;
+                c.invoke(p_232a_039d, true, 9002, 925, 19684)?;
+                label = 19684;
+                continue;
+            }
+            19684 => {
+                c.pc = (6997, 19684);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 19687);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 19689);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (6997, 19691);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 16)?;
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (6997, 19696);
+                c.step()?;
+                let o = 0u16.wrapping_add(56668u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6997, 19700);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19702);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19704);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19708);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (6997, 19709);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 19710);
+                c.step()?;
+                let v = 112u16;
+                c.push(v)?;
+                c.pc = (6997, 19712);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.push(v)?;
+                c.pc = (6997, 19715);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 19720)?;
+                label = 19720;
+                continue;
+            }
+            19720 => {
+                c.pc = (6997, 19720);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (6997, 19721);
+                c.step()?;
+                c.ret(true, 6)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_1b55_4d0c(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 19724u16;
+    loop {
+        match label {
+            19724 => {
+                c.pc = (6997, 19724);
+                c.step()?;
+                c.enter(2)?;
+                c.pc = (6997, 19728);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                let y = 65486u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6997, 19732);
+                c.step()?;
+                label = if c.sf == c.of { 19741 } else { 19734 };
+                continue;
+            }
+            19734 => {
+                c.pc = (6997, 19734);
+                c.step()?;
+                let v = 1u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 19739);
+                c.step()?;
+                label = 19826;
+                continue;
+            }
+            19741 => {
+                c.pc = (6997, 19741);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6997, 19745);
+                c.step()?;
+                label = if c.sf == c.of { 19754 } else { 19747 };
+                continue;
+            }
+            19747 => {
+                c.pc = (6997, 19747);
+                c.step()?;
+                let v = 2u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 19752);
+                c.step()?;
+                label = 19826;
+                continue;
+            }
+            19754 => {
+                c.pc = (6997, 19754);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                let y = 20u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6997, 19758);
+                c.step()?;
+                label = if c.sf == c.of { 19767 } else { 19760 };
+                continue;
+            }
+            19760 => {
+                c.pc = (6997, 19760);
+                c.step()?;
+                let v = 3u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 19765);
+                c.step()?;
+                label = 19826;
+                continue;
+            }
+            19767 => {
+                c.pc = (6997, 19767);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                let y = 40u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6997, 19771);
+                c.step()?;
+                label = if c.sf == c.of { 19780 } else { 19773 };
+                continue;
+            }
+            19773 => {
+                c.pc = (6997, 19773);
+                c.step()?;
+                let v = 4u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 19778);
+                c.step()?;
+                label = 19826;
+                continue;
+            }
+            19780 => {
+                c.pc = (6997, 19780);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                let y = 80u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6997, 19784);
+                c.step()?;
+                label = if c.sf == c.of { 19793 } else { 19786 };
+                continue;
+            }
+            19786 => {
+                c.pc = (6997, 19786);
+                c.step()?;
+                let v = 5u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 19791);
+                c.step()?;
+                label = 19826;
+                continue;
+            }
+            19793 => {
+                c.pc = (6997, 19793);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                let y = 150u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6997, 19798);
+                c.step()?;
+                label = if c.sf == c.of { 19807 } else { 19800 };
+                continue;
+            }
+            19800 => {
+                c.pc = (6997, 19800);
+                c.step()?;
+                let v = 6u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 19805);
+                c.step()?;
+                label = 19826;
+                continue;
+            }
+            19807 => {
+                c.pc = (6997, 19807);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                let y = 300u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6997, 19812);
+                c.step()?;
+                label = if c.sf == c.of { 19821 } else { 19814 };
+                continue;
+            }
+            19814 => {
+                c.pc = (6997, 19814);
+                c.step()?;
+                let v = 7u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 19819);
+                c.step()?;
+                label = 19826;
+                continue;
+            }
+            19821 => {
+                c.pc = (6997, 19821);
+                c.step()?;
+                let v = 8u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                label = 19826;
+                continue;
+            }
+            19826 => {
+                c.pc = (6997, 19826);
+                c.step()?;
+                let v = 6u16;
+                c.push(v)?;
+                c.pc = (6997, 19828);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[7] = v;
+                c.pc = (6997, 19831);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_add(4743u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19835);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6997, 19837);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (6997, 19839);
+                c.step()?;
+                let x = c.r[7];
+                let y = 4u16;
+                let v = c.shl(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19842);
+                c.step()?;
+                let x = c.r[7];
+                let y = 35340u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19846);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (6997, 19847);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 19848);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19851);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 19852);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19855);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 19856);
+                c.step()?;
+                let v = 56668u16;
+                c.r[7] = v;
+                c.pc = (6997, 19859);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (6997, 19860);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 19861);
+                c.step()?;
+                c.invoke(p_232a_041b, true, 9002, 1051, 19866)?;
+                label = 19866;
+                continue;
+            }
+            19866 => {
+                c.pc = (6997, 19866);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 19869);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 19871);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (6997, 19873);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 16)?;
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (6997, 19878);
+                c.step()?;
+                let o = 0u16.wrapping_add(56668u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6997, 19882);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19884);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19886);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19890);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (6997, 19891);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 19892);
+                c.step()?;
+                let v = 112u16;
+                c.push(v)?;
+                c.pc = (6997, 19894);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.push(v)?;
+                c.pc = (6997, 19897);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 19902)?;
+                label = 19902;
+                continue;
+            }
+            19902 => {
+                c.pc = (6997, 19902);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (6997, 19903);
+                c.step()?;
+                c.ret(true, 6)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_1b55_4dc2(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 19906u16;
+    loop {
+        match label {
+            19906 => {
+                c.pc = (6997, 19906);
+                c.step()?;
+                c.enter(6)?;
+                c.pc = (6997, 19910);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 19913);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 19916);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6997, 19920);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19922);
+                c.step()?;
+                let v = c.r[7];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16), 16, v)?;
+                c.pc = (6997, 19925);
+                c.step()?;
+                let v = c.r[8];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16, v)?;
+                c.pc = (6997, 19928);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 19931);
+                c.step()?;
+                let o = 0u16.wrapping_add(55202u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6997, 19935);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 19937);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19940);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6997, 19942);
+                c.step()?;
+                c.r[2] = if (c.r[0] as i16) < 0 { 65535 } else { 0 };
+                c.pc = (6997, 19943);
+                c.step()?;
+                let v = 6u16;
+                c.r[1] = v;
+                c.pc = (6997, 19946);
+                c.step()?;
+                let v = c.r[1];
+                c.divide(v, true)?;
+                c.pc = (6997, 19948);
+                c.step()?;
+                c.exchange_registers(2, 0);
+                c.pc = (6997, 19949);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (6997, 19951);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6997, 19954);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(7u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19958);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6997, 19960);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (6997, 19962);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_add(4752u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 19966);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6997, 19968);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 19970);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 19973);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 19976);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (6997, 19977);
+                c.step()?;
+                c.ret(true, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
 pub(super) fn p_1b55_4e0c(c: &mut Cpu) -> Result<(), String> {
     let mut label = 19980u16;
     loop {
@@ -98932,11 +106274,256 @@ pub(super) fn p_1b55_4e0c(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_1b55_4e81(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 1B55:4E81".into())
+pub(super) fn p_1b55_4e81(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 20097u16;
+    loop {
+        match label {
+            20097 => {
+                c.pc = (6997, 20097);
+                c.step()?;
+                c.enter(6)?;
+                c.pc = (6997, 20101);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 20104);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 20107);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6997, 20111);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 20113);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(7u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 20117);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6997, 20119);
+                c.step()?;
+                let v = c.r[0];
+                c.r[3] = v;
+                c.pc = (6997, 20121);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 20124);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (6997, 20126);
+                c.step()?;
+                let v = 3u16;
+                c.r[1] = v;
+                c.pc = (6997, 20129);
+                c.step()?;
+                let v = c.r[1];
+                c.divide(v, false)?;
+                c.pc = (6997, 20131);
+                c.step()?;
+                c.exchange_registers(2, 0);
+                c.pc = (6997, 20132);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (6997, 20134);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_add(4794u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 20138);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6997, 20140);
+                c.step()?;
+                let x = c.r[0];
+                let y = 14u16;
+                let v = c.imul3(x, y);
+                c.r[7] = v;
+                c.pc = (6997, 20143);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[3];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 20145);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[7]).wrapping_add(4766u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 20149);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
+                c.pc = (6997, 20152);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 20155);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (6997, 20156);
+                c.step()?;
+                c.ret(true, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
-pub(super) fn p_1b55_4ebf(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 1B55:4EBF".into())
+pub(super) fn p_1b55_4ebf(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 20159u16;
+    loop {
+        match label {
+            20159 => {
+                c.pc = (6997, 20159);
+                c.step()?;
+                c.enter(8)?;
+                c.pc = (6997, 20163);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 20166);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 20169);
+                c.step()?;
+                let o = 0u16.wrapping_add(55226u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6997, 20173);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6997, 20175);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(5u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 20179);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6997, 20181);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (6997, 20183);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(3u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6997, 20187);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6997, 20189);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[2];
+                let v = c.sub(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 20191);
+                c.step()?;
+                c.r[2] = if (c.r[0] as i16) < 0 { 65535 } else { 0 };
+                c.pc = (6997, 20192);
+                c.step()?;
+                let v = 8u16;
+                c.r[1] = v;
+                c.pc = (6997, 20195);
+                c.step()?;
+                let v = c.r[1];
+                c.divide(v, true)?;
+                c.pc = (6997, 20197);
+                c.step()?;
+                c.exchange_registers(2, 0);
+                c.pc = (6997, 20198);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16, v)?;
+                c.pc = (6997, 20201);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(1u16), 8)?;
+                let y = 21u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6997, 20206);
+                c.step()?;
+                label = if !c.cf { 20216 } else { 20208 };
+                continue;
+            }
+            20208 => {
+                c.pc = (6997, 20208);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 20211);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shr(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 20213);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16, v)?;
+                label = 20216;
+                continue;
+            }
+            20216 => {
+                c.pc = (6997, 20216);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 20219);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 20222);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 20225);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (6997, 20226);
+                c.step()?;
+                c.ret(true, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_1b55_4f05(c: &mut Cpu) -> Result<(), String> {
     let mut label = 20229u16;
@@ -101936,6 +109523,347 @@ pub(super) fn p_1b55_53fb(c: &mut Cpu) -> Result<(), String> {
                 c.pc = (6997, 21667);
                 c.step()?;
                 c.ret(true, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_1b55_5634(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 22068u16;
+    loop {
+        match label {
+            22068 => {
+                c.pc = (6997, 22068);
+                c.step()?;
+                c.enter(272)?;
+                c.pc = (6997, 22072);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 22075);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 16)?;
+                let v = c.or(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 22078);
+                c.step()?;
+                label = if !c.z { 22090 } else { 22080 };
+                continue;
+            }
+            22080 => {
+                c.pc = (6997, 22080);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[0];
+                let v = c.xor(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6997, 22082);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16, v)?;
+                c.pc = (6997, 22085);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6997, 22088);
+                c.step()?;
+                label = 22136;
+                continue;
+            }
+            22090 => {
+                c.pc = (6997, 22090);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 16)?;
+                c.push(v)?;
+                c.pc = (6997, 22093);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.push(v)?;
+                c.pc = (6997, 22096);
+                c.step()?;
+                let v = 0u16;
+                c.push(v)?;
+                c.pc = (6997, 22098);
+                c.step()?;
+                let v = 1u16;
+                c.push(v)?;
+                c.pc = (6997, 22100);
+                c.step()?;
+                c.invoke(p_24bc_04c0, true, 9404, 1216, 22105)?;
+                label = 22105;
+                continue;
+            }
+            22105 => {
+                c.pc = (6997, 22105);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (6997, 22106);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 22107);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 22110);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 16)?;
+                c.r[2] = v;
+                c.pc = (6997, 22113);
+                c.step()?;
+                let v = 100u16;
+                c.r[1] = v;
+                c.pc = (6997, 22116);
+                c.step()?;
+                let x = c.r[3];
+                let y = c.r[3];
+                let v = c.xor(x, y, 16);
+                c.r[3] = v;
+                c.pc = (6997, 22118);
+                c.step()?;
+                c.invoke(p_26c9_0a2a, true, 9929, 2602, 22123)?;
+                label = 22123;
+                continue;
+            }
+            22123 => {
+                c.pc = (6997, 22123);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[1] = v;
+                c.pc = (6997, 22124);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[3] = v;
+                c.pc = (6997, 22125);
+                c.step()?;
+                c.invoke(p_26c9_0a67, true, 9929, 2663, 22130)?;
+                label = 22130;
+                continue;
+            }
+            22130 => {
+                c.pc = (6997, 22130);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16, v)?;
+                c.pc = (6997, 22133);
+                c.step()?;
+                let v = c.r[2];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                label = 22136;
+                continue;
+            }
+            22136 => {
+                c.pc = (6997, 22136);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 22139);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[2] = v;
+                c.pc = (6997, 22142);
+                c.step()?;
+                let v = 100u16;
+                c.r[1] = v;
+                c.pc = (6997, 22145);
+                c.step()?;
+                let x = c.r[3];
+                let y = c.r[3];
+                let v = c.xor(x, y, 16);
+                c.r[3] = v;
+                c.pc = (6997, 22147);
+                c.step()?;
+                c.invoke(p_26c9_0a67, true, 9929, 2663, 22152)?;
+                label = 22152;
+                continue;
+            }
+            22152 => {
+                c.pc = (6997, 22152);
+                c.step()?;
+                let v = c.r[1];
+                c.r[0] = v;
+                c.pc = (6997, 22154);
+                c.step()?;
+                let v = c.r[3];
+                c.r[2] = v;
+                c.pc = (6997, 22156);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (6997, 22157);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 22158);
+                c.step()?;
+                let v = 2u16;
+                c.push(v)?;
+                c.pc = (6997, 22160);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(16u16);
+                c.pc = (6997, 22163);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (6997, 22164);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 22165);
+                c.step()?;
+                let v = 10u16;
+                c.push(v)?;
+                c.pc = (6997, 22167);
+                c.step()?;
+                c.invoke(p_26c9_190a, true, 9929, 6410, 22172)?;
+                label = 22172;
+                continue;
+            }
+            22172 => {
+                c.pc = (6997, 22172);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(15u16), 8)?;
+                let y = 32u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6997, 22176);
+                c.step()?;
+                label = if !c.z { 22182 } else { 22178 };
+                continue;
+            }
+            22178 => {
+                c.pc = (6997, 22178);
+                c.step()?;
+                let v = 48u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(15u16), 8, v)?;
+                label = 22182;
+                continue;
+            }
+            22182 => {
+                c.pc = (6997, 22182);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(272u16);
+                c.pc = (6997, 22186);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (6997, 22187);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 22188);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6997, 22191);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[2] = v;
+                c.pc = (6997, 22194);
+                c.step()?;
+                let v = 100u16;
+                c.r[1] = v;
+                c.pc = (6997, 22197);
+                c.step()?;
+                let x = c.r[3];
+                let y = c.r[3];
+                let v = c.xor(x, y, 16);
+                c.r[3] = v;
+                c.pc = (6997, 22199);
+                c.step()?;
+                c.invoke(p_26c9_0a67, true, 9929, 2663, 22204)?;
+                label = 22204;
+                continue;
+            }
+            22204 => {
+                c.pc = (6997, 22204);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (6997, 22205);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6997, 22206);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 22211)?;
+                label = 22211;
+                continue;
+            }
+            22211 => {
+                c.pc = (6997, 22211);
+                c.step()?;
+                let v = 22066u16;
+                c.r[7] = v;
+                c.pc = (6997, 22214);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (6997, 22215);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 22216);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 22221)?;
+                label = 22221;
+                continue;
+            }
+            22221 => {
+                c.pc = (6997, 22221);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(16u16);
+                c.pc = (6997, 22224);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (6997, 22225);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 22226);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 22231)?;
+                label = 22231;
+                continue;
+            }
+            22231 => {
+                c.pc = (6997, 22231);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(14u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6997, 22234);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (6997, 22235);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6997, 22236);
+                c.step()?;
+                let v = 10u16;
+                c.push(v)?;
+                c.pc = (6997, 22238);
+                c.step()?;
+                c.invoke(p_26c9_0b6d, true, 9929, 2925, 22243)?;
+                label = 22243;
+                continue;
+            }
+            22243 => {
+                c.pc = (6997, 22243);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (6997, 22244);
+                c.step()?;
+                c.ret(true, 8)?;
                 return Ok(());
             }
             _ => return Err(format!("invalid compiled label {label:04X}")),
@@ -108521,8 +116449,135 @@ pub(super) fn p_1b55_7b19(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_232a_0098(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 232A:0098".into())
+pub(super) fn p_232a_0098(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 152u16;
+    loop {
+        match label {
+            152 => {
+                c.pc = (9002, 152);
+                c.step()?;
+                c.enter(82)?;
+                c.pc = (9002, 156);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9002, 158);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9002, 160);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9002, 162);
+                c.step()?;
+                c.df = false;
+                c.pc = (9002, 163);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 166);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9002, 169);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9002, 170);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9002, 172);
+                c.step()?;
+                label = if c.cf { 176 } else { 174 };
+                continue;
+            }
+            174 => {
+                c.pc = (9002, 174);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 176;
+                continue;
+            }
+            176 => {
+                c.pc = (9002, 176);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9002, 177);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9002, 178);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 180);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9002, 182);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9002, 184);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 187);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
+                c.pc = (9002, 190);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9002, 194);
+                c.step()?;
+                label = if c.z { 206 } else { 196 };
+                continue;
+            }
+            196 => {
+                c.pc = (9002, 196);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 199);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 200);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 201);
+                c.step()?;
+                c.invoke(p_24bc_0702, true, 9404, 1794, 206)?;
+                label = 206;
+                continue;
+            }
+            206 => {
+                c.pc = (9002, 206);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 209);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9002, 210);
+                c.step()?;
+                c.ret(true, 6)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_232a_00d5(c: &mut Cpu) -> Result<(), String> {
     let mut label = 213u16;
@@ -109058,17 +117113,1151 @@ pub(super) fn p_232a_022e(_c: &mut Cpu) -> Result<(), String> {
 pub(super) fn p_232a_0240(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 232A:0240".into())
 }
-pub(super) fn p_232a_0283(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 232A:0283".into())
+pub(super) fn p_232a_0283(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 643u16;
+    loop {
+        match label {
+            643 => {
+                c.pc = (9002, 643);
+                c.step()?;
+                c.enter(256)?;
+                c.pc = (9002, 647);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9002, 649);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9002, 651);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9002, 653);
+                c.step()?;
+                c.df = false;
+                c.pc = (9002, 654);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9002, 658);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(14u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9002, 661);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9002, 662);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9002, 663);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9002, 664);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 666);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9002, 668);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9002, 670);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 674);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 676);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 678);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 681);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 683);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[2];
+                let v = c.sub(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 685);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                c.pc = (9002, 686);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 688);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 690);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 693);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 695);
+                c.step()?;
+                let x = c.r[0];
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9002, 699);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 702);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]);
+                let s = c.r[8];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 705);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 707);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 709);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 713);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 714);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 715);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(56676u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 718);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 719);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 723);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 725);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 726);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 731)?;
+                label = 731;
+                continue;
+            }
+            731 => {
+                c.pc = (9002, 731);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9002, 735);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 736);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 737);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 740);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 742);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 744);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 746);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 749);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 751);
+                c.step()?;
+                let x = c.r[0];
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9002, 755);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 758);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]);
+                let s = c.r[8];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 761);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 763);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 765);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 769);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 770);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 771);
+                c.step()?;
+                c.invoke(p_24bc_0294, true, 9404, 660, 776)?;
+                label = 776;
+                continue;
+            }
+            776 => {
+                c.pc = (9002, 776);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9002, 777);
+                c.step()?;
+                c.ret(true, 12)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
-pub(super) fn p_232a_030c(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 232A:030C".into())
+pub(super) fn p_232a_030c(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 780u16;
+    loop {
+        match label {
+            780 => {
+                c.pc = (9002, 780);
+                c.step()?;
+                c.enter(256)?;
+                c.pc = (9002, 784);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9002, 786);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9002, 788);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9002, 790);
+                c.step()?;
+                c.df = false;
+                c.pc = (9002, 791);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9002, 795);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(14u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9002, 798);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9002, 799);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9002, 800);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9002, 801);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 803);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9002, 805);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9002, 807);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(18u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 810);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 812);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[11], 0u16.wrapping_add(56676u16), 16, v)?;
+                c.pc = (9002, 815);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 819);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 821);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 823);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 826);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 828);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[2];
+                let v = c.sub(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 830);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                c.pc = (9002, 831);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 833);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 835);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 838);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 840);
+                c.step()?;
+                let x = c.r[0];
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9002, 844);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 847);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]);
+                let s = c.r[8];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 850);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 852);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 854);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 858);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 859);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 860);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(56676u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 863);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 864);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 868);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 870);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 871);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 876)?;
+                label = 876;
+                continue;
+            }
+            876 => {
+                c.pc = (9002, 876);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9002, 880);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 881);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 882);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 885);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 887);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 889);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 891);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 894);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 896);
+                c.step()?;
+                let x = c.r[0];
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9002, 900);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 903);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]);
+                let s = c.r[8];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 906);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 908);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 910);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 914);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 915);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 916);
+                c.step()?;
+                c.invoke(p_24bc_0294, true, 9404, 660, 921)?;
+                label = 921;
+                continue;
+            }
+            921 => {
+                c.pc = (9002, 921);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9002, 922);
+                c.step()?;
+                c.ret(true, 14)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
-pub(super) fn p_232a_039d(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 232A:039D".into())
+pub(super) fn p_232a_039d(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 925u16;
+    loop {
+        match label {
+            925 => {
+                c.pc = (9002, 925);
+                c.step()?;
+                c.enter(256)?;
+                c.pc = (9002, 929);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9002, 931);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9002, 933);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9002, 935);
+                c.step()?;
+                c.df = false;
+                c.pc = (9002, 936);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9002, 940);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(14u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9002, 943);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9002, 944);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9002, 945);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9002, 946);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 948);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9002, 950);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9002, 952);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 955);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 957);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 959);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 961);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 964);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 966);
+                c.step()?;
+                let x = c.r[0];
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9002, 970);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 973);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]);
+                let s = c.r[8];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 976);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 978);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 980);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 984);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 985);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 986);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(56676u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 989);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 990);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 994);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 996);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 997);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 1002)?;
+                label = 1002;
+                continue;
+            }
+            1002 => {
+                c.pc = (9002, 1002);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9002, 1006);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1007);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1008);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1011);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1013);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1015);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 1017);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1020);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1022);
+                c.step()?;
+                let x = c.r[0];
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9002, 1026);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1029);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]);
+                let s = c.r[8];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1032);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1034);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1036);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1040);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 1041);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1042);
+                c.step()?;
+                c.invoke(p_24bc_0277, true, 9404, 631, 1047)?;
+                label = 1047;
+                continue;
+            }
+            1047 => {
+                c.pc = (9002, 1047);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9002, 1048);
+                c.step()?;
+                c.ret(true, 12)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
-pub(super) fn p_232a_041b(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 232A:041B".into())
+pub(super) fn p_232a_041b(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 1051u16;
+    loop {
+        match label {
+            1051 => {
+                c.pc = (9002, 1051);
+                c.step()?;
+                c.enter(256)?;
+                c.pc = (9002, 1055);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9002, 1057);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9002, 1059);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9002, 1061);
+                c.step()?;
+                c.df = false;
+                c.pc = (9002, 1062);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9002, 1066);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(14u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9002, 1069);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9002, 1070);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9002, 1071);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9002, 1072);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1074);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9002, 1076);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9002, 1078);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(18u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1081);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1083);
+                c.step()?;
+                let v = c.r[0];
+                c.write(c.r[11], 0u16.wrapping_add(56676u16), 16, v)?;
+                c.pc = (9002, 1086);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1089);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1091);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1093);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 1095);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1098);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1100);
+                c.step()?;
+                let x = c.r[0];
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9002, 1104);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1107);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]);
+                let s = c.r[8];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1110);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1112);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1114);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1118);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 1119);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1120);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(56676u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1123);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 1124);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1128);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1130);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 1131);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 1136)?;
+                label = 1136;
+                continue;
+            }
+            1136 => {
+                c.pc = (9002, 1136);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9002, 1140);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1141);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1142);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1145);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1147);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1149);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 1151);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1154);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1156);
+                c.step()?;
+                let x = c.r[0];
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9002, 1160);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1163);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]);
+                let s = c.r[8];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1166);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1168);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1170);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1174);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 1175);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1176);
+                c.step()?;
+                c.invoke(p_24bc_0277, true, 9404, 631, 1181)?;
+                label = 1181;
+                continue;
+            }
+            1181 => {
+                c.pc = (9002, 1181);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9002, 1182);
+                c.step()?;
+                c.ret(true, 14)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_232a_052f(c: &mut Cpu) -> Result<(), String> {
     let mut label = 1327u16;
@@ -109140,8 +118329,1115 @@ pub(super) fn p_232a_052f(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_232a_06e5(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 232A:06E5".into())
+pub(super) fn p_232a_0555(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 1365u16;
+    loop {
+        match label {
+            1365 => {
+                c.pc = (9002, 1365);
+                c.step()?;
+                c.enter(346)?;
+                c.pc = (9002, 1369);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9002, 1371);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9002, 1373);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9002, 1375);
+                c.step()?;
+                c.df = false;
+                c.pc = (9002, 1376);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1379);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(10u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9002, 1382);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9002, 1383);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9002, 1385);
+                c.step()?;
+                label = if c.cf { 1389 } else { 1387 };
+                continue;
+            }
+            1387 => {
+                c.pc = (9002, 1387);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 1389;
+                continue;
+            }
+            1389 => {
+                c.pc = (9002, 1389);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9002, 1390);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9002, 1391);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1393);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9002, 1395);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9002, 1397);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(81u16), 8)?;
+                let y = 32u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9002, 1401);
+                c.step()?;
+                label = if c.z { 1441 } else { 1403 };
+                continue;
+            }
+            1403 => {
+                c.pc = (9002, 1403);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(346u16);
+                c.pc = (9002, 1407);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1408);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1409);
+                c.step()?;
+                let v = 1352u16;
+                c.r[7] = v;
+                c.pc = (9002, 1412);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9002, 1413);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1414);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 1419)?;
+                label = 1419;
+                continue;
+            }
+            1419 => {
+                c.pc = (9002, 1419);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1422);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1423);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1424);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 1429)?;
+                label = 1429;
+                continue;
+            }
+            1429 => {
+                c.pc = (9002, 1429);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1432);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1433);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1434);
+                c.step()?;
+                let v = 80u16;
+                c.push(v)?;
+                c.pc = (9002, 1436);
+                c.step()?;
+                c.invoke(p_26c9_0b6d, true, 9929, 2925, 1441)?;
+                label = 1441;
+                continue;
+            }
+            1441 => {
+                c.pc = (9002, 1441);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(346u16);
+                c.pc = (9002, 1445);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1446);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1447);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1450);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1451);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1452);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 1457)?;
+                label = 1457;
+                continue;
+            }
+            1457 => {
+                c.pc = (9002, 1457);
+                c.step()?;
+                let v = 1352u16;
+                c.r[7] = v;
+                c.pc = (9002, 1460);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9002, 1461);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1462);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 1467)?;
+                label = 1467;
+                continue;
+            }
+            1467 => {
+                c.pc = (9002, 1467);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1470);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1471);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1472);
+                c.step()?;
+                let v = 80u16;
+                c.push(v)?;
+                c.pc = (9002, 1474);
+                c.step()?;
+                c.invoke(p_26c9_0b6d, true, 9929, 2925, 1479)?;
+                label = 1479;
+                continue;
+            }
+            1479 => {
+                c.pc = (9002, 1479);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1482);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1484);
+                c.step()?;
+                let v = c.r[0];
+                c.write(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5]).wrapping_sub(84u16),
+                    16,
+                    v,
+                )?;
+                c.pc = (9002, 1487);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(84u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9002, 1490);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1491);
+                c.step()?;
+                let v = c.r[0];
+                c.r[7] = v;
+                c.pc = (9002, 1493);
+                c.step()?;
+                c.r[7] = 0u16
+                    .wrapping_add(c.r[5])
+                    .wrapping_add(c.r[7])
+                    .wrapping_sub(82u16);
+                c.pc = (9002, 1496);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1497);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1498);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = v;
+                c.pc = (9002, 1501);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(84u16), 16)?;
+                let v = c.sub(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1504);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 1505);
+                c.step()?;
+                let v = 254u16;
+                c.push(v)?;
+                c.pc = (9002, 1508);
+                c.step()?;
+                c.invoke(p_24bc_0222, true, 9404, 546, 1513)?;
+                label = 1513;
+                continue;
+            }
+            1513 => {
+                c.pc = (9002, 1513);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = v;
+                c.pc = (9002, 1516);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(84u16), 16)?;
+                let v = c.sub(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1519);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shr(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1521);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1522);
+                c.step()?;
+                let v = c.r[0];
+                c.write(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5]).wrapping_sub(86u16),
+                    16,
+                    v,
+                )?;
+                c.pc = (9002, 1525);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(81u16);
+                c.pc = (9002, 1528);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1529);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1530);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(86u16), 16)?;
+                c.r[7] = v;
+                c.pc = (9002, 1533);
+                c.step()?;
+                c.r[7] = 0u16
+                    .wrapping_add(c.r[5])
+                    .wrapping_add(c.r[7])
+                    .wrapping_sub(82u16);
+                c.pc = (9002, 1536);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1537);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1538);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(84u16), 16)?;
+                c.push(v)?;
+                c.pc = (9002, 1541);
+                c.step()?;
+                c.invoke(p_24bc_01c2, true, 9404, 450, 1546)?;
+                label = 1546;
+                continue;
+            }
+            1546 => {
+                c.pc = (9002, 1546);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(81u16);
+                c.pc = (9002, 1549);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1550);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1551);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(86u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9002, 1554);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.dec(x, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1555);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 1556);
+                c.step()?;
+                let v = 254u16;
+                c.push(v)?;
+                c.pc = (9002, 1559);
+                c.step()?;
+                c.invoke(p_24bc_0222, true, 9404, 546, 1564)?;
+                label = 1564;
+                continue;
+            }
+            1564 => {
+                c.pc = (9002, 1564);
+                c.step()?;
+                let v = 80u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16), 8, v)?;
+                c.pc = (9002, 1568);
+                c.step()?;
+                let v = 1354u16;
+                c.r[7] = v;
+                c.pc = (9002, 1571);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9002, 1572);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1573);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1576);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1577);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1578);
+                c.step()?;
+                c.invoke(p_26c9_0bfe, true, 9929, 3070, 1583)?;
+                label = 1583;
+                continue;
+            }
+            1583 => {
+                c.pc = (9002, 1583);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[0];
+                let v = c.or(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1585);
+                c.step()?;
+                label = if !c.z { 1613 } else { 1587 };
+                continue;
+            }
+            1587 => {
+                c.pc = (9002, 1587);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(41638u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1590);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 1591);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1594);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1595);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1596);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(14u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1599);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 1600);
+                c.step()?;
+                let v = 1u16;
+                c.push(v)?;
+                c.pc = (9002, 1602);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1605);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 1606);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1607);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9002, 1608);
+                c.step()?;
+                c.invoke(p_232a_041b, false, 9002, 1051, 1611)?;
+                label = 1611;
+                continue;
+            }
+            1611 => {
+                c.pc = (9002, 1611);
+                c.step()?;
+                label = 1635;
+                continue;
+            }
+            1613 => {
+                c.pc = (9002, 1613);
+                c.step()?;
+                let v = 65410u16;
+                c.push(v)?;
+                c.pc = (9002, 1615);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1618);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1619);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1620);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(14u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1623);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 1624);
+                c.step()?;
+                let v = 1u16;
+                c.push(v)?;
+                c.pc = (9002, 1626);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1629);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 1630);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1631);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9002, 1632);
+                c.step()?;
+                c.invoke(p_232a_041b, false, 9002, 1051, 1635)?;
+                label = 1635;
+                continue;
+            }
+            1635 => {
+                c.pc = (9002, 1635);
+                c.step()?;
+                let v = 1357u16;
+                c.r[7] = v;
+                c.pc = (9002, 1638);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9002, 1639);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1640);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1643);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1644);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1645);
+                c.step()?;
+                c.invoke(p_26c9_0bfe, true, 9929, 3070, 1650)?;
+                label = 1650;
+                continue;
+            }
+            1650 => {
+                c.pc = (9002, 1650);
+                c.step()?;
+                let v = c.r[0];
+                c.write(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5]).wrapping_sub(88u16),
+                    16,
+                    v,
+                )?;
+                c.pc = (9002, 1653);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(88u16), 16)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (9002, 1657);
+                c.step()?;
+                label = if !c.z { 1661 } else { 1659 };
+                continue;
+            }
+            1659 => {
+                c.pc = (9002, 1659);
+                c.step()?;
+                label = 1753;
+                continue;
+            }
+            1661 => {
+                c.pc = (9002, 1661);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(88u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9002, 1664);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1667);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1669);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 1671);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(14u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1674);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1676);
+                c.step()?;
+                let x = c.r[0];
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9002, 1680);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1683);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]);
+                let s = c.r[8];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1686);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1688);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1690);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1694);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 1695);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1696);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(41639u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1699);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 1700);
+                c.step()?;
+                let v = 1u16;
+                c.push(v)?;
+                c.pc = (9002, 1702);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 1707)?;
+                label = 1707;
+                continue;
+            }
+            1707 => {
+                c.pc = (9002, 1707);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(88u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9002, 1710);
+                c.step()?;
+                let x = c.r[0];
+                let y = 5u16;
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1713);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 1715);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9002, 1717);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(14u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1720);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1722);
+                c.step()?;
+                let x = c.r[0];
+                let y = 160u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9002, 1726);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1729);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[7]);
+                let s = c.r[8];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 1732);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1734);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1736);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65374u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9002, 1740);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9002, 1741);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1742);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(41639u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1745);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 1746);
+                c.step()?;
+                let v = 1u16;
+                c.push(v)?;
+                c.pc = (9002, 1748);
+                c.step()?;
+                c.invoke(p_24bc_034b, true, 9404, 843, 1753)?;
+                label = 1753;
+                continue;
+            }
+            1753 => {
+                c.pc = (9002, 1753);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9002, 1754);
+                c.step()?;
+                c.ret(true, 10)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_232a_06e5(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 1765u16;
+    loop {
+        match label {
+            1765 => {
+                c.pc = (9002, 1765);
+                c.step()?;
+                c.enter(338)?;
+                c.pc = (9002, 1769);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9002, 1771);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9002, 1773);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9002, 1775);
+                c.step()?;
+                c.df = false;
+                c.pc = (9002, 1776);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1779);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9002, 1782);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9002, 1783);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9002, 1785);
+                c.step()?;
+                label = if c.cf { 1789 } else { 1787 };
+                continue;
+            }
+            1787 => {
+                c.pc = (9002, 1787);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 1789;
+                continue;
+            }
+            1789 => {
+                c.pc = (9002, 1789);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9002, 1790);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9002, 1791);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1793);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9002, 1795);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9002, 1797);
+                c.step()?;
+                c.invoke(p_24bc_0568, true, 9404, 1384, 1802)?;
+                label = 1802;
+                continue;
+            }
+            1802 => {
+                c.pc = (9002, 1802);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(338u16);
+                c.pc = (9002, 1806);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1807);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1808);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1811);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1812);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1813);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 1818)?;
+                label = 1818;
+                continue;
+            }
+            1818 => {
+                c.pc = (9002, 1818);
+                c.step()?;
+                let v = 1757u16;
+                c.r[7] = v;
+                c.pc = (9002, 1821);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9002, 1822);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1823);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 1828)?;
+                label = 1828;
+                continue;
+            }
+            1828 => {
+                c.pc = (9002, 1828);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1831);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1832);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1833);
+                c.step()?;
+                let v = 80u16;
+                c.push(v)?;
+                c.pc = (9002, 1835);
+                c.step()?;
+                c.invoke(p_26c9_0b6d, true, 9929, 2925, 1840)?;
+                label = 1840;
+                continue;
+            }
+            1840 => {
+                c.pc = (9002, 1840);
+                c.step()?;
+                let v = 25u16;
+                c.push(v)?;
+                c.pc = (9002, 1842);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9002, 1845);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9002, 1846);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1847);
+                c.step()?;
+                let v = 56664u16;
+                c.r[7] = v;
+                c.pc = (9002, 1850);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (9002, 1851);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1852);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9002, 1853);
+                c.step()?;
+                c.invoke(p_232a_0555, false, 9002, 1365, 1856)?;
+                label = 1856;
+                continue;
+            }
+            1856 => {
+                c.pc = (9002, 1856);
+                c.step()?;
+                let v = 41674u16;
+                c.r[7] = v;
+                c.pc = (9002, 1859);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (9002, 1860);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9002, 1861);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9002, 1862);
+                c.step()?;
+                c.invoke(p_232a_0795, false, 9002, 1941, 1865)?;
+                label = 1865;
+                continue;
+            }
+            1865 => {
+                c.pc = (9002, 1865);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(56968u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1868);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9002, 1869);
+                c.step()?;
+                c.invoke(p_26c9_1986, true, 9929, 6534, 1874)?;
+                label = 1874;
+                continue;
+            }
+            1874 => {
+                c.pc = (9002, 1874);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 89u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9002, 1876);
+                c.step()?;
+                let v = 0u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1878);
+                c.step()?;
+                label = if !c.z { 1881 } else { 1880 };
+                continue;
+            }
+            1880 => {
+                c.pc = (9002, 1880);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                label = 1881;
+                continue;
+            }
+            1881 => {
+                c.pc = (9002, 1881);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
+                c.pc = (9002, 1884);
+                c.step()?;
+                c.invoke(p_24bc_0598, true, 9404, 1432, 1889)?;
+                label = 1889;
+                continue;
+            }
+            1889 => {
+                c.pc = (9002, 1889);
+                c.step()?;
+                let v = 0u16;
+                c.write(c.r[11], 0u16.wrapping_add(56968u16), 8, v)?;
+                c.pc = (9002, 1894);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1897);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9002, 1898);
+                c.step()?;
+                c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_232a_076d(c: &mut Cpu) -> Result<(), String> {
     let mut label = 1901u16;
@@ -109177,6 +119473,119 @@ pub(super) fn p_232a_076d(c: &mut Cpu) -> Result<(), String> {
                 c.pc = (9002, 1920);
                 c.step()?;
                 c.ret(true, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_232a_0795(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 1941u16;
+    loop {
+        match label {
+            1941 => {
+                c.pc = (9002, 1941);
+                c.step()?;
+                c.enter(32)?;
+                c.pc = (9002, 1945);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9002, 1947);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9002, 1949);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9002, 1951);
+                c.step()?;
+                c.df = false;
+                c.pc = (9002, 1952);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(32u16);
+                c.pc = (9002, 1955);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9002, 1958);
+                c.step()?;
+                let v = 32u16;
+                c.r[1] = v;
+                c.pc = (9002, 1961);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9002, 1963);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                label = 1965;
+                continue;
+            }
+            1965 => {
+                c.pc = (9002, 1965);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9002, 1966);
+                c.step()?;
+                c.invoke(p_232a_099b, false, 9002, 2459, 1969)?;
+                label = 1969;
+                continue;
+            }
+            1969 => {
+                c.pc = (9002, 1969);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(56968u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 1972);
+                c.step()?;
+                let v = 1u16;
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 1974);
+                c.step()?;
+                let v = 32u16;
+                c.r[2] = v;
+                c.pc = (9002, 1977);
+                c.step()?;
+                c.invoke(p_26c9_0e1f, true, 9929, 3615, 1982)?;
+                label = 1982;
+                continue;
+            }
+            1982 => {
+                c.pc = (9002, 1982);
+                c.step()?;
+                let v = c.r[2];
+                c.r[7] = v;
+                c.pc = (9002, 1984);
+                c.step()?;
+                let x = c.read(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5])
+                        .wrapping_add(c.r[7])
+                        .wrapping_sub(32u16),
+                    8,
+                )?;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.and(x, y, 8);
+                let _ = v;
+                c.pc = (9002, 1987);
+                c.step()?;
+                label = if c.z { 1965 } else { 1989 };
+                continue;
+            }
+            1989 => {
+                c.pc = (9002, 1989);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9002, 1990);
+                c.step()?;
+                c.ret(true, 4)?;
                 return Ok(());
             }
             _ => return Err(format!("invalid compiled label {label:04X}")),
@@ -110607,8 +121016,894 @@ pub(super) fn p_232a_11e3(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_24bc_0000(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 24BC:0000".into())
+pub(super) fn p_24bc_0000(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 0u16;
+    loop {
+        match label {
+            0 => {
+                c.pc = (9404, 0);
+                c.step()?;
+                let v = c.r[5];
+                c.push(v)?;
+                c.pc = (9404, 1);
+                c.step()?;
+                let v = c.r[4];
+                c.r[5] = v;
+                c.pc = (9404, 3);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (9404, 4);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 5);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 8);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(10u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 11);
+                c.step()?;
+                c.load_string(16)?;
+                c.pc = (9404, 12);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.dec(x, 16);
+                c.r[0] = v;
+                c.pc = (9404, 13);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 15);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9404, 17);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (9404, 19);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[0];
+                let v = c.xor(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 21);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 22);
+                c.step()?;
+                let v = c.r[0];
+                c.r[3] = v;
+                c.pc = (9404, 24);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 25);
+                c.step()?;
+                let v = c.r[0];
+                c.r[1] = v;
+                c.pc = (9404, 27);
+                c.step()?;
+                let x = c.r[1];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[1] = v;
+                c.pc = (9404, 29);
+                c.step()?;
+                let v = c.r[5];
+                c.push(v)?;
+                label = 30;
+                continue;
+            }
+            30 => {
+                c.pc = (9404, 30);
+                c.step()?;
+                let v = c.r[7];
+                c.r[5] = v;
+                c.pc = (9404, 32);
+                c.step()?;
+                let x = c.r[5];
+                let y = c.r[1];
+                let v = c.add(x, y, 16);
+                c.r[5] = v;
+                label = 34;
+                continue;
+            }
+            34 => {
+                c.pc = (9404, 34);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[5];
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (9404, 36);
+                c.step()?;
+                label = if c.z { 52 } else { 38 };
+                continue;
+            }
+            38 => {
+                c.pc = (9404, 38);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 39);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 255u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 41);
+                c.step()?;
+                label = if c.z { 66 } else { 43 };
+                continue;
+            }
+            43 => {
+                c.pc = (9404, 43);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 45);
+                c.step()?;
+                label = if c.z { 71 } else { 47 };
+                continue;
+            }
+            47 => {
+                c.pc = (9404, 47);
+                c.step()?;
+                c.store_string(16)?;
+                c.pc = (9404, 48);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9404, 50);
+                c.step()?;
+                label = 34;
+                continue;
+            }
+            52 => {
+                c.pc = (9404, 52);
+                c.step()?;
+                let x = c.r[3];
+                let v = c.dec(x, 16);
+                c.r[3] = v;
+                c.pc = (9404, 53);
+                c.step()?;
+                let x = c.r[3];
+                let y = 0u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (9404, 56);
+                c.step()?;
+                label = if c.z { 84 } else { 58 };
+                continue;
+            }
+            58 => {
+                c.pc = (9404, 58);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[1];
+                let v = c.sub(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9404, 60);
+                c.step()?;
+                let x = c.r[7];
+                let y = 160u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9404, 64);
+                c.step()?;
+                label = 30;
+                continue;
+            }
+            66 => {
+                c.pc = (9404, 66);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 67);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 69);
+                c.step()?;
+                label = 38;
+                continue;
+            }
+            71 => {
+                c.pc = (9404, 71);
+                c.step()?;
+                let v = c.r[1];
+                c.push(v)?;
+                c.pc = (9404, 72);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 73);
+                c.step()?;
+                let x = c.r[1];
+                let y = c.r[1];
+                let v = c.xor(x, y, 16);
+                c.r[1] = v;
+                c.pc = (9404, 75);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 77);
+                c.step()?;
+                let v = c.r[2];
+                c.r[0] = v;
+                c.pc = (9404, 79);
+                c.step()?;
+                c.repeat_stos(16)?;
+                c.pc = (9404, 81);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[1] = v;
+                c.pc = (9404, 82);
+                c.step()?;
+                label = 34;
+                continue;
+            }
+            84 => {
+                c.pc = (9404, 84);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[5] = v;
+                c.pc = (9404, 85);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[11] = v;
+                c.pc = (9404, 86);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 87);
+                c.step()?;
+                c.ret(true, 8)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_24bc_0098(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 152u16;
+    loop {
+        match label {
+            152 => {
+                c.pc = (9404, 152);
+                c.step()?;
+                c.enter(82)?;
+                c.pc = (9404, 156);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9404, 158);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9404, 160);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9404, 162);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 163);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 166);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 169);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 170);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 172);
+                c.step()?;
+                label = if c.cf { 176 } else { 174 };
+                continue;
+            }
+            174 => {
+                c.pc = (9404, 174);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 176;
+                continue;
+            }
+            176 => {
+                c.pc = (9404, 176);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 177);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9404, 178);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 180);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 182);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9404, 184);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (9404, 185);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 188);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 191);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 194);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 195);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 197);
+                c.step()?;
+                let x = (c.r[2] >> 0) & 255;
+                let y = (c.r[2] >> 0) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[2] = (c.r[2] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 199);
+                c.step()?;
+                let v = (c.r[1] >> 0) & 255;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 201);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 202);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 203);
+                c.step()?;
+                let x = (c.r[1] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 205);
+                c.step()?;
+                label = if c.cf { 213 } else { 207 };
+                continue;
+            }
+            207 => {
+                c.pc = (9404, 207);
+                c.step()?;
+                let v = (c.r[1] >> 0) & 255;
+                c.r[2] = (c.r[2] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 209);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 211);
+                c.step()?;
+                let x = (c.r[2] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.sub(x, y, 8);
+                c.r[2] = (c.r[2] & 65280) | ((v & 255) << 0);
+                label = 213;
+                continue;
+            }
+            213 => {
+                c.pc = (9404, 213);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 215);
+                c.step()?;
+                let v = (c.r[2] >> 0) & 255;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 217);
+                c.step()?;
+                let v = 32u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 219);
+                c.step()?;
+                c.repeat_stos(8)?;
+                c.pc = (9404, 221);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[11] = v;
+                c.pc = (9404, 222);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 223);
+                c.step()?;
+                c.ret(true, 6)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_24bc_00e4(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 228u16;
+    loop {
+        match label {
+            228 => {
+                c.pc = (9404, 228);
+                c.step()?;
+                c.enter(420)?;
+                c.pc = (9404, 232);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9404, 234);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9404, 236);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9404, 238);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 239);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 242);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 245);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 246);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 248);
+                c.step()?;
+                label = if c.cf { 252 } else { 250 };
+                continue;
+            }
+            250 => {
+                c.pc = (9404, 250);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 252;
+                continue;
+            }
+            252 => {
+                c.pc = (9404, 252);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 253);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9404, 254);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 256);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 258);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9404, 260);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 263);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 265);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9404, 267);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 270);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 272);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[2];
+                let v = c.sub(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 274);
+                c.step()?;
+                let x = c.r[0];
+                let y = 2u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (9404, 277);
+                c.step()?;
+                label = if c.sf == c.of { 286 } else { 279 };
+                continue;
+            }
+            279 => {
+                c.pc = (9404, 279);
+                c.step()?;
+                let v = 0u16;
+                c.write(
+                    c.r[10],
+                    0u16.wrapping_add(c.r[5]).wrapping_sub(164u16),
+                    8,
+                    v,
+                )?;
+                c.pc = (9404, 284);
+                c.step()?;
+                label = 328;
+                continue;
+            }
+            286 => {
+                c.pc = (9404, 286);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(420u16);
+                c.pc = (9404, 290);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 291);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 292);
+                c.step()?;
+                let v = 32u16;
+                c.push(v)?;
+                c.pc = (9404, 294);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 297);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 299);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9404, 301);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 304);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 306);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[2];
+                let v = c.sub(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 308);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shr(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 310);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 311);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 312);
+                c.step()?;
+                c.invoke(p_24bc_0534, false, 9404, 1332, 315)?;
+                label = 315;
+                continue;
+            }
+            315 => {
+                c.pc = (9404, 315);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(164u16);
+                c.pc = (9404, 319);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 320);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 321);
+                c.step()?;
+                let v = 80u16;
+                c.push(v)?;
+                c.pc = (9404, 323);
+                c.step()?;
+                c.invoke(p_26c9_0b6d, true, 9929, 2925, 328)?;
+                label = 328;
+                continue;
+            }
+            328 => {
+                c.pc = (9404, 328);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(420u16);
+                c.pc = (9404, 332);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 333);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 334);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(164u16);
+                c.pc = (9404, 338);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 339);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 340);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 345)?;
+                label = 345;
+                continue;
+            }
+            345 => {
+                c.pc = (9404, 345);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 348);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 349);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 350);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 355)?;
+                label = 355;
+                continue;
+            }
+            355 => {
+                c.pc = (9404, 355);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(164u16);
+                c.pc = (9404, 359);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 360);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 361);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 366)?;
+                label = 366;
+                continue;
+            }
+            366 => {
+                c.pc = (9404, 366);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(164u16);
+                c.pc = (9404, 370);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 371);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 372);
+                c.step()?;
+                let v = 80u16;
+                c.push(v)?;
+                c.pc = (9404, 374);
+                c.step()?;
+                c.invoke(p_26c9_0b6d, true, 9929, 2925, 379)?;
+                label = 379;
+                continue;
+            }
+            379 => {
+                c.pc = (9404, 379);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(164u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 383);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 386);
+                c.step()?;
+                label = if !c.cf { 428 } else { 388 };
+                continue;
+            }
+            388 => {
+                c.pc = (9404, 388);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(420u16);
+                c.pc = (9404, 392);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 393);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 394);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(164u16);
+                c.pc = (9404, 398);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 399);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 400);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 405)?;
+                label = 405;
+                continue;
+            }
+            405 => {
+                c.pc = (9404, 405);
+                c.step()?;
+                let v = 226u16;
+                c.r[7] = v;
+                c.pc = (9404, 408);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 409);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 410);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 415)?;
+                label = 415;
+                continue;
+            }
+            415 => {
+                c.pc = (9404, 415);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(164u16);
+                c.pc = (9404, 419);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 420);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 421);
+                c.step()?;
+                let v = 80u16;
+                c.push(v)?;
+                c.pc = (9404, 423);
+                c.step()?;
+                c.invoke(p_26c9_0b6d, true, 9929, 2925, 428)?;
+                label = 428;
+                continue;
+            }
+            428 => {
+                c.pc = (9404, 428);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(164u16);
+                c.pc = (9404, 432);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 433);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 434);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 437);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9404, 438);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 439);
+                c.step()?;
+                let v = 80u16;
+                c.push(v)?;
+                c.pc = (9404, 441);
+                c.step()?;
+                c.invoke(p_26c9_0b6d, true, 9929, 2925, 446)?;
+                label = 446;
+                continue;
+            }
+            446 => {
+                c.pc = (9404, 446);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 447);
+                c.step()?;
+                c.ret(true, 6)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_24bc_01c2(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 24BC:01C2".into())
@@ -110616,8 +121911,79 @@ pub(super) fn p_24bc_01c2(_c: &mut Cpu) -> Result<(), String> {
 pub(super) fn p_24bc_0203(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 24BC:0203".into())
 }
-pub(super) fn p_24bc_0222(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 24BC:0222".into())
+pub(super) fn p_24bc_0222(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 546u16;
+    loop {
+        match label {
+            546 => {
+                c.pc = (9404, 546);
+                c.step()?;
+                let v = c.r[5];
+                c.push(v)?;
+                c.pc = (9404, 547);
+                c.step()?;
+                let v = c.r[4];
+                c.r[5] = v;
+                c.pc = (9404, 549);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 16)?;
+                c.r[1] = v;
+                c.pc = (9404, 553);
+                c.step()?;
+                let v = c.r[1];
+                c.push(v)?;
+                c.pc = (9404, 554);
+                c.step()?;
+                let x = c.r[1];
+                let y = 1u16;
+                let v = c.shr(x, y, 16);
+                c.r[1] = v;
+                c.pc = (9404, 556);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 557);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(10u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 561);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 565);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 567);
+                c.step()?;
+                c.repeat_stos(16)?;
+                c.pc = (9404, 569);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[1] = v;
+                c.pc = (9404, 570);
+                c.step()?;
+                let x = c.r[1];
+                let y = 1u16;
+                let v = c.and(x, y, 16);
+                c.r[1] = v;
+                c.pc = (9404, 573);
+                c.step()?;
+                c.repeat_stos(8)?;
+                c.pc = (9404, 575);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 576);
+                c.step()?;
+                c.ret(true, 8)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_24bc_0259(c: &mut Cpu) -> Result<(), String> {
     let mut label = 601u16;
@@ -110675,6 +122041,334 @@ pub(super) fn p_24bc_0259(c: &mut Cpu) -> Result<(), String> {
                 c.pc = (9404, 628);
                 c.step()?;
                 c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_24bc_0277(_c: &mut Cpu) -> Result<(), String> {
+    Err("unported original 24BC:0277".into())
+}
+pub(super) fn p_24bc_0294(_c: &mut Cpu) -> Result<(), String> {
+    Err("unported original 24BC:0294".into())
+}
+pub(super) fn p_24bc_02b2(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 690u16;
+    loop {
+        match label {
+            690 => {
+                c.pc = (9404, 690);
+                c.step()?;
+                c.enter(256)?;
+                c.pc = (9404, 694);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9404, 696);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9404, 698);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9404, 700);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 701);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9404, 705);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(10u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 708);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 709);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 710);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9404, 711);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 713);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 715);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9404, 717);
+                c.step()?;
+                let x = c.read(c.r[11], 0u16.wrapping_add(63602u16), 16)?;
+                let y = 25u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (9404, 722);
+                c.step()?;
+                label = if c.cf || c.z { 780 } else { 724 };
+                continue;
+            }
+            724 => {
+                c.pc = (9404, 724);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9404, 728);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 729);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 730);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 733);
+                c.step()?;
+                let x = c.r[0];
+                let y = 15u16;
+                let v = c.and(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 736);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 737);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 740);
+                c.step()?;
+                let x = c.r[0];
+                let y = 4u16;
+                let v = c.shr(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 743);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 744);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(57576u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 747);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 749);
+                c.step()?;
+                let v = c.r[0];
+                c.r[1] = v;
+                c.pc = (9404, 751);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 754);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (9404, 756);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(57564u16), 16)?;
+                c.divide(v, false)?;
+                c.pc = (9404, 760);
+                c.step()?;
+                let v = c.r[1];
+                c.multiply(v, false);
+                c.pc = (9404, 762);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 763);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 766);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (9404, 768);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(57564u16), 16)?;
+                c.divide(v, false)?;
+                c.pc = (9404, 772);
+                c.step()?;
+                c.exchange_registers(2, 0);
+                c.pc = (9404, 773);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 774);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 775);
+                c.step()?;
+                c.invoke(p_24bc_1cec, false, 9404, 7404, 778)?;
+                label = 778;
+                continue;
+            }
+            778 => {
+                c.pc = (9404, 778);
+                c.step()?;
+                label = 839;
+                continue;
+            }
+            780 => {
+                c.pc = (9404, 780);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 783);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 785);
+                c.step()?;
+                let o = 0u16.wrapping_add(56862u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 789);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9404, 791);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65534u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9404, 795);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9404, 796);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 797);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 800);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 801);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 805);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 807);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 808);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 809);
+                c.step()?;
+                c.invoke(p_24bc_034b, false, 9404, 843, 812)?;
+                label = 812;
+                continue;
+            }
+            812 => {
+                c.pc = (9404, 812);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9404, 816);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 817);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 818);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 821);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 823);
+                c.step()?;
+                let o = 0u16.wrapping_add(56862u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 827);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9404, 829);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65534u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9404, 833);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9404, 834);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 835);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 836);
+                c.step()?;
+                c.invoke(p_24bc_0277, false, 9404, 631, 839)?;
+                label = 839;
+                continue;
+            }
+            839 => {
+                c.pc = (9404, 839);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 840);
+                c.step()?;
+                c.ret(true, 8)?;
                 return Ok(());
             }
             _ => return Err(format!("invalid compiled label {label:04X}")),
@@ -111423,6 +123117,122 @@ pub(super) fn p_24bc_04fa(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
+pub(super) fn p_24bc_0534(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 1332u16;
+    loop {
+        match label {
+            1332 => {
+                c.pc = (9404, 1332);
+                c.step()?;
+                c.enter(82)?;
+                c.pc = (9404, 1336);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 1339);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16), 8, v)?;
+                c.pc = (9404, 1342);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(81u16);
+                c.pc = (9404, 1345);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1346);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1347);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 1350);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 1352);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 1353);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 1356);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 1358);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 1359);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1360);
+                c.step()?;
+                c.invoke(p_24bc_0222, false, 9404, 546, 1363)?;
+                label = 1363;
+                continue;
+            }
+            1363 => {
+                c.pc = (9404, 1363);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1366);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1367);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1368);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(10u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 1371);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9404, 1372);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1373);
+                c.step()?;
+                let v = 80u16;
+                c.push(v)?;
+                c.pc = (9404, 1375);
+                c.step()?;
+                c.invoke(p_26c9_0b6d, true, 9929, 2925, 1380)?;
+                label = 1380;
+                continue;
+            }
+            1380 => {
+                c.pc = (9404, 1380);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 1381);
+                c.step()?;
+                c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
 pub(super) fn p_24bc_0568(c: &mut Cpu) -> Result<(), String> {
     let mut label = 1384u16;
     loop {
@@ -111651,11 +123461,807 @@ pub(super) fn p_24bc_0598(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_24bc_066f(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 24BC:066F".into())
+pub(super) fn p_24bc_05c8(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 1480u16;
+    loop {
+        match label {
+            1480 => {
+                c.pc = (9404, 1480);
+                c.step()?;
+                c.enter(338)?;
+                c.pc = (9404, 1484);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9404, 1486);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9404, 1488);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9404, 1490);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 1491);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1494);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(4u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 1497);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 1498);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 1500);
+                c.step()?;
+                label = if c.cf { 1504 } else { 1502 };
+                continue;
+            }
+            1502 => {
+                c.pc = (9404, 1502);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 1504;
+                continue;
+            }
+            1504 => {
+                c.pc = (9404, 1504);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 1505);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9404, 1506);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 1508);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 1510);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9404, 1512);
+                c.step()?;
+                let x = c.read(c.r[11], 0u16.wrapping_add(57566u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 1517);
+                c.step()?;
+                label = if c.z { 1554 } else { 1519 };
+                continue;
+            }
+            1519 => {
+                c.pc = (9404, 1519);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(338u16);
+                c.pc = (9404, 1523);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1524);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1525);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1528);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1529);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1530);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(57564u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 1533);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 1534);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1535);
+                c.step()?;
+                c.invoke(p_24bc_0098, false, 9404, 152, 1538)?;
+                label = 1538;
+                continue;
+            }
+            1538 => {
+                c.pc = (9404, 1538);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 1541);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 1543);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 1544);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(56962u16), 16)?;
+                c.push(v)?;
+                c.pc = (9404, 1548);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1549);
+                c.step()?;
+                c.invoke(p_24bc_02b2, false, 9404, 690, 1552)?;
+                label = 1552;
+                continue;
+            }
+            1552 => {
+                c.pc = (9404, 1552);
+                c.step()?;
+                label = 1587;
+                continue;
+            }
+            1554 => {
+                c.pc = (9404, 1554);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(338u16);
+                c.pc = (9404, 1558);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1559);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1560);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1563);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1564);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1565);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(57564u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 1568);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 1569);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1570);
+                c.step()?;
+                c.invoke(p_24bc_00e4, false, 9404, 228, 1573)?;
+                label = 1573;
+                continue;
+            }
+            1573 => {
+                c.pc = (9404, 1573);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 1576);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 1578);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 1579);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(56962u16), 16)?;
+                c.push(v)?;
+                c.pc = (9404, 1583);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1584);
+                c.step()?;
+                c.invoke(p_24bc_02b2, false, 9404, 690, 1587)?;
+                label = 1587;
+                continue;
+            }
+            1587 => {
+                c.pc = (9404, 1587);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 1588);
+                c.step()?;
+                c.ret(false, 6)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
-pub(super) fn p_24bc_0702(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 24BC:0702".into())
+pub(super) fn p_24bc_0637(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 1591u16;
+    loop {
+        match label {
+            1591 => {
+                c.pc = (9404, 1591);
+                c.step()?;
+                c.enter(82)?;
+                c.pc = (9404, 1595);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9404, 1597);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9404, 1599);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9404, 1601);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 1602);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1605);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 1608);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 1609);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 1611);
+                c.step()?;
+                label = if c.cf { 1615 } else { 1613 };
+                continue;
+            }
+            1613 => {
+                c.pc = (9404, 1613);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 1615;
+                continue;
+            }
+            1615 => {
+                c.pc = (9404, 1615);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 1616);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9404, 1617);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 1619);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 1621);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9404, 1623);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(41780u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 1626);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 1627);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1630);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1631);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1632);
+                c.step()?;
+                c.invoke(p_24bc_05c8, false, 9404, 1480, 1635)?;
+                label = 1635;
+                continue;
+            }
+            1635 => {
+                c.pc = (9404, 1635);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 1636);
+                c.step()?;
+                c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_24bc_066f(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 1647u16;
+    loop {
+        match label {
+            1647 => {
+                c.pc = (9404, 1647);
+                c.step()?;
+                c.enter(338)?;
+                c.pc = (9404, 1651);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9404, 1653);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9404, 1655);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9404, 1657);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 1658);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1661);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 1664);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 1665);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 1667);
+                c.step()?;
+                label = if c.cf { 1671 } else { 1669 };
+                continue;
+            }
+            1669 => {
+                c.pc = (9404, 1669);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 1671;
+                continue;
+            }
+            1671 => {
+                c.pc = (9404, 1671);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 1672);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9404, 1673);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 1675);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 1677);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9404, 1679);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1680);
+                c.step()?;
+                c.invoke(p_24bc_0568, false, 9404, 1384, 1683)?;
+                label = 1683;
+                continue;
+            }
+            1683 => {
+                c.pc = (9404, 1683);
+                c.step()?;
+                let v = 79u16;
+                c.push(v)?;
+                c.pc = (9404, 1685);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(338u16);
+                c.pc = (9404, 1689);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1690);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1691);
+                c.step()?;
+                let v = 1639u16;
+                c.r[7] = v;
+                c.pc = (9404, 1694);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1695);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1696);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 1701)?;
+                label = 1701;
+                continue;
+            }
+            1701 => {
+                c.pc = (9404, 1701);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1704);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1705);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1706);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 1711)?;
+                label = 1711;
+                continue;
+            }
+            1711 => {
+                c.pc = (9404, 1711);
+                c.step()?;
+                c.invoke(p_24bc_05c8, false, 9404, 1480, 1714)?;
+                label = 1714;
+                continue;
+            }
+            1714 => {
+                c.pc = (9404, 1714);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1715);
+                c.step()?;
+                c.invoke(p_24bc_0c17, false, 9404, 3095, 1718)?;
+                label = 1718;
+                continue;
+            }
+            1718 => {
+                c.pc = (9404, 1718);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1719);
+                c.step()?;
+                c.invoke(p_24bc_0598, false, 9404, 1432, 1722)?;
+                label = 1722;
+                continue;
+            }
+            1722 => {
+                c.pc = (9404, 1722);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 1723);
+                c.step()?;
+                c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_24bc_0702(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 1794u16;
+    loop {
+        match label {
+            1794 => {
+                c.pc = (9404, 1794);
+                c.step()?;
+                c.enter(338)?;
+                c.pc = (9404, 1798);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9404, 1800);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9404, 1802);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9404, 1804);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 1805);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1808);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 1811);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 1812);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 1814);
+                c.step()?;
+                label = if c.cf { 1818 } else { 1816 };
+                continue;
+            }
+            1816 => {
+                c.pc = (9404, 1816);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 1818;
+                continue;
+            }
+            1818 => {
+                c.pc = (9404, 1818);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 1819);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9404, 1820);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 1822);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 1824);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9404, 1826);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1827);
+                c.step()?;
+                c.invoke(p_24bc_0568, false, 9404, 1384, 1830)?;
+                label = 1830;
+                continue;
+            }
+            1830 => {
+                c.pc = (9404, 1830);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 1834);
+                c.step()?;
+                label = if c.z { 1874 } else { 1836 };
+                continue;
+            }
+            1836 => {
+                c.pc = (9404, 1836);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(338u16);
+                c.pc = (9404, 1840);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1841);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1842);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1845);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1846);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1847);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 1852)?;
+                label = 1852;
+                continue;
+            }
+            1852 => {
+                c.pc = (9404, 1852);
+                c.step()?;
+                let v = 1778u16;
+                c.r[7] = v;
+                c.pc = (9404, 1855);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1856);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1857);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 1862)?;
+                label = 1862;
+                continue;
+            }
+            1862 => {
+                c.pc = (9404, 1862);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1865);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1866);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1867);
+                c.step()?;
+                let v = 80u16;
+                c.push(v)?;
+                c.pc = (9404, 1869);
+                c.step()?;
+                c.invoke(p_26c9_0b6d, true, 9929, 2925, 1874)?;
+                label = 1874;
+                continue;
+            }
+            1874 => {
+                c.pc = (9404, 1874);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(338u16);
+                c.pc = (9404, 1878);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1879);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1880);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 1883);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 1884);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1885);
+                c.step()?;
+                c.invoke(p_26c9_0b53, true, 9929, 2899, 1890)?;
+                label = 1890;
+                continue;
+            }
+            1890 => {
+                c.pc = (9404, 1890);
+                c.step()?;
+                let v = 1782u16;
+                c.r[7] = v;
+                c.pc = (9404, 1893);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1894);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 1895);
+                c.step()?;
+                c.invoke(p_26c9_0bd2, true, 9929, 3026, 1900)?;
+                label = 1900;
+                continue;
+            }
+            1900 => {
+                c.pc = (9404, 1900);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1901);
+                c.step()?;
+                c.invoke(p_24bc_0637, false, 9404, 1591, 1904)?;
+                label = 1904;
+                continue;
+            }
+            1904 => {
+                c.pc = (9404, 1904);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1905);
+                c.step()?;
+                c.invoke(p_24bc_0c17, false, 9404, 3095, 1908)?;
+                label = 1908;
+                continue;
+            }
+            1908 => {
+                c.pc = (9404, 1908);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 1909);
+                c.step()?;
+                c.invoke(p_24bc_0598, false, 9404, 1432, 1912)?;
+                label = 1912;
+                continue;
+            }
+            1912 => {
+                c.pc = (9404, 1912);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 1913);
+                c.step()?;
+                c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_24bc_08c0(c: &mut Cpu) -> Result<(), String> {
     let mut label = 2240u16;
@@ -112619,8 +125225,7 @@ pub(super) fn p_24bc_0cdc(c: &mut Cpu) -> Result<(), String> {
                 c.push(v)?;
                 c.pc = (9404, 3302);
                 c.step()?;
-                c.r[0] = c.read(c.r[11], c.r[6], 16)?;
-                c.r[6] = c.r[6].wrapping_add(2);
+                c.load_string(16)?;
                 c.pc = (9404, 3303);
                 c.step()?;
                 let v = 31421u16;
@@ -112645,8 +125250,7 @@ pub(super) fn p_24bc_0cdc(c: &mut Cpu) -> Result<(), String> {
                 c.r[8] = v;
                 c.pc = (9404, 3313);
                 c.step()?;
-                c.write(c.r[8], c.r[7], 16, c.r[0])?;
-                c.r[7] = c.r[7].wrapping_add(2);
+                c.store_string(16)?;
                 c.pc = (9404, 3314);
                 c.step()?;
                 let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
@@ -113516,14 +126120,596 @@ pub(super) fn p_24bc_19a6(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
+pub(super) fn p_24bc_1b83(_c: &mut Cpu) -> Result<(), String> {
+    Err("unported original 24BC:1B83".into())
+}
+pub(super) fn p_24bc_1b97(_c: &mut Cpu) -> Result<(), String> {
+    Err("unported original 24BC:1B97".into())
+}
+pub(super) fn p_24bc_1be8(_c: &mut Cpu) -> Result<(), String> {
+    Err("unported original 24BC:1BE8".into())
+}
+pub(super) fn p_24bc_1c96(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 7318u16;
+    loop {
+        match label {
+            7318 => {
+                c.pc = (9404, 7318);
+                c.step()?;
+                c.enter(82)?;
+                c.pc = (9404, 7322);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9404, 7324);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9404, 7326);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9404, 7328);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 7329);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 7332);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(16u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 7335);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 7336);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 7338);
+                c.step()?;
+                label = if c.cf { 7342 } else { 7340 };
+                continue;
+            }
+            7340 => {
+                c.pc = (9404, 7340);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 7342;
+                continue;
+            }
+            7342 => {
+                c.pc = (9404, 7342);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 7343);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9404, 7344);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 7346);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 7348);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9404, 7350);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(57582u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 7353);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.read(c.r[11], 0u16.wrapping_add(57584u16), 16)?;
+                let v = c.or(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 7357);
+                c.step()?;
+                label = if c.z { 7400 } else { 7359 };
+                continue;
+            }
+            7359 => {
+                c.pc = (9404, 7359);
+                c.step()?;
+                let o = 0u16.wrapping_add(57582u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 7363);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9404, 7364);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 7365);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 7368);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 7369);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 7370);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(14u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 7373);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 7374);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 7377);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 7378);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.push(v)?;
+                c.pc = (9404, 7381);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 16)?;
+                let y = 320u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (9404, 7386);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 16)?;
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 7389);
+                c.step()?;
+                let o = 0u16.wrapping_add(57568u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 7393);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9404, 7395);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9404, 7396);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 7397);
+                c.step()?;
+                c.invoke(p_24bc_1be8, false, 9404, 7144, 7400)?;
+                label = 7400;
+                continue;
+            }
+            7400 => {
+                c.pc = (9404, 7400);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 7401);
+                c.step()?;
+                c.ret(true, 14)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_24bc_1cec(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 7404u16;
+    loop {
+        match label {
+            7404 => {
+                c.pc = (9404, 7404);
+                c.step()?;
+                c.enter(82)?;
+                c.pc = (9404, 7408);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9404, 7410);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9404, 7412);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9404, 7414);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 7415);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 7418);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(14u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 7421);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 7422);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 80u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 7424);
+                c.step()?;
+                label = if c.cf { 7428 } else { 7426 };
+                continue;
+            }
+            7426 => {
+                c.pc = (9404, 7426);
+                c.step()?;
+                let v = 80u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 7428;
+                continue;
+            }
+            7428 => {
+                c.pc = (9404, 7428);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 7429);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9404, 7430);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 7432);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 7434);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9404, 7436);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 7440);
+                c.step()?;
+                label = if c.cf || c.z { 7555 } else { 7442 };
+                continue;
+            }
+            7442 => {
+                c.pc = (9404, 7442);
+                c.step()?;
+                let x = c.read(c.r[11], 0u16.wrapping_add(57566u16), 8)?;
+                let y = 0u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 7447);
+                c.step()?;
+                label = if c.z { 7487 } else { 7449 };
+                continue;
+            }
+            7449 => {
+                c.pc = (9404, 7449);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 7452);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 7453);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 7454);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 7457);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 7458);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 7461);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 7462);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 16)?;
+                c.push(v)?;
+                c.pc = (9404, 7465);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 7468);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 7471);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 7472);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 7475);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 7477);
+                c.step()?;
+                let x = c.r[0];
+                let y = 3u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 7480);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 7481);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 7482);
+                c.step()?;
+                c.invoke(p_24bc_1c96, false, 9404, 7318, 7485)?;
+                label = 7485;
+                continue;
+            }
+            7485 => {
+                c.pc = (9404, 7485);
+                c.step()?;
+                label = 7555;
+                continue;
+            }
+            7487 => {
+                c.pc = (9404, 7487);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(57578u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 7490);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.read(c.r[11], 0u16.wrapping_add(57580u16), 16)?;
+                let v = c.or(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 7494);
+                c.step()?;
+                label = if c.z { 7555 } else { 7496 };
+                continue;
+            }
+            7496 => {
+                c.pc = (9404, 7496);
+                c.step()?;
+                let v = 2u16;
+                c.push(v)?;
+                c.pc = (9404, 7498);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 7499);
+                c.step()?;
+                c.invoke(p_24bc_1b83, false, 9404, 7043, 7502)?;
+                label = 7502;
+                continue;
+            }
+            7502 => {
+                c.pc = (9404, 7502);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(82u16);
+                c.pc = (9404, 7505);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9404, 7506);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 7507);
+                c.step()?;
+                let o = 0u16.wrapping_add(57578u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 7511);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9404, 7512);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 7513);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(57564u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9404, 7516);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 16)?;
+                c.multiply(v, false);
+                c.pc = (9404, 7519);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9404, 7522);
+                c.step()?;
+                let o = 0u16.wrapping_add(57568u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 7526);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9404, 7528);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (9404, 7529);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (9404, 7530);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(57564u16), 16)?;
+                c.push(v)?;
+                c.pc = (9404, 7534);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(57576u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 7537);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 7538);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 7541);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 7542);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 7545);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9404, 7546);
+                c.step()?;
+                c.invoke(p_24bc_1b97, false, 9404, 7063, 7549)?;
+                label = 7549;
+                continue;
+            }
+            7549 => {
+                c.pc = (9404, 7549);
+                c.step()?;
+                let v = 0u16;
+                c.push(v)?;
+                c.pc = (9404, 7551);
+                c.step()?;
+                let v = c.r[9];
+                c.push(v)?;
+                c.pc = (9404, 7552);
+                c.step()?;
+                c.invoke(p_24bc_1b83, false, 9404, 7043, 7555)?;
+                label = 7555;
+                continue;
+            }
+            7555 => {
+                c.pc = (9404, 7555);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 7556);
+                c.step()?;
+                c.ret(true, 12)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
 pub(super) fn p_26b8_00a7(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 26B8:00A7".into())
 }
 pub(super) fn p_26b8_00b2(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 26B8:00B2".into())
 }
-pub(super) fn p_26c9_0a12(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 26C9:0A12".into())
+pub(super) fn p_26c9_0a12(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 2578u16;
+    loop {
+        match label {
+            2578 => {
+                c.pc = (9929, 2578);
+                c.step()?;
+                let v = c.r[4];
+                c.r[3] = v;
+                c.pc = (9929, 2580);
+                c.step()?;
+                let v = c.r[11];
+                c.r[2] = v;
+                c.pc = (9929, 2582);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(10u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9929, 2586);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9929, 2590);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[3]).wrapping_add(4u16), 16)?;
+                c.r[1] = v;
+                c.pc = (9929, 2594);
+                c.step()?;
+                c.df = false;
+                c.pc = (9929, 2595);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9929, 2597);
+                c.step()?;
+                let v = c.r[2];
+                c.r[11] = v;
+                c.pc = (9929, 2599);
+                c.step()?;
+                c.ret(true, 10)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_26c9_0a2a(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 26C9:0A2A".into())
@@ -113531,23 +126717,469 @@ pub(super) fn p_26c9_0a2a(_c: &mut Cpu) -> Result<(), String> {
 pub(super) fn p_26c9_0a67(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 26C9:0A67".into())
 }
-pub(super) fn p_26c9_0b53(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 26C9:0B53".into())
+pub(super) fn p_26c9_0b53(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 2899u16;
+    loop {
+        match label {
+            2899 => {
+                c.pc = (9929, 2899);
+                c.step()?;
+                c.df = false;
+                c.pc = (9929, 2900);
+                c.step()?;
+                let v = c.r[4];
+                c.r[3] = v;
+                c.pc = (9929, 2902);
+                c.step()?;
+                let v = c.r[11];
+                c.r[2] = v;
+                c.pc = (9929, 2904);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9929, 2908);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(4u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9929, 2912);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9929, 2913);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9929, 2914);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 2916);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9929, 2918);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9929, 2920);
+                c.step()?;
+                let v = c.r[2];
+                c.r[11] = v;
+                c.pc = (9929, 2922);
+                c.step()?;
+                c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
-pub(super) fn p_26c9_0b6d(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 26C9:0B6D".into())
+pub(super) fn p_26c9_0b6d(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 2925u16;
+    loop {
+        match label {
+            2925 => {
+                c.pc = (9929, 2925);
+                c.step()?;
+                c.df = false;
+                c.pc = (9929, 2926);
+                c.step()?;
+                let v = c.r[4];
+                c.r[3] = v;
+                c.pc = (9929, 2928);
+                c.step()?;
+                let v = c.r[11];
+                c.r[2] = v;
+                c.pc = (9929, 2930);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(10u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9929, 2934);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9929, 2938);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[3]).wrapping_add(4u16), 16)?;
+                c.r[1] = v;
+                c.pc = (9929, 2942);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9929, 2943);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[1] >> 0) & 255;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9929, 2945);
+                c.step()?;
+                label = if c.cf || c.z { 2949 } else { 2947 };
+                continue;
+            }
+            2947 => {
+                c.pc = (9929, 2947);
+                c.step()?;
+                let v = (c.r[1] >> 0) & 255;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 2949;
+                continue;
+            }
+            2949 => {
+                c.pc = (9929, 2949);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9929, 2950);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 2952);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9929, 2954);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9929, 2956);
+                c.step()?;
+                let v = c.r[2];
+                c.r[11] = v;
+                c.pc = (9929, 2958);
+                c.step()?;
+                c.ret(true, 10)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
-pub(super) fn p_26c9_0b91(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 26C9:0B91".into())
+pub(super) fn p_26c9_0b91(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 2961u16;
+    loop {
+        match label {
+            2961 => {
+                c.pc = (9929, 2961);
+                c.step()?;
+                c.df = false;
+                c.pc = (9929, 2962);
+                c.step()?;
+                let v = c.r[4];
+                c.r[3] = v;
+                c.pc = (9929, 2964);
+                c.step()?;
+                let v = c.r[11];
+                c.r[2] = v;
+                c.pc = (9929, 2966);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(12u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9929, 2970);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9929, 2974);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(c.r[6]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 2976);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9929, 2978);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[3]).wrapping_add(6u16), 16)?;
+                c.r[1] = v;
+                c.pc = (9929, 2982);
+                c.step()?;
+                let x = c.r[1];
+                let y = c.r[1];
+                let v = c.or(x, y, 16);
+                c.r[1] = v;
+                c.pc = (9929, 2984);
+                c.step()?;
+                label = if !c.z && (c.sf == c.of) { 2989 } else { 2986 };
+                continue;
+            }
+            2986 => {
+                c.pc = (9929, 2986);
+                c.step()?;
+                let v = 1u16;
+                c.r[1] = v;
+                label = 2989;
+                continue;
+            }
+            2989 => {
+                c.pc = (9929, 2989);
+                c.step()?;
+                let x = c.r[6];
+                let y = c.r[1];
+                let v = c.add(x, y, 16);
+                c.r[6] = v;
+                c.pc = (9929, 2991);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[1];
+                let v = c.sub(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9929, 2993);
+                c.step()?;
+                label = if c.cf { 3014 } else { 2995 };
+                continue;
+            }
+            2995 => {
+                c.pc = (9929, 2995);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.inc(x, 16);
+                c.r[0] = v;
+                c.pc = (9929, 2996);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[3]).wrapping_add(4u16), 16)?;
+                c.r[1] = v;
+                c.pc = (9929, 3000);
+                c.step()?;
+                let x = c.r[1];
+                let y = c.r[1];
+                let v = c.or(x, y, 16);
+                c.r[1] = v;
+                c.pc = (9929, 3002);
+                c.step()?;
+                label = if c.sf == c.of { 3006 } else { 3004 };
+                continue;
+            }
+            3004 => {
+                c.pc = (9929, 3004);
+                c.step()?;
+                let x = c.r[1];
+                let y = c.r[1];
+                let v = c.xor(x, y, 16);
+                c.r[1] = v;
+                label = 3006;
+                continue;
+            }
+            3006 => {
+                c.pc = (9929, 3006);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[1];
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (9929, 3008);
+                c.step()?;
+                label = if c.cf || c.z { 3016 } else { 3010 };
+                continue;
+            }
+            3010 => {
+                c.pc = (9929, 3010);
+                c.step()?;
+                let v = c.r[1];
+                c.r[0] = v;
+                c.pc = (9929, 3012);
+                c.step()?;
+                label = 3016;
+                continue;
+            }
+            3014 => {
+                c.pc = (9929, 3014);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[0];
+                let v = c.xor(x, y, 16);
+                c.r[0] = v;
+                label = 3016;
+                continue;
+            }
+            3016 => {
+                c.pc = (9929, 3016);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9929, 3017);
+                c.step()?;
+                let v = c.r[0];
+                c.r[1] = v;
+                c.pc = (9929, 3019);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9929, 3021);
+                c.step()?;
+                let v = c.r[2];
+                c.r[11] = v;
+                c.pc = (9929, 3023);
+                c.step()?;
+                c.ret(true, 8)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
-pub(super) fn p_26c9_0bd2(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 26C9:0BD2".into())
+pub(super) fn p_26c9_0bd2(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 3026u16;
+    loop {
+        match label {
+            3026 => {
+                c.pc = (9929, 3026);
+                c.step()?;
+                c.df = false;
+                c.pc = (9929, 3027);
+                c.step()?;
+                let v = c.r[4];
+                c.r[3] = v;
+                c.pc = (9929, 3029);
+                c.step()?;
+                let v = c.r[11];
+                c.r[2] = v;
+                c.pc = (9929, 3031);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9929, 3035);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(4u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9929, 3039);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3042);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9929, 3044);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9929, 3045);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                let y = (c.r[0] >> 0) & 255;
+                let v = c.add(x, y, 8);
+                c.write(c.r[8], 0u16.wrapping_add(c.r[7]), 8, v)?;
+                c.pc = (9929, 3048);
+                c.step()?;
+                label = if !c.cf { 3058 } else { 3050 };
+                continue;
+            }
+            3050 => {
+                c.pc = (9929, 3050);
+                c.step()?;
+                let v = 255u16;
+                c.write(c.r[8], 0u16.wrapping_add(c.r[7]), 8, v)?;
+                c.pc = (9929, 3054);
+                c.step()?;
+                let v = (c.r[1] >> 0) & 255;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3056);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let v = c.not(x, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 3058;
+                continue;
+            }
+            3058 => {
+                c.pc = (9929, 3058);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[1];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (9929, 3060);
+                c.step()?;
+                let x = c.r[7];
+                let v = c.inc(x, 16);
+                c.r[7] = v;
+                c.pc = (9929, 3061);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3063);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9929, 3065);
+                c.step()?;
+                let v = c.r[2];
+                c.r[11] = v;
+                c.pc = (9929, 3067);
+                c.step()?;
+                c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_26c9_0bfe(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 26C9:0BFE".into())
 }
-pub(super) fn p_26c9_0c6f(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 26C9:0C6F".into())
+pub(super) fn p_26c9_0c6f(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 3183u16;
+    loop {
+        match label {
+            3183 => {
+                c.pc = (9929, 3183);
+                c.step()?;
+                c.df = false;
+                c.pc = (9929, 3184);
+                c.step()?;
+                let v = c.r[4];
+                c.r[3] = v;
+                c.pc = (9929, 3186);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9929, 3190);
+                c.step()?;
+                let v = 1u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3192);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9929, 3193);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[3]).wrapping_add(4u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3197);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9929, 3198);
+                c.step()?;
+                c.ret(true, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_26c9_0c9c(c: &mut Cpu) -> Result<(), String> {
     let mut label = 3228u16;
@@ -113779,8 +127411,53 @@ pub(super) fn p_26c9_0c9c(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_26c9_0d94(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 26C9:0D94".into())
+pub(super) fn p_26c9_0d94(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 3476u16;
+    loop {
+        match label {
+            3476 => {
+                c.pc = (9929, 3476);
+                c.step()?;
+                c.df = false;
+                c.pc = (9929, 3477);
+                c.step()?;
+                let v = c.r[4];
+                c.r[3] = v;
+                c.pc = (9929, 3479);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[3]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9929, 3483);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[3]).wrapping_add(4u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9929, 3487);
+                c.step()?;
+                c.store_string(16)?;
+                c.pc = (9929, 3488);
+                c.step()?;
+                let v = 15u16;
+                c.r[1] = v;
+                c.pc = (9929, 3491);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[0];
+                let v = c.xor(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9929, 3493);
+                c.step()?;
+                c.repeat_stos(16)?;
+                c.pc = (9929, 3495);
+                c.step()?;
+                c.ret(true, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_26c9_0daa(c: &mut Cpu) -> Result<(), String> {
     let mut label = 3498u16;
@@ -113860,8 +127537,459 @@ pub(super) fn p_26c9_0daa(c: &mut Cpu) -> Result<(), String> {
 pub(super) fn p_26c9_0e1f(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 26C9:0E1F".into())
 }
-pub(super) fn p_26c9_190a(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 26C9:190A".into())
+pub(super) fn p_26c9_1827(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 6183u16;
+    loop {
+        match label {
+            6183 => {
+                c.pc = (9929, 6183);
+                c.step()?;
+                let v = c.r[7];
+                c.r[1] = v;
+                c.pc = (9929, 6185);
+                c.step()?;
+                let v = 10u16;
+                c.r[6] = v;
+                c.pc = (9929, 6188);
+                c.step()?;
+                let v = c.r[2];
+                c.r[3] = v;
+                c.pc = (9929, 6190);
+                c.step()?;
+                let x = c.r[3];
+                let y = c.r[3];
+                let v = c.or(x, y, 16);
+                c.r[3] = v;
+                c.pc = (9929, 6192);
+                c.step()?;
+                label = if !c.sf { 6211 } else { 6194 };
+                continue;
+            }
+            6194 => {
+                c.pc = (9929, 6194);
+                c.step()?;
+                let x = c.r[3];
+                let v = c.neg(x, 16);
+                c.r[3] = v;
+                c.pc = (9929, 6196);
+                c.step()?;
+                let x = c.r[0];
+                let v = c.neg(x, 16);
+                c.r[0] = v;
+                c.pc = (9929, 6198);
+                c.step()?;
+                let x = c.r[3];
+                let y = 0u16;
+                let v = c.sbb(x, y, 16);
+                c.r[3] = v;
+                c.pc = (9929, 6201);
+                c.step()?;
+                c.invoke(p_26c9_1843, false, 9929, 6211, 6204)?;
+                label = 6204;
+                continue;
+            }
+            6204 => {
+                c.pc = (9929, 6204);
+                c.step()?;
+                let x = c.r[7];
+                let v = c.dec(x, 16);
+                c.r[7] = v;
+                c.pc = (9929, 6205);
+                c.step()?;
+                let v = 45u16;
+                c.write(c.r[8], 0u16.wrapping_add(c.r[7]), 8, v)?;
+                c.pc = (9929, 6209);
+                c.step()?;
+                let x = c.r[1];
+                let v = c.inc(x, 16);
+                c.r[1] = v;
+                c.pc = (9929, 6210);
+                c.step()?;
+                c.ret(false, 0)?;
+                return Ok(());
+            }
+            6211 => {
+                c.pc = (9929, 6211);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (9929, 6213);
+                c.step()?;
+                c.exchange_registers(3, 0);
+                c.pc = (9929, 6214);
+                c.step()?;
+                let v = c.r[6];
+                c.divide(v, false)?;
+                c.pc = (9929, 6216);
+                c.step()?;
+                c.exchange_registers(3, 0);
+                c.pc = (9929, 6217);
+                c.step()?;
+                let v = c.r[6];
+                c.divide(v, false)?;
+                c.pc = (9929, 6219);
+                c.step()?;
+                let x = (c.r[2] >> 0) & 255;
+                let y = 48u16;
+                let v = c.add(x, y, 8);
+                c.r[2] = (c.r[2] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 6222);
+                c.step()?;
+                let x = (c.r[2] >> 0) & 255;
+                let y = 58u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9929, 6225);
+                c.step()?;
+                label = if c.cf { 6230 } else { 6227 };
+                continue;
+            }
+            6227 => {
+                c.pc = (9929, 6227);
+                c.step()?;
+                let x = (c.r[2] >> 0) & 255;
+                let y = 7u16;
+                let v = c.add(x, y, 8);
+                c.r[2] = (c.r[2] & 65280) | ((v & 255) << 0);
+                label = 6230;
+                continue;
+            }
+            6230 => {
+                c.pc = (9929, 6230);
+                c.step()?;
+                let x = c.r[7];
+                let v = c.dec(x, 16);
+                c.r[7] = v;
+                c.pc = (9929, 6231);
+                c.step()?;
+                let v = (c.r[2] >> 0) & 255;
+                c.write(c.r[8], 0u16.wrapping_add(c.r[7]), 8, v)?;
+                c.pc = (9929, 6234);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9929, 6236);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[3];
+                let v = c.or(x, y, 16);
+                c.r[2] = v;
+                c.pc = (9929, 6238);
+                c.step()?;
+                label = if !c.z { 6211 } else { 6240 };
+                continue;
+            }
+            6240 => {
+                c.pc = (9929, 6240);
+                c.step()?;
+                let x = c.r[1];
+                let y = c.r[7];
+                let v = c.sub(x, y, 16);
+                c.r[1] = v;
+                c.pc = (9929, 6242);
+                c.step()?;
+                c.ret(false, 0)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_26c9_1843(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 6211u16;
+    loop {
+        match label {
+            6211 => {
+                c.pc = (9929, 6211);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (9929, 6213);
+                c.step()?;
+                c.exchange_registers(3, 0);
+                c.pc = (9929, 6214);
+                c.step()?;
+                let v = c.r[6];
+                c.divide(v, false)?;
+                c.pc = (9929, 6216);
+                c.step()?;
+                c.exchange_registers(3, 0);
+                c.pc = (9929, 6217);
+                c.step()?;
+                let v = c.r[6];
+                c.divide(v, false)?;
+                c.pc = (9929, 6219);
+                c.step()?;
+                let x = (c.r[2] >> 0) & 255;
+                let y = 48u16;
+                let v = c.add(x, y, 8);
+                c.r[2] = (c.r[2] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 6222);
+                c.step()?;
+                let x = (c.r[2] >> 0) & 255;
+                let y = 58u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9929, 6225);
+                c.step()?;
+                label = if c.cf { 6230 } else { 6227 };
+                continue;
+            }
+            6227 => {
+                c.pc = (9929, 6227);
+                c.step()?;
+                let x = (c.r[2] >> 0) & 255;
+                let y = 7u16;
+                let v = c.add(x, y, 8);
+                c.r[2] = (c.r[2] & 65280) | ((v & 255) << 0);
+                label = 6230;
+                continue;
+            }
+            6230 => {
+                c.pc = (9929, 6230);
+                c.step()?;
+                let x = c.r[7];
+                let v = c.dec(x, 16);
+                c.r[7] = v;
+                c.pc = (9929, 6231);
+                c.step()?;
+                let v = (c.r[2] >> 0) & 255;
+                c.write(c.r[8], 0u16.wrapping_add(c.r[7]), 8, v)?;
+                c.pc = (9929, 6234);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (9929, 6236);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[3];
+                let v = c.or(x, y, 16);
+                c.r[2] = v;
+                c.pc = (9929, 6238);
+                c.step()?;
+                label = if !c.z { 6211 } else { 6240 };
+                continue;
+            }
+            6240 => {
+                c.pc = (9929, 6240);
+                c.step()?;
+                let x = c.r[1];
+                let y = c.r[7];
+                let v = c.sub(x, y, 16);
+                c.r[1] = v;
+                c.pc = (9929, 6242);
+                c.step()?;
+                c.ret(false, 0)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_26c9_190a(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 6410u16;
+    loop {
+        match label {
+            6410 => {
+                c.pc = (9929, 6410);
+                c.step()?;
+                let v = c.r[5];
+                c.push(v)?;
+                c.pc = (9929, 6411);
+                c.step()?;
+                let v = c.r[4];
+                c.r[5] = v;
+                c.pc = (9929, 6413);
+                c.step()?;
+                let x = c.r[4];
+                let y = 32u16;
+                let v = c.sub(x, y, 16);
+                c.r[4] = v;
+                c.pc = (9929, 6416);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(14u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9929, 6419);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(16u16), 16)?;
+                c.r[2] = v;
+                c.pc = (9929, 6422);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]);
+                c.pc = (9929, 6425);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9929, 6426);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[8] = v;
+                c.pc = (9929, 6427);
+                c.step()?;
+                c.invoke(p_26c9_1827, false, 9929, 6183, 6430)?;
+                label = 6430;
+                continue;
+            }
+            6430 => {
+                c.pc = (9929, 6430);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (9929, 6431);
+                c.step()?;
+                let v = c.r[7];
+                c.r[6] = v;
+                c.pc = (9929, 6433);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (9929, 6434);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[11] = v;
+                c.pc = (9929, 6435);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(8u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9929, 6438);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[2] = v;
+                c.pc = (9929, 6441);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(12u16), 16)?;
+                c.r[0] = v;
+                c.pc = (9929, 6444);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[2];
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (9929, 6446);
+                c.step()?;
+                label = if c.z || (c.sf != c.of) { 6450 } else { 6448 };
+                continue;
+            }
+            6448 => {
+                c.pc = (9929, 6448);
+                c.step()?;
+                let v = c.r[2];
+                c.r[0] = v;
+                label = 6450;
+                continue;
+            }
+            6450 => {
+                c.pc = (9929, 6450);
+                c.step()?;
+                let x = c.r[1];
+                let y = c.r[2];
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (9929, 6452);
+                c.step()?;
+                label = if c.z || (c.sf != c.of) { 6456 } else { 6454 };
+                continue;
+            }
+            6454 => {
+                c.pc = (9929, 6454);
+                c.step()?;
+                let v = c.r[2];
+                c.r[1] = v;
+                label = 6456;
+                continue;
+            }
+            6456 => {
+                c.pc = (9929, 6456);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[1];
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (9929, 6458);
+                c.step()?;
+                label = if c.sf == c.of { 6462 } else { 6460 };
+                continue;
+            }
+            6460 => {
+                c.pc = (9929, 6460);
+                c.step()?;
+                let v = c.r[1];
+                c.r[0] = v;
+                label = 6462;
+                continue;
+            }
+            6462 => {
+                c.pc = (9929, 6462);
+                c.step()?;
+                c.df = false;
+                c.pc = (9929, 6463);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9929, 6464);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[1];
+                let v = c.sub(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9929, 6466);
+                c.step()?;
+                label = if c.z { 6476 } else { 6468 };
+                continue;
+            }
+            6468 => {
+                c.pc = (9929, 6468);
+                c.step()?;
+                let v = c.r[1];
+                c.push(v)?;
+                c.pc = (9929, 6469);
+                c.step()?;
+                let v = c.r[0];
+                c.r[1] = v;
+                c.pc = (9929, 6471);
+                c.step()?;
+                let v = 32u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 6473);
+                c.step()?;
+                c.repeat_stos(8)?;
+                c.pc = (9929, 6475);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[1] = v;
+                label = 6476;
+                continue;
+            }
+            6476 => {
+                c.pc = (9929, 6476);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9929, 6478);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[11] = v;
+                c.pc = (9929, 6479);
+                c.step()?;
+                let v = c.r[5];
+                c.r[4] = v;
+                c.pc = (9929, 6481);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[5] = v;
+                c.pc = (9929, 6482);
+                c.step()?;
+                c.ret(true, 12)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_26c9_1986(c: &mut Cpu) -> Result<(), String> {
     let mut label = 6534u16;

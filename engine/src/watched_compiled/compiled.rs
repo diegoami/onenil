@@ -21,6 +21,7 @@ pub(super) struct Cpu {
     pub flat_memory:bool,
     pub code_base:u16,
     pub stack_bounds:Option<(usize,usize)>,
+    pub df:bool,
     stack: Vec<u8>,
     stack_known: Vec<bool>,
     frames: Vec<(u16, u16)>,
@@ -45,6 +46,7 @@ impl Cpu {
             flat_memory:false,
             code_base:0,
             stack_bounds:None,
+            df:false,
             stack: vec![0; 65540],
             stack_known: vec![false; 65540],
             frames: vec![],
@@ -55,13 +57,41 @@ impl Cpu {
         c.r[10] = 0xF000;
         c
     }
-    pub fn exchange_registers(&mut self,_first:usize,_second:usize){}
+    pub fn exchange_registers(&mut self,first:usize,second:usize){self.r.swap(first,second);}
+    fn string_advance(&mut self,register:usize,width:u8){
+        let n=u16::from(width/8);self.r[register]=if self.df{self.r[register].wrapping_sub(n)}else{self.r[register].wrapping_add(n)};
+    }
+    pub fn load_string(&mut self,width:u8)->Result<(),String>{
+        let v=self.read(self.r[11],self.r[6],width)?;
+        self.r[0]=if width==8{(self.r[0]&0xFF00)|(v&255)}else{v};self.string_advance(6,width);Ok(())
+    }
+    pub fn store_string(&mut self,width:u8)->Result<(),String>{
+        self.write(self.r[8],self.r[7],width,self.r[0])?;self.string_advance(7,width);Ok(())
+    }
+    pub fn repeat_movs(&mut self,width:u8)->Result<(),String>{
+        if width!=8&&width!=16{return Err("unsupported string move width".into());}
+        while self.r[1]!=0{
+            self.step()?;let v=self.read(self.r[11],self.r[6],width)?;self.write(self.r[8],self.r[7],width,v)?;
+            self.string_advance(6,width);self.string_advance(7,width);self.r[1]=self.r[1].wrapping_sub(1);
+        }
+        Ok(())
+    }
+    pub fn repeat_stos(&mut self,width:u8)->Result<(),String>{
+        if width!=8&&width!=16{return Err("unsupported string store width".into());}
+        while self.r[1]!=0{self.step()?;self.store_string(width)?;self.r[1]=self.r[1].wrapping_sub(1);}
+        Ok(())
+    }
+    pub fn segment_const(&self,value:u16)->u16{value.wrapping_add(self.code_base)}
+    pub fn invoke_entry(&mut self,f:Proc,caller_cs:u16,ret:u16)->Result<(),String>{
+        self.frames.push((caller_cs,ret));let result=f(self);self.frames.pop();result
+    }
     pub fn read(&self, s: u16, o: u16, w: u8) -> Result<u16, String> {
         let mut value = 0u16;
         for i in 0..usize::from(w / 8) {
             let at = usize::from(o) + i;
-            let b = if s == 0xF000 {
+            let b = if !self.flat_memory && s == 0xF000 {
                 if !self.stack_known.get(at).copied().unwrap_or(false) {
+                    self.missing.set(Some(Missing{scratch:true,address:at,writing:false,pc:self.pc}));
                     return Err(format!(
                         "uninitialized native scratch at {:04X}:{:04X} SS:{at:04X}",
                         self.pc.0, self.pc.1
@@ -71,6 +101,8 @@ impl Cpu {
             } else {
                 let a = 16 * usize::from(s) + at;
                 if !self.known.get(a).copied().unwrap_or(false) {
+                    let scratch=self.stack_bounds.map(|(lo,hi)|lo<=a&&a<hi).unwrap_or(false);
+                    self.missing.set(Some(Missing{scratch,address:a,writing:false,pc:self.pc}));
                     return Err(format!(
                         "missing reached native data at {:04X}:{:04X} {s:04X}:{o:04X}",
                         self.pc.0, self.pc.1
@@ -88,14 +120,17 @@ impl Cpu {
         let mut second = 0;
         for i in 0..2 {
             let a = at + i;
-            let b = if s == 0xF000 {
+            let b = if !self.flat_memory && s == 0xF000 {
                 if !self.stack_known[a] {
+                    self.missing.set(Some(Missing{scratch:true,address:a,writing:false,pc:self.pc}));
                     return Err("uninitialized far scratch".into());
                 }
                 self.stack[a]
             } else {
                 let a = 16 * usize::from(s) + a;
                 if !self.known.get(a).copied().unwrap_or(false) {
+                    let scratch=self.stack_bounds.map(|(lo,hi)|lo<=a&&a<hi).unwrap_or(false);
+                    self.missing.set(Some(Missing{scratch,address:a,writing:false,pc:self.pc}));
                     return Err("missing reached far-pointer data".into());
                 }
                 self.e.image[a]
@@ -105,10 +140,21 @@ impl Cpu {
         Ok((first, second))
     }
     pub fn write(&mut self, s: u16, o: u16, w: u8, v: u16) -> Result<(), String> {
+        if self.require_write_baseline && (self.flat_memory||s!=0xF000){
+            for i in 0..usize::from(w/8){
+                let a=16*usize::from(s)+usize::from(o)+i;
+                let scratch=self.stack_bounds.map(|(lo,hi)|lo<=a&&a<hi).unwrap_or(false);
+                if a>=self.e.image.len(){return Err("unsupported native data write".into());}
+                if !scratch&&!self.known[a]{
+                    self.missing.set(Some(Missing{scratch:false,address:a,writing:true,pc:self.pc}));
+                    return Err(format!("missing initial native write baseline at {:04X}:{:04X} {a:05X}",self.pc.0,self.pc.1));
+                }
+            }
+        }
         for i in 0..usize::from(w / 8) {
             let at = usize::from(o) + i;
             let b = (v >> (8 * i)) as u8;
-            if s == 0xF000 {
+            if !self.flat_memory && s == 0xF000 {
                 self.stack[at] = b;
                 self.stack_known[at] = true
             } else {
@@ -153,10 +199,10 @@ impl Cpu {
         Ok(())
     }
     pub fn invoke(&mut self, f: Proc, far: bool, cs: u16, ip: u16, ret: u16) -> Result<(), String> {
-        let caller = self.r[9];
+        let caller = self.r[9].wrapping_sub(self.code_base);
         if far {
-            self.push(caller)?;
-            self.r[9] = cs
+            self.push(self.r[9])?;
+            self.r[9] = cs.wrapping_add(self.code_base)
         }
         self.push(ret)?;
         self.frames.push((caller, ret));
@@ -166,7 +212,8 @@ impl Cpu {
         } else {
             0
         };
-        let before = self.e.word(crate::SEED);
+        let seed_pointer=if rng{Some(self.far(self.r[10],self.r[4].wrapping_add(6))?)}else{None};
+        let before=if let Some((offset,segment))=seed_pointer{self.read(segment,offset,16)?}else{0};
         f(self)?;
         if rng {
             let count = self.frames.len();
@@ -179,7 +226,7 @@ impl Cpu {
                 site: format!("{:04X}:{:04X}", site.0, site.1),
                 n,
                 seed_before: before,
-                seed_after: self.e.word(crate::SEED),
+                seed_after: {let(offset,segment)=seed_pointer.unwrap();self.read(segment,offset,16)?},
                 value: self.r[0],
             });
         }
@@ -502,10 +549,23 @@ mod tests {
             c.enter(0)?;c.invoke(inner,true,0x0AB9,0x100,0x1111)?;
             c.r[4]=c.r[5];c.r[5]=c.pop()?;c.ret(true,0)
         }
-        let mut c=cpu();c.write(0xF000,0x100,16,7).unwrap();
+        let mut c=cpu();let global_before=c.e.word(crate::SEED);c.write(0xF000,0x100,16,7).unwrap();
         c.invoke(outer,true,0x0AB9,0x200,0x2222).unwrap();
         assert_eq!(c.draws[0].seed_before,7);assert_eq!(c.draws[0].seed_after,30266);
-        assert_eq!(c.read(0xF000,0x100,16).unwrap(),30266);assert_eq!(c.e.word(crate::SEED),0);
+        assert_eq!(c.read(0xF000,0x100,16).unwrap(),30266);assert_eq!(c.e.word(crate::SEED),global_before);
+    }
+
+    #[test]
+    fn repeated_move_honors_reverse_overlap_and_preserves_flags(){
+        let mut c=cpu();c.r[11]=0x2000;c.r[8]=0x2000;c.r[6]=0x1004;c.r[7]=0x1006;c.r[1]=3;c.df=true;
+        for (o,v)in[(0x1000,1),(0x1002,2),(0x1004,3)]{c.write(0x2000,o,16,v).unwrap();}
+        c.cf=true;c.z=true;c.sf=false;c.of=true;c.pf=false;
+        c.repeat_movs(16).unwrap();
+        for (o,v)in[(0x1000,1),(0x1002,1),(0x1004,2),(0x1006,3)]{assert_eq!(c.read(0x2000,o,16).unwrap(),v);}
+        assert_eq!((c.r[6],c.r[7],c.r[1]),(0xFFE,0x1000,0));
+        assert_eq!((c.cf,c.z,c.sf,c.of,c.pf),(true,true,false,true,false));
+        c.r[11]=0xFFFF;c.r[6]=0xFFFF;c.r[8]=0xFFFF;c.r[7]=0xFFFF;c.missing.set(None);
+        c.repeat_movs(16).unwrap();assert!(c.missing.get().is_none());
     }
 
 }

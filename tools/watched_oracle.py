@@ -2,6 +2,7 @@
 Python records/normalizes source execution only. It computes no engine outcome.
 """
 import gzip,hashlib,json,signal,sys
+from functools import lru_cache
 from pathlib import Path
 import replay_step_tail as common
 ROOT=common.ROOT
@@ -28,13 +29,18 @@ class Pages:
             if read_json(path)!=metadata:raise ValueError('private snapshot resume differs:'+name)
         else:write_json(path,metadata)
         return {'path':str(path.relative_to(ROOT)),'sha256':common.sha(path.read_bytes()),'ram_sha256':metadata['ram_sha256']}
+@lru_cache(maxsize=32768)
+def page(path,digest):
+    block=gzip.decompress(path.read_bytes())
+    if len(block)!=4096 or common.sha(block)!=digest:raise ValueError('private page digest differs')
+    return block
+
 def memory(reference):
     path=ROOT/reference['path'];raw=path.read_bytes()
     if common.sha(raw)!=reference['sha256']:raise ValueError('private snapshot index digest differs')
     metadata=json.loads(raw);pages=path.parent.parent/'pages';blocks=[]
     for digest in metadata['pages']:
-        block=gzip.decompress((pages/(digest+'.gz')).read_bytes())
-        if len(block)!=4096 or common.sha(block)!=digest:raise ValueError('private page digest differs')
+        block=page(pages/(digest+'.gz'),digest)
         blocks.append(block)
     raw=b''.join(blocks)
     if len(raw)!=metadata['size'] or common.sha(raw)!=reference['ram_sha256'] or common.sha(raw)!=metadata['ram_sha256']:raise ValueError('private RAM digest differs')
@@ -59,6 +65,33 @@ def validate(directory):
     codes={e['code']for c in cases for e in c['events']}
     if not codes.intersection({8,12})or not codes.intersection({11,14}):raise ValueError('missing original pass/contact observation')
     return cases,manifest
+def validate_reference(directory,research_root,private=False):
+    cases,manifest=validate(directory)
+    sys.path.insert(0,str(research_root.resolve()/'runtime/emul'))
+    import watched_actions as source
+    pin=source.check();reference=source.setup.contests.outputs(read_json(research_root/pin['record']))
+    start=read_json(directory/'start.json')
+    if start['source']!=pin:raise ValueError('original source pin differs')
+    draws=[normalized(d)for d in reference['draws']]
+    def integer(raw,a,w=2):return int.from_bytes(raw[a:a+w],'little')
+    def scene_bytes(scene):
+        out=bytearray(25)
+        for key,value in scene.items():
+            if key=='index':continue
+            width=2 if key.startswith('word')else 1;offset=int(key[4:]);out[offset:offset+width]=value.to_bytes(width,'little')
+        return bytes(out)
+    for c in cases:
+        if c['draws']!=draws[c['draw_start']:c['draw_end']]:raise ValueError('original RNG reference slice differs')
+        for e in c['events']:
+            if e!=reference['actions'][e['event']]:raise ValueError('original commentary reference differs')
+        if private:
+            ds=c['registers']['ds']*16;stack=c['registers']['ss']*16+c['registers']['sp']
+            for boundary,field,seed in [('entry','input_scene','seed_before'),('exit','output_scene','seed_after')]:
+                ram=memory(c[boundary]);a=ds+0xCCEF+25*c['scene']
+                if ram[a:a+25]!=scene_bytes(c[field])or integer(ram,ds+0xA51C)!=c[seed]:raise ValueError('private scene/seed observation differs')
+                if boundary=='entry'and [integer(ram,stack+2*i)for i in range(4)]!=c['stack_words']:raise ValueError('private original ABI differs')
+    return {'schema':'original-action-reference-validation/1','roots':len(cases),'private_boundaries':2*len(cases)if private else 0,'source':pin,'draw_slices':len(cases),'events':sum(len(c['events'])for c in cases),'manifest_sha256':common.sha((directory/'manifest.json').read_bytes())}
+
 def capture(research_root,directory=ROOT/'records/T37/oracle-r0001'):
     if(directory/'manifest.json').exists():validate(directory);print('completed original action oracle unchanged');return
     if common.git('status','--porcelain','--','tools/watched_oracle.py','tools/replay_watched_action.py'):raise ValueError('commit original observer before capture')

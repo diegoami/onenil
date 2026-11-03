@@ -33,8 +33,73 @@ pub struct State{
 pub struct Fault{pub message:String,pub missing:Option<Missing>}
 #[derive(Debug,Serialize)]
 pub struct Outcome{pub scene:Scene,pub seed:u16,pub pointers:Vec<Pointer>,pub cells:Vec<ByteFact>,pub draws:Vec<Draw>,pub events:Vec<serde_json::Value>}
-fn machine(_s:&State)->Result<Cpu,String>{Err("T37 entry data builder not implemented".into())}
-pub fn advance(_s:&State)->Result<Outcome,Fault>{Err(Fault{message:"T37 action kernels not implemented".into(),missing:None})}
+fn find_pointer(s:&State,kind:PointerKind)->Result<&Pointer,String>{s.pointers.iter().find(|p|p.kind==kind).ok_or_else(||"missing named pointer".into())}
+fn area_pointer(area:Area)->Option<PointerKind>{Some(match area{Area::P8=>PointerKind::P8,Area::P15=>PointerKind::P15,Area::Club=>PointerKind::Club,Area::Config=>PointerKind::Config,Area::Main=>PointerKind::Main,Area::MainShown=>PointerKind::MainShown,Area::Background=>PointerKind::Background,Area::BackgroundShown=>PointerKind::BackgroundShown,_=>return None})}
+fn pitch_offset(offset:i32)->bool{(-8..=8).any(|row|{let start=0x90E+160*row-74;(start..start+150).contains(&offset)})}
+pub(super) fn cell_address(s:&State,f:&ByteFact)->Result<usize,String>{
+ if f.area==Area::Frame{
+  if !(-4096..=-1).contains(&f.offset){return Err("unsupported entry frame field".into());}
+  return Ok(16*usize::from(s.regs[10])+(i32::from(s.regs[4])+f.offset)as usize);
+ }
+ if f.offset<0{return Err("negative named data offset".into());}
+ let offset=f.offset as usize;
+ if f.area==Area::Ds{
+  if !((0x380..0x382).contains(&offset)||(0x900..0xC00).contains(&offset)||(0xD00..0xD80).contains(&offset)||(0x957D..=0xAD9A).contains(&offset)||(0xCCEF..0xD7BA).contains(&offset)){return Err("unsupported named DS field".into());}
+  return Ok(16*usize::from(s.regs[11])+offset);
+ }
+ let kind=area_pointer(f.area).ok_or("unsupported named area")?;
+ let p=find_pointer(s,kind)?;
+ if offset>=kind.length(){return Err("named area offset outside bounds".into());}
+ if matches!(f.area,Area::Main|Area::MainShown|Area::Background|Area::BackgroundShown)&&!pitch_offset(f.offset){return Err("non-gameplay screen cell".into());}
+ Ok(p.address()+offset)
+}
+fn machine(s:&State)->Result<Cpu,String>{
+ if !(1..=22).contains(&s.scene.index)||s.scene.byte7>22||s.scene.word14>3920||s.regs[4]<4096||s.regs[4]>0xFFF0{return Err("unsupported action entry identity/stack".into());}
+ let ds=16*usize::from(s.regs[11]);let scene=ds+0xCCEF+25*usize::from(s.scene.index);let seed=ds+usize::from(crate::SEED);
+ let stack=16*usize::from(s.regs[10])+usize::from(s.regs[4]);
+ if usize::from(s.stack_words[2])+16*usize::from(s.stack_words[3])!=scene||s.stack_words[1]!=s.regs[9]{return Err("action entry far ABI differs".into());}
+ let mut kinds=std::collections::BTreeSet::new();
+ for p in &s.pointers{
+  if !kinds.insert(p.kind)||p.address()+p.kind.length()>0x110000||usize::from(p.offset)+p.kind.length()>65536{return Err("duplicate/out-of-range named pointer".into());}
+  if p.kind==PointerKind::Seed{if p.address()!=seed{return Err("seed pointer aliases another field".into());}}
+  else if p.kind!=PointerKind::Commentary||p.address()!=0{
+   let range=p.address()..p.address()+p.kind.length();
+   if p.address()<ds+65536||range.contains(&seed)||range.contains(&scene)||range.contains(&stack){return Err("named pointer aliases protected entry state".into());}
+  }
+ }
+ if kinds.len()!=10{return Err("missing named action pointer".into());}
+ let mut image=vec![0;0x110000];let mut known=vec![false;image.len()];let mut seen=std::collections::BTreeSet::new();
+ fn initial(image:&mut[u8],known:&mut[bool],seen:&mut std::collections::BTreeSet<usize>,at:usize,bytes:&[u8])->Result<(),String>{
+  if at+bytes.len()>image.len(){return Err("entry data exceeds image".into());}
+  for(i,b)in bytes.iter().enumerate(){if !seen.insert(at+i){return Err("aliased action entry fact".into());}image[at+i]=*b;known[at+i]=true;}Ok(())
+ }
+ initial(&mut image,&mut known,&mut seen,scene,&s.scene.bytes())?;
+ initial(&mut image,&mut known,&mut seen,seed,&s.seed.to_le_bytes())?;
+ for(i,w)in s.stack_words.iter().enumerate(){initial(&mut image,&mut known,&mut seen,stack+2*i,&w.to_le_bytes())?;}
+ for p in &s.pointers{
+  let at=ds+usize::from(p.kind.slot());initial(&mut image,&mut known,&mut seen,at,&p.offset.to_le_bytes())?;initial(&mut image,&mut known,&mut seen,at+2,&p.segment.to_le_bytes())?;
+ }
+ for f in &s.cells{let a=cell_address(s,f)?;initial(&mut image,&mut known,&mut seen,a,&[f.value])?;}
+ let mut e=crate::role_scores::image(Default::default());e.image=image.into_boxed_slice();let mut c=Cpu::new(e);c.known=known;c.flat_memory=true;c.code_base=s.regs[9].wrapping_sub(0x0AB9);c.r=s.regs;
+ c.stack_bounds=Some((stack-4096,stack+8));c.cf=s.flags&1!=0;c.pf=s.flags&4!=0;c.z=s.flags&0x40!=0;c.sf=s.flags&0x80!=0;c.of=s.flags&0x800!=0;c.df=s.flags&0x400!=0;
+ c.require_write_baseline=true;Ok(c)
+}
+pub fn advance(s:&State)->Result<Outcome,Fault>{
+ let mut c=machine(s).map_err(|message|Fault{message,missing:None})?;
+ let entry=match s.kind{Kind::Action5=>super::action_graph::p_0ab9_448c,Kind::Contact=>super::action_graph::p_0ab9_4dff};
+ if let Err(message)=c.invoke_entry(entry,0x0AB9,s.stack_words[0]){return Err(Fault{message,missing:c.missing.get()});}
+ if c.r[4]!=s.regs[4].wrapping_add(8)||c.r[5]!=s.regs[5]||c.r[11]!=s.regs[11]{return Err(Fault{message:"action Pascal entry/return handoff differs".into(),missing:None});}
+ let mut output=s.clone();
+ let ds=16*usize::from(s.regs[11]);let at=ds+0xCCEF+25*usize::from(s.scene.index);
+ // Scene's typed accessor uses canonical DS addresses;copy only the25 decoded fields.
+ let mut canonical=crate::role_scores::image(Default::default());let to=0xCCEF+25*usize::from(s.scene.index);
+ canonical.image[to..to+25].copy_from_slice(&c.e.image[at..at+25]);output.scene=Scene::read(&canonical,s.scene.index);
+ output.seed=u16::from_le_bytes([c.e.image[ds+0xA51C],c.e.image[ds+0xA51D]]);
+ output.cells.retain(|f|f.area!=Area::Frame);
+ for f in &mut output.cells{f.value=c.e.image[cell_address(s,f).map_err(|message|Fault{message,missing:None})?];}
+ for p in &mut output.pointers{let a=ds+usize::from(p.kind.slot());p.offset=u16::from_le_bytes([c.e.image[a],c.e.image[a+1]]);p.segment=u16::from_le_bytes([c.e.image[a+2],c.e.image[a+3]]);}
+ Ok(Outcome{scene:output.scene,seed:output.seed,pointers:output.pointers,cells:output.cells,draws:c.draws,events:vec![]})
+}
 #[cfg(test)]
 mod tests{
  use super::*;

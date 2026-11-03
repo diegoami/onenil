@@ -381,6 +381,16 @@ mod python {
     }
 
     #[pyfunction]
+    fn watched_action(input_json: &str) -> PyResult<String> {
+        let state: watched_compiled::action::State = serde_json::from_str(input_json)
+            .map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let value=match watched_compiled::action::advance(&state){
+            Ok(out)=>serde_json::json!({"ok":out}),
+            Err(fault)=>serde_json::json!({"error":fault}),
+        };
+        serde_json::to_string(&value).map_err(|e|PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
     fn watched_select_target(input_json: &str) -> PyResult<String> {
         let state: watched_compiled::SelectionState =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -866,6 +876,7 @@ mod python {
         module.add_function(wrap_pyfunction!(watched_advance_ball, module)?)?;
         module.add_function(wrap_pyfunction!(watched_adjust_target, module)?)?;
         module.add_function(wrap_pyfunction!(watched_select_target, module)?)?;
+        module.add_function(wrap_pyfunction!(watched_action, module)?)?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;

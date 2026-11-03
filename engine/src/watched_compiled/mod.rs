@@ -2,6 +2,8 @@
 //! [designed] Typed root facts and temporary Pascal frames;no runtime decoding.
 mod adjustment;
 pub mod action;
+mod action_graph;
+mod projections;
 mod compiled;
 mod selection;
 use crate::{terminal::Scene, Draw};
