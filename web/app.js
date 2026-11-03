@@ -14,8 +14,12 @@ function render() {
   $('phase').textContent = `${phases[state.phase]}${running ? ' · Live' : ''}`;
   $('status-dot').classList.toggle('active', running);
   $('primary').textContent = state.phase === 'ready' ? 'Kick off' : state.phase === 'half-time' ? 'Continue second half' : state.phase === 'full-time' ? 'Match finished' : running ? 'Pause' : 'Resume';
-  $('primary').disabled = busy || state.phase === 'full-time';
+  $('primary').disabled = busy || state.phase === 'full-time' || (state.phase === 'ready' && ($('lineup').value !== state.choices.lineup || $('seed').value !== state.choices.seed));
   $('restart').disabled = busy;
+  const locked = busy || state.phase !== 'ready';
+  for (const id of ['lineup','seed','apply']) $(id).disabled = locked;
+
+  $('selected').textContent = `${state.choices.lineup === 'reserve' ? 'Alternate XI' : 'Reference XI'} · Seed ${state.choices.seed}`;
   $('live-label').textContent = running ? 'LIVE' : state.phase === 'full-time' ? 'FULL-TIME' : state.phase === 'half-time' ? 'HALF-TIME' : 'PAUSED';
   const svg = $('players'); svg.replaceChildren();
   const ns = 'http://www.w3.org/2000/svg';
@@ -57,16 +61,16 @@ function render() {
     if (nearEnd) log.scrollTop = log.scrollHeight;
   }
 }
-async function request(action) {
-  const response = await fetch(action ? `/api/${action}` : '/api/state', action ? {method:'POST', headers:{'X-Onenil-Action':'1'}} : {});
+async function request(action, payload) {
+  const response = await fetch(action ? `/api/${action}` : '/api/state', action ? {method:'POST', headers:{'X-Onenil-Action':'1', ...(payload ? {'Content-Type':'application/json'} : {})}, ...(payload ? {body:JSON.stringify(payload)} : {})} : {});
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || 'Match request failed');
   state = data;
 }
-async function action(kind) {
+async function action(kind, payload) {
   if (busy) return;
   busy = true; render();
-  try { await request(kind); $('error').hidden = true; }
+  try { await request(kind, payload); $('error').hidden = true; }
   catch (error) { stop(); $('error').textContent = error.message; $('error').hidden = false; }
   finally { busy = false; render(); }
 }
@@ -85,5 +89,11 @@ $('primary').addEventListener('click', async () => {
   if (!$('error').hidden || !['first-half','second-half'].includes(state.phase)) return;
   running = true; render(); timer = setTimeout(tick, Number($('speed').value));
 });
-$('restart').addEventListener('click', async () => { stop(); rendered = 0; await action('restart'); });
-request().then(render).catch(error => { $('error').textContent = `Cannot start native engine: ${error.message}`; $('error').hidden = false; $('primary').disabled = true; });
+for (const id of ['lineup','seed']) $(id).addEventListener('change', render);
+$('setup').addEventListener('submit', async event => {
+  event.preventDefault();
+  await action('configure', {lineup:$('lineup').value, seed:$('seed').value});
+  $('lineup').value = state.choices.lineup; $('seed').value = state.choices.seed;
+});
+$('restart').addEventListener('click', async () => { stop(); rendered = 0; await action('restart'); $('lineup').value = state.choices.lineup; $('seed').value = state.choices.seed; render(); });
+request().then(() => { $('lineup').value = state.choices.lineup; $('seed').value = state.choices.seed; render(); }).catch(error => { $('error').textContent = `Cannot start native engine: ${error.message}`; $('error').hidden = false; $('primary').disabled = true; });
