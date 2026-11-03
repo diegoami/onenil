@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """One selected-squad/legacy admission;native preparation then the entire continuing match."""
-import argparse,copy,json
+import argparse,copy,json,sys
+from datetime import datetime,timezone
 from pathlib import Path
 import replay_continuous_match as match
 half=match.half
@@ -83,7 +84,56 @@ def check(data,points):
     # expected snapshot is ever passed to this constructor or any step().
     return session
 
+def capture_settings(research_root):
+    """Observe the original once;never change guest settings or export private bytes."""
+    root=research_root.resolve()
+    sys.path.insert(0,str(root/'runtime/emul'))
+    import match_setup as observer
+    meta,base=next(iter(observer.selected_runs().values()))
+    _,data=observer.match.find_state(base['start_state']['sha256'])
+    week=observer.match.Week(data);observer.Recorder(week)
+    captured=None
+    class ReachedAdmission(Exception):pass
+    def observe(g):
+        nonlocal captured
+        current=observer.state(week)
+        expected=observer.contests.outputs(base)
+        draws=[e for e in week.events if e['kind']=='draw']
+        if not common.same(current,expected['points'][2]['state']):
+            raise ValueError('settings capture reached a different pre86E9 state')
+        if not common.same(draws,expected['draws'][:255]):
+            raise ValueError('settings capture original255-draw prefix differs')
+        captured={'initial_sha256':observer.initials.digest(current),
+                  'draws_sha256':observer.initials.digest(draws),'draw_count':len(draws),
+                  'managed_selection_mode':g.mem(g.far(0xD7D2)+0xF6,1)[0]}
+        raise ReachedAdmission()
+    if common.git('status','--porcelain','--','tools/replay_match_setup.py'):
+        raise ValueError('commit observer before capture')
+    week.g.code_hook('0AB9:86E9',observe)
+    started=datetime.now(timezone.utc).isoformat()
+    try:week.play(on_boundary=lambda w:print(f'settings:screen{w.screen_i},draws{w.draws}',flush=True))
+    except ReachedAdmission:pass
+    else:raise ValueError('settings capture did not reach admission')
+    if week.g.unsupported or captured is None:raise ValueError('unsupported/incomplete settings capture')
+    record={'schema':'setup-settings-observation/1','code_commit':common.git('rev-parse','HEAD'),
+            'started':started,'ended':datetime.now(timezone.utc).isoformat(),
+            'source':{'repository':'https://github.com/diegoami/onenil-archaeology',
+                      'commit':observer.match.git('rev-parse','HEAD'),
+                      'record':str(meta.relative_to(root)),'record_sha256':common.sha(meta.read_bytes()),
+                      'static':{'static/1-0-exe/code/seg_0AB9_18.asm':common.sha((root/'static/1-0-exe/code/seg_0AB9_18.asm').read_bytes())}},
+            'start_state_sha256':base['start_state']['sha256'],
+            'game_files':{k:common.sha(v) for k,v in week.files_at_start.items()},'observed':captured,
+            'scope':'Read-only original config+F6 at exact T38 pre86E9 state/255-draw prefix;intentional stop,not whole-match capture'}
+    out=ROOT/'records/T28';out.mkdir(parents=True,exist_ok=True)
+    n=max((int(p.stem.split('-r')[-1]) for p in out.glob('settings-r*.json')),default=0)+1
+    path=out/f'settings-r{n:04d}.json'
+    with path.open('x') as f:json.dump(record,f,indent=2);f.write('\n')
+    print(path, captured,flush=True)
+
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--check',action='store_true',required=True);ap.parse_args()
+    ap=argparse.ArgumentParser(description=__doc__);g=ap.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--capture-settings',action='store_true');ap.add_argument('--research-root',type=Path);args=ap.parse_args()
+    if args.capture_settings:
+        if args.research_root is None:ap.error('--capture-settings requires --research-root')
+        capture_settings(args.research_root);return
     data,points,_=load();check(data,points)
 if __name__=='__main__':main()
