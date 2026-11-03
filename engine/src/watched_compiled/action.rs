@@ -84,7 +84,8 @@ fn machine(s:&State)->Result<Cpu,String>{
  c.stack_bounds=Some((stack-4096,stack+8));c.cf=s.flags&1!=0;c.pf=s.flags&4!=0;c.z=s.flags&0x40!=0;c.sf=s.flags&0x80!=0;c.of=s.flags&0x800!=0;c.df=s.flags&0x400!=0;
  c.track_events=true;c.require_write_baseline=true;Ok(c)
 }
-pub fn advance(s:&State)->Result<Outcome,Fault>{
+pub fn advance(_s:&State)->Result<Outcome,Fault>{Err(Fault{message:"T37 action kernel stub for original-fixture red".into(),missing:None})}
+fn advance_computed(s:&State)->Result<Outcome,Fault>{
  let mut c=machine(s).map_err(|message|Fault{message,missing:None})?;
  let entry=match s.kind{Kind::Action5=>super::action_graph::p_0ab9_448c,Kind::Contact=>super::action_graph::p_0ab9_4dff};
  if let Err(message)=c.invoke_entry(entry,0x0AB9,s.stack_words[0]){return Err(Fault{message,missing:c.missing.get()});}
@@ -121,4 +122,29 @@ mod tests{
   let mut s=context();s.pointers.push(s.pointers[0].clone());assert!(machine(&s).is_err());
   let mut s=context();let p=s.pointers.iter_mut().find(|p|p.kind==PointerKind::P8).unwrap();p.segment=s.regs[11];p.offset=0xA51C;assert!(machine(&s).is_err());
  }
+ fn original_case(index:usize)->serde_json::Value{
+  let path=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(format!("tests/fixtures/watched_action/case-{index:05}.json"));
+  serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap()
+ }
+ #[test]
+ fn real_original_action_and_commentary_roots_replay(){
+  for index in[0,113]{let case=original_case(index);let input:State=serde_json::from_value(case["input"].clone()).unwrap();
+   let actual=advance(&input).unwrap_or_else(|fault|panic!("case{index}: {fault:?}"));assert_eq!(serde_json::to_value(actual).unwrap(),case["expected"],"case{index}");}
+ }
+ #[test]
+ fn actual_required_entry_fact_cannot_be_silently_defaulted(){
+  let case=original_case(0);let mut input:State=serde_json::from_value(case["input"].clone()).unwrap();
+  input.cells.remove(0);let fault=advance(&input).unwrap_err();assert!(fault.missing.is_some(),"{fault:?}");
+ }
+
+ #[test]
+ fn entry_player_pools_cannot_alias_each_other_or_pitch_storage(){
+  let mut s=context();let p8=s.pointers.iter().find(|p|p.kind==PointerKind::P8).unwrap().clone();
+  let p15=s.pointers.iter_mut().find(|p|p.kind==PointerKind::P15).unwrap();p15.offset=p8.offset;p15.segment=p8.segment;
+  assert!(machine(&s).is_err());
+  let mut s=context();let p8=s.pointers.iter().find(|p|p.kind==PointerKind::P8).unwrap().clone();
+  let main=s.pointers.iter_mut().find(|p|p.kind==PointerKind::Main).unwrap();main.offset=p8.offset;main.segment=p8.segment;
+  assert!(machine(&s).is_err());
+ }
+
 }

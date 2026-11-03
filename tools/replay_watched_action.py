@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """[designed] Original passing/contact capture,decoded ENTRY export,and native replay."""
-import argparse,hashlib,json,time
+import argparse,hashlib,json,time,platform,subprocess
+from datetime import datetime,timezone
+from importlib.metadata import version
 from pathlib import Path
 import watched_oracle as oracle
 import watched_action_export as export
@@ -58,14 +60,34 @@ def replay(values):
         if result.get('ok')!=case['expected']:raise ValueError(f'native original action parity differs at case{case["case"]}: '+str(result.get('error')))
     print('native watched actions:',len(values),'original roots matched',flush=True)
 
+def benchmark(values,repetitions):
+    from onenil_engine import onenil_engine as native
+    source_paths=['engine','tools/replay_watched_action.py','tools/watched_action_export.py','tools/watched_oracle.py','tools/compile_watched.py','pyproject.toml']
+    if oracle.common.git('status','--porcelain','--',*source_paths):raise ValueError('commit source and decoded fixtures before measurement')
+    if native.__debug_assertions__:raise ValueError('release extension required')
+    inputs=[json.dumps(c['input'],sort_keys=True,separators=(',',':'))for c in values];size=0
+    started=datetime.now(timezone.utc).isoformat();begin=time.perf_counter_ns()
+    for _ in range(repetitions):
+        for value in inputs:size+=len(native.watched_action(value))
+    elapsed=time.perf_counter_ns()-begin;out=ROOT/'records/T37'
+    number=max((int(p.stem.split('-r')[-1])for p in out.glob('T37-r*.json')),default=0)+1;path=out/f'T37-r{number:04d}.json'
+    result={'schema':'routine-benchmark/1','run_id':path.stem,'code_commit':oracle.common.git('rev-parse','HEAD'),'started':started,'ended':datetime.now(timezone.utc).isoformat(),'platform':platform.platform(),'python':platform.python_version(),'rustc':subprocess.check_output(['rustc','--version'],text=True).strip(),'cargo_lock_sha256':digest(ROOT/'engine/Cargo.lock'),
+      'build':{'crate_version':native.__version__,'debug_assertions':native.__debug_assertions__,'maturin':version('maturin'),'extension_sha256':digest(Path(native.__file__))},
+      'source_pins':{'oracle_manifest_sha256':oracle.MANIFEST_SHA256,'decoded_manifest_sha256':digest(FIXTURES/'manifest.json')},'routine':'native448C/4DFF source-addressed compiled action graphs','repetitions':repetitions,'cases':len(values),'calls':len(values)*repetitions,'elapsed_ns':elapsed,'serialized_output_bytes':size,
+      'method':'Pre-serialized inputs;release parsing,one native data image,compiled arithmetic/control flow/native helpers/RNG/commentary and serialization included;fixture preparation/output decoding excluded',
+      'limits':'Action/contact root kernels only;not a continuous watched tick,clock,full native match or emulator speed comparison'}
+    oracle.write_json(path,result);print(path.relative_to(ROOT))
+
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--capture',action='store_true');p.add_argument('--research-root',type=Path);p.add_argument('--export',action='store_true');p.add_argument('--check',action='store_true');p.add_argument('--replay',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--capture',action='store_true');p.add_argument('--research-root',type=Path);p.add_argument('--export',action='store_true');p.add_argument('--check',action='store_true');p.add_argument('--replay',action='store_true');p.add_argument('--benchmark',action='store_true');p.add_argument('--repetitions',type=int,default=3);a=p.parse_args()
+    if a.repetitions<1:p.error('positive repetitions required')
     if a.capture:
         if a.research_root is None:p.error('--capture requires --research-root')
         oracle.capture(a.research_root)
     if a.export:generate()
-    if a.check or a.replay:
+    if a.check or a.replay or a.benchmark:
         values=check();print('decoded watched-action corpus:',len(values),'roots verified')
-        if a.replay:replay(values)
-    if not any((a.capture,a.export,a.check,a.replay)):p.error('choose --capture/--export/--check/--replay')
+        if a.replay or a.benchmark:replay(values)
+        if a.benchmark:benchmark(values,a.repetitions)
+    if not any((a.capture,a.export,a.check,a.replay,a.benchmark)):p.error('choose --capture/--export/--check/--replay')
 if __name__=='__main__':main()

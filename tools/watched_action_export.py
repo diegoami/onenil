@@ -46,7 +46,8 @@ def export_one(case,native,prior=()):
         if 'ok'in result:return state,result['ok'],selected,attempt
         fault=result['error'];missing=fault['missing']
         if missing is None:raise ValueError(f'case{case["case"]}: {fault["message"]}')
-        area,offset=named(state,missing['address'])
+        try:area,offset=named(state,missing['address'])
+        except ValueError as error:raise ValueError(f'case{case["case"]}: {fault}')from error
         before=len(seen);add(area,offset)
         if len(seen)==before:raise ValueError('native repeated admitted missing fact:'+str(fault))
     raise ValueError('native fact admission did not converge')
