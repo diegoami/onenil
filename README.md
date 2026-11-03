@@ -1397,3 +1397,13 @@ restarts diagnose pending their original routines. Pixel/audio/timer transport
 is external;the logical occupancy writes used by gameplay stay inside this
 projection. Other watched actions,restarts and clock/tick/viewer integration
 remain before detailed browser play-by-play is available.
+
+[confirmed: T34 capture-r0002] All32 original7423 roots through tick107/draw3666
+match full ball/main/background/metric/bounds/seed/draw observations. They
+include14 air-flag entries,28 metric calls,64 main/58 background indexed
+witnesses and56 changed main cells;no RNG is drawn. All32 remain inside the
+playing pitch. Signed metric extremes,bounds rejection and other guard
+endpoints have synthetic/static coverage. Aborted r0001 is retained/excluded:
+the observer initially failed to wrap effective pitch-buffer offsets to16 bits;
+accepted r0002 uses corrected segmented addresses and verifies every indexed
+read against the original ES:DI address.
