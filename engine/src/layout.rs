@@ -8,6 +8,10 @@ pub(crate) const PAIR_OWN: usize = 0x40000;
 pub(crate) const PAIR_OPP: usize = 0x40010;
 pub(crate) const PAIR_ASSIGNED: usize = 0x40020;
 pub(crate) const SCENE_MODE: usize = 0x40080;
+// [designed] Decoded watched occupancy cells and admission-presence metadata.
+pub(crate) const PITCH: usize = 0x41000;
+pub(crate) const PITCH_PRESENT: usize = 0x42000;
+pub(crate) const PITCH_CELLS: usize = 17 * 75;
 // [confirmed] Ratings4A37 and assignment4A37 share original DCC8.
 pub(crate) const STAFF: usize = CLUB_COUNTS;
 pub(crate) const CONFIG: usize = 0x49000;
@@ -29,6 +33,8 @@ mod tests {
             (PAIR_OPP, PAIR_OPP + 11),
             (PAIR_ASSIGNED, PAIR_ASSIGNED + 11),
             (SCENE_MODE, SCENE_MODE + 1),
+            (PITCH, PITCH + 2 * PITCH_CELLS),
+            (PITCH_PRESENT, PITCH_PRESENT + PITCH_CELLS),
             (CONFIG, CONFIG + 256),
             (CLUB_COUNTS, CLUB_COUNTS + 0x10000),
             (HISTORY, HISTORY + 0x10000),
