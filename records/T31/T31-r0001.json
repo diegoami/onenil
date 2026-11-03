@@ -1,0 +1,63 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T31-r0001",
+  "code_commit": "f370467a34fa89c2f733a34c445e166ef7fd1417",
+  "started": "2026-11-03T13:23:47.746337+00:00",
+  "ended": "2026-11-03T13:23:47.849509+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "1439f3f5f532577ff74c25e902288d3d83aff59341fde8e1eec47d4898dfd096"
+  },
+  "source_pins": [
+    {
+      "schema": "watched-direction-source/1",
+      "capture": "records/T31/capture-r0001.json",
+      "capture_sha256": "f786884fc65244bcd7135f56cec20971e58a5b5e9a58948aa55f378cf3e7cb58",
+      "cases_sha256": "8616164a8dfea645bd5cc664886f9789f9355f40e45fd1a9a05ec30c81c5930c",
+      "source": {
+        "repository": "https://github.com/diegoami/onenil-archaeology",
+        "commit": "c7637bdb08f49c8c6de862c5fba9fe3dacd2228f",
+        "prefix_record": "runs/T39/T39-r0003.json",
+        "prefix_record_sha256": "b7f170d8f5229046717354a973e1a121eb61dacf2f716856efe461bacce6f99c",
+        "start_state_sha256": "2f634978859f7c07b3519e4278d8aaf70c2c70b93ad48362408fbcfa210576a1",
+        "static_sources": {
+          "static/1-0-exe/code/seg_0AB9_12.asm": "af2630092912280994154772ec15a46d8be8983c9478bc7d738e302222f9b937",
+          "static/1-0-exe/code/seg_1998_01.asm": "8975e7992cc991c92d6a05b8875eb0960c2893ed122314f984bed4eb77d17148",
+          "static/1-0-exe/code/seg_26C9_02.asm": "6aec4a2b9333d18723a2d6c220ae1bdd6f5d4713f7174a73ba3d5094e665ea3c"
+        }
+      }
+    },
+    {
+      "schema": "watched-direction-source/1",
+      "capture": "records/T31/capture-r0002.json",
+      "capture_sha256": "c9e731da6ca6874d224098382dd4b5f8dc5d09cfa5eef398c80f2bbfb162e480",
+      "cases_sha256": "85ba79683e2291ac63095be6ddad0ae9389b571370fc23e91a93ee2eb57ca898",
+      "source": {
+        "repository": "https://github.com/diegoami/onenil-archaeology",
+        "commit": "c7637bdb08f49c8c6de862c5fba9fe3dacd2228f",
+        "prefix_record": "runs/T39/T39-r0003.json",
+        "prefix_record_sha256": "b7f170d8f5229046717354a973e1a121eb61dacf2f716856efe461bacce6f99c",
+        "start_state_sha256": "2f634978859f7c07b3519e4278d8aaf70c2c70b93ad48362408fbcfa210576a1",
+        "static_sources": {
+          "static/1-0-exe/code/seg_0AB9_12.asm": "af2630092912280994154772ec15a46d8be8983c9478bc7d738e302222f9b937",
+          "static/1-0-exe/code/seg_1998_01.asm": "8975e7992cc991c92d6a05b8875eb0960c2893ed122314f984bed4eb77d17148",
+          "static/1-0-exe/code/seg_26C9_02.asm": "6aec4a2b9333d18723a2d6c220ae1bdd6f5d4713f7174a73ba3d5094e665ea3c"
+        }
+      }
+    }
+  ],
+  "routine": "original70D5 direction selection and6F98 movement retries",
+  "repetitions": 100,
+  "cases": 128,
+  "calls": 12800,
+  "elapsed_ns": 101371859,
+  "serialized_output_bytes": 8676400,
+  "method": "Pre-serialized inputs;release parsing,one native image/setup,direction/bounds/occupancy and serialization included;fixture preparation and output decoding excluded",
+  "limits": "Standalone direction/retry composition,not72BB action dispatch,ball/clock,complete watched ticks or detailed commentary;no full-match/emulator speed comparison"
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "validation/1",
+  "code_commit": "f370467a34fa89c2f733a34c445e166ef7fd1417",
+  "rust_tests": 421,
+  "original_parent_cases": 128,
+  "warm_attempts": 110,
+  "warm_rejections": 46,
+  "active_attempts": 64,
+  "active_raw_cells": 33,
+  "all_prior_replay_checks": 27,
+  "shared_layout_check": "passed",
+  "controller_tests": 5,
+  "fmt": "passed",
+  "py_compile": "passed",
+  "diff_check": "passed",
+  "original_file_scan": "passed",
+  "embedding_scan": {
+    "changed_files": 13,
+    "private_files": 30,
+    "method": "No NUL or matching high-entropy aligned128-byte original block"
+  },
+  "baseline_preservation": {
+    "commit": "d2b30f7",
+    "unchanged_files": 384,
+    "intentional_changes": [
+      "README.md",
+      "engine/src/lib.rs",
+      "engine/src/watched_movement.rs"
+    ]
+  },
+  "new_evidence_first_addition": "unchanged",
+  "static_source_digests": "match research originals",
+  "limits": "No original dynamic clamp or blocked-occupancy cases in these streams;synthetic/static coverage only. No72BB action dispatch,ball/watched clock,full watched tick or detailed viewer commentary."
+}

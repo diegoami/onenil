@@ -1296,3 +1296,27 @@ This kernel does not yet run the watched match. Original70D5 direction/retry
 selection,72BB player/action dispatch,ball work and the watched clock remain
 before a continuous player-action feed can replace the summary viewer. Captured
 original action sequences are test references,never the runtime backend.
+
+### Watched direction selection and retries (T31)
+
+[confirmed: archaeologyF39 at c7637bd,70D5 static at d9e20a4,and T31 original
+captures] The next native parent adjusts the target's high coordinate byte,
+chooses an axis using the original coin draw,and retries6F98 on the same image
+until movement is allowed. Root inputs contain raw occupancy cells;directions,
+candidates and helper outcomes are computed in Rust. All128 original parent
+calls match full scene,seed,ordered random draws and movement attempts.
+The warm64 contain110 attempts/46 bounds rejections;the active64 reach33
+occupancy reads and all accept their first attempt. Neither captured stream
+changes the target clamp;clamp guards and blocked occupancy retries have
+synthetic/static coverage. These observations do not establish dynamic shot
+or goal behavior.
+
+```sh
+.cache/venv/bin/python tools/replay_watched_direction.py --check
+.cache/venv/bin/python tools/replay_watched_direction.py --benchmark --out records/T31
+```
+
+[designed] This is a standalone movement parent. Player/action dispatch72BB,
+ball state and the watched clock still need porting and integration before the
+browser can produce the requested detailed commentary. The current preview
+remains the quick-result summary.
