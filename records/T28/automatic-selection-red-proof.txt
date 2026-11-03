@@ -1,0 +1,20 @@
+    Blocking waiting for file lock on build directory
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 31.46s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 1 test
+
+thread 'player_cache::tests::automatic_managed_fallback_selects_from_current_image' (3410) panicked at src/player_cache.rs:573:38:
+called `Result::unwrap()` on an `Err` value: "unsupported1539 managed/UI fallbackB6BD"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test player_cache::tests::automatic_managed_fallback_selects_from_current_image ... FAILED
+
+failures:
+
+failures:
+    player_cache::tests::automatic_managed_fallback_selects_from_current_image
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 301 filtered out; finished in 0.38s
+
+error: test failed, to rerun pass `--lib`

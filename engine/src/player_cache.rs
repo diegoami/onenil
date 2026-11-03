@@ -296,21 +296,40 @@ pub(crate) fn run(e: &mut Engine, s: &State) -> Result<Outcome, String> {
                 vec![id],
                 u16::from(available),
             ));
-            if available != 0 {
-                return Err("unsupported1539 managed/UI fallbackB6BD".into());
-            }
-            let slot = cache_helpers::slot_image(e, side, 1);
-            events.push(readonly(
-                e,
-                s,
-                "0AB9:15DF",
-                "slot",
-                side,
-                vec![1, u16::from(side)],
-                slot,
-            ));
-            if slot > 11 {
-                return Err("unsupported1539 managed/UI fallbackB6BD".into());
+            let needs_selection = if available != 0 {
+                true
+            } else {
+                let slot = cache_helpers::slot_image(e, side, 1);
+                events.push(readonly(
+                    e,
+                    s,
+                    "0AB9:15DF",
+                    "slot",
+                    side,
+                    vec![1, u16::from(side)],
+                    slot,
+                ));
+                slot > 11
+            };
+            if needs_selection {
+                // [confirmed] seg_0AB9_18 B6DE..B73A at archaeology d9e20a4;
+                // T28/settings-r0001 confirms the original config+F6 is nonzero.
+                // The bounded debug API leaves this setting zero and still diagnoses UI.
+                if e.image[crate::layout::CONFIG + 0xF6] == 0 {
+                    return Err("unsupported1539 managed/UI fallbackB6BD".into());
+                }
+                let before = snapshot(e, s);
+                let selected = cache_selection::select_image(e, side)?.output.player;
+                put(e, cache_address(side, 1), selected);
+                events.push(event(
+                    "0AB9:15ED",
+                    "managed_select",
+                    side,
+                    vec![1, u16::from(side)],
+                    before,
+                    snapshot(e, s),
+                    Some(selected),
+                ));
             }
         }
         for slot in 1..=11 {
@@ -561,6 +580,21 @@ mod tests {
             assert_eq!(e["arguments"][2], 0);
             assert_eq!(e["result"], 7);
         }
+    }
+    #[test]
+    fn automatic_managed_fallback_selects_from_current_image() {
+        let mut s = sample();
+        s.cache[0][0] = 0;
+        let mut e = machine(&s).unwrap();
+        e.image[crate::layout::CONFIG + 0xF6] = 1;
+        let selected = cache_selection::select_image(&e, 0).unwrap().output.player;
+        let before_seed = word(&e, 0xA51C);
+        let result = run(&mut e, &s).unwrap();
+        assert_eq!(result.output.cache[0][0], selected);
+        assert_eq!(word(&e, 0xA51C), before_seed);
+        assert!(result.draws.is_empty());
+        // Automatic B6BD kind1 stores only that cache,not the other role caches.
+        assert_eq!(result.output.cache[0][1..], s.cache[0][1..]);
     }
     #[test]
     fn reached_managed_fallback_diagnoses_and_caller_input_is_unchanged() {

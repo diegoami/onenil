@@ -72,6 +72,7 @@ pub struct Data {
     pub legacy: continuous::Admission,
     pub replacement: ai_selection::ReadSet,
     pub gates: match_session::Gates,
+    pub managed_selection_mode: u8,
     pub skill_tables: Vec<role_scores::TableInput>,
     pub setup_cells: Cells,
     pub income: Vec<Income>,
@@ -194,6 +195,7 @@ impl Session {
             replacement,
             gates,
             skill_tables,
+            managed_selection_mode,
             setup_cells,
             income,
             supplement,
@@ -205,6 +207,7 @@ impl Session {
             draws: vec![],
             income_results: vec![],
         };
+        out.match_state.inner.e.image[layout::CONFIG + 0xF6] = managed_selection_mode;
         out.load_inputs(&setup_cells, &income, &supplement)?;
         out.prepare(&setup_cells, &income, &supplement)?;
         Ok(out)
