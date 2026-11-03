@@ -1265,3 +1265,34 @@ The T29 browser viewer uses this API with two supported starting XIs and seeds.
 Controller checks cover all four combinations; Chromium checks reference and
 alternate full matches, actual player/seed handoff and desktop/mobile controls.
 Owner-run milestone35 review remains before formal first-playable acceptance.
+
+### Watched-engine port: movement legality (T30)
+
+[designed: owner decision2026-11-03] Detailed player-action commentary requires
+porting the original watched engine. The current browser uses the quick-result
+backend and remains a summary preview. Generic clock messages do not meet the
+owner's requirement for passes,tackles and shots.
+
+[confirmed: archaeologyF39/T39 at c7637bd and T30 captures] The first native
+watched component computes6F98 candidate movement and legality:reset from the
+previous position,wrapped coordinate-byte movement,bounds/guard order and
+actual occupancy-tag/membership checks. Its bridge replays128 real original
+calls:64 kickoff-positioning cases and64 active cases,including33 actual
+occupancy reads. Tag5 and blocked-occupancy branches have static/synthetic
+coverage;the captured active cases all allow movement. No RNG is drawn.
+
+```sh
+.cache/venv/bin/python tools/replay_watched_movement.py --check
+.cache/venv/bin/python tools/replay_watched_movement.py --benchmark --out records/T30
+```
+
+Inputs contain complete raw scene/global/role/blocking facts and an optional
+indexed occupancy witness. Rust computes the new coordinate before looking up
+that witness;the witness is not an expected position. Wrong/missing reached
+lookups diagnose. Expected scene/result snapshots are assertions only. Whole
+native-image checks permit only the scene's position word to change.
+
+This kernel does not yet run the watched match. Original70D5 direction/retry
+selection,72BB player/action dispatch,ball work and the watched clock remain
+before a continuous player-action feed can replace the summary viewer. Captured
+original action sequences are test references,never the runtime backend.
