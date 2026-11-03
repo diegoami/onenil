@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/replay_watched_movement.py", line 97, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/replay_watched_movement.py", line 96, in main
+    cases,_=load();check(cases)
+                   ^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/replay_watched_movement.py", line 21, in check
+    got=json.loads(native.watched_move_candidate(common.encoded(c['input'])))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'onenil_engine' has no attribute 'watched_move_candidate'
