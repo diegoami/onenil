@@ -73,9 +73,21 @@ def owned_addresses(state):
             if at in seen or at-ds in(0xD5A,0xD5B,0xD088,0xD089):continue
             seen.add(at);yield at
 
-def parent_state(c,mode):
-    raw,registers,words=admitted(c,mode);pseudo={**c,'kind':'actor','registers':registers,'stack_words':words,'input_scene':{**c['input_scene'],'byte19':mode}}
-    return raw,facts.context(pseudo,raw)
+def parent_state(c,mode,overlay=None):
+    raw,registers,words=admitted(c,mode);raw=bytearray(raw);ds=16*registers['ds']
+    def put(at,value,width):raw[at:at+width]=value.to_bytes(width,'little')
+    if overlay is not None:
+        before=overlay['before']
+        for row in before['scenes']:
+            for key,value in row.items():
+                if key=='index':continue
+                put(ds+0xCCEF+25*row['index']+int(key[4:]),value,2 if key.startswith('word')else 1)
+        for key,value in before['ball'].items():put(ds+0xCF46+int(key[4:]),value,2 if key.startswith('word')else 1)
+        for key,offset,width in [('seed',0xA51C,2),('actor',0xD09F,1),('secondary',0xD0A0,1),('elapsed',0xD0B2,2),('remaining',0xD0AE,2),('stoppage',0xD0B4,2),('phase',0xD0AC,1),('active',0xD0B8,1),('hold',0xD0B9,1),('quick',0xD074,1)]:put(ds+offset,before[key],width)
+    at=ds+0xCCEF+25*c['scene'];put(at+19,mode,1)
+    scene={'index':c['scene'],**{f'word{k}':facts.word(raw,at+k)for k in(0,2,8,10,12,14,20,23)},**{f'byte{k}':raw[at+k]for k in(4,5,6,7,16,17,18,19,22)}}
+    pseudo={**c,'kind':'actor','registers':registers,'stack_words':words,'input_scene':scene,'seed_before':facts.word(raw,ds+0xA51C)}
+    return bytes(raw),facts.context(pseudo,raw)
 
 def event_entry(g,watch):
     args={'code':g.stack_word(2)&255,'actor_slot':g.stack_word(6),'secondary_slot':g.stack_word(4),'side':g.stack_word(8)&255}
@@ -83,19 +95,19 @@ def event_entry(g,watch):
     def player(slot):return 0 if slot==0 else int.from_bytes(g.mem(g.far(0xD7C2)+62*(club-1)+2*(slot-1),2),'little')
     return args|{'club':club,'player':player(args['actor_slot']),'secondary':player(args['secondary_slot']),'minute':g.rd(0xD0B2),'draw_start':watch.draws,'seed_before':g.rd(0xA51C),'head_before':g.rd(0x380),'caller':g.image_address(g.reg('cs'),g.stack_word(0))}
 
-def run_one(research_root,c,source_sha,mode,number,files):
+def run_one(research_root,c,source_sha,mode,number,files,overlay=None):
     sys.path.insert(0,str(research_root.resolve()/'runtime/emul'))
     import match as original
-    raw,state=parent_state(c,mode);registers=dict(zip(oracle.REGS,state['regs']));g=guest(research_root,raw,registers,state['flags']);g.files=dict(files)
+    raw,state=parent_state(c,mode,overlay);registers=dict(zip(oracle.REGS,state['regs']));g=guest(research_root,raw,registers,state['flags']);g.files=dict(files)
     watch=original.Week.__new__(original.Week);watch.g=g;watch.events=[];watch.draws=0;watch._pending=None;watch.install_hooks()
     events=[];pending=[None];child={'joined':False,'returned':False};finished=[False]
     class Returned(Exception):pass
     def on_enter(g):
-        if mode!=5 or child['joined']:return
+        if mode!=5 or overlay is not None or child['joined']:return
         if {r:g.reg(r)for r in oracle.REGS}!=c['registers']or g.reg('eflags')!=c['flags']or oracle.common.sha(g.mem(0,0x110000))!=c['entry']['ram_sha256']:raise ValueError('derived parent lost retained nested-entry join')
         child['joined']=True;child['draw_start']=watch.draws;child['event_start']=len(events)
     def on_child_return(g):
-        if mode!=5 or not child['joined']or child['returned']or g.reg('sp')!=c['registers']['sp']:return
+        if mode!=5 or overlay is not None or not child['joined']or child['returned']or g.reg('sp')!=c['registers']['sp']:return
         draws=[oracle.normalized(d)for d in watch.events if d['kind']=='draw'][child['draw_start']:]
         if oracle.scene(g,c['scene'])!=c['output_scene']or g.rd(0xA51C)!=c['seed_after']or draws!=c['draws']:raise ValueError('original nested outcome/RNG differs from retained independent root')
         child['returned']=True
@@ -116,14 +128,14 @@ def run_one(research_root,c,source_sha,mode,number,files):
         while g.budget<20_000_000:g.run(max_steps=min(500_000,20_000_000-g.budget));g.other_polls=0
     except Returned:pass
     if not finished[0]or g.unsupported or pending[0]is not None or watch._pending is not None:raise ValueError('original parent did not return cleanly within budget')
-    if mode==5 and not(child['joined']and child['returned']):raise ValueError('missing original nested-entry/outcome join')
+    if mode==5 and overlay is None and not(child['joined']and child['returned']):raise ValueError('missing original nested-entry/outcome join')
     after=g.mem(0,0x110000);changes=[]
     for at in owned_addresses(state):
         if raw[at]!=after[at]:
             area,offset=facts.named(state,at);changes.append({'area':area,'offset':offset,'before':raw[at],'after':after[at]})
     ds=16*state['regs'][11]
     pointers=[{'kind':kind,'offset':facts.word(after,ds+slot),'segment':facts.word(after,ds+slot+2)}for kind,slot in facts.SLOTS.items()]
-    return {'schema':'original-parent-microkernel/1','case':number,'source_case':c['case'],'source_sha256':source_sha,'mode':mode,'admission':'derived-unmodified'if mode==5 else'derived-with-mode-intervention','interventions':[]if mode==5 else[{'field':'actor.byte19','before':5,'after':mode}],
+    return {'schema':'original-parent-microkernel/1','case':number,'source_case':c['case'],'source_sha256':source_sha,'mode':mode,'admission':'derived-with-tick-entry-overlay'if overlay else('derived-unmodified'if mode==5 else'derived-with-mode-intervention'),'input_overlay':overlay,'interventions':([{'field':'original-tick-entry-player-ball-clock-inputs','source':overlay['source']}]if overlay else([]if mode==5 else[{'field':'actor.byte19','before':5,'after':mode}])),
        'registers':registers,'flags':state['flags'],'stack_words':state['stack_words'],'input_scene':state['scene'],'seed_before':state['seed'],'pointers':state['pointers'],'output_scene':oracle.scene(g,c['scene']),'seed_after':g.rd(0xA51C),'output_pointers':pointers,
        'changes':changes,'draws':[oracle.normalized(d)for d in watch.events if d['kind']=='draw'],'events':events,'exit_sp':g.reg('sp'),'exit_bp':g.reg('bp'),'nested_join':child,'game_timer_ticks':g.game_timer_ticks,'scope':'Original computation from source-proven derived parent admission;not a captured live parent entry. Presentation countdown/ISR phase excluded.'}
 
@@ -162,10 +174,57 @@ def capture(research_root,directory=ROOT/'records/T38/oracle-r0001'):
     else:oracle.write_json(manifest,out)
     print('original parent corpus completed:',len(items),'roots;codes',sorted(codes),flush=True)
 
+def capture_shots(research_root,directory=ROOT/'records/T38/oracle-r0002'):
+    if oracle.common.git('status','--porcelain','--','tools/watched_parent.py'):raise ValueError('commit observer before original measurement')
+    sources=anchors();by_scene={}
+    for pair in sources:by_scene.setdefault(pair[0]['scene'],pair)
+    overlays=[];seen=set()
+    for path in sorted((research_root/'runs/T40').glob('chunk-*.json')):
+        value=oracle.read_json(path);payload=value['payload'];ticks={t['tick']:t['before']for t in payload['ticks']}
+        for event in payload['actions']:
+            if event['code']not in(17,18,19,20)or event['tick']in seen:continue
+            before=ticks[event['tick']];actor=before['actor']
+            if actor not in by_scene or before['scenes'][actor-1]['byte19']!=5:continue
+            seen.add(event['tick']);overlays.append({'source':{'path':str(path.relative_to(research_root)),'sha256':oracle.common.sha(path.read_bytes()),'tick':event['tick'],'boundary':'before original watched tick','scope':'Input snapshot overlay,not an observed parent entry or a requested shot outcome'},'before':before})
+        if len(overlays)>=8:break
+    overlays=overlays[:8]
+    if not overlays:raise ValueError('no original tick-entry input overlays available')
+    inherited_dir=ROOT/'records/T38/oracle-r0001';inherited=[]
+    for n in range(42):
+        path=inherited_dir/f'case-{n:04d}.json';inherited.append({'path':str(path.relative_to(ROOT)),'sha256':oracle.common.sha(path.read_bytes()),'origin_protocol_sha256':oracle.common.sha((inherited_dir/'start.json').read_bytes())})
+    proof_path=ROOT/'records/T38/admission-proof-r0001.json'
+    protocol={'schema':'original-parent-supplement-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':oracle.common.sha(Path(__file__).read_bytes()),'proof_sha256':oracle.common.sha(proof_path.read_bytes()),'inherited':inherited,'input_overlays':overlays,'scope':'Additional initial player/ball/clock input overlays from original tick BEFORE observations;other facts retain the earlier source context. No actual parent-entry or exact historical-shot reproduction claim.'}
+    start=directory/'start.json'
+    if start.exists():
+        old=oracle.read_json(start)
+        if any(old[k]!=protocol[k]for k in('observer_sha256','proof_sha256','inherited','input_overlays','scope')):raise ValueError('supplement resume source differs')
+        protocol=old
+    else:oracle.write_json(start,protocol)
+    sys.path.insert(0,str(research_root.resolve()/'runtime/emul'));import match as original
+    files=original.game_files();items=list(inherited)
+    for i,overlay in enumerate(overlays,42):
+        c,sha=by_scene[overlay['before']['actor']];path=directory/f'case-{i:04d}.json'
+        if not path.exists():
+            try:value=run_one(research_root,c,sha,5,i,files,overlay)
+            except(Exception,KeyboardInterrupt)as error:
+                n=len(list(directory.glob('aborted-*.json')))+1;oracle.write_json(directory/f'aborted-{n:04d}.json',{'status':'aborted','case':i,'source_case':c['case'],'reason':f'{type(error).__name__}: {error}','producer':protocol['producer']});raise
+            oracle.write_json(path,value)
+        items.append({'path':str(path.relative_to(ROOT)),'sha256':oracle.common.sha(path.read_bytes()),'origin_protocol_sha256':oracle.common.sha(start.read_bytes())})
+        print(f'original shot-context parent{i+1} source{c["case"]} original-before-tick{overlay["source"]["tick"]}',flush=True)
+    values=[oracle.read_json(ROOT[item['path']])for item in items];codes={e['code']for c in values for e in c['events']}
+    if not codes.intersection({17,18,19,20}):raise ValueError('no computed original shot-launch event in supplemented corpus')
+    result={'schema':'original-parent-corpus/1','status':'completed','producer':protocol['producer'],'protocol_sha256':oracle.common.sha(start.read_bytes()),'proof_sha256':protocol['proof_sha256'],'cases':items,'modes':sorted({c['mode']for c in values}),'event_codes':sorted(codes),'scope':'32 source-proven parent admissions,explicit modes and original-before-tick input overlays. Derived/intervened isolated calls,not observed live parent entries.'}
+    out=directory/'manifest.json'
+    if out.exists():
+        if oracle.read_json(out)!=result:raise ValueError('completed parent manifest differs')
+    else:oracle.write_json(out,result)
+    print('original parent corpus completed:',len(items),'roots;codes',sorted(codes),flush=True)
+
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--prove',action='store_true');p.add_argument('--capture',action='store_true');p.add_argument('--research-root',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--prove',action='store_true');p.add_argument('--capture',action='store_true');p.add_argument('--capture-shots',action='store_true');p.add_argument('--research-root',type=Path,required=True);a=p.parse_args()
     if a.prove:
         out=ROOT/'records/T38/admission-proof-r0001.json';oracle.write_json(out,prove(a.research_root));print('original parent admission proof:32 complete nested entries reproduced')
     if a.capture:capture(a.research_root)
-    if not(a.prove or a.capture):p.error('choose --prove or --capture')
+    if a.capture_shots:capture_shots(a.research_root)
+    if not(a.prove or a.capture or a.capture_shots):p.error('choose --prove or --capture')
 if __name__=='__main__':main()

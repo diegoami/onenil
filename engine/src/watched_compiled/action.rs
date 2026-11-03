@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 pub enum Kind {
     Action5,
     Contact,
+    Actor,
 }
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord)]
 #[serde(rename_all = "snake_case")]
@@ -330,6 +331,7 @@ pub fn advance(s: &State) -> Result<Outcome, Fault> {
     let entry = match s.kind {
         Kind::Action5 => super::action_graph::p_0ab9_448c,
         Kind::Contact => super::action_graph::p_0ab9_4dff,
+        Kind::Actor => super::action_graph::p_0ab9_72bb,
     };
     if let Err(message) = c.invoke_entry(entry, 0x0AB9, s.stack_words[0]) {
         return Err(Fault {
