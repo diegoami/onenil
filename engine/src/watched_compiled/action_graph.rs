@@ -128869,8 +128869,105 @@ pub(super) fn p_26c9_0daa(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_26c9_0e1f(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 26C9:0E1F".into())
+pub(super) fn p_26c9_0e1f(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 3615u16;
+    loop {
+        match label {
+            3615 => {
+                c.pc = (9929, 3615);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9929, 3617);
+                c.step()?;
+                let v = 3u16;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3619);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 0) & 255;
+                let v = c.shr(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9929, 3621);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[2] >> 8) & 255;
+                let v = c.sub(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9929, 3623);
+                c.step()?;
+                label = if c.cf { 3642 } else { 3625 };
+                continue;
+            }
+            3625 => {
+                c.pc = (9929, 3625);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[2] >> 0) & 255;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9929, 3627);
+                c.step()?;
+                label = if !c.cf { 3642 } else { 3629 };
+                continue;
+            }
+            3629 => {
+                c.pc = (9929, 3629);
+                c.step()?;
+                let v = (c.r[1] >> 8) & 255;
+                c.r[2] = (c.r[2] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3631);
+                c.step()?;
+                let x = (c.r[2] >> 8) & 255;
+                let y = (c.r[2] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[2] = (c.r[2] & 255) | ((v & 255) << 8);
+                c.pc = (9929, 3633);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 7u16;
+                let v = c.and(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3635);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3637);
+                c.step()?;
+                let v = (c.r[0] >> 8) & 255;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3639);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                let n = (c.r[1] >> 0) & 255;
+                let v = c.rol(v, n, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9929, 3641);
+                c.step()?;
+                c.ret(true, 0)?;
+                return Ok(());
+            }
+            3642 => {
+                c.pc = (9929, 3642);
+                c.step()?;
+                c.r[2] = if (c.r[0] as i16) < 0 { 65535 } else { 0 };
+                c.pc = (9929, 3643);
+                c.step()?;
+                c.exchange_registers(2, 0);
+                c.pc = (9929, 3644);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (9929, 3646);
+                c.step()?;
+                c.ret(true, 0)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_26c9_1827(c: &mut Cpu) -> Result<(), String> {
     let mut label = 6183u16;

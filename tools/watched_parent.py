@@ -61,13 +61,13 @@ def prove(research_root):
     entries=[prove_one(research_root,c,sha)for c,sha in anchors()]
     return {'schema':'original-parent-admission-proof/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':oracle.common.sha(Path(__file__).read_bytes()),'source_oracle_manifest_sha256':oracle.MANIFEST_SHA256,'clock':'original match divisor0400,isolated initial phase;no IRQ before nested-entry join','entries':entries,'scope':'Source-proven derived admissions;not observations of the original parent entry. No native result supplies any input.'}
 
-def owned_addresses(state):
+def owned_addresses(state,pitch_margin=False):
     ds=16*state['regs'][11];seen=set()
     spans=[(ds+a,ds+b)for a,b in[(0x380,0x382),(0x900,0xC00),(0xD00,0xD80),(0x957D,0xAD9B),(0xCCEF,0xD7BA)]]
     for area,n in facts.LENGTHS.items():
         start=facts.address(state,area,0)
         if area in('p8','p15','club','config'):spans.append((start,start+n))
-        else:spans.extend((start+0x90E+160*r-74,start+0x90E+160*r+76)for r in range(-8,9))
+        else:spans.extend((start+0x90E+160*r-74,start+0x90E+160*r+76)for r in range(-9 if pitch_margin else -8,10 if pitch_margin else 9))
     for lo,hi in spans:
         for at in range(lo,hi):
             if at in seen or at-ds in(0xD5A,0xD5B,0xD088,0xD089):continue
@@ -95,7 +95,7 @@ def event_entry(g,watch):
     def player(slot):return 0 if slot==0 else int.from_bytes(g.mem(g.far(0xD7C2)+62*(club-1)+2*(slot-1),2),'little')
     return args|{'club':club,'player':player(args['actor_slot']),'secondary':player(args['secondary_slot']),'minute':g.rd(0xD0B2),'draw_start':watch.draws,'seed_before':g.rd(0xA51C),'head_before':g.rd(0x380),'caller':g.image_address(g.reg('cs'),g.stack_word(0))}
 
-def run_one(research_root,c,source_sha,mode,number,files,overlay=None):
+def run_one(research_root,c,source_sha,mode,number,files,overlay=None,pitch_margin=False):
     sys.path.insert(0,str(research_root.resolve()/'runtime/emul'))
     import match as original
     raw,state=parent_state(c,mode,overlay);registers=dict(zip(oracle.REGS,state['regs']));g=guest(research_root,raw,registers,state['flags']);g.files=dict(files)
@@ -130,7 +130,7 @@ def run_one(research_root,c,source_sha,mode,number,files,overlay=None):
     if not finished[0]or g.unsupported or pending[0]is not None or watch._pending is not None:raise ValueError('original parent did not return cleanly within budget')
     if mode==5 and overlay is None and not(child['joined']and child['returned']):raise ValueError('missing original nested-entry/outcome join')
     after=g.mem(0,0x110000);changes=[]
-    for at in owned_addresses(state):
+    for at in owned_addresses(state,pitch_margin):
         if raw[at]!=after[at]:
             area,offset=facts.named(state,at);changes.append({'area':area,'offset':offset,'before':raw[at],'after':after[at]})
     ds=16*state['regs'][11]
@@ -222,11 +222,49 @@ def capture_shots(research_root,directory=ROOT/'records/T38/oracle-r0002'):
     else:oracle.write_json(out,result)
     print('original parent corpus completed:',len(items),'roots;codes',sorted(codes),flush=True)
 
+def capture_margin(research_root):
+    """[confirmed] 1998:087B restores/draws set-piece coordinates outside the old17rows.
+    Reexecute original inputs;append only newly owned margin changes,never replace r1/r2.
+    """
+    if oracle.common.git('status','--porcelain','--','tools/watched_parent.py'):raise ValueError('commit observer before measurement')
+    import replay_watched_actor as replay
+    values,manifest=replay.originals();directory=ROOT/'records/T38/margin-r0001';directory.mkdir(parents=True,exist_ok=True)
+    protocol={'schema':'original-parent-margin-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':oracle.common.sha(Path(__file__).read_bytes()),'original_manifest_sha256':replay.CORPUS_SHA256,'scope':'Same original parent inputs and outcomes;extend logical pitch ownership from17to19 rows for set-piece occupancy. No previous observations changed.'}
+    start=directory/'start.json'
+    if start.exists():
+        protocol=oracle.read_json(start)
+        if protocol['observer_sha256']!=oracle.common.sha(Path(__file__).read_bytes()):raise ValueError('margin observer changed')
+    else:oracle.write_json(start,protocol)
+    sys.path.insert(0,str(research_root.resolve()/'runtime/emul'));import match as original
+    files=original.game_files();items=[]
+    for c,anchor in values:
+        path=directory/f'case-{c["case"]:04d}.json'
+        if not path.exists():
+            source_sha=c['source_sha256'];got=run_one(research_root,anchor,source_sha,c['mode'],c['case'],files,c.get('input_overlay'),True)
+            old={(d['area'],d['offset']):d for d in c['changes']};new=[]
+            for d in got['changes']:
+                key=(d['area'],d['offset'])
+                if key in old:
+                    if old.pop(key)!=d:raise ValueError('original prior change differs')
+                else:
+                    if d['area']not in('main','main_shown','background','background_shown')or facts.pitch(d['offset']):raise ValueError('unexpected margin change')
+                    new.append(d)
+            if old:raise ValueError('original lost prior change')
+            for key in ('output_scene','seed_after','output_pointers','draws','events','exit_sp','exit_bp'):
+                if got[key]!=c[key]:raise ValueError('original margin rerun outcome differs:'+key)
+            oracle.write_json(path,{'schema':'original-parent-margin/1','case':c['case'],'original_sha256':manifest['cases'][c['case']]['sha256'],'changes':new,'prior_outcomes_equal':True})
+        items.append({'path':str(path.relative_to(ROOT)),'sha256':oracle.common.sha(path.read_bytes())});print('original logical margin',c['case'],'verified',flush=True)
+    result={'schema':'original-parent-margin-corpus/1','protocol_sha256':oracle.common.sha(start.read_bytes()),'cases':items}
+    out=directory/'manifest.json'
+    if not out.exists():oracle.write_json(out,result)
+    elif oracle.read_json(out)!=result:raise ValueError('margin manifest differs')
+
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--prove',action='store_true');p.add_argument('--capture',action='store_true');p.add_argument('--capture-shots',action='store_true');p.add_argument('--research-root',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--margin',action='store_true');p.add_argument('--prove',action='store_true');p.add_argument('--capture',action='store_true');p.add_argument('--capture-shots',action='store_true');p.add_argument('--research-root',type=Path,required=True);a=p.parse_args()
+    if a.margin:capture_margin(a.research_root)
     if a.prove:
         out=ROOT/'records/T38/admission-proof-r0001.json';oracle.write_json(out,prove(a.research_root));print('original parent admission proof:32 complete nested entries reproduced')
     if a.capture:capture(a.research_root)
     if a.capture_shots:capture_shots(a.research_root)
-    if not(a.prove or a.capture or a.capture_shots):p.error('choose --prove or --capture')
+    if not(a.margin or a.prove or a.capture or a.capture_shots):p.error('choose --prove or --capture')
 if __name__=='__main__':main()

@@ -131,6 +131,7 @@ def emit_instruction(seg,ip,row):
         if width(a[0])!=16:raise ValueError('unsupported multiply width')
         return prefix+f'let v={read(a[0])};c.multiply(v,{str(op=="imul").lower()});'
     if SOURCE_ADDRESSES and op=='idiv'and a[0]in REG32:return prefix+f'let v={read(a[0])};c.divide_signed32(v)?;'
+    if SOURCE_ADDRESSES and op=='rol':return prefix+f'let v={read(a[0])};let n={read(a[1])};let v=c.rol(v,n,{width(a[0])});'+write(a[0],'v')
     if SOURCE_ADDRESSES and op=='rcl':return prefix+f'let v={read(a[0])};let n={read(a[1])};let v=c.rcl(v,n,{width(a[0])});'+write(a[0],'v')
     if op in ('div','idiv'):return prefix+f'let v={read(a[0])};c.divide(v,{str(op=="idiv").lower()})?;'
     if op in ('inc','dec','neg','not'):

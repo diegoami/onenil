@@ -1,0 +1,63 @@
+native original parent 0 verified
+native original parent 1 verified
+native original parent 2 verified
+native original parent 3 verified
+native original parent 4 verified
+native original parent 5 verified
+native original parent 6 verified
+native original parent 7 verified
+native original parent 8 verified
+native original parent 9 verified
+native original parent 10 verified
+native original parent 11 verified
+native original parent 12 verified
+native original parent 13 verified
+native original parent 14 verified
+native original parent 15 verified
+native original parent 16 verified
+native original parent 17 verified
+native original parent 18 verified
+native original parent 19 verified
+native original parent 20 verified
+native original parent 21 verified
+native original parent 22 verified
+native original parent 23 verified
+native original parent 24 verified
+native original parent 25 verified
+native original parent 26 verified
+native original parent 27 verified
+native original parent 28 verified
+native original parent 29 verified
+native original parent 30 verified
+native original parent 31 verified
+native original parent 32 verified
+native original parent 33 verified
+native original parent 34 verified
+native original parent 35 verified
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/replay_watched_actor.py", line 61, in select_entry
+    try:area,offset=named(state,missing['address'])
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/replay_watched_actor.py", line 52, in named
+    return facts.named(state,at)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/watched_action_export.py", line 30, in named
+    raise ValueError(f'unclassified original entry fact {at:05X}')
+ValueError: unclassified original entry fact B836E
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/replay_watched_actor.py", line 160, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/replay_watched_actor.py", line 154, in main
+    if a.export:export(a.probe)
+                ^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/replay_watched_actor.py", line 103, in export
+    raw,state,actual=select_entry(c,anchor,native);want=expected(c,raw,state)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/replay_watched_actor.py", line 62, in select_entry
+    except ValueError as error:raise ValueError(f'original parent{c["case"]}: {fault}')from error
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: original parent36: {'message': 'missing initial native write baseline at 1998:0936 B836E', 'missing': {'address': 754542, 'pc': [6552, 2358], 'scratch': False, 'writing': True}}

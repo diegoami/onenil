@@ -330,7 +330,6 @@ fn machine(s: &State) -> Result<Cpu, String> {
     c.require_write_baseline = true;
     Ok(c)
 }
-fn actor_stub(_c:&mut Cpu)->Result<(),String>{Err("T38 parent stub for valid original-fixture red".into())}
 pub fn advance(s: &State) -> Result<Outcome, Fault> {
     let mut c = machine(s).map_err(|message| Fault {
         message,
@@ -340,7 +339,7 @@ pub fn advance(s: &State) -> Result<Outcome, Fault> {
     let entry = match s.kind {
         Kind::Action5 => super::action_graph::p_0ab9_448c,
         Kind::Contact => super::action_graph::p_0ab9_4dff,
-        Kind::Actor => actor_stub,
+        Kind::Actor => super::action_graph::p_0ab9_72bb,
     };
     if let Err(message) = c.invoke_entry(entry, 0x0AB9, s.stack_words[0]) {
         return Err(Fault {
