@@ -1,0 +1,77 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T36-r0001",
+  "code_commit": "993b118d07dee9d31b99873dd94533232391f645",
+  "started": "2026-11-03T17:36:55.840652+00:00",
+  "ended": "2026-11-03T17:36:56.593870+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "3b1960531edc6702f2eb03bb0ee919a41adcc9705b4b50e08867a747e89818bd"
+  },
+  "source_pins": [
+    {
+      "schema": "watched-selection-source/1",
+      "capture": "records/T36/capture-r0001.json",
+      "capture_sha256": "cbfecaa780a3d0af9603503f0dd8f4f6ea0b7565805db30ba96871c6248611a4",
+      "cases_sha256": "cebbd5a1f3eac5f58f0bdea6b6f823dfb0f277ce09245708ff8e3611e3cd5f60",
+      "source": {
+        "repository": "https://github.com/diegoami/onenil-archaeology",
+        "commit": "21f95b9853bf0a4f71fb072d49c6be7fe9758a06",
+        "prefix_record": "runs/T39/T39-r0003.json",
+        "prefix_record_sha256": "b7f170d8f5229046717354a973e1a121eb61dacf2f716856efe461bacce6f99c",
+        "start_state_sha256": "2f634978859f7c07b3519e4278d8aaf70c2c70b93ad48362408fbcfa210576a1",
+        "static_sources": {
+          "static/1-0-exe/code/seg_0AB9_01.asm": "d14716fcf764421a1dc076df23b754ad6fbc4d475da378aa30077ed476ea0668",
+          "static/1-0-exe/code/seg_0AB9_03.asm": "8784b2278e0fe5b41214590743858ff2e188262da95cba068658ed0285de935a",
+          "static/1-0-exe/code/seg_0AB9_04.asm": "79762ffdda657b2a979c592c7016a077058b7fd9efbe5856bc383f00c5df71af",
+          "static/1-0-exe/code/seg_0AB9_05.asm": "68f1f3deb316bcace3d312c8ff34005c91882ed7a9251625360376734331b821",
+          "static/1-0-exe/code/seg_0AB9_06.asm": "e4eb392963fa63edd01f235b066813789edfca8d4bc57b090072b63a99357eb9",
+          "static/1-0-exe/code/seg_0AB9_15.asm": "1135ac3f260099524f36af23ef221e94bdf916ec596b593c866e265fdcb317f4",
+          "static/1-0-exe/code/seg_1B55_08.asm": "9ec2623ac41b932e5fd665494563f4da6a00d54030020274a7cfbc9152c40f6d",
+          "static/1-0-exe/code/seg_232A_01.asm": "dc40af4154df75bc213cd40c381184d4dca28d2b3fb34ddba414407a6c9dfa6a",
+          "static/1-0-exe/code/seg_24BC_01.asm": "8415be6d44cce168c19ad565477130cfdc7557218a211f2f778ba745ed60e38f",
+          "static/1-0-exe/code/seg_24BC_02.asm": "05fb7318b6dc4f4a6f5e8f2c422608b2fd565f1260839be5206014b81e5e41b7"
+        }
+      }
+    },
+    {
+      "schema": "watched-selection-source/1",
+      "capture": "records/T36/frames-capture-r0001.json",
+      "capture_sha256": "389f16b460f0be01ba6dd6e399e2b762f6d9e56016bcc007fb14b97c6f6947a0",
+      "cases_sha256": "31eeec7a8545d5d0760f411e89a5163792b45931017e4bfcd71cedfd2a1436b4",
+      "source": {
+        "repository": "https://github.com/diegoami/onenil-archaeology",
+        "commit": "4b0090249406d5b4875fc32bb32421a5a010895a",
+        "prefix_record": "runs/T39/T39-r0003.json",
+        "prefix_record_sha256": "b7f170d8f5229046717354a973e1a121eb61dacf2f716856efe461bacce6f99c",
+        "start_state_sha256": "2f634978859f7c07b3519e4278d8aaf70c2c70b93ad48362408fbcfa210576a1",
+        "static_sources": {
+          "static/1-0-exe/code/seg_0AB9_01.asm": "d14716fcf764421a1dc076df23b754ad6fbc4d475da378aa30077ed476ea0668",
+          "static/1-0-exe/code/seg_0AB9_03.asm": "8784b2278e0fe5b41214590743858ff2e188262da95cba068658ed0285de935a",
+          "static/1-0-exe/code/seg_0AB9_04.asm": "79762ffdda657b2a979c592c7016a077058b7fd9efbe5856bc383f00c5df71af",
+          "static/1-0-exe/code/seg_0AB9_05.asm": "68f1f3deb316bcace3d312c8ff34005c91882ed7a9251625360376734331b821",
+          "static/1-0-exe/code/seg_0AB9_06.asm": "e4eb392963fa63edd01f235b066813789edfca8d4bc57b090072b63a99357eb9",
+          "static/1-0-exe/code/seg_0AB9_15.asm": "1135ac3f260099524f36af23ef221e94bdf916ec596b593c866e265fdcb317f4",
+          "static/1-0-exe/code/seg_1B55_08.asm": "9ec2623ac41b932e5fd665494563f4da6a00d54030020274a7cfbc9152c40f6d",
+          "static/1-0-exe/code/seg_232A_01.asm": "dc40af4154df75bc213cd40c381184d4dca28d2b3fb34ddba414407a6c9dfa6a",
+          "static/1-0-exe/code/seg_24BC_01.asm": "8415be6d44cce168c19ad565477130cfdc7557218a211f2f778ba745ed60e38f",
+          "static/1-0-exe/code/seg_24BC_02.asm": "05fb7318b6dc4f4a6f5e8f2c422608b2fd565f1260839be5206014b81e5e41b7"
+        }
+      }
+    }
+  ],
+  "routine": "compiled native3846 full target-selection helper graph",
+  "repetitions": 100,
+  "cases": 64,
+  "calls": 6400,
+  "elapsed_ns": 750654922,
+  "serialized_output_bytes": 7062200,
+  "method": "Pre-serialized inputs;release parsing,one native image/setup,compiled selection graph/Pascal frames/native helpers/RNG and serialization included;fixture preparation and output decoding excluded",
+  "limits": "3846 graph only,no full action5/72BB/clock,complete watched ticks or detailed commentary;no full-match/emulator speed comparison"
+}

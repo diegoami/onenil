@@ -2,6 +2,7 @@
 //! [designed] Typed root facts and temporary Pascal frames;no runtime decoding.
 mod adjustment;
 mod compiled;
+mod selection;
 use crate::{terminal::Scene, Draw};
 use serde::{Deserialize, Serialize};
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord)]
@@ -26,6 +27,16 @@ pub struct State {
     pub seed: u16,
     pub cells: Vec<Cell>,
 }
+/// [confirmed] Original3846's keeper path reads future BP-5 without a store.
+/// [designed] One required raw entry ABI byte;other scratch stays checked.
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+pub struct SelectionState {
+    pub scene: Scene,
+    pub seed: u16,
+    pub cells: Vec<Cell>,
+    pub frame_byte5: u8,
+}
 #[derive(Debug, Serialize)]
 pub struct Outcome {
     pub output: State,
@@ -37,7 +48,7 @@ fn location(cell: &Cell) -> Result<usize, String> {
         Region::Ds => {
             if !((0x900..=0xBFF).contains(&offset)
                 || (0xD00..=0xD7F).contains(&offset)
-                || (0xA338..=0xA339).contains(&offset)
+                || ((0x957D..=0xAD9A).contains(&offset) && !(0xA51C..=0xA51D).contains(&offset))
                 || (0xCCEF..0xD7BA).contains(&offset))
             {
                 return Err("unsupported compiled data field".into());
@@ -119,9 +130,48 @@ pub fn advance(s: &State) -> Result<Outcome, String> {
         draws: c.draws,
     })
 }
+fn run_selection(c: &mut compiled::Cpu, index: u8, frame_byte5: u8) -> Result<(), String> {
+    let sp = c.r[4];
+    // Four argument bytes,four far-return bytes,saved BP,and original BP-5.
+    c.write(c.r[10], sp.wrapping_sub(15), 8, u16::from(frame_byte5))?;
+    c.push(0)?;
+    c.push(0xCCEF + 25 * u16::from(index))?;
+    c.invoke(selection::p_0ab9_3846, true, 0x0AB9, 0x3846, 0)?;
+    if c.r[4] != sp || c.r[5] != 0 || c.r[11] != 0 {
+        return Err("compiled selection Pascal frame/DS handoff differs".into());
+    }
+    Ok(())
+}
+pub fn select_target(input: &SelectionState) -> Result<Outcome, String> {
+    let s = &State {
+        scene: input.scene.clone(),
+        seed: input.seed,
+        cells: input.cells.clone(),
+    };
+    let mut c = machine(s)?;
+    run_selection(&mut c, s.scene.index, input.frame_byte5)?;
+    let mut output = s.clone();
+    output.scene = Scene::read(&c.e, s.scene.index);
+    output.seed = c.e.word(crate::SEED);
+    for field in &mut output.cells {
+        field.value = c.e.image[location(field)?];
+    }
+    Ok(Outcome {
+        output,
+        draws: c.draws,
+    })
+}
 #[cfg(test)]
 mod tests {
     use super::*;
+    fn selection(s: &State, frame_byte5: u8) -> SelectionState {
+        SelectionState {
+            scene: s.scene.clone(),
+            seed: s.seed,
+            cells: s.cells.clone(),
+            frame_byte5,
+        }
+    }
     fn sample() -> State {
         let c: serde_json::Value = serde_json::from_str(
             include_str!("../../tests/fixtures/watched_target/cases.jsonl")
@@ -303,5 +353,146 @@ mod tests {
             v[field] = serde_json::json!(1);
             assert!(serde_json::from_value::<State>(v).is_err());
         }
+    }
+    #[test]
+    fn selection_active_side_random_short_circuit() {
+        let mut s = synthetic();
+        s.seed = 100;
+        s.cells.push(Cell {
+            region: Region::P15,
+            offset: 23,
+            value: 0,
+        });
+        let o = select_target(&selection(&s, 0)).unwrap();
+        assert_eq!(o.output.scene, s.scene);
+        assert_eq!(o.draws.len(), 1);
+        assert_ne!(o.output.seed, s.seed);
+    }
+    #[test]
+    fn selection_missing_and_alias_guards() {
+        assert!(select_target(&selection(&sample(), 0))
+            .unwrap_err()
+            .contains("missing"));
+        for offset in [0xA51C, 0xA51D, 0xD7BA, 0xDE84, 0xCCEF + 25] {
+            let mut s = synthetic();
+            s.cells.push(Cell {
+                region: Region::Ds,
+                offset,
+                value: 42,
+            });
+            assert!(select_target(&selection(&s, 0)).is_err());
+        }
+    }
+    #[test]
+    fn original_selection_roots() {
+        let source = std::fs::read_to_string(format!(
+            "{}/tests/fixtures/watched_selection/cases.jsonl",
+            env!("CARGO_MANIFEST_DIR")
+        ))
+        .unwrap();
+        let frames = std::fs::read_to_string(format!(
+            "{}/tests/fixtures/watched_selection/frames.jsonl",
+            env!("CARGO_MANIFEST_DIR")
+        ))
+        .unwrap();
+        assert_eq!(source.lines().count(), 64);
+        assert_eq!(frames.lines().count(), 64);
+        for (number, (line, frame_line)) in source.lines().zip(frames.lines()).enumerate() {
+            let frame_row: serde_json::Value = serde_json::from_str(frame_line).unwrap();
+            let row: serde_json::Value = serde_json::from_str(line).unwrap();
+            let s: State = serde_json::from_value(row["input"].clone()).unwrap();
+            let frame: SelectionState = serde_json::from_value(frame_row["input"].clone()).unwrap();
+            assert!(frame.cells.is_empty());
+            assert_eq!(frame.scene, s.scene);
+            assert_eq!(frame.seed, s.seed);
+            assert_eq!(row["case"], number);
+            assert_eq!(frame_row["case"], number);
+            for k in ["tick", "draw_start", "draw_end"] {
+                assert_eq!(row[k], frame_row[k]);
+            }
+            for k in ["scene", "seed"] {
+                assert_eq!(row["output"]["output"][k], frame_row["output"]["output"][k]);
+            }
+            assert_eq!(row["output"]["draws"], frame_row["output"]["draws"]);
+
+            assert_eq!(
+                serde_json::to_value(select_target(&selection(&s, frame.frame_byte5)).unwrap())
+                    .unwrap(),
+                row["output"]
+            );
+            let mut c = machine(&s).unwrap();
+            let before = c.e.image.clone();
+            run_selection(&mut c, s.scene.index, frame.frame_byte5).unwrap();
+            let root = 0xCCEF + 25 * usize::from(s.scene.index);
+            for (i, (a, b)) in before.iter().zip(&c.e.image).enumerate() {
+                if ![
+                    root + 8,
+                    root + 9,
+                    root + 12,
+                    root + 20,
+                    root + 21,
+                    usize::from(crate::SEED),
+                    usize::from(crate::SEED) + 1,
+                ]
+                .contains(&i)
+                {
+                    assert_eq!(a, b, "selection unexpected write {i:05X}");
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn selection_formation_updates_offset_and_target() {
+        let mut s = synthetic();
+        s.seed = 4;
+        s.cells.push(Cell {
+            region: Region::P15,
+            offset: 23,
+            value: 0,
+        });
+        set(&mut s, Region::P8, 14, 0);
+        let o = select_target(&selection(&s, 0)).unwrap();
+        assert_eq!(o.output.scene.word12, 0x0500);
+        // Original1F5E negates both signed target bytes for this orientation.
+        assert_eq!(o.output.scene.word8, 0xF7FD);
+        assert_eq!(o.draws.len(), 1);
+    }
+    #[test]
+    fn selection_raw_frame_flag_controls_inactive_keeper_clear() {
+        let mut s = synthetic();
+        set(&mut s, Region::Ds, 0xD09F, 12);
+        set(&mut s, Region::P8, 14, 0);
+        s.scene.word20 = 7;
+        s.cells.push(Cell {
+            region: Region::Ds,
+            offset: 0xD0B8,
+            value: 0,
+        });
+        for flag in [0, 1, 255] {
+            let o = select_target(&selection(&s, flag)).unwrap();
+            assert_eq!(o.output.scene.word20, if flag == 0 { 7 } else { 0 });
+            assert!(o.draws.is_empty());
+        }
+    }
+    #[test]
+    fn selection_frame_is_required_and_does_not_extend_adjustment_schema() {
+        let v = serde_json::to_value(selection(&synthetic(), 0)).unwrap();
+        assert!(serde_json::from_value::<State>(v.clone()).is_err());
+        let mut missing = v.clone();
+        missing.as_object_mut().unwrap().remove("frame_byte5");
+        assert!(serde_json::from_value::<SelectionState>(missing).is_err());
+        for bad in [
+            serde_json::json!(-1),
+            serde_json::json!(256),
+            serde_json::json!(true),
+        ] {
+            let mut bad_value = v.clone();
+            bad_value["frame_byte5"] = bad;
+            assert!(serde_json::from_value::<SelectionState>(bad_value).is_err());
+        }
+        let mut helper = v;
+        helper["expected_frame_result"] = serde_json::json!(1);
+        assert!(serde_json::from_value::<SelectionState>(helper).is_err());
     }
 }

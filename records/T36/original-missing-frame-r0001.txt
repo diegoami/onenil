@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/replay_watched_selection.py", line 181, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/replay_watched_selection.py", line 179, in main
+    cases,pins=load();check(cases)
+                      ^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/replay_watched_selection.py", line 29, in check
+    got=json.loads(native.watched_select_target(common.encoded(c['input'])))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: uninitialized native scratch at 0AB9:3964 SS:FEF1

@@ -18,8 +18,8 @@ def listing(root):
 def target(seg,args):
     if args.startswith('far '):
         a,b=args[4:].split(':');return(int(a,16),int(b,16)),True
-    if not args.startswith('0x'):raise ValueError('indirect control transfer:'+args)
-    return(seg,int(args,16)),False
+    if not re.fullmatch(r'(?:0x[0-9a-f]+|[0-9]+)',args):raise ValueError('indirect control transfer:'+args)
+    return(seg,int(args,0)&65535),False
 
 def graph(code,roots):
     result={};todo=list(roots)
@@ -130,8 +130,8 @@ def compile_graph(g):
     return '\n'.join(out)+'\n'
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');args=p.parse_args()
-    code,files=listing(args.research_root);g=graph(code,[(0x0AB9,0x35F8)]);source=compile_graph(g)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',default='0AB9:35F8');args=p.parse_args()
+    code,files=listing(args.research_root);root=tuple(int(v,16) for v in args.root.split(':'));g=graph(code,[root]);source=compile_graph(g)
     import subprocess,tempfile
     with tempfile.TemporaryDirectory()as d:
         temp=Path(d)/'generated.rs';temp.write_text(source);subprocess.run(['rustfmt','--edition','2021',str(temp)],check=True);source=temp.read_bytes()
@@ -139,5 +139,5 @@ def main():
         if args.out.read_bytes()!=source:raise ValueError('compiled Rust differs from listing translation')
     else:args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_bytes(source)
     used={row[3] for rows in g.values()for row in rows.values()}
-    print(json.dumps({'roots':['0AB9:35F8'],'procedures':len(g),'instructions':sum(map(len,g.values())),'listing_digests':{p:files[p] for p in sorted(used)},'generated_sha256':hashlib.sha256(source).hexdigest()},indent=2))
+    print(json.dumps({'roots':[args.root],'procedures':len(g),'instructions':sum(map(len,g.values())),'listing_digests':{p:files[p] for p in sorted(used)},'generated_sha256':hashlib.sha256(source).hexdigest()},indent=2))
 if __name__=='__main__':main()

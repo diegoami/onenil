@@ -1436,3 +1436,28 @@ data facts are supplied;missing reads or uninitialized scratch diagnose.
 [designed] This mechanism supports the remaining native action ports. It is one
 shared helper graph;full action5,watched ticks,clock and viewer integration still
 remain before detailed browser play-by-play is ready.
+
+### Watched target selection (T36)
+
+[confirmed: F39/c7637bd and pinned static d9e20a4] The complete3846
+selection graph compiles24 procedures/977 instructions into direct Rust blocks
+and calls. All64 original roots match full scenes,seeds and72 ordered draws;
+whole-image checks permit only root8/9,12,20/21 and the seed to change.
+
+[confirmed: T36 capture-r0001 and frames-capture-r0001] The inactive goalkeeper
+path reads BP-5 without initializing it. Standalone selection therefore requires
+one raw entry ABI byte (`frame_byte5`),captured at SS:(entrySP-7). A second
+original run joins every boundary,full scene,seed and ordered draw to the first;
+its raw byte supplies no helper outcome. Values0 and nonzero have separate
+native tests. Other uninitialized scratch reads still diagnose. The old
+adjustment schema remains strict and unchanged. Full native callers must carry
+their own continuing frames;these kernel facts are never per-step match inputs.
+
+```sh
+python3 tools/compile_watched.py --research-root ../onenil-archaeology --root 0AB9:3846 --out engine/src/watched_compiled/selection.rs --check
+.cache/venv/bin/python tools/replay_watched_selection.py --check
+.cache/venv/bin/python tools/replay_watched_selection.py --benchmark --out records/T36
+```
+
+[designed] This closes target selection only. Action dispatch,continuous watched
+clock/phase flow and detailed browser commentary remain under milestone35.
