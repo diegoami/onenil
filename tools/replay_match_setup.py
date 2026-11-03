@@ -181,7 +181,8 @@ def capture_settings(research_root):
             raise ValueError('settings capture original255-draw prefix differs')
         captured={'initial_sha256':observer.initials.digest(current),
                   'draws_sha256':observer.initials.digest(draws),'draw_count':len(draws),
-                  'managed_selection_mode':g.mem(g.far(0xD7D2)+0xF6,1)[0]}
+                  'managed_selection_mode':g.mem(g.far(0xD7D2)+0xF6,1)[0],
+                  'legacy_queue_zero':{'code':g.rd(0xA52A,1),'first_player':g.rd(0xA52B),'second_player':g.rd(0xA52D),'side':g.rd(0xA52F,1)}}
         raise ReachedAdmission()
     if common.git('status','--porcelain','--','tools/replay_match_setup.py'):
         raise ValueError('commit observer before capture')
