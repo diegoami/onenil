@@ -1,0 +1,53 @@
+{
+  "schema": "frame-join-validation/1",
+  "code_commit": "f04d8fcfac9056ac54431b0611d77ff4fdc1c881",
+  "script_sha256": "35d9937877d77c79d4eca148053bbe4bb8e092ac1ebb8c1db2beba4f509be029",
+  "results": [
+    {
+      "case": "valid",
+      "result": "accepted"
+    },
+    {
+      "case": "entry scene",
+      "result": "rejected",
+      "reason": "frame original state join differs"
+    },
+    {
+      "case": "exit scene",
+      "result": "rejected",
+      "reason": "frame original state join differs"
+    },
+    {
+      "case": "ordered draw",
+      "result": "rejected",
+      "reason": "frame original draw/fact join differs"
+    },
+    {
+      "case": "boundary",
+      "result": "rejected",
+      "reason": "frame original boundary join differs"
+    },
+    {
+      "case": "source prefix",
+      "result": "rejected",
+      "reason": "frame and baseline source differs"
+    },
+    {
+      "case": "boolean frame",
+      "result": "rejected",
+      "reason": "invalid raw entry frame byte"
+    },
+    {
+      "case": "missing case",
+      "result": "rejected",
+      "reason": "frame witness count differs"
+    },
+    {
+      "case": "helper field",
+      "result": "rejected",
+      "reason": "frame witness fields differ"
+    }
+  ],
+  "status": "passed",
+  "scope": "Copies only;digests/capture exports updated coherently before mutation checks;original records untouched"
+}
