@@ -39,3 +39,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T33 Original kickoff readiness and first ball launch](T33.md)
 
 - [T34 Original in-bounds ball flight and logical pitch transport](T34.md)
+
+- [T35 Compiled native watched target-adjustment graph](T35.md)
