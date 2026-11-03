@@ -35,3 +35,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T31](T31.md): Original watched direction selection and movement retries (#65).
 
 - [T32 Original watched action-one target preparation](T32.md)
+
+- [T33 Original kickoff readiness and first ball launch](T33.md)
