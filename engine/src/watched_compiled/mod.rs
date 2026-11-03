@@ -1,10 +1,10 @@
 //! [confirmed] F39/c7637bd;compiled original35F8 numeric helper graph.
 //! [designed] Typed root facts and temporary Pascal frames;no runtime decoding.
-mod adjustment;
 pub mod action;
 mod action_graph;
-mod projections;
+mod adjustment;
 mod compiled;
+mod projections;
 mod selection;
 use crate::{terminal::Scene, Draw};
 use serde::{Deserialize, Serialize};

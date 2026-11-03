@@ -382,13 +382,13 @@ mod python {
 
     #[pyfunction]
     fn watched_action(input_json: &str) -> PyResult<String> {
-        let state: watched_compiled::action::State = serde_json::from_str(input_json)
-            .map_err(|e| PyValueError::new_err(e.to_string()))?;
-        let value=match watched_compiled::action::advance(&state){
-            Ok(out)=>serde_json::json!({"ok":out,"presentation":out.presentation}),
-            Err(fault)=>serde_json::json!({"error":fault}),
+        let state: watched_compiled::action::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let value = match watched_compiled::action::advance(&state) {
+            Ok(out) => serde_json::json!({"ok":out,"presentation":out.presentation}),
+            Err(fault) => serde_json::json!({"error":fault}),
         };
-        serde_json::to_string(&value).map_err(|e|PyValueError::new_err(e.to_string()))
+        serde_json::to_string(&value).map_err(|e| PyValueError::new_err(e.to_string()))
     }
     #[pyfunction]
     fn watched_select_target(input_json: &str) -> PyResult<String> {
