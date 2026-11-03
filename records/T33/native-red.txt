@@ -1,0 +1,85 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+warning: constant `PITCH_CELLS` is never used
+  --> src/layout.rs:16:18
+   |
+16 | pub(crate) const PITCH_CELLS: usize = 17 * 75;
+   |                  ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `machine` is never used
+  --> src/watched_kickoff.rs:24:4
+   |
+24 | fn machine(_s:&State)->Result<Engine,String>{Err("56EE not implemented".into())}
+   |    ^^^^^^^
+
+warning: function `advance_image` is never used
+  --> src/watched_kickoff.rs:25:4
+   |
+25 | fn advance_image(_e:&mut Engine,_index:u8)->Result<(u8,Vec<Draw>),String>{Err("56EE not implemented".into())}
+   |    ^^^^^^^^^^^^^
+
+warning: `onenil-engine` (lib) generated 3 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.91s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 7 tests
+test watched_kickoff::tests::mode_upgrades_score_success_and_failure_and_original_rng_sites ... FAILED
+test watched_kickoff::tests::exact_whole_image_ownership ... FAILED
+test watched_kickoff::tests::orientation_signed_byte_wrap_axis_ties_and_half_distance ... FAILED
+test watched_kickoff::tests::readiness_scans_and_short_circuits_actual_availability ... FAILED
+test watched_kickoff::tests::native_launch_state_and_all_twenty_two_action_stores ... FAILED
+test watched_kickoff::tests::invalid_alias_missing_reached_facts_and_explicit_domains ... FAILED
+test watched_kickoff::tests::original_initial_kickoff_roots ... FAILED
+
+failures:
+
+---- watched_kickoff::tests::mode_upgrades_score_success_and_failure_and_original_rng_sites stdout ----
+
+thread 'watched_kickoff::tests::mode_upgrades_score_success_and_failure_and_original_rng_sites' (3436) panicked at src/watched_kickoff.rs:69:62:
+called `Result::unwrap()` on an `Err` value: "56EE not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- watched_kickoff::tests::exact_whole_image_ownership stdout ----
+
+thread 'watched_kickoff::tests::exact_whole_image_ownership' (3434) panicked at src/watched_kickoff.rs:84:40:
+called `Result::unwrap()` on an `Err` value: "56EE not implemented"
+
+---- watched_kickoff::tests::orientation_signed_byte_wrap_axis_ties_and_half_distance stdout ----
+
+thread 'watched_kickoff::tests::orientation_signed_byte_wrap_axis_ties_and_half_distance' (3438) panicked at src/watched_kickoff.rs:62:57:
+called `Result::unwrap()` on an `Err` value: "56EE not implemented"
+
+---- watched_kickoff::tests::readiness_scans_and_short_circuits_actual_availability stdout ----
+
+thread 'watched_kickoff::tests::readiness_scans_and_short_circuits_actual_availability' (3440) panicked at src/watched_kickoff.rs:44:61:
+called `Result::unwrap()` on an `Err` value: "56EE not implemented"
+
+---- watched_kickoff::tests::native_launch_state_and_all_twenty_two_action_stores stdout ----
+
+thread 'watched_kickoff::tests::native_launch_state_and_all_twenty_two_action_stores' (3437) panicked at src/watched_kickoff.rs:55:36:
+called `Result::unwrap()` on an `Err` value: "56EE not implemented"
+
+---- watched_kickoff::tests::invalid_alias_missing_reached_facts_and_explicit_domains stdout ----
+
+thread 'watched_kickoff::tests::invalid_alias_missing_reached_facts_and_explicit_domains' (3435) panicked at src/watched_kickoff.rs:78:36:
+assertion failed: advance(&s).unwrap_err().contains("divisor")
+
+---- watched_kickoff::tests::original_initial_kickoff_roots stdout ----
+
+thread 'watched_kickoff::tests::original_initial_kickoff_roots' (3439) panicked at src/watched_kickoff.rs:40:198:
+called `Result::unwrap()` on an `Err` value: "56EE not implemented"
+
+
+failures:
+    watched_kickoff::tests::exact_whole_image_ownership
+    watched_kickoff::tests::invalid_alias_missing_reached_facts_and_explicit_domains
+    watched_kickoff::tests::mode_upgrades_score_success_and_failure_and_original_rng_sites
+    watched_kickoff::tests::native_launch_state_and_all_twenty_two_action_stores
+    watched_kickoff::tests::orientation_signed_byte_wrap_axis_ties_and_half_distance
+    watched_kickoff::tests::original_initial_kickoff_roots
+    watched_kickoff::tests::readiness_scans_and_short_circuits_actual_availability
+
+test result: FAILED. 0 passed; 7 failed; 0 ignored; 0 measured; 324 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
