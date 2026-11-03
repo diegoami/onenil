@@ -53,10 +53,11 @@ def capture(research_root):
         if ticks==1:
             if not common.same(observer.snapshot(g),reference['first_ticks'][0]['state']):raise ValueError('adjustment reached different watched admission')
             joined=True
-    from unicorn import UC_HOOK_MEM_READ,UC_HOOK_MEM_WRITE,UC_MEM_WRITE
+    import compile_watched as compiler
+    code,_=compiler.listing(root);procedures=compiler.graph(code,[(0x0AB9,0x35F8)])
     builtin=set(range(0xD7BA,0xD7C6))|set(range(0xDE84,0xDE88))
     def enter(g):
-        nonlocal pending,entry_memory,regions,hook,entry_sp,memory_callback
+        nonlocal pending,entry_memory,regions,entry_sp
         if pending is not None:raise ValueError('nested35F8')
         address=g.stack_word(4)+16*g.stack_word(6);offset=address-g.DS*16-0xCCEF
         if offset%25 or not 1<=offset//25<=22:raise ValueError('adjustment scene pointer differs')
@@ -64,25 +65,29 @@ def capture(research_root):
         regions=[('p8',g.far(0xD7BA),8*3921),('p15',g.far(0xD7BE),15*3921),('club',g.far(0xD7C2),62*175),('ds',g.DS*16,65536)]
         entry_memory={name:g.mem(base,length) for name,base,length in regions};entry_sp=g.reg('sp')
         pending={'case':len(cases),'tick':ticks,'draw_start':week.draws,'input':{'scene':scene(g,index),'seed':g.rd(0xA51C),'cells':[]}}
-        def memory(uc,access,address,size,value,user):
-            if pending is None:return
-            stack_base=g.reg('ss')*16;lo=(g.reg('sp')-8)&65535;span=(entry_sp+8-lo)&65535
-            for linear in range(address,address+size):
-                if 0<=linear-stack_base<65536 and ((linear-stack_base-lo)&65535)<=span:continue
-                found=None
-                for name,base,length in regions:
-                    if base<=linear<base+length:found=(name,linear-base);break
-                if found is None:raise ValueError(f'unmapped original data access {g.where()} {linear:06X}')
-                name,offset=found;root=0xCCEF+25*index
-                owned=name=='ds' and (offset in (root+12,root+13,0xA51C,0xA51D))
-                if access==UC_MEM_WRITE:
-                    if not owned:raise ValueError(f'unexpected original35F8 write {g.where()} {name}:{offset:04X}')
-                    continue
-                if name=='ds' and (root<=offset<root+25 or offset in builtin or offset in (0xA51C,0xA51D)):continue
-                cell={'region':name,'offset':offset,'value':entry_memory[name][offset]}
-                cells=pending['input']['cells']
-                if not any(c['region']==name and c['offset']==offset for c in cells):cells.append(cell)
-        memory_callback=memory
+    def observe(g,operand,writing):
+        if pending is None:return
+        import re
+        inner=operand[operand.index('[')+1:operand.index(']')];seg=re.search(r'(es|ss|ds|cs):',operand)
+        segment=seg[1] if seg else ('ss' if re.search(r'\bbp\b',inner) else 'ds')
+        if segment=='ss':return
+        offset=0
+        for sign,value in re.findall(r'([+-]?)\s*(0x[0-9a-f]+|[a-z]+|\d+)',inner):
+            value=g.reg(value) if value in compiler.REGS else int(value,0);offset+= -value if sign=='-' else value
+        address=g.reg(segment)*16+(offset&65535)
+        size=1 if 'byte ptr' in operand else 2 if 'word ptr' in operand else 4
+        index=pending['input']['scene']['index'];scene_at=0xCCEF+25*index
+        for linear in range(address,address+size):
+            found=next(((name,linear-base)for name,base,length in regions if base<=linear<base+length),None)
+            if found is None:raise ValueError(f'unmapped original decoded data {g.where()} {linear:06X}')
+            name,offset=found;owned=name=='ds' and offset in (scene_at+12,scene_at+13,0xA51C,0xA51D)
+            if writing:
+                if not owned:raise ValueError(f'unexpected original35F8 write {g.where()} {name}:{offset:04X}')
+                continue
+            if name=='ds' and (scene_at<=offset<scene_at+25 or offset in builtin or offset in (0xA51C,0xA51D)):continue
+            field={'region':name,'offset':offset,'value':entry_memory[name][offset]}
+            cells=pending['input']['cells']
+            if not any(c['region']==name and c['offset']==offset for c in cells):cells.append(field)
     def leave(g):
         nonlocal pending,hook
         if pending is None:return
@@ -97,11 +102,17 @@ def capture(research_root):
             return {k:d[k] for k in ('n','seed_before','seed_after','value')}|{'site':site}
         c.update(draw_end=week.draws,output={'output':output,'draws':[normalize(d) for d in draws]});cases.append(c)
         if len(cases)==64:raise Complete()
-    def dispatch(uc,access,address,size,value,user):
-        if pending is not None:memory_callback(uc,access,address,size,value,user)
-    week.g.mu.hook_add(UC_HOOK_MEM_READ|UC_HOOK_MEM_WRITE,dispatch)
     week.g.code_hook('0AB9:E24C',enable);week.g.code_hook('0AB9:7A02',tick)
     week.g.code_hook('0AB9:35F8',enter);week.g.code_hook('0AB9:365F',leave)
+    visited=set()
+    for (segment,entry),rows in procedures.items():
+        for ip,(op,args,nxt,path) in rows.items():
+            if (segment,ip) in visited:continue
+            visited.add((segment,ip));operands=[a.strip() for a in args.split(',')]
+            for i,operand in enumerate(operands):
+                if '[' not in operand:continue
+                writing=i==0 and op in ('mov','add','sub','adc','sbb','xor','or','and','inc','dec','neg','not','shl','shr','sar','stosw')
+                week.g.code_hook(f'{segment:04X}:{ip:04X}',lambda g,o=operand,w=writing:observe(g,o,w))
     producer=common.git('rev-parse','HEAD');started=observer.match.utc();status='completed';reason=None
     try:
         try:week.play()
