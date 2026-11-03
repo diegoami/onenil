@@ -61,7 +61,111 @@ def prove(research_root):
     entries=[prove_one(research_root,c,sha)for c,sha in anchors()]
     return {'schema':'original-parent-admission-proof/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':oracle.common.sha(Path(__file__).read_bytes()),'source_oracle_manifest_sha256':oracle.MANIFEST_SHA256,'clock':'original match divisor0400,isolated initial phase;no IRQ before nested-entry join','entries':entries,'scope':'Source-proven derived admissions;not observations of the original parent entry. No native result supplies any input.'}
 
+def owned_addresses(state):
+    ds=16*state['regs'][11];seen=set()
+    spans=[(ds+a,ds+b)for a,b in[(0x380,0x382),(0x900,0xC00),(0xD00,0xD80),(0x957D,0xAD9B),(0xCCEF,0xD7BA)]]
+    for area,n in facts.LENGTHS.items():
+        start=facts.address(state,area,0)
+        if area in('p8','p15','club','config'):spans.append((start,start+n))
+        else:spans.extend((start+0x90E+160*r-74,start+0x90E+160*r+76)for r in range(-8,9))
+    for lo,hi in spans:
+        for at in range(lo,hi):
+            if at in seen or at-ds in(0xD5A,0xD5B,0xD088,0xD089):continue
+            seen.add(at);yield at
+
+def parent_state(c,mode):
+    raw,registers,words=admitted(c,mode);pseudo={**c,'kind':'actor','registers':registers,'stack_words':words,'input_scene':{**c['input_scene'],'byte19':mode}}
+    return raw,facts.context(pseudo,raw)
+
+def event_entry(g,watch):
+    args={'code':g.stack_word(2)&255,'actor_slot':g.stack_word(6),'secondary_slot':g.stack_word(4),'side':g.stack_word(8)&255}
+    club=g.rd(0xD6E4+2*args['side'])
+    def player(slot):return 0 if slot==0 else int.from_bytes(g.mem(g.far(0xD7C2)+62*(club-1)+2*(slot-1),2),'little')
+    return args|{'club':club,'player':player(args['actor_slot']),'secondary':player(args['secondary_slot']),'minute':g.rd(0xD0B2),'draw_start':watch.draws,'seed_before':g.rd(0xA51C),'head_before':g.rd(0x380),'caller':g.image_address(g.reg('cs'),g.stack_word(0))}
+
+def run_one(research_root,c,source_sha,mode,number,files):
+    sys.path.insert(0,str(research_root.resolve()/'runtime/emul'))
+    import match as original
+    raw,state=parent_state(c,mode);registers=dict(zip(oracle.REGS,state['regs']));g=guest(research_root,raw,registers,state['flags']);g.files=dict(files)
+    watch=original.Week.__new__(original.Week);watch.g=g;watch.events=[];watch.draws=0;watch._pending=None;watch.install_hooks()
+    events=[];pending=[None];child={'joined':False,'returned':False};finished=[False]
+    class Returned(Exception):pass
+    def on_enter(g):
+        if mode!=5 or child['joined']:return
+        if {r:g.reg(r)for r in oracle.REGS}!=c['registers']or g.reg('eflags')!=c['flags']or oracle.common.sha(g.mem(0,0x110000))!=c['entry']['ram_sha256']:raise ValueError('derived parent lost retained nested-entry join')
+        child['joined']=True;child['draw_start']=watch.draws;child['event_start']=len(events)
+    def on_child_return(g):
+        if mode!=5 or not child['joined']or child['returned']or g.reg('sp')!=c['registers']['sp']:return
+        draws=[oracle.normalized(d)for d in watch.events if d['kind']=='draw'][child['draw_start']:]
+        if oracle.scene(g,c['scene'])!=c['output_scene']or g.rd(0xA51C)!=c['seed_after']or draws!=c['draws']:raise ValueError('original nested outcome/RNG differs from retained independent root')
+        child['returned']=True
+    def on_event(g):
+        if pending[0]is not None:raise ValueError('nested numeric commentary')
+        pending[0]=event_entry(g,watch)
+    def on_event_return(g):
+        value=pending[0];pending[0]=None
+        if value is None:return
+        if g.rd(0x380)!=value['head_before']:
+            head=g.rd(0x380);at=0xA52A+6*head
+            value.update(draw_end=watch.draws,seed_after=g.rd(0xA51C),queue={'index':head,'code':g.rd(at,1),'player':g.rd(at+1),'secondary':g.rd(at+3),'side':g.rd(at+5,1)})
+            events.append(value)
+    def on_return(g):
+        if g.reg('sp')==state['regs'][4]and g.reg('bp')==state['regs'][5]:finished[0]=True;raise Returned()
+    g.code_hook('0AB9:448C',on_enter);g.code_hook('0AB9:4610',on_child_return);g.code_hook('0AB9:0F94',on_event);g.code_hook('0AB9:0FFC',on_event_return);g.code_hook('0AB9:7420',on_return)
+    try:
+        while g.budget<20_000_000:g.run(max_steps=min(500_000,20_000_000-g.budget));g.other_polls=0
+    except Returned:pass
+    if not finished[0]or g.unsupported or pending[0]is not None or watch._pending is not None:raise ValueError('original parent did not return cleanly within budget')
+    if mode==5 and not(child['joined']and child['returned']):raise ValueError('missing original nested-entry/outcome join')
+    after=g.mem(0,0x110000);changes=[]
+    for at in owned_addresses(state):
+        if raw[at]!=after[at]:
+            area,offset=facts.named(state,at);changes.append({'area':area,'offset':offset,'before':raw[at],'after':after[at]})
+    ds=16*state['regs'][11]
+    pointers=[{'kind':kind,'offset':facts.word(after,ds+slot),'segment':facts.word(after,ds+slot+2)}for kind,slot in facts.SLOTS.items()]
+    return {'schema':'original-parent-microkernel/1','case':number,'source_case':c['case'],'source_sha256':source_sha,'mode':mode,'admission':'derived-unmodified'if mode==5 else'derived-with-mode-intervention','interventions':[]if mode==5 else[{'field':'actor.byte19','before':5,'after':mode}],
+       'registers':registers,'flags':state['flags'],'stack_words':state['stack_words'],'input_scene':state['scene'],'seed_before':state['seed'],'pointers':state['pointers'],'output_scene':oracle.scene(g,c['scene']),'seed_after':g.rd(0xA51C),'output_pointers':pointers,
+       'changes':changes,'draws':[oracle.normalized(d)for d in watch.events if d['kind']=='draw'],'events':events,'exit_sp':g.reg('sp'),'exit_bp':g.reg('bp'),'nested_join':child,'game_timer_ticks':g.game_timer_ticks,'scope':'Original computation from source-proven derived parent admission;not a captured live parent entry. Presentation countdown/ISR phase excluded.'}
+
+def capture(research_root,directory=ROOT/'records/T38/oracle-r0001'):
+    if oracle.common.git('status','--porcelain','--','tools/watched_parent.py'):raise ValueError('commit observer before original measurement')
+    sources=anchors();proof_path=ROOT/'records/T38/admission-proof-r0001.json';proof=oracle.read_json(proof_path)
+    if[(e['source_case'],e['source_sha256'])for e in proof['entries']]!=[(c['case'],sha)for c,sha in sources]:raise ValueError('parent proof/source anchors differ')
+    # Prefer an actually observed current ball actor for the explicit mode tests.
+    ball_actors=[pair for pair in sources if oracle.memory(pair[0]['entry'])[16*pair[0]['registers']['ds']+0xD09F]==pair[0]['scene']]
+    representative=(ball_actors or sources)[-1]
+    catalog=[(c,sha,5)for c,sha in sources]+[(representative[0],representative[1],mode)for mode in MODES if mode!=5]
+    protocol={'schema':'original-parent-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':oracle.common.sha(Path(__file__).read_bytes()),'proof_sha256':oracle.common.sha(proof_path.read_bytes()),'cases':[{'source_case':c['case'],'source_sha256':sha,'mode':mode}for c,sha,mode in catalog],'clock':'isolated original match divisor0400;no-key services;source ISR runs,its presentation phase is excluded'}
+    start=directory/'start.json'
+    if start.exists():
+        old=oracle.read_json(start)
+        if any(old[k]!=protocol[k]for k in('observer_sha256','proof_sha256','cases','clock')):raise ValueError('parent capture resume source differs')
+        protocol=old
+    else:oracle.write_json(start,protocol)
+    sys.path.insert(0,str(research_root.resolve()/'runtime/emul'));import match as original
+    files=original.game_files();items=[]
+    for number,(c,sha,mode)in enumerate(catalog):
+        path=directory/f'case-{number:04d}.json'
+        if not path.exists():
+            try:value=run_one(research_root,c,sha,mode,number,files)
+            except(Exception,KeyboardInterrupt)as error:
+                i=len(list(directory.glob('aborted-*.json')))+1;oracle.write_json(directory/f'aborted-{i:04d}.json',{'status':'aborted','case':number,'source_case':c['case'],'mode':mode,'reason':f'{type(error).__name__}: {error}','producer':protocol['producer']});raise
+            oracle.write_json(path,value)
+        items.append({'path':str(path.relative_to(ROOT)),'sha256':oracle.common.sha(path.read_bytes())})
+        print(f'original parent{number+1}/{len(catalog)} source{c["case"]} mode{mode}',flush=True)
+    codes={e['code']for item in items for e in oracle.read_json(ROOT/item['path'])['events']}
+    if not codes.intersection({17,18,19,20}):raise ValueError('no original shot-launch event captured')
+    out={'schema':'original-parent-corpus/1','status':'completed','producer':protocol['producer'],'protocol_sha256':oracle.common.sha(start.read_bytes()),'proof_sha256':protocol['proof_sha256'],'cases':items,'modes':sorted({v[2]for v in catalog}),'event_codes':sorted(codes),'scope':'32 source-proven unmodified parent admissions plus explicit action-mode interventions;not live parent-entry observations'}
+    manifest=directory/'manifest.json'
+    if manifest.exists():
+        if oracle.read_json(manifest)!=out:raise ValueError('completed original parent manifest differs')
+    else:oracle.write_json(manifest,out)
+    print('original parent corpus completed:',len(items),'roots;codes',sorted(codes),flush=True)
+
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--prove',action='store_true',required=True);p.add_argument('--research-root',type=Path,required=True);a=p.parse_args()
-    out=ROOT/'records/T38/admission-proof-r0001.json';oracle.write_json(out,prove(a.research_root));print('original parent admission proof:32 complete nested entries reproduced')
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--prove',action='store_true');p.add_argument('--capture',action='store_true');p.add_argument('--research-root',type=Path,required=True);a=p.parse_args()
+    if a.prove:
+        out=ROOT/'records/T38/admission-proof-r0001.json';oracle.write_json(out,prove(a.research_root));print('original parent admission proof:32 complete nested entries reproduced')
+    if a.capture:capture(a.research_root)
+    if not(a.prove or a.capture):p.error('choose --prove or --capture')
 if __name__=='__main__':main()
