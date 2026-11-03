@@ -36,7 +36,18 @@ def initial_data(points,inputs):
         if out.get('club') in clubs and 'players' in out and all(isinstance(i,int) for i in out['players']):out['players']=clubs[out['club']][:len(out['players'])]
         if 'directions' in out and isinstance(out['directions'],list) and len(out['directions'])==4:out['directions']=raw_selected['directions']
         return out
-    old=project(old);a=old['initial'];a['goals']['rosters']=[clubs[i] for i in a['goals']['clubs']];c=old['caller'];raw=c['pairing']['context'];outer=raw['rebuild']['outer']
+    old=project(old)
+    # Supplied-squad career selection leaves this scratch vector as incoming state.
+    candidates=raw_selected['selection']['candidates']
+    def carry_candidates(value):
+        if isinstance(value,dict):
+            for key,item in value.items():
+                if key=='candidates':value[key]=copy.deepcopy(candidates)
+                else:carry_candidates(item)
+        elif isinstance(value,list):
+            for item in value:carry_candidates(item)
+    carry_candidates(old)
+    a=old['initial'];a['goals']['rosters']=[clubs[i] for i in a['goals']['clubs']];c=old['caller'];raw=c['pairing']['context'];outer=raw['rebuild']['outer']
     core=match.rearrangement.core(raw)
     ratings=[];fields={f['club']:f for f in selected['setup_cells']['club_fields']}
     for side,club in enumerate(reversed(outer['selection']['clubs'])):
@@ -60,11 +71,11 @@ def initial_data(points,inputs):
            'cache':match.cache.state(a['positions']['context'],extra),
            'terminal':match.terminal.state({'context':raw},a['positions']['positions'],a['proximity'])}
     g=outer['globals']
-    settings_path=ROOT/'records/T28/settings-r0001.json'
+    settings_path=ROOT/'records/T28/settings-r0002.json'
     settings_pin=json.loads((FIXTURES/'settings-index.json').read_text())
     if common.sha(settings_path.read_bytes())!=settings_pin['sha256']:raise ValueError('setup settings evidence digest differs')
     settings=json.loads(settings_path.read_text())
-    return {'legacy_income_total':points[0]['income_total'],'managed_selection_mode':settings['observed']['managed_selection_mode'],'legacy':legacy,'replacement':{'match_state':state,'display_mode':g['mode'],'position_sentinel':g['position_sentinel'],'speaker_gate':g['speaker_gate']},
+    return {'legacy_queue_zero':{'index':0,**settings['observed']['legacy_queue_zero']},'legacy_income_total':points[0]['income_total'],'managed_selection_mode':settings['observed']['managed_selection_mode'],'legacy':legacy,'replacement':{'match_state':state,'display_mode':g['mode'],'position_sentinel':g['position_sentinel'],'speaker_gate':g['speaker_gate']},
             'gates':c['gates'],'skill_tables':match.table_rows([s for s in a['skills'] if s['criterion'] in (6,14)]),
             'setup_cells':selected['setup_cells'],'income':[r['input'] for r in inputs['incomes']],
             'supplement':inputs['fields']}

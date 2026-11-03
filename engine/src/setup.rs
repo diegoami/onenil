@@ -74,6 +74,7 @@ pub struct Data {
     pub gates: match_session::Gates,
     pub managed_selection_mode: u8,
     pub legacy_income_total: u32,
+    pub legacy_queue_zero: crate::goal_effects::QueueRow,
     pub skill_tables: Vec<role_scores::TableInput>,
     pub setup_cells: Cells,
     pub income: Vec<Income>,
@@ -198,6 +199,7 @@ impl Session {
             skill_tables,
             managed_selection_mode,
             legacy_income_total,
+            legacy_queue_zero,
             setup_cells,
             income,
             supplement,
@@ -220,6 +222,14 @@ impl Session {
             0xD6EA,
             (legacy_income_total >> 16) as u16,
         );
+        let e = &mut out.match_state.inner.e;
+        if legacy_queue_zero.index != 0 {
+            return Err("legacy queue-zero index differs".into());
+        }
+        e.image[0xA52A] = legacy_queue_zero.code;
+        put(e, 0xA52B, legacy_queue_zero.first_player);
+        put(e, 0xA52D, legacy_queue_zero.second_player);
+        e.image[0xA52F] = legacy_queue_zero.side;
         out.load_inputs(&setup_cells, &income, &supplement)?;
         out.prepare(&setup_cells, &income, &supplement)?;
         Ok(out)
@@ -651,6 +661,20 @@ impl Session {
         self.mark("0AB9:E303");
         self.caller_ready()?;
         self.mark("0AB9:E008");
+        // [confirmed] E03C..E053 calls1998:186C for every supplied starting XI
+        // at archaeology d9e20a4;186C increments P15+4 and word0 if allowance !=0.
+        let e = &mut self.match_state.inner.e;
+        if e.image[0xD6DD] != 0 {
+            for side in 0..2 {
+                let base = club(word(e, 0xD6E4 + 2 * side));
+                for slot in 0..11 {
+                    let id = word(e, base + 2 * slot);
+                    let p = layout::P15 + 15 * usize::from(id);
+                    e.image[p + 4] = e.image[p + 4].wrapping_add(1);
+                    put(e, p, word(e, p).wrapping_add(1));
+                }
+            }
+        }
         self.mark("0AB9:7D86");
         self.kickoff()?;
         self.mark("0AB9:7DC8");
