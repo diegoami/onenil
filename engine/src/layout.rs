@@ -9,6 +9,8 @@ pub(crate) const PAIR_OPP: usize = 0x40010;
 pub(crate) const PAIR_ASSIGNED: usize = 0x40020;
 pub(crate) const SCENE_MODE: usize = 0x40080;
 // [designed] Decoded watched occupancy cells and admission-presence metadata.
+// [designed] Presence of admitted watched commentary identity slots.
+pub(crate) const WATCHED_IDENTITY_PRESENT: usize = 0x400A0;
 pub(crate) const PITCH: usize = 0x41000;
 pub(crate) const PITCH_PRESENT: usize = 0x42000;
 pub(crate) const PITCH_CELLS: usize = 17 * 75;
@@ -33,6 +35,7 @@ mod tests {
             (PAIR_OPP, PAIR_OPP + 11),
             (PAIR_ASSIGNED, PAIR_ASSIGNED + 11),
             (SCENE_MODE, SCENE_MODE + 1),
+            (WATCHED_IDENTITY_PRESENT, WATCHED_IDENTITY_PRESENT + 23),
             (PITCH, PITCH + 2 * PITCH_CELLS),
             (PITCH_PRESENT, PITCH_PRESENT + PITCH_CELLS),
             (CONFIG, CONFIG + 256),

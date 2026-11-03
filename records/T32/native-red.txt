@@ -1,0 +1,85 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+warning: constant `PITCH_CELLS` is never used
+  --> src/layout.rs:14:18
+   |
+14 | pub(crate) const PITCH_CELLS: usize = 17 * 75;
+   |                  ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `machine` is never used
+  --> src/watched_target.rs:28:4
+   |
+28 | fn machine(_s:&State)->Result<Engine,String>{Err("561E not implemented".into())}
+   |    ^^^^^^^
+
+warning: function `advance_image` is never used
+  --> src/watched_target.rs:29:4
+   |
+29 | fn advance_image(_e:&mut Engine,_index:u8)->Result<Option<Commentary>,String>{Err("561E not implemented".into())}
+   |    ^^^^^^^^^^^^^
+
+warning: `onenil-engine` (lib) generated 3 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.71s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 7 tests
+test watched_target::tests::at_target_hold_and_actor_action_transitions ... FAILED
+test watched_target::tests::code49_queue_weight_identity_dedup_and_wrap ... FAILED
+test watched_target::tests::orientation_wrap_and_original_override_order ... FAILED
+test watched_target::tests::selector_matches_slot_not_index_and_actor_override_wins ... FAILED
+test watched_target::tests::whole_image_write_ownership ... FAILED
+test watched_target::tests::original_target_parent_calls ... FAILED
+test watched_target::tests::strict_inputs_aliases_and_reached_missing_identities ... FAILED
+
+failures:
+
+---- watched_target::tests::at_target_hold_and_actor_action_transitions stdout ----
+
+thread 'watched_target::tests::at_target_hold_and_actor_action_transitions' (3428) panicked at src/watched_target.rs:72:43:
+called `Result::unwrap()` on an `Err` value: "561E not implemented"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- watched_target::tests::code49_queue_weight_identity_dedup_and_wrap stdout ----
+
+thread 'watched_target::tests::code49_queue_weight_identity_dedup_and_wrap' (3429) panicked at src/watched_target.rs:79:39:
+called `Result::unwrap()` on an `Err` value: "561E not implemented"
+
+---- watched_target::tests::orientation_wrap_and_original_override_order stdout ----
+
+thread 'watched_target::tests::orientation_wrap_and_original_override_order' (3430) panicked at src/watched_target.rs:55:42:
+called `Result::unwrap()` on an `Err` value: "561E not implemented"
+
+---- watched_target::tests::selector_matches_slot_not_index_and_actor_override_wins stdout ----
+
+thread 'watched_target::tests::selector_matches_slot_not_index_and_actor_override_wins' (3432) panicked at src/watched_target.rs:65:28:
+called `Result::unwrap()` on an `Err` value: "561E not implemented"
+
+---- watched_target::tests::whole_image_write_ownership stdout ----
+
+thread 'watched_target::tests::whole_image_write_ownership' (3434) panicked at src/watched_target.rs:99:57:
+called `Result::unwrap()` on an `Err` value: "561E not implemented"
+
+---- watched_target::tests::original_target_parent_calls stdout ----
+
+thread 'watched_target::tests::original_target_parent_calls' (3431) panicked at src/watched_target.rs:50:204:
+called `Result::unwrap()` on an `Err` value: "561E not implemented"
+
+---- watched_target::tests::strict_inputs_aliases_and_reached_missing_identities stdout ----
+
+thread 'watched_target::tests::strict_inputs_aliases_and_reached_missing_identities' (3433) panicked at src/watched_target.rs:94:60:
+assertion failed: advance(&s).unwrap_err().contains("identity")
+
+
+failures:
+    watched_target::tests::at_target_hold_and_actor_action_transitions
+    watched_target::tests::code49_queue_weight_identity_dedup_and_wrap
+    watched_target::tests::orientation_wrap_and_original_override_order
+    watched_target::tests::original_target_parent_calls
+    watched_target::tests::selector_matches_slot_not_index_and_actor_override_wins
+    watched_target::tests::strict_inputs_aliases_and_reached_missing_identities
+    watched_target::tests::whole_image_write_ownership
+
+test result: FAILED. 0 passed; 7 failed; 0 ignored; 0 measured; 316 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--lib`

@@ -1320,3 +1320,32 @@ or goal behavior.
 ball state and the watched clock still need porting and integration before the
 browser can produce the requested detailed commentary. The current preview
 remains the quick-result summary.
+
+### Watched action-one target preparation (T32)
+
+[confirmed: archaeologyF39 at c7637bd and561E/helper listings at d9e20a4]
+Rust now computes561E's role-indexed target offset,byte wrapping,1F5E
+orientation and selector/actor overrides on one image. Arrival preserves the
+original hold/actor guards and can change the action and call1DB7(49).
+The existing native0F94 numeric routine owns player identities,weighted totals,
+queue acceptance/deduplication/counts and clock-pair copies. The input carries
+raw table/identity/roster facts;no target or commentary outcome is supplied.
+
+```sh
+.cache/venv/bin/python tools/replay_watched_target.py --check
+.cache/venv/bin/python tools/replay_watched_target.py --benchmark --out records/T32
+```
+
+[designed] This is one preparation action within72BB. Other actions,ball effects
+and the watched clock/tick driver remain before detailed player-action
+commentary can run in the browser. Numeric code49 alone does not deliver that
+experience;the summary preview remains unchanged.
+
+[confirmed: T32 capture-r0003] The complete admission stream contains592561E
+calls through the first active tick48/draw943,including all22 arrival
+transitions and one accepted code49 event at tick12(primary slot10,secondary0,
+side0). All full projected states and numeric effects match Rust. The separate
+64-call warm fixture overlaps this sequence;656 replay cases represent592
+unique original calls. Original deduplication,queue wrapping and nonzero
+weights are not exercised by this stream;synthetic/static tests cover them.
+The aborted active-only run is retained and excluded from accepted evidence.
