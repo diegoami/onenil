@@ -58,7 +58,8 @@ def capture(research_root):
         return {**{f'word{k}':g.rd(0xCF46+k) for k in (0,2,7,9,11)},**{f'byte{k}':g.rd(0xCF46+k,1) for k in (4,5,6,13,14)}}
     def indexed(g,bank,coordinate):
         x,y=coordinate.to_bytes(2,'little');x=x if x<128 else x-256;y=y if y<128 else y-256
-        address=g.far(0xD08A if bank=='main' else 0xD092)+160*x+2*y+0x90E
+        pointer=0xD08A if bank=='main' else 0xD092
+        address=16*g.rd(pointer+2)+((g.rd(pointer)+160*x+2*y+0x90E)&65535)
         return {'coordinate':coordinate,'occupant':g.mem(address,1)[0],'tag':g.mem(address+1,1)[0]}
     def enter(g):
         nonlocal pending
@@ -69,9 +70,9 @@ def capture(research_root):
         pending={'case':len(cases),'tick':ticks,'draw_start':week.draws,'input':state,'within':None,'metrics':[]}
     def read_cell(g,bank,offset):
         if pending is None:return
-        coordinate=g.rd(0xCF46+offset);address=g.reg('es')*16+g.reg('di')+0x90E
+        coordinate=g.rd(0xCF46+offset);address=g.reg('es')*16+((g.reg('di')+0x90E)&65535)
         cell={'coordinate':coordinate,'occupant':g.mem(address,1)[0],'tag':g.mem(address+1,1)[0]}
-        if not common.same(cell,indexed(g,bank,coordinate)):raise ValueError('indexed pitch pointer differs')
+        if not common.same(cell,indexed(g,bank,coordinate)):raise ValueError(f'indexed pitch pointer differs bank{bank} point{coordinate:04X} ES:DI={g.reg("es"):04X}:{g.reg("di"):04X} expected{indexed(g,bank,coordinate)} observed{cell}')
         cells=pending['input'][bank]
         for previous in cells:
             if previous['coordinate']==coordinate:
@@ -112,7 +113,7 @@ def capture(research_root):
     number=max((int(p.stem.split('-r')[-1]) for p in directory.glob('capture-r*.json')),default=0)+1;path=directory/f'capture-r{number:04d}.json'
     result={'schema':'watched-ball-capture/1','code_commit':producer,'started':started,'ended':observer.match.utc(),
             'status':status,'reason':reason,'source':{'repository':'https://github.com/diegoami/onenil-archaeology','commit':observer.match.git('rev-parse','HEAD'),'prefix_record':source['record'],'prefix_record_sha256':source['record_sha256'],'start_state_sha256':record['start_state']['sha256'],'static_sources':{p:common.sha((root/p).read_bytes()) for p in STATIC}},
-            'first_tick_join':joined,'ticks':ticks,'draws':week.draws,'cases':cases,
+            'pending_on_abort':pending if status!='completed' else None,'first_tick_join':joined,'ticks':ticks,'draws':week.draws,'cases':cases,
             'scope':'First32 original7423 roots from retained admission/RNG prefix;raw reached indexed main/background facts and separate state/bounds/metric/draw assertions'}
     with path.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
     print(path.relative_to(ROOT),status,reason,flush=True)
