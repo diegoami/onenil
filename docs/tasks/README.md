@@ -45,3 +45,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T36 Complete original watched target selection](T36.md)
 
 - [T37 Native watched passing and contact actions](T37.md)
+
+- [T38 Complete native watched actor dispatch](T38.md)
