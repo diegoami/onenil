@@ -34,6 +34,7 @@ def load():
     core=lambda source:{k:v for k,v in source.items()if k!='commit'}
     if not common.same(core(pin['source']),core(pins[0]['source'])):raise ValueError('frame and baseline source differs')
     for c,f in zip(cases,frames):
+        if set(f['input'])!={'scene','seed','cells','frame_byte5'} or set(f['output'])!={'output','draws'} or set(f['output']['output'])!={'scene','seed','cells'}:raise ValueError('frame witness fields differ')
         for k in ('case','tick','draw_start','draw_end'):
             if c[k]!=f[k]:raise ValueError('frame original boundary join differs')
         for k in ('scene','seed'):
