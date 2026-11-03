@@ -66,7 +66,7 @@ def capture(research_root):
         pending={'case':len(cases),'tick':ticks,'draw_start':week.draws,'input':{'scene':scene(g,index),'seed':g.rd(0xA51C),'cells':[]}}
         def memory(uc,access,address,size,value,user):
             if pending is None:return
-            stack_base=g.reg('ss')*16;lo=g.reg('sp');span=(entry_sp+8-lo)&65535
+            stack_base=g.reg('ss')*16;lo=(g.reg('sp')-8)&65535;span=(entry_sp+8-lo)&65535
             for linear in range(address,address+size):
                 if 0<=linear-stack_base<65536 and ((linear-stack_base-lo)&65535)<=span:continue
                 found=None
