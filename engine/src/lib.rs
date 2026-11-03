@@ -247,6 +247,65 @@ mod python {
     use pyo3::prelude::*;
 
     #[pyclass]
+    struct NativeExhibitionSession {
+        session: crate::setup::Session,
+    }
+    #[pymethods]
+    impl NativeExhibitionSession {
+        #[new]
+        fn new(data_json: &str) -> PyResult<Self> {
+            let a: crate::setup::Data = serde_json::from_str(data_json)
+                .map_err(|e| PyValueError::new_err(e.to_string()))?;
+            Ok(Self {
+                session: crate::setup::Session::new(a).map_err(PyValueError::new_err)?,
+            })
+        }
+        fn phase(&self) -> &'static str {
+            self.session.match_state.phase()
+        }
+        fn snapshot(&self) -> PyResult<String> {
+            serde_json::to_string(&self.session.match_state.snapshot())
+                .map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn view_state(&self) -> PyResult<String> {
+            serde_json::to_string(&self.session.match_state.view_state())
+                .map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn preparation(&self) -> PyResult<String> {
+            serde_json::to_string(&self.session.preparation())
+                .map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn step(&mut self) -> PyResult<String> {
+            let v = self
+                .session
+                .match_state
+                .step()
+                .map_err(PyValueError::new_err)?;
+            serde_json::to_string(&v).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn continue_without_changes(&mut self) -> PyResult<String> {
+            let v = self
+                .session
+                .match_state
+                .continue_without_changes()
+                .map_err(PyValueError::new_err)?;
+            serde_json::to_string(&v).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn caller_points(&self) -> PyResult<String> {
+            serde_json::to_string(self.session.match_state.caller_points())
+                .map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn result(&self) -> PyResult<String> {
+            let v = self
+                .session
+                .match_state
+                .result()
+                .map_err(PyValueError::new_err)?;
+            serde_json::to_string(&v).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+    }
+
+    #[pyclass]
     struct NativeMatchSession {
         session: match_session::Session,
     }
@@ -744,6 +803,7 @@ mod python {
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
         module.add_class::<NativeQuickSession>()?;
         module.add_class::<NativeMatchSession>()?;
+        module.add_class::<NativeExhibitionSession>()?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;

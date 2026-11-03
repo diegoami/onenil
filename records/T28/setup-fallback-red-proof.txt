@@ -1,0 +1,8 @@
+Session-stop verification, 2026-11-03
+Command: CARGO_HOME=/tmp/onenil-cargo RUSTUP_HOME=/tmp/onenil-rustup RUSTFLAGS="-C linker=/tmp/onenil-toolchain/cc" /tmp/onenil-cargo/bin/cargo test --manifest-path engine/Cargo.toml --locked setup::tests -- --nocapture
+Exit: 101
+2 passed; 1 failed; 298 filtered out
+Passed: selected_input_has_old_legacy_not_ready_match; live_views_follow_scene_and_cache_reference_changes
+Failed: native_preparation_reaches_ready_match_then_actual_full_time at Session::new(data).unwrap()
+Error: unsupported1539 managed/UI fallbackB6BD
+Scope: unfinished implementation; no full setup-to-final or release-replay success claim.
