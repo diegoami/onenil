@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """One selected-squad/legacy admission;native preparation then the entire continuing match."""
-import argparse,copy,json,sys
+import argparse,copy,json,sys,platform,subprocess,time
+from importlib.metadata import version
 from datetime import datetime,timezone
 from pathlib import Path
 import replay_continuous_match as match
@@ -171,6 +172,34 @@ def check(data,points):
     print('Native preparation:11 setup boundaries/258 draws,then same image through95 DD02/clock/RNG steps,37 AI calls,two replacements,final1-3.')
     return session
 
+def benchmark(data,pin,repetitions,directory):
+    from onenil_engine import onenil_engine as native
+    if common.git('status','--porcelain','--','engine','tools/replay_match_setup.py','pyproject.toml'):
+        raise ValueError('commit source before measuring')
+    if native.__debug_assertions__:raise ValueError('release extension required')
+    value=common.encoded(data);started=datetime.now(timezone.utc).isoformat();begin=time.perf_counter_ns();steps=0;size=0
+    for _ in range(repetitions):
+        session=native.NativeExhibitionSession(value)
+        while session.phase()!='full-time':
+            if session.phase()=='half-time':session.continue_without_changes()
+            size+=len(session.step());steps+=1
+    elapsed=time.perf_counter_ns()-begin;out=ROOT/directory;out.mkdir(parents=True,exist_ok=True)
+    n=max((int(p.stem.split('-r')[-1]) for p in out.glob('T28-r*.json')),default=0)+1;path=out/f'T28-r{n:04d}.json'
+    record={'schema':'routine-benchmark/1','run_id':path.stem,'code_commit':common.git('rev-parse','HEAD'),
+            'started':started,'ended':datetime.now(timezone.utc).isoformat(),'platform':platform.platform(),
+            'python':platform.python_version(),'rustc':subprocess.check_output(['rustc','--version'],text=True).strip(),
+            'cargo_lock_sha256':common.sha((ROOT/'engine/Cargo.lock').read_bytes()),
+            'build':{'crate_version':native.__version__,'debug_assertions':native.__debug_assertions__,
+                     'maturin':version('maturin'),'extension_sha256':common.sha(Path(native.__file__).read_bytes())},
+            'source_pins':pin,'settings':json.loads((FIXTURES/'settings-index.json').read_text()),
+            'initial_data_sha256':common.sha((FIXTURES/'admission.json').read_bytes()),
+            'routine':'selected-squad preparation plus one continuing native full match',
+            'repetitions':repetitions,'setup_draws_per_session':258,'steps':steps,'elapsed_ns':elapsed,'serialized_output_bytes':size,
+            'method':'Pre-serialized initial admission;release parse,one image,actual preparation and successive native match steps/serialization,halftime and phase queries included;fixture verification and output decoding excluded',
+            'limits':'One fixed exhibition reference;career automatic squad/colour choice supplied as input,career financial persistence excluded;no arbitrary lineup/seed acceptance,UI/browser timing,emulator or full-game speed comparison'}
+    with path.open('x') as f:json.dump(record,f,indent=2);f.write('\n')
+    print(path.relative_to(ROOT))
+
 def capture_settings(research_root):
     """Observe the original once;never change guest settings or export private bytes."""
     root=research_root.resolve()
@@ -219,9 +248,11 @@ def capture_settings(research_root):
     print(path, captured,flush=True)
 
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);g=ap.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--capture-settings',action='store_true');ap.add_argument('--research-root',type=Path);args=ap.parse_args()
+    ap=argparse.ArgumentParser(description=__doc__);g=ap.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--benchmark',action='store_true');ap.add_argument('--out',default='records/T28');ap.add_argument('--repetitions',type=int,default=10);g.add_argument('--capture-settings',action='store_true');ap.add_argument('--research-root',type=Path);args=ap.parse_args()
     if args.capture_settings:
         if args.research_root is None:ap.error('--capture-settings requires --research-root')
         capture_settings(args.research_root);return
-    data,points,_=load();check(data,points)
+    if args.repetitions<1:ap.error("positive repetitions required")
+    data,points,pin=load();check(data,points)
+    if args.benchmark:benchmark(data,pin,args.repetitions,args.out)
 if __name__=='__main__':main()

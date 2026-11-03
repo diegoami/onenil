@@ -149,6 +149,73 @@ mod tests {
         );
     }
     #[test]
+    fn setup_input_guards_reject_incomplete_and_conflicting_data() {
+        let source = include_str!("../tests/fixtures/setup/admission.json");
+        let data = || serde_json::from_str::<Data>(source).unwrap();
+        let mut a = data();
+        a.legacy.substitution.context.clubs[0].roster[0] = 0;
+        assert!(Session::new(a).err().unwrap().contains("zero selected"));
+        let mut a = data();
+        a.legacy.substitution.context.clubs[0].roster[0] =
+            a.legacy.substitution.context.clubs[1].roster[0];
+        assert!(Session::new(a).err().unwrap().contains("foreign"));
+        let mut a = data();
+        a.legacy.substitution.context.clubs[0].roster[1] =
+            a.legacy.substitution.context.clubs[0].roster[0];
+        assert!(Session::new(a).err().unwrap().contains("duplicated"));
+        let mut a = data();
+        a.supplement.capacities.pop();
+        assert!(Session::new(a).err().unwrap().contains("incomplete"));
+        let mut a = data();
+        a.income[0].table.pop();
+        assert!(Session::new(a).err().unwrap().contains("incomplete"));
+        let mut a = data();
+        a.legacy.clock.seed ^= 1;
+        assert!(Session::new(a).err().unwrap().contains("seed aliases"));
+        let mut a = data();
+        a.managed_selection_mode = 0;
+        assert!(Session::new(a).err().unwrap().contains("fallbackB6BD"));
+        let mut a = data();
+        a.legacy_queue_zero.index = 1;
+        assert!(Session::new(a).err().unwrap().contains("queue-zero index"));
+        for field in ["expected", "output", "intermediate"] {
+            let mut value: serde_json::Value = serde_json::from_str(source).unwrap();
+            value[field] = serde_json::json!({});
+            assert!(serde_json::from_value::<Data>(value).is_err());
+        }
+        let mut value: serde_json::Value = serde_json::from_str(source).unwrap();
+        value
+            .as_object_mut()
+            .unwrap()
+            .remove("managed_selection_mode");
+        assert!(serde_json::from_value::<Data>(value).is_err());
+    }
+    #[test]
+    fn preparation_preserves_nonstarter_canonical_bytes_and_legacy_until_owned() {
+        let data: Data =
+            serde_json::from_str(include_str!("../tests/fixtures/setup/admission.json")).unwrap();
+        let starters = data
+            .legacy
+            .substitution
+            .context
+            .clubs
+            .iter()
+            .flat_map(|c| c.roster[..11].iter().copied())
+            .collect::<std::collections::BTreeSet<_>>();
+        let legacy = data.legacy.players.clone();
+        let session = Session::new(data).unwrap();
+        for p in legacy.iter().filter(|p| !starters.contains(&p.id)) {
+            let a = crate::layout::P15 + 15 * usize::from(p.id);
+            assert_eq!(session.match_state.inner.e.image[a..a + 15], p.p15);
+        }
+        for point in &session.points[..4] {
+            assert_eq!(point["income_total"], json!(30989));
+        }
+        for point in &session.points[4..] {
+            assert_eq!(point["income_total"], json!(24101));
+        }
+    }
+    #[test]
     fn selected_input_has_old_legacy_not_ready_match() {
         let a: Data =
             serde_json::from_str(include_str!("../tests/fixtures/setup/admission.json")).unwrap();
