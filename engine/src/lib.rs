@@ -376,6 +376,13 @@ mod python {
     }
 
     #[pyfunction]
+    fn watched_move_candidate(input_json: &str) -> PyResult<String> {
+        let state: watched_movement::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = watched_movement::advance(&state).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
     fn quick_contests(k: u16, seed: u16, ratings: Vec<u16>, goals: Vec<u8>) -> PyResult<String> {
         let ratings = ratings
             .try_into()
@@ -805,6 +812,7 @@ mod python {
         module.add_class::<NativeQuickSession>()?;
         module.add_class::<NativeMatchSession>()?;
         module.add_class::<NativeExhibitionSession>()?;
+        module.add_function(wrap_pyfunction!(watched_move_candidate, module)?)?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;

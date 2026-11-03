@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Original watched6F98 inputs/assertions;Rust alone computes movement legality."""
-import argparse,hashlib,json,sys
+import argparse,hashlib,json,sys,platform,subprocess,time
+from datetime import datetime,timezone
+from importlib.metadata import version
 from pathlib import Path
 import replay_step_tail as common
 ROOT=common.ROOT;FIXTURES=ROOT/'engine/tests/fixtures/watched_movement'
@@ -11,9 +13,13 @@ def load():
         pin=json.loads((FIXTURES/(prefix+'provenance.json')).read_text())
         raw=(FIXTURES/(prefix+'cases.jsonl')).read_bytes()
         if common.sha(raw)!=pin['cases_sha256']:raise ValueError('movement original cases digest differs')
-        if common.sha((ROOT/pin['capture']).read_bytes())!=pin['capture_sha256']:raise ValueError('movement capture digest differs')
+        capture_bytes=(ROOT/pin['capture']).read_bytes()
+        if common.sha(capture_bytes)!=pin['capture_sha256']:raise ValueError('movement capture digest differs')
+        capture_record=json.loads(capture_bytes)
+        if capture_record['status']!='completed' or not capture_record['first_tick_join'] or capture_record['source']!=pin['source']:raise ValueError('movement capture provenance differs')
         rows=[json.loads(line) for line in raw.splitlines()]
         if len(rows)!=64 or [c['case'] for c in rows]!=list(range(64)):raise ValueError('64 original movement calls per stream required')
+        if not common.same(rows,capture_record['cases']):raise ValueError('movement capture/export differs')
         if any(c['draw_start']!=c['draw_end'] or c['input']['seed']!=c['output']['output']['seed'] or c['output']['draws'] for c in rows):raise ValueError('original6F98 unexpectedly drew RNG')
         if prefix and any(c['input']['active']==0 for c in rows):raise ValueError('active stream contains inactive calls')
         cases.extend(rows);pins.append(pin)
@@ -21,10 +27,10 @@ def load():
 
 def check(cases):
     import onenil_engine as native
-    for c in cases:
+    for number,c in enumerate(cases):
         got=json.loads(native.watched_move_candidate(common.encoded(c['input'])))
-        if not common.same(got,c['output']):raise ValueError(f'original movement case{c["case"]} differs')
-    print('Native watched movement:64 exact original candidate/legality/seed cases,no RNG;standalone kernel,not a watched match.')
+        if not common.same(got,c['output']):raise ValueError(f'original movement case{number} differs')
+    print(f'Native watched movement:{len(cases)} exact original candidate/legality/seed cases,no RNG;standalone kernel,not a watched match.')
 
 def capture(research_root,active_only=False):
     if common.git('status','--porcelain','--','tools/replay_watched_movement.py'):raise ValueError('commit observer before capture')
@@ -95,10 +101,33 @@ def capture(research_root,active_only=False):
     pin={'schema':'watched-movement-source/1','capture':str(path.relative_to(ROOT)),'capture_sha256':common.sha(path.read_bytes()),'cases_sha256':common.sha(raw),'source':result['source']}
     with (FIXTURES/pin_name).open('x') as f:json.dump(pin,f,indent=2);f.write('\n')
 
+def benchmark(cases,pins,repetitions,directory):
+    from onenil_engine import onenil_engine as native
+    if common.git('status','--porcelain','--','engine','tools/replay_watched_movement.py','pyproject.toml'):raise ValueError('commit source before measurement')
+    if native.__debug_assertions__:raise ValueError('release extension required')
+    values=[common.encoded(c['input']) for c in cases];size=0
+    started=datetime.now(timezone.utc).isoformat();begin=time.perf_counter_ns()
+    for _ in range(repetitions):
+        for value in values:size+=len(native.watched_move_candidate(value))
+    elapsed=time.perf_counter_ns()-begin;out=ROOT/directory;out.mkdir(parents=True,exist_ok=True)
+    number=max((int(p.stem.split('-r')[-1]) for p in out.glob('T30-r*.json')),default=0)+1;path=out/f'T30-r{number:04d}.json'
+    result={'schema':'routine-benchmark/1','run_id':path.stem,'code_commit':common.git('rev-parse','HEAD'),
+            'started':started,'ended':datetime.now(timezone.utc).isoformat(),'platform':platform.platform(),'python':platform.python_version(),
+            'rustc':subprocess.check_output(['rustc','--version'],text=True).strip(),'cargo_lock_sha256':common.sha((ROOT/'engine/Cargo.lock').read_bytes()),
+            'build':{'crate_version':native.__version__,'debug_assertions':native.__debug_assertions__,'maturin':version('maturin'),'extension_sha256':common.sha(Path(native.__file__).read_bytes())},
+            'source_pins':pins,'routine':'original6F98 watched candidate movement and legality',
+            'repetitions':repetitions,'cases':len(cases),'calls':len(cases)*repetitions,'elapsed_ns':elapsed,'serialized_output_bytes':size,
+            'method':'Pre-serialized inputs;release parsing,one native image/setup,movement/bounds/occupancy and serialization included;fixture preparation and output decoding excluded',
+            'limits':'Standalone movement kernel,not70D5 direction selection,72BB action dispatch,ball/clock,complete watched ticks or detailed commentary;no full-match/emulator speed comparison'}
+    with path.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
+    print(path.relative_to(ROOT))
+
 def main():
-    p=argparse.ArgumentParser(description=__doc__);g=p.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--capture',action='store_true');g.add_argument('--capture-active',action='store_true');p.add_argument('--research-root',type=Path);args=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);g=p.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--benchmark',action='store_true');p.add_argument('--out',default='records/T30');p.add_argument('--repetitions',type=int,default=100);g.add_argument('--capture',action='store_true');g.add_argument('--capture-active',action='store_true');p.add_argument('--research-root',type=Path);args=p.parse_args()
     if args.capture or args.capture_active:
         if args.research_root is None:p.error('--capture requires --research-root')
         capture(args.research_root,args.capture_active);return
-    cases,_=load();check(cases)
+    if args.repetitions<1:p.error("positive repetitions required")
+    cases,pins=load();check(cases)
+    if args.benchmark:benchmark(cases,pins,args.repetitions,args.out)
 if __name__=='__main__':main()

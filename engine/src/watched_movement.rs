@@ -1,4 +1,4 @@
-//! [confirmed] ArchaeologyF39 and6F98/1998:084B at d9e20a4.
+//! [confirmed] ArchaeologyF39 at c7637bd;6F98/1998:084B at d9e20a4.
 //! [designed] Standalone original movement/legality kernel,not a watched match.
 use crate::{terminal::Scene, Draw};
 use serde::{Deserialize, Serialize};
@@ -68,8 +68,52 @@ fn machine(s: &State) -> Result<Engine, String> {
     }
     Ok(e)
 }
-pub(crate) fn advance_image(_e: &mut Engine, _index: u8) -> Result<u8, String> {
-    Err("unimplemented original watched movement".into())
+pub(crate) fn advance_image(e: &mut Engine, index: u8) -> Result<u8, String> {
+    if !(1..=22).contains(&index) {
+        return Err("unsupported watched movement scene".into());
+    }
+    let a = scene(index);
+    // [confirmed] 6FA7..6FF7 resets from word2,then changes just one byte.
+    let previous = e.word((a + 2) as u16);
+    e.put_word(a as u16, previous);
+    let direction = e.image[a + 16];
+    match direction {
+        1 => e.image[a] = e.image[a].wrapping_sub(1),
+        2 => e.image[a] = e.image[a].wrapping_add(1),
+        3 => e.image[a + 1] = e.image[a + 1].wrapping_sub(1),
+        4 => e.image[a + 1] = e.image[a + 1].wrapping_add(1),
+        _ => {}
+    }
+    // Direction5 returns true even outside the usual pitch bounds.
+    if direction == 5 {
+        return Ok(1);
+    }
+    let point = e.word(a as u16);
+    let Some(cell) = grid_index(point) else {
+        return Ok(0);
+    };
+    let slot = e.image[a + 7];
+    let id = e.word((a + 14) as u16);
+    if e.image[0xD0B8] == 0
+        || slot == e.image[0xD0A0]
+        || slot == e.image[0xD09F]
+        || e.image[layout::P8 + 8 * usize::from(id) + 6] == 0
+    {
+        return Ok(1);
+    }
+    // [designed] Missing raw indexed input diagnoses;it is never an empty cell.
+    if e.image[layout::PITCH_PRESENT + cell] == 0 {
+        return Err("missing reached watched occupancy witness".into());
+    }
+    let at = layout::PITCH + 2 * cell;
+    if e.image[at + 1] == 5 {
+        return Ok(1);
+    }
+    // [confirmed] Runtime0E1F(code,AH=1,DX=32) selects bit(code%8)
+    // of byte(code/8),for the full byte domain0..255.
+    let occupant = e.image[at];
+    let mask = e.image[0xD36 + usize::from(occupant >> 3)];
+    Ok(u8::from(mask & (1u8 << (occupant & 7)) == 0))
 }
 pub fn advance(s: &State) -> Result<Outcome, String> {
     let mut e = machine(s)?;
