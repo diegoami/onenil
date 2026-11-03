@@ -1,0 +1,302 @@
+{
+  "schema": "original-parent-microkernel/1",
+  "case": 10,
+  "source_case": 20,
+  "source_sha256": "12206347946ee498920a77f3f9ae741422a112c2a7fedd4537475413aa417000",
+  "mode": 5,
+  "admission": "derived-unmodified",
+  "interventions": [],
+  "registers": {
+    "ax": 38661,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 16006,
+    "bp": 16022,
+    "si": 29550,
+    "di": 52838,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    31547,
+    4828,
+    52838,
+    12423
+  ],
+  "input_scene": {
+    "index": 15,
+    "word0": 59898,
+    "word2": 59898,
+    "word8": 59898,
+    "word10": 57338,
+    "word12": 2560,
+    "word14": 2584,
+    "word20": 0,
+    "word23": 26,
+    "byte4": 156,
+    "byte5": 12,
+    "byte6": 0,
+    "byte7": 15,
+    "byte16": 5,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 44616,
+  "pointers": [
+    {
+      "kind": "p8",
+      "offset": 8,
+      "segment": 19139
+    },
+    {
+      "kind": "p15",
+      "offset": 0,
+      "segment": 21100
+    },
+    {
+      "kind": "club",
+      "offset": 0,
+      "segment": 24776
+    },
+    {
+      "kind": "config",
+      "offset": 0,
+      "segment": 28142
+    },
+    {
+      "kind": "main",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "main_shown",
+      "offset": 0,
+      "segment": 17471
+    },
+    {
+      "kind": "background",
+      "offset": 0,
+      "segment": 31014
+    },
+    {
+      "kind": "background_shown",
+      "offset": 0,
+      "segment": 17721
+    },
+    {
+      "kind": "commentary",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "seed",
+      "offset": 42268,
+      "segment": 12423
+    }
+  ],
+  "output_scene": {
+    "index": 15,
+    "word0": 59899,
+    "word2": 59899,
+    "word8": 59899,
+    "word10": 57338,
+    "word12": 2817,
+    "word14": 2584,
+    "word20": 0,
+    "word23": 27,
+    "byte4": 148,
+    "byte5": 12,
+    "byte6": 1,
+    "byte7": 15,
+    "byte16": 2,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 46993,
+  "output_pointers": [
+    {
+      "kind": "p8",
+      "offset": 8,
+      "segment": 19139
+    },
+    {
+      "kind": "p15",
+      "offset": 0,
+      "segment": 21100
+    },
+    {
+      "kind": "club",
+      "offset": 0,
+      "segment": 24776
+    },
+    {
+      "kind": "config",
+      "offset": 0,
+      "segment": 28142
+    },
+    {
+      "kind": "main",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "main_shown",
+      "offset": 0,
+      "segment": 17471
+    },
+    {
+      "kind": "background",
+      "offset": 0,
+      "segment": 31014
+    },
+    {
+      "kind": "background_shown",
+      "offset": 0,
+      "segment": 17721
+    },
+    {
+      "kind": "commentary",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "seed",
+      "offset": 42268,
+      "segment": 12423
+    }
+  ],
+  "changes": [
+    {
+      "area": "ds",
+      "offset": 42268,
+      "before": 72,
+      "after": 145
+    },
+    {
+      "area": "ds",
+      "offset": 42269,
+      "before": 174,
+      "after": 183
+    },
+    {
+      "area": "ds",
+      "offset": 52838,
+      "before": 250,
+      "after": 251
+    },
+    {
+      "area": "ds",
+      "offset": 52840,
+      "before": 250,
+      "after": 251
+    },
+    {
+      "area": "ds",
+      "offset": 52842,
+      "before": 156,
+      "after": 148
+    },
+    {
+      "area": "ds",
+      "offset": 52844,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "area": "ds",
+      "offset": 52846,
+      "before": 250,
+      "after": 251
+    },
+    {
+      "area": "ds",
+      "offset": 52850,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "area": "ds",
+      "offset": 52851,
+      "before": 10,
+      "after": 11
+    },
+    {
+      "area": "ds",
+      "offset": 52854,
+      "before": 5,
+      "after": 2
+    },
+    {
+      "area": "ds",
+      "offset": 52861,
+      "before": 26,
+      "after": 27
+    },
+    {
+      "area": "main",
+      "offset": 1312,
+      "before": 156,
+      "after": 32
+    },
+    {
+      "area": "main",
+      "offset": 1313,
+      "before": 12,
+      "after": 7
+    },
+    {
+      "area": "main",
+      "offset": 1472,
+      "before": 32,
+      "after": 148
+    },
+    {
+      "area": "main",
+      "offset": 1473,
+      "before": 7,
+      "after": 12
+    }
+  ],
+  "draws": [
+    {
+      "n": 9,
+      "seed_before": 44616,
+      "seed_after": 5687,
+      "value": 1,
+      "site": "0AB9:388A"
+    },
+    {
+      "n": 5,
+      "seed_before": 5687,
+      "seed_after": 47018,
+      "value": 4,
+      "site": "0AB9:333A"
+    },
+    {
+      "n": 2,
+      "seed_before": 47018,
+      "seed_after": 46993,
+      "value": 2,
+      "site": "0AB9:7217"
+    }
+  ],
+  "events": [],
+  "exit_sp": 16006,
+  "exit_bp": 16022,
+  "nested_join": {
+    "joined": true,
+    "returned": true,
+    "draw_start": 0,
+    "event_start": 0
+  },
+  "game_timer_ticks": 0,
+  "scope": "Original computation from source-proven derived parent admission;not a captured live parent entry. Presentation countdown/ISR phase excluded."
+}
