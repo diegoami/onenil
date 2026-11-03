@@ -385,7 +385,7 @@ mod python {
         let state: watched_compiled::action::State = serde_json::from_str(input_json)
             .map_err(|e| PyValueError::new_err(e.to_string()))?;
         let value=match watched_compiled::action::advance(&state){
-            Ok(out)=>serde_json::json!({"ok":out}),
+            Ok(out)=>serde_json::json!({"ok":out,"presentation":out.presentation}),
             Err(fault)=>serde_json::json!({"error":fault}),
         };
         serde_json::to_string(&value).map_err(|e|PyValueError::new_err(e.to_string()))

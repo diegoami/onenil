@@ -32,7 +32,7 @@ pub struct State{
 #[derive(Debug,Serialize)]
 pub struct Fault{pub message:String,pub missing:Option<Missing>}
 #[derive(Debug,Serialize)]
-pub struct Outcome{pub scene:Scene,pub seed:u16,pub pointers:Vec<Pointer>,pub cells:Vec<ByteFact>,pub draws:Vec<Draw>,pub events:Vec<serde_json::Value>}
+pub struct Outcome{pub scene:Scene,pub seed:u16,pub pointers:Vec<Pointer>,pub cells:Vec<ByteFact>,pub draws:Vec<Draw>,pub events:Vec<serde_json::Value>,#[serde(skip)] pub presentation:Vec<serde_json::Value>}
 fn find_pointer(s:&State,kind:PointerKind)->Result<&Pointer,String>{s.pointers.iter().find(|p|p.kind==kind).ok_or_else(||"missing named pointer".into())}
 fn area_pointer(area:Area)->Option<PointerKind>{Some(match area{Area::P8=>PointerKind::P8,Area::P15=>PointerKind::P15,Area::Club=>PointerKind::Club,Area::Config=>PointerKind::Config,Area::Main=>PointerKind::Main,Area::MainShown=>PointerKind::MainShown,Area::Background=>PointerKind::Background,Area::BackgroundShown=>PointerKind::BackgroundShown,_=>return None})}
 fn pitch_offset(offset:i32)->bool{(-8..=8).any(|row|{let start=0x90E+160*row-74;(start..start+150).contains(&offset)})}
@@ -44,6 +44,7 @@ pub(super) fn cell_address(s:&State,f:&ByteFact)->Result<usize,String>{
  if f.offset<0{return Err("negative named data offset".into());}
  let offset=f.offset as usize;
  if f.area==Area::Ds{
+  if (0xD5A..0xD5C).contains(&offset)||(0xD088..0xD08A).contains(&offset){return Err("presentation timer field outside action ownership".into());}
   if !((0x380..0x382).contains(&offset)||(0x900..0xC00).contains(&offset)||(0xD00..0xD80).contains(&offset)||(0x957D..=0xAD9A).contains(&offset)||(0xCCEF..0xD7BA).contains(&offset)){return Err("unsupported named DS field".into());}
   return Ok(16*usize::from(s.regs[11])+offset);
  }
@@ -68,6 +69,15 @@ fn machine(s:&State)->Result<Cpu,String>{
   }
  }
  if kinds.len()!=10{return Err("missing named action pointer".into());}
+ for (i,p) in s.pointers.iter().enumerate(){
+  if matches!(p.kind,PointerKind::Seed|PointerKind::Commentary){continue;}
+  for q in &s.pointers[i+1..]{
+   if matches!(q.kind,PointerKind::Seed|PointerKind::Commentary){continue;}
+   let pool=|k|matches!(k,PointerKind::P8|PointerKind::P15|PointerKind::Club|PointerKind::Config);
+   if (pool(p.kind)||pool(q.kind))&&p.address()<q.address()+q.kind.length()&&q.address()<p.address()+p.kind.length(){return Err("named player/data pool overlaps another area".into());}
+  }
+ }
+
  let mut image=vec![0;0x110000];let mut known=vec![false;image.len()];let mut seen=std::collections::BTreeSet::new();
  fn initial(image:&mut[u8],known:&mut[bool],seen:&mut std::collections::BTreeSet<usize>,at:usize,bytes:&[u8])->Result<(),String>{
   if at+bytes.len()>image.len(){return Err("entry data exceeds image".into());}
@@ -84,8 +94,7 @@ fn machine(s:&State)->Result<Cpu,String>{
  c.stack_bounds=Some((stack-4096,stack+8));c.cf=s.flags&1!=0;c.pf=s.flags&4!=0;c.z=s.flags&0x40!=0;c.sf=s.flags&0x80!=0;c.of=s.flags&0x800!=0;c.df=s.flags&0x400!=0;
  c.track_events=true;c.require_write_baseline=true;Ok(c)
 }
-pub fn advance(_s:&State)->Result<Outcome,Fault>{Err(Fault{message:"T37 action kernel stub for original-fixture red".into(),missing:None})}
-fn advance_computed(s:&State)->Result<Outcome,Fault>{
+pub fn advance(s:&State)->Result<Outcome,Fault>{
  let mut c=machine(s).map_err(|message|Fault{message,missing:None})?;
  let entry=match s.kind{Kind::Action5=>super::action_graph::p_0ab9_448c,Kind::Contact=>super::action_graph::p_0ab9_4dff};
  if let Err(message)=c.invoke_entry(entry,0x0AB9,s.stack_words[0]){return Err(Fault{message,missing:c.missing.get()});}
@@ -99,7 +108,7 @@ fn advance_computed(s:&State)->Result<Outcome,Fault>{
  output.cells.retain(|f|f.area!=Area::Frame);
  for f in &mut output.cells{f.value=c.e.image[cell_address(s,f).map_err(|message|Fault{message,missing:None})?];}
  for p in &mut output.pointers{let a=ds+usize::from(p.kind.slot());p.offset=u16::from_le_bytes([c.e.image[a],c.e.image[a+1]]);p.segment=u16::from_le_bytes([c.e.image[a+2],c.e.image[a+3]]);}
- Ok(Outcome{scene:output.scene,seed:output.seed,pointers:output.pointers,cells:output.cells,draws:c.draws,events:c.events})
+ Ok(Outcome{scene:output.scene,seed:output.seed,pointers:output.pointers,cells:output.cells,draws:c.draws,events:c.events,presentation:c.presentation})
 }
 #[cfg(test)]
 mod tests{
@@ -145,6 +154,17 @@ mod tests{
   let mut s=context();let p8=s.pointers.iter().find(|p|p.kind==PointerKind::P8).unwrap().clone();
   let main=s.pointers.iter_mut().find(|p|p.kind==PointerKind::Main).unwrap();main.offset=p8.offset;main.segment=p8.segment;
   assert!(machine(&s).is_err());
+ }
+
+ #[test]
+ fn original_wait_requests_presentation_time_without_gameplay_or_rng_effects(){
+  let mut s=context();s.cells.push(ByteFact{area:Area::Config,offset:2,value:1});let mut c=machine(&s).unwrap();
+  let before=c.e.image.clone();let sp=c.r[4];c.push(17).unwrap();
+  c.invoke(super::super::projections::sound_delay,true,0x1998,0x00D6,0x2222).unwrap();
+  assert_eq!(c.r[4],sp);assert_eq!(c.presentation,vec![serde_json::json!({"site":"1998:00D6","kind":"delay","ticks":17})]);
+  assert!(c.draws.is_empty()&&c.events.is_empty());let(lo,hi)=c.stack_bounds.unwrap();
+  for(a,(old,new))in before.iter().zip(c.e.image.iter()).enumerate(){if a<lo||a>=hi{assert_eq!(old,new,"gameplay byte{a:05X}");}}
+  for offset in[0xD5A,0xD5B,0xD088,0xD089]{let mut s=s.clone();s.cells.push(ByteFact{area:Area::Ds,offset,value:0});assert!(machine(&s).is_err());}
  }
 
 }

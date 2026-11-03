@@ -22,6 +22,7 @@ def named(state,at):
     ds=16*state['regs'][11];stack=16*state['regs'][10]+state['regs'][4]
     if stack-4096<=at<stack:return 'frame',at-stack
     offset=at-ds
+    if offset in(0xD5A,0xD5B,0xD088,0xD089):raise ValueError("presentation timer outside action ownership")
     if 0x380<=offset<0x382 or 0x900<=offset<0xC00 or 0xD00<=offset<0xD80 or 0x957D<=offset<=0xAD9A or 0xCCEF<=offset<0xD7BA:return 'ds',offset
     for area,n in LENGTHS.items():
         start=address(state,area,0);offset=at-start
@@ -76,6 +77,7 @@ def validate_ownership(case,state):
         else:spans.extend((start+0x90E+160*r-74,start+0x90E+160*r+76)for r in range(-8,9))
     for lo,hi in spans:
         for a in range(lo,hi):
+            if a-ds in(0xD5A,0xD5B,0xD088,0xD089):continue
             if entry[a]!=exit[a]and a not in known:raise ValueError(f'original changed undeclared gameplay fact {a:05X} case{case["case"]}')
 
 def main():
