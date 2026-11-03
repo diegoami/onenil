@@ -51,6 +51,7 @@ def ea(operand):
     return f'c.r[{REGS[seg[1] if seg else ("ss" if re.search(r"\bbp\b",inner) else "ds")]}]',out
 
 def width(v):
+    if 'dword ptr' in v:raise ValueError('unsupported dword operand:'+v)
     if v in BYTES or 'byte ptr' in v:return 8
     if v in REGS or 'word ptr' in v:return 16
     raise ValueError('unknown operand width:'+v)
@@ -59,7 +60,7 @@ def read(v,w=16):
     v=v.strip()
     if v in REGS:return f'c.r[{REGS[v]}]'
     if v in BYTES:
-        i,shift=BYTES[v];return f'((c.r[{i}] >> {shift}) & 255)'
+        i,shift=BYTES[v];return f'(c.r[{i}] >> {shift}) & 255'
     if '[' in v:
         seg,off=ea(v);return f'c.read({seg},{off},{width(v)})?'
     return f'{int(v,0)&((1<<w)-1)}u16'
@@ -87,7 +88,7 @@ def emit_instruction(seg,ip,row):
     if op=='push':return prefix+f'let v={read(a[0])};c.push(v)?;'
     if op=='pop':return prefix+'let v=c.pop()?;'+write(a[0],'v')
     if op in ('les','lds'):
-        ss,off=ea(a[1]);return prefix+f'let o={off};let s={ss};let v=c.read(s,o,16)?;let g=c.read(s,o.wrapping_add(2),16)?;'+write(a[0],'v')+f'c.r[{8 if op=="les" else 11}]=g;'
+        ss,off=ea(a[1]);return prefix+f'let o={off};let s={ss};let(v,g)=c.far(s,o)?;'+write(a[0],'v')+f'c.r[{8 if op=="les" else 11}]=g;'
     if op=='lea':return prefix+write(a[0],ea(a[1])[1])
     if op=='mov':return prefix+f'let v={read(a[1],width(a[0]))};'+write(a[0],'v')
     if op in ('cwde','cbw'):return prefix+'c.r[0]=i16::from(c.r[0] as u8 as i8) as u16;'
@@ -96,7 +97,8 @@ def emit_instruction(seg,ip,row):
         if op=='lodsw':return prefix+'c.r[0]=c.read(c.r[11],c.r[6],16)?;c.r[6]=c.r[6].wrapping_add(2);'
         return prefix+'c.write(c.r[8],c.r[7],16,c.r[0])?;c.r[7]=c.r[7].wrapping_add(2);'
     if op in ('mul','imul'):
-        if len(a)==3:return prefix+f'let v=({read(a[1])} as i16 as i32).wrapping_mul({read(a[2])} as i16 as i32) as u16;'+write(a[0],'v')
+        if len(a)==3:return prefix+f'let x={read(a[1])};let y={read(a[2])};let v=c.imul3(x,y);'+write(a[0],'v')
+        if width(a[0])!=16:raise ValueError('unsupported multiply width')
         return prefix+f'let v={read(a[0])};c.multiply(v,{str(op=="imul").lower()});'
     if op in ('div','idiv'):return prefix+f'let v={read(a[0])};c.divide(v,{str(op=="idiv").lower()})?;'
     if op in ('inc','dec','neg','not'):

@@ -73,22 +73,20 @@ pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 6771);
                 c.step()?;
-                let v = (c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(14u16), 16)? as i16
-                    as i32)
-                    .wrapping_mul(15u16 as i16 as i32) as u16;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(14u16), 16)?;
+                let y = 15u16;
+                let v = c.imul3(x, y);
                 c.r[0] = v;
                 c.pc = (2745, 6776);
                 c.step()?;
                 let o = 0u16.wrapping_add(55230u16);
                 let s = c.r[11];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 6780);
@@ -103,8 +101,8 @@ pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 6786);
                 c.step()?;
-                let x = ((c.r[0] >> 8) & 255);
-                let y = ((c.r[0] >> 8) & 255);
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
                 let v = c.xor(x, y, 8);
                 c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
                 c.pc = (2745, 6788);
@@ -120,8 +118,8 @@ pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
             6794 => {
                 c.pc = (2745, 6794);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 6796);
@@ -138,22 +136,20 @@ pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 6804);
                 c.step()?;
-                let v = (c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(14u16), 16)? as i16
-                    as i32)
-                    .wrapping_mul(15u16 as i16 as i32) as u16;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(14u16), 16)?;
+                let y = 15u16;
+                let v = c.imul3(x, y);
                 c.r[0] = v;
                 c.pc = (2745, 6809);
                 c.step()?;
                 let o = 0u16.wrapping_add(55230u16);
                 let s = c.r[11];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 6813);
@@ -168,8 +164,8 @@ pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 6819);
                 c.step()?;
-                let x = ((c.r[0] >> 8) & 255);
-                let y = ((c.r[0] >> 8) & 255);
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
                 let v = c.xor(x, y, 8);
                 c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
                 c.pc = (2745, 6821);
@@ -185,7 +181,7 @@ pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
             6827 => {
                 c.pc = (2745, 6827);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 6830);
                 c.step()?;
@@ -201,8 +197,7 @@ pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 6838);
@@ -239,19 +234,19 @@ pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
                 c.r[7] = v;
                 c.pc = (2745, 6849);
                 c.step()?;
-                let v = (c.read(
+                let x = c.read(
                     c.r[11],
                     0u16.wrapping_add(c.r[7]).wrapping_sub(10524u16),
                     16,
-                )? as i16 as i32)
-                    .wrapping_mul(62u16 as i16 as i32) as u16;
+                )?;
+                let y = 62u16;
+                let v = c.imul3(x, y);
                 c.r[0] = v;
                 c.pc = (2745, 6854);
                 c.step()?;
                 let o = 0u16.wrapping_add(55234u16);
                 let s = c.r[11];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 6858);
@@ -266,8 +261,8 @@ pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 6864);
                 c.step()?;
-                let x = ((c.r[0] >> 8) & 255);
-                let y = ((c.r[0] >> 8) & 255);
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
                 let v = c.xor(x, y, 8);
                 c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
                 c.pc = (2745, 6866);
@@ -283,7 +278,7 @@ pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
             6872 => {
                 c.pc = (2745, 6872);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 label = 6875;
                 continue;
@@ -318,8 +313,7 @@ pub(super) fn p_0ab9_1cbb(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 7362);
@@ -349,7 +343,7 @@ pub(super) fn p_0ab9_1cbb(c: &mut Cpu) -> Result<(), String> {
             7372 => {
                 c.pc = (2745, 7372);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 7375);
                 c.step()?;
@@ -403,7 +397,7 @@ pub(super) fn p_0ab9_1cd6(c: &mut Cpu) -> Result<(), String> {
             7396 => {
                 c.pc = (2745, 7396);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 7399);
                 c.step()?;
@@ -445,8 +439,7 @@ pub(super) fn p_0ab9_1e4e(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 7769);
@@ -474,8 +467,8 @@ pub(super) fn p_0ab9_1e4e(c: &mut Cpu) -> Result<(), String> {
                 c.r[2] = v;
                 c.pc = (2745, 7776);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[2] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[2] >> 0) & 255;
                 let v = c.sub(x, y, 8);
                 let _ = v;
                 c.pc = (2745, 7778);
@@ -499,7 +492,7 @@ pub(super) fn p_0ab9_1e4e(c: &mut Cpu) -> Result<(), String> {
             7783 => {
                 c.pc = (2745, 7783);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 7786);
                 c.step()?;
@@ -530,8 +523,7 @@ pub(super) fn p_0ab9_1e9f(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 7846);
@@ -552,8 +544,8 @@ pub(super) fn p_0ab9_1e9f(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 7857);
                 c.step()?;
-                let x = ((c.r[0] >> 8) & 255);
-                let y = ((c.r[0] >> 8) & 255);
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
                 let v = c.xor(x, y, 8);
                 c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
                 c.pc = (2745, 7859);
@@ -564,7 +556,7 @@ pub(super) fn p_0ab9_1e9f(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = v;
                 c.pc = (2745, 7862);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 7865);
                 c.step()?;
@@ -576,8 +568,7 @@ pub(super) fn p_0ab9_1e9f(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 7870);
@@ -586,7 +577,7 @@ pub(super) fn p_0ab9_1e9f(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 7874);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 label = 7877;
                 continue;
@@ -701,8 +692,7 @@ pub(super) fn p_0ab9_1ecc(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 7922);
@@ -730,8 +720,8 @@ pub(super) fn p_0ab9_1ecc(c: &mut Cpu) -> Result<(), String> {
                 c.r[2] = v;
                 c.pc = (2745, 7929);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[2] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[2] >> 0) & 255;
                 let v = c.xor(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 7931);
@@ -747,7 +737,7 @@ pub(super) fn p_0ab9_1ecc(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 7938);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 7941);
                 c.step()?;
@@ -778,8 +768,7 @@ pub(super) fn p_0ab9_1fd3(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 8154);
@@ -812,8 +801,7 @@ pub(super) fn p_0ab9_1fd3(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 8166);
@@ -966,7 +954,7 @@ pub(super) fn p_0ab9_1fd3(c: &mut Cpu) -> Result<(), String> {
             8223 => {
                 c.pc = (2745, 8223);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 8226);
                 c.step()?;
@@ -997,8 +985,7 @@ pub(super) fn p_0ab9_2029(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 8240);
@@ -1031,8 +1018,7 @@ pub(super) fn p_0ab9_2029(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 8252);
@@ -1185,7 +1171,7 @@ pub(super) fn p_0ab9_2029(c: &mut Cpu) -> Result<(), String> {
             8309 => {
                 c.pc = (2745, 8309);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 8312);
                 c.step()?;
@@ -1216,8 +1202,7 @@ pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 12902);
@@ -1234,8 +1219,7 @@ pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(55226u16);
                 let s = c.r[11];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 12913);
@@ -1278,8 +1262,7 @@ pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 12938);
@@ -1302,8 +1285,7 @@ pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 12950);
@@ -1327,8 +1309,8 @@ pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
             12956 => {
                 c.pc = (2745, 12956);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 12958);
@@ -1341,8 +1323,7 @@ pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 12963);
@@ -1366,8 +1347,8 @@ pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
             12969 => {
                 c.pc = (2745, 12969);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 12971);
@@ -1405,8 +1386,7 @@ pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 12985);
@@ -1459,8 +1439,8 @@ pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13006);
                 c.step()?;
-                let x = ((c.r[0] >> 8) & 255);
-                let y = ((c.r[0] >> 8) & 255);
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
                 let v = c.xor(x, y, 8);
                 c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
                 c.pc = (2745, 13008);
@@ -1508,8 +1488,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13340);
@@ -1547,8 +1526,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13356);
@@ -1599,8 +1577,8 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13375);
                 c.step()?;
-                let x = ((c.r[0] >> 8) & 255);
-                let y = ((c.r[0] >> 8) & 255);
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
                 let v = c.xor(x, y, 8);
                 c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
                 c.pc = (2745, 13377);
@@ -1615,8 +1593,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13386);
@@ -1687,8 +1664,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13418);
@@ -1712,8 +1688,8 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
             13424 => {
                 c.pc = (2745, 13424);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13426);
@@ -1734,8 +1710,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13437);
@@ -1759,8 +1734,8 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
             13443 => {
                 c.pc = (2745, 13443);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13445);
@@ -1778,8 +1753,8 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
             13452 => {
                 c.pc = (2745, 13452);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13454);
@@ -1808,7 +1783,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
             13462 => {
                 c.pc = (2745, 13462);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 13465);
                 c.step()?;
@@ -1840,8 +1815,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13481);
@@ -1865,8 +1839,8 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
             13487 => {
                 c.pc = (2745, 13487);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13489);
@@ -1887,8 +1861,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13500);
@@ -1912,8 +1885,8 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
             13506 => {
                 c.pc = (2745, 13506);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13508);
@@ -1942,7 +1915,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
             13516 => {
                 c.pc = (2745, 13516);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 13519);
                 c.step()?;
@@ -1974,8 +1947,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13535);
@@ -1999,8 +1971,8 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
             13541 => {
                 c.pc = (2745, 13541);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13543);
@@ -2021,8 +1993,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13554);
@@ -2046,8 +2017,8 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
             13560 => {
                 c.pc = (2745, 13560);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13562);
@@ -2076,7 +2047,7 @@ pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
             13570 => {
                 c.pc = (2745, 13570);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 label = 13573;
                 continue;
@@ -2119,8 +2090,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13595);
@@ -2158,8 +2128,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13611);
@@ -2206,8 +2175,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13631);
@@ -2268,8 +2236,8 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13653);
                 c.step()?;
-                let x = ((c.r[0] >> 8) & 255);
-                let y = ((c.r[0] >> 8) & 255);
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
                 let v = c.xor(x, y, 8);
                 c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
                 c.pc = (2745, 13655);
@@ -2284,8 +2252,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13664);
@@ -2356,8 +2323,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13696);
@@ -2381,7 +2347,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
             13702 => {
                 c.pc = (2745, 13702);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 13705);
                 c.step()?;
@@ -2413,8 +2379,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13721);
@@ -2438,7 +2403,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
             13727 => {
                 c.pc = (2745, 13727);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (2745, 13730);
                 c.step()?;
@@ -2470,8 +2435,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13746);
@@ -2495,8 +2459,8 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
             13752 => {
                 c.pc = (2745, 13752);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13754);
@@ -2513,8 +2477,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13763);
@@ -2538,7 +2501,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
             13769 => {
                 c.pc = (2745, 13769);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
                 let y = 2u16;
                 let v = c.sub(x, y, 8);
                 let _ = v;
@@ -2556,8 +2519,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[7]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13780);
@@ -2574,8 +2536,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(55226u16);
                 let s = c.r[11];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13791);
@@ -2616,7 +2577,7 @@ pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
             13806 => {
                 c.pc = (2745, 13806);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 label = 13809;
                 continue;
@@ -2651,8 +2612,7 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13823);
@@ -2676,8 +2636,8 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
             13829 => {
                 c.pc = (2745, 13829);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13831);
@@ -2690,8 +2650,7 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13836);
@@ -2708,8 +2667,7 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(55226u16);
                 let s = c.r[11];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13847);
@@ -2738,8 +2696,7 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13861);
@@ -2763,8 +2720,8 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
             13867 => {
                 c.pc = (2745, 13867);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
-                let y = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.or(x, y, 8);
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (2745, 13869);
@@ -2788,14 +2745,13 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13878);
                 c.step()?;
                 let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(13u16), 8)?;
-                let y = ((c.r[0] >> 0) & 255);
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.add(x, y, 8);
                 c.write(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(13u16), 8, v)?;
                 c.pc = (2745, 13882);
@@ -2819,14 +2775,13 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13891);
                 c.step()?;
                 let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(13u16), 8)?;
-                let y = ((c.r[0] >> 0) & 255);
+                let y = (c.r[0] >> 0) & 255;
                 let v = c.sub(x, y, 8);
                 c.write(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(13u16), 8, v)?;
                 c.pc = (2745, 13895);
@@ -2850,7 +2805,7 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
             13901 => {
                 c.pc = (2745, 13901);
                 c.step()?;
-                let x = ((c.r[0] >> 0) & 255);
+                let x = (c.r[0] >> 0) & 255;
                 let y = 2u16;
                 let v = c.sub(x, y, 8);
                 let _ = v;
@@ -2864,8 +2819,7 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (2745, 13908);
@@ -2882,7 +2836,7 @@ pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = v;
                 c.pc = (2745, 13915);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(12u16), 8, v)?;
                 label = 13919;
                 continue;
@@ -2933,7 +2887,7 @@ pub(super) fn p_24bc_0259(c: &mut Cpu) -> Result<(), String> {
                 c.pc = (9404, 616);
                 c.step()?;
                 let x = c.r[0];
-                let y = ((c.r[1] >> 0) & 255);
+                let y = (c.r[1] >> 0) & 255;
                 let v = c.shr(x, y, 16);
                 c.r[0] = v;
                 c.pc = (9404, 618);
@@ -2944,7 +2898,7 @@ pub(super) fn p_24bc_0259(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = v;
                 c.pc = (9404, 621);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (9404, 624);
                 c.step()?;
@@ -2979,8 +2933,7 @@ pub(super) fn p_24bc_0cdc(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(c.r[5]).wrapping_add(8u16);
                 let s = c.r[10];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[6] = v;
                 c.r[11] = g;
                 c.pc = (9404, 3300);
@@ -3067,8 +3020,7 @@ pub(super) fn p_24bc_0d3f(c: &mut Cpu) -> Result<(), String> {
                 c.step()?;
                 let o = 0u16.wrapping_add(56964u16);
                 let s = c.r[11];
-                let v = c.read(s, o, 16)?;
-                let g = c.read(s, o.wrapping_add(2), 16)?;
+                let (v, g) = c.far(s, o)?;
                 c.r[7] = v;
                 c.r[8] = g;
                 c.pc = (9404, 3399);
@@ -3121,7 +3073,7 @@ pub(super) fn p_24bc_0d3f(c: &mut Cpu) -> Result<(), String> {
             3415 => {
                 c.pc = (9404, 3415);
                 c.step()?;
-                let v = ((c.r[0] >> 0) & 255);
+                let v = (c.r[0] >> 0) & 255;
                 c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
                 c.pc = (9404, 3418);
                 c.step()?;
