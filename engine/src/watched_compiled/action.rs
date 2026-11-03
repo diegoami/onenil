@@ -593,4 +593,10 @@ mod tests {
             );
         }
     }
+    #[test]
+    fn actor_entry_requires_an_explicit_logical_render_style_pointer(){
+        let mut s=context();s.kind=Kind::Actor;
+        assert!(machine(&s).is_err(),"actor entry accepted no typed renderer-style pointer");
+    }
+
 }

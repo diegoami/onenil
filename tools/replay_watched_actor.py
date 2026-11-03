@@ -44,7 +44,9 @@ def select_entry(c,anchor,native):
         if 'ok'in result:return raw,state,result['ok']
         fault=result['error'];missing=fault['missing']
         if missing is None:raise ValueError(f'original parent{c["case"]}: '+fault['message'])
-        area,offset=facts.named(state,missing['address']);at=facts.address(state,area,offset)
+        try:area,offset=facts.named(state,missing['address'])
+        except ValueError as error:raise ValueError(f'original parent{c["case"]}: {fault}')from error
+        at=facts.address(state,area,offset)
         if at in seen:raise ValueError('native parent repeated admitted missing fact:'+str(fault))
         seen.add(at);state['cells'].append({'area':area,'offset':offset,'value':raw[at]})
     raise ValueError('parent fact selection did not converge')
