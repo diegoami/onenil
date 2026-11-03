@@ -1,0 +1,43 @@
+{
+  "schema": "original-presentation-clock-boundary/1",
+  "task_amendment": "8fdce1d",
+  "source": {
+    "path": "static/1-0-exe/code/seg_1998_01.asm",
+    "sha256": "8975e7992cc991c92d6a05b8875eb0960c2893ed122314f984bed4eb77d17148",
+    "original_static_commit": "d9e20a4"
+  },
+  "case": 114,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/00114-entry.json",
+    "sha256": "3922b2f8cd3bdd734479ec20418a503603635d4087e13909e17e938cae7968db",
+    "ram_sha256": "05113bc09bd8d4cc0ad4f5a66507ad9c85f142fd4aab7820ba6684ec77bbfedd"
+  },
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/00114-exit.json",
+    "sha256": "445e3e22efe90cd5145a3a8818e31f9cb2733d50a25ca26c271e8525aee42b3a",
+    "ram_sha256": "0a34ad5ab22c81c2faed1c3b3ff55270671c58690514dcd2aebaf3c9e5a1ce99"
+  },
+  "decoded": {
+    "DS:0D5A": {
+      "before": 63,
+      "after": 64
+    },
+    "DS:0D5C": {
+      "before": 100,
+      "after": 100
+    },
+    "DS:D088": {
+      "before": 0,
+      "after": 0
+    }
+  },
+  "presentation_roots": [
+    "1998:00D6",
+    "1998:01E0"
+  ],
+  "ownership_exclusions": [
+    "DS:0D5A..0D5B",
+    "DS:D088..D089"
+  ],
+  "scope": "Sound waits emit native delay/tone requests. Their countdown/interrupt phase cannot enter action inputs or outputs. Native continuous-clock integration remains required;action RNG/scenes/queue/pitch/game state still compare against original exits."
+}

@@ -1,0 +1,28 @@
+{
+  "schema": "private-original-archive-upload/1",
+  "status": "uploaded-and-metadata-verified",
+  "authorization": "Explicit owner reply: Approve private Drive upload",
+  "previous_rejection": "records/T37/private-oracle-upload-r0001.json",
+  "verified_at": "2026-11-03T20:28:10.797991+00:00",
+  "local": {
+    "path": ".cache/T37/T37-oracle-r0001.tar.gz",
+    "size": 26414072,
+    "sha256": "4f70e307b1c7c9bc97910453abacc2b7cb20cecec0f142b1ea750978da0377d2"
+  },
+  "remote": {
+    "id": "1WQe_N-yyso4khgSqPTVnhYtltgvXs1Ln",
+    "parent_id": "1IyIUQBE_Clkv6aBizULKIymRzHBLd4U8",
+    "name": "T37-oracle-r0001.tar.gz",
+    "url": "https://drive.google.com/file/d/1WQe_N-yyso4khgSqPTVnhYtltgvXs1Ln/view?usp=drivesdk",
+    "size": 26414072,
+    "mime_type": "application/gzip",
+    "permissions_observed": [
+      {
+        "type": "user",
+        "role": "owner"
+      }
+    ]
+  },
+  "method": "Google Drive plugin upload_file,then get_file_metadata readback",
+  "verification": "Local SHA256 rechecked;remote file size,parent,name,MIME and owner-only permission metadata verified. Connector metadata does not expose remote checksum;no claim of remote SHA256 readback."
+}

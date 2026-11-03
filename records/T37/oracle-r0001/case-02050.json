@@ -1,0 +1,101 @@
+{
+  "case": 2050,
+  "kind": "action5",
+  "parent": null,
+  "tick": 100,
+  "scene": 11,
+  "registers": {
+    "ax": 39941,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 15990,
+    "bp": 16004,
+    "si": 199,
+    "di": 52738,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    29412,
+    4828,
+    52738,
+    12423
+  ],
+  "input_scene": {
+    "index": 11,
+    "word0": 62463,
+    "word2": 62463,
+    "word8": 62210,
+    "word10": 60160,
+    "word12": 10494,
+    "word14": 2676,
+    "word20": 2583,
+    "word23": 51,
+    "byte4": 148,
+    "byte5": 9,
+    "byte6": 1,
+    "byte7": 11,
+    "byte16": 2,
+    "byte17": 0,
+    "byte18": 67,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 60301,
+  "draw_start": 3335,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/02050-entry.json",
+    "sha256": "28aa2f8c00cba663fdbc2c186e8d14f49fcf972e9691c06732b0e93abc590cf5",
+    "ram_sha256": "79332b2374cc6448cd1defef2a95e870c4c15708d4e23f8760a488a3d64620a9"
+  },
+  "exit_sp": 15990,
+  "exit_bp": 16004,
+  "output_scene": {
+    "index": 11,
+    "word0": 62463,
+    "word2": 62463,
+    "word8": 60927,
+    "word10": 60160,
+    "word12": 10497,
+    "word14": 2676,
+    "word20": 2583,
+    "word23": 51,
+    "byte4": 148,
+    "byte5": 9,
+    "byte6": 1,
+    "byte7": 11,
+    "byte16": 2,
+    "byte17": 0,
+    "byte18": 67,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 44183,
+  "draw_end": 3337,
+  "draws": [
+    {
+      "n": 4,
+      "seed_before": 60301,
+      "seed_after": 13352,
+      "value": 1,
+      "site": "0AB9:388A"
+    },
+    {
+      "n": 5,
+      "seed_before": 13352,
+      "seed_after": 44183,
+      "value": 4,
+      "site": "0AB9:333A"
+    }
+  ],
+  "events": [],
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/02050-exit.json",
+    "sha256": "564559f51397d298631f1b27fc576e1202a7c46dada7bfdbc9b52bb85c3fb615",
+    "ram_sha256": "ca12a065401d6663502921fdcc4dc8ec7cee045ab442161df0e251e1c54110eb"
+  }
+}

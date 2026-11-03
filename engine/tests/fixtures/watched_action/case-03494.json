@@ -1,0 +1,215 @@
+{
+  "case": 3494,
+  "kind": "contact",
+  "tick": 123,
+  "oracle_sha256": "4b1b606cb291b1be987aa2d39a4b4adb61e4b8d45282e7eee4de9fcb8090c689",
+  "entry_sha256": "c4f3b8b117440f64052beb4ddca6e86db3145825d399fc063d465bbf4610821d",
+  "input": {
+    "kind": "contact",
+    "scene": {
+      "index": 19,
+      "word0": 2296,
+      "word2": 2296,
+      "word8": 2552,
+      "word10": 60153,
+      "word12": 8703,
+      "word14": 2588,
+      "word20": 0,
+      "word23": 67,
+      "byte4": 156,
+      "byte5": 12,
+      "byte6": 1,
+      "byte7": 19,
+      "byte16": 4,
+      "byte17": 0,
+      "byte18": 65,
+      "byte19": 5,
+      "byte22": 0
+    },
+    "seed": 53684,
+    "regs": [
+      1,
+      0,
+      0,
+      0,
+      15980,
+      15988,
+      42270,
+      52938,
+      12423,
+      4828,
+      16447,
+      12423
+    ],
+    "flags": 29186,
+    "stack_words": [
+      17935,
+      4828,
+      52938,
+      12423
+    ],
+    "pointers": [
+      {
+        "kind": "p8",
+        "offset": 8,
+        "segment": 19139
+      },
+      {
+        "kind": "p15",
+        "offset": 0,
+        "segment": 21100
+      },
+      {
+        "kind": "club",
+        "offset": 0,
+        "segment": 24776
+      },
+      {
+        "kind": "config",
+        "offset": 0,
+        "segment": 28142
+      },
+      {
+        "kind": "main",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "main_shown",
+        "offset": 0,
+        "segment": 17471
+      },
+      {
+        "kind": "background",
+        "offset": 0,
+        "segment": 31014
+      },
+      {
+        "kind": "background_shown",
+        "offset": 0,
+        "segment": 17721
+      },
+      {
+        "kind": "commentary",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "seed",
+        "offset": 42268,
+        "segment": 12423
+      }
+    ],
+    "cells": [
+      {
+        "area": "ds",
+        "offset": 53364,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53062,
+        "value": 251
+      },
+      {
+        "area": "ds",
+        "offset": 53063,
+        "value": 248
+      }
+    ]
+  },
+  "expected": {
+    "scene": {
+      "index": 19,
+      "word0": 2296,
+      "word2": 2296,
+      "word8": 2552,
+      "word10": 60153,
+      "word12": 8703,
+      "word14": 2588,
+      "word20": 0,
+      "word23": 67,
+      "byte4": 156,
+      "byte5": 12,
+      "byte6": 1,
+      "byte7": 19,
+      "byte16": 4,
+      "byte17": 0,
+      "byte18": 65,
+      "byte19": 5,
+      "byte22": 0
+    },
+    "seed": 53684,
+    "pointers": [
+      {
+        "kind": "p8",
+        "offset": 8,
+        "segment": 19139
+      },
+      {
+        "kind": "p15",
+        "offset": 0,
+        "segment": 21100
+      },
+      {
+        "kind": "club",
+        "offset": 0,
+        "segment": 24776
+      },
+      {
+        "kind": "config",
+        "offset": 0,
+        "segment": 28142
+      },
+      {
+        "kind": "main",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "main_shown",
+        "offset": 0,
+        "segment": 17471
+      },
+      {
+        "kind": "background",
+        "offset": 0,
+        "segment": 31014
+      },
+      {
+        "kind": "background_shown",
+        "offset": 0,
+        "segment": 17721
+      },
+      {
+        "kind": "commentary",
+        "offset": 0,
+        "segment": 47104
+      },
+      {
+        "kind": "seed",
+        "offset": 42268,
+        "segment": 12423
+      }
+    ],
+    "cells": [
+      {
+        "area": "ds",
+        "offset": 53364,
+        "value": 0
+      },
+      {
+        "area": "ds",
+        "offset": 53062,
+        "value": 251
+      },
+      {
+        "area": "ds",
+        "offset": 53063,
+        "value": 248
+      }
+    ],
+    "draws": [],
+    "events": []
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "case": 1524,
+  "kind": "action5",
+  "parent": null,
+  "tick": 79,
+  "scene": 10,
+  "registers": {
+    "ax": 39941,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 15990,
+    "bp": 16004,
+    "si": 199,
+    "di": 52713,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    29412,
+    4828,
+    52713,
+    12423
+  ],
+  "input_scene": {
+    "index": 10,
+    "word0": 764,
+    "word2": 764,
+    "word8": 764,
+    "word10": 59911,
+    "word12": 5630,
+    "word14": 2670,
+    "word20": 2584,
+    "word23": 31,
+    "byte4": 148,
+    "byte5": 9,
+    "byte6": 1,
+    "byte7": 10,
+    "byte16": 2,
+    "byte17": 0,
+    "byte18": 67,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 23929,
+  "draw_start": 2323,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/01524-entry.json",
+    "sha256": "4f64ff936682742c8ca6a2e5fd21221ee21feffa2f6ab28ab0b61b8fee3b1c78",
+    "ram_sha256": "161303463000cfea65d09a1beef9a1b2a5cbf84aac527c6542f74dcb19352abf"
+  },
+  "exit_sp": 15990,
+  "exit_bp": 16004,
+  "output_scene": {
+    "index": 10,
+    "word0": 764,
+    "word2": 764,
+    "word8": 764,
+    "word10": 59911,
+    "word12": 5630,
+    "word14": 2670,
+    "word20": 2584,
+    "word23": 31,
+    "byte4": 148,
+    "byte5": 9,
+    "byte6": 1,
+    "byte7": 10,
+    "byte16": 2,
+    "byte17": 7,
+    "byte18": 67,
+    "byte19": 13,
+    "byte22": 0
+  },
+  "seed_after": 19366,
+  "draw_end": 2326,
+  "draws": [
+    {
+      "n": 84,
+      "seed_before": 23929,
+      "seed_after": 51044,
+      "value": 66,
+      "site": "0AB9:41AD"
+    },
+    {
+      "n": 28,
+      "seed_before": 51044,
+      "seed_after": 63459,
+      "value": 28,
+      "site": "0AB9:4201"
+    },
+    {
+      "n": 14,
+      "seed_before": 63459,
+      "seed_after": 19366,
+      "value": 5,
+      "site": "0AB9:4231"
+    }
+  ],
+  "events": [
+    {
+      "code": 11,
+      "actor_slot": 10,
+      "secondary_slot": 0,
+      "side": 1,
+      "club": 134,
+      "player": 2670,
+      "secondary": 0,
+      "minute": 1,
+      "tick": 79,
+      "draw_start": 2323,
+      "seed_before": 23929,
+      "head_before": 13,
+      "caller": "0AB9:1E4A",
+      "event": 12,
+      "draw_end": 2323,
+      "seed_after": 23929,
+      "queue": {
+        "index": 14,
+        "code": 11,
+        "player": 2670,
+        "secondary": 0,
+        "side": 1
+      }
+    },
+    {
+      "code": 12,
+      "actor_slot": 7,
+      "secondary_slot": 0,
+      "side": 0,
+      "club": 130,
+      "player": 2587,
+      "secondary": 0,
+      "minute": 1,
+      "tick": 79,
+      "draw_start": 2326,
+      "seed_before": 19366,
+      "head_before": 14,
+      "caller": "0AB9:1DDE",
+      "event": 13,
+      "draw_end": 2326,
+      "seed_after": 19366,
+      "queue": {
+        "index": 15,
+        "code": 12,
+        "player": 2587,
+        "secondary": 0,
+        "side": 0
+      }
+    }
+  ],
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/01524-exit.json",
+    "sha256": "2bf6e1c66d45f478b0ec4d2e02fc3a827c71fff4a381c08fa5cd8a7650dc81ea",
+    "ram_sha256": "7f54813be8c90be93c54c1a396df9681a820f083e03b711cad08189eff163b22"
+  }
+}

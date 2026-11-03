@@ -1,0 +1,52 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+error[E0599]: no method named `resize` found for struct `Box<[u8]>` in the current scope
+   --> src/watched_compiled/compiled.rs:474:73
+    |
+474 |         let mut e=crate::role_scores::image(Default::default());e.image.resize(0x110000,0);
+    |                                                                         ^^^^^^ method not found in `Box<[u8]>`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2859:9
+     |
+2859 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2921:9
+     |
+2921 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4486:9
+     |
+4486 |     let mut label = 40814u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4974:9
+     |
+4974 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:5036:9
+     |
+5036 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+For more information about this error, try `rustc --explain E0599`.
+warning: `onenil-engine` (lib test) generated 5 warnings
+error: could not compile `onenil-engine` (lib test) due to 1 previous error; 5 warnings emitted

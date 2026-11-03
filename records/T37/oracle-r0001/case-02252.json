@@ -1,0 +1,108 @@
+{
+  "case": 2252,
+  "kind": "action5",
+  "parent": null,
+  "tick": 103,
+  "scene": 22,
+  "registers": {
+    "ax": 38661,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 15990,
+    "bp": 16004,
+    "si": 42270,
+    "di": 53013,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    29412,
+    4828,
+    53013,
+    12423
+  ],
+  "input_scene": {
+    "index": 22,
+    "word0": 64512,
+    "word2": 64512,
+    "word8": 64257,
+    "word10": 60928,
+    "word12": 8453,
+    "word14": 2591,
+    "word20": 0,
+    "word23": 47,
+    "byte4": 157,
+    "byte5": 12,
+    "byte6": 1,
+    "byte7": 22,
+    "byte16": 5,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 53347,
+  "draw_start": 3477,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/02252-entry.json",
+    "sha256": "21e98e545ab416262e1e0afef2c7cc9107d731e785aed399560383a726e34ff8",
+    "ram_sha256": "f66db6ef0c8a3d3d6c7e0da6e4a915fb338627fa9b88c48d89a1555c06c8e8b5"
+  },
+  "exit_sp": 15990,
+  "exit_bp": 16004,
+  "output_scene": {
+    "index": 22,
+    "word0": 64512,
+    "word2": 64512,
+    "word8": 64001,
+    "word10": 60928,
+    "word12": 8699,
+    "word14": 2591,
+    "word20": 0,
+    "word23": 47,
+    "byte4": 157,
+    "byte5": 12,
+    "byte6": 1,
+    "byte7": 22,
+    "byte16": 5,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 31608,
+  "draw_end": 3480,
+  "draws": [
+    {
+      "n": 15,
+      "seed_before": 53347,
+      "seed_after": 8742,
+      "value": 3,
+      "site": "0AB9:3327"
+    },
+    {
+      "n": 2,
+      "seed_before": 8742,
+      "seed_after": 27933,
+      "value": 1,
+      "site": "0AB9:380B"
+    },
+    {
+      "n": 6,
+      "seed_before": 27933,
+      "seed_after": 31608,
+      "value": 3,
+      "site": "0AB9:3927"
+    }
+  ],
+  "events": [],
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/02252-exit.json",
+    "sha256": "7bfad7c0d01f3268bb2b9862808650d37372b6f7483b370e410d8a2cf4f19727",
+    "ram_sha256": "5a5396317c89f91d8bb652058d0e4cca4c9f799295b249697ba2eacfb5af0ccd"
+  }
+}

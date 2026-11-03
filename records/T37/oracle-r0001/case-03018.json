@@ -1,0 +1,112 @@
+{
+  "case": 3018,
+  "kind": "action5",
+  "parent": null,
+  "tick": 113,
+  "scene": 10,
+  "registers": {
+    "ax": 39941,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 15990,
+    "bp": 16004,
+    "si": 199,
+    "di": 52713,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    29412,
+    4828,
+    52713,
+    12423
+  ],
+  "input_scene": {
+    "index": 10,
+    "word0": 65275,
+    "word2": 65275,
+    "word8": 65275,
+    "word10": 59911,
+    "word12": 12030,
+    "word14": 2670,
+    "word20": 2584,
+    "word23": 40,
+    "byte4": 147,
+    "byte5": 9,
+    "byte6": 0,
+    "byte7": 10,
+    "byte16": 3,
+    "byte17": 0,
+    "byte18": 67,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 55649,
+  "draw_start": 3963,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/03018-entry.json",
+    "sha256": "c331099b66e50870634731fa527989008131c1c711d723211d63bbb67abe96bd",
+    "ram_sha256": "f80c1f7ab1432538401ea5073070d2be7416ad10ce3575d6010053de9c8dd2ad"
+  },
+  "exit_sp": 15990,
+  "exit_bp": 16004,
+  "output_scene": {
+    "index": 10,
+    "word0": 65275,
+    "word2": 65275,
+    "word8": 65275,
+    "word10": 59911,
+    "word12": 12286,
+    "word14": 2670,
+    "word20": 2584,
+    "word23": 40,
+    "byte4": 147,
+    "byte5": 9,
+    "byte6": 0,
+    "byte7": 10,
+    "byte16": 3,
+    "byte17": 0,
+    "byte18": 67,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 55649,
+  "draw_end": 3963,
+  "draws": [],
+  "events": [
+    {
+      "code": 35,
+      "actor_slot": 10,
+      "secondary_slot": 0,
+      "side": 1,
+      "club": 134,
+      "player": 2670,
+      "secondary": 0,
+      "minute": 2,
+      "tick": 113,
+      "draw_start": 3963,
+      "seed_before": 55649,
+      "head_before": 21,
+      "caller": "0AB9:1E4A",
+      "event": 20,
+      "draw_end": 3963,
+      "seed_after": 55649,
+      "queue": {
+        "index": 22,
+        "code": 35,
+        "player": 2670,
+        "secondary": 0,
+        "side": 1
+      }
+    }
+  ],
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/03018-exit.json",
+    "sha256": "f0bead0310b9de3fe97260ea7e05443064a9fcb8567f4ecb8f89efec5a9266a5",
+    "ram_sha256": "967180a127af0a2cbf122dd45a0c40ef1c07afe36236ea5db8c483b9c1085695"
+  }
+}

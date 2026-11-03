@@ -1,0 +1,108 @@
+{
+  "case": 1028,
+  "kind": "action5",
+  "parent": null,
+  "tick": 67,
+  "scene": 21,
+  "registers": {
+    "ax": 38661,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 15990,
+    "bp": 16004,
+    "si": 199,
+    "di": 52988,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    29412,
+    4828,
+    52988,
+    12423
+  ],
+  "input_scene": {
+    "index": 21,
+    "word0": 65274,
+    "word2": 65274,
+    "word8": 65274,
+    "word10": 60160,
+    "word12": 7422,
+    "word14": 2590,
+    "word20": 0,
+    "word23": 27,
+    "byte4": 157,
+    "byte5": 12,
+    "byte6": 1,
+    "byte7": 21,
+    "byte16": 5,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 2048,
+  "draw_start": 1728,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/01028-entry.json",
+    "sha256": "351536704991f8c770bc15ce911e929fdf1979b9bd4b1fcd8564b3341d3afbeb",
+    "ram_sha256": "cf0e762990b7f3765f797713fb03f8c933d65a43ec0559ebce6e053f2b445b16"
+  },
+  "exit_sp": 15990,
+  "exit_bp": 16004,
+  "output_scene": {
+    "index": 21,
+    "word0": 65274,
+    "word2": 65274,
+    "word8": 2302,
+    "word10": 60160,
+    "word12": 7678,
+    "word14": 2590,
+    "word20": 0,
+    "word23": 27,
+    "byte4": 157,
+    "byte5": 12,
+    "byte6": 1,
+    "byte7": 21,
+    "byte16": 5,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 7977,
+  "draw_end": 1731,
+  "draws": [
+    {
+      "n": 5,
+      "seed_before": 2048,
+      "seed_after": 783,
+      "value": 1,
+      "site": "0AB9:333A"
+    },
+    {
+      "n": 2,
+      "seed_before": 783,
+      "seed_after": 33570,
+      "value": 2,
+      "site": "0AB9:402B"
+    },
+    {
+      "n": 15,
+      "seed_before": 33570,
+      "seed_after": 7977,
+      "value": 2,
+      "site": "0AB9:449B"
+    }
+  ],
+  "events": [],
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/01028-exit.json",
+    "sha256": "6c2fa5f6d3cb2abeb8c2057a3d431e66d4b09f229bafa56955d348cba59b5c7b",
+    "ram_sha256": "122dac818a131f9a38e0e8453979896851a4f43f881267a0db4a80b635a94c36"
+  }
+}

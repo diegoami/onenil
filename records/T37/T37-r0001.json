@@ -1,0 +1,29 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T37-r0001",
+  "code_commit": "13fdb6431768bf91bed4945971a17b8d2d837461",
+  "started": "2026-11-03T20:48:36.846917+00:00",
+  "ended": "2026-11-03T20:48:59.372215+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "0b6dba0155a87d5fa08432e8b1716147cb7ad1b81ce87cf7a7aa945e27b81ee0"
+  },
+  "source_pins": {
+    "oracle_manifest_sha256": "4cfe86ebfed710044e7aa91081b9f376186507254f650950ed27d31f7c84b0dc",
+    "decoded_manifest_sha256": "8349aba70941f35c7e849e1182d49bcf8a2437286cc0a401ac00296422f2fd7f"
+  },
+  "routine": "native448C/4DFF source-addressed compiled action graphs",
+  "repetitions": 3,
+  "cases": 3768,
+  "calls": 11304,
+  "elapsed_ns": 22516787178,
+  "serialized_output_bytes": 18809979,
+  "method": "Pre-serialized inputs;release parsing,one native data image,compiled arithmetic/control flow/native helpers/RNG/commentary and serialization included;fixture preparation/output decoding excluded",
+  "limits": "Action/contact root kernels only;not a continuous watched tick,clock,full native match or emulator speed comparison"
+}

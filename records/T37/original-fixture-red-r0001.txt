@@ -1,0 +1,2748 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+warning: unreachable statement
+     --> src/watched_compiled/action_graph.rs:88670:17
+      |
+88669 |                 return Err("unported original instruction 1998:0129".into());
+      |                 ------------------------------------------------------------ any code following this expression is unreachable
+88670 |                 c.pc = (6552, 299);
+      |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+      |
+      = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+     --> src/watched_compiled/action_graph.rs:89022:17
+      |
+89021 |                 return Err("unported original instruction 1998:01D5".into());
+      |                 ------------------------------------------------------------ any code following this expression is unreachable
+89022 |                 c.pc = (6552, 471);
+      |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:117497:17
+       |
+117496 |                 return Err("unported original instruction 232A:0238".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+117497 |                 c.pc = (9002, 570);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:117553:17
+       |
+117552 |                 return Err("unported original instruction 232A:024C".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+117553 |                 c.pc = (9002, 590);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:127638:17
+       |
+127637 |                 return Err("unported original instruction 26C9:011F".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+127638 |                 c.pc = (9929, 288);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:127955:17
+       |
+127954 |                 return Err("unported original instruction 26C9:01AF".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+127955 |                 c.pc = (9929, 433);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:128070:17
+       |
+128069 |                 return Err("unported original instruction 26C9:01EE".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+128070 |                 label = 496;
+       |                 ^^^^^^^^^^^^ unreachable statement
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2859:9
+     |
+2859 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2921:9
+     |
+2921 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/action_graph.rs:2462:9
+     |
+2462 |     let mut label = 3906u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:51434:9
+      |
+51434 |     let mut label = 28526u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:63129:9
+      |
+63129 |     let mut label = 40814u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:78559:9
+      |
+78559 |     let mut label = 50355u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:93715:9
+      |
+93715 |     let mut label = 2934u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:102660:9
+       |
+102660 |     let mut label = 13939u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:103402:9
+       |
+103402 |     let mut label = 18265u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:103832:9
+       |
+103832 |     let mut label = 18492u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:104902:9
+       |
+104902 |     let mut label = 18999u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:106253:9
+       |
+106253 |     let mut label = 19906u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:106638:9
+       |
+106638 |     let mut label = 20097u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:113304:9
+       |
+113304 |     let mut label = 25352u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116943:9
+       |
+116943 |     let mut label = 213u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:117027:9
+       |
+117027 |     let mut label = 248u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:117220:9
+       |
+117220 |     let mut label = 324u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:117304:9
+       |
+117304 |     let mut label = 483u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:122379:9
+       |
+122379 |     let mut label = 546u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:122453:9
+       |
+122453 |     let mut label = 601u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:125664:9
+       |
+125664 |     let mut label = 3292u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:127427:9
+       |
+127427 |     let mut label = 2578u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:128557:9
+       |
+128557 |     let mut label = 2899u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:128979:9
+       |
+128979 |     let mut label = 3183u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:129251:9
+       |
+129251 |     let mut label = 3476u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:129299:9
+       |
+129299 |     let mut label = 3498u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4486:9
+     |
+4486 |     let mut label = 40814u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4974:9
+     |
+4974 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:5036:9
+     |
+5036 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: type `Missing` is more private than the item `Fault::missing`
+  --> src/watched_compiled/action.rs:33:37
+   |
+33 | pub struct Fault{pub message:String,pub missing:Option<Missing>}
+   |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^ field `Fault::missing` is reachable at visibility `pub`
+   |
+note: but type `Missing` is only usable at visibility `pub(in crate::watched_compiled)`
+  --> src/watched_compiled/compiled.rs:6:1
+   |
+ 6 | pub(super) struct Missing {pub scratch:bool,pub address:usize,pub writing:bool,pub pc:(u16,u16)}
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: function `advance_computed` is never used
+  --> src/watched_compiled/action.rs:88:4
+   |
+88 | fn advance_computed(s:&State)->Result<Outcome,Fault>{
+   |    ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `p_0ab9_0000` is never used
+ --> src/watched_compiled/action_graph.rs:4:15
+  |
+4 | pub(super) fn p_0ab9_0000(c: &mut Cpu) -> Result<(), String> {
+  |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_0143` is never used
+  --> src/watched_compiled/action_graph.rs:75:15
+   |
+75 | pub(super) fn p_0ab9_0143(c: &mut Cpu) -> Result<(), String> {
+   |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_0207` is never used
+   --> src/watched_compiled/action_graph.rs:526:15
+    |
+526 | pub(super) fn p_0ab9_0207(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_02d7` is never used
+   --> src/watched_compiled/action_graph.rs:965:15
+    |
+965 | pub(super) fn p_0ab9_02d7(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_033e` is never used
+    --> src/watched_compiled/action_graph.rs:1206:15
+     |
+1206 | pub(super) fn p_0ab9_033e(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_03bb` is never used
+    --> src/watched_compiled/action_graph.rs:1470:15
+     |
+1470 | pub(super) fn p_0ab9_03bb(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_09bd` is never used
+    --> src/watched_compiled/action_graph.rs:1560:15
+     |
+1560 | pub(super) fn p_0ab9_09bd(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_0d7e` is never used
+    --> src/watched_compiled/action_graph.rs:1563:15
+     |
+1563 | pub(super) fn p_0ab9_0d7e(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_0e45` is never used
+    --> src/watched_compiled/action_graph.rs:1952:15
+     |
+1952 | pub(super) fn p_0ab9_0e45(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_0f42` is never used
+    --> src/watched_compiled/action_graph.rs:2461:15
+     |
+2461 | pub(super) fn p_0ab9_0f42(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_0f94` is never used
+    --> src/watched_compiled/action_graph.rs:2615:15
+     |
+2615 | pub(super) fn p_0ab9_0f94(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1000` is never used
+    --> src/watched_compiled/action_graph.rs:2830:15
+     |
+2830 | pub(super) fn p_0ab9_1000(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_10b9` is never used
+    --> src/watched_compiled/action_graph.rs:3167:15
+     |
+3167 | pub(super) fn p_0ab9_10b9(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_13b8` is never used
+    --> src/watched_compiled/action_graph.rs:4827:15
+     |
+4827 | pub(super) fn p_0ab9_13b8(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1455` is never used
+    --> src/watched_compiled/action_graph.rs:5140:15
+     |
+5140 | pub(super) fn p_0ab9_1455(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1539` is never used
+    --> src/watched_compiled/action_graph.rs:5632:15
+     |
+5632 | pub(super) fn p_0ab9_1539(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_164f` is never used
+    --> src/watched_compiled/action_graph.rs:6202:15
+     |
+6202 | pub(super) fn p_0ab9_164f(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_19a0` is never used
+    --> src/watched_compiled/action_graph.rs:7985:15
+     |
+7985 | pub(super) fn p_0ab9_19a0(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1a18` is never used
+    --> src/watched_compiled/action_graph.rs:8059:15
+     |
+8059 | pub(super) fn p_0ab9_1a18(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1a38` is never used
+    --> src/watched_compiled/action_graph.rs:8119:15
+     |
+8119 | pub(super) fn p_0ab9_1a38(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1a4c` is never used
+    --> src/watched_compiled/action_graph.rs:8168:15
+     |
+8168 | pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1ae2` is never used
+    --> src/watched_compiled/action_graph.rs:8468:15
+     |
+8468 | pub(super) fn p_0ab9_1ae2(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1bd6` is never used
+    --> src/watched_compiled/action_graph.rs:8947:15
+     |
+8947 | pub(super) fn p_0ab9_1bd6(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1c1e` is never used
+    --> src/watched_compiled/action_graph.rs:9133:15
+     |
+9133 | pub(super) fn p_0ab9_1c1e(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1c7e` is never used
+    --> src/watched_compiled/action_graph.rs:9348:15
+     |
+9348 | pub(super) fn p_0ab9_1c7e(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1ca1` is never used
+    --> src/watched_compiled/action_graph.rs:9419:15
+     |
+9419 | pub(super) fn p_0ab9_1ca1(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1cbb` is never used
+    --> src/watched_compiled/action_graph.rs:9466:15
+     |
+9466 | pub(super) fn p_0ab9_1cbb(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1cd6` is never used
+    --> src/watched_compiled/action_graph.rs:9527:15
+     |
+9527 | pub(super) fn p_0ab9_1cd6(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1cec` is never used
+    --> src/watched_compiled/action_graph.rs:9581:15
+     |
+9581 | pub(super) fn p_0ab9_1cec(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1d3a` is never used
+    --> src/watched_compiled/action_graph.rs:9767:15
+     |
+9767 | pub(super) fn p_0ab9_1d3a(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1d89` is never used
+    --> src/watched_compiled/action_graph.rs:9959:15
+     |
+9959 | pub(super) fn p_0ab9_1d89(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1db7` is never used
+     --> src/watched_compiled/action_graph.rs:10067:15
+      |
+10067 | pub(super) fn p_0ab9_1db7(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1de2` is never used
+     --> src/watched_compiled/action_graph.rs:10181:15
+      |
+10181 | pub(super) fn p_0ab9_1de2(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1e14` is never used
+     --> src/watched_compiled/action_graph.rs:10313:15
+      |
+10313 | pub(super) fn p_0ab9_1e14(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1e28` is never used
+     --> src/watched_compiled/action_graph.rs:10366:15
+      |
+10366 | pub(super) fn p_0ab9_1e28(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1e4e` is never used
+     --> src/watched_compiled/action_graph.rs:10477:15
+      |
+10477 | pub(super) fn p_0ab9_1e4e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1e71` is never used
+     --> src/watched_compiled/action_graph.rs:10572:15
+      |
+10572 | pub(super) fn p_0ab9_1e71(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1e9f` is never used
+     --> src/watched_compiled/action_graph.rs:10659:15
+      |
+10659 | pub(super) fn p_0ab9_1e9f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1ecc` is never used
+     --> src/watched_compiled/action_graph.rs:10748:15
+      |
+10748 | pub(super) fn p_0ab9_1ecc(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1f0c` is never used
+     --> src/watched_compiled/action_graph.rs:10904:15
+      |
+10904 | pub(super) fn p_0ab9_1f0c(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1f33` is never used
+     --> src/watched_compiled/action_graph.rs:10986:15
+      |
+10986 | pub(super) fn p_0ab9_1f33(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1f5e` is never used
+     --> src/watched_compiled/action_graph.rs:11091:15
+      |
+11091 | pub(super) fn p_0ab9_1f5e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1f99` is never used
+     --> src/watched_compiled/action_graph.rs:11220:15
+      |
+11220 | pub(super) fn p_0ab9_1f99(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1fb6` is never used
+     --> src/watched_compiled/action_graph.rs:11285:15
+      |
+11285 | pub(super) fn p_0ab9_1fb6(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1fd3` is never used
+     --> src/watched_compiled/action_graph.rs:11350:15
+      |
+11350 | pub(super) fn p_0ab9_1fd3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2029` is never used
+     --> src/watched_compiled/action_graph.rs:11567:15
+      |
+11567 | pub(super) fn p_0ab9_2029(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_207f` is never used
+     --> src/watched_compiled/action_graph.rs:11784:15
+      |
+11784 | pub(super) fn p_0ab9_207f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_20c5` is never used
+     --> src/watched_compiled/action_graph.rs:11955:15
+      |
+11955 | pub(super) fn p_0ab9_20c5(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_20f5` is never used
+     --> src/watched_compiled/action_graph.rs:12070:15
+      |
+12070 | pub(super) fn p_0ab9_20f5(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2129` is never used
+     --> src/watched_compiled/action_graph.rs:12196:15
+      |
+12196 | pub(super) fn p_0ab9_2129(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_215d` is never used
+     --> src/watched_compiled/action_graph.rs:12322:15
+      |
+12322 | pub(super) fn p_0ab9_215d(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_21d7` is never used
+     --> src/watched_compiled/action_graph.rs:12607:15
+      |
+12607 | pub(super) fn p_0ab9_21d7(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2304` is never used
+     --> src/watched_compiled/action_graph.rs:13245:15
+      |
+13245 | pub(super) fn p_0ab9_2304(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2327` is never used
+     --> src/watched_compiled/action_graph.rs:13323:15
+      |
+13323 | pub(super) fn p_0ab9_2327(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_24eb` is never used
+     --> src/watched_compiled/action_graph.rs:14339:15
+      |
+14339 | pub(super) fn p_0ab9_24eb(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2505` is never used
+     --> src/watched_compiled/action_graph.rs:14421:15
+      |
+14421 | pub(super) fn p_0ab9_2505(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2625` is never used
+     --> src/watched_compiled/action_graph.rs:15025:15
+      |
+15025 | pub(super) fn p_0ab9_2625(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_293a` is never used
+     --> src/watched_compiled/action_graph.rs:16675:15
+      |
+16675 | pub(super) fn p_0ab9_293a(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2bc6` is never used
+     --> src/watched_compiled/action_graph.rs:18013:15
+      |
+18013 | pub(super) fn p_0ab9_2bc6(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2c3d` is never used
+     --> src/watched_compiled/action_graph.rs:18269:15
+      |
+18269 | pub(super) fn p_0ab9_2c3d(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2c84` is never used
+     --> src/watched_compiled/action_graph.rs:18438:15
+      |
+18438 | pub(super) fn p_0ab9_2c84(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2cb4` is never used
+     --> src/watched_compiled/action_graph.rs:18566:15
+      |
+18566 | pub(super) fn p_0ab9_2cb4(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2ccd` is never used
+     --> src/watched_compiled/action_graph.rs:18631:15
+      |
+18631 | pub(super) fn p_0ab9_2ccd(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2db4` is never used
+     --> src/watched_compiled/action_graph.rs:19170:15
+      |
+19170 | pub(super) fn p_0ab9_2db4(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2e53` is never used
+     --> src/watched_compiled/action_graph.rs:19507:15
+      |
+19507 | pub(super) fn p_0ab9_2e53(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2ed4` is never used
+     --> src/watched_compiled/action_graph.rs:19791:15
+      |
+19791 | pub(super) fn p_0ab9_2ed4(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2eea` is never used
+     --> src/watched_compiled/action_graph.rs:19855:15
+      |
+19855 | pub(super) fn p_0ab9_2eea(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2efe` is never used
+     --> src/watched_compiled/action_graph.rs:19915:15
+      |
+19915 | pub(super) fn p_0ab9_2efe(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2faa` is never used
+     --> src/watched_compiled/action_graph.rs:20291:15
+      |
+20291 | pub(super) fn p_0ab9_2faa(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3070` is never used
+     --> src/watched_compiled/action_graph.rs:20719:15
+      |
+20719 | pub(super) fn p_0ab9_3070(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3098` is never used
+     --> src/watched_compiled/action_graph.rs:20830:15
+      |
+20830 | pub(super) fn p_0ab9_3098(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3102` is never used
+     --> src/watched_compiled/action_graph.rs:21088:15
+      |
+21088 | pub(super) fn p_0ab9_3102(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3155` is never used
+     --> src/watched_compiled/action_graph.rs:21276:15
+      |
+21276 | pub(super) fn p_0ab9_3155(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_325f` is never used
+     --> src/watched_compiled/action_graph.rs:21821:15
+      |
+21821 | pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_32da` is never used
+     --> src/watched_compiled/action_graph.rs:22099:15
+      |
+22099 | pub(super) fn p_0ab9_32da(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3399` is never used
+     --> src/watched_compiled/action_graph.rs:22467:15
+      |
+22467 | pub(super) fn p_0ab9_3399(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_340d` is never used
+     --> src/watched_compiled/action_graph.rs:22715:15
+      |
+22715 | pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_350c` is never used
+     --> src/watched_compiled/action_graph.rs:23317:15
+      |
+23317 | pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_35f8` is never used
+     --> src/watched_compiled/action_graph.rs:23847:15
+      |
+23847 | pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3663` is never used
+     --> src/watched_compiled/action_graph.rs:24102:15
+      |
+24102 | pub(super) fn p_0ab9_3663(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3846` is never used
+     --> src/watched_compiled/action_graph.rs:25053:15
+      |
+25053 | pub(super) fn p_0ab9_3846(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3977` is never used
+     --> src/watched_compiled/action_graph.rs:25784:15
+      |
+25784 | pub(super) fn p_0ab9_3977(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3b21` is never used
+     --> src/watched_compiled/action_graph.rs:26792:15
+      |
+26792 | pub(super) fn p_0ab9_3b21(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3b5a` is never used
+     --> src/watched_compiled/action_graph.rs:26911:15
+      |
+26911 | pub(super) fn p_0ab9_3b5a(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3bcf` is never used
+     --> src/watched_compiled/action_graph.rs:27164:15
+      |
+27164 | pub(super) fn p_0ab9_3bcf(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3d37` is never used
+     --> src/watched_compiled/action_graph.rs:27985:15
+      |
+27985 | pub(super) fn p_0ab9_3d37(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_3d66` is never used
+     --> src/watched_compiled/action_graph.rs:28099:15
+      |
+28099 | pub(super) fn p_0ab9_3d66(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_406a` is never used
+     --> src/watched_compiled/action_graph.rs:29738:15
+      |
+29738 | pub(super) fn p_0ab9_406a(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_40c3` is never used
+     --> src/watched_compiled/action_graph.rs:29901:15
+      |
+29901 | pub(super) fn p_0ab9_40c3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4180` is never used
+     --> src/watched_compiled/action_graph.rs:30305:15
+      |
+30305 | pub(super) fn p_0ab9_4180(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4218` is never used
+     --> src/watched_compiled/action_graph.rs:30629:15
+      |
+30629 | pub(super) fn p_0ab9_4218(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4267` is never used
+     --> src/watched_compiled/action_graph.rs:30788:15
+      |
+30788 | pub(super) fn p_0ab9_4267(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_43d2` is never used
+     --> src/watched_compiled/action_graph.rs:31619:15
+      |
+31619 | pub(super) fn p_0ab9_43d2(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4416` is never used
+     --> src/watched_compiled/action_graph.rs:31768:15
+      |
+31768 | pub(super) fn p_0ab9_4416(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_448c` is never used
+     --> src/watched_compiled/action_graph.rs:32039:15
+      |
+32039 | pub(super) fn p_0ab9_448c(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4613` is never used
+     --> src/watched_compiled/action_graph.rs:32956:15
+      |
+32956 | pub(super) fn p_0ab9_4613(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_474b` is never used
+     --> src/watched_compiled/action_graph.rs:33123:15
+      |
+33123 | pub(super) fn p_0ab9_474b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4794` is never used
+     --> src/watched_compiled/action_graph.rs:33270:15
+      |
+33270 | pub(super) fn p_0ab9_4794(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_47f1` is never used
+     --> src/watched_compiled/action_graph.rs:33489:15
+      |
+33489 | pub(super) fn p_0ab9_47f1(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4ab1` is never used
+     --> src/watched_compiled/action_graph.rs:35068:15
+      |
+35068 | pub(super) fn p_0ab9_4ab1(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4b14` is never used
+     --> src/watched_compiled/action_graph.rs:35293:15
+      |
+35293 | pub(super) fn p_0ab9_4b14(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4b4c` is never used
+     --> src/watched_compiled/action_graph.rs:35425:15
+      |
+35425 | pub(super) fn p_0ab9_4b4c(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4b6b` is never used
+     --> src/watched_compiled/action_graph.rs:35500:15
+      |
+35500 | pub(super) fn p_0ab9_4b6b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4be5` is never used
+     --> src/watched_compiled/action_graph.rs:35750:15
+      |
+35750 | pub(super) fn p_0ab9_4be5(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4dff` is never used
+     --> src/watched_compiled/action_graph.rs:36976:15
+      |
+36976 | pub(super) fn p_0ab9_4dff(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4e5c` is never used
+     --> src/watched_compiled/action_graph.rs:37189:15
+      |
+37189 | pub(super) fn p_0ab9_4e5c(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4eaa` is never used
+     --> src/watched_compiled/action_graph.rs:37363:15
+      |
+37363 | pub(super) fn p_0ab9_4eaa(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_561e` is never used
+     --> src/watched_compiled/action_graph.rs:37920:15
+      |
+37920 | pub(super) fn p_0ab9_561e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_56ee` is never used
+     --> src/watched_compiled/action_graph.rs:38332:15
+      |
+38332 | pub(super) fn p_0ab9_56ee(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5728` is never used
+     --> src/watched_compiled/action_graph.rs:38471:15
+      |
+38471 | pub(super) fn p_0ab9_5728(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_577f` is never used
+     --> src/watched_compiled/action_graph.rs:38653:15
+      |
+38653 | pub(super) fn p_0ab9_577f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_57e3` is never used
+     --> src/watched_compiled/action_graph.rs:38851:15
+      |
+38851 | pub(super) fn p_0ab9_57e3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5902` is never used
+     --> src/watched_compiled/action_graph.rs:39450:15
+      |
+39450 | pub(super) fn p_0ab9_5902(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5996` is never used
+     --> src/watched_compiled/action_graph.rs:39747:15
+      |
+39747 | pub(super) fn p_0ab9_5996(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5a56` is never used
+     --> src/watched_compiled/action_graph.rs:39835:15
+      |
+39835 | pub(super) fn p_0ab9_5a56(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5a81` is never used
+     --> src/watched_compiled/action_graph.rs:39928:15
+      |
+39928 | pub(super) fn p_0ab9_5a81(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5ab6` is never used
+     --> src/watched_compiled/action_graph.rs:40044:15
+      |
+40044 | pub(super) fn p_0ab9_5ab6(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5b21` is never used
+     --> src/watched_compiled/action_graph.rs:40282:15
+      |
+40282 | pub(super) fn p_0ab9_5b21(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5b52` is never used
+     --> src/watched_compiled/action_graph.rs:40411:15
+      |
+40411 | pub(super) fn p_0ab9_5b52(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5bc2` is never used
+     --> src/watched_compiled/action_graph.rs:40649:15
+      |
+40649 | pub(super) fn p_0ab9_5bc2(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5c48` is never used
+     --> src/watched_compiled/action_graph.rs:40955:15
+      |
+40955 | pub(super) fn p_0ab9_5c48(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5ca1` is never used
+     --> src/watched_compiled/action_graph.rs:41142:15
+      |
+41142 | pub(super) fn p_0ab9_5ca1(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5cc4` is never used
+     --> src/watched_compiled/action_graph.rs:41234:15
+      |
+41234 | pub(super) fn p_0ab9_5cc4(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5d1f` is never used
+     --> src/watched_compiled/action_graph.rs:41422:15
+      |
+41422 | pub(super) fn p_0ab9_5d1f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5da3` is never used
+     --> src/watched_compiled/action_graph.rs:41702:15
+      |
+41702 | pub(super) fn p_0ab9_5da3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5e09` is never used
+     --> src/watched_compiled/action_graph.rs:41953:15
+      |
+41953 | pub(super) fn p_0ab9_5e09(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5eb3` is never used
+     --> src/watched_compiled/action_graph.rs:42306:15
+      |
+42306 | pub(super) fn p_0ab9_5eb3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5fab` is never used
+     --> src/watched_compiled/action_graph.rs:42877:15
+      |
+42877 | pub(super) fn p_0ab9_5fab(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_60ca` is never used
+     --> src/watched_compiled/action_graph.rs:43443:15
+      |
+43443 | pub(super) fn p_0ab9_60ca(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6305` is never used
+     --> src/watched_compiled/action_graph.rs:44733:15
+      |
+44733 | pub(super) fn p_0ab9_6305(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_63e3` is never used
+     --> src/watched_compiled/action_graph.rs:45142:15
+      |
+45142 | pub(super) fn p_0ab9_63e3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6489` is never used
+     --> src/watched_compiled/action_graph.rs:45467:15
+      |
+45467 | pub(super) fn p_0ab9_6489(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6549` is never used
+     --> src/watched_compiled/action_graph.rs:45868:15
+      |
+45868 | pub(super) fn p_0ab9_6549(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6589` is never used
+     --> src/watched_compiled/action_graph.rs:45996:15
+      |
+45996 | pub(super) fn p_0ab9_6589(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_67d0` is never used
+     --> src/watched_compiled/action_graph.rs:47265:15
+      |
+47265 | pub(super) fn p_0ab9_67d0(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6849` is never used
+     --> src/watched_compiled/action_graph.rs:47530:15
+      |
+47530 | pub(super) fn p_0ab9_6849(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6935` is never used
+     --> src/watched_compiled/action_graph.rs:48074:15
+      |
+48074 | pub(super) fn p_0ab9_6935(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_69b8` is never used
+     --> src/watched_compiled/action_graph.rs:48333:15
+      |
+48333 | pub(super) fn p_0ab9_69b8(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6a7a` is never used
+     --> src/watched_compiled/action_graph.rs:48776:15
+      |
+48776 | pub(super) fn p_0ab9_6a7a(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6b2f` is never used
+     --> src/watched_compiled/action_graph.rs:49124:15
+      |
+49124 | pub(super) fn p_0ab9_6b2f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6cce` is never used
+     --> src/watched_compiled/action_graph.rs:49964:15
+      |
+49964 | pub(super) fn p_0ab9_6cce(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6d83` is never used
+     --> src/watched_compiled/action_graph.rs:50355:15
+      |
+50355 | pub(super) fn p_0ab9_6d83(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6dc0` is never used
+     --> src/watched_compiled/action_graph.rs:50487:15
+      |
+50487 | pub(super) fn p_0ab9_6dc0(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6e28` is never used
+     --> src/watched_compiled/action_graph.rs:50736:15
+      |
+50736 | pub(super) fn p_0ab9_6e28(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6f6e` is never used
+     --> src/watched_compiled/action_graph.rs:51433:15
+      |
+51433 | pub(super) fn p_0ab9_6f6e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_6f98` is never used
+     --> src/watched_compiled/action_graph.rs:51500:15
+      |
+51500 | pub(super) fn p_0ab9_6f98(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_70d5` is never used
+     --> src/watched_compiled/action_graph.rs:52058:15
+      |
+52058 | pub(super) fn p_0ab9_70d5(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_72bb` is never used
+     --> src/watched_compiled/action_graph.rs:53148:15
+      |
+53148 | pub(super) fn p_0ab9_72bb(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_770e` is never used
+     --> src/watched_compiled/action_graph.rs:54041:15
+      |
+54041 | pub(super) fn p_0ab9_770e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_79ed` is never used
+     --> src/watched_compiled/action_graph.rs:54872:15
+      |
+54872 | pub(super) fn p_0ab9_79ed(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_8599` is never used
+     --> src/watched_compiled/action_graph.rs:54926:15
+      |
+54926 | pub(super) fn p_0ab9_8599(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_8663` is never used
+     --> src/watched_compiled/action_graph.rs:55331:15
+      |
+55331 | pub(super) fn p_0ab9_8663(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_8973` is never used
+     --> src/watched_compiled/action_graph.rs:55596:15
+      |
+55596 | pub(super) fn p_0ab9_8973(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_8a0f` is never used
+     --> src/watched_compiled/action_graph.rs:55889:15
+      |
+55889 | pub(super) fn p_0ab9_8a0f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_8a62` is never used
+     --> src/watched_compiled/action_graph.rs:56038:15
+      |
+56038 | pub(super) fn p_0ab9_8a62(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_8b0b` is never used
+     --> src/watched_compiled/action_graph.rs:56365:15
+      |
+56365 | pub(super) fn p_0ab9_8b0b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_8d6f` is never used
+     --> src/watched_compiled/action_graph.rs:57491:15
+      |
+57491 | pub(super) fn p_0ab9_8d6f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_95b3` is never used
+     --> src/watched_compiled/action_graph.rs:61664:15
+      |
+61664 | pub(super) fn p_0ab9_95b3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_95d1` is never used
+     --> src/watched_compiled/action_graph.rs:61730:15
+      |
+61730 | pub(super) fn p_0ab9_95d1(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_966f` is never used
+     --> src/watched_compiled/action_graph.rs:62045:15
+      |
+62045 | pub(super) fn p_0ab9_966f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_9702` is never used
+     --> src/watched_compiled/action_graph.rs:62327:15
+      |
+62327 | pub(super) fn p_0ab9_9702(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_9882` is never used
+     --> src/watched_compiled/action_graph.rs:62459:15
+      |
+62459 | pub(super) fn p_0ab9_9882(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_9f6e` is never used
+     --> src/watched_compiled/action_graph.rs:63128:15
+      |
+63128 | pub(super) fn p_0ab9_9f6e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_9fd0` is never used
+     --> src/watched_compiled/action_graph.rs:63309:15
+      |
+63309 | pub(super) fn p_0ab9_9fd0(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a0a4` is never used
+     --> src/watched_compiled/action_graph.rs:63613:15
+      |
+63613 | pub(super) fn p_0ab9_a0a4(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a5be` is never used
+     --> src/watched_compiled/action_graph.rs:64393:15
+      |
+64393 | pub(super) fn p_0ab9_a5be(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a613` is never used
+     --> src/watched_compiled/action_graph.rs:64555:15
+      |
+64555 | pub(super) fn p_0ab9_a613(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a741` is never used
+     --> src/watched_compiled/action_graph.rs:65157:15
+      |
+65157 | pub(super) fn p_0ab9_a741(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a7bb` is never used
+     --> src/watched_compiled/action_graph.rs:65395:15
+      |
+65395 | pub(super) fn p_0ab9_a7bb(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a837` is never used
+     --> src/watched_compiled/action_graph.rs:65635:15
+      |
+65635 | pub(super) fn p_0ab9_a837(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a8a0` is never used
+     --> src/watched_compiled/action_graph.rs:65898:15
+      |
+65898 | pub(super) fn p_0ab9_a8a0(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a94b` is never used
+     --> src/watched_compiled/action_graph.rs:66224:15
+      |
+66224 | pub(super) fn p_0ab9_a94b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_abd9` is never used
+     --> src/watched_compiled/action_graph.rs:67463:15
+      |
+67463 | pub(super) fn p_0ab9_abd9(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_ac52` is never used
+     --> src/watched_compiled/action_graph.rs:67701:15
+      |
+67701 | pub(super) fn p_0ab9_ac52(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_ac87` is never used
+     --> src/watched_compiled/action_graph.rs:67806:15
+      |
+67806 | pub(super) fn p_0ab9_ac87(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_ad43` is never used
+     --> src/watched_compiled/action_graph.rs:68220:15
+      |
+68220 | pub(super) fn p_0ab9_ad43(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_add0` is never used
+     --> src/watched_compiled/action_graph.rs:68516:15
+      |
+68516 | pub(super) fn p_0ab9_add0(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_aeb8` is never used
+     --> src/watched_compiled/action_graph.rs:68946:15
+      |
+68946 | pub(super) fn p_0ab9_aeb8(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_b0f5` is never used
+     --> src/watched_compiled/action_graph.rs:70091:15
+      |
+70091 | pub(super) fn p_0ab9_b0f5(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_b271` is never used
+     --> src/watched_compiled/action_graph.rs:70885:15
+      |
+70885 | pub(super) fn p_0ab9_b271(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_b6bd` is never used
+     --> src/watched_compiled/action_graph.rs:71793:15
+      |
+71793 | pub(super) fn p_0ab9_b6bd(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_baf6` is never used
+     --> src/watched_compiled/action_graph.rs:73939:15
+      |
+73939 | pub(super) fn p_0ab9_baf6(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_bb79` is never used
+     --> src/watched_compiled/action_graph.rs:74187:15
+      |
+74187 | pub(super) fn p_0ab9_bb79(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_bba8` is never used
+     --> src/watched_compiled/action_graph.rs:74289:15
+      |
+74289 | pub(super) fn p_0ab9_bba8(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_bbe2` is never used
+     --> src/watched_compiled/action_graph.rs:74412:15
+      |
+74412 | pub(super) fn p_0ab9_bbe2(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_bd5b` is never used
+     --> src/watched_compiled/action_graph.rs:75112:15
+      |
+75112 | pub(super) fn p_0ab9_bd5b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_bea4` is never used
+     --> src/watched_compiled/action_graph.rs:75562:15
+      |
+75562 | pub(super) fn p_0ab9_bea4(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_c056` is never used
+     --> src/watched_compiled/action_graph.rs:76411:15
+      |
+76411 | pub(super) fn p_0ab9_c056(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_c0a3` is never used
+     --> src/watched_compiled/action_graph.rs:76550:15
+      |
+76550 | pub(super) fn p_0ab9_c0a3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_c358` is never used
+     --> src/watched_compiled/action_graph.rs:77889:15
+      |
+77889 | pub(super) fn p_0ab9_c358(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_c3c6` is never used
+     --> src/watched_compiled/action_graph.rs:78105:15
+      |
+78105 | pub(super) fn p_0ab9_c3c6(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_c4b3` is never used
+     --> src/watched_compiled/action_graph.rs:78558:15
+      |
+78558 | pub(super) fn p_0ab9_c4b3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_c4cd` is never used
+     --> src/watched_compiled/action_graph.rs:78604:15
+      |
+78604 | pub(super) fn p_0ab9_c4cd(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_c866` is never used
+     --> src/watched_compiled/action_graph.rs:80220:15
+      |
+80220 | pub(super) fn p_0ab9_c866(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_cbf0` is never used
+     --> src/watched_compiled/action_graph.rs:81763:15
+      |
+81763 | pub(super) fn p_0ab9_cbf0(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_d1dd` is never used
+     --> src/watched_compiled/action_graph.rs:84926:15
+      |
+84926 | pub(super) fn p_0ab9_d1dd(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_d29e` is never used
+     --> src/watched_compiled/action_graph.rs:85118:15
+      |
+85118 | pub(super) fn p_0ab9_d29e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_d5d6` is never used
+     --> src/watched_compiled/action_graph.rs:86845:15
+      |
+86845 | pub(super) fn p_0ab9_d5d6(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_00d6` is never used
+     --> src/watched_compiled/action_graph.rs:88501:15
+      |
+88501 | pub(super) fn p_1998_00d6(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_0100` is never used
+     --> src/watched_compiled/action_graph.rs:88595:15
+      |
+88595 | pub(super) fn p_1998_0100(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_0134` is never used
+     --> src/watched_compiled/action_graph.rs:88693:15
+      |
+88693 | pub(super) fn p_1998_0134(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_015a` is never used
+     --> src/watched_compiled/action_graph.rs:88777:15
+      |
+88777 | pub(super) fn p_1998_015a(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_01e0` is never used
+     --> src/watched_compiled/action_graph.rs:89045:15
+      |
+89045 | pub(super) fn p_1998_01e0(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_022b` is never used
+     --> src/watched_compiled/action_graph.rs:89190:15
+      |
+89190 | pub(super) fn p_1998_022b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_0273` is never used
+     --> src/watched_compiled/action_graph.rs:89327:15
+      |
+89327 | pub(super) fn p_1998_0273(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_02df` is never used
+     --> src/watched_compiled/action_graph.rs:89576:15
+      |
+89576 | pub(super) fn p_1998_02df(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_0338` is never used
+     --> src/watched_compiled/action_graph.rs:89764:15
+      |
+89764 | pub(super) fn p_1998_0338(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_039a` is never used
+     --> src/watched_compiled/action_graph.rs:89970:15
+      |
+89970 | pub(super) fn p_1998_039a(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_03db` is never used
+     --> src/watched_compiled/action_graph.rs:90117:15
+      |
+90117 | pub(super) fn p_1998_03db(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_045c` is never used
+     --> src/watched_compiled/action_graph.rs:90354:15
+      |
+90354 | pub(super) fn p_1998_045c(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_084b` is never used
+     --> src/watched_compiled/action_graph.rs:92241:15
+      |
+92241 | pub(super) fn p_1998_084b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_087b` is never used
+     --> src/watched_compiled/action_graph.rs:92356:15
+      |
+92356 | pub(super) fn p_1998_087b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_093f` is never used
+     --> src/watched_compiled/action_graph.rs:92718:15
+      |
+92718 | pub(super) fn p_1998_093f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_09a3` is never used
+     --> src/watched_compiled/action_graph.rs:92872:15
+      |
+92872 | pub(super) fn p_1998_09a3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_0a16` is never used
+     --> src/watched_compiled/action_graph.rs:93019:15
+      |
+93019 | pub(super) fn p_1998_0a16(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_0b3f` is never used
+     --> src/watched_compiled/action_graph.rs:93602:15
+      |
+93602 | pub(super) fn p_1998_0b3f(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_0b76` is never used
+     --> src/watched_compiled/action_graph.rs:93714:15
+      |
+93714 | pub(super) fn p_1998_0b76(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_0b9e` is never used
+     --> src/watched_compiled/action_graph.rs:93790:15
+      |
+93790 | pub(super) fn p_1998_0b9e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_0d79` is never used
+     --> src/watched_compiled/action_graph.rs:94063:15
+      |
+94063 | pub(super) fn p_1998_0d79(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_1394` is never used
+     --> src/watched_compiled/action_graph.rs:94157:15
+      |
+94157 | pub(super) fn p_1998_1394(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1998_186c` is never used
+     --> src/watched_compiled/action_graph.rs:94342:15
+      |
+94342 | pub(super) fn p_1998_186c(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_0e7a` is never used
+     --> src/watched_compiled/action_graph.rs:94429:15
+      |
+94429 | pub(super) fn p_1b55_0e7a(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_0ea2` is never used
+     --> src/watched_compiled/action_graph.rs:94520:15
+      |
+94520 | pub(super) fn p_1b55_0ea2(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_0ee3` is never used
+     --> src/watched_compiled/action_graph.rs:94645:15
+      |
+94645 | pub(super) fn p_1b55_0ee3(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_0f3b` is never used
+     --> src/watched_compiled/action_graph.rs:94837:15
+      |
+94837 | pub(super) fn p_1b55_0f3b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_0f95` is never used
+     --> src/watched_compiled/action_graph.rs:95029:15
+      |
+95029 | pub(super) fn p_1b55_0f95(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_101e` is never used
+     --> src/watched_compiled/action_graph.rs:95319:15
+      |
+95319 | pub(super) fn p_1b55_101e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_10af` is never used
+     --> src/watched_compiled/action_graph.rs:95626:15
+      |
+95626 | pub(super) fn p_1b55_10af(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_1334` is never used
+     --> src/watched_compiled/action_graph.rs:96080:15
+      |
+96080 | pub(super) fn p_1b55_1334(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_142b` is never used
+     --> src/watched_compiled/action_graph.rs:96637:15
+      |
+96637 | pub(super) fn p_1b55_142b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_1542` is never used
+     --> src/watched_compiled/action_graph.rs:97192:15
+      |
+97192 | pub(super) fn p_1b55_1542(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_1b8e` is never used
+     --> src/watched_compiled/action_graph.rs:97483:15
+      |
+97483 | pub(super) fn p_1b55_1b8e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_1d7e` is never used
+     --> src/watched_compiled/action_graph.rs:97558:15
+      |
+97558 | pub(super) fn p_1b55_1d7e(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_1e90` is never used
+     --> src/watched_compiled/action_graph.rs:98092:15
+      |
+98092 | pub(super) fn p_1b55_1e90(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_1f46` is never used
+     --> src/watched_compiled/action_graph.rs:98297:15
+      |
+98297 | pub(super) fn p_1b55_1f46(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_1ff1` is never used
+     --> src/watched_compiled/action_graph.rs:98644:15
+      |
+98644 | pub(super) fn p_1b55_1ff1(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_265b` is never used
+     --> src/watched_compiled/action_graph.rs:99020:15
+      |
+99020 | pub(super) fn p_1b55_265b(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_2700` is never used
+     --> src/watched_compiled/action_graph.rs:99205:15
+      |
+99205 | pub(super) fn p_1b55_2700(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_2efa` is never used
+     --> src/watched_compiled/action_graph.rs:99295:15
+      |
+99295 | pub(super) fn p_1b55_2efa(c: &mut Cpu) -> Result<(), String> {
+      |               ^^^^^^^^^^^
+
+warning: function `p_1b55_3108` is never used
+      --> src/watched_compiled/action_graph.rs:100374:15
+       |
+100374 | pub(super) fn p_1b55_3108(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_311e` is never used
+      --> src/watched_compiled/action_graph.rs:100427:15
+       |
+100427 | pub(super) fn p_1b55_311e(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_321f` is never used
+      --> src/watched_compiled/action_graph.rs:100920:15
+       |
+100920 | pub(super) fn p_1b55_321f(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_3323` is never used
+      --> src/watched_compiled/action_graph.rs:101431:15
+       |
+101431 | pub(super) fn p_1b55_3323(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_345a` is never used
+      --> src/watched_compiled/action_graph.rs:102025:15
+       |
+102025 | pub(super) fn p_1b55_345a(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_357b` is never used
+      --> src/watched_compiled/action_graph.rs:102214:15
+       |
+102214 | pub(super) fn p_1b55_357b(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_35f5` is never used
+      --> src/watched_compiled/action_graph.rs:102429:15
+       |
+102429 | pub(super) fn p_1b55_35f5(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_364e` is never used
+      --> src/watched_compiled/action_graph.rs:102590:15
+       |
+102590 | pub(super) fn p_1b55_364e(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_3673` is never used
+      --> src/watched_compiled/action_graph.rs:102659:15
+       |
+102659 | pub(super) fn p_1b55_3673(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_36b5` is never used
+      --> src/watched_compiled/action_graph.rs:102765:15
+       |
+102765 | pub(super) fn p_1b55_36b5(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_3875` is never used
+      --> src/watched_compiled/action_graph.rs:102995:15
+       |
+102995 | pub(super) fn p_1b55_3875(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_44dc` is never used
+      --> src/watched_compiled/action_graph.rs:103195:15
+       |
+103195 | pub(super) fn p_1b55_44dc(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4759` is never used
+      --> src/watched_compiled/action_graph.rs:103401:15
+       |
+103401 | pub(super) fn p_1b55_4759(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_478c` is never used
+      --> src/watched_compiled/action_graph.rs:103502:15
+       |
+103502 | pub(super) fn p_1b55_478c(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_483c` is never used
+      --> src/watched_compiled/action_graph.rs:103831:15
+       |
+103831 | pub(super) fn p_1b55_483c(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_485d` is never used
+      --> src/watched_compiled/action_graph.rs:103898:15
+       |
+103898 | pub(super) fn p_1b55_485d(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_49d7` is never used
+      --> src/watched_compiled/action_graph.rs:104723:15
+       |
+104723 | pub(super) fn p_1b55_49d7(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4a37` is never used
+      --> src/watched_compiled/action_graph.rs:104901:15
+       |
+104901 | pub(super) fn p_1b55_4a37(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4b4a` is never used
+      --> src/watched_compiled/action_graph.rs:105064:15
+       |
+105064 | pub(super) fn p_1b55_4b4a(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4c4a` is never used
+      --> src/watched_compiled/action_graph.rs:105533:15
+       |
+105533 | pub(super) fn p_1b55_4c4a(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4d0c` is never used
+      --> src/watched_compiled/action_graph.rs:105924:15
+       |
+105924 | pub(super) fn p_1b55_4d0c(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4dc2` is never used
+      --> src/watched_compiled/action_graph.rs:106252:15
+       |
+106252 | pub(super) fn p_1b55_4dc2(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4e0c` is never used
+      --> src/watched_compiled/action_graph.rs:106394:15
+       |
+106394 | pub(super) fn p_1b55_4e0c(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4e81` is never used
+      --> src/watched_compiled/action_graph.rs:106637:15
+       |
+106637 | pub(super) fn p_1b55_4e81(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4ebf` is never used
+      --> src/watched_compiled/action_graph.rs:106754:15
+       |
+106754 | pub(super) fn p_1b55_4ebf(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4f05` is never used
+      --> src/watched_compiled/action_graph.rs:106888:15
+       |
+106888 | pub(super) fn p_1b55_4f05(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_4f89` is never used
+      --> src/watched_compiled/action_graph.rs:107176:15
+       |
+107176 | pub(super) fn p_1b55_4f89(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_500b` is never used
+      --> src/watched_compiled/action_graph.rs:107443:15
+       |
+107443 | pub(super) fn p_1b55_500b(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_50eb` is never used
+      --> src/watched_compiled/action_graph.rs:107913:15
+       |
+107913 | pub(super) fn p_1b55_50eb(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5284` is never used
+      --> src/watched_compiled/action_graph.rs:108787:15
+       |
+108787 | pub(super) fn p_1b55_5284(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_535b` is never used
+      --> src/watched_compiled/action_graph.rs:109212:15
+       |
+109212 | pub(super) fn p_1b55_535b(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_53c6` is never used
+      --> src/watched_compiled/action_graph.rs:109434:15
+       |
+109434 | pub(super) fn p_1b55_53c6(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_53fb` is never used
+      --> src/watched_compiled/action_graph.rs:109539:15
+       |
+109539 | pub(super) fn p_1b55_53fb(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5634` is never used
+      --> src/watched_compiled/action_graph.rs:109892:15
+       |
+109892 | pub(super) fn p_1b55_5634(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5975` is never used
+      --> src/watched_compiled/action_graph.rs:110233:15
+       |
+110233 | pub(super) fn p_1b55_5975(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_59c1` is never used
+      --> src/watched_compiled/action_graph.rs:110387:15
+       |
+110387 | pub(super) fn p_1b55_59c1(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5a60` is never used
+      --> src/watched_compiled/action_graph.rs:110611:15
+       |
+110611 | pub(super) fn p_1b55_5a60(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5b3c` is never used
+      --> src/watched_compiled/action_graph.rs:111072:15
+       |
+111072 | pub(super) fn p_1b55_5b3c(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5c2f` is never used
+      --> src/watched_compiled/action_graph.rs:111196:15
+       |
+111196 | pub(super) fn p_1b55_5c2f(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5c6e` is never used
+      --> src/watched_compiled/action_graph.rs:111302:15
+       |
+111302 | pub(super) fn p_1b55_5c6e(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5ca9` is never used
+      --> src/watched_compiled/action_graph.rs:111421:15
+       |
+111421 | pub(super) fn p_1b55_5ca9(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5cfb` is never used
+      --> src/watched_compiled/action_graph.rs:111538:15
+       |
+111538 | pub(super) fn p_1b55_5cfb(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5e5c` is never used
+      --> src/watched_compiled/action_graph.rs:111750:15
+       |
+111750 | pub(super) fn p_1b55_5e5c(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_5e79` is never used
+      --> src/watched_compiled/action_graph.rs:111808:15
+       |
+111808 | pub(super) fn p_1b55_5e79(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_6308` is never used
+      --> src/watched_compiled/action_graph.rs:113303:15
+       |
+113303 | pub(super) fn p_1b55_6308(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_6350` is never used
+      --> src/watched_compiled/action_graph.rs:113425:15
+       |
+113425 | pub(super) fn p_1b55_6350(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_6447` is never used
+      --> src/watched_compiled/action_graph.rs:113860:15
+       |
+113860 | pub(super) fn p_1b55_6447(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_6507` is never used
+      --> src/watched_compiled/action_graph.rs:114228:15
+       |
+114228 | pub(super) fn p_1b55_6507(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_66ee` is never used
+      --> src/watched_compiled/action_graph.rs:114371:15
+       |
+114371 | pub(super) fn p_1b55_66ee(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_678a` is never used
+      --> src/watched_compiled/action_graph.rs:114685:15
+       |
+114685 | pub(super) fn p_1b55_678a(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_67bd` is never used
+      --> src/watched_compiled/action_graph.rs:114799:15
+       |
+114799 | pub(super) fn p_1b55_67bd(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_724a` is never used
+      --> src/watched_compiled/action_graph.rs:114896:15
+       |
+114896 | pub(super) fn p_1b55_724a(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_7541` is never used
+      --> src/watched_compiled/action_graph.rs:115168:15
+       |
+115168 | pub(super) fn p_1b55_7541(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_7688` is never used
+      --> src/watched_compiled/action_graph.rs:115780:15
+       |
+115780 | pub(super) fn p_1b55_7688(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_7777` is never used
+      --> src/watched_compiled/action_graph.rs:116264:15
+       |
+116264 | pub(super) fn p_1b55_7777(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_1b55_7b19` is never used
+      --> src/watched_compiled/action_graph.rs:116660:15
+       |
+116660 | pub(super) fn p_1b55_7b19(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0098` is never used
+      --> src/watched_compiled/action_graph.rs:116812:15
+       |
+116812 | pub(super) fn p_232a_0098(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_00d5` is never used
+      --> src/watched_compiled/action_graph.rs:116942:15
+       |
+116942 | pub(super) fn p_232a_00d5(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_00f8` is never used
+      --> src/watched_compiled/action_graph.rs:117026:15
+       |
+117026 | pub(super) fn p_232a_00f8(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_011d` is never used
+      --> src/watched_compiled/action_graph.rs:117115:15
+       |
+117115 | pub(super) fn p_232a_011d(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0144` is never used
+      --> src/watched_compiled/action_graph.rs:117219:15
+       |
+117219 | pub(super) fn p_232a_0144(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_01e3` is never used
+      --> src/watched_compiled/action_graph.rs:117303:15
+       |
+117303 | pub(super) fn p_232a_01e3(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0203` is never used
+      --> src/watched_compiled/action_graph.rs:117376:15
+       |
+117376 | pub(super) fn p_232a_0203(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_022e` is never used
+      --> src/watched_compiled/action_graph.rs:117470:15
+       |
+117470 | pub(super) fn p_232a_022e(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0240` is never used
+      --> src/watched_compiled/action_graph.rs:117522:15
+       |
+117522 | pub(super) fn p_232a_0240(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0283` is never used
+      --> src/watched_compiled/action_graph.rs:117580:15
+       |
+117580 | pub(super) fn p_232a_0283(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_030c` is never used
+      --> src/watched_compiled/action_graph.rs:117872:15
+       |
+117872 | pub(super) fn p_232a_030c(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_039d` is never used
+      --> src/watched_compiled/action_graph.rs:118178:15
+       |
+118178 | pub(super) fn p_232a_039d(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_041b` is never used
+      --> src/watched_compiled/action_graph.rs:118445:15
+       |
+118445 | pub(super) fn p_232a_041b(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_052f` is never used
+      --> src/watched_compiled/action_graph.rs:118726:15
+       |
+118726 | pub(super) fn p_232a_052f(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0555` is never used
+      --> src/watched_compiled/action_graph.rs:118796:15
+       |
+118796 | pub(super) fn p_232a_0555(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_06e5` is never used
+      --> src/watched_compiled/action_graph.rs:119621:15
+       |
+119621 | pub(super) fn p_232a_06e5(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_076d` is never used
+      --> src/watched_compiled/action_graph.rs:119906:15
+       |
+119906 | pub(super) fn p_232a_076d(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0795` is never used
+      --> src/watched_compiled/action_graph.rs:119946:15
+       |
+119946 | pub(super) fn p_232a_0795(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_07c9` is never used
+      --> src/watched_compiled/action_graph.rs:120059:15
+       |
+120059 | pub(super) fn p_232a_07c9(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0869` is never used
+      --> src/watched_compiled/action_graph.rs:120151:15
+       |
+120151 | pub(super) fn p_232a_0869(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_099b` is never used
+      --> src/watched_compiled/action_graph.rs:120771:15
+       |
+120771 | pub(super) fn p_232a_099b(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0e60` is never used
+      --> src/watched_compiled/action_graph.rs:120859:15
+       |
+120859 | pub(super) fn p_232a_0e60(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0ec4` is never used
+      --> src/watched_compiled/action_graph.rs:121099:15
+       |
+121099 | pub(super) fn p_232a_0ec4(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_0f8b` is never used
+      --> src/watched_compiled/action_graph.rs:121295:15
+       |
+121295 | pub(super) fn p_232a_0f8b(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_232a_11e3` is never used
+      --> src/watched_compiled/action_graph.rs:121403:15
+       |
+121403 | pub(super) fn p_232a_11e3(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0000` is never used
+      --> src/watched_compiled/action_graph.rs:121483:15
+       |
+121483 | pub(super) fn p_24bc_0000(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0098` is never used
+      --> src/watched_compiled/action_graph.rs:121746:15
+       |
+121746 | pub(super) fn p_24bc_0098(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_00e4` is never used
+      --> src/watched_compiled/action_graph.rs:121929:15
+       |
+121929 | pub(super) fn p_24bc_00e4(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_01c2` is never used
+      --> src/watched_compiled/action_graph.rs:122372:15
+       |
+122372 | pub(super) fn p_24bc_01c2(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0203` is never used
+      --> src/watched_compiled/action_graph.rs:122375:15
+       |
+122375 | pub(super) fn p_24bc_0203(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0222` is never used
+      --> src/watched_compiled/action_graph.rs:122378:15
+       |
+122378 | pub(super) fn p_24bc_0222(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0259` is never used
+      --> src/watched_compiled/action_graph.rs:122452:15
+       |
+122452 | pub(super) fn p_24bc_0259(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0277` is never used
+      --> src/watched_compiled/action_graph.rs:122514:15
+       |
+122514 | pub(super) fn p_24bc_0277(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0294` is never used
+      --> src/watched_compiled/action_graph.rs:122517:15
+       |
+122517 | pub(super) fn p_24bc_0294(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_02b2` is never used
+      --> src/watched_compiled/action_graph.rs:122520:15
+       |
+122520 | pub(super) fn p_24bc_02b2(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_034b` is never used
+      --> src/watched_compiled/action_graph.rs:122842:15
+       |
+122842 | pub(super) fn p_24bc_034b(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_03d9` is never used
+      --> src/watched_compiled/action_graph.rs:122845:15
+       |
+122845 | pub(super) fn p_24bc_03d9(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0402` is never used
+      --> src/watched_compiled/action_graph.rs:122941:15
+       |
+122941 | pub(super) fn p_24bc_0402(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_042b` is never used
+      --> src/watched_compiled/action_graph.rs:123037:15
+       |
+123037 | pub(super) fn p_24bc_042b(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_048c` is never used
+      --> src/watched_compiled/action_graph.rs:123255:15
+       |
+123255 | pub(super) fn p_24bc_048c(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_04c0` is never used
+      --> src/watched_compiled/action_graph.rs:123366:15
+       |
+123366 | pub(super) fn p_24bc_04c0(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_04fa` is never used
+      --> src/watched_compiled/action_graph.rs:123475:15
+       |
+123475 | pub(super) fn p_24bc_04fa(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0534` is never used
+      --> src/watched_compiled/action_graph.rs:123584:15
+       |
+123584 | pub(super) fn p_24bc_0534(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0568` is never used
+      --> src/watched_compiled/action_graph.rs:123700:15
+       |
+123700 | pub(super) fn p_24bc_0568(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0598` is never used
+      --> src/watched_compiled/action_graph.rs:123814:15
+       |
+123814 | pub(super) fn p_24bc_0598(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_05c8` is never used
+      --> src/watched_compiled/action_graph.rs:123928:15
+       |
+123928 | pub(super) fn p_24bc_05c8(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0637` is never used
+      --> src/watched_compiled/action_graph.rs:124174:15
+       |
+124174 | pub(super) fn p_24bc_0637(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_066f` is never used
+      --> src/watched_compiled/action_graph.rs:124288:15
+       |
+124288 | pub(super) fn p_24bc_066f(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0702` is never used
+      --> src/watched_compiled/action_graph.rs:124468:15
+       |
+124468 | pub(super) fn p_24bc_0702(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_08c0` is never used
+      --> src/watched_compiled/action_graph.rs:124730:15
+       |
+124730 | pub(super) fn p_24bc_08c0(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_098f` is never used
+      --> src/watched_compiled/action_graph.rs:124808:15
+       |
+124808 | pub(super) fn p_24bc_098f(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0c17` is never used
+      --> src/watched_compiled/action_graph.rs:125420:15
+       |
+125420 | pub(super) fn p_24bc_0c17(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0c58` is never used
+      --> src/watched_compiled/action_graph.rs:125569:15
+       |
+125569 | pub(super) fn p_24bc_0c58(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0cdc` is never used
+      --> src/watched_compiled/action_graph.rs:125663:15
+       |
+125663 | pub(super) fn p_24bc_0cdc(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0d01` is never used
+      --> src/watched_compiled/action_graph.rs:125752:15
+       |
+125752 | pub(super) fn p_24bc_0d01(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0d1c` is never used
+      --> src/watched_compiled/action_graph.rs:125811:15
+       |
+125811 | pub(super) fn p_24bc_0d1c(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0d3f` is never used
+      --> src/watched_compiled/action_graph.rs:125895:15
+       |
+125895 | pub(super) fn p_24bc_0d3f(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_116a` is never used
+      --> src/watched_compiled/action_graph.rs:125979:15
+       |
+125979 | pub(super) fn p_24bc_116a(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_126d` is never used
+      --> src/watched_compiled/action_graph.rs:126213:15
+       |
+126213 | pub(super) fn p_24bc_126d(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_19a6` is never used
+      --> src/watched_compiled/action_graph.rs:126437:15
+       |
+126437 | pub(super) fn p_24bc_19a6(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_1b83` is never used
+      --> src/watched_compiled/action_graph.rs:126587:15
+       |
+126587 | pub(super) fn p_24bc_1b83(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_1b97` is never used
+      --> src/watched_compiled/action_graph.rs:126590:15
+       |
+126590 | pub(super) fn p_24bc_1b97(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_1be8` is never used
+      --> src/watched_compiled/action_graph.rs:126593:15
+       |
+126593 | pub(super) fn p_24bc_1be8(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_1c96` is never used
+      --> src/watched_compiled/action_graph.rs:126596:15
+       |
+126596 | pub(super) fn p_24bc_1c96(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_24bc_1cec` is never used
+      --> src/watched_compiled/action_graph.rs:126786:15
+       |
+126786 | pub(super) fn p_24bc_1cec(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26b8_00a7` is never used
+      --> src/watched_compiled/action_graph.rs:127122:15
+       |
+127122 | pub(super) fn p_26b8_00a7(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26b8_00b2` is never used
+      --> src/watched_compiled/action_graph.rs:127125:15
+       |
+127125 | pub(super) fn p_26b8_00b2(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_01f0` is never used
+      --> src/watched_compiled/action_graph.rs:127128:15
+       |
+127128 | pub(super) fn p_26c9_01f0(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_01fe` is never used
+      --> src/watched_compiled/action_graph.rs:127176:15
+       |
+127176 | pub(super) fn p_26c9_01fe(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_020a` is never used
+      --> src/watched_compiled/action_graph.rs:127243:15
+       |
+127243 | pub(super) fn p_26c9_020a(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0218` is never used
+      --> src/watched_compiled/action_graph.rs:127292:15
+       |
+127292 | pub(super) fn p_26c9_0218(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0232` is never used
+      --> src/watched_compiled/action_graph.rs:127295:15
+       |
+127295 | pub(super) fn p_26c9_0232(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_05c6` is never used
+      --> src/watched_compiled/action_graph.rs:127298:15
+       |
+127298 | pub(super) fn p_26c9_05c6(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0602` is never used
+      --> src/watched_compiled/action_graph.rs:127423:15
+       |
+127423 | pub(super) fn p_26c9_0602(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0a12` is never used
+      --> src/watched_compiled/action_graph.rs:127426:15
+       |
+127426 | pub(super) fn p_26c9_0a12(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0a2a` is never used
+      --> src/watched_compiled/action_graph.rs:127476:15
+       |
+127476 | pub(super) fn p_26c9_0a2a(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0a67` is never used
+      --> src/watched_compiled/action_graph.rs:127609:15
+       |
+127609 | pub(super) fn p_26c9_0a67(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0b53` is never used
+      --> src/watched_compiled/action_graph.rs:128556:15
+       |
+128556 | pub(super) fn p_26c9_0b53(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0b6d` is never used
+      --> src/watched_compiled/action_graph.rs:128618:15
+       |
+128618 | pub(super) fn p_26c9_0b6d(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0b91` is never used
+      --> src/watched_compiled/action_graph.rs:128704:15
+       |
+128704 | pub(super) fn p_26c9_0b91(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0bd2` is never used
+      --> src/watched_compiled/action_graph.rs:128872:15
+       |
+128872 | pub(super) fn p_26c9_0bd2(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0bfe` is never used
+      --> src/watched_compiled/action_graph.rs:128975:15
+       |
+128975 | pub(super) fn p_26c9_0bfe(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0c6f` is never used
+      --> src/watched_compiled/action_graph.rs:128978:15
+       |
+128978 | pub(super) fn p_26c9_0c6f(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0c9c` is never used
+      --> src/watched_compiled/action_graph.rs:129020:15
+       |
+129020 | pub(super) fn p_26c9_0c9c(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0d94` is never used
+      --> src/watched_compiled/action_graph.rs:129250:15
+       |
+129250 | pub(super) fn p_26c9_0d94(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0daa` is never used
+      --> src/watched_compiled/action_graph.rs:129298:15
+       |
+129298 | pub(super) fn p_26c9_0daa(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_0e1f` is never used
+      --> src/watched_compiled/action_graph.rs:129373:15
+       |
+129373 | pub(super) fn p_26c9_0e1f(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_121c` is never used
+      --> src/watched_compiled/action_graph.rs:129376:15
+       |
+129376 | pub(super) fn p_26c9_121c(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_12c6` is never used
+      --> src/watched_compiled/action_graph.rs:129379:15
+       |
+129379 | pub(super) fn p_26c9_12c6(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_12d8` is never used
+      --> src/watched_compiled/action_graph.rs:129382:15
+       |
+129382 | pub(super) fn p_26c9_12d8(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_12de` is never used
+      --> src/watched_compiled/action_graph.rs:129385:15
+       |
+129385 | pub(super) fn p_26c9_12de(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_12ec` is never used
+      --> src/watched_compiled/action_graph.rs:129388:15
+       |
+129388 | pub(super) fn p_26c9_12ec(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_12f8` is never used
+      --> src/watched_compiled/action_graph.rs:129409:15
+       |
+129409 | pub(super) fn p_26c9_12f8(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_149c` is never used
+      --> src/watched_compiled/action_graph.rs:129412:15
+       |
+129412 | pub(super) fn p_26c9_149c(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_1545` is never used
+      --> src/watched_compiled/action_graph.rs:129415:15
+       |
+129415 | pub(super) fn p_26c9_1545(_c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_1827` is never used
+      --> src/watched_compiled/action_graph.rs:129418:15
+       |
+129418 | pub(super) fn p_26c9_1827(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_1843` is never used
+      --> src/watched_compiled/action_graph.rs:129578:15
+       |
+129578 | pub(super) fn p_26c9_1843(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_190a` is never used
+      --> src/watched_compiled/action_graph.rs:129671:15
+       |
+129671 | pub(super) fn p_26c9_190a(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `p_26c9_1986` is never used
+      --> src/watched_compiled/action_graph.rs:129872:15
+       |
+129872 | pub(super) fn p_26c9_1986(c: &mut Cpu) -> Result<(), String> {
+       |               ^^^^^^^^^^^
+
+warning: function `commentary_display` is never used
+ --> src/watched_compiled/projections.rs:5:15
+  |
+5 | pub(super) fn commentary_display(c:&mut Cpu)->Result<(),String>{c.ret(false,6)}
+  |               ^^^^^^^^^^^^^^^^^^
+
+warning: multiple methods are never used
+   --> src/watched_compiled/compiled.rs:98:12
+    |
+ 33 | impl Cpu {
+    | -------- methods in this implementation
+...
+ 98 |     pub fn load_string(&mut self,width:u8)->Result<(),String>{
+    |            ^^^^^^^^^^^
+...
+102 |     pub fn store_string(&mut self,width:u8)->Result<(),String>{
+    |            ^^^^^^^^^^^^
+...
+113 |     pub fn repeat_stos(&mut self,width:u8)->Result<(),String>{
+    |            ^^^^^^^^^^^
+...
+118 |     pub fn segment_const(&self,value:u16)->u16{value.wrapping_add(self.code_base)}
+    |            ^^^^^^^^^^^^^
+119 |     pub fn invoke_entry(&mut self,f:Proc,caller_cs:u16,ret:u16)->Result<(),String>{
+    |            ^^^^^^^^^^^^
+...
+331 |     pub fn sbb(&mut self, x: u16, y: u16, w: u8) -> u16 {
+    |            ^^^
+...
+410 |     pub fn not(&mut self, x: u16, w: u8) -> u16 {
+    |            ^^^
+
+warning: `onenil-engine` (lib test) generated 434 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 29 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.39s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 5 tests
+test watched_compiled::action::tests::actual_required_entry_fact_cannot_be_silently_defaulted ... FAILED
+test watched_compiled::action::tests::original_entry_context_initializes_one_data_image_and_real_abi ... ok
+test watched_compiled::action::tests::entry_player_pools_cannot_alias_each_other_or_pitch_storage ... FAILED
+test watched_compiled::action::tests::entry_schema_and_reserved_aliases_are_strict ... ok
+test watched_compiled::action::tests::real_original_action_and_commentary_roots_replay ... FAILED
+
+failures:
+
+---- watched_compiled::action::tests::actual_required_entry_fact_cannot_be_silently_defaulted stdout ----
+
+thread 'watched_compiled::action::tests::actual_required_entry_fact_cannot_be_silently_defaulted' (649) panicked at src/watched_compiled/action.rs:137:64:
+Fault { message: "T37 action kernel stub for original-fixture red", missing: None }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- watched_compiled::action::tests::entry_player_pools_cannot_alias_each_other_or_pitch_storage stdout ----
+
+thread 'watched_compiled::action::tests::entry_player_pools_cannot_alias_each_other_or_pitch_storage' (650) panicked at src/watched_compiled/action.rs:144:3:
+assertion failed: machine(&s).is_err()
+
+---- watched_compiled::action::tests::real_original_action_and_commentary_roots_replay stdout ----
+
+thread 'watched_compiled::action::tests::real_original_action_and_commentary_roots_replay' (653) panicked at src/watched_compiled/action.rs:132:53:
+case0: Fault { message: "T37 action kernel stub for original-fixture red", missing: None }
+
+
+failures:
+    watched_compiled::action::tests::actual_required_entry_fact_cannot_be_silently_defaulted
+    watched_compiled::action::tests::entry_player_pools_cannot_alias_each_other_or_pitch_storage
+    watched_compiled::action::tests::real_original_action_and_commentary_roots_replay
+
+test result: FAILED. 2 passed; 3 failed; 0 ignored; 0 measured; 365 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
