@@ -471,7 +471,7 @@ mod tests {
 
     #[test]
     fn flat_memory_preserves_segment_aliases_for_stack_data(){
-        let mut e=crate::role_scores::image(Default::default());e.image.resize(0x110000,0);
+        let mut e=crate::role_scores::image(Default::default());let mut image=e.image.to_vec();image.resize(0x110000,0);e.image=image.into_boxed_slice();
         let mut c=Cpu::new(e);c.flat_memory=true;c.stack_bounds=Some((0xFF000,0x100000));
         c.write(0xF000,0xFF00,16,0x8123).unwrap();
         assert_eq!(c.e.image[0xFFF00],0x23);
