@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """[designed] Native72BB replay against independently computed original microkernels."""
-import argparse,hashlib,json,time
+import argparse,hashlib,json,time,subprocess
 from pathlib import Path
 import watched_oracle as oracle
 import watched_action_export as facts
@@ -66,8 +66,19 @@ def expected(c,raw,state):
         if at not in known:raise ValueError(f'original parent{c["case"]} changed undeclared gameplay field '+str(change))
     return {'scene':c['output_scene'],'seed':c['seed_after'],'pointers':c['output_pointers'],'cells':cells,'draws':c['draws'],'events':c['events']}
 
-def export():
-    import onenil_engine as native
+class Probe:
+    def __init__(self,path):self.process=subprocess.Popen([str(path)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
+    def watched_action(self,value):
+        self.process.stdin.write(value+'\n');self.process.stdin.flush();line=self.process.stdout.readline()
+        if not line:raise ValueError('native probe ended unexpectedly')
+        return line
+    def close(self):
+        self.process.stdin.close()
+        if self.process.wait()!=0:raise ValueError('native probe failed')
+
+def export(probe=None):
+    if probe:native=Probe(probe)
+    else:import onenil_engine as native
     values,manifest=originals();items=[];FIXTURES.mkdir(parents=True,exist_ok=True)
     for c,anchor in values:
         path=FIXTURES/f'case-{c["case"]:04d}.json'
@@ -82,6 +93,7 @@ def export():
     value={'schema':'decoded-watched-actor/1','producer':oracle.common.git('rev-parse','HEAD'),'original_manifest_sha256':CORPUS_SHA256,'cases':items,'scope':'Original ENTRY facts only;original expected changes/results never feed native helper decisions'}
     out=FIXTURES/'manifest.json'
     if not out.exists():oracle.write_json(out,value)
+    if probe:native.close()
     return check()
 
 def check():
@@ -120,8 +132,8 @@ def replay(values):
     print('native watched actor:',len(values),'original parent transitions matched')
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--export',action='store_true');p.add_argument('--check',action='store_true');p.add_argument('--replay',action='store_true');p.add_argument('--check-research',type=Path);a=p.parse_args()
-    if a.export:export()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--export',action='store_true');p.add_argument('--probe',type=Path);p.add_argument('--check',action='store_true');p.add_argument('--replay',action='store_true');p.add_argument('--check-research',type=Path);a=p.parse_args()
+    if a.export:export(a.probe)
     if a.check_research:check_research(a.check_research)
     if a.check or a.replay:
         values=check();print('decoded actor corpus:',len(values),'roots verified')
