@@ -1407,3 +1407,32 @@ endpoints have synthetic/static coverage. Aborted r0001 is retained/excluded:
 the observer initially failed to wrap effective pitch-buffer offsets to16 bits;
 accepted r0002 uses corrected segmented addresses and verifies every indexed
 read against the original ES:DI address.
+
+### Compiled watched target-adjustment graph (T35)
+
+[confirmed: archaeologyF39/c7637bd and pinned static listings at d9e20a4]
+The complete35F8 graph is compiled into native Rust basic blocks/direct calls:
+15 procedures,584 original instructions,including tactic membership,directional
+comparisons,offset limits and actual0CDC RNG. Temporary Pascal frames are native
+scratch storage;gameplay data stays in the existing Engine image. The runtime
+loads no original executable and has no opcode decoder or instruction stream.
+Python only translates listing structure and observes original executed operand
+addresses;it computes no player decision or helper outcome.
+
+```sh
+python3 tools/compile_watched.py --research-root ../onenil-archaeology --check
+.cache/venv/bin/python tools/replay_watched_adjustment.py --check
+.cache/venv/bin/python tools/replay_watched_adjustment.py --benchmark --out records/T35
+```
+
+[confirmed: T35 capture-r0004] All64 original35F8 roots through tick50/draw1032
+match full scenes,seeds and ordered draws. Both positive and negative offset
+changes occur;no RNG is drawn by these64 roots. Synthetic/static tests cover the
+conditional coin,tactic overrides,wrapping and arithmetic/frame boundaries.
+Earlier aborted memory-hook captures are retained/excluded;accepted observation
+uses stable code hooks and decoded effective addresses. Only root-entry readonly
+data facts are supplied;missing reads or uninitialized scratch diagnose.
+
+[designed] This mechanism supports the remaining native action ports. It is one
+shared helper graph;full action5,watched ticks,clock and viewer integration still
+remain before detailed browser play-by-play is ready.

@@ -2,7 +2,7 @@
 //! [designed] Typed root facts and temporary Pascal frames;no runtime decoding.
 mod adjustment;
 mod compiled;
-use crate::{terminal::Scene, Draw, Engine};
+use crate::{terminal::Scene, Draw};
 use serde::{Deserialize, Serialize};
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord)]
 #[serde(rename_all = "lowercase")]
@@ -136,6 +136,147 @@ mod tests {
             cells: vec![],
         }
     }
+    fn synthetic() -> State {
+        let mut s = sample();
+        s.scene.index = 1;
+        s.scene.byte7 = 1;
+        s.scene.word14 = 1;
+        s.scene.word0 = 0x0403;
+        s.scene.word10 = 0x0403;
+        s.scene.word12 = 0x0509;
+        let mut fields = std::collections::BTreeMap::new();
+        for (a, v) in [
+            (0xD09F, 1),
+            (0xD0AC, 45),
+            (0xD0AE, 91),
+            (0xD0AF, 0),
+            (0xA338, 255),
+            (0xA339, 1),
+            (0xCF47, 0),
+            (0xD6E4, 2),
+            (0xD6E5, 0),
+            (0xD6E6, 1),
+            (0xD6E7, 0),
+            (0xD6DD, 0),
+        ] {
+            fields.insert((Region::Ds, a), v);
+        }
+        for (i, v) in [1, 1, 2, 3].into_iter().enumerate() {
+            fields.insert((Region::Ds, 0xA56 + i as u16), v);
+        }
+        for i in 0..16 {
+            fields.insert((Region::Ds, 0xA67 + i), 0);
+        }
+        for i in 0..8 {
+            fields.insert((Region::Ds, 0xA77 + i), 20);
+        }
+        fields.insert((Region::P8, 14), 5);
+        fields.insert((Region::P15, 25), 0);
+        fields.insert((Region::Club, 57), 255);
+        fields.insert((Region::Club, 119), 255);
+        s.cells = fields
+            .into_iter()
+            .map(|((region, offset), value)| Cell {
+                region,
+                offset,
+                value,
+            })
+            .collect();
+        s
+    }
+    fn set(s: &mut State, region: Region, offset: u16, value: u8) {
+        s.cells
+            .iter_mut()
+            .find(|c| c.region == region && c.offset == offset)
+            .unwrap()
+            .value = value;
+    }
+    fn owned(s: &State) {
+        let mut c = machine(s).unwrap();
+        c.e.image[0x68000] = 42;
+        let before = c.e.image.clone();
+        run(&mut c, s.scene.index).unwrap();
+        let a = 0xCCEF + 25 * usize::from(s.scene.index);
+        for (i, (old, new)) in before.iter().zip(&c.e.image).enumerate() {
+            if ![
+                a + 12,
+                a + 13,
+                usize::from(crate::SEED),
+                usize::from(crate::SEED) + 1,
+            ]
+            .contains(&i)
+            {
+                assert_eq!(old, new, "unexpected write {i:05X}");
+            }
+        }
+    }
+    #[test]
+    fn adjustment_paths_tactic_precedence_and_wrapped_increment() {
+        let mut s = synthetic();
+        assert_eq!(advance(&s).unwrap().output.scene.word12, 0x0609);
+        owned(&s);
+        set(&mut s, Region::Ds, 0xD09F, 12);
+        set(&mut s, Region::Ds, 0xCF47, 5);
+        assert_eq!(advance(&s).unwrap().output.scene.word12, 0x0409);
+        s.scene.byte7 = 2;
+        assert_eq!(advance(&s).unwrap().output.scene.word12, 0x04FD);
+        owned(&s);
+        s = synthetic();
+        s.scene.word12 = 0x7F09;
+        for i in 0..8 {
+            set(&mut s, Region::Ds, 0xA77 + i, 128);
+        }
+        assert_eq!(advance(&s).unwrap().output.scene.word12, 0x8009);
+        s = synthetic();
+        set(&mut s, Region::Ds, 0xA77 + 2, 5);
+        set(&mut s, Region::Ds, 0xA77 + 6, 5);
+        set(&mut s, Region::P15, 25, 16);
+        assert_eq!(advance(&s).unwrap().output.scene.word12, 0x0509);
+    }
+    #[test]
+    fn actual_compiled_coin_and_seed_control_adjustment() {
+        let mut s = synthetic();
+        set(&mut s, Region::P15, 25, 16);
+        set(&mut s, Region::Ds, 0xA56 + 2, 1);
+        set(&mut s, Region::Ds, 0xCF47, 5);
+        for (seed, value, offset) in [(0, 1, 6), (1, 2, 5)] {
+            s.seed = seed;
+            let o = advance(&s).unwrap();
+            assert_eq!(o.draws.len(), 1);
+            assert_eq!(o.draws[0].site, "0AB9:348C");
+            assert_eq!(o.draws[0].n, 2);
+            assert_eq!(o.draws[0].value, value);
+            assert_eq!(o.output.scene.word12 >> 8, offset);
+            owned(&s);
+        }
+    }
+    #[test]
+    fn strict_regions_duplicates_and_readonly_aliases() {
+        for mode in 0..6 {
+            let mut s = synthetic();
+            match mode {
+                0 => s.scene.index = 0,
+                1 => s.scene.word14 = 3921,
+                2 => s.scene.byte7 = 23,
+                3 => s.cells.push(s.cells[0].clone()),
+                4 => s.cells.push(Cell {
+                    region: Region::Ds,
+                    offset: 0xCCEF + 25,
+                    value: 0,
+                }),
+                _ => s.cells.push(Cell {
+                    region: Region::Ds,
+                    offset: 0xD7BA,
+                    value: 0,
+                }),
+            };
+            assert!(advance(&s).is_err());
+        }
+        let mut s = synthetic();
+        s.cells
+            .retain(|c| !(c.region == Region::P8 && c.offset == 14));
+        assert!(advance(&s).unwrap_err().contains("missing"));
+    }
     #[test]
     fn original_adjustment_roots() {
         let source = std::fs::read_to_string(format!(
@@ -150,6 +291,7 @@ mod tests {
                 serde_json::to_value(advance(&s).unwrap()).unwrap(),
                 c["output"]
             );
+            owned(&s);
         }
     }
     #[test]
