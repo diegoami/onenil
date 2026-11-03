@@ -25,12 +25,16 @@ backend. Supported demo sessions must finish without unresolved requests.
 | 3. Complete quick match | One initial state reaches a final result and matches a full original reference;repeat/alternate supported configurations finish | Squad/start-data decoding;19CA seed table;86E9 kickoff;actual7C3F/7B7B control/termination;complete event/state continuity |
 | 4. Playable shell | A documented launch command and scripted player session choose lineup/seed,kick off,follow the clock/commentary,and show final results | Thin shell,event-feed formatting,optional simple pitch view,usable diagnostics,prototype scope documentation and owner-run milestone review |
 
-[confirmed: native baseline78d4f88] Engine modules currently expose separate
-routine inputs/outputs rather than a full-match entrypoint. `step_tail.rs`
-explicitly emits pending calls and separates prefix from clock;
-`quick_reset.rs` leaves6B2F/78B7 and full DD02 external;`event_effects.rs`
-diagnoses roster-changing AI calls. These are concrete integration gaps,not
-proof that adding a UI would make the existing harness a complete match.
+[confirmed: nativeT28/T29] One selected-squad admission now computes original
+setup and a complete continuing match:258 setup draws,11 setup boundaries and95
+DD02/clock/RNG boundaries,actual halftime,two substitutions and final result.
+The local browser offers a supported reference/reserve-starting XI and two seed
+settings, with native setup for all four combinations. Controller smokes reach
+full time for every combination. Chromium verifies reference/alternate matches,
+actual chosen player/seed handoff,pause/halftime/restart and desktop/mobile views.
+Alternate sessions establish completion support,not additional original parity.
+The commentary/formation preview is available with the README launch command.
+Owner-run milestone review in issue35 remains required before acceptance.
 
 [derived: archaeology218490d,match-structure/step-tail contracts] Do not turn
 one recorded92-step match into an invented fixed-length loop. Match setup,

@@ -1,0 +1,66 @@
+{
+  "schema": "viewer-smoke/1",
+  "run_id": "T29-r0001",
+  "code_commit": "7dd86a894d6547f80f89aac98d102f2fe2979162",
+  "started": "2026-11-03T10:58:26.649322+00:00",
+  "ended": "2026-11-03T10:58:38.702415+00:00",
+  "browser": "145.0.7632.6",
+  "extension_sha256": "de43700c1136a344b00183382c0774af32801630d57d4cc543b13c3c2033e5b4",
+  "checks": [
+    "22 live formation players",
+    "kickoff",
+    "pause retains step count",
+    "pace change",
+    "explicit halftime stop/continue",
+    "95 native steps",
+    "4 goals/2 substitutions",
+    "native final score",
+    "desktop/mobile render",
+    "no horizontal mobile overflow",
+    "restart resets score/events",
+    "no console errors",
+    "action header guard",
+    "real alternate XI and seed handoff",
+    "alternate native full time",
+    "choices locked after kickoff",
+    "restart preserves choices",
+    "invalid/oversized configuration guards"
+  ],
+  "steps": 95,
+  "result": [
+    1,
+    3
+  ],
+  "alternate": {
+    "choices": {
+      "lineup": "reserve",
+      "seed": "122"
+    },
+    "steps": 96,
+    "result": [
+      2,
+      4
+    ],
+    "initial_seed": 40812,
+    "starting_players": [
+      2581,
+      2582,
+      2583,
+      2584,
+      2585,
+      2586,
+      2587,
+      2588,
+      2589,
+      2591,
+      2593
+    ]
+  },
+  "screenshots": {
+    "T29-r0001-reference-desktop.png": "0e5250e177d65a9fc6123f4d1ff33203f149fc76cdfe660d5d1013fd15829b0b",
+    "T29-r0001-reference-mobile.png": "bb453277c130222ac88ded580901a3fec86aeb688735c49fd14cd20c17b904c9",
+    "T29-r0001-alternate-desktop.png": "a88b4b02121aae664db0e5ffaa10b36f2c277808ec5e6951f4af613c3272e534",
+    "T29-r0001-alternate-mobile.png": "0766363964a0f286fdee85e55cd272fc1d41ffdd21bdd34b2f80b78e804bd494"
+  },
+  "limits": "Reference and supported alternate exhibition from native setup;alternate is a completion smoke,not additional original parity;formation projection only,no watched-engine/ball movement;owner acceptance review remains"
+}

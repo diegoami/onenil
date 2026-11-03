@@ -1,7 +1,7 @@
 # onenil
 
 A faithful rebuild of *One-Nil* (Wizard, 1995/1996), a football club manager, from the evidence of
-[onenil-archaeology](https://github.com/diegoami/onenil-archaeology). The engine will be Rust,
+[onenil-archaeology](https://github.com/diegoami/onenil-archaeology). The engine is Rust,
 checked against the original through a Python harness. No byte of the original game is in this
 repository; see [docs/artifacts.md](docs/artifacts.md). Rules: [CLAUDE.md](CLAUDE.md). Process:
 [docs/process.md](docs/process.md).
@@ -11,8 +11,10 @@ tracked in [issue35](https://github.com/diegoami/onenil/issues/35):choose a supp
 lineup/seed,kick off,follow a match clock and text commentary,and reach a final
 score through one continuing native state. Commentary is the minimum; a simple
 pitch view is the preferred stretch goal.
-The current routine harness is not yet playable. Progress is tracked through
-match-state closure,a continuous quick step,a complete match,and text controls.
+A local exhibition preview now provides those controls, running commentary and
+a formation pitch. Build the extension below, then run
+`.cache/venv/bin/python tools/play_match.py` and open http://127.0.0.1:8040.
+Two supported XIs and two seeds are available; owner milestone review remains pending.
 
 The first slice is `0AB9:D983`, the quick result's three-contest routine. Its scope is the input
 ratings, random draw sequence, final seed and goal bytes; it is not a complete match/week or a
@@ -1189,7 +1191,7 @@ owner review remain first-playable acceptance work. A local viewer of this
 prepared session is the next visible deliverable. Receipts measure release
 admission/native progression/serialization only,with no full-game speed claim.
 
-### Run the local match viewer (T27)
+### Run the local match viewer (T27/T29)
 
 After building the Python extension with the installation steps above:
 
@@ -1207,12 +1209,22 @@ There is no invented ball tracking or watched-engine animation. Names are
 narrowly decoded facts with source digests in `demo/metadata.json`;all graphics
 are newly drawn SVG/CSS. No original game assets are required.
 
-[designed] This preview admits the single initial T26 state from
-`demo/reference.json`,without loading replay/expected streams at runtime.
-It offers the fixed Sheffield Wed–Blackburn R reference only. The native258-draw
-setup API is documented below. Wiring it into this viewer,lineup/seed choices,
-supported-session breadth and owner-run first-playable review remain under#35. Repeating the same prepared configuration
-is deterministic. This is visible prototype progress,not completed acceptance.
+[designed] Choose Blackburn's reference XI (Newell starts) or alternate XI
+(Warhurst starts), and seed64 or122. Click **Prepare match**,then **Kick off**.
+Pause/resume and choose the pace; explicitly continue at halftime. Restart
+preserves your choices and runs fresh native preparation. Controls lock after
+kickoff; restart to change them. The pitch and lineup show the actual chosen
+players before kickoff.
+
+The runtime admits only selected-squad `demo/exhibition.json` and factual names;
+Rust computes setup and the match on one continuing image. Python structurally
+links roster aliases and raw rating witnesses for the chosen XI. It loads no
+replay/expected stream or original game asset. The fixed Sheffield Wed–Blackburn
+fixture supports four XI/seed combinations, all smoke-checked through full time.
+The original reference retains exact setup/match replay; alternate sessions are
+completion smokes, without additional original parity claims. Watched-engine
+animation and career/season systems are outside this preview. Owner-run review
+under issue35 remains the final acceptance step.
 
 Checks:
 
@@ -1249,6 +1261,7 @@ session. Missing/inconsistent data and reached unsupported branches diagnose.
 The immutable settings observations under `records/T28` read original config+F6
 and untouched queue-zero cells at the exact T38 admission/255-draw prefix.
 
-This completes native setup for the fixed reference. The T27 browser viewer
-still uses its prepared input; wiring this API into lineup/seed controls,
-supported alternate-session smoke tests and owner review remain under issue35.
+The T29 browser viewer uses this API with two supported starting XIs and seeds.
+Controller checks cover all four combinations; Chromium checks reference and
+alternate full matches, actual player/seed handoff and desktop/mobile controls.
+Owner-run milestone35 review remains before formal first-playable acceptance.
