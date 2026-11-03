@@ -119,6 +119,9 @@ pub fn advance(s: &State) -> Result<Outcome, String> {
         draws: c.draws,
     })
 }
+pub fn select_target(_s: &State) -> Result<Outcome, String> {
+    Err("T36 selection not implemented".into())
+}
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -304,4 +307,33 @@ mod tests {
             assert!(serde_json::from_value::<State>(v).is_err());
         }
     }
+    #[test]
+    fn selection_active_side_random_short_circuit() {
+        let mut s=synthetic();
+        s.seed=100;
+        s.cells.push(Cell{region:Region::P15,offset:23,value:0});
+        let o=select_target(&s).unwrap();
+        assert_eq!(o.output.scene,s.scene);
+        assert_eq!(o.draws.len(),1);
+        assert_ne!(o.output.seed,s.seed);
+    }
+    #[test]
+    fn selection_missing_and_alias_guards() {
+        assert!(select_target(&sample()).unwrap_err().contains("missing"));
+        for offset in [0xA51C,0xA51D,0xD7BA,0xDE84,0xCCEF+25] {
+            let mut s=synthetic();
+            s.cells.push(Cell{region:Region::Ds,offset,value:42});
+            assert!(select_target(&s).is_err());
+        }
+    }
+    #[test]
+    fn original_selection_roots() {
+        let source=std::fs::read_to_string(format!("{}/tests/fixtures/watched_selection/cases.jsonl",env!("CARGO_MANIFEST_DIR"))).unwrap();
+        for line in source.lines(){
+            let row:serde_json::Value=serde_json::from_str(line).unwrap();
+            let s:State=serde_json::from_value(row["input"].clone()).unwrap();
+            assert_eq!(serde_json::to_value(select_target(&s).unwrap()).unwrap(),row["output"]);
+        }
+    }
+
 }
