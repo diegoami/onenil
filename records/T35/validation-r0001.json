@@ -1,0 +1,39 @@
+{
+  "schema": "validation/1",
+  "code_commit": "7ae54ef69c6c2df3d56b0b43f3d1bc09e0a2257f",
+  "rust_tests": 455,
+  "original_roots": 64,
+  "original_end_tick": 50,
+  "original_draw_cursor": 1032,
+  "original_local_draws": 0,
+  "compiled_procedures": 15,
+  "compiled_instructions": 584,
+  "generated_source_check": "byte-identical regeneration from pinned listings",
+  "prior_replay_tools": 31,
+  "shared_layout": "passed",
+  "controller_tests": 5,
+  "fmt": "passed",
+  "py_compile": "passed",
+  "original_scan": "passed",
+  "embedding_scan": {
+    "files_at_producer": 19,
+    "private_files": 30
+  },
+  "baseline_preservation": {
+    "commit": "5db6f53",
+    "unchanged_files": 433,
+    "intentional_changes": [
+      "README.md",
+      "engine/src/lib.rs"
+    ]
+  },
+  "ownership": "Only root scene bytes12/13 and actual seed;all original roots and synthetic adjustment/coin cases checked.",
+  "red_proof": "Six actual primitive/input stub failures;the original test initially failed for missing fixtures and is not counted as a behavior red.",
+  "excluded_captures": [
+    "capture-r0001.json",
+    "capture-r0002.json",
+    "capture-r0003.json"
+  ],
+  "observer_dependencies": "Parser/graph/register definitions identical between committed observer producer and implementation;AST digest proof retained.",
+  "limits": "Shared35F8 numeric graph only,no full action5/tick/viewer. Original roots draw no RNG;conditional coin and tactic/wrapping/arithmetic/frame extrema have synthetic/static coverage. No original executable/opcode stream/runtime decoder."
+}
