@@ -167,4 +167,14 @@ mod tests{
   for offset in[0xD5A,0xD5B,0xD088,0xD089]{let mut s=s.clone();s.cells.push(ByteFact{area:Area::Ds,offset,value:0});assert!(machine(&s).is_err());}
  }
 
+ #[test]
+ fn a_pool_cannot_clip_the_entry_stack_after_its_first_byte(){
+  let mut s=context();let ss=s.regs[10];let sp=s.regs[4];let p=s.pointers.iter_mut().find(|p|p.kind==PointerKind::Main).unwrap();
+  p.segment=ss;p.offset=sp+1;assert!(machine(&s).is_err());
+ }
+ #[test]
+ fn the_private_call_stack_cannot_alias_the_data_segment(){
+  let mut s=context();s.regs[10]=s.regs[11];assert!(machine(&s).is_err());
+ }
+
 }

@@ -1,0 +1,318 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+warning: unreachable statement
+     --> src/watched_compiled/action_graph.rs:88579:17
+      |
+88578 |                 return Err("unported original instruction 1998:0129".into());
+      |                 ------------------------------------------------------------ any code following this expression is unreachable
+88579 |                 c.pc = (6552, 299);
+      |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+      |
+      = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:116996:17
+       |
+116995 |                 return Err("unported original instruction 232A:0238".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+116996 |                 c.pc = (9002, 570);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:117052:17
+       |
+117051 |                 return Err("unported original instruction 232A:024C".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+117052 |                 c.pc = (9002, 590);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:127137:17
+       |
+127136 |                 return Err("unported original instruction 26C9:011F".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+127137 |                 c.pc = (9929, 288);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:127454:17
+       |
+127453 |                 return Err("unported original instruction 26C9:01AF".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+127454 |                 c.pc = (9929, 433);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:127569:17
+       |
+127568 |                 return Err("unported original instruction 26C9:01EE".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+127569 |                 label = 496;
+       |                 ^^^^^^^^^^^^ unreachable statement
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2859:9
+     |
+2859 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2921:9
+     |
+2921 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/action_graph.rs:2462:9
+     |
+2462 |     let mut label = 3906u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:51434:9
+      |
+51434 |     let mut label = 28526u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:63129:9
+      |
+63129 |     let mut label = 40814u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:78559:9
+      |
+78559 |     let mut label = 50355u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:93214:9
+      |
+93214 |     let mut label = 2934u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:102159:9
+       |
+102159 |     let mut label = 13939u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:102901:9
+       |
+102901 |     let mut label = 18265u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:103331:9
+       |
+103331 |     let mut label = 18492u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:104401:9
+       |
+104401 |     let mut label = 18999u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:105752:9
+       |
+105752 |     let mut label = 19906u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:106137:9
+       |
+106137 |     let mut label = 20097u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:112803:9
+       |
+112803 |     let mut label = 25352u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116442:9
+       |
+116442 |     let mut label = 213u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116526:9
+       |
+116526 |     let mut label = 248u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116719:9
+       |
+116719 |     let mut label = 324u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116803:9
+       |
+116803 |     let mut label = 483u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:121878:9
+       |
+121878 |     let mut label = 546u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:121952:9
+       |
+121952 |     let mut label = 601u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:125163:9
+       |
+125163 |     let mut label = 3292u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:126926:9
+       |
+126926 |     let mut label = 2578u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:128056:9
+       |
+128056 |     let mut label = 2899u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:128478:9
+       |
+128478 |     let mut label = 3183u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:128750:9
+       |
+128750 |     let mut label = 3476u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:128798:9
+       |
+128798 |     let mut label = 3498u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4486:9
+     |
+4486 |     let mut label = 40814u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4974:9
+     |
+4974 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:5036:9
+     |
+5036 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: `onenil-engine` (lib test) generated 35 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 29 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 17.74s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 6 tests
+test ratings::tests::conflicting_shared_records_and_tables_cannot_be_overwritten_between_sides ... ok
+test watched_compiled::action::tests::entry_player_pools_cannot_alias_each_other_or_pitch_storage ... ok
+test watched_compiled::action::tests::the_private_call_stack_cannot_alias_the_data_segment ... FAILED
+test watched_compiled::action::tests::a_pool_cannot_clip_the_entry_stack_after_its_first_byte ... FAILED
+test watched_compiled::action::tests::actual_required_entry_fact_cannot_be_silently_defaulted ... ok
+test continuous::tests::missing_redundant_goal_fields_cannot_hide_behind_other_views ... ok
+
+failures:
+
+---- watched_compiled::action::tests::the_private_call_stack_cannot_alias_the_data_segment stdout ----
+
+thread 'watched_compiled::action::tests::the_private_call_stack_cannot_alias_the_data_segment' (654) panicked at src/watched_compiled/action.rs:177:45:
+assertion failed: machine(&s).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- watched_compiled::action::tests::a_pool_cannot_clip_the_entry_stack_after_its_first_byte stdout ----
+
+thread 'watched_compiled::action::tests::a_pool_cannot_clip_the_entry_stack_after_its_first_byte' (651) panicked at src/watched_compiled/action.rs:173:30:
+assertion failed: machine(&s).is_err()
+
+
+failures:
+    watched_compiled::action::tests::a_pool_cannot_clip_the_entry_stack_after_its_first_byte
+    watched_compiled::action::tests::the_private_call_stack_cannot_alias_the_data_segment
+
+test result: FAILED. 4 passed; 2 failed; 0 ignored; 0 measured; 367 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`
