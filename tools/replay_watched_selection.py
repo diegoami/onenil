@@ -6,7 +6,7 @@ from importlib.metadata import version
 from pathlib import Path
 import replay_step_tail as common
 ROOT=common.ROOT;FIXTURES=ROOT/'engine/tests/fixtures/watched_selection'
-STATIC=tuple('static/1-0-exe/code/seg_'+n+'.asm' for n in ('0AB9_01','0AB9_03','0AB9_04','0AB9_05','0AB9_06','0AB9_17','1B55_08','232A_01','24BC_01','24BC_02'))
+STATIC=tuple('static/1-0-exe/code/seg_'+n+'.asm' for n in ('0AB9_01','0AB9_03','0AB9_04','0AB9_05','0AB9_06','0AB9_15','1B55_08','232A_01','24BC_01','24BC_02'))
 def load():
     cases=[];pins=[]
     for prefix in ('',):
