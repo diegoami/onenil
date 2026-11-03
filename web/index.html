@@ -6,10 +6,15 @@
 <header><a class="brand" href="/">ONE<span>–</span>NIL<span class="brand-note">MATCH CENTRE</span></a><span class="preview">NATIVE EXHIBITION PREVIEW</span></header>
 <main>
 <section class="scoreboard" aria-label="Scoreboard">
-<div class="fixture-label">ENGLISH CLUB FOOTBALL <span>·</span> PREPARED REFERENCE</div>
+<div class="fixture-label">ENGLISH CLUB FOOTBALL <span>·</span> EXHIBITION MATCH</div>
 <div class="score-row"><div class="team home"><span class="badge blue">SW</span><h1 id="home">Sheffield Wed</h1></div><div class="score"><strong id="score">0 <span>:</span> 0</strong><div id="clock">0′</div></div><div class="team away"><span class="badge red">BR</span><h1 id="away">Blackburn R</h1></div></div>
 <div class="status"><span id="status-dot"></span><span id="phase">Ready for kickoff</span></div>
 </section>
+<form class="setup" id="setup" aria-label="Match setup">
+<label for="lineup">Blackburn starting XI</label><select id="lineup"><option value="reference">Reference XI · Newell starts</option><option value="reserve">Alternate XI · Warhurst starts</option></select>
+<label for="seed">Match seed</label><select id="seed"><option value="64">64</option><option value="122">122</option></select>
+<button type="submit" class="secondary" id="apply">Prepare match</button><span id="selected" aria-live="polite">Reference XI · Seed 64</span>
+</form>
 <div class="toolbar"><button id="primary">Kick off</button><button id="restart" class="secondary">Restart</button><label for="speed">Match pace</label><select id="speed"><option value="900">Steady</option><option value="300" selected>Quick</option><option value="30">Fast</option></select><span class="connection" id="connection">Local native engine</span></div>
 <p class="error" id="error" role="alert" hidden></p>
 <div class="match-grid">
@@ -24,5 +29,5 @@
 </section>
 <section class="commentary-card"><div class="section-head"><h2>Live commentary</h2><span id="live-label">AWAITING KICKOFF</span></div><div id="commentary" role="log" aria-live="polite" aria-relevant="additions"><p class="empty">The teams are ready.<br>Kick off to follow the match.</p></div></section>
 </div>
-<footer><strong>A first look at the native match.</strong> One fixed squad and seed; the session starts from prepared data after setup. Goals, substitutions, clock and formation come from the continuing Rust engine. Lineup/seed selection and native setup are still to come.</footer>
+<footer><strong>A first look at the native match.</strong> Choose a starting XI and match seed, then prepare and kick off. Goals, substitutions, clock and formation follow one continuing native match from setup to full time. Two supported XIs and two seeds; this preview covers one exhibition fixture.</footer>
 </main></body></html>

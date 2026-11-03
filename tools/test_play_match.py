@@ -7,9 +7,13 @@ from play_match import Match, ROOT
 
 
 class MatchTests(unittest.TestCase):
-    def test_runtime_admits_only_the_initial_preset(self):
+    def test_runtime_admits_only_selected_squad_data(self):
         self.assertEqual((ROOT/'demo/reference.json').read_bytes(),
                          (ROOT/'engine/tests/fixtures/full_match/admission.json').read_bytes())
+        game=Match()
+        self.assertEqual(game.preset,(ROOT/'demo/exhibition.json').read_text())
+        self.assertEqual(game.factory.__name__,'NativeExhibitionSession')
+        self.assertEqual(json.loads(game.preset)['legacy']['clock']['clock']['remaining'],0)
         # Replay/expected streams are not runtime dependencies.
         source = (ROOT/'tools/play_match.py').read_text()
         self.assertNotIn('replay_', source)
