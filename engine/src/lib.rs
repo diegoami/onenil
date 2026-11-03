@@ -382,7 +382,7 @@ mod python {
 
     #[pyfunction]
     fn watched_select_target(input_json: &str) -> PyResult<String> {
-        let state: watched_compiled::State =
+        let state: watched_compiled::SelectionState =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
         let out = watched_compiled::select_target(&state).map_err(PyValueError::new_err)?;
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
