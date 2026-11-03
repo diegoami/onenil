@@ -64,7 +64,7 @@ def initial_data(points,inputs):
     settings_pin=json.loads((FIXTURES/'settings-index.json').read_text())
     if common.sha(settings_path.read_bytes())!=settings_pin['sha256']:raise ValueError('setup settings evidence digest differs')
     settings=json.loads(settings_path.read_text())
-    return {'managed_selection_mode':settings['observed']['managed_selection_mode'],'legacy':legacy,'replacement':{'match_state':state,'display_mode':g['mode'],'position_sentinel':g['position_sentinel'],'speaker_gate':g['speaker_gate']},
+    return {'legacy_income_total':points[0]['income_total'],'managed_selection_mode':settings['observed']['managed_selection_mode'],'legacy':legacy,'replacement':{'match_state':state,'display_mode':g['mode'],'position_sentinel':g['position_sentinel'],'speaker_gate':g['speaker_gate']},
             'gates':c['gates'],'skill_tables':match.table_rows([s for s in a['skills'] if s['criterion'] in (6,14)]),
             'setup_cells':selected['setup_cells'],'income':[r['input'] for r in inputs['incomes']],
             'supplement':inputs['fields']}

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/replay_match_setup.py", line 215, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/replay_match_setup.py", line 214, in main
+    data,points,_=load();check(data,points)
+                         ^^^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/replay_match_setup.py", line 140, in check
+    require_equal(actual,expected,f'setup boundary{index} {want["site"]}')
+  File "/tmp/onenil-native/tools/replay_match_setup.py", line 114, in require_equal
+    if not common.same(got,want):raise ValueError(label+': '+str(difference(got,want)))
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: setup boundary2 0AB9:86E9: /income_total: 0/30989

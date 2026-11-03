@@ -73,6 +73,7 @@ pub struct Data {
     pub replacement: ai_selection::ReadSet,
     pub gates: match_session::Gates,
     pub managed_selection_mode: u8,
+    pub legacy_income_total: u32,
     pub skill_tables: Vec<role_scores::TableInput>,
     pub setup_cells: Cells,
     pub income: Vec<Income>,
@@ -196,6 +197,7 @@ impl Session {
             gates,
             skill_tables,
             managed_selection_mode,
+            legacy_income_total,
             setup_cells,
             income,
             supplement,
@@ -208,6 +210,16 @@ impl Session {
             income_results: vec![],
         };
         out.match_state.inner.e.image[layout::CONFIG + 0xF6] = managed_selection_mode;
+        put(
+            &mut out.match_state.inner.e,
+            0xD6E8,
+            legacy_income_total as u16,
+        );
+        put(
+            &mut out.match_state.inner.e,
+            0xD6EA,
+            (legacy_income_total >> 16) as u16,
+        );
         out.load_inputs(&setup_cells, &income, &supplement)?;
         out.prepare(&setup_cells, &income, &supplement)?;
         Ok(out)
