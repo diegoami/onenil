@@ -1,0 +1,314 @@
+{
+  "schema": "original-parent-microkernel/1",
+  "case": 38,
+  "source_case": 64,
+  "source_sha256": "f27177e32878e25b2d18a79e6e6b99e30a1394b3a2ec05ba8b61e19db147e4e2",
+  "mode": 9,
+  "admission": "derived-with-mode-intervention",
+  "interventions": [
+    {
+      "field": "actor.byte19",
+      "before": 5,
+      "after": 9
+    }
+  ],
+  "registers": {
+    "ax": 38661,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 16006,
+    "bp": 16022,
+    "si": 199,
+    "di": 52988,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    31547,
+    4828,
+    52988,
+    12423
+  ],
+  "input_scene": {
+    "index": 21,
+    "word0": 65280,
+    "word2": 65280,
+    "word8": 65280,
+    "word10": 60160,
+    "word12": 4864,
+    "word14": 2590,
+    "word20": 0,
+    "word23": 10,
+    "byte4": 156,
+    "byte5": 12,
+    "byte6": 0,
+    "byte7": 21,
+    "byte16": 5,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 9,
+    "byte22": 0
+  },
+  "seed_before": 44794,
+  "pointers": [
+    {
+      "kind": "p8",
+      "offset": 8,
+      "segment": 19139
+    },
+    {
+      "kind": "p15",
+      "offset": 0,
+      "segment": 21100
+    },
+    {
+      "kind": "club",
+      "offset": 0,
+      "segment": 24776
+    },
+    {
+      "kind": "config",
+      "offset": 0,
+      "segment": 28142
+    },
+    {
+      "kind": "main",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "main_shown",
+      "offset": 0,
+      "segment": 17471
+    },
+    {
+      "kind": "background",
+      "offset": 0,
+      "segment": 31014
+    },
+    {
+      "kind": "background_shown",
+      "offset": 0,
+      "segment": 17721
+    },
+    {
+      "kind": "commentary",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "seed",
+      "offset": 42268,
+      "segment": 12423
+    }
+  ],
+  "output_scene": {
+    "index": 21,
+    "word0": 65280,
+    "word2": 65280,
+    "word8": 65280,
+    "word10": 60160,
+    "word12": 4864,
+    "word14": 2590,
+    "word20": 0,
+    "word23": 10,
+    "byte4": 156,
+    "byte5": 12,
+    "byte6": 0,
+    "byte7": 21,
+    "byte16": 5,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 9,
+    "byte22": 0
+  },
+  "seed_after": 44794,
+  "output_pointers": [
+    {
+      "kind": "p8",
+      "offset": 8,
+      "segment": 19139
+    },
+    {
+      "kind": "p15",
+      "offset": 0,
+      "segment": 21100
+    },
+    {
+      "kind": "club",
+      "offset": 0,
+      "segment": 24776
+    },
+    {
+      "kind": "config",
+      "offset": 0,
+      "segment": 28142
+    },
+    {
+      "kind": "main",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "main_shown",
+      "offset": 0,
+      "segment": 17471
+    },
+    {
+      "kind": "background",
+      "offset": 0,
+      "segment": 31014
+    },
+    {
+      "kind": "background_shown",
+      "offset": 0,
+      "segment": 17721
+    },
+    {
+      "kind": "commentary",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "seed",
+      "offset": 42268,
+      "segment": 12423
+    }
+  ],
+  "changes": [
+    {
+      "area": "ds",
+      "offset": 896,
+      "before": 2,
+      "after": 3
+    },
+    {
+      "area": "ds",
+      "offset": 42300,
+      "before": 255,
+      "after": 44
+    },
+    {
+      "area": "ds",
+      "offset": 42301,
+      "before": 255,
+      "after": 30
+    },
+    {
+      "area": "ds",
+      "offset": 42302,
+      "before": 255,
+      "after": 10
+    },
+    {
+      "area": "ds",
+      "offset": 42303,
+      "before": 255,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 42304,
+      "before": 255,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 42305,
+      "before": 255,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 53062,
+      "before": 255,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 53064,
+      "before": 255,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 53075,
+      "before": 1,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 53430,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "area": "ds",
+      "offset": 53696,
+      "before": 2,
+      "after": 3
+    },
+    {
+      "area": "main",
+      "offset": 2158,
+      "before": 7,
+      "after": 179
+    },
+    {
+      "area": "main",
+      "offset": 2159,
+      "before": 15,
+      "after": 7
+    },
+    {
+      "area": "main",
+      "offset": 2318,
+      "before": 9,
+      "after": 7
+    },
+    {
+      "area": "main",
+      "offset": 2319,
+      "before": 7,
+      "after": 15
+    }
+  ],
+  "draws": [],
+  "events": [
+    {
+      "code": 44,
+      "actor_slot": 10,
+      "secondary_slot": 0,
+      "side": 0,
+      "club": 130,
+      "player": 2590,
+      "secondary": 0,
+      "minute": 1,
+      "draw_start": 0,
+      "seed_before": 44794,
+      "head_before": 2,
+      "caller": "0AB9:1DDE",
+      "draw_end": 0,
+      "seed_after": 44794,
+      "queue": {
+        "index": 3,
+        "code": 44,
+        "player": 2590,
+        "secondary": 0,
+        "side": 0
+      }
+    }
+  ],
+  "exit_sp": 16006,
+  "exit_bp": 16022,
+  "nested_join": {
+    "joined": false,
+    "returned": false
+  },
+  "game_timer_ticks": 0,
+  "scope": "Original computation from source-proven derived parent admission;not a captured live parent entry. Presentation countdown/ISR phase excluded."
+}

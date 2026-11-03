@@ -1501,3 +1501,34 @@ and whole-gameplay ownership checks:
 tar -xzf .cache/T37/T37-oracle-r0001.tar.gz -C .cache/T37
 .cache/venv/bin/python tools/replay_watched_action.py --check-private
 ```
+
+## Native watched actor dispatch
+
+[confirmed: T38 original-parent corpus and margin-r0001] All50 isolated72BB
+parent transitions match the original,including all11 dispatched action modes,
+computed shots and headers. The32 ordinary admissions are derived from retained
+448C entries and source-proven parent register/stack liveness;they are not
+captured live parent entries. Other cases use explicit mode or original tick-entry
+player/ball overlays. Each expected result comes from original execution.
+
+[confirmed: original1998:087B and margin-r0001] Set-piece occupancy reaches the
+logical pitch's outer rows. Actor inputs admit19rows;older action/contact
+inputs retain their17row bounds. The style pointer supplies one logical glyph
+mode byte,which affects occupancy;it supplies no font data. Unknown reads and
+writes without original-entry baselines still fail. Direct Rust procedures
+execute arithmetic,branches and numeric commentary without an opcode runtime.
+
+```sh
+.cache/venv/bin/python tools/replay_watched_actor.py --check --replay
+.cache/venv/bin/python tools/replay_watched_actor.py --check-private
+.cache/venv/bin/python tools/replay_watched_actor.py --benchmark
+python3 records/T38/validate_provenance.py
+```
+
+[designed] Private validation needs the earlier original entry cache;public
+checks and native fixtures do not. Original admission proof validation can be
+repeated with the research virtualenv's Python and
+`tools/watched_parent.py --prove --research-root ../onenil-archaeology`.
+The microkernel benchmark includes parsing,image construction and serialization;
+it does not measure a continuous tick or playable match. Continuous7A02 state,
+logical7B7B clock progression and detailed viewer commentary remain required.

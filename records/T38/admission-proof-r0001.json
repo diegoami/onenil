@@ -1,0 +1,1674 @@
+{
+  "schema": "original-parent-admission-proof/1",
+  "producer": "f6f9cf680898cf306cc478cbc0258931a9a3ef25",
+  "observer_sha256": "d6d054d68249d99d539ee806647f92b7550919d8a96c0ee52d4a22792171688b",
+  "source_oracle_manifest_sha256": "4cfe86ebfed710044e7aa91081b9f376186507254f650950ed27d31f7c84b0dc",
+  "clock": "original match divisor0400,isolated initial phase;no IRQ before nested-entry join",
+  "entries": [
+    {
+      "source_case": 0,
+      "source_sha256": "998c807a0b1fc6dfc2684aa7dbcf60040fb5329d6692af85e4d12869d2a844b4",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52713,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52713,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52713,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52713,
+          12423
+        ],
+        "seed": 14503,
+        "ram_sha256": "33dfdbed1c7b8b0b7d1e1a794c3a864cf6f1c504857f4743074546aaf33f3acd",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 2,
+      "source_sha256": "6917a7f499c56c6693819449725f3c037f107b42a75918f96363d9dbf1d16dd8",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52913,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52913,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52913,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52913,
+          12423
+        ],
+        "seed": 33882,
+        "ram_sha256": "aeb2bfe6815490b5640ef802fd57d6d7c7cc36698e339846b24aa602e7d5bb3b",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 4,
+      "source_sha256": "bbd451546033cbe4d795e4dbbba06f236cabc3b39adb26b6962fbc18282ae99a",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52638,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52638,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52638,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52638,
+          12423
+        ],
+        "seed": 46465,
+        "ram_sha256": "fe43ad6f033fca1b24f302d49d974ad917a67d3c66459700b8981e69704a4857",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 6,
+      "source_sha256": "00583d944f8aaae76c1e46fa53ea65144a0dc18f9f2985137b766c5254a4d69a",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52538,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52538,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52538,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52538,
+          12423
+        ],
+        "seed": 38220,
+        "ram_sha256": "2d6e77c4c9584a69d596f87cf0d82e8dd028e4614280744e21f166d4264c7887",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 8,
+      "source_sha256": "bd96e27ea58e72064dc085ada006d21a85440ee824b309cd9ac80e1fc6dd8d25",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52963,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52963,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52963,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52963,
+          12423
+        ],
+        "seed": 35883,
+        "ram_sha256": "c5a22a08d1d2c92003a938af6124a2a28ad081ee7c0337b2381496219cc4e56c",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 10,
+      "source_sha256": "0aa6a6f9f36a7792b882e831362cc3d5fb085bc12b8305538e9f74380d6e0b9f",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52688,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52688,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52688,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52688,
+          12423
+        ],
+        "seed": 12128,
+        "ram_sha256": "99d9573a6a4984e5ce146cdccccd6d1836e0f959ae679e375665eb73da14e691",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 12,
+      "source_sha256": "d1d19efac18f2749e1dc952244b84f7af9b425c97ee91531d1d431bdba70044d",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52813,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52813,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52813,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52813,
+          12423
+        ],
+        "seed": 13698,
+        "ram_sha256": "7e90f08f8c90a7fde5eb6d6c4c9194ad093793272a5e039d580be0ae14c75938",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 14,
+      "source_sha256": "6f2311526bc3ad5a31782cda3be223c48c5301767a5cd951bcc8524d219913be",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52588,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52588,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52588,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52588,
+          12423
+        ],
+        "seed": 36873,
+        "ram_sha256": "fb3dbe6002b9517bf169637ba0e1343d80f57d5eadf3b655b148369ed18e2db5",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 16,
+      "source_sha256": "eaa6e268b3a2e52308953107c08d3db13be193b178c815ace05260390b8414d9",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52863,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52863,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52863,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52863,
+          12423
+        ],
+        "seed": 30451,
+        "ram_sha256": "dc744874f4d6eefc2bf5909c7a59e2ca772fe09205bccab96c349213667d7c8b",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 18,
+      "source_sha256": "6a89c2c3ce2aa357b2858ce0678eae49d09c5e7f1093ecac9b69d78b5cc2a3be",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52563,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52563,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52563,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52563,
+          12423
+        ],
+        "seed": 47734,
+        "ram_sha256": "a612d02e7aab96b1b9d353443715b13d0455a35a1b46668ea405337713452f78",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 20,
+      "source_sha256": "12206347946ee498920a77f3f9ae741422a112c2a7fedd4537475413aa417000",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52838,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52838,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52838,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52838,
+          12423
+        ],
+        "seed": 44616,
+        "ram_sha256": "e0c98c08ab23c5a3aa192ccabece73d66b2bad3cc7ed143204f34ef54b63c7ba",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 22,
+      "source_sha256": "101391e498071955851dc179859b76757a68266a7bb4a9d53e4186ba4e645733",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52663,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52663,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52663,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52663,
+          12423
+        ],
+        "seed": 46993,
+        "ram_sha256": "a2deb44ac65fddbf12b7666cffaf47ba65d2dfe129e6441f59462cbbca15947c",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 24,
+      "source_sha256": "9ea8ba134325193ab2eae9fba1b663e428198c8736d29d829e7e491c4e451329",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 29550,
+        "di": 52938,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52938,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 29550,
+          "di": 52938,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52938,
+          12423
+        ],
+        "seed": 38587,
+        "ram_sha256": "68c166c8b699df8eccd9919a897b02eed9ab4d9c7428a3ca45452c6911a363a1",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 48,
+      "source_sha256": "8c74cbeeef5c66c973d18964583f88139000972296cbd389a8024f5f902d19ac",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 15741,
+        "di": 53013,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        53013,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 15741,
+          "di": 53013,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          53013,
+          12423
+        ],
+        "seed": 47669,
+        "ram_sha256": "d8cae130d95509b2ef39396f65f84b6d310a73792bdbd2de89d4c774c3dcb05d",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 50,
+      "source_sha256": "5a49f666ae76a3e50e3fd6f75fac1d824916f15776081e4f1106703d45e3cf28",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52738,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52738,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52738,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52738,
+          12423
+        ],
+        "seed": 54832,
+        "ram_sha256": "fee01f6d04760387429d4716138916396f1b205bdff15925f39d2ea8202d8961",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 52,
+      "source_sha256": "7bc141886ba7eb25645b05ddaf11252efe4f2fda8ef1dcc3a3d7f6a400e71eaf",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39685,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52488,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52488,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39685,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52488,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52488,
+          12423
+        ],
+        "seed": 7295,
+        "ram_sha256": "03de240d547c18e2b335dbbc30c6711307a576fbc54024fb13ff8f77548af803",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 54,
+      "source_sha256": "862f06498d1384586b779c323e00e85ec1fcbb78093b5176151787a2da527f1a",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52763,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52763,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52763,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52763,
+          12423
+        ],
+        "seed": 7295,
+        "ram_sha256": "3eadca4056f37abfbc94a7daafd0e09128d99fe86b8c3afff68b7411c3ba3449",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 56,
+      "source_sha256": "b8307b46f1b52361ebfa70317cf86cc289ae964274b13c1eab3a48718bb61fe0",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52613,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52613,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52613,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52613,
+          12423
+        ],
+        "seed": 43730,
+        "ram_sha256": "fe5686098ab391229bdc6caf6eb7f9b3b8967ac104fe6149703bfb925ebe209d",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 58,
+      "source_sha256": "f086fb70c57f0706af48cf200f88a931f8bcde0d2cd34ee359482bc08551542c",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52888,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52888,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52888,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52888,
+          12423
+        ],
+        "seed": 13188,
+        "ram_sha256": "39bb6ac342c1d06c044d224c3a84d9b2477ec3ee31a7e3684dfad94127bf8c98",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 60,
+      "source_sha256": "b1104f92927771f70b826723dfb0f84af6f9fa5f6a69f6f79b8576a73b84d9c4",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39685,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52513,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52513,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39685,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52513,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52513,
+          12423
+        ],
+        "seed": 61757,
+        "ram_sha256": "ce2780972a39610988a4b5db5aea59f6be9a71cc4899b69c8d47cff6a96538b8",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 62,
+      "source_sha256": "498f9c81326e1531d525d5b3999b6b1d4e2f74675e7948f8db69a6bc3da3818f",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52788,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52788,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52788,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52788,
+          12423
+        ],
+        "seed": 1991,
+        "ram_sha256": "b2b46065647492cffeaaa2653eb616af5287e785712fc42d1546ceec42e1bb11",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 64,
+      "source_sha256": "f27177e32878e25b2d18a79e6e6b99e30a1394b3a2ec05ba8b61e19db147e4e2",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52988,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52988,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52988,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52988,
+          12423
+        ],
+        "seed": 44794,
+        "ram_sha256": "78c07663a4108a940daba73223358352772da6c21e7042b8f48c2555415f4f48",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 76,
+      "source_sha256": "5d39821d7cc630685889ffff66dcb4ba8af924b8b82f42994a014eefcf1b1c9a",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52688,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52688,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52688,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52688,
+          12423
+        ],
+        "seed": 3415,
+        "ram_sha256": "51b14344a7de2dc1d2dd1c93a8bfa104c9ee0ec88bb36bb0c771c255abf7831b",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 123,
+      "source_sha256": "7f4895c1d5e3d384a2171f3237e56959b5cd19e75a0fb3c7a51f5ff158704928",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52888,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52888,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52888,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52888,
+          12423
+        ],
+        "seed": 41632,
+        "ram_sha256": "2a1bdae46894e79bed259a73ed7e00e070cf37ef66212fd46c3fed49b49dc775",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 173,
+      "source_sha256": "74065174acd21f92785a0224fe267fcb4ef9246884b14935c06d0e71c3f3d054",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52838,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52838,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52838,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52838,
+          12423
+        ],
+        "seed": 38407,
+        "ram_sha256": "01c1053902dc5c05bd1934c5dcf5d88b8d889c1e1d796d04e8495342ee271d90",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 222,
+      "source_sha256": "da925ac418e8ba8c3ce33d9a80ce3be5905c7e67c58a46853789afd525adf4ff",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52638,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52638,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52638,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52638,
+          12423
+        ],
+        "seed": 24318,
+        "ram_sha256": "bc9ebd52952116295c7c4e38d42eb0f7517b947d2e173d336abf46c8d26c493d",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 269,
+      "source_sha256": "da484e2b408f73ae993e15bfccf76033c8477f6db97780d05c4195947f3650f4",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39685,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52488,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52488,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39685,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52488,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52488,
+          12423
+        ],
+        "seed": 6161,
+        "ram_sha256": "c7fade2e24fabd277cc9acdc557b30f0ba346944f9a442c05ae2c07d2ef44758",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 297,
+      "source_sha256": "5b6e8960490d0e36f387da1cd60c196efc9297faf42c7b11e679655c1583e550",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 39941,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52588,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52588,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 39941,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52588,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52588,
+          12423
+        ],
+        "seed": 34963,
+        "ram_sha256": "8fa217adc3caeb6fd68b99b41aa110cf60525729089689fa4af7f06168ad8885",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 346,
+      "source_sha256": "e4bec459df73bdc3a039f6f29973b29181a8020ea8bdb42fb9b962a3aa5dd954",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52988,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52988,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52988,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52988,
+          12423
+        ],
+        "seed": 15682,
+        "ram_sha256": "973b3452fb0631882ea97982021a6040617cdf998e3a4259e0fd3001d88a94a1",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 372,
+      "source_sha256": "e046e7acdb7f03081e5bf9a13a0b244ab0cf6480306136f932162ddc9474c4e3",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52938,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52938,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52938,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52938,
+          12423
+        ],
+        "seed": 41477,
+        "ram_sha256": "f7a0ba78200b677ba15e71e910876bcee0d74d421f91bb19b34abd5a55c1d55e",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 421,
+      "source_sha256": "843e93bad29ed118f72e58925b8ed35aee4a32c623406d39cf5d905910683919",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52963,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52963,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52963,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52963,
+          12423
+        ],
+        "seed": 13953,
+        "ram_sha256": "25467ad91acd9073ed7911147232a3433b978e5af40f6f856ffaefb90daca14a",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    },
+    {
+      "source_case": 448,
+      "source_sha256": "b09180a9a1f3fa0ff77e2f82bebd6c7235c9bd75497f025bda9b63d385f9d7d4",
+      "admission": "derived-parent-entry",
+      "parent_registers": {
+        "ax": 38661,
+        "cx": 2,
+        "dx": 2,
+        "bx": 0,
+        "sp": 16006,
+        "bp": 16022,
+        "si": 199,
+        "di": 52888,
+        "es": 12423,
+        "cs": 4828,
+        "ss": 16447,
+        "ds": 12423
+      },
+      "parent_stack_words": [
+        31547,
+        4828,
+        52888,
+        12423
+      ],
+      "joined_nested_entry": {
+        "registers": {
+          "ax": 38661,
+          "cx": 2,
+          "dx": 2,
+          "bx": 0,
+          "sp": 15990,
+          "bp": 16004,
+          "si": 199,
+          "di": 52888,
+          "es": 12423,
+          "cs": 4828,
+          "ss": 16447,
+          "ds": 12423
+        },
+        "flags": 29254,
+        "stack_words": [
+          29412,
+          4828,
+          52888,
+          12423
+        ],
+        "seed": 62595,
+        "ram_sha256": "f36eff54d08c0f46cc2785887971d42565fa1e35ade9473cb08e6c45cfb22227",
+        "game_timer_ticks": 0
+      },
+      "liveness": "AX/DI/ES/flags are recomputed by72BB\u201372E1;BX/CX/DX/SI/DS/SS/CS are unchanged. Parent BP/SP/header come from retained original caller frame. Only dead/overwritten stack slots are prefilled."
+    }
+  ],
+  "scope": "Source-proven derived admissions;not observations of the original parent entry. No native result supplies any input."
+}

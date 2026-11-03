@@ -1,0 +1,31 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T38-r0001",
+  "code_commit": "37a918c0ce771e92e78c46bdb91b720e755520cc",
+  "started": "2026-11-03T22:36:21.778986+00:00",
+  "ended": "2026-11-03T22:36:21.956576+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "807d9b6dec2a0976f15adcfb84dadb394cf7368b29d5cfc1876a2cfffaa43b4f"
+  },
+  "source_pins": {
+    "oracle_manifest_sha256": "f0dc8f33fce736501835c4b19e50a3ca98ee0a20b9ec46980b7580811f0945c8",
+    "decoded_manifest_sha256": "c7ff374c68d4237d440a775a54b6b512d594ccf996cbd22059ce1833c487b46d",
+    "margin_manifest_sha256": "590b9ec023f70ff22fad6fef444a225aa221516c0e329ba829f0bd22679d65ef"
+  },
+  "routine": "native72BB full actor dispatch and movement graph",
+  "repetitions": 5,
+  "cases": 50,
+  "calls": 250,
+  "elapsed_ns": 174561025,
+  "serialized_output_bytes": 762125,
+  "compiler_boundary": "Cpu.invoke/invoke_entry use inline(never) to bound LLVM optimization of the static procedure graph;no semantic change",
+  "method": "Pre-serialized inputs;release parsing,one native data image,compiled arithmetic/control flow/native helpers/RNG/commentary and serialization included;fixture preparation/output decoding excluded",
+  "limits": "Action/contact root kernels only;not a continuous watched tick,clock,full native match or emulator speed comparison"
+}

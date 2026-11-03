@@ -1,0 +1,931 @@
+{
+  "schema": "original-parent-microkernel/1",
+  "case": 45,
+  "source_case": 24,
+  "source_sha256": "9ea8ba134325193ab2eae9fba1b663e428198c8736d29d829e7e491c4e451329",
+  "mode": 5,
+  "admission": "derived-with-tick-entry-overlay",
+  "input_overlay": {
+    "source": {
+      "path": "runs/T40/chunk-000024.json",
+      "sha256": "d3d1ddee4571ff9586912c44d6f6813c9a44128686e00ff7c83dd8f35fa5f75b",
+      "tick": 1537,
+      "boundary": "before original watched tick",
+      "scope": "Input snapshot overlay,not an observed parent entry or a requested shot outcome"
+    },
+    "before": {
+      "active": 1,
+      "actor": 19,
+      "ball": {
+        "byte13": 0,
+        "byte14": 0,
+        "byte6": 0,
+        "word0": 9215,
+        "word11": 0,
+        "word2": 9215,
+        "word4": 3847,
+        "word7": 0,
+        "word9": 1
+      },
+      "elapsed": 36,
+      "hold": 0,
+      "phase": 45,
+      "quick": 0,
+      "remaining": 55,
+      "scenes": [
+        {
+          "byte12": 0,
+          "byte13": 0,
+          "byte18": 67,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 17,
+          "byte24": 0,
+          "byte6": 0,
+          "byte7": 1,
+          "index": 1,
+          "word0": 8703,
+          "word10": 56064,
+          "word14": 2661,
+          "word16": 2,
+          "word2": 8703,
+          "word20": 0,
+          "word4": 2561,
+          "word8": 8959
+        },
+        {
+          "byte12": 0,
+          "byte13": 0,
+          "byte18": 67,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 159,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 2,
+          "index": 2,
+          "word0": 7165,
+          "word10": 56320,
+          "word14": 2662,
+          "word16": 2,
+          "word2": 7165,
+          "word20": 0,
+          "word4": 2452,
+          "word8": 8959
+        },
+        {
+          "byte12": 2,
+          "byte13": 0,
+          "byte18": 67,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 18,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 3,
+          "index": 3,
+          "word0": 7422,
+          "word10": 56576,
+          "word14": 2675,
+          "word16": 4,
+          "word2": 7422,
+          "word20": 2591,
+          "word4": 2460,
+          "word8": 8959
+        },
+        {
+          "byte12": 5,
+          "byte13": 0,
+          "byte18": 67,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 156,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 4,
+          "index": 4,
+          "word0": 5119,
+          "word10": 57338,
+          "word14": 2664,
+          "word16": 4,
+          "word2": 5119,
+          "word20": 2590,
+          "word4": 2460,
+          "word8": 8959
+        },
+        {
+          "byte12": 255,
+          "byte13": 6,
+          "byte18": 67,
+          "byte19": 13,
+          "byte22": 0,
+          "byte23": 48,
+          "byte24": 0,
+          "byte6": 0,
+          "byte7": 5,
+          "index": 5,
+          "word0": 7162,
+          "word10": 57094,
+          "word14": 2665,
+          "word16": 5,
+          "word2": 7162,
+          "word20": 2588,
+          "word4": 2450,
+          "word8": 7162
+        },
+        {
+          "byte12": 254,
+          "byte13": 0,
+          "byte18": 67,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 19,
+          "byte24": 0,
+          "byte6": 0,
+          "byte7": 6,
+          "index": 6,
+          "word0": 7426,
+          "word10": 57600,
+          "word14": 2666,
+          "word16": 4,
+          "word2": 7426,
+          "word20": 2589,
+          "word4": 2461,
+          "word8": 8959
+        },
+        {
+          "byte12": 255,
+          "byte13": 0,
+          "byte18": 67,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 147,
+          "byte24": 0,
+          "byte6": 0,
+          "byte7": 7,
+          "index": 7,
+          "word0": 7678,
+          "word10": 58368,
+          "word14": 2667,
+          "word16": 4,
+          "word2": 7678,
+          "word20": 2586,
+          "word4": 2461,
+          "word8": 8959
+        },
+        {
+          "byte12": 254,
+          "byte13": 0,
+          "byte18": 67,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 121,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 8,
+          "index": 8,
+          "word0": 3326,
+          "word10": 59392,
+          "word14": 2673,
+          "word16": 4,
+          "word2": 3326,
+          "word20": 2582,
+          "word4": 2460,
+          "word8": 8959
+        },
+        {
+          "byte12": 2,
+          "byte13": 0,
+          "byte18": 67,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 68,
+          "byte24": 0,
+          "byte6": 0,
+          "byte7": 9,
+          "index": 9,
+          "word0": 4351,
+          "word10": 60153,
+          "word14": 2669,
+          "word16": 1,
+          "word2": 4351,
+          "word20": 2585,
+          "word4": 2453,
+          "word8": 8959
+        },
+        {
+          "byte12": 251,
+          "byte13": 0,
+          "byte18": 67,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 23,
+          "byte24": 0,
+          "byte6": 0,
+          "byte7": 10,
+          "index": 10,
+          "word0": 6909,
+          "word10": 59911,
+          "word14": 2670,
+          "word16": 4,
+          "word2": 6909,
+          "word20": 2584,
+          "word4": 2461,
+          "word8": 8959
+        },
+        {
+          "byte12": 1,
+          "byte13": 0,
+          "byte18": 67,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 148,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 11,
+          "index": 11,
+          "word0": 2047,
+          "word10": 60160,
+          "word14": 2676,
+          "word16": 2,
+          "word2": 2047,
+          "word20": 2583,
+          "word4": 2452,
+          "word8": 8959
+        },
+        {
+          "byte12": 0,
+          "byte13": 0,
+          "byte18": 65,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 122,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 12,
+          "index": 12,
+          "word0": 56064,
+          "word10": 56064,
+          "word14": 2581,
+          "word16": 5,
+          "word2": 56064,
+          "word20": 0,
+          "word4": 2561,
+          "word8": 56064
+        },
+        {
+          "byte12": 254,
+          "byte13": 35,
+          "byte18": 61,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 140,
+          "byte24": 0,
+          "byte6": 0,
+          "byte7": 13,
+          "index": 13,
+          "word0": 251,
+          "word10": 56829,
+          "word14": 2582,
+          "word16": 5,
+          "word2": 251,
+          "word20": 0,
+          "word4": 3228,
+          "word8": 251
+        },
+        {
+          "byte12": 255,
+          "byte13": 35,
+          "byte18": 65,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 73,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 14,
+          "index": 14,
+          "word0": 2050,
+          "word10": 56579,
+          "word14": 2583,
+          "word16": 4,
+          "word2": 2050,
+          "word20": 0,
+          "word4": 3228,
+          "word8": 6658
+        },
+        {
+          "byte12": 255,
+          "byte13": 50,
+          "byte18": 65,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 50,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 15,
+          "index": 15,
+          "word0": 1535,
+          "word10": 57338,
+          "word14": 2584,
+          "word16": 2,
+          "word2": 1535,
+          "word20": 0,
+          "word4": 3220,
+          "word8": 6658
+        },
+        {
+          "byte12": 254,
+          "byte13": 50,
+          "byte18": 65,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 23,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 16,
+          "index": 16,
+          "word0": 5632,
+          "word10": 57094,
+          "word14": 2585,
+          "word16": 4,
+          "word2": 5632,
+          "word20": 0,
+          "word4": 3228,
+          "word8": 6656
+        },
+        {
+          "byte12": 1,
+          "byte13": 60,
+          "byte18": 65,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 23,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 17,
+          "index": 17,
+          "word0": 6913,
+          "word10": 57600,
+          "word14": 2586,
+          "word16": 5,
+          "word2": 6913,
+          "word20": 0,
+          "word4": 3229,
+          "word8": 6913
+        },
+        {
+          "byte12": 1,
+          "byte13": 60,
+          "byte18": 65,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 148,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 18,
+          "index": 18,
+          "word0": 6910,
+          "word10": 58368,
+          "word14": 2587,
+          "word16": 1,
+          "word2": 6910,
+          "word20": 0,
+          "word4": 3220,
+          "word8": 6910
+        },
+        {
+          "byte12": 255,
+          "byte13": 60,
+          "byte18": 65,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 118,
+          "byte24": 0,
+          "byte6": 0,
+          "byte7": 19,
+          "index": 19,
+          "word0": 8959,
+          "word10": 60153,
+          "word14": 2588,
+          "word16": 2308,
+          "word2": 8959,
+          "word20": 0,
+          "word4": 3229,
+          "word8": 9728
+        },
+        {
+          "byte12": 0,
+          "byte13": 60,
+          "byte18": 65,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 140,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 20,
+          "index": 20,
+          "word0": 6656,
+          "word10": 59911,
+          "word14": 2589,
+          "word16": 3333,
+          "word2": 6656,
+          "word20": 0,
+          "word4": 3229,
+          "word8": 6656
+        },
+        {
+          "byte12": 0,
+          "byte13": 51,
+          "byte18": 65,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 55,
+          "byte24": 0,
+          "byte6": 1,
+          "byte7": 21,
+          "index": 21,
+          "word0": 4608,
+          "word10": 60160,
+          "word14": 2590,
+          "word16": 4,
+          "word2": 4608,
+          "word20": 0,
+          "word4": 3228,
+          "word8": 6656
+        },
+        {
+          "byte12": 252,
+          "byte13": 60,
+          "byte18": 65,
+          "byte19": 5,
+          "byte22": 0,
+          "byte23": 76,
+          "byte24": 0,
+          "byte6": 0,
+          "byte7": 22,
+          "index": 22,
+          "word0": 6654,
+          "word10": 60928,
+          "word14": 2591,
+          "word16": 4,
+          "word2": 6654,
+          "word20": 0,
+          "word4": 3229,
+          "word8": 7164
+        }
+      ],
+      "scores": [
+        0,
+        0
+      ],
+      "secondary": 0,
+      "seed": 15350,
+      "stoppage": 0
+    }
+  },
+  "interventions": [
+    {
+      "field": "original-tick-entry-player-ball-clock-inputs",
+      "source": {
+        "path": "runs/T40/chunk-000024.json",
+        "sha256": "d3d1ddee4571ff9586912c44d6f6813c9a44128686e00ff7c83dd8f35fa5f75b",
+        "tick": 1537,
+        "boundary": "before original watched tick",
+        "scope": "Input snapshot overlay,not an observed parent entry or a requested shot outcome"
+      }
+    }
+  ],
+  "registers": {
+    "ax": 38661,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 16006,
+    "bp": 16022,
+    "si": 29550,
+    "di": 52938,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    31547,
+    4828,
+    52938,
+    12423
+  ],
+  "input_scene": {
+    "index": 19,
+    "word0": 8959,
+    "word2": 8959,
+    "word8": 9728,
+    "word10": 60153,
+    "word12": 15615,
+    "word14": 2588,
+    "word20": 0,
+    "word23": 118,
+    "byte4": 157,
+    "byte5": 12,
+    "byte6": 0,
+    "byte7": 19,
+    "byte16": 4,
+    "byte17": 9,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 15350,
+  "pointers": [
+    {
+      "kind": "p8",
+      "offset": 8,
+      "segment": 19139
+    },
+    {
+      "kind": "p15",
+      "offset": 0,
+      "segment": 21100
+    },
+    {
+      "kind": "club",
+      "offset": 0,
+      "segment": 24776
+    },
+    {
+      "kind": "config",
+      "offset": 0,
+      "segment": 28142
+    },
+    {
+      "kind": "main",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "main_shown",
+      "offset": 0,
+      "segment": 17471
+    },
+    {
+      "kind": "background",
+      "offset": 0,
+      "segment": 31014
+    },
+    {
+      "kind": "background_shown",
+      "offset": 0,
+      "segment": 17721
+    },
+    {
+      "kind": "commentary",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "seed",
+      "offset": 42268,
+      "segment": 12423
+    }
+  ],
+  "output_scene": {
+    "index": 19,
+    "word0": 8704,
+    "word2": 8704,
+    "word8": 9728,
+    "word10": 60153,
+    "word12": 15361,
+    "word14": 2588,
+    "word20": 0,
+    "word23": 119,
+    "byte4": 148,
+    "byte5": 12,
+    "byte6": 1,
+    "byte7": 19,
+    "byte16": 2,
+    "byte17": 9,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 9787,
+  "output_pointers": [
+    {
+      "kind": "p8",
+      "offset": 8,
+      "segment": 19139
+    },
+    {
+      "kind": "p15",
+      "offset": 0,
+      "segment": 21100
+    },
+    {
+      "kind": "club",
+      "offset": 0,
+      "segment": 24776
+    },
+    {
+      "kind": "config",
+      "offset": 0,
+      "segment": 28142
+    },
+    {
+      "kind": "main",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "main_shown",
+      "offset": 0,
+      "segment": 17471
+    },
+    {
+      "kind": "background",
+      "offset": 0,
+      "segment": 31014
+    },
+    {
+      "kind": "background_shown",
+      "offset": 0,
+      "segment": 17721
+    },
+    {
+      "kind": "commentary",
+      "offset": 0,
+      "segment": 47104
+    },
+    {
+      "kind": "seed",
+      "offset": 42268,
+      "segment": 12423
+    }
+  ],
+  "changes": [
+    {
+      "area": "ds",
+      "offset": 896,
+      "before": 2,
+      "after": 3
+    },
+    {
+      "area": "ds",
+      "offset": 42268,
+      "before": 246,
+      "after": 59
+    },
+    {
+      "area": "ds",
+      "offset": 42269,
+      "before": 59,
+      "after": 38
+    },
+    {
+      "area": "ds",
+      "offset": 42300,
+      "before": 255,
+      "after": 17
+    },
+    {
+      "area": "ds",
+      "offset": 42301,
+      "before": 255,
+      "after": 28
+    },
+    {
+      "area": "ds",
+      "offset": 42302,
+      "before": 255,
+      "after": 10
+    },
+    {
+      "area": "ds",
+      "offset": 42303,
+      "before": 255,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 42304,
+      "before": 255,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 42305,
+      "before": 255,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 52938,
+      "before": 255,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 52940,
+      "before": 255,
+      "after": 0
+    },
+    {
+      "area": "ds",
+      "offset": 52942,
+      "before": 157,
+      "after": 148
+    },
+    {
+      "area": "ds",
+      "offset": 52944,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "area": "ds",
+      "offset": 52950,
+      "before": 255,
+      "after": 1
+    },
+    {
+      "area": "ds",
+      "offset": 52954,
+      "before": 4,
+      "after": 2
+    },
+    {
+      "area": "ds",
+      "offset": 52961,
+      "before": 118,
+      "after": 119
+    },
+    {
+      "area": "ds",
+      "offset": 53062,
+      "before": 255,
+      "after": 254
+    },
+    {
+      "area": "ds",
+      "offset": 53069,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "area": "ds",
+      "offset": 53071,
+      "before": 1,
+      "after": 2
+    },
+    {
+      "area": "ds",
+      "offset": 53073,
+      "before": 0,
+      "after": 13
+    },
+    {
+      "area": "ds",
+      "offset": 53075,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "area": "ds",
+      "offset": 53362,
+      "before": 134,
+      "after": 135
+    },
+    {
+      "area": "ds",
+      "offset": 53414,
+      "before": 254,
+      "after": 11
+    },
+    {
+      "area": "ds",
+      "offset": 53415,
+      "before": 0,
+      "after": 61
+    },
+    {
+      "area": "ds",
+      "offset": 53435,
+      "before": 6,
+      "after": 1
+    },
+    {
+      "area": "ds",
+      "offset": 53461,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "area": "ds",
+      "offset": 53696,
+      "before": 2,
+      "after": 3
+    },
+    {
+      "area": "ds",
+      "offset": 53705,
+      "before": 0,
+      "after": 1
+    },
+    {
+      "area": "main",
+      "offset": 2386,
+      "before": 32,
+      "after": 148
+    },
+    {
+      "area": "main",
+      "offset": 2387,
+      "before": 7,
+      "after": 12
+    }
+  ],
+  "draws": [
+    {
+      "n": 5,
+      "seed_before": 15350,
+      "seed_after": 39853,
+      "value": 4,
+      "site": "0AB9:333A"
+    },
+    {
+      "n": 2,
+      "seed_before": 39853,
+      "seed_after": 31688,
+      "value": 1,
+      "site": "0AB9:2CFB"
+    },
+    {
+      "n": 2,
+      "seed_before": 31688,
+      "seed_after": 52663,
+      "value": 2,
+      "site": "0AB9:2D03"
+    },
+    {
+      "n": 84,
+      "seed_before": 52663,
+      "seed_after": 12586,
+      "value": 17,
+      "site": "0AB9:1BF1"
+    },
+    {
+      "n": 2,
+      "seed_before": 12586,
+      "seed_after": 27409,
+      "value": 1,
+      "site": "0AB9:2D92"
+    },
+    {
+      "n": 3,
+      "seed_before": 27409,
+      "seed_after": 16540,
+      "value": 1,
+      "site": "0AB9:2EE6"
+    },
+    {
+      "n": 2,
+      "seed_before": 16540,
+      "seed_after": 9787,
+      "value": 1,
+      "site": "0AB9:7217"
+    }
+  ],
+  "events": [
+    {
+      "code": 17,
+      "actor_slot": 8,
+      "secondary_slot": 0,
+      "side": 0,
+      "club": 130,
+      "player": 2588,
+      "secondary": 0,
+      "minute": 36,
+      "draw_start": 4,
+      "seed_before": 12586,
+      "head_before": 2,
+      "caller": "0AB9:1DDE",
+      "draw_end": 4,
+      "seed_after": 12586,
+      "queue": {
+        "index": 3,
+        "code": 17,
+        "player": 2588,
+        "secondary": 0,
+        "side": 0
+      }
+    }
+  ],
+  "exit_sp": 16006,
+  "exit_bp": 16022,
+  "nested_join": {
+    "joined": false,
+    "returned": false
+  },
+  "game_timer_ticks": 1,
+  "scope": "Original computation from source-proven derived parent admission;not a captured live parent entry. Presentation countdown/ISR phase excluded."
+}
