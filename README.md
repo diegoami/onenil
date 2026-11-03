@@ -1209,9 +1209,9 @@ are newly drawn SVG/CSS. No original game assets are required.
 
 [designed] This preview admits the single initial T26 state from
 `demo/reference.json`,without loading replay/expected streams at runtime.
-It offers the fixed Sheffield Wed–Blackburn R reference only. Native258-draw
-setup,lineup/seed choices,supported-session breadth and owner-run first-playable
-review are still pending under#35. Repeating the same prepared configuration
+It offers the fixed Sheffield Wed–Blackburn R reference only. The native258-draw
+setup API is documented below. Wiring it into this viewer,lineup/seed choices,
+supported-session breadth and owner-run first-playable review remain under#35. Repeating the same prepared configuration
 is deterministic. This is visible prototype progress,not completed acceptance.
 
 Checks:

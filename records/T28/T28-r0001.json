@@ -1,0 +1,42 @@
+{
+  "schema": "routine-benchmark/1",
+  "run_id": "T28-r0001",
+  "code_commit": "d4b0b8927e6e193d8a3643a5b29009a40d67ec0e",
+  "started": "2026-11-03T10:49:36.197240+00:00",
+  "ended": "2026-11-03T10:49:41.185768+00:00",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "build": {
+    "crate_version": "0.1.0",
+    "debug_assertions": false,
+    "maturin": "1.16.0",
+    "extension_sha256": "de43700c1136a344b00183382c0774af32801630d57d4cc543b13c3c2033e5b4"
+  },
+  "source_pins": {
+    "repository": "https://github.com/diegoami/onenil-archaeology",
+    "commit": "d9e20a443a1438f253022b65aae9fd6e49be8517",
+    "sources": {
+      "T38-r0002.jsonl": "d576bff396b4cb33e17815b86181bb931795335144ba1d38531e0377c0438071",
+      "index.json": "6f3e76f283900dfdd8b1b236df02321bec1646ec956f5c08f9972fe08aaf24b8",
+      "T38-input-r0001.json": "0863fc1221a75fbe7f27cf56b22b2516e53a58205122e67243a3419b49a77553",
+      "input-index.json": "908868b81db200bf28a9c2b18eca490bc540a771e0eb1a5ee185201a4416e83b"
+    },
+    "prior_match_pin_sha256": "b61cc63f9a71912b467f06ee1d031774b94cf6a90d084234685a40e76a81195e",
+    "scope": "Selected-squad exhibition preparation;early RNG/selector ownership,then pre86E9-onward state;career automatic squad/colour selection replaced by supplied inputs"
+  },
+  "settings": {
+    "record": "records/T28/settings-r0002.json",
+    "sha256": "862b63f5cf7594b6d2c24faf6902528907e308c4e28bf486deac201b4d3c642d"
+  },
+  "initial_data_sha256": "4f81a6759ab816754c71787c38ddbe258ea9d55cc4bb9a6e185c02eb09a7af07",
+  "routine": "selected-squad preparation plus one continuing native full match",
+  "repetitions": 10,
+  "setup_draws_per_session": 258,
+  "steps": 950,
+  "elapsed_ns": 4985836816,
+  "serialized_output_bytes": 18137430,
+  "method": "Pre-serialized initial admission;release parse,one image,actual preparation and successive native match steps/serialization,halftime and phase queries included;fixture verification and output decoding excluded",
+  "limits": "One fixed exhibition reference;career automatic squad/colour choice supplied as input,career financial persistence excluded;no arbitrary lineup/seed acceptance,UI/browser timing,emulator or full-game speed comparison"
+}
