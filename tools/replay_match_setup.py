@@ -81,11 +81,83 @@ def load():
     if not common.same(data,json.loads((FIXTURES/'admission.json').read_text())):raise ValueError('setup initial-data projection differs')
     return data,points,pin
 
+def expected_caller(state,witnesses):
+    # T38 includes foreign cached players in core but not in selection's roster
+    # closure. Join their immutable raw hand cells only for existing normalizers.
+    raw=copy.deepcopy(state);outer=raw['pairing']['context']['rebuild']['outer']
+    original=copy.deepcopy(outer['selection'])
+    have={p['id'] for p in original['players']}
+    for p in outer['players']:
+        if p['id'] not in have:
+            q=copy.deepcopy(witnesses[p['id']]);q['position']=p['p8_6'];q['style']=p['p8_7']
+            outer['selection']['players'].append(q)
+    # codes contains its own context alias;use the same structural join.
+    raw['codes']['context']=copy.deepcopy(raw['pairing']['context'])
+    out=match.normalize(raw);out['selection']=original
+    return out
+
+def difference(got,want,path=''):
+    if type(got)!=type(want):return f'{path}: types {type(got).__name__}/{type(want).__name__}'
+    if isinstance(want,dict):
+        if got.keys()!=want.keys():return f'{path}: keys {got.keys() ^ want.keys()}'
+        for k in want:
+            diff=difference(got[k],want[k],path+'/'+k)
+            if diff:return diff
+    elif isinstance(want,list):
+        if len(got)!=len(want):return f'{path}: lengths {len(got)}/{len(want)}'
+        for i,(a,b) in enumerate(zip(got,want)):
+            diff=difference(a,b,path+f'/{i}')
+            if diff:return diff
+    elif got!=want:return f'{path}: {got!r}/{want!r}'
+
+def require_equal(got,want,label):
+    if not common.same(got,want):raise ValueError(label+': '+str(difference(got,want)))
+
 def check(data,points):
     import onenil_engine as native
     session=native.NativeExhibitionSession(common.encoded(data))
-    # The whole original setup/match sequence will be asserted here;no later
-    # expected snapshot is ever passed to this constructor or any step().
+    prep=json.loads(session.preparation())
+    draws=[json.loads(l)['event'] for l in (FIXTURES/'T38-r0002.jsonl').read_text().splitlines() if json.loads(l)['schema']=='setup-draw/1']
+    require_equal(prep['draws'],[{**{k:d[k] for k in ('n','seed_before','seed_after','value')},'site':d['callers'][1 if d['callers'][0]=='24BC:0D4F' else 2]} for d in draws],'setup258 ordered draws')
+    witnesses={p['id']:p for p in points[2]['state']['caller']['pairing']['context']['rebuild']['outer']['selection']['players']}
+    if len(prep['points'])!=len(points):raise ValueError('setup boundary count differs')
+    for index,(got,want) in enumerate(zip(prep['points'],points)):
+        a=want['state']['initial'];c=want['state']['caller']
+        if index<2:
+            # Career squad/colour work between these observations is supplied input;
+            # only native seeding/selector ownership is compared before pre86E9.
+            expected={'site':want['site'],'draw':want['draw'],'config':a['config'],
+                      'selectors':[v['value'] for v in a['selectors']],
+                      'selector_head':a['events']['selectors']['head'],'seed':c['seed']}
+            actual={k:got[k] for k in expected if k!='seed'};actual['seed']=got['caller']['seed']
+        else:
+            expected={'site':want['site'],'draw':want['draw'],'config':a['config'],
+                      'selectors':[v['value'] for v in a['selectors']],
+                      'selector_head':a['events']['selectors']['head'],'income_total':want['income_total'],
+                      'caller':expected_caller(c,witnesses),
+                      **{k:a[v] for k,v in [('goal','goals'),('event','events'),('extra','extra'),('reset','reset'),('clock','clock')]}}
+            actual=got
+        require_equal(actual,expected,f'setup boundary{index} {want["site"]}')
+    require_equal(prep['incomes'],[json.loads(l)['result'] for l in (FIXTURES/'T38-r0002.jsonl').read_text().splitlines() if json.loads(l)['schema']=='setup-income/1'],'setup incomes')
+    _,steps,phases,_=match.load()
+    # Compare all later boundaries using this same session;no second constructor.
+    require_equal(json.loads(session.snapshot()),half.normalized(steps[0]['input']),'prepared first DD02')
+    all_draws=[json.loads(l) for l in (half.FIXTURES/'draws.jsonl').read_text().splitlines()]
+    count=0;ai=[]
+    while session.phase()!='full-time':
+        if session.phase()=='half-time':session.continue_without_changes()
+        got=json.loads(session.step());want=steps[count]
+        for k in ('input','output'):require_equal(got[k],half.normalized(want[k]),f'full-match step{count} {k}')
+        require_equal(got['clock'],{k:want['clock'][k] for k in ('output','event','result')},f'step{count} clock')
+        require_equal(got['clock_input'],want['clock']['input'],f'step{count} clock input')
+        require_equal(got['draws'],[{k:v for k,v in d.items() if k!='i'} for d in all_draws[want['draw_start']:want['clock']['draw_end']]],f'step{count} RNG')
+        ai.extend(got['ai']);count+=1
+        if count>len(steps):raise ValueError('native match failed to terminate')
+    if count!=95 or len(ai)!=37:raise ValueError('full-match step/AI census differs')
+    require_equal([h['arguments'] for c in ai for h in c['helpers'] if h['kind']=='replace'],[[14,8,1],[13,6,1]],'actual replacements')
+    require_equal(json.loads(session.caller_points()),[match.normalize(p['state']) for p in phases],'full-match caller projections')
+    require_equal(json.loads(session.result()),{'clubs':steps[-1]['output']['clubs'],'goals':steps[-1]['output']['score_side']},'final result')
+    print('Native preparation:11 setup boundaries/258 draws,then same image through95 DD02/clock/RNG steps,37 AI calls,two replacements,final1-3.')
     return session
 
 def capture_settings(research_root):
