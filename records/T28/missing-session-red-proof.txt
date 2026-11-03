@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/replay_match_setup.py", line 87, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/replay_match_setup.py", line 86, in main
+    data,points,_=load();check(data,points)
+                         ^^^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/replay_match_setup.py", line 79, in check
+    session=native.NativeExhibitionSession(common.encoded(data))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'onenil_engine' has no attribute 'NativeExhibitionSession'

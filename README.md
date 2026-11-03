@@ -1209,9 +1209,9 @@ are newly drawn SVG/CSS. No original game assets are required.
 
 [designed] This preview admits the single initial T26 state from
 `demo/reference.json`,without loading replay/expected streams at runtime.
-It offers the fixed Sheffield Wed–Blackburn R reference only. Native258-draw
-setup,lineup/seed choices,supported-session breadth and owner-run first-playable
-review are still pending under#35. Repeating the same prepared configuration
+It offers the fixed Sheffield Wed–Blackburn R reference only. The native258-draw
+setup API is documented below. Wiring it into this viewer,lineup/seed choices,
+supported-session breadth and owner-run first-playable review remain under#35. Repeating the same prepared configuration
 is deterministic. This is visible prototype progress,not completed acceptance.
 
 Checks:
@@ -1223,3 +1223,32 @@ Checks:
 .cache/venv/bin/python -m playwright install chromium
 .cache/venv/bin/python tools/smoke_match_viewer.py
 ```
+
+### Native selected-squad setup (T28)
+
+[confirmed: archaeologyT38 at d9e20a4 and nativeT28] `NativeExhibitionSession`
+admits `demo/exhibition.json` once, computes the 258 setup draws and continues
+through the same Rust image to full time. It reads no expected boundary or
+original executable at runtime. The input contains selected squads, raw readonly
+player/table facts, configuration and explicit incoming legacy state. In
+particular, old seed/selectors remain inputs to native reseeding; the initial
+clock, scenes and caches have not been replaced with prepared kickoff values.
+Career automatic squad/colour selection is supplied as the chosen squads and
+presentation attributes. Match income/RNG is computed; career ledger persistence
+is outside this exhibition.
+
+```sh
+.cache/venv/bin/python tools/replay_match_setup.py --check
+.cache/venv/bin/python tools/replay_match_setup.py --benchmark --out records/T28
+```
+
+The check compares all 258 setup draws and 11 setup boundaries (the first two
+compare seeding-owned fields), then all 95 original DD02/clock/RNG boundaries,
+actual halftime, both replacements and the original final result from that same
+session. Missing/inconsistent data and reached unsupported branches diagnose.
+The immutable settings observations under `records/T28` read original config+F6
+and untouched queue-zero cells at the exact T38 admission/255-draw prefix.
+
+This completes native setup for the fixed reference. The T27 browser viewer
+still uses its prepared input; wiring this API into lineup/seed controls,
+supported alternate-session smoke tests and owner review remain under issue35.

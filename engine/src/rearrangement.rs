@@ -272,6 +272,7 @@ pub(crate) fn snapshot(e: &mut Engine, s: &State) -> State {
         p.flags11 = e.image[crate::layout::P15 + 15 * usize::from(p.id) + 11];
     }
     out.cache.seed = out.core.assignment.seed;
+    out.cache.gate = e.image[0xD18];
     out.cache.side_offsets = out.core.side_offsets;
     out.cache.scenes = out.core.assignment.scenes.clone();
     for side in 0..2 {
