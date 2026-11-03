@@ -179,7 +179,7 @@ fn identity(e: &Engine, index: u8) -> Result<u16, String> {
     let slot = e.image[scene(index) + 7];
     Ok(u16::from(if slot > 11 { slot - 11 } else { slot }))
 }
-fn orient(e: &Engine, index: u8, target: u16) -> u16 {
+pub(crate) fn orient(e: &Engine, index: u8, target: u16) -> u16 {
     let (sign, _) = crate::terminal::direction_image(e, &Scene::read(e, index));
     let bytes = target
         .to_le_bytes()

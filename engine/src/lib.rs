@@ -34,9 +34,9 @@ pub mod step_tail;
 pub mod substitution;
 pub mod terminal;
 pub mod watched_direction;
+pub mod watched_kickoff;
 pub mod watched_movement;
 pub mod watched_target;
-pub mod watched_kickoff;
 
 const SEED: u16 = 0xA51C;
 const RATINGS: u16 = 0xD674;
@@ -380,7 +380,8 @@ mod python {
 
     #[pyfunction]
     fn watched_kickoff(input_json: &str) -> PyResult<String> {
-        let state: watched_kickoff::State = serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let state: watched_kickoff::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
         let out = watched_kickoff::advance(&state).map_err(PyValueError::new_err)?;
         serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
     }

@@ -1349,3 +1349,29 @@ side0). All full projected states and numeric effects match Rust. The separate
 unique original calls. Original deduplication,queue wrapping and nonzero
 weights are not exercised by this stream;synthetic/static tests cover them.
 The aborted active-only run is retained and excluded from accepted evidence.
+
+### Original kickoff readiness and first ball launch (T33)
+
+[confirmed: archaeologyF39/c7637bd,56EE/2625/helper listings at d9e20a4,
+T33 capture-r0001] Rust computes the initial action-two kickoff on one image:
+22-scene readiness with real availability checks,target orientation,wrapped
+ball direction/distance/endpoint,mode selection,native1BD6/1AE2 skill and RNG,
+activation and all22 action5 stores. No readiness,skill result,vector or random
+value is supplied. Every35 original56EE calls through first active tick48
+matches:34 wait returns and one successful launch,using one draw at1BF1
+(bound84,value19). The observed launch is mode6,direction(-1,0),distance2,
+endpoint(-2,0). Mode7/8 and failed-skill RNG branches have synthetic/static
+coverage only.
+
+```sh
+.cache/venv/bin/python tools/replay_watched_kickoff.py --check
+.cache/venv/bin/python tools/replay_watched_kickoff.py --benchmark --out records/T33
+```
+
+[designed] This is the initial inactive-entry gameplay projection. Active-play
+launches diagnose until their additional effects are ported. Original sound7
+is retained as a raw fact;PC-speaker I/O and presentation countdown/timer
+fields D088/D5A/DE26 remain outside this projection. Matching these gameplay
+fields does not claim full physical sound/timer execution. Other watched
+actions,ball flight and clock/tick/viewer integration remain before detailed
+browser commentary is available.
