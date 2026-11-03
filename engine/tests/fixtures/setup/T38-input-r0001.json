@@ -1,0 +1,3717 @@
+{
+  "schema": "run/1",
+  "run_id": "T38-input-r0001",
+  "experiment": "T38",
+  "arm": "setup_input_supplement",
+  "rep": 1,
+  "code_commit": "b6997a9c63a2b89af2706ce9b94e4adea9443205",
+  "machine": "ubuntu-24-04-wsl2",
+  "artifact": {
+    "set": "One-Nil96 (records/T01/inventory.json)",
+    "variant": null
+  },
+  "runtime": {
+    "harness": "runtime/emul/match_setup.py@b6997a9c63a2b89af2706ce9b94e4adea9443205",
+    "unicorn": "2.1.4",
+    "python": "3.12.3",
+    "dos_clock": {
+      "date": [
+        1995,
+        8,
+        1,
+        2
+      ],
+      "time": [
+        10,
+        0,
+        0,
+        0
+      ]
+    },
+    "settings": {
+      "INSTR_PER_S": 20000000,
+      "KEY_HOLD": 1600000,
+      "PIT_HZ": 1193182,
+      "SLICE_MAX": 1000
+    }
+  },
+  "interventions": [
+    {
+      "level": "I3",
+      "what": "read-only setup input supplement;intentional stop before86E9"
+    }
+  ],
+  "start_state": {
+    "id": ".cache/states/T04/T04-week-r0016.sav",
+    "sha256": "2f634978859f7c07b3519e4278d8aaf70c2c70b93ad48362408fbcfa210576a1",
+    "restore": "DOSBox-X savestate restored by guest.py"
+  },
+  "seed": null,
+  "actions": {
+    "script": "runtime/emul/match_setup.py --run-inputs",
+    "source": {
+      "t38_record": "runs/T38/T38-r0002.json",
+      "t38_record_sha256": "32ac2c838165ef0002214866d1f8674c2c1d7e7709a9ba0380284f488ed9f909"
+    },
+    "game_files": {
+      "1-0.EXE": "89ff9c5f238f24e81a0c2440a46cdd8997280a65fc3cc3d97cb974f55280a80a",
+      "1-0.PAL": "438b08987f9e09034787fe7b2fe9441cf7889a57e9e1deafc73acf2fda1247e4",
+      "1-0.PIF": "d3cbcbc35df6f29b6a84384a0555c79f428aad5eea8b13a63f297a480b5eeeb4",
+      "1-0.TFN": "9934df2b3a4225e1a22ae0846c5b954e7919fc41400f4dee78e83266b7e31465",
+      "ALTER.EXE": "8dc12e825026c226dad79790d65a80f0b1859936ef8534420fc6c7874dd54373",
+      "ALTER.PIF": "641e95bc8077cbfe058aee339445d9364fb136320b1cf25510e7cf6d340a1cac",
+      "ENGL-94.DAT": "88d970b94aa00e7a77e75e1b9fa9db53e997d8eeef75a9faae0998ed914d0515",
+      "ENGL-95.DAT": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+      "INSTALL.EXE": "ba4211946371f864cd48e7f6d06be7f1390260ba5f233c2e4ea2cbcc3c2816e5",
+      "ITAL-94.DAT": "c0ac09985d63cfbfed44334b59e3119174766a0ef9127dadcc23a9bd458941a2",
+      "RUN.BAT": "eda6774b47d1ccde504365308cff5c5363e0fbb5dc521c39e2ebd0abe661f045",
+      "RUN.PIF": "d0d60d041d2cdb2cf9c35f1f8feed3c68e40e18e2328548b536eb2d7a6e50615",
+      "SAVE1.1-0": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36",
+      "SCOT-94.DAT": "66c18f1106777e58ca202393b1dff633632cea03c9e57be8e830caacd5eeb6f8"
+    }
+  },
+  "observations": [
+    {
+      "step": 0,
+      "source": "log",
+      "field": "scope",
+      "value": "Read-only supplement stops at the identical pre86E9 state after255 exact original draws;whole-week behavioral equality remains in T38-r0002."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "initial_sha256",
+      "value": "ef01cce3785e737c17460a858efd964ff930208a2fadf2ee530af4217ffa748c"
+    },
+    {
+      "name": "draws",
+      "value": [
+        {
+          "kind": "draw",
+          "i": 0,
+          "n": 16,
+          "seed_before": 64,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 51791,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 1,
+          "n": 16,
+          "seed_before": 51791,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 7522,
+          "value": 2
+        },
+        {
+          "kind": "draw",
+          "i": 2,
+          "n": 16,
+          "seed_before": 7522,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 32873,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 3,
+          "n": 16,
+          "seed_before": 32873,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 62100,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 4,
+          "n": 16,
+          "seed_before": 62100,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 47699,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 5,
+          "n": 16,
+          "seed_before": 47699,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 14422,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 6,
+          "n": 16,
+          "seed_before": 14422,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 44685,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 7,
+          "n": 16,
+          "seed_before": 44685,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 11048,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 8,
+          "n": 16,
+          "seed_before": 11048,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 1943,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 9,
+          "n": 16,
+          "seed_before": 1943,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 43914,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 10,
+          "n": 16,
+          "seed_before": 43914,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 33777,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 11,
+          "n": 16,
+          "seed_before": 33777,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 24060,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 12,
+          "n": 16,
+          "seed_before": 24060,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 38427,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 13,
+          "n": 16,
+          "seed_before": 38427,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 51966,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 14,
+          "n": 16,
+          "seed_before": 51966,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 1173,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 15,
+          "n": 16,
+          "seed_before": 1173,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 32528,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 16,
+          "n": 16,
+          "seed_before": 32528,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 35295,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 17,
+          "n": 16,
+          "seed_before": 35295,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 10930,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 18,
+          "n": 16,
+          "seed_before": 10930,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 29817,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 19,
+          "n": 16,
+          "seed_before": 29817,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 49764,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 20,
+          "n": 16,
+          "seed_before": 49764,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 18147,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 21,
+          "n": 16,
+          "seed_before": 18147,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 40614,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 22,
+          "n": 16,
+          "seed_before": 40614,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 22429,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 23,
+          "n": 16,
+          "seed_before": 22429,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 39928,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 24,
+          "n": 16,
+          "seed_before": 39928,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 28967,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 25,
+          "n": 16,
+          "seed_before": 28967,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 15066,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 26,
+          "n": 16,
+          "seed_before": 15066,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 29185,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 27,
+          "n": 16,
+          "seed_before": 29185,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 49100,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 28,
+          "n": 16,
+          "seed_before": 49100,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 60587,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 29,
+          "n": 16,
+          "seed_before": 60587,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 21326,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 30,
+          "n": 16,
+          "seed_before": 21326,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 51109,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 31,
+          "n": 16,
+          "seed_before": 51109,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 8672,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 32,
+          "n": 16,
+          "seed_before": 8672,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 56687,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 33,
+          "n": 16,
+          "seed_before": 56687,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 31746,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 34,
+          "n": 16,
+          "seed_before": 31746,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 40073,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 35,
+          "n": 16,
+          "seed_before": 40073,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 63028,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 36,
+          "n": 16,
+          "seed_before": 63028,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 42867,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 37,
+          "n": 16,
+          "seed_before": 42867,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 35062,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 38,
+          "n": 16,
+          "seed_before": 35062,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 29869,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 39,
+          "n": 16,
+          "seed_before": 29869,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 45256,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 40,
+          "n": 16,
+          "seed_before": 45256,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 61111,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 41,
+          "n": 16,
+          "seed_before": 61111,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 36394,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 42,
+          "n": 16,
+          "seed_before": 36394,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 5137,
+          "value": 2
+        },
+        {
+          "kind": "draw",
+          "i": 43,
+          "n": 16,
+          "seed_before": 5137,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 1436,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 44,
+          "n": 16,
+          "seed_before": 1436,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 38715,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 45,
+          "n": 16,
+          "seed_before": 38715,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 57246,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 46,
+          "n": 16,
+          "seed_before": 57246,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 32437,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 47,
+          "n": 16,
+          "seed_before": 32437,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 59568,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 48,
+          "n": 16,
+          "seed_before": 59568,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 50431,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 49,
+          "n": 16,
+          "seed_before": 50431,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 4434,
+          "value": 2
+        },
+        {
+          "kind": "draw",
+          "i": 50,
+          "n": 16,
+          "seed_before": 4434,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 63641,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 51,
+          "n": 16,
+          "seed_before": 63641,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 36356,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 52,
+          "n": 16,
+          "seed_before": 36356,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 56323,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 53,
+          "n": 16,
+          "seed_before": 56323,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 63302,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 54,
+          "n": 16,
+          "seed_before": 63302,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 1469,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 55,
+          "n": 16,
+          "seed_before": 1469,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 27032,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 56,
+          "n": 16,
+          "seed_before": 27032,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 32839,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 57,
+          "n": 16,
+          "seed_before": 32839,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 42362,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 58,
+          "n": 16,
+          "seed_before": 42362,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 27169,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 59,
+          "n": 16,
+          "seed_before": 27169,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 12140,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 60,
+          "n": 16,
+          "seed_before": 12140,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 38347,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 61,
+          "n": 16,
+          "seed_before": 38347,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 28654,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 62,
+          "n": 16,
+          "seed_before": 28654,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 10693,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 63,
+          "n": 16,
+          "seed_before": 10693,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 54144,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 64,
+          "n": 16,
+          "seed_before": 54144,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 16527,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 65,
+          "n": 16,
+          "seed_before": 16527,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 60066,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 66,
+          "n": 16,
+          "seed_before": 60066,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 34985,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 67,
+          "n": 16,
+          "seed_before": 34985,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 35284,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 68,
+          "n": 16,
+          "seed_before": 35284,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 58515,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 69,
+          "n": 16,
+          "seed_before": 58515,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 59798,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 70,
+          "n": 16,
+          "seed_before": 59798,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 2765,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 71,
+          "n": 16,
+          "seed_before": 2765,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 50792,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 72,
+          "n": 16,
+          "seed_before": 50792,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 9687,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 73,
+          "n": 16,
+          "seed_before": 9687,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 32970,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 74,
+          "n": 16,
+          "seed_before": 32970,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 29745,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 75,
+          "n": 16,
+          "seed_before": 29745,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 15676,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 76,
+          "n": 16,
+          "seed_before": 15676,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 59483,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 77,
+          "n": 16,
+          "seed_before": 59483,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 1086,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 78,
+          "n": 16,
+          "seed_before": 1086,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 51413,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 79,
+          "n": 16,
+          "seed_before": 51413,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 57936,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 80,
+          "n": 16,
+          "seed_before": 57936,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 20511,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 81,
+          "n": 16,
+          "seed_before": 20511,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 2034,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 82,
+          "n": 16,
+          "seed_before": 2034,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 19641,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 83,
+          "n": 16,
+          "seed_before": 19641,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 59812,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 84,
+          "n": 16,
+          "seed_before": 59812,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 49443,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 85,
+          "n": 16,
+          "seed_before": 49443,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 24550,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 86,
+          "n": 16,
+          "seed_before": 24550,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 33757,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 87,
+          "n": 16,
+          "seed_before": 33757,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 51000,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 88,
+          "n": 16,
+          "seed_before": 51000,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 57191,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 89,
+          "n": 16,
+          "seed_before": 57191,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 8218,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 90,
+          "n": 16,
+          "seed_before": 8218,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 12865,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 91,
+          "n": 16,
+          "seed_before": 12865,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 12044,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 92,
+          "n": 16,
+          "seed_before": 12044,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 36587,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 93,
+          "n": 16,
+          "seed_before": 36587,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 40078,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 94,
+          "n": 16,
+          "seed_before": 40078,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 23525,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 95,
+          "n": 16,
+          "seed_before": 23525,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 5408,
+          "value": 2
+        },
+        {
+          "kind": "draw",
+          "i": 96,
+          "n": 16,
+          "seed_before": 5408,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 62383,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 97,
+          "n": 16,
+          "seed_before": 62383,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 26946,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 98,
+          "n": 16,
+          "seed_before": 26946,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 17609,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 99,
+          "n": 16,
+          "seed_before": 17609,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 44404,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 100,
+          "n": 16,
+          "seed_before": 44404,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 29107,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 101,
+          "n": 16,
+          "seed_before": 29107,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 23094,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 102,
+          "n": 16,
+          "seed_before": 23094,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 28909,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 103,
+          "n": 16,
+          "seed_before": 28909,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 27656,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 104,
+          "n": 16,
+          "seed_before": 27656,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 44279,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 105,
+          "n": 16,
+          "seed_before": 44279,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 33642,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 106,
+          "n": 16,
+          "seed_before": 33642,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 42065,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 107,
+          "n": 16,
+          "seed_before": 42065,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 1244,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 108,
+          "n": 16,
+          "seed_before": 1244,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 35195,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 109,
+          "n": 16,
+          "seed_before": 35195,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 14558,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 110,
+          "n": 16,
+          "seed_before": 14558,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 58101,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 111,
+          "n": 16,
+          "seed_before": 58101,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 27632,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 112,
+          "n": 16,
+          "seed_before": 27632,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 11071,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 113,
+          "n": 16,
+          "seed_before": 11071,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 3730,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 114,
+          "n": 16,
+          "seed_before": 3730,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 28889,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 115,
+          "n": 16,
+          "seed_before": 28889,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 54596,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 116,
+          "n": 16,
+          "seed_before": 54596,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 63043,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 117,
+          "n": 16,
+          "seed_before": 63043,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 55430,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 118,
+          "n": 16,
+          "seed_before": 55430,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 53757,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 119,
+          "n": 16,
+          "seed_before": 53757,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 46296,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 120,
+          "n": 16,
+          "seed_before": 46296,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 36487,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 121,
+          "n": 16,
+          "seed_before": 36487,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 43706,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 122,
+          "n": 16,
+          "seed_before": 43706,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 51809,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 123,
+          "n": 16,
+          "seed_before": 51809,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 48812,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 124,
+          "n": 16,
+          "seed_before": 48812,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 55307,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 125,
+          "n": 16,
+          "seed_before": 55307,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 55598,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 126,
+          "n": 16,
+          "seed_before": 55598,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 24069,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 127,
+          "n": 16,
+          "seed_before": 24069,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 59072,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 128,
+          "n": 16,
+          "seed_before": 59072,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 63183,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 129,
+          "n": 16,
+          "seed_before": 63183,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 63458,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 130,
+          "n": 16,
+          "seed_before": 63458,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 53481,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 131,
+          "n": 16,
+          "seed_before": 53481,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 24852,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 132,
+          "n": 16,
+          "seed_before": 24852,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 20179,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 133,
+          "n": 16,
+          "seed_before": 20179,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 56022,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 134,
+          "n": 16,
+          "seed_before": 56022,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 42765,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 135,
+          "n": 16,
+          "seed_before": 42765,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 41384,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 136,
+          "n": 16,
+          "seed_before": 41384,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 33815,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 137,
+          "n": 16,
+          "seed_before": 33815,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 38410,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 138,
+          "n": 16,
+          "seed_before": 38410,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 42097,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 139,
+          "n": 16,
+          "seed_before": 42097,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 23676,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 140,
+          "n": 16,
+          "seed_before": 23676,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 31387,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 141,
+          "n": 16,
+          "seed_before": 31387,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 32126,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 142,
+          "n": 16,
+          "seed_before": 32126,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 52501,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 143,
+          "n": 16,
+          "seed_before": 52501,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 34192,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 144,
+          "n": 16,
+          "seed_before": 34192,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 22111,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 145,
+          "n": 16,
+          "seed_before": 22111,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 9522,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 146,
+          "n": 16,
+          "seed_before": 9522,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 25849,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 147,
+          "n": 16,
+          "seed_before": 25849,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 20708,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 148,
+          "n": 16,
+          "seed_before": 20708,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 31587,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 149,
+          "n": 16,
+          "seed_before": 31587,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 24870,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 150,
+          "n": 16,
+          "seed_before": 24870,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 61469,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 151,
+          "n": 16,
+          "seed_before": 61469,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 12920,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 152,
+          "n": 16,
+          "seed_before": 12920,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 36263,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 153,
+          "n": 16,
+          "seed_before": 36263,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 17754,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 154,
+          "n": 16,
+          "seed_before": 17754,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 12929,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 155,
+          "n": 16,
+          "seed_before": 12929,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 56908,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 156,
+          "n": 16,
+          "seed_before": 56908,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 28971,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 157,
+          "n": 16,
+          "seed_before": 28971,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 9678,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 158,
+          "n": 16,
+          "seed_before": 9678,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 12325,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 159,
+          "n": 16,
+          "seed_before": 12325,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 18528,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 160,
+          "n": 16,
+          "seed_before": 18528,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 18927,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 161,
+          "n": 16,
+          "seed_before": 18927,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 38530,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 162,
+          "n": 16,
+          "seed_before": 38530,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 11529,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 163,
+          "n": 16,
+          "seed_before": 11529,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 42164,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 164,
+          "n": 16,
+          "seed_before": 42164,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 31731,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 165,
+          "n": 16,
+          "seed_before": 31731,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 27510,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 166,
+          "n": 16,
+          "seed_before": 27510,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 44333,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 167,
+          "n": 16,
+          "seed_before": 44333,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 26440,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 168,
+          "n": 16,
+          "seed_before": 26440,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 43831,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 169,
+          "n": 16,
+          "seed_before": 43831,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 47274,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 170,
+          "n": 16,
+          "seed_before": 47274,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 29841,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 171,
+          "n": 16,
+          "seed_before": 29841,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 17436,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 172,
+          "n": 16,
+          "seed_before": 17436,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 48059,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 173,
+          "n": 16,
+          "seed_before": 48059,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 53790,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 174,
+          "n": 16,
+          "seed_before": 53790,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 34613,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 175,
+          "n": 16,
+          "seed_before": 34613,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 12080,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 176,
+          "n": 16,
+          "seed_before": 12080,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 53631,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 177,
+          "n": 16,
+          "seed_before": 53631,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 19410,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 178,
+          "n": 16,
+          "seed_before": 19410,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 10521,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 179,
+          "n": 16,
+          "seed_before": 10521,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 23684,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 180,
+          "n": 16,
+          "seed_before": 23684,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 20611,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 181,
+          "n": 16,
+          "seed_before": 20611,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 63942,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 182,
+          "n": 16,
+          "seed_before": 63942,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 56893,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 183,
+          "n": 16,
+          "seed_before": 56893,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 16408,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 184,
+          "n": 16,
+          "seed_before": 16408,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 56519,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 185,
+          "n": 16,
+          "seed_before": 56519,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 61434,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 186,
+          "n": 16,
+          "seed_before": 61434,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 27297,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 187,
+          "n": 16,
+          "seed_before": 27297,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 36332,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 188,
+          "n": 16,
+          "seed_before": 36332,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 23115,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 189,
+          "n": 16,
+          "seed_before": 23115,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 33390,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 190,
+          "n": 16,
+          "seed_before": 33390,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 53829,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 191,
+          "n": 16,
+          "seed_before": 53829,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 14848,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 192,
+          "n": 16,
+          "seed_before": 14848,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 60687,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 193,
+          "n": 16,
+          "seed_before": 60687,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 17698,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 194,
+          "n": 16,
+          "seed_before": 17698,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 22825,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 195,
+          "n": 16,
+          "seed_before": 22825,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 30804,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 196,
+          "n": 16,
+          "seed_before": 30804,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 63763,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 197,
+          "n": 16,
+          "seed_before": 63763,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 3094,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 198,
+          "n": 16,
+          "seed_before": 3094,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 33613,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 199,
+          "n": 16,
+          "seed_before": 33613,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 48360,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 200,
+          "n": 16,
+          "seed_before": 48360,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 8791,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 201,
+          "n": 16,
+          "seed_before": 8791,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 60234,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 202,
+          "n": 16,
+          "seed_before": 60234,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 5297,
+          "value": 2
+        },
+        {
+          "kind": "draw",
+          "i": 203,
+          "n": 16,
+          "seed_before": 5297,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 48060,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 204,
+          "n": 16,
+          "seed_before": 48060,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 19675,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 205,
+          "n": 16,
+          "seed_before": 19675,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 14014,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 206,
+          "n": 16,
+          "seed_before": 14014,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 4437,
+          "value": 2
+        },
+        {
+          "kind": "draw",
+          "i": 207,
+          "n": 16,
+          "seed_before": 4437,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 26832,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 208,
+          "n": 16,
+          "seed_before": 26832,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 40095,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 209,
+          "n": 16,
+          "seed_before": 40095,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 33394,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 210,
+          "n": 16,
+          "seed_before": 33394,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 48441,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 211,
+          "n": 16,
+          "seed_before": 48441,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 63524,
+          "value": 16
+        },
+        {
+          "kind": "draw",
+          "i": 212,
+          "n": 16,
+          "seed_before": 63524,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 30115,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 213,
+          "n": 16,
+          "seed_before": 30115,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 41574,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 214,
+          "n": 16,
+          "seed_before": 41574,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 40029,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 215,
+          "n": 16,
+          "seed_before": 40029,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 56760,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 216,
+          "n": 16,
+          "seed_before": 56760,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 31719,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 217,
+          "n": 16,
+          "seed_before": 31719,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 43674,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 218,
+          "n": 16,
+          "seed_before": 43674,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 29377,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 219,
+          "n": 16,
+          "seed_before": 29377,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 52620,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 220,
+          "n": 16,
+          "seed_before": 52620,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 37739,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 221,
+          "n": 16,
+          "seed_before": 37739,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 61198,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 222,
+          "n": 16,
+          "seed_before": 61198,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 17509,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 223,
+          "n": 16,
+          "seed_before": 17509,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 48032,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 224,
+          "n": 16,
+          "seed_before": 48032,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 57391,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 225,
+          "n": 16,
+          "seed_before": 57391,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 962,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 226,
+          "n": 16,
+          "seed_before": 962,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 21833,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 227,
+          "n": 16,
+          "seed_before": 21833,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 56308,
+          "value": 14
+        },
+        {
+          "kind": "draw",
+          "i": 228,
+          "n": 16,
+          "seed_before": 56308,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 50739,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 229,
+          "n": 16,
+          "seed_before": 50739,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 48310,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 230,
+          "n": 16,
+          "seed_before": 48310,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 10605,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 231,
+          "n": 16,
+          "seed_before": 10605,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 41608,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 232,
+          "n": 16,
+          "seed_before": 41608,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 59767,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 233,
+          "n": 16,
+          "seed_before": 59767,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 11754,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 234,
+          "n": 16,
+          "seed_before": 11754,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 34001,
+          "value": 9
+        },
+        {
+          "kind": "draw",
+          "i": 235,
+          "n": 16,
+          "seed_before": 34001,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 50012,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 236,
+          "n": 16,
+          "seed_before": 50012,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 11771,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 237,
+          "n": 16,
+          "seed_before": 11771,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 43870,
+          "value": 11
+        },
+        {
+          "kind": "draw",
+          "i": 238,
+          "n": 16,
+          "seed_before": 43870,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 27509,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 239,
+          "n": 16,
+          "seed_before": 27509,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 12912,
+          "value": 4
+        },
+        {
+          "kind": "draw",
+          "i": 240,
+          "n": 16,
+          "seed_before": 12912,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 47039,
+          "value": 12
+        },
+        {
+          "kind": "draw",
+          "i": 241,
+          "n": 16,
+          "seed_before": 47039,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 51474,
+          "value": 13
+        },
+        {
+          "kind": "draw",
+          "i": 242,
+          "n": 16,
+          "seed_before": 51474,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 8537,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 243,
+          "n": 16,
+          "seed_before": 8537,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 9156,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 244,
+          "n": 16,
+          "seed_before": 9156,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 60099,
+          "value": 15
+        },
+        {
+          "kind": "draw",
+          "i": 245,
+          "n": 16,
+          "seed_before": 60099,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 23302,
+          "value": 6
+        },
+        {
+          "kind": "draw",
+          "i": 246,
+          "n": 16,
+          "seed_before": 23302,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 10877,
+          "value": 3
+        },
+        {
+          "kind": "draw",
+          "i": 247,
+          "n": 16,
+          "seed_before": 10877,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 2904,
+          "value": 1
+        },
+        {
+          "kind": "draw",
+          "i": 248,
+          "n": 16,
+          "seed_before": 2904,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 27399,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 249,
+          "n": 16,
+          "seed_before": 27399,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 30010,
+          "value": 8
+        },
+        {
+          "kind": "draw",
+          "i": 250,
+          "n": 16,
+          "seed_before": 30010,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 19169,
+          "value": 5
+        },
+        {
+          "kind": "draw",
+          "i": 251,
+          "n": 16,
+          "seed_before": 19169,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 40236,
+          "value": 10
+        },
+        {
+          "kind": "draw",
+          "i": 252,
+          "n": 16,
+          "seed_before": 40236,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 7307,
+          "value": 2
+        },
+        {
+          "kind": "draw",
+          "i": 253,
+          "n": 16,
+          "seed_before": 7307,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 27566,
+          "value": 7
+        },
+        {
+          "kind": "draw",
+          "i": 254,
+          "n": 16,
+          "seed_before": 27566,
+          "callers": [
+            "24BC:0D12",
+            "232A:0779",
+            "0AB9:1A01",
+            "0AB9:E24F"
+          ],
+          "seed_after": 34437,
+          "value": 9
+        }
+      ]
+    },
+    {
+      "name": "fields",
+      "value": {
+        "capacities": [
+          {
+            "club": 130,
+            "byte": 31
+          },
+          {
+            "club": 134,
+            "byte": 36
+          }
+        ],
+        "start_gate": 0,
+        "club_factors": [
+          {
+            "club": 130,
+            "selector": 1,
+            "address": 4213,
+            "value": 5
+          },
+          {
+            "club": 134,
+            "selector": 1,
+            "address": 4213,
+            "value": 5
+          }
+        ],
+        "fixture_factors": [
+          {
+            "index": 0,
+            "value": 255
+          },
+          {
+            "index": 1,
+            "value": 254
+          },
+          {
+            "index": 2,
+            "value": 254
+          },
+          {
+            "index": 3,
+            "value": 0
+          },
+          {
+            "index": 4,
+            "value": 0
+          }
+        ]
+      }
+    }
+  ],
+  "started": "2026-11-02T23:14:19Z",
+  "ended": "2026-11-02T23:14:20Z",
+  "status": "completed"
+}
