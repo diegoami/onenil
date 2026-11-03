@@ -508,6 +508,7 @@ impl Cpu {
     pub fn xor(&mut self, x: u16, y: u16, w: u8) -> u16 {
         self.logic(x ^ y, w)
     }
+    pub fn rol(&mut self,_value:u16,_count:u16,_width:u8)->u16{0}
     pub fn shl(&mut self, x: u16, y: u16, w: u8) -> u16 {
         let n = y & 31;
         let mut v = x & (Self::mask(w) as u16);
@@ -911,4 +912,13 @@ mod tests {
         assert_eq!(c.rcl(0xFFFF, 0, 16), 0xFFFF);
         assert!(!c.cf);
     }
+    #[test]
+    fn rotate_left_forms_original_membership_bits_without_changing_status_flags(){
+        let mut c=cpu();c.z=true;c.sf=true;c.pf=false;
+        assert_eq!(c.rol(1,2,8),4);assert!(c.z&&c.sf&&!c.pf);
+        c.cf=true;c.of=true;assert_eq!(c.rol(0x1234,0,16),0x1234);assert!(c.cf&&c.of);
+        assert_eq!(c.rol(0x80,1,8),1);assert!(c.cf&&c.of);
+        assert_eq!(c.rol(0x8000,1,16),1);assert!(c.cf&&c.of);
+    }
+
 }

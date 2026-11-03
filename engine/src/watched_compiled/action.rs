@@ -17,6 +17,7 @@ pub enum PointerKind {
     P15,
     Club,
     Config,
+    Style,
     Main,
     MainShown,
     Background,
@@ -31,6 +32,7 @@ impl PointerKind {
             Self::P15 => 0xD7BE,
             Self::Club => 0xD7C2,
             Self::Config => 0xD7D2,
+            Self::Style => 0xD0C0,
             Self::Main => 0xD08A,
             Self::MainShown => 0xD08E,
             Self::Background => 0xD092,
@@ -45,6 +47,7 @@ impl PointerKind {
             Self::P15 => 15 * 3921,
             Self::Club => 62 * 175,
             Self::Config => 256,
+            Self::Style => 1,
             Self::Seed => 2,
             _ => 4000,
         }
@@ -70,6 +73,7 @@ pub enum Area {
     P15,
     Club,
     Config,
+    Style,
     Main,
     MainShown,
     Background,
@@ -123,6 +127,7 @@ fn area_pointer(area: Area) -> Option<PointerKind> {
         Area::P15 => PointerKind::P15,
         Area::Club => PointerKind::Club,
         Area::Config => PointerKind::Config,
+        Area::Style => PointerKind::Style,
         Area::Main => PointerKind::Main,
         Area::MainShown => PointerKind::MainShown,
         Area::Background => PointerKind::Background,
@@ -219,7 +224,9 @@ fn machine(s: &State) -> Result<Cpu, String> {
             }
         }
     }
-    if kinds.len() != 10 {
+    let mut required:std::collections::BTreeSet<_>=[PointerKind::P8,PointerKind::P15,PointerKind::Club,PointerKind::Config,PointerKind::Main,PointerKind::MainShown,PointerKind::Background,PointerKind::BackgroundShown,PointerKind::Commentary,PointerKind::Seed].into_iter().collect();
+    if s.kind==Kind::Actor{required.insert(PointerKind::Style);}
+    if kinds != required {
         return Err("missing named action pointer".into());
     }
     for (i, p) in s.pointers.iter().enumerate() {
@@ -233,7 +240,7 @@ fn machine(s: &State) -> Result<Cpu, String> {
             let pool = |k| {
                 matches!(
                     k,
-                    PointerKind::P8 | PointerKind::P15 | PointerKind::Club | PointerKind::Config
+                    PointerKind::P8 | PointerKind::P15 | PointerKind::Club | PointerKind::Config | PointerKind::Style
                 )
             };
             if (pool(p.kind) || pool(q.kind))
@@ -323,15 +330,17 @@ fn machine(s: &State) -> Result<Cpu, String> {
     c.require_write_baseline = true;
     Ok(c)
 }
+fn actor_stub(_c:&mut Cpu)->Result<(),String>{Err("T38 parent stub for valid original-fixture red".into())}
 pub fn advance(s: &State) -> Result<Outcome, Fault> {
     let mut c = machine(s).map_err(|message| Fault {
         message,
         missing: None,
     })?;
+    let style=if s.kind==Kind::Actor{let a=find_pointer(s,PointerKind::Style).unwrap().address();Some((a,c.e.image[a]))}else{None};
     let entry = match s.kind {
         Kind::Action5 => super::action_graph::p_0ab9_448c,
         Kind::Contact => super::action_graph::p_0ab9_4dff,
-        Kind::Actor => super::action_graph::p_0ab9_72bb,
+        Kind::Actor => actor_stub,
     };
     if let Err(message) = c.invoke_entry(entry, 0x0AB9, s.stack_words[0]) {
         return Err(Fault {
@@ -345,6 +354,7 @@ pub fn advance(s: &State) -> Result<Outcome, Fault> {
             missing: None,
         });
     }
+    if let Some((a,before))=style{if c.e.image[a]!=before{return Err(Fault{message:"actor modified readonly logical style".into(),missing:None});}}
     let mut output = s.clone();
     let ds = 16 * usize::from(s.regs[11]);
     let at = ds + 0xCCEF + 25 * usize::from(s.scene.index);
@@ -597,6 +607,20 @@ mod tests {
     fn actor_entry_requires_an_explicit_logical_render_style_pointer(){
         let mut s=context();s.kind=Kind::Actor;
         assert!(machine(&s).is_err(),"actor entry accepted no typed renderer-style pointer");
+        s.pointers.push(Pointer{kind:PointerKind::Style,offset:31,segment:28274});
+        s.cells.push(ByteFact{area:Area::Style,offset:0,value:0});
+        let c=machine(&s).unwrap();let at=16*28274+31;assert!(c.known[at]);assert_eq!(c.e.image[at],0);
+        let mut extra=s.clone();extra.cells[0].offset=1;assert!(machine(&extra).is_err());
+        let mut wrong=s.clone();wrong.kind=Kind::Action5;assert!(machine(&wrong).is_err());
+        let mut missing=s.clone();missing.pointers.retain(|p|p.kind!=PointerKind::P8);assert!(machine(&missing).is_err());
+    }
+
+    #[test]
+    fn valid_original_parent_fixture_replays(){
+        let path=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/watched_actor/case-0000.json");
+        let case:serde_json::Value=serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
+        let input:State=serde_json::from_value(case["input"].clone()).unwrap();
+        assert_eq!(serde_json::to_value(advance(&input).unwrap()).unwrap(),case["expected"]);
     }
 
 }

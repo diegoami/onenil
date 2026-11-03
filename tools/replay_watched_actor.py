@@ -35,7 +35,21 @@ def originals():
         result.append((c,anchor))
     return result,manifest
 
-def admitted(c,anchor):return parent.parent_state(anchor,c['mode'],c.get('input_overlay'))
+def admitted(c,anchor):
+    raw,state=parent.parent_state(anchor,c['mode'],c.get('input_overlay'));ds=16*state['regs'][11]
+    state['pointers'].append({'kind':'style','offset':facts.word(raw,ds+0xD0C0),'segment':facts.word(raw,ds+0xD0C2)})
+    return raw,state
+
+def address(state,area,offset):
+    if area=='style':
+        p=state['pointers'][-1]
+        if p['kind']!='style'or offset!=0:raise ValueError('invalid logical style fact')
+        return p['offset']+16*p['segment']
+    return facts.address(state,area,offset)
+
+def named(state,at):
+    if at==address(state,'style',0):return 'style',0
+    return facts.named(state,at)
 
 def select_entry(c,anchor,native):
     raw,state=admitted(c,anchor);seen=set()
@@ -44,9 +58,9 @@ def select_entry(c,anchor,native):
         if 'ok'in result:return raw,state,result['ok']
         fault=result['error'];missing=fault['missing']
         if missing is None:raise ValueError(f'original parent{c["case"]}: '+fault['message'])
-        try:area,offset=facts.named(state,missing['address'])
+        try:area,offset=named(state,missing['address'])
         except ValueError as error:raise ValueError(f'original parent{c["case"]}: {fault}')from error
-        at=facts.address(state,area,offset)
+        at=address(state,area,offset)
         if at in seen:raise ValueError('native parent repeated admitted missing fact:'+str(fault))
         seen.add(at);state['cells'].append({'area':area,'offset':offset,'value':raw[at]})
     raise ValueError('parent fact selection did not converge')
@@ -56,17 +70,18 @@ def expected(c,raw,state):
     cells=[]
     for f in state['cells']:
         if f['area']=='frame':continue
-        change=changes.get((f['area'],f['offset']));value=change['after']if change else raw[facts.address(state,f['area'],f['offset'])]
+        change=changes.get((f['area'],f['offset']));value=change['after']if change else raw[address(state,f['area'],f['offset'])]
         cells.append({**f,'value':value})
     ds=16*state['regs'][11];scene=ds+0xCCEF+25*state['scene']['index']
-    known={facts.address(state,f['area'],f['offset'])for f in state['cells']}
+    known={address(state,f['area'],f['offset'])for f in state['cells']}
     known.update(range(scene,scene+25));known.update(range(ds+0xA51C,ds+0xA51E))
     for slot in facts.SLOTS.values():known.update(range(ds+slot,ds+slot+4))
+    known.update(range(ds+0xD0C0,ds+0xD0C4))
     for change in c['changes']:
-        at=facts.address(state,change['area'],change['offset'])
+        at=address(state,change['area'],change['offset'])
         if raw[at]!=change['before']:raise ValueError('original change baseline differs from admitted ENTRY')
         if at not in known:raise ValueError(f'original parent{c["case"]} changed undeclared gameplay field '+str(change))
-    return {'scene':c['output_scene'],'seed':c['seed_after'],'pointers':c['output_pointers'],'cells':cells,'draws':c['draws'],'events':c['events']}
+    return {'scene':c['output_scene'],'seed':c['seed_after'],'pointers':c['output_pointers']+[state['pointers'][-1]],'cells':cells,'draws':c['draws'],'events':c['events']}
 
 class Probe:
     def __init__(self,path):self.process=subprocess.Popen([str(path)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
@@ -108,10 +123,11 @@ def check():
         value=read(path)
         if value['case']!=c['case']or value['source_sha256']!=original_manifest['cases'][c['case']]['sha256']or value['admission']!=c['admission']:raise ValueError('decoded parent source differs')
         state=value['input']
-        if state['kind']!='actor'or state['scene']!=c['input_scene']or state['seed']!=c['seed_before']or state['regs']!=[c['registers'][r]for r in oracle.REGS]or state['flags']!=c['flags']or state['stack_words']!=c['stack_words']or state['pointers']!=c['pointers']:raise ValueError('decoded parent entry context differs')
+        if state['kind']!='actor'or state['scene']!=c['input_scene']or state['seed']!=c['seed_before']or state['regs']!=[c['registers'][r]for r in oracle.REGS]or state['flags']!=c['flags']or state['stack_words']!=c['stack_words']or state['pointers'][:-1]!=c['pointers']or state['pointers'][-1]['kind']!='style':raise ValueError('decoded parent entry context differs')
         out=value['expected']
         for key,field in [('scene','output_scene'),('seed','seed_after'),('pointers','output_pointers'),('draws','draws'),('events','events')]:
-            if out[key]!=c[field]:raise ValueError('decoded original parent expected '+key+' differs')
+            want=c[field]+[state['pointers'][-1]]if key=='pointers'else c[field]
+            if out[key]!=want:raise ValueError('decoded original parent expected '+key+' differs')
         values.append(value)
     return values
 
