@@ -43,3 +43,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T35 Compiled native watched target-adjustment graph](T35.md)
 
 - [T36 Complete original watched target selection](T36.md)
+
+- [T37 Native watched passing and contact actions](T37.md)
