@@ -33,6 +33,7 @@ pub mod setup;
 pub mod step_tail;
 pub mod substitution;
 pub mod terminal;
+pub mod watched_direction;
 pub mod watched_movement;
 
 const SEED: u16 = 0xA51C;
@@ -375,6 +376,13 @@ mod python {
         }
     }
 
+    #[pyfunction]
+    fn watched_choose_direction(input_json: &str) -> PyResult<String> {
+        let state: watched_direction::State =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let out = watched_direction::advance(&state).map_err(PyValueError::new_err)?;
+        serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
     #[pyfunction]
     fn watched_move_candidate(input_json: &str) -> PyResult<String> {
         let state: watched_movement::State =
@@ -813,6 +821,7 @@ mod python {
         module.add_class::<NativeMatchSession>()?;
         module.add_class::<NativeExhibitionSession>()?;
         module.add_function(wrap_pyfunction!(watched_move_candidate, module)?)?;
+        module.add_function(wrap_pyfunction!(watched_choose_direction, module)?)?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;

@@ -31,7 +31,7 @@ use crate::{layout, role_scores, Engine};
 fn scene(index: u8) -> usize {
     0xCCEF + 25 * usize::from(index)
 }
-fn grid_index(coordinate: u16) -> Option<usize> {
+pub(crate) fn grid_index(coordinate: u16) -> Option<usize> {
     let [x, y] = coordinate.to_le_bytes();
     let x = i16::from(x as i8);
     let y = i16::from(y as i8);
@@ -41,7 +41,7 @@ fn grid_index(coordinate: u16) -> Option<usize> {
         Some((x + 8) as usize * 75 + (y + 37) as usize)
     }
 }
-fn machine(s: &State) -> Result<Engine, String> {
+pub(crate) fn machine(s: &State) -> Result<Engine, String> {
     if !(1..=22).contains(&s.scene.index)
         || s.scene.byte7 > 22
         || s.scene.word14 > 3920
