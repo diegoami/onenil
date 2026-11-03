@@ -1,0 +1,1139 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:106:25
+    |
+106 |                 let x = ((c.r[0] >> 8) & 255);
+    |                         ^                   ^
+    |
+    = note: `#[warn(unused_parens)]` (part of `#[warn(unused)]`) on by default
+help: remove these parentheses
+    |
+106 -                 let x = ((c.r[0] >> 8) & 255);
+106 +                 let x = (c.r[0] >> 8) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:107:25
+    |
+107 |                 let y = ((c.r[0] >> 8) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+107 -                 let y = ((c.r[0] >> 8) & 255);
+107 +                 let y = (c.r[0] >> 8) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:123:25
+    |
+123 |                 let x = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+123 -                 let x = ((c.r[0] >> 0) & 255);
+123 +                 let x = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:124:25
+    |
+124 |                 let y = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+124 -                 let y = ((c.r[0] >> 0) & 255);
+124 +                 let y = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:171:25
+    |
+171 |                 let x = ((c.r[0] >> 8) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+171 -                 let x = ((c.r[0] >> 8) & 255);
+171 +                 let x = (c.r[0] >> 8) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:172:25
+    |
+172 |                 let y = ((c.r[0] >> 8) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+172 -                 let y = ((c.r[0] >> 8) & 255);
+172 +                 let y = (c.r[0] >> 8) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:188:25
+    |
+188 |                 let v = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+188 -                 let v = ((c.r[0] >> 0) & 255);
+188 +                 let v = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:269:25
+    |
+269 |                 let x = ((c.r[0] >> 8) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+269 -                 let x = ((c.r[0] >> 8) & 255);
+269 +                 let x = (c.r[0] >> 8) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:270:25
+    |
+270 |                 let y = ((c.r[0] >> 8) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+270 -                 let y = ((c.r[0] >> 8) & 255);
+270 +                 let y = (c.r[0] >> 8) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:286:25
+    |
+286 |                 let v = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+286 -                 let v = ((c.r[0] >> 0) & 255);
+286 +                 let v = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:352:25
+    |
+352 |                 let v = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+352 -                 let v = ((c.r[0] >> 0) & 255);
+352 +                 let v = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:406:25
+    |
+406 |                 let v = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+406 -                 let v = ((c.r[0] >> 0) & 255);
+406 +                 let v = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:477:25
+    |
+477 |                 let x = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+477 -                 let x = ((c.r[0] >> 0) & 255);
+477 +                 let x = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:478:25
+    |
+478 |                 let y = ((c.r[2] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+478 -                 let y = ((c.r[2] >> 0) & 255);
+478 +                 let y = (c.r[2] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:502:25
+    |
+502 |                 let v = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+502 -                 let v = ((c.r[0] >> 0) & 255);
+502 +                 let v = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:555:25
+    |
+555 |                 let x = ((c.r[0] >> 8) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+555 -                 let x = ((c.r[0] >> 8) & 255);
+555 +                 let x = (c.r[0] >> 8) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:556:25
+    |
+556 |                 let y = ((c.r[0] >> 8) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+556 -                 let y = ((c.r[0] >> 8) & 255);
+556 +                 let y = (c.r[0] >> 8) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:567:25
+    |
+567 |                 let v = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+567 -                 let v = ((c.r[0] >> 0) & 255);
+567 +                 let v = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:589:25
+    |
+589 |                 let v = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+589 -                 let v = ((c.r[0] >> 0) & 255);
+589 +                 let v = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:733:25
+    |
+733 |                 let x = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+733 -                 let x = ((c.r[0] >> 0) & 255);
+733 +                 let x = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:734:25
+    |
+734 |                 let y = ((c.r[2] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+734 -                 let y = ((c.r[2] >> 0) & 255);
+734 +                 let y = (c.r[2] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:750:25
+    |
+750 |                 let v = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+750 -                 let v = ((c.r[0] >> 0) & 255);
+750 +                 let v = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+   --> src/watched_compiled/adjustment.rs:969:25
+    |
+969 |                 let v = ((c.r[0] >> 0) & 255);
+    |                         ^                   ^
+    |
+help: remove these parentheses
+    |
+969 -                 let v = ((c.r[0] >> 0) & 255);
+969 +                 let v = (c.r[0] >> 0) & 255;
+    |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1188:25
+     |
+1188 |                 let v = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1188 -                 let v = ((c.r[0] >> 0) & 255);
+1188 +                 let v = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1330:25
+     |
+1330 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1330 -                 let x = ((c.r[0] >> 0) & 255);
+1330 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1331:25
+     |
+1331 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1331 -                 let y = ((c.r[0] >> 0) & 255);
+1331 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1369:25
+     |
+1369 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1369 -                 let x = ((c.r[0] >> 0) & 255);
+1369 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1370:25
+     |
+1370 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1370 -                 let y = ((c.r[0] >> 0) & 255);
+1370 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1462:25
+     |
+1462 |                 let x = ((c.r[0] >> 8) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1462 -                 let x = ((c.r[0] >> 8) & 255);
+1462 +                 let x = (c.r[0] >> 8) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1463:25
+     |
+1463 |                 let y = ((c.r[0] >> 8) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1463 -                 let y = ((c.r[0] >> 8) & 255);
+1463 +                 let y = (c.r[0] >> 8) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1602:25
+     |
+1602 |                 let x = ((c.r[0] >> 8) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1602 -                 let x = ((c.r[0] >> 8) & 255);
+1602 +                 let x = (c.r[0] >> 8) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1603:25
+     |
+1603 |                 let y = ((c.r[0] >> 8) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1603 -                 let y = ((c.r[0] >> 8) & 255);
+1603 +                 let y = (c.r[0] >> 8) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1715:25
+     |
+1715 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1715 -                 let x = ((c.r[0] >> 0) & 255);
+1715 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1716:25
+     |
+1716 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1716 -                 let y = ((c.r[0] >> 0) & 255);
+1716 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1762:25
+     |
+1762 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1762 -                 let x = ((c.r[0] >> 0) & 255);
+1762 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1763:25
+     |
+1763 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1763 -                 let y = ((c.r[0] >> 0) & 255);
+1763 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1781:25
+     |
+1781 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1781 -                 let x = ((c.r[0] >> 0) & 255);
+1781 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1782:25
+     |
+1782 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1782 -                 let y = ((c.r[0] >> 0) & 255);
+1782 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1811:25
+     |
+1811 |                 let v = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1811 -                 let v = ((c.r[0] >> 0) & 255);
+1811 +                 let v = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1868:25
+     |
+1868 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1868 -                 let x = ((c.r[0] >> 0) & 255);
+1868 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1869:25
+     |
+1869 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1869 -                 let y = ((c.r[0] >> 0) & 255);
+1869 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1915:25
+     |
+1915 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1915 -                 let x = ((c.r[0] >> 0) & 255);
+1915 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1916:25
+     |
+1916 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1916 -                 let y = ((c.r[0] >> 0) & 255);
+1916 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:1945:25
+     |
+1945 |                 let v = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+1945 -                 let v = ((c.r[0] >> 0) & 255);
+1945 +                 let v = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2002:25
+     |
+2002 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2002 -                 let x = ((c.r[0] >> 0) & 255);
+2002 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2003:25
+     |
+2003 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2003 -                 let y = ((c.r[0] >> 0) & 255);
+2003 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2049:25
+     |
+2049 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2049 -                 let x = ((c.r[0] >> 0) & 255);
+2049 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2050:25
+     |
+2050 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2050 -                 let y = ((c.r[0] >> 0) & 255);
+2050 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2079:25
+     |
+2079 |                 let v = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2079 -                 let v = ((c.r[0] >> 0) & 255);
+2079 +                 let v = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2271:25
+     |
+2271 |                 let x = ((c.r[0] >> 8) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2271 -                 let x = ((c.r[0] >> 8) & 255);
+2271 +                 let x = (c.r[0] >> 8) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2272:25
+     |
+2272 |                 let y = ((c.r[0] >> 8) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2272 -                 let y = ((c.r[0] >> 8) & 255);
+2272 +                 let y = (c.r[0] >> 8) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2384:25
+     |
+2384 |                 let v = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2384 -                 let v = ((c.r[0] >> 0) & 255);
+2384 +                 let v = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2441:25
+     |
+2441 |                 let v = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2441 -                 let v = ((c.r[0] >> 0) & 255);
+2441 +                 let v = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2498:25
+     |
+2498 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2498 -                 let x = ((c.r[0] >> 0) & 255);
+2498 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2499:25
+     |
+2499 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2499 -                 let y = ((c.r[0] >> 0) & 255);
+2499 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2541:25
+     |
+2541 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2541 -                 let x = ((c.r[0] >> 0) & 255);
+2541 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2619:25
+     |
+2619 |                 let v = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2619 -                 let v = ((c.r[0] >> 0) & 255);
+2619 +                 let v = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2679:25
+     |
+2679 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2679 -                 let x = ((c.r[0] >> 0) & 255);
+2679 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2680:25
+     |
+2680 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2680 -                 let y = ((c.r[0] >> 0) & 255);
+2680 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2766:25
+     |
+2766 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2766 -                 let x = ((c.r[0] >> 0) & 255);
+2766 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2767:25
+     |
+2767 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2767 -                 let y = ((c.r[0] >> 0) & 255);
+2767 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2798:25
+     |
+2798 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2798 -                 let y = ((c.r[0] >> 0) & 255);
+2798 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2829:25
+     |
+2829 |                 let y = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2829 -                 let y = ((c.r[0] >> 0) & 255);
+2829 +                 let y = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2853:25
+     |
+2853 |                 let x = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2853 -                 let x = ((c.r[0] >> 0) & 255);
+2853 +                 let x = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2885:25
+     |
+2885 |                 let v = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2885 -                 let v = ((c.r[0] >> 0) & 255);
+2885 +                 let v = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2936:25
+     |
+2936 |                 let y = ((c.r[1] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2936 -                 let y = ((c.r[1] >> 0) & 255);
+2936 +                 let y = (c.r[1] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:2947:25
+     |
+2947 |                 let v = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+2947 -                 let v = ((c.r[0] >> 0) & 255);
+2947 +                 let v = (c.r[0] >> 0) & 255;
+     |
+
+warning: unnecessary parentheses around assigned value
+    --> src/watched_compiled/adjustment.rs:3124:25
+     |
+3124 |                 let v = ((c.r[0] >> 0) & 255);
+     |                         ^                   ^
+     |
+help: remove these parentheses
+     |
+3124 -                 let v = ((c.r[0] >> 0) & 255);
+3124 +                 let v = (c.r[0] >> 0) & 255;
+     |
+
+warning: unused import: `Engine`
+ --> src/watched_compiled/mod.rs:5:34
+  |
+5 | use crate::{terminal::Scene,Draw,Engine};
+  |                                  ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2905:9
+     |
+2905 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2967:9
+     |
+2967 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: constant `PITCH_CELLS` is never used
+  --> src/layout.rs:22:18
+   |
+22 | pub(crate) const PITCH_CELLS: usize = 17 * 75;
+   |                  ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `machine` is never used
+  --> src/watched_compiled/mod.rs:18:4
+   |
+18 | fn machine(_s:&State)->Result<compiled::Cpu,String>{Err("compiled35F8 not implemented".into())}
+   |    ^^^^^^^
+
+warning: function `p_0ab9_1a4c` is never used
+ --> src/watched_compiled/adjustment.rs:4:15
+  |
+4 | pub(super) fn p_0ab9_1a4c(c: &mut Cpu) -> Result<(), String> {
+  |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1cbb` is never used
+   --> src/watched_compiled/adjustment.rs:309:15
+    |
+309 | pub(super) fn p_0ab9_1cbb(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1cd6` is never used
+   --> src/watched_compiled/adjustment.rs:371:15
+    |
+371 | pub(super) fn p_0ab9_1cd6(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1e4e` is never used
+   --> src/watched_compiled/adjustment.rs:425:15
+    |
+425 | pub(super) fn p_0ab9_1e4e(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1e9f` is never used
+   --> src/watched_compiled/adjustment.rs:521:15
+    |
+521 | pub(super) fn p_0ab9_1e9f(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1ecc` is never used
+   --> src/watched_compiled/adjustment.rs:612:15
+    |
+612 | pub(super) fn p_0ab9_1ecc(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_1fd3` is never used
+   --> src/watched_compiled/adjustment.rs:769:15
+    |
+769 | pub(super) fn p_0ab9_1fd3(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_2029` is never used
+   --> src/watched_compiled/adjustment.rs:988:15
+    |
+988 | pub(super) fn p_0ab9_2029(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_325f` is never used
+    --> src/watched_compiled/adjustment.rs:1207:15
+     |
+1207 | pub(super) fn p_0ab9_325f(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_340d` is never used
+    --> src/watched_compiled/adjustment.rs:1491:15
+     |
+1491 | pub(super) fn p_0ab9_340d(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_350c` is never used
+    --> src/watched_compiled/adjustment.rs:2102:15
+     |
+2102 | pub(super) fn p_0ab9_350c(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_35f8` is never used
+    --> src/watched_compiled/adjustment.rs:2642:15
+     |
+2642 | pub(super) fn p_0ab9_35f8(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0259` is never used
+    --> src/watched_compiled/adjustment.rs:2904:15
+     |
+2904 | pub(super) fn p_24bc_0259(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0cdc` is never used
+    --> src/watched_compiled/adjustment.rs:2966:15
+     |
+2966 | pub(super) fn p_24bc_0cdc(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_24bc_0d3f` is never used
+    --> src/watched_compiled/adjustment.rs:3058:15
+     |
+3058 | pub(super) fn p_24bc_0d3f(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: type alias `Proc` is never used
+ --> src/watched_compiled/compiled.rs:3:17
+  |
+3 | pub(super) type Proc=fn(&mut Cpu)->Result<(),String>;
+  |                 ^^^^
+
+warning: struct `Cpu` is never constructed
+ --> src/watched_compiled/compiled.rs:4:19
+  |
+4 | pub(super) struct Cpu{
+  |                   ^^^
+
+warning: multiple associated items are never used
+  --> src/watched_compiled/compiled.rs:9:9
+   |
+ 8 | impl Cpu{
+   | -------- associated items in this implementation
+ 9 |  pub fn new(e:Engine)->Self{Self{r:[0;12],pc:(0,0),cf:false,z:false,sf:false,of:false,pf:false,e,draws:vec![]}}
+   |         ^^^
+10 |  pub fn read(&self,_s:u16,_o:u16,_w:u8)->Result<u16,String>{Err("missing native read".into())}
+   |         ^^^^
+11 |  pub fn write(&mut self,_s:u16,_o:u16,_w:u8,_v:u16)->Result<(),String>{Err("native write not implemented".into())}
+   |         ^^^^^
+12 |  pub fn step(&mut self)->Result<(),String>{Ok(())}
+   |         ^^^^
+13 |  pub fn push(&mut self,_v:u16)->Result<(),String>{Err("push not implemented".into())}
+   |         ^^^^
+14 |  pub fn pop(&mut self)->Result<u16,String>{Err("pop not implemented".into())}
+   |         ^^^
+15 |  pub fn enter(&mut self,_n:u16)->Result<(),String>{Err("enter not implemented".into())}
+   |         ^^^^^
+16 |  pub fn ret(&mut self,_far:bool,_n:u16)->Result<(),String>{Err("ret not implemented".into())}
+   |         ^^^
+17 |  pub fn invoke(&mut self,_f:Proc,_far:bool,_cs:u16,_ip:u16,_ret:u16)->Result<(),String>{Err("invoke not implemented".into())}
+   |         ^^^^^^
+18 |  pub fn multiply(&mut self,_v:u16,_signed:bool){}
+   |         ^^^^^^^^
+19 |  pub fn divide(&mut self,_v:u16,_signed:bool)->Result<(),String>{Err("divide not implemented".into())}
+   |         ^^^^^^
+20 |  pub fn add(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+21 |  pub fn sub(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+22 |  pub fn adc(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+23 |  pub fn sbb(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+24 |  pub fn and(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+25 |  pub fn or(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^
+26 |  pub fn xor(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+27 |  pub fn shl(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+28 |  pub fn shr(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+29 |  pub fn sar(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+30 |  pub fn inc(&mut self,_x:u16,_w:u8)->u16{0}
+   |         ^^^
+31 |  pub fn dec(&mut self,_x:u16,_w:u8)->u16{0}
+   |         ^^^
+32 |  pub fn neg(&mut self,_x:u16,_w:u8)->u16{0}
+   |         ^^^
+33 |  pub fn not(&mut self,_x:u16,_w:u8)->u16{0}
+   |         ^^^
+
+warning: `onenil-engine` (lib) generated 91 warnings (run `cargo fix --lib -p onenil-engine` to apply 71 suggestions)
+warning: function `machine` is never used
+  --> src/watched_compiled/mod.rs:18:4
+   |
+18 | fn machine(_s:&State)->Result<compiled::Cpu,String>{Err("compiled35F8 not implemented".into())}
+   |    ^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: fields `pc`, `pf`, `e`, and `draws` are never read
+ --> src/watched_compiled/compiled.rs:5:21
+  |
+4 | pub(super) struct Cpu{
+  |                   --- fields in this struct
+5 |  pub r:[u16;12],pub pc:(u16,u16),pub cf:bool,pub z:bool,pub sf:bool,pub of:bool,pub pf:bool,
+  |                     ^^                                                              ^^
+6 |  pub e:Engine,pub draws:Vec<Draw>,
+  |      ^            ^^^^^
+
+warning: multiple methods are never used
+  --> src/watched_compiled/compiled.rs:12:9
+   |
+ 8 | impl Cpu{
+   | -------- methods in this implementation
+...
+12 |  pub fn step(&mut self)->Result<(),String>{Ok(())}
+   |         ^^^^
+13 |  pub fn push(&mut self,_v:u16)->Result<(),String>{Err("push not implemented".into())}
+   |         ^^^^
+14 |  pub fn pop(&mut self)->Result<u16,String>{Err("pop not implemented".into())}
+   |         ^^^
+15 |  pub fn enter(&mut self,_n:u16)->Result<(),String>{Err("enter not implemented".into())}
+   |         ^^^^^
+16 |  pub fn ret(&mut self,_far:bool,_n:u16)->Result<(),String>{Err("ret not implemented".into())}
+   |         ^^^
+17 |  pub fn invoke(&mut self,_f:Proc,_far:bool,_cs:u16,_ip:u16,_ret:u16)->Result<(),String>{Err("invoke not implemented".into())}
+   |         ^^^^^^
+18 |  pub fn multiply(&mut self,_v:u16,_signed:bool){}
+   |         ^^^^^^^^
+...
+22 |  pub fn adc(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+23 |  pub fn sbb(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+24 |  pub fn and(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+25 |  pub fn or(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+26 |  pub fn xor(&mut self,_x:u16,_y:u16,_w:u8)->u16{0}
+   |         ^^^
+...
+32 |  pub fn neg(&mut self,_x:u16,_w:u8)->u16{0}
+   |         ^^^
+33 |  pub fn not(&mut self,_x:u16,_w:u8)->u16{0}
+   |         ^^^
+
+warning: `onenil-engine` (lib test) generated 90 warnings (87 duplicates)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.34s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 7 tests
+test watched_compiled::compiled::tests::add_and_sub_signed_unsigned_boundaries ... FAILED
+test watched_compiled::compiled::tests::division_signed_word_and_overflow ... FAILED
+test watched_compiled::compiled::tests::shifts_mask_counts_and_signed_extension ... FAILED
+test watched_compiled::compiled::tests::missing_engine_and_scratch_reads_diagnose ... FAILED
+test watched_compiled::tests::original_adjustment_roots ... FAILED
+test watched_compiled::compiled::tests::inc_dec_preserve_carry_and_logic_clear_it ... FAILED
+test watched_compiled::tests::strict_missing_alias_and_expected_inputs ... FAILED
+
+failures:
+
+---- watched_compiled::compiled::tests::add_and_sub_signed_unsigned_boundaries stdout ----
+
+thread 'watched_compiled::compiled::tests::add_and_sub_signed_unsigned_boundaries' (3439) panicked at src/watched_compiled/compiled.rs:40:62:
+assertion `left == right` failed
+  left: 0
+ right: 32768
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- watched_compiled::compiled::tests::division_signed_word_and_overflow stdout ----
+
+thread 'watched_compiled::compiled::tests::division_signed_word_and_overflow' (3440) panicked at src/watched_compiled/compiled.rs:48:100:
+called `Result::unwrap()` on an `Err` value: "divide not implemented"
+
+---- watched_compiled::compiled::tests::shifts_mask_counts_and_signed_extension stdout ----
+
+thread 'watched_compiled::compiled::tests::shifts_mask_counts_and_signed_extension' (3443) panicked at src/watched_compiled/compiled.rs:44:63:
+assertion `left == right` failed
+  left: 0
+ right: 49152
+
+---- watched_compiled::compiled::tests::missing_engine_and_scratch_reads_diagnose stdout ----
+
+thread 'watched_compiled::compiled::tests::missing_engine_and_scratch_reads_diagnose' (3442) panicked at src/watched_compiled/compiled.rs:46:163:
+called `Result::unwrap()` on an `Err` value: "native write not implemented"
+
+---- watched_compiled::tests::original_adjustment_roots stdout ----
+
+thread 'watched_compiled::tests::original_adjustment_roots' (3444) panicked at src/watched_compiled/mod.rs:29:126:
+called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }
+
+---- watched_compiled::compiled::tests::inc_dec_preserve_carry_and_logic_clear_it stdout ----
+
+thread 'watched_compiled::compiled::tests::inc_dec_preserve_carry_and_logic_clear_it' (3441) panicked at src/watched_compiled/compiled.rs:42:105:
+assertion failed: c.cf && c.z
+
+---- watched_compiled::tests::strict_missing_alias_and_expected_inputs stdout ----
+
+thread 'watched_compiled::tests::strict_missing_alias_and_expected_inputs' (3445) panicked at src/watched_compiled/mod.rs:34:3:
+assertion failed: advance(&sample()).unwrap_err().contains("missing")
+
+
+failures:
+    watched_compiled::compiled::tests::add_and_sub_signed_unsigned_boundaries
+    watched_compiled::compiled::tests::division_signed_word_and_overflow
+    watched_compiled::compiled::tests::inc_dec_preserve_carry_and_logic_clear_it
+    watched_compiled::compiled::tests::missing_engine_and_scratch_reads_diagnose
+    watched_compiled::compiled::tests::shifts_mask_counts_and_signed_extension
+    watched_compiled::tests::original_adjustment_roots
+    watched_compiled::tests::strict_missing_alias_and_expected_inputs
+
+test result: FAILED. 0 passed; 7 failed; 0 ignored; 0 measured; 338 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
