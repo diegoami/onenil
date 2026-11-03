@@ -1,8 +1,9 @@
 # First playable delivery target
 
 [designed: delivery plan2026-11-02,following the owner's request for something
-playable] The next product milestone is one native quick-result exhibition
-match with running commentary and a preferred simple pitch view. Track live progress and acceptance in
+playable] The next product milestone is one native exhibition driven by the original
+watched engine,with detailed player-action commentary and a pitch view. The owner
+explicitly chose that port over a newly designed action simulation on2026-11-03. Track live progress and acceptance in
 [issue35](https://github.com/diegoami/onenil/issues/35). Routine/test counts are
 regression evidence;they do not establish this milestone's completion.
 
@@ -22,16 +23,16 @@ produce setup,steps,halftime/termination and results. Captured per-step inputs,
 expected helper results and the original executable cannot serve as the runtime
 backend. Supported demo sessions must finish without unresolved requests.
 
-## Delivery gates
+## Updated delivery gates after the owner’s clarification
 
 | Gate | Exit evidence | Dependencies to close |
 | --- | --- | --- |
-| 1. Match-state changes | Every state-changing callee reached by the chosen reference match executes natively | Scene/cache codes;remaining164F rearrangement and A94B/AEB8 selection/replacement;availability/substitution paths reached by that match |
-| 2. Continuous quick step | A whole DD02 transition and caller clock run from one input state,with no fixture-fed handoffs or unresolved reached requests | Shared canonical pools across existing slices;6B2F/78B7/input adapters and remaining logical effects;clear separation of proven rendering-only work |
-| 3. Complete quick match | One initial state reaches a final result and matches a full original reference;repeat/alternate supported configurations finish | Squad/start-data decoding;19CA seed table;86E9 kickoff;actual7C3F/7B7B control/termination;complete event/state continuity |
-| 4. Playable shell | A documented launch command and scripted player session choose lineup/seed,kick off,follow the clock/commentary,and show final results | Thin shell,event-feed formatting,optional simple pitch view,usable diagnostics,prototype scope documentation and owner-run milestone review |
+| 1. Watched state changes | Every reached movement,ball,collision,action/shot and commentary callee executes natively | Read the watched7A02/72BB path;preserve gameplay occupancy dependencies and raw read sets |
+| 2. Continuous watched tick | One admitted image/RNG advances actual watched ticks and clock with no expected-state handoff | Compose real action dispatch,movement,ball work and input/timer boundary;retain explicit unsupported paths until closed |
+| 3. Complete watched match | One initial state reaches full time and matches an original watched reference;additional supported sessions finish | Native watched setup,halftime/termination,substitutions and all reached events;quick-result parity is separate regression evidence |
+| 4. Detailed playable shell | A documented command selects supported input and shows chronological player actions and outcomes | Actual player names/passes,tackles,shots,saves/goals;controls/pitch/rendering checks and owner-run milestone review |
 
-[confirmed: nativeT28/T29] One selected-squad admission now computes original
+[confirmed: nativeT28/T29,delivered quick-result baseline] One selected-squad admission computes original
 setup and a complete continuing match:258 setup draws,11 setup boundaries and95
 DD02/clock/RNG boundaries,actual halftime,two substitutions and final result.
 The local browser offers a supported reference/reserve-starting XI and two seed
@@ -40,13 +41,15 @@ full time for every combination. Chromium verifies reference/alternate matches,
 actual chosen player/seed handoff,pause/halftime/restart and desktop/mobile views.
 Alternate sessions establish completion support,not additional original parity.
 The commentary/formation preview is available with the README launch command.
-Owner-run milestone review in issue35 remains required before acceptance.
+This quick-result baseline does not satisfy detailed commentary. Watched action
+production is now required before a new owner-run milestone review.
 
 [derived: archaeology218490d,match-structure/step-tail contracts] Do not turn
 one recorded92-step match into an invented fixed-length loop. Match setup,
 RNG consumption and termination must follow the original's actual control flow.
-The original watched/animated engine is separate and is excluded from this first
-target. A simple pitch view may visualize native match data/events; it does not
+The original watched engine is now required for the requested player actions.
+Its gameplay computations must be native;the existing formation view does not
+establish movement parity. A simple pitch view may visualize native match data/events; it does not
 establish watched-engine parity or authorize invented player movement.
 Season fixtures,tables,transfers,finances and the full game shell remain later.
 

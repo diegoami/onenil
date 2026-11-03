@@ -36,6 +36,8 @@ remote `onenildrive` ([docs/artifacts.md](docs/artifacts.md)). They never enter 
   (passes,tackles,shots and their outcomes),not repeated "Play continues" messages.
   The quick-result summary preview does not satisfy that requirement;extend the
   original watched/action-producing path rather than inventing actions in prose.
+  [designed: owner decision,2026-11-03] Port the original watched engine;the
+  owner explicitly chose fidelity over a newly designed native action simulation.
 - Speed is measured from the first runnable slice: a simulated week, a season, a matchday's results.
 
 ## Working rules
