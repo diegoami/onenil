@@ -79,6 +79,8 @@ impl Cpu {
         let v=i64::from(self.get32(0)as i32)*i64::from(value as i32);
         self.set32(0,v as u32);self.set32(2,(v>>32)as u32);self.cf=v!=i64::from(v as i32);self.of=self.cf;
     }
+    pub fn divide_signed32(&mut self,_value:u32)->Result<(),String>{Err("unported signed32 divide".into())}
+    pub fn rcl(&mut self,_value:u16,_count:u16,_width:u8)->u16{0}
     pub fn exchange_registers(&mut self,first:usize,second:usize){self.r.swap(first,second);}
     fn string_advance(&mut self,register:usize,width:u8){
         let n=u16::from(width/8);self.r[register]=if self.df{self.r[register].wrapping_sub(n)}else{self.r[register].wrapping_add(n)};
@@ -624,6 +626,16 @@ mod tests {
         c.set32(0,(-7i32)as u32);c.multiply_signed32(9);assert_eq!(c.get32(0),(-63i32)as u32);assert_eq!(c.get32(2),u32::MAX);assert!(!c.cf&&!c.of);
         c.set32(0,0x7FFFFFFF);c.multiply_signed32(2);assert!(c.cf&&c.of);
         c.cf=true;c.z=false;assert_eq!(c.double_shift32(true,42,3,0),42);assert!(c.cf&&!c.z);
+    }
+
+    #[test]
+    fn wide_divide_has_signed_remainder_and_rejects_zero_overflow(){
+        let mut c=cpu();c.set32(0,(-63i32)as u32);c.set32(2,u32::MAX);
+        c.divide_signed32(10).unwrap();assert_eq!(c.get32(0),(-6i32)as u32);assert_eq!(c.get32(2),(-3i32)as u32);
+        let before=c.r;assert!(c.divide_signed32(0).is_err());assert_eq!(c.r,before);
+        c.set32(0,0x80000000);c.set32(2,u32::MAX);assert!(c.divide_signed32(u32::MAX).is_err());
+        c.cf=true;assert_eq!(c.rcl(0x8000,1,16),1);assert!(c.cf&&c.of);
+        c.cf=false;assert_eq!(c.rcl(0xFFFF,0,16),0xFFFF);assert!(!c.cf);
     }
 
 }

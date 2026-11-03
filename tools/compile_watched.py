@@ -115,6 +115,7 @@ def emit_instruction(seg,ip,row):
         if operation in ('stosb','stosw'):return prefix+f'c.repeat_stos({8 if operation=="stosb"else 16})?;'
         raise ValueError('unsupported repeat operation:'+operation)
     if op in ('cwde','cbw'):return prefix+'c.r[0]=i16::from(c.r[0] as u8 as i8) as u16;'
+    if SOURCE_ADDRESSES and op=='cdq'and nxt-ip==2:return prefix+'let v=if (c.get32(0)as i32)<0{u32::MAX}else{0};c.set32(2,v);'
     if op in ('cdq','cwd'):return prefix+'c.r[2]=if (c.r[0] as i16)<0 {65535}else{0};'
     if op in ('lodsw','stosw'):
         if op=='lodsw':return prefix+'c.r[0]=c.read(c.r[11],c.r[6],16)?;c.r[6]=c.r[6].wrapping_add(2);'
@@ -129,6 +130,8 @@ def emit_instruction(seg,ip,row):
         if len(a)==3:return prefix+f'let x={read(a[1])};let y={read(a[2])};let v=c.imul3(x,y);'+write(a[0],'v')
         if width(a[0])!=16:raise ValueError('unsupported multiply width')
         return prefix+f'let v={read(a[0])};c.multiply(v,{str(op=="imul").lower()});'
+    if SOURCE_ADDRESSES and op=='idiv'and a[0]in REG32:return prefix+f'let v={read(a[0])};c.divide_signed32(v)?;'
+    if SOURCE_ADDRESSES and op=='rcl':return prefix+f'let v={read(a[0])};let n={read(a[1])};let v=c.rcl(v,n,{width(a[0])});'+write(a[0],'v')
     if op in ('div','idiv'):return prefix+f'let v={read(a[0])};c.divide(v,{str(op=="idiv").lower()})?;'
     if op in ('inc','dec','neg','not'):
         w=width(a[0]);return prefix+f'let x={read(a[0])};let v=c.{op}(x,{w});'+write(a[0],'v')
@@ -138,7 +141,7 @@ def emit_instruction(seg,ip,row):
         return code+('let _=v;' if op in ('cmp','test') else write(a[0],'v'))
     raise ValueError(f'unsupported {seg:04X}:{ip:04X} {op} {args}')
 
-def compile_procedure(seg,entry,rows):
+def compile_procedure(seg,entry,rows,partial_errors=None):
     out=[]
     leaders={entry}
     for ip,(op,args,nxt,path) in rows.items():
@@ -149,7 +152,13 @@ def compile_procedure(seg,entry,rows):
     for start in sorted(leaders):
         out.append(f'{start}=>{{');ip=start
         while True:
-            row=rows[ip];out.append(emit_instruction(seg,ip,row));op,args,nxt,_=row
+            row=rows[ip]
+            try:out.append(emit_instruction(seg,ip,row))
+            except ValueError as error:
+                if partial_errors is None:raise
+                partial_errors[f'{seg:04X}:{ip:04X}']=str(error)
+                out.append(f'c.pc=({seg},{ip});return Err("unported original instruction {seg:04X}:{ip:04X}".into());')
+            op,args,nxt,_=row
             if op.startswith('j') or op in ('call','ret','retf'):break
             if nxt in leaders:out.append(f'label={nxt};continue;');break
             ip=nxt
@@ -157,7 +166,7 @@ def compile_procedure(seg,entry,rows):
     out.append('_=>return Err(format!("invalid compiled label {label:04X}")),}}}')
     return out
 
-def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roots=None):
+def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roots=None,partial=None):
     out=['//! [confirmed] Mechanically compiled numeric control flow;F39/c7637bd,static d9e20a4.','//! [designed] Direct Rust calls/blocks;no runtime decoder or original executable.','use super::compiled::Cpu;']
     deferred=deferred or set();adapters=adapters or {};report=report if report is not None else {};bodies={}
     for (seg,entry),rows in sorted(g.items()):
@@ -165,6 +174,9 @@ def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roo
         if key in adapters:
             bodies[key]=[f'pub(super) fn {name(seg,entry)}(c:&mut Cpu)->Result<(),String>{{super::projections::{adapters[key]}(c)}}']
             report[f'{seg:04X}:{entry:04X}']={'kind':'projection','function':adapters[key]};continue
+        if key in(partial or set()):
+            errors={};bodies[key]=compile_procedure(seg,entry,rows,errors)
+            report[f'{seg:04X}:{entry:04X}']={'kind':'partial','unsupported_instructions':errors};continue
         reason='explicit unported boundary'if key in deferred else None
         if reason is None:
             try:bodies[key]=compile_procedure(seg,entry,rows);continue
@@ -178,7 +190,8 @@ def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roo
         key=pending.pop()
         if key in reached:continue
         reached.add(key)
-        if f'{key[0]:04X}:{key[1]:04X}'in report:continue
+        boundary=report.get(f'{key[0]:04X}:{key[1]:04X}')
+        if boundary and boundary['kind']!='partial':continue
         for op,args,*_ in g[key].values():
             if op=='call':pending.append(target(key[0],args)[0])
     for key in sorted(reached):out.extend(bodies[key])
@@ -188,7 +201,7 @@ def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roo
 
 def main():
     global SOURCE_ADDRESSES,RELOCATED
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',action='append');p.add_argument('--defer',action='append',default=[]);p.add_argument('--projection',action='append',default=[]);p.add_argument('--defer-unsupported',action='store_true');p.add_argument('--source-addresses',action='store_true');args=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',action='append');p.add_argument('--defer',action='append',default=[]);p.add_argument('--partial',action='append',default=[]);p.add_argument('--projection',action='append',default=[]);p.add_argument('--defer-unsupported',action='store_true');p.add_argument('--source-addresses',action='store_true');args=p.parse_args()
     code,files=listing(args.research_root);roots=args.root or ['0AB9:35F8'];parse=lambda value:tuple(int(v,16)for v in value.split(':'))
     SOURCE_ADDRESSES=args.source_addresses
     if SOURCE_ADDRESSES:
@@ -202,7 +215,7 @@ def main():
         address,function=item.split('=')
         if not re.fullmatch('[a-z_][a-z_0-9]*',function):raise ValueError('invalid projection name')
         adapters[parse(address)]=function
-    g=graph(code,[parse(v)for v in roots]);report={};source=compile_graph(g,deferred,adapters,args.defer_unsupported,report,[parse(v)for v in roots])
+    g=graph(code,[parse(v)for v in roots]);report={};source=compile_graph(g,deferred,adapters,args.defer_unsupported,report,[parse(v)for v in roots],{parse(v)for v in args.partial})
     import subprocess,tempfile
     with tempfile.TemporaryDirectory()as d:
         temp=Path(d)/'generated.rs';temp.write_text(source);subprocess.run(['rustfmt','--edition','2021',str(temp)],check=True);source=temp.read_bytes()
