@@ -1,0 +1,19 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 12.17s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 1 test
+
+thread 'watched_movement::tests::original_watched_movement_calls' (3417) panicked at src/watched_movement.rs:26:29:
+called `Result::unwrap()` on an `Err` value: "unimplemented original watched movement"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test watched_movement::tests::original_watched_movement_calls ... FAILED
+
+failures:
+
+failures:
+    watched_movement::tests::original_watched_movement_calls
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 304 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`

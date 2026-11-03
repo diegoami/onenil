@@ -33,6 +33,7 @@ pub mod setup;
 pub mod step_tail;
 pub mod substitution;
 pub mod terminal;
+pub mod watched_movement;
 
 const SEED: u16 = 0xA51C;
 const RATINGS: u16 = 0xD674;
