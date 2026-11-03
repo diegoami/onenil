@@ -32,7 +32,7 @@ def check(cases):
     print(f'Native watched ball:{len(cases)} exact original ball/pitch/metric/bounds/seed/draw cases;standalone kernel,not a watched match.')
 
 def capture(research_root):
-    if common.git('status','--porcelain','--','tools/replay_watched_advance_ball.py'):raise ValueError('commit observer before capture')
+    if common.git('status','--porcelain','--','tools/replay_watched_ball.py'):raise ValueError('commit observer before capture')
     pin_name='provenance.json'
     case_name='cases.jsonl'
     if (FIXTURES/pin_name).exists():load();print('original ball capture unchanged');return
@@ -124,7 +124,7 @@ def capture(research_root):
 
 def benchmark(cases,pins,repetitions,directory):
     from onenil_engine import onenil_engine as native
-    if common.git('status','--porcelain','--','engine','tools/replay_watched_advance_ball.py','pyproject.toml'):raise ValueError('commit source before measurement')
+    if common.git('status','--porcelain','--','engine','tools/replay_watched_ball.py','pyproject.toml'):raise ValueError('commit source before measurement')
     if native.__debug_assertions__:raise ValueError('release extension required')
     values=[common.encoded(c['input']) for c in cases];size=0
     started=datetime.now(timezone.utc).isoformat();begin=time.perf_counter_ns()
