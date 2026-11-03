@@ -9,7 +9,7 @@ ROOT=common.ROOT;FIXTURES=ROOT/'engine/tests/fixtures/watched_target'
 STATIC=('static/1-0-exe/code/seg_0AB9_09.asm','static/1-0-exe/code/seg_0AB9_03.asm','static/1-0-exe/code/seg_0AB9_02.asm')
 def load():
     cases=[];pins=[]
-    for prefix in ('','active-'):
+    for prefix in ('','admission-'):
         pin=json.loads((FIXTURES/(prefix+'provenance.json')).read_text())
         raw=(FIXTURES/(prefix+'cases.jsonl')).read_bytes()
         if common.sha(raw)!=pin['cases_sha256']:raise ValueError('target original cases digest differs')
@@ -18,9 +18,9 @@ def load():
         capture_record=json.loads(capture_bytes)
         if capture_record['status']!='completed' or not capture_record['first_tick_join'] or capture_record['source']!=pin['source']:raise ValueError('target capture provenance differs')
         rows=[json.loads(line) for line in raw.splitlines()]
-        if len(rows)!=64 or [c['case'] for c in rows]!=list(range(64)):raise ValueError('64 original target calls per stream required')
+        if (not prefix and len(rows)!=64) or not rows or [c['case'] for c in rows]!=list(range(len(rows))):raise ValueError('original target call stream differs')
+        if prefix and not capture_record.get('first_active_tick'):raise ValueError('complete admission boundary missing')
         if not common.same(rows,capture_record['cases']):raise ValueError('target capture/export differs')
-        if prefix and any(c['active']==0 for c in rows):raise ValueError('active stream contains inactive calls')
         cases.extend(rows);pins.append(pin)
     return cases,pins
 
@@ -31,10 +31,10 @@ def check(cases):
         if not common.same(got,c['output']):raise ValueError(f'original target case{number} differs')
     print(f'Native watched target:{len(cases)} exact original scene/seed/numeric commentary cases;standalone kernel,not a watched match.')
 
-def capture(research_root,active_only=False):
+def capture(research_root,admission=False):
     if common.git('status','--porcelain','--','tools/replay_watched_target.py'):raise ValueError('commit observer before capture')
-    pin_name='active-provenance.json' if active_only else 'provenance.json'
-    case_name='active-cases.jsonl' if active_only else 'cases.jsonl'
+    pin_name='admission-provenance.json' if admission else 'provenance.json'
+    case_name='admission-cases.jsonl' if admission else 'cases.jsonl'
     if (FIXTURES/pin_name).exists():load();print('original target capture unchanged');return
     root=research_root.resolve();sys.path.insert(0,str(root/'runtime/emul'))
     import watched_actions as observer
@@ -49,6 +49,9 @@ def capture(research_root,active_only=False):
     def tick(g):
         nonlocal ticks,joined
         ticks+=1
+        if ticks>reference['ticks']:raise ValueError('target capture exceeded retained original prefix')
+        if ticks%25==0:print(f'target admission tick{ticks}/roots{len(cases)}/draws{week.draws}',flush=True)
+        if admission and ticks>1 and g.rd(0xD0B8,1)!=0:raise Complete()
         if ticks==1:
             if not common.same(observer.snapshot(g),reference['first_ticks'][0]['state']):raise ValueError('target reached different watched admission')
             joined=True
@@ -68,7 +71,6 @@ def capture(research_root,active_only=False):
                 'target_pair':[g.rd(0xD09A),g.rd(0xD09C)],'head':head,'rows':rows}
     def enter(g):
         nonlocal pending
-        if active_only and g.rd(0xD0B8,1)==0:return
         if pending is not None:raise ValueError('nested561E')
         address=g.stack_word(4)+16*g.stack_word(6)
         offset=address-g.DS*16-0xCCEF
@@ -94,25 +96,25 @@ def capture(research_root,active_only=False):
         if event is not None:event['accepted']=int(output['numeric']['head']!=c['input']['numeric']['head'])
         if week.draws!=c['draw_start']:raise ValueError('561E unexpectedly drew RNG')
         c.update(draw_end=week.draws,output={'output':output,'draws':[],'commentary':event});cases.append(c)
-        if len(cases)==64:raise Complete()
+        if not admission and len(cases)==64:raise Complete()
     week.g.code_hook('0AB9:E24C',enable);week.g.code_hook('0AB9:7A02',tick)
     week.g.code_hook('0AB9:561E',enter);week.g.code_hook('0AB9:0F94',commentary);week.g.code_hook('0AB9:56EA',leave)
     producer=common.git('rev-parse','HEAD');started=observer.match.utc();status='completed';reason=None
     try:
         try:week.play()
         except Complete:pass
-        else:raise ValueError('original ended before64 target calls')
+        else:raise ValueError('original ended before target capture boundary')
         draws=[e for e in week.events if e['kind']=='draw']
         if not joined or week.g.unsupported:raise ValueError('unsupported/incomplete original capture')
         if not common.same(draws,reference['draws'][:len(draws)]):raise ValueError('target original RNG prefix differs')
-        if len(cases)!=64:raise ValueError('target call count differs')
+        if not cases or (not admission and len(cases)!=64):raise ValueError('target call count differs')
     except (Exception,KeyboardInterrupt) as e:status='aborted';reason=f'{type(e).__name__}: {e}'
     directory=ROOT/'records/T32';directory.mkdir(parents=True,exist_ok=True)
     number=max((int(p.stem.split('-r')[-1]) for p in directory.glob('capture-r*.json')),default=0)+1;path=directory/f'capture-r{number:04d}.json'
     result={'schema':'watched-target-capture/1','code_commit':producer,'started':started,'ended':observer.match.utc(),
             'status':status,'reason':reason,'source':{'repository':'https://github.com/diegoami/onenil-archaeology','commit':observer.match.git('rev-parse','HEAD'),'prefix_record':source['record'],'prefix_record_sha256':source['record_sha256'],'start_state_sha256':record['start_state']['sha256'],'static_sources':{p:common.sha((root/p).read_bytes()) for p in STATIC}},
-            'first_tick_join':joined,'ticks':ticks,'draws':week.draws,'active_only':active_only,'cases':cases,
-            'scope':'64 original561E root calls from retained watched admission/RNG prefix;raw named input facts and separate output/numeric commentary assertions;not a complete watched simulation'}
+            'first_tick_join':joined,'ticks':ticks,'draws':week.draws,'admission':admission,'first_active_tick':ticks if admission and status=='completed' else None,'cases':cases,
+            'scope':'Original561E roots from retained watched admission/RNG prefix:64 warm or all through first active tick;raw named input facts and separate output/numeric commentary assertions;not a complete watched simulation'}
     with path.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
     print(path.relative_to(ROOT),status,reason,flush=True)
     if status!='completed':raise SystemExit(1)
@@ -143,10 +145,10 @@ def benchmark(cases,pins,repetitions,directory):
     print(path.relative_to(ROOT))
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);g=p.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--benchmark',action='store_true');p.add_argument('--out',default='records/T32');p.add_argument('--repetitions',type=int,default=100);g.add_argument('--capture',action='store_true');g.add_argument('--capture-active',action='store_true');p.add_argument('--research-root',type=Path);args=p.parse_args()
-    if args.capture or args.capture_active:
+    p=argparse.ArgumentParser(description=__doc__);g=p.add_mutually_exclusive_group(required=True);g.add_argument('--check',action='store_true');g.add_argument('--benchmark',action='store_true');p.add_argument('--out',default='records/T32');p.add_argument('--repetitions',type=int,default=100);g.add_argument('--capture',action='store_true');g.add_argument('--capture-admission',action='store_true');p.add_argument('--research-root',type=Path);args=p.parse_args()
+    if args.capture or args.capture_admission:
         if args.research_root is None:p.error('--capture requires --research-root')
-        capture(args.research_root,args.capture_active);return
+        capture(args.research_root,args.capture_admission);return
     if args.repetitions<1:p.error("positive repetitions required")
     cases,pins=load();check(cases)
     if args.benchmark:benchmark(cases,pins,args.repetitions,args.out)

@@ -321,7 +321,7 @@ mod tests {
     }
     #[test]
     fn original_target_parent_calls() {
-        for name in ["cases.jsonl", "active-cases.jsonl"] {
+        for name in ["cases.jsonl", "admission-cases.jsonl"] {
             let source = std::fs::read_to_string(format!(
                 "{}/tests/fixtures/watched_target/{name}",
                 env!("CARGO_MANIFEST_DIR")
@@ -595,7 +595,7 @@ mod tests {
                 accepted: 1,
             }),
         );
-        for name in ["cases.jsonl", "active-cases.jsonl"] {
+        for name in ["cases.jsonl", "admission-cases.jsonl"] {
             let source = std::fs::read_to_string(format!(
                 "{}/tests/fixtures/watched_target/{name}",
                 env!("CARGO_MANIFEST_DIR")
