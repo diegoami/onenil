@@ -1,0 +1,46 @@
+{
+  "schema": "validation/1",
+  "code_commit": "758771dd51910e6fd49246f257abf4f7f7cdea20",
+  "rust_tests": 437,
+  "original_root_calls": 35,
+  "original_readiness_waits": 34,
+  "original_launches": 1,
+  "first_active_tick": 48,
+  "original_draw_cursor": 943,
+  "original_launch": {
+    "mode": 6,
+    "dx": 65535,
+    "dy": 0,
+    "distance": 2,
+    "endpoint": 254,
+    "draw_site": "0AB9:1BF1",
+    "bound": 84,
+    "value": 19,
+    "seed_before": 47480,
+    "seed_after": 14503
+  },
+  "prior_replay_tools": 29,
+  "shared_layout_check": "passed",
+  "controller_tests": 5,
+  "fmt": "passed",
+  "py_compile": "passed",
+  "diff_check": "passed",
+  "original_scan": "passed",
+  "embedding_scan": {
+    "files_at_producer": 11,
+    "private_files": 30,
+    "method": "No NUL or matching high-entropy aligned128-byte original block"
+  },
+  "baseline_preservation": {
+    "commit": "6be411a",
+    "unchanged_files": 410,
+    "intentional_changes": [
+      "README.md",
+      "engine/src/lib.rs",
+      "engine/src/layout.rs",
+      "engine/src/watched_target.rs"
+    ]
+  },
+  "static_source_digests": "match research originals",
+  "limits": "Gameplay projection only. Original sound7 retained;PC-speaker I/O,D088/D5A/DE26 presentation timing excluded explicitly by main amendment6be411a. Active-entry launches reject. Mode7/8,failed skill/additional RNG branches synthetic/static only. No ball flight,complete watched ticks or detailed browser commentary."
+}
