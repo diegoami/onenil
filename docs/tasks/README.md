@@ -30,3 +30,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T26](T26.md): Continue one native reference match through actual halftime/full time (#54).
 - [T27](T27.md): Local running-commentary and formation-pitch preview (#56).
 - [T28](T28.md): Native selected-squad preparation into one continuing full match (#58).
+- [T29](T29.md): Choose lineup and seed in the native setup viewer (#60).
