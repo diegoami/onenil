@@ -1,0 +1,108 @@
+{
+  "case": 3042,
+  "kind": "action5",
+  "parent": null,
+  "tick": 114,
+  "scene": 18,
+  "registers": {
+    "ax": 38661,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 15990,
+    "bp": 16004,
+    "si": 199,
+    "di": 52913,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    29412,
+    4828,
+    52913,
+    12423
+  ],
+  "input_scene": {
+    "index": 18,
+    "word0": 62977,
+    "word2": 62977,
+    "word8": 60673,
+    "word10": 58368,
+    "word12": 11522,
+    "word14": 2587,
+    "word20": 0,
+    "word23": 84,
+    "byte4": 149,
+    "byte5": 12,
+    "byte6": 0,
+    "byte7": 18,
+    "byte16": 2,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 18559,
+  "draw_start": 4017,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/03042-entry.json",
+    "sha256": "6c135d468185bc66324fd10f33c67bf8a2e1638d37031d60edc7b311222c4d14",
+    "ram_sha256": "ea98eb5b15056fbe820ebaf8f760fecfa1fd720d9a63c1ca7ccc3c7c26f7b573"
+  },
+  "exit_sp": 15990,
+  "exit_bp": 16004,
+  "output_scene": {
+    "index": 18,
+    "word0": 62977,
+    "word2": 62977,
+    "word8": 60672,
+    "word10": 58368,
+    "word12": 11774,
+    "word14": 2587,
+    "word20": 0,
+    "word23": 84,
+    "byte4": 149,
+    "byte5": 12,
+    "byte6": 0,
+    "byte7": 18,
+    "byte16": 2,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 36740,
+  "draw_end": 4020,
+  "draws": [
+    {
+      "n": 5,
+      "seed_before": 18559,
+      "seed_after": 9938,
+      "value": 1,
+      "site": "0AB9:333A"
+    },
+    {
+      "n": 1,
+      "seed_before": 9938,
+      "seed_after": 55321,
+      "value": 1,
+      "site": "0AB9:380B"
+    },
+    {
+      "n": 6,
+      "seed_before": 55321,
+      "seed_after": 36740,
+      "value": 4,
+      "site": "0AB9:3927"
+    }
+  ],
+  "events": [],
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/03042-exit.json",
+    "sha256": "6dc9ddf03c20d4d9ea529bc626d3a7de449e30f045b5da9c0e63abafaf37daa7",
+    "ram_sha256": "060cb063200eb1700f3254e981b7f9ff571b2a1529c58f3b41afb829227702b3"
+  }
+}

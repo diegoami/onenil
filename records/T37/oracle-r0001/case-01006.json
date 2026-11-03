@@ -1,0 +1,112 @@
+{
+  "case": 1006,
+  "kind": "action5",
+  "parent": null,
+  "tick": 66,
+  "scene": 21,
+  "registers": {
+    "ax": 38661,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 15990,
+    "bp": 16004,
+    "si": 199,
+    "di": 52988,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    29412,
+    4828,
+    52988,
+    12423
+  ],
+  "input_scene": {
+    "index": 21,
+    "word0": 65274,
+    "word2": 65274,
+    "word8": 65274,
+    "word10": 60160,
+    "word12": 7422,
+    "word14": 2590,
+    "word20": 0,
+    "word23": 27,
+    "byte4": 146,
+    "byte5": 12,
+    "byte6": 1,
+    "byte7": 21,
+    "byte16": 3,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 58162,
+  "draw_start": 1682,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/01006-entry.json",
+    "sha256": "fe45c52a00506b1177655bc8176921ece52a741e2d2100a25a5d6863a6714027",
+    "ram_sha256": "90365efcd1b2d2fa3b199a07bef48f7e5e47c638af94b17f2277b8669c555cdc"
+  },
+  "exit_sp": 15990,
+  "exit_bp": 16004,
+  "output_scene": {
+    "index": 21,
+    "word0": 65274,
+    "word2": 65274,
+    "word8": 65274,
+    "word10": 60160,
+    "word12": 7422,
+    "word14": 2590,
+    "word20": 0,
+    "word23": 27,
+    "byte4": 146,
+    "byte5": 12,
+    "byte6": 1,
+    "byte7": 21,
+    "byte16": 3,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 58162,
+  "draw_end": 1682,
+  "draws": [],
+  "events": [
+    {
+      "code": 34,
+      "actor_slot": 10,
+      "secondary_slot": 0,
+      "side": 0,
+      "club": 130,
+      "player": 2590,
+      "secondary": 0,
+      "minute": 1,
+      "tick": 66,
+      "draw_start": 1682,
+      "seed_before": 58162,
+      "head_before": 7,
+      "caller": "0AB9:1E4A",
+      "event": 6,
+      "draw_end": 1682,
+      "seed_after": 58162,
+      "queue": {
+        "index": 8,
+        "code": 34,
+        "player": 2590,
+        "secondary": 0,
+        "side": 0
+      }
+    }
+  ],
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/01006-exit.json",
+    "sha256": "5c8e30ba5eb2e3ddc970471fc9e6bc0fb46e59dc95b74869f7eb86bdbe7d364e",
+    "ram_sha256": "fd4def0f05ee2f43012970dc2ff4f0711fa2cc3604f67127668db0bd58a9ef1c"
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "case": 503,
+  "kind": "action5",
+  "parent": null,
+  "tick": 55,
+  "scene": 19,
+  "registers": {
+    "ax": 38661,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 15990,
+    "bp": 16004,
+    "si": 199,
+    "di": 52938,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    29412,
+    4828,
+    52938,
+    12423
+  ],
+  "input_scene": {
+    "index": 19,
+    "word0": 250,
+    "word2": 250,
+    "word8": 763,
+    "word10": 60153,
+    "word12": 6658,
+    "word14": 2588,
+    "word20": 0,
+    "word23": 13,
+    "byte4": 156,
+    "byte5": 12,
+    "byte6": 1,
+    "byte7": 19,
+    "byte16": 4,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 51441,
+  "draw_start": 1291,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/00503-entry.json",
+    "sha256": "5f425bba77e049d7887efca7f9a7f12a8ccc99aa4e1661bd375ae4baa6623338",
+    "ram_sha256": "1dc6989c61de38733201063e13a5669fa898680cd40b0e367b656ca247f02d72"
+  },
+  "exit_sp": 15990,
+  "exit_bp": 16004,
+  "output_scene": {
+    "index": 19,
+    "word0": 250,
+    "word2": 250,
+    "word8": 1273,
+    "word10": 60153,
+    "word12": 6912,
+    "word14": 2588,
+    "word20": 0,
+    "word23": 13,
+    "byte4": 156,
+    "byte5": 12,
+    "byte6": 1,
+    "byte7": 19,
+    "byte16": 4,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 33563,
+  "draw_end": 1293,
+  "draws": [
+    {
+      "n": 2,
+      "seed_before": 51441,
+      "seed_after": 20220,
+      "value": 1,
+      "site": "0AB9:388A"
+    },
+    {
+      "n": 5,
+      "seed_before": 20220,
+      "seed_after": 33563,
+      "value": 3,
+      "site": "0AB9:333A"
+    }
+  ],
+  "events": [],
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/00503-exit.json",
+    "sha256": "dfb12df44e44bc741eb3f0fca50c18912f4d1583ec0ffc63e5a52161e28ba2ec",
+    "ram_sha256": "8252364cf5c9bff26c017718121ec730ab38c4a1aaa8bf9489ffc82cfa1b9643"
+  }
+}

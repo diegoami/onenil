@@ -1,0 +1,101 @@
+{
+  "case": 1180,
+  "kind": "action5",
+  "parent": null,
+  "tick": 70,
+  "scene": 20,
+  "registers": {
+    "ax": 38661,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 15990,
+    "bp": 16004,
+    "si": 199,
+    "di": 52963,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    29412,
+    4828,
+    52963,
+    12423
+  ],
+  "input_scene": {
+    "index": 20,
+    "word0": 262,
+    "word2": 262,
+    "word8": 261,
+    "word10": 59911,
+    "word12": 6654,
+    "word14": 2589,
+    "word20": 0,
+    "word23": 38,
+    "byte4": 149,
+    "byte5": 12,
+    "byte6": 0,
+    "byte7": 20,
+    "byte16": 1,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 52715,
+  "draw_start": 1885,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/01180-entry.json",
+    "sha256": "53393a90780a3a42e5423e493f3c82c70f1feee84f9b027a77904828f48c138e",
+    "ram_sha256": "162795e78d18999d1285acc09aa99dba01202605120279dfee14f51643378da0"
+  },
+  "exit_sp": 15990,
+  "exit_bp": 16004,
+  "output_scene": {
+    "index": 20,
+    "word0": 262,
+    "word2": 262,
+    "word8": 773,
+    "word10": 59911,
+    "word12": 6910,
+    "word14": 2589,
+    "word20": 0,
+    "word23": 38,
+    "byte4": 149,
+    "byte5": 12,
+    "byte6": 0,
+    "byte7": 20,
+    "byte16": 1,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 4837,
+  "draw_end": 1887,
+  "draws": [
+    {
+      "n": 2,
+      "seed_before": 52715,
+      "seed_after": 8078,
+      "value": 1,
+      "site": "0AB9:388A"
+    },
+    {
+      "n": 5,
+      "seed_before": 8078,
+      "seed_after": 4837,
+      "value": 1,
+      "site": "0AB9:333A"
+    }
+  ],
+  "events": [],
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/01180-exit.json",
+    "sha256": "30ae5880b4bb81669cb910528fca43cb78ad38e54d6bca9448f41dfe76864766",
+    "ram_sha256": "45cd46bf29951252e6fa4860d83f5142c66066d7e500c1242a616670890f2f79"
+  }
+}

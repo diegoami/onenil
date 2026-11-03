@@ -1,0 +1,108 @@
+{
+  "case": 2718,
+  "kind": "action5",
+  "parent": null,
+  "tick": 108,
+  "scene": 20,
+  "registers": {
+    "ax": 38661,
+    "cx": 2,
+    "dx": 2,
+    "bx": 0,
+    "sp": 15990,
+    "bp": 16004,
+    "si": 199,
+    "di": 52963,
+    "es": 12423,
+    "cs": 4828,
+    "ss": 16447,
+    "ds": 12423
+  },
+  "flags": 29254,
+  "stack_words": [
+    29412,
+    4828,
+    52963,
+    12423
+  ],
+  "input_scene": {
+    "index": 20,
+    "word0": 3334,
+    "word2": 3334,
+    "word8": 64776,
+    "word10": 59911,
+    "word12": 9982,
+    "word14": 2589,
+    "word20": 0,
+    "word23": 72,
+    "byte4": 147,
+    "byte5": 12,
+    "byte6": 0,
+    "byte7": 20,
+    "byte16": 3,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_before": 11214,
+  "draw_start": 3742,
+  "entry": {
+    "path": ".cache/T37/oracle-r0001/snapshots/02718-entry.json",
+    "sha256": "71ccb52c75f06fb17e95f4735d981667dd7bf2058abb43f395a2bdcd21b66f4d",
+    "ram_sha256": "a55a6468d6bc10666c25b3cb0f25c8f2a3bcec0811118da380a785070ca0e7e3"
+  },
+  "exit_sp": 15990,
+  "exit_bp": 16004,
+  "output_scene": {
+    "index": 20,
+    "word0": 3334,
+    "word2": 3334,
+    "word8": 64520,
+    "word10": 59911,
+    "word12": 9473,
+    "word14": 2589,
+    "word20": 0,
+    "word23": 72,
+    "byte4": 147,
+    "byte5": 12,
+    "byte6": 0,
+    "byte7": 20,
+    "byte16": 3,
+    "byte17": 0,
+    "byte18": 65,
+    "byte19": 5,
+    "byte22": 0
+  },
+  "seed_after": 10223,
+  "draw_end": 3745,
+  "draws": [
+    {
+      "n": 5,
+      "seed_before": 11214,
+      "seed_after": 40485,
+      "value": 4,
+      "site": "0AB9:333A"
+    },
+    {
+      "n": 1,
+      "seed_before": 40485,
+      "seed_after": 32352,
+      "value": 1,
+      "site": "0AB9:380B"
+    },
+    {
+      "n": 6,
+      "seed_before": 32352,
+      "seed_after": 10223,
+      "value": 1,
+      "site": "0AB9:3927"
+    }
+  ],
+  "events": [],
+  "exit": {
+    "path": ".cache/T37/oracle-r0001/snapshots/02718-exit.json",
+    "sha256": "f23de0cd43ab9b28c57f5760e2369a39254617447873358210c6662b87019899",
+    "ram_sha256": "7f31b6427ad78db37176e34466cfcf595c51a7ebb5d7dcb4444e897287415923"
+  }
+}

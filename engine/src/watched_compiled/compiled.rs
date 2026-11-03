@@ -1,6 +1,9 @@
 //! [designed] Arithmetic/ABI support for compiled native Rust procedures.
 //! No opcode decoding,original executable or instruction stream exists here.
 use crate::{Draw, Engine};
+use std::cell::Cell;
+#[derive(Clone,Copy,Debug,serde::Serialize,PartialEq,Eq)]
+pub(super) struct Missing {pub scratch:bool,pub address:usize,pub writing:bool,pub pc:(u16,u16)}
 pub(super) type Proc = fn(&mut Cpu) -> Result<(), String>;
 pub(super) struct Cpu {
     pub r: [u16; 12],
@@ -13,6 +16,11 @@ pub(super) struct Cpu {
     pub e: Engine,
     pub draws: Vec<Draw>,
     pub known: Vec<bool>,
+    pub missing:Cell<Option<Missing>>,
+    pub require_write_baseline:bool,
+    pub flat_memory:bool,
+    pub code_base:u16,
+    pub stack_bounds:Option<(usize,usize)>,
     stack: Vec<u8>,
     stack_known: Vec<bool>,
     frames: Vec<(u16, u16)>,
@@ -32,6 +40,11 @@ impl Cpu {
             e,
             draws: vec![],
             known: vec![false; n],
+            missing:Cell::new(None),
+            require_write_baseline:false,
+            flat_memory:false,
+            code_base:0,
+            stack_bounds:None,
             stack: vec![0; 65540],
             stack_known: vec![false; 65540],
             frames: vec![],
@@ -42,6 +55,7 @@ impl Cpu {
         c.r[10] = 0xF000;
         c
     }
+    pub fn exchange_registers(&mut self,_first:usize,_second:usize){}
     pub fn read(&self, s: u16, o: u16, w: u8) -> Result<u16, String> {
         let mut value = 0u16;
         for i in 0..usize::from(w / 8) {
@@ -435,4 +449,63 @@ mod tests {
         assert!(c.divide(1, false).is_err());
         assert!(c.divide(0, false).is_err());
     }
+    #[test]
+    fn missing_diagnostics_identify_actual_data_and_scratch_bytes(){
+        let c=cpu();assert!(c.read(0,42,8).is_err());
+        assert_eq!(c.missing.get().unwrap().address,42);
+        assert!(!c.missing.get().unwrap().scratch);
+        assert!(c.read(0xF000,99,8).is_err());
+        assert!(c.missing.get().unwrap().scratch);
+        assert_eq!(c.missing.get().unwrap().address,99);
+    }
+    #[test]
+    fn strict_first_write_requires_original_baseline_even_for_zero(){
+        let mut c=cpu();c.require_write_baseline=true;
+        assert!(c.write(0,0xCF46,8,0).is_err());
+        let m=c.missing.get().unwrap();assert!(m.writing&&!m.scratch);assert_eq!(m.address,0xCF46);
+        c.require_write_baseline=false;c.write(0,0xCF46,8,7).unwrap();
+        c.require_write_baseline=true;c.write(0,0xCF46,8,0).unwrap();
+        assert_eq!(c.read(0,0xCF46,8).unwrap(),0);
+        c.write(0xF000,42,8,1).unwrap();
+    }
+
+    #[test]
+    fn flat_memory_preserves_segment_aliases_for_stack_data(){
+        let mut e=crate::role_scores::image(Default::default());e.image.resize(0x110000,0);
+        let mut c=Cpu::new(e);c.flat_memory=true;c.stack_bounds=Some((0xFF000,0x100000));
+        c.write(0xF000,0xFF00,16,0x8123).unwrap();
+        assert_eq!(c.e.image[0xFFF00],0x23);
+        assert_eq!(c.read(0xFFF0,0,16).unwrap(),0x8123);
+    }
+    #[test]
+    fn relocated_calls_keep_real_cs_words_and_logical_procedure_names(){
+        fn child(c:&mut Cpu)->Result<(),String>{c.r[0]=c.r[9];c.ret(true,0)}
+        let mut c=cpu();c.code_base=0x1000;c.r[9]=0x1AB9;
+        c.invoke(child,true,0x24BC,0x100,0x1234).unwrap();
+        assert_eq!(c.r[0],0x34BC);assert_eq!(c.r[9],0x1AB9);
+    }
+    #[test]
+    fn exchange_preserves_flags_and_unrelated_registers(){
+        let mut c=cpu();c.r[0]=0x8000;c.r[2]=0xFFFF;c.r[1]=0x55;c.cf=true;c.z=false;c.sf=true;c.of=true;c.pf=false;
+        c.exchange_registers(0,2);
+        assert_eq!((c.r[0],c.r[2],c.r[1]),(0xFFFF,0x8000,0x55));
+        assert_eq!((c.cf,c.z,c.sf,c.of,c.pf),(true,false,true,true,false));
+    }
+    #[test]
+    fn rng_trace_uses_actual_seed_parameter_not_unrelated_global(){
+        fn inner(c:&mut Cpu)->Result<(),String>{
+            c.enter(0)?;c.push(0xF000)?;c.push(0x100)?;c.push(2)?;
+            c.invoke(crate::watched_compiled::adjustment::p_24bc_0cdc,true,0x24BC,0x0CDC,0x3333)?;
+            c.r[4]=c.r[5];c.r[5]=c.pop()?;c.ret(true,0)
+        }
+        fn outer(c:&mut Cpu)->Result<(),String>{
+            c.enter(0)?;c.invoke(inner,true,0x0AB9,0x100,0x1111)?;
+            c.r[4]=c.r[5];c.r[5]=c.pop()?;c.ret(true,0)
+        }
+        let mut c=cpu();c.write(0xF000,0x100,16,7).unwrap();
+        c.invoke(outer,true,0x0AB9,0x200,0x2222).unwrap();
+        assert_eq!(c.draws[0].seed_before,7);assert_eq!(c.draws[0].seed_after,30266);
+        assert_eq!(c.read(0xF000,0x100,16).unwrap(),30266);assert_eq!(c.e.word(crate::SEED),0);
+    }
+
 }
