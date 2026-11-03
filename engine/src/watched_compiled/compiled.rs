@@ -3,7 +3,7 @@
 use crate::{Draw, Engine};
 use std::cell::Cell;
 #[derive(Clone,Copy,Debug,serde::Serialize,PartialEq,Eq)]
-pub(super) struct Missing {pub scratch:bool,pub address:usize,pub writing:bool,pub pc:(u16,u16)}
+pub struct Missing {pub scratch:bool,pub address:usize,pub writing:bool,pub pc:(u16,u16)}
 pub(super) type Proc = fn(&mut Cpu) -> Result<(), String>;
 pub(super) struct Cpu {
     pub r: [u16; 12],
