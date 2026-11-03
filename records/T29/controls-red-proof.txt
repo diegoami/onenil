@@ -1,0 +1,23 @@
+E...E
+======================================================================
+ERROR: test_configuration_is_atomic_and_only_before_kickoff (__main__.MatchTests.test_configuration_is_atomic_and_only_before_kickoff)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/test_play_match.py", line 84, in test_configuration_is_atomic_and_only_before_kickoff
+    with self.assertRaises(ValueError):game.configure(invalid)
+                                       ^^^^^^^^^^^^^^
+AttributeError: 'Match' object has no attribute 'configure'
+
+======================================================================
+ERROR: test_supported_lineup_and_seed_choices_reach_real_full_time (__main__.MatchTests.test_supported_lineup_and_seed_choices_reach_real_full_time)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/test_play_match.py", line 58, in test_supported_lineup_and_seed_choices_reach_real_full_time
+    game.configure({'lineup':lineup,'seed':seed})
+    ^^^^^^^^^^^^^^
+AttributeError: 'Match' object has no attribute 'configure'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.727s
+
+FAILED (errors=2)

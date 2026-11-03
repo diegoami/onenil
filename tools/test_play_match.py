@@ -50,6 +50,44 @@ class MatchTests(unittest.TestCase):
             game.action('step')
         self.assertEqual(game.state(), done)
 
+    def test_supported_lineup_and_seed_choices_reach_real_full_time(self):
+        states = {}
+        for lineup in ('reference', 'reserve'):
+            for seed in ('64', '122'):
+                game=Match()
+                game.configure({'lineup':lineup,'seed':seed})
+                ready=game.state()
+                ids={p['player'] for p in ready['view']['formation'] if p['club']==130}
+                self.assertEqual(2593 in ids,lineup=='reserve')
+                self.assertEqual(2590 in ids,lineup=='reference')
+                prep=json.loads(game.session.preparation())
+                self.assertEqual(prep['draws'][0]['seed_before'],int(seed))
+                states[lineup,seed]=ready['view']['seed']
+                game.action('start')
+                while game.state()['phase']!='full-time':
+                    if game.state()['phase']=='half-time':game.action('continue')
+                    game.action('step')
+                    self.assertLess(game.steps,200)
+                self.assertEqual(game.events[-1]['kind'],'full-time')
+                self.assertTrue(any(e['kind']=='clock' for e in game.events))
+                self.assertEqual(len(game.state()['view']['formation']),22)
+                game.action('restart')
+                self.assertEqual(game.state(),ready)
+        self.assertNotEqual(states['reference','64'],states['reference','122'])
+
+    def test_configuration_is_atomic_and_only_before_kickoff(self):
+        game=Match()
+        for invalid in ({'lineup':'bad','seed':'64'}, {'lineup':'reference','seed':'0'},
+                        {'lineup':'reference','seed':64}, {'seed':'64'},
+                        {'lineup':'reference','seed':'64','expected':{}},None):
+            before=game.state()
+            with self.assertRaises(ValueError):game.configure(invalid)
+            self.assertEqual(game.state(),before)
+        game.configure({'lineup':'reserve','seed':'122'})
+        game.action('start');before=game.state()
+        with self.assertRaises(ValueError):game.configure({'lineup':'reference','seed':'64'})
+        self.assertEqual(game.state(),before)
+
     def test_phase_guards_keep_current_state(self):
         game = Match()
         for action in ('step', 'continue', 'bad'):
