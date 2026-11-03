@@ -197,7 +197,9 @@ def capture_shots(research_root,directory=ROOT/'records/T38/oracle-r0002'):
     start=directory/'start.json'
     if start.exists():
         old=oracle.read_json(start)
-        if any(old[k]!=protocol[k]for k in('observer_sha256','proof_sha256','inherited','input_overlays','scope')):raise ValueError('supplement resume source differs')
+        if any(old[k]!=protocol[k]for k in('proof_sha256','inherited','input_overlays','scope')):raise ValueError('supplement resume admission differs')
+        complete=all((directory/f'case-{i:04d}.json').exists()for i in range(42,42+len(overlays)))
+        if not complete and old['observer_sha256']!=protocol['observer_sha256']:raise ValueError('incomplete supplement observer changed;resume its original source')
         protocol=old
     else:oracle.write_json(start,protocol)
     sys.path.insert(0,str(research_root.resolve()/'runtime/emul'));import match as original
@@ -211,7 +213,7 @@ def capture_shots(research_root,directory=ROOT/'records/T38/oracle-r0002'):
             oracle.write_json(path,value)
         items.append({'path':str(path.relative_to(ROOT)),'sha256':oracle.common.sha(path.read_bytes()),'origin_protocol_sha256':oracle.common.sha(start.read_bytes())})
         print(f'original shot-context parent{i+1} source{c["case"]} original-before-tick{overlay["source"]["tick"]}',flush=True)
-    values=[oracle.read_json(ROOT[item['path']])for item in items];codes={e['code']for c in values for e in c['events']}
+    values=[oracle.read_json(ROOT/item['path'])for item in items];codes={e['code']for c in values for e in c['events']}
     if not codes.intersection({17,18,19,20}):raise ValueError('no computed original shot-launch event in supplemented corpus')
     result={'schema':'original-parent-corpus/1','status':'completed','producer':protocol['producer'],'protocol_sha256':oracle.common.sha(start.read_bytes()),'proof_sha256':protocol['proof_sha256'],'cases':items,'modes':sorted({c['mode']for c in values}),'event_codes':sorted(codes),'scope':'32 source-proven parent admissions,explicit modes and original-before-tick input overlays. Derived/intervened isolated calls,not observed live parent entries.'}
     out=directory/'manifest.json'
