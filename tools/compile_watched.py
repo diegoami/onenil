@@ -6,6 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 SOURCE_ADDRESSES=False
 RELOCATED=set()
 REGS={'ax':0,'cx':1,'dx':2,'bx':3,'sp':4,'bp':5,'si':6,'di':7,'es':8,'cs':9,'ss':10,'ds':11}
+REG32={'e'+r:i for r,i in REGS.items()if i<8}
 BYTES={a+b:(i,shift) for a,i in [('a',0),('c',1),('d',2),('b',3)] for b,shift in [('l',0),('h',8)]}
 def listing(root):
     code={};files={}
@@ -54,12 +55,14 @@ def ea(operand):
 
 def width(v):
     if 'dword ptr' in v:raise ValueError('unsupported dword operand:'+v)
+    if v in REG32 and SOURCE_ADDRESSES:return 32
     if v in BYTES or 'byte ptr' in v:return 8
     if v in REGS or 'word ptr' in v:return 16
     raise ValueError('unknown operand width:'+v)
 
 def read(v,w=16):
     v=v.strip()
+    if SOURCE_ADDRESSES and v in REG32:return f'c.get32({REG32[v]})'
     if v in REGS:return f'c.r[{REGS[v]}]'
     if v in BYTES:
         i,shift=BYTES[v];return f'(c.r[{i}] >> {shift}) & 255'
@@ -68,6 +71,7 @@ def read(v,w=16):
     return f'{int(v,0)&((1<<w)-1)}u16'
 
 def write(v,value):
+    if SOURCE_ADDRESSES and v in REG32:return f'c.set32({REG32[v]},{value});'
     if v in REGS:return f'c.r[{REGS[v]}]={value};'
     if v in BYTES:
         i,shift=BYTES[v];mask=0xFF00 if shift==0 else 0x00FF
@@ -115,6 +119,12 @@ def emit_instruction(seg,ip,row):
     if op in ('lodsw','stosw'):
         if op=='lodsw':return prefix+'c.r[0]=c.read(c.r[11],c.r[6],16)?;c.r[6]=c.r[6].wrapping_add(2);'
         return prefix+'c.write(c.r[8],c.r[7],16,c.r[0])?;c.r[7]=c.r[7].wrapping_add(2);'
+    if SOURCE_ADDRESSES and op=='shl'and a[0]in REG32:
+        return prefix+f'let x={read(a[0])};let n={read(a[1])};let v=c.shl32(x,n);'+write(a[0],'v')
+    if SOURCE_ADDRESSES and op in('shld','shrd')and a[0]in REG32 and a[1]in REG32:
+        return prefix+f'let x={read(a[0])};let y={read(a[1])};let n={read(a[2])};let v=c.double_shift32({str(op=="shld").lower()},x,y,n);'+write(a[0],'v')
+    if SOURCE_ADDRESSES and op=='imul'and len(a)==1 and a[0]in REG32:
+        return prefix+f'let v={read(a[0])};c.multiply_signed32(v);'
     if op in ('mul','imul'):
         if len(a)==3:return prefix+f'let x={read(a[1])};let y={read(a[2])};let v=c.imul3(x,y);'+write(a[0],'v')
         if width(a[0])!=16:raise ValueError('unsupported multiply width')

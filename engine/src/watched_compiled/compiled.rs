@@ -65,9 +65,20 @@ impl Cpu {
     }
     pub fn get32(&self,index:usize)->u32{u32::from(self.r[index])|(u32::from(self.upper[index])<<16)}
     pub fn set32(&mut self,index:usize,value:u32){self.r[index]=value as u16;self.upper[index]=(value>>16)as u16;}
-    pub fn shl32(&mut self,_value:u32,_count:u16)->u32{0}
-    pub fn double_shift32(&mut self,_left:bool,_value:u32,_source:u32,_count:u16)->u32{0}
-    pub fn multiply_signed32(&mut self,_value:u32){}
+    fn status32(&mut self,v:u32){self.z=v==0;self.sf=v&0x80000000!=0;self.pf=(v as u8).count_ones()%2==0;}
+    pub fn shl32(&mut self,value:u32,count:u16)->u32{
+        let n=count&31;if n==0{return value;}let v=value<<n;self.cf=value&(1u32<<(32-n))!=0;
+        self.status32(v);if n==1{self.of=self.sf^self.cf;}v
+    }
+    pub fn double_shift32(&mut self,left:bool,value:u32,source:u32,count:u16)->u32{
+        let n=count&31;if n==0{return value;}
+        let v=if left{self.cf=value&(1u32<<(32-n))!=0;(value<<n)|(source>>(32-n))}else{self.cf=value&(1u32<<(n-1))!=0;(value>>n)|(source<<(32-n))};
+        self.status32(v);if n==1{self.of=(value^v)&0x80000000!=0;}v
+    }
+    pub fn multiply_signed32(&mut self,value:u32){
+        let v=i64::from(self.get32(0)as i32)*i64::from(value as i32);
+        self.set32(0,v as u32);self.set32(2,(v>>32)as u32);self.cf=v!=i64::from(v as i32);self.of=self.cf;
+    }
     pub fn exchange_registers(&mut self,first:usize,second:usize){self.r.swap(first,second);}
     fn string_advance(&mut self,register:usize,width:u8){
         let n=u16::from(width/8);self.r[register]=if self.df{self.r[register].wrapping_sub(n)}else{self.r[register].wrapping_add(n)};

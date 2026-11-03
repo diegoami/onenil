@@ -126711,8 +126711,138 @@ pub(super) fn p_26c9_0a12(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_26c9_0a2a(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 26C9:0A2A".into())
+pub(super) fn p_26c9_0a2a(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 2602u16;
+    loop {
+        match label {
+            2602 => {
+                c.pc = (9929, 2602);
+                c.step()?;
+                let x = c.read(c.r[11], 0u16.wrapping_add(42282u16), 8)?;
+                let y = 2u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9929, 2607);
+                c.step()?;
+                label = if c.cf { 2636 } else { 2609 };
+                continue;
+            }
+            2609 => {
+                c.pc = (9929, 2609);
+                c.step()?;
+                let x = c.get32(0);
+                let n = 16u16;
+                let v = c.shl32(x, n);
+                c.set32(0, v);
+                c.pc = (9929, 2613);
+                c.step()?;
+                let x = c.get32(0);
+                let y = c.get32(2);
+                let n = 16u16;
+                let v = c.double_shift32(false, x, y, n);
+                c.set32(0, v);
+                c.pc = (9929, 2618);
+                c.step()?;
+                let x = c.get32(1);
+                let n = 16u16;
+                let v = c.shl32(x, n);
+                c.set32(1, v);
+                c.pc = (9929, 2622);
+                c.step()?;
+                let x = c.get32(1);
+                let y = c.get32(3);
+                let n = 16u16;
+                let v = c.double_shift32(false, x, y, n);
+                c.set32(1, v);
+                c.pc = (9929, 2627);
+                c.step()?;
+                let v = c.get32(1);
+                c.multiply_signed32(v);
+                c.pc = (9929, 2630);
+                c.step()?;
+                let x = c.get32(2);
+                let y = c.get32(0);
+                let n = 16u16;
+                let v = c.double_shift32(true, x, y, n);
+                c.set32(2, v);
+                c.pc = (9929, 2635);
+                c.step()?;
+                c.ret(true, 0)?;
+                return Ok(());
+            }
+            2636 => {
+                c.pc = (9929, 2636);
+                c.step()?;
+                let v = c.r[0];
+                c.r[6] = v;
+                c.pc = (9929, 2638);
+                c.step()?;
+                let v = c.r[2];
+                c.r[7] = v;
+                c.pc = (9929, 2640);
+                c.step()?;
+                let v = c.r[1];
+                c.multiply(v, false);
+                c.pc = (9929, 2642);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (9929, 2643);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (9929, 2644);
+                c.step()?;
+                let v = c.r[6];
+                c.r[0] = v;
+                c.pc = (9929, 2646);
+                c.step()?;
+                let v = c.r[3];
+                c.multiply(v, false);
+                c.pc = (9929, 2648);
+                c.step()?;
+                let v = c.r[0];
+                c.r[3] = v;
+                c.pc = (9929, 2650);
+                c.step()?;
+                let v = c.r[7];
+                c.r[0] = v;
+                c.pc = (9929, 2652);
+                c.step()?;
+                let v = c.r[1];
+                c.multiply(v, false);
+                c.pc = (9929, 2654);
+                c.step()?;
+                let v = c.r[0];
+                c.r[1] = v;
+                c.pc = (9929, 2656);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[2] = v;
+                c.pc = (9929, 2657);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[0] = v;
+                c.pc = (9929, 2658);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[3];
+                let v = c.add(x, y, 16);
+                c.r[2] = v;
+                c.pc = (9929, 2660);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[1];
+                let v = c.add(x, y, 16);
+                c.r[2] = v;
+                c.pc = (9929, 2662);
+                c.step()?;
+                c.ret(true, 0)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_26c9_0a67(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 26C9:0A67".into())
