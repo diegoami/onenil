@@ -235,7 +235,7 @@ def compare(got):
  if got['live_goals']!=list(reversed(finish['final']['scores'])):raise ValueError('native live-goal/final-result mapping differs')
  print('native4199watched ticks,182553computed draws plus258setup context,831actions and fulltime return match',flush=True)
 
-INITIAL_SHA='pending-positive-admission'
+INITIAL_SHA='88274a14f94fb526c1f0777d06017355b73e41946aabaafc7d65233da5492311'
 def admission():
  path=ROOT/'engine/tests/fixtures/watched_match/initial.json'
  if sha(path)!=INITIAL_SHA:raise ValueError('full watched admission root differs')
@@ -282,14 +282,25 @@ def benchmark(value,repetitions):
  if native.__debug_assertions__:raise ValueError('release extension required')
  request=json.dumps({k:value[k]for k in('initial','no_pending_key')},sort_keys=True,separators=(',',':'))
  began=datetime.now(timezone.utc).isoformat();start=time.perf_counter_ns();size=0
- for _ in range(repetitions):size+=len(native.watched_match(request))
+ for _ in range(repetitions):
+  output=native.watched_match(request)
+  if not output.startswith('{"ok":'):raise ValueError('benchmark native match returned an error')
+  size+=len(output)
  elapsed=time.perf_counter_ns()-start;directory=ROOT/'records/T41';n=len(list(directory.glob('T41-r*.json')))+1;path=directory/f'T41-r{n:04d}.json'
- record={'schema':'routine-benchmark/1','code_commit':oracle.common.git('rev-parse','HEAD'),'started':began,'elapsed_ns':elapsed,'matches':repetitions,'watched_ticks':4199*repetitions,'computed_draws':182553*repetitions,'setup_context_draws_per_match':258,'serialized_output_bytes':size,'platform':platform.platform(),'rustc':subprocess.check_output(['rustc','--version'],text=True).strip(),'extension_sha256':sha(Path(native.__file__)),'cargo_lock_sha256':sha(ROOT/'engine/Cargo.lock'),'debug_assertions':native.__debug_assertions__,'maturin':version('maturin'),'pins':{'reference':INDEX_SHA,'initial':INITIAL_SHA,'transient':TRANSIENT_SHA},'method':'Pre-serialized initial admission;native parsing,one persistent image,complete watched lifecycle and output serialization','limits':'One reference admission after initial setup;selected-lineup native watched setup and playable viewer remain required. No emulator-speed comparison.'}
+ record={'schema':'routine-benchmark/1','code_commit':oracle.common.git('rev-parse','HEAD'),'started':began,'elapsed_ns':elapsed,'matches':repetitions,'watched_ticks':4199*repetitions,'computed_draws':182553*repetitions,'accepted_actions':831*repetitions,'setup_context_draws_per_match':258,'serialized_output_bytes':size,'platform':platform.platform(),'rustc':subprocess.check_output(['rustc','--version'],text=True).strip(),'extension_sha256':sha(Path(native.__file__)),'cargo_lock_sha256':sha(ROOT/'engine/Cargo.lock'),'debug_assertions':native.__debug_assertions__,'maturin':version('maturin'),'pins':{'reference':INDEX_SHA,'initial':INITIAL_SHA,'transient':TRANSIENT_SHA},'method':'Pre-serialized initial admission;native parsing,one persistent image,complete watched lifecycle and output serialization','limits':'One reference admission after initial setup;selected-lineup native watched setup and playable viewer remain required. No emulator-speed comparison.'}
  if path.exists():raise ValueError('immutable benchmark record exists')
  path.write_text(json.dumps(record,indent=2)+'\n');print(path.relative_to(ROOT),flush=True)
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--check',action='store_true');a=p.parse_args()
- if a.check:sources()
- else:p.error('choose --check')
+ p=argparse.ArgumentParser(description=__doc__)
+ for flag in('check','private','replay','benchmark'):p.add_argument('--'+flag,action='store_true')
+ p.add_argument('--repetitions',type=int,default=3);a=p.parse_args()
+ if not(a.check or a.private or a.replay or a.benchmark):p.error('choose --check,--private,--replay or --benchmark')
+ if a.repetitions<1:p.error('repetitions must be positive')
+ sources()
+ for proof in(transient_proof,statistics_proof,template_proof,ui_leaves_proof,formation_proof,grouped_integer_proof,fixture_title_proof,menu_input_proof,lineup_validation_proof,replacement_banner_proof,final_footer_proof):proof()
+ value=admission();print('pinned one-entry watched-match admission verified',flush=True)
+ if a.private:verify_private(value)
+ if a.replay or a.benchmark:replay(value)
+ if a.benchmark:benchmark(value,a.repetitions)
 if __name__=='__main__':main()

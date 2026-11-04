@@ -29,4 +29,15 @@ def main():
   else:raise AssertionError('coherently rehashed reference accepted')
  replay.read=original_read;replay.sha=original_sha
  print(f'{checks} altered/coherently-rehashed full-reference cases rejected')
+ initial=replay.ROOT/'engine/tests/fixtures/watched_match/initial.json';value=replay.admission()
+ mutations=[lambda c:c.update(no_pending_key=False),lambda c:c.update(source_admission_sha256='0'*64),lambda c:c['initial'].update(seed=0),lambda c:c['initial']['regs'].__setitem__(4,0),lambda c:c['initial']['cells'][0].update(value=c['initial']['cells'][0]['value']^1),lambda c:c['initial']['pointers'][0].update(segment=0),lambda c:c['initial'].update(kind='caller')]
+ for mutate in mutations:
+  changed=copy.deepcopy(value);mutate(changed);digest=hashlib.sha256(json.dumps(changed).encode()).hexdigest()
+  replay.read=lambda path:changed if path==initial else original_read(path)
+  replay.sha=lambda path:digest if path==initial else original_sha(path)
+  try:replay.admission()
+  except ValueError:checks+=1
+  else:raise AssertionError('coherently rehashed initial admission accepted')
+ replay.read=original_read;replay.sha=original_sha
+ print(f'{checks} total reference/initial-admission tamper cases rejected')
 if __name__=='__main__':main()

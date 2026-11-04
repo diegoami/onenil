@@ -720,6 +720,31 @@ mod tests {
         Cpu::new(crate::role_scores::image(Default::default()))
     }
     #[test]
+    fn watched_lifecycle_rejects_nested_ticks_tick_limit_and_exhausted_fuel() {
+        for nested in [false, true] {
+            let mut c = cpu();
+            c.watch_trace = Some(vec![]);
+            c.pc = (0x0AB9, 0x7A02);
+            let quick = usize::from(c.r[11]) * 16 + 0xD074;
+            c.known[quick] = true;
+            c.e.image[quick] = 0;
+            if nested {
+                c.watch_pending = Some(serde_json::json!({"tick":1}));
+            } else {
+                c.watch_tick = 10000;
+            }
+            assert_eq!(
+                c.step().unwrap_err(),
+                "watched match tick nesting/bound exceeded"
+            );
+            assert!(c.watch_trace.as_ref().unwrap().is_empty());
+            assert!(c.draws.is_empty());
+        }
+        let mut c = cpu();
+        c.fuel = 0;
+        assert_eq!(c.step().unwrap_err(), "compiled procedure budget exhausted");
+    }
+    #[test]
     fn add_and_sub_signed_unsigned_boundaries() {
         let mut c = cpu();
         assert_eq!(c.add(0x7FFF, 1, 16), 0x8000);

@@ -1591,3 +1591,32 @@ capture commands validate retained records without rerunning the original;
 incomplete captures require their recorded observer version and private inputs.
 The release benchmark includes admission,all computed steps and serialization,
 with one persistent native image per trajectory;it measures this caller slice.
+
+## Complete reference watched match
+
+[confirmed: T41 full original reference,archaeology F40/60179ee] The native
+watched lifecycle now matches all4,199 original entry/return snapshots,182,553
+computed random draws and831 accepted actions through halftime,fulltime and
+the actual0AB9:EBE2 return. One frozen post-setup ENTRY admission supplies all
+initial facts;no intermediate state or helper outcomes enter the runtime.
+The258 earlier setup draws remain admitted context and are not computed by
+this lifecycle. Native selected-lineup/seed setup,additional complete supported
+sessions and the detailed commentary/pitch viewer remain milestone35 gates.
+
+```sh
+python3 tools/replay_watched_match.py --check
+.cache/venv/bin/python tools/replay_watched_match.py --replay
+.cache/venv/bin/python tools/replay_watched_match.py --benchmark
+python3 records/T41/validate_provenance.py
+python3 records/T41/validate_presentation_provenance.py
+.cache/venv/bin/python records/T41/validate_native_guards.py
+cargo test --manifest-path engine/Cargo.toml --test watched_match --locked
+```
+
+[designed] Public checks and native replay require no original game bytes.
+Private provenance validation uses the research virtualenv's Python with
+`tools/replay_watched_match.py --private` after restoring private capture pages.
+The release benchmark measures parsing,the persistent native lifecycle and
+output serialization from the pre-serialized admission. It makes no emulator
+speed comparison. The reference's legacy `scores` field is scratch during play;
+running scores use nativeD0C4/C5,with the source-defined final side mapping.
