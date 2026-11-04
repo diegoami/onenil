@@ -63,7 +63,7 @@ def select(probe):
    if at not in known:known.add(at);state['cells'].append({'area':area,'offset':offset,'value':raw[at]})
  # Original0E45 advances the numeric queue in1..1700;all baseline rows are ENTRY facts.
  ds=16*state['regs'][11]
- batches=[('ds',range(0xA52A,0xA52A+6*1701)),('ds',range(0xC66,0xC68)),('ds',range(0x12BA,0x12BD)),('ds',range(0x8708,0x8716)),('ds',range(0x0F20,0x0F30)),('ds',range(0x1274,0x1288)),('ds',range(0x12BE,0x12CE))]
+ batches=[('ds',range(0xA52A,0xA52A+6*1701)),('ds',range(0xC66,0xC68)),('ds',range(0x12BA,0x12BD)),('ds',range(0x8708,0x8716)),('ds',range(0x0F20,0x0F30)),('ds',range(0x1274,0x1288)),('ds',range(0x12BE,0x12CE)),('ds',range(0x9828,0x9A2A))]
  for side in(0,1):
   club=int.from_bytes(raw[ds+0xD6E4+2*side:ds+0xD6E6+2*side],'little')
   baseline=0xD885+club;table=0x93F7+raw[ds+baseline];batches.extend([('ds',[baseline]),('ds',[table])])

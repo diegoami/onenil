@@ -1,0 +1,20 @@
+pinned original4199ticks/182811draws/831actions and actual fulltime return verified
+verified completed original prefix 2079 ticks 91555 draws
+initial ENTRY union 32049 facts;native diagnostic {'message': 'watched tick2079 draw91555: missing reached native data at 1B55:499F 3087:99BE', 'missing': {'address': 238126, 'pc': [6997, 18847], 'scratch': False, 'writing': False}}
+verified completed original prefix 2079 ticks 91555 draws
+verified completed original prefix 2079 ticks 91555 draws
+verified completed original prefix 2079 ticks 91555 draws
+verified completed original prefix 2079 ticks 91555 draws
+verified completed original prefix 2079 ticks 91555 draws
+verified completed original prefix 2079 ticks 91555 draws
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 359, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 351, in main
+    if a.select:select(a.select)
+                ^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 85, in select
+    saved.write_text(json.dumps(state));p.stdin.write(json.dumps({'initial':state,'no_pending_key':True})+'\n');p.stdin.flush();line=p.stdout.readline()
+                                                                                                                                     ^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
