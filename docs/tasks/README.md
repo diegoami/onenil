@@ -57,3 +57,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T42 Native watched commentary and pitch preview](T42.md)
 
 - [T43 Native selected-squad watched preparation](T43.md)
+
+- [T44 Prepared native image into the continuous watched caller](T44.md)
