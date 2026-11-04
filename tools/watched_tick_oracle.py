@@ -138,9 +138,33 @@ def repeat(research):
     if not path.exists():oracle.write_json(path,result)
     elif read(path)!=result:raise ValueError('original repeated manifest differs')
 
+def prove_neutral(research):
+    if oracle.common.git('status','--porcelain','--','tools/watched_tick_oracle.py'):raise ValueError('commit observer before measurement')
+    full,pin,record,expected,reference=source(research);_,data=full.match.find_state(record['start_state']['sha256']);week=full.match.Week(data)
+    count=[0];calls=[]
+    class Complete(Exception):pass
+    def enable(g):g.put(g.far(0xD7D2)+0xF2,b'\x01')
+    def enter(g):
+        count[0]+=1
+        if count[0]>COUNT:raise Complete()
+        if full.state(g)!=reference['ticks'][count[0]-1]['before']:raise ValueError('neutral audit original tick join differs')
+    def key_return(g):
+        if 1<=count[0]<=COUNT:
+            value=g.reg('ax')&255
+            if value!=0:raise ValueError('captured original tick does not take no-pending-key route')
+            calls.append({'tick':count[0],'AL':value,'site':'0AB9:791B'})
+    week.g.code_hook('0AB9:E24C',enable);week.g.code_hook('0AB9:7A02',enter);week.g.code_hook('0AB9:791B',key_return)
+    try:week.play()
+    except Complete:pass
+    if len(calls)!=COUNT*22 or week.g.unsupported:raise ValueError('neutral audit did not visit every original player')
+    directory=ROOT/'records/T39/neutral-input';n=len(list(directory.glob('run-*.json')))+1
+    oracle.write_json(directory/f'run-{n:04d}.json',{'schema':'original-neutral-input-proof/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':sha(Path(__file__)),'source':pin,'reference_chunk_sha256':sha(research/'runs/T40/chunk-000000.json'),'count':len(calls),'calls':calls,'scope':'Read-only observation of actual keyboard-test return at791B;all176 player visits take the no-pending-key branch. No helper result feeds native gameplay.'})
+    print('original no-pending-key route:',len(calls),'visits verified',flush=True)
+
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--capture',action='store_true');p.add_argument('--repeat',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--neutral-proof',action='store_true');p.add_argument('--capture',action='store_true');p.add_argument('--repeat',action='store_true');a=p.parse_args()
+    if a.neutral_proof:prove_neutral(a.research_root)
     if a.capture:actual(a.research_root)
     if a.repeat:repeat(a.research_root)
-    if not(a.capture or a.repeat):p.error('choose capture or repeat')
+    if not(a.capture or a.repeat or a.neutral_proof):p.error('choose capture or repeat')
 if __name__=='__main__':main()

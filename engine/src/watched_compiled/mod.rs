@@ -6,6 +6,8 @@ mod adjustment;
 mod compiled;
 mod projections;
 mod selection;
+pub mod tick;
+mod tick_graph;
 use crate::{terminal::Scene, Draw};
 use serde::{Deserialize, Serialize};
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord)]
