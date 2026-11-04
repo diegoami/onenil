@@ -15,7 +15,7 @@ FIXTURE=ROOT/'engine/tests/fixtures/prepared_match/admission.json'
 FIXTURE_SHA='842f1453cae4ba9ab626d7e57316494cfe7e70f64ea80e746c3834de0e12989f'
 # Filled only after the immutable original full-lifecycle observation completes.
 FIELD_MANIFEST_SHA=None
-FIELD_DIRECTORY=ROOT/'records/T45/original-r0001'
+FIELD_DIRECTORY=ROOT/'records/T45/original-r0003'
 def read(path):return json.loads(path.read_text())
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def canonical(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode()
@@ -95,7 +95,11 @@ def selftest():
             validate_observer_identity(start)
             changed=copy.deepcopy(start);changed['observer_sha256']='0'*64;reject(changed,validate_observer_identity)
             changed=copy.deepcopy(start);changed['schema']='unknown';reject(changed,validate_observer_identity)
-    print('prepared match input/provenance/outcome/live-score/observer guards:',rejected,'rejected')
+    recovered=read(ROOT/'records/T45/original-r0003/start.json');validate_recovery_lineage(recovered)
+    for key in ('receipt_sha256','start_sha256','manifest_sha256','private_sha256'):
+        changed=copy.deepcopy(recovered);changed['resume_from'][key]='0'*64;reject(changed,validate_recovery_lineage)
+    changed=copy.deepcopy(recovered);changed['resume_from']['receipt']='../outside.json';reject(changed,validate_recovery_lineage)
+    print('prepared match input/provenance/outcome/live-score/observer/recovery guards:',rejected,'rejected')
 
 def replay_probe(probe,value,prefix_steps=0):
     result=subprocess.run([str(probe)],input=json.dumps(dict(input=value,prefix_steps=prefix_steps))+'\n',capture_output=True,text=True,check=True)
@@ -128,6 +132,25 @@ def validate_observer_identity(start):
     if start['observer_sha256']!=hashlib.sha256(observer).hexdigest():
         raise ValueError('original full-preservation frozen observer identity differs')
 
+def validate_recovery_lineage(start):
+    link=start.get('resume_from')
+    if link is None:return
+    if type(link)is not dict or set(link)!={'receipt','receipt_sha256','start_sha256','manifest_sha256','private_sha256'}:
+        raise ValueError('recovery lineage shape differs')
+    receipt=(ROOT/link['receipt']).resolve()
+    if receipt.parent.parent!=(ROOT/'records/T45').resolve() or not receipt.name.startswith('checkpoint-r')or receipt.suffix!='.json':
+        raise ValueError('recovery receipt outside original records')
+    directory=receipt.parent
+    if sha(receipt)!=link['receipt_sha256']or sha(directory/'start.json')!=link['start_sha256']or sha(directory/'manifest.json')!=link['manifest_sha256']:
+        raise ValueError('recovery parent provenance differs')
+    manifest=read(directory/'manifest.json')
+    if manifest['files'].get(receipt.name)!=link['receipt_sha256']or manifest['files'].get('start.json')!=link['start_sha256']:
+        raise ValueError('recovery parent manifest differs')
+    parent=read(directory/'start.json');validate_observer_identity(parent)
+    for key in ('research_commit','reference_index_sha256','prepared_admission_sha256'):
+        if parent[key]!=start[key]:raise ValueError('recovery input/reference identity differs')
+    if read(receipt)['private_sha256']!=link['private_sha256']:raise ValueError('recovery private checkpoint binding differs')
+
 def field_preservation():
     if FIELD_MANIFEST_SHA is None:raise ValueError('full original field-preservation observation is not yet pinned')
     manifest=read(FIELD_DIRECTORY/'manifest.json')
@@ -136,6 +159,7 @@ def field_preservation():
         if sha(FIELD_DIRECTORY/name)!=digest:raise ValueError('full original preservation leaf differs')
     start=read(FIELD_DIRECTORY/'start.json')
     validate_observer_identity(start)
+    validate_recovery_lineage(start)
     if start['reference_index_sha256']!=reference.INDEX_SHA or start['prepared_admission_sha256']!=sha(prefix.FIXTURE):
         raise ValueError('original full-preservation input/reference identity differs')
     result=read(FIELD_DIRECTORY/'result.json')
