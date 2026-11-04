@@ -1,0 +1,41 @@
+{
+  "scope": "Owner deadline wind-down complete for local original jobs. Timed checkpoint stop and immediate restore+safe-stop succeeded;full original field/clock proof remains incomplete.",
+  "resumable_receipt": "records/T45/original-r0003/checkpoint-r0010.json",
+  "resumable_ticks": 145,
+  "resumable_draws": 5601,
+  "resumable_actions": 29,
+  "older_trace_only_prefix": {
+    "ticks": 1750,
+    "draws": 78219,
+    "restorable": false
+  },
+  "why": "Older schema1 run could not finish before shutdown and lacked a machine snapshot. Its measured trace is retained without acceptance. New schema3 run is independently restored from the previously authenticated original machine and safely pauses with exact restored RNG prefix validation.",
+  "source_observer": "records/T45/preservation-observer-r0003.py",
+  "local_original_jobs": "Old verifier terminated by request;checkpointed verifier and restore test exited0 at safe checkpoints.",
+  "local_preview": "Stopped by request;restart with tools/play_watched.py --port8041. This remains reference preview,not selectable prepared milestone acceptance.",
+  "checks": {
+    "T45-shutdown-checkpointed-verification-r0001.txt": {
+      "sha256": "6cc815d926be5e79f4d037adfd807d5e8e5df5b7f01a28b8f119485a7dd29bb5",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "durable original checkpoint 2 ticks 15 draws 619",
+        "durable original checkpoint 3 ticks 44 draws 914",
+        "durable original checkpoint 4 ticks 57 draws 1406",
+        "durable original checkpoint 5 ticks 72 draws 2011",
+        "durable original checkpoint 6 ticks 86 draws 2772",
+        "durable original checkpoint 7 ticks 101 draws 3458",
+        "durable original checkpoint 8 ticks 130 draws 4908",
+        "durable original checkpoint 9 ticks 145 draws 5601",
+        "records/T45/original-r0003 paused at durable checkpoint"
+      ]
+    },
+    "T45-shutdown-restore-roundtrip-r0001.txt": {
+      "sha256": "238037b3179c5962ef49f07f98f5ce6418e87027d2d5948b670bf4571a45897e",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "durable original checkpoint 10 ticks 145 draws 5601",
+        "records/T45/original-r0003 paused at durable checkpoint"
+      ]
+    }
+  }
+}
