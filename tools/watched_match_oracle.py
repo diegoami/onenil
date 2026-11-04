@@ -7,7 +7,7 @@ import watched_oracle as oracle
 import replay_watched_tick as ticks
 import replay_watched_match as replay
 ROOT=oracle.ROOT
-SLOTS={'results':(0xD7CE,58*176),'fixtures':(0xD7CA,174*176),'screen':(0xDD58,4000),'screen_shown':(0xDD5C,4000),'screen_saved':(0xDD60,4000)}
+SLOTS={'results':(0xD7CE,58*176),'fixtures':(0xD7CA,174*176),'screen':(0xDD58,4000),'screen_shown':(0xDD5C,4000),'screen_saved':(0xDD60,4000),'counts':(0xDCC8,4004)}
 def read(p):return json.loads(p.read_text())
 def address(state,area,offset):
  if area in SLOTS or area=='style':
@@ -23,7 +23,7 @@ def named(state,at):
  offset=at-ds
  if 0<=offset<65536:
   if offset in (0xD5A,0xD5B,0xD088,0xD089):raise ValueError('presentation timer outside match ownership')
-  if any(lo<=offset<hi for lo,hi in[(0x380,0x382),(0x900,0xC00),(0xD00,0xDA0),(0x957D,0xD7BA),(0xD7D6,0xD7DA),(0xDCBA,0xDCBC),(0xDD64,0xDD66),(0x0C66,0x0C68),(0x93F7,0x94F7),(0xD886,0xD936)])or offset in(0xDD56,0xDE88,0xDE8A,0xE5DD):return 'ds',offset
+  if any(lo<=offset<hi for lo,hi in[(0x380,0x382),(0x900,0xC00),(0xD00,0xDA0),(0x957D,0xD7BA),(0xD7D6,0xD7DA),(0xDCBA,0xDCBC),(0xDD64,0xDD66),(0x0C66,0x0C68),(0x93F7,0x94F7),(0xD886,0xD936),(0x129E,0x12BD)])or offset in(0xDD56,0xDE88,0xDE8A,0xE5DD):return 'ds',offset
   raise ValueError(f'unclassified source DS field{offset:04X};requires source/original proof')
  for name,(_,length)in {**{k:(0,4000)for k in('main','main_shown','background','background_shown')},**SLOTS}.items():
   p=next(p for p in state['pointers']if p['kind']==name);base=16*p['segment']+p['offset']
@@ -63,10 +63,17 @@ def select(probe):
    if at not in known:known.add(at);state['cells'].append({'area':area,'offset':offset,'value':raw[at]})
  # Original0E45 advances the numeric queue in1..1700;all baseline rows are ENTRY facts.
  ds=16*state['regs'][11]
- batches=[('ds',range(0xA52A,0xA52A+6*1701)),('ds',range(0xC66,0xC68))]
+ batches=[('ds',range(0xA52A,0xA52A+6*1701)),('ds',range(0xC66,0xC68)),('ds',range(0x12BA,0x12BD))]
  for side in(0,1):
   club=int.from_bytes(raw[ds+0xD6E4+2*side:ds+0xD6E6+2*side],'little')
   baseline=0xD885+club;table=0x93F7+raw[ds+baseline];batches.extend([('ds',[baseline]),('ds',[table])])
+  club_at=address(state,'club',62*(club-1))
+  for field in(40,42):
+   index=int.from_bytes(raw[club_at+field:club_at+field+2],'little');batches.append(('counts',[4*index+2]))
+  for slot in range(20):
+   player=int.from_bytes(raw[club_at+2*slot:club_at+2*slot+2],'little')
+   if 0<player<=3920:
+    style=raw[address(state,'p8',8*player+7)];selector=raw[ds+0x12BA+player%3];batches.append(('ds',[0x129E+14*selector+style]))
   for area,width in [('club',62),('results',58),('fixtures',174)]:batches.append((area,range(width*(club-1),width*club)))
  for area,offsets in batches:
   for offset in offsets:

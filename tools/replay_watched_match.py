@@ -108,7 +108,7 @@ def admission():
  for key in('scene','seed','regs','flags','stack_words'):
   if state[key]!=anchor['context'][key]:raise ValueError('full watched initial context differs')
  original={p['kind']:p for p in anchor['context']['pointers']};pointers={p['kind']:p for p in state['pointers']}
- if len(pointers)!=len(state['pointers'])or set(pointers)!=set(original)|{'results','fixtures','screen','screen_shown','screen_saved'}:raise ValueError('full watched pointer kinds differ')
+ if len(pointers)!=len(state['pointers'])or set(pointers)!=set(original)|{'results','fixtures','screen','screen_shown','screen_saved','counts'}:raise ValueError('full watched pointer kinds differ')
  for key,pointer in original.items():
   if pointers[key]!=pointer:raise ValueError('full watched source pointer differs')
  for ui,logical in[('screen','main'),('screen_shown','main_shown'),('screen_saved','background_shown')]:

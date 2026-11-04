@@ -121,6 +121,11 @@ def emit_instruction(seg,ip,row):
         if operation in ('movsb','movsw'):return prefix+f'c.repeat_movs({8 if operation=="movsb"else 16})?;'
         if operation in ('stosb','stosw'):return prefix+f'c.repeat_stos({8 if operation=="stosb"else 16})?;'
         raise ValueError('unsupported repeat operation:'+operation)
+    if SOURCE_ADDRESSES and op in ('repne','repe'):
+        operation=args.split()[0]
+        if operation in ('scasb','scasw','cmpsb','cmpsw'):
+            return prefix+f'c.repeat_compare({8 if operation.endswith("b")else 16},{str(operation.startswith("scas")).lower()},{str(op=="repe").lower()})?;'
+        raise ValueError('unsupported conditional repeat operation:'+operation)
     if op in ('cwde','cbw'):return prefix+'c.r[0]=i16::from(c.r[0] as u8 as i8) as u16;'
     if SOURCE_ADDRESSES and op=='cdq'and nxt-ip==2:return prefix+'let v=if (c.get32(0)as i32)<0{u32::MAX}else{0};c.set32(2,v);'
     if op in ('cdq','cwd'):return prefix+'c.r[2]=if (c.r[0] as i16)<0 {65535}else{0};'

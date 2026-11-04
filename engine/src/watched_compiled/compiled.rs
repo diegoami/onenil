@@ -213,6 +213,32 @@ impl Cpu {
         }
         Ok(())
     }
+    // [confirmed] Original26C9:0BFE/0C44 use conditional byte comparisons.
+    // CX=0 leaves flags and addresses untouched; flags come from the last subtraction.
+    pub fn repeat_compare(&mut self, width: u8, scan: bool, equal: bool) -> Result<(), String> {
+        if width != 8 && width != 16 {
+            return Err("unsupported string comparison width".into());
+        }
+        while self.r[1] != 0 {
+            self.step()?;
+            let left = if scan {
+                self.r[0]
+            } else {
+                self.read(self.r[11], self.r[6], width)?
+            };
+            let right = self.read(self.r[8], self.r[7], width)?;
+            self.sub(left, right, width);
+            if !scan {
+                self.string_advance(6, width);
+            }
+            self.string_advance(7, width);
+            self.r[1] = self.r[1].wrapping_sub(1);
+            if self.z != equal {
+                break;
+            }
+        }
+        Ok(())
+    }
     pub fn segment_const(&self, value: u16) -> u16 {
         value.wrapping_add(self.code_base)
     }
@@ -880,6 +906,90 @@ mod tests {
         assert_eq!(c.draws[0].seed_after, 30266);
         assert_eq!(c.read(0xF000, 0x100, 16).unwrap(), 30266);
         assert_eq!(c.e.word(crate::SEED), global_before);
+    }
+
+    #[test]
+    fn original_pascal_search_retries_and_includes_zero_characters() {
+        let mut c = cpu();
+        for (offset, value) in [
+            (0x100, 2),
+            (0x101, 7),
+            (0x102, 0),
+            (0x200, 5),
+            (0x201, 7),
+            (0x202, 3),
+            (0x203, 7),
+            (0x204, 0),
+            (0x205, 8),
+        ] {
+            c.write(0x2000, offset, 8, value).unwrap();
+        }
+        let (sp, bp, ds) = (c.r[4], c.r[5], c.r[11]);
+        for (length, expected) in [(2, 3), (1, 1), (0, 0)] {
+            c.write(0x2000, 0x100, 8, length).unwrap();
+            for value in [0x2000, 0x100, 0x2000, 0x200] {
+                c.push(value).unwrap();
+            }
+            c.invoke(
+                crate::watched_compiled::action_graph::p_26c9_0bfe,
+                true,
+                0x26C9,
+                0x0BFE,
+                0x3333,
+            )
+            .unwrap();
+            assert_eq!(c.r[0], expected);
+            assert_eq!((c.r[4], c.r[5], c.r[11]), (sp, bp, ds));
+        }
+        c.write(0x2000, 0x100, 8, 1).unwrap();
+        c.write(0x2000, 0x101, 8, 0).unwrap();
+        for value in [0x2000, 0x100, 0x2000, 0x200] {
+            c.push(value).unwrap();
+        }
+        c.invoke(
+            crate::watched_compiled::action_graph::p_26c9_0bfe,
+            true,
+            0x26C9,
+            0x0BFE,
+            0x3333,
+        )
+        .unwrap();
+        assert_eq!(c.r[0], 4);
+    }
+
+    #[test]
+    fn conditional_comparisons_stop_on_match_mismatch_and_zero_count() {
+        let mut c = cpu();
+        c.r[11] = 0x2000;
+        c.r[8] = 0x2000;
+        for (offset, value) in [(0x100, 2), (0x101, 7), (0x102, 9), (0x200, 7), (0x201, 8)] {
+            c.write(0x2000, offset, 8, value).unwrap();
+        }
+        c.r[0] = 0xAB07;
+        c.r[6] = 0x200;
+        c.r[7] = 0x100;
+        c.r[1] = 3;
+        c.repeat_compare(8, true, false).unwrap();
+        assert_eq!((c.r[0], c.r[6], c.r[7], c.r[1]), (0xAB07, 0x200, 0x102, 1));
+        assert!(c.z && !c.cf);
+        c.r[7] = 0x101;
+        c.r[1] = 2;
+        c.repeat_compare(8, false, true).unwrap();
+        assert_eq!((c.r[6], c.r[7], c.r[1]), (0x202, 0x103, 0));
+        assert!(!c.z && c.cf && c.sf);
+        c.r[11] = 0xFFFF;
+        c.r[8] = 0xFFFF;
+        c.repeat_compare(8, false, true).unwrap();
+        assert!(!c.z && c.cf && c.sf);
+        c.r[11] = 0x2000;
+        c.r[8] = 0x2000;
+        c.r[6] = 0x201;
+        c.r[7] = 0x102;
+        c.r[1] = 2;
+        c.df = true;
+        c.repeat_compare(8, false, true).unwrap();
+        assert_eq!((c.r[6], c.r[7], c.r[1]), (0x200, 0x101, 1));
+        assert!(!c.z && c.cf);
     }
 
     #[test]

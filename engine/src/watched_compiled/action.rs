@@ -32,6 +32,7 @@ pub enum PointerKind {
     Screen,
     ScreenShown,
     ScreenSaved,
+    Counts,
 }
 impl PointerKind {
     pub(super) fn slot(self) -> u16 {
@@ -52,6 +53,7 @@ impl PointerKind {
             Self::Screen => 0xDD58,
             Self::ScreenShown => 0xDD5C,
             Self::ScreenSaved => 0xDD60,
+            Self::Counts => 0xDCC8,
         }
     }
     fn length(self) -> usize {
@@ -64,6 +66,7 @@ impl PointerKind {
             Self::Seed => 2,
             Self::Results => 58 * 176,
             Self::Fixtures => 174 * 176,
+            Self::Counts => 1001 * 4,
             _ => 4000,
         }
     }
@@ -96,6 +99,7 @@ pub enum Area {
     Frame,
     Results,
     Fixtures,
+    Counts,
 }
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
@@ -147,6 +151,7 @@ fn area_pointer(area: Area) -> Option<PointerKind> {
         Area::Style => PointerKind::Style,
         Area::Results => PointerKind::Results,
         Area::Fixtures => PointerKind::Fixtures,
+        Area::Counts => PointerKind::Counts,
         Area::Main => PointerKind::Main,
         Area::MainShown => PointerKind::MainShown,
         Area::Background => PointerKind::Background,
@@ -185,6 +190,7 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
             || (s.kind == Kind::WatchedMatch
                 && ((0xAD9B..0xCD00).contains(&offset)
                     || (0x0C66..0x0C68).contains(&offset)
+                    || (0x129E..0x12BD).contains(&offset)
                     || (0x93F7..0x94F7).contains(&offset)
                     || (0xD886..0xD936).contains(&offset)
                     || (0xD7D6..0xD7DA).contains(&offset)
@@ -294,6 +300,7 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
     if s.kind == Kind::WatchedMatch {
         required.insert(PointerKind::Results);
         required.insert(PointerKind::Fixtures);
+        required.insert(PointerKind::Counts);
         for ui in [
             PointerKind::Screen,
             PointerKind::ScreenShown,
@@ -334,6 +341,7 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
                         | PointerKind::Style
                         | PointerKind::Results
                         | PointerKind::Fixtures
+                        | PointerKind::Counts
                 )
             };
             if (pool(p.kind) || pool(q.kind))
