@@ -1,0 +1,13 @@
+pinned original4199ticks/182811draws/831actions and actual fulltime return verified
+verified completed original prefix 2079 ticks 91555 draws
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 210, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 206, in main
+    if a.select:select(a.select)
+                ^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 96, in select
+    if missing is None:raise ValueError('native match unsupported:'+error['message'])
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: native match unsupported:watched tick2079 draw91555: unported original 26C9:0BFE

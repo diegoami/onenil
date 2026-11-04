@@ -97,6 +97,8 @@ def compare(got):
   expected_events.append(event)
  if got['events']!=expected_events:raise ValueError('full native ordered accepted actions differ')
  if got['final']!=finish['final']or got['return']!=finish['boundary']:raise ValueError('full native final snapshot/return differs')
+ # [confirmed] OriginalE008:E069-E06E swaps C4/C5 into final D086/D087.
+ if got['live_goals']!=list(reversed(finish['final']['scores'])):raise ValueError('native live-goal/final-result mapping differs')
  print('native4199watched ticks,182553computed draws plus258setup context,831actions and fulltime return match',flush=True)
 
 INITIAL_SHA='pending-positive-admission'
