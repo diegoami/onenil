@@ -318,13 +318,41 @@ def prove_formation(research):
  oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')})
  print('original formation counts and presentation-only footprint',observations,flush=True)
 
+def prove_grouped_integer(research):
+ directory=ROOT/'records/T41/grouped-integer-r0001'
+ if(directory/'result.json').exists():raise ValueError('immutable grouped integer result already exists')
+ if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original numeric formatter proof')
+ sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
+ anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ss=16*regs['ss'];load=regs['cs']-0x0AB9
+ values=[0,1,12,999,1000,1001,999999,1000000,2147483647,2147483648,4294967295,4294966296];out=regs['sp']+128
+ protocol={'schema':'original-grouped-integer-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'1B55:0F95','return':'0AB9:EBE2','values':values,'output_stack_offset':out,'scope':'Derived isolated original signed32 decimal grouping;decoded dynamically generated numeric output only,no original string/template asset.'};start=directory/'start.json'
+ if start.exists():raise ValueError('immutable formatter proof already started')
+ oracle.write_json(start,protocol);observations=[]
+ for value in values:
+  raw=bytearray(initial);sp=regs['sp']-12;words=[0xEBE2,regs['cs'],value&65535,value>>16,out,regs['ss']];raw[ss+sp:ss+sp+12]=b''.join(w.to_bytes(2,'little')for w in words)
+  g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x1B55,'IP':0x0F95,'SP':sp,'EFLAGS':state['flags']});before=g.mem(0,0x110000)
+  class Returned(Exception):pass
+  def returned(g):raise Returned()
+  g.code_hook('0AB9:EBE2',returned);complete=False
+  try:g.run(max_steps=500000)
+  except Returned:complete=True
+  if not complete or g.unsupported:raise ValueError('original grouped integer did not return cleanly')
+  if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp']-4,regs['bp'],regs['ds']):raise ValueError('original grouped integer hidden-output ABI differs')
+  after=g.mem(0,0x110000);unexpected=[]
+  for address,(old,new)in enumerate(zip(before,after,strict=True)):
+   if old!=new and not(ss+sp-4096<=address<ss+regs['sp']or ss+out<=address<ss+out+256):unexpected.append(address)
+  observations.append({'raw_value':value,'pascal_bytes':list(after[ss+out:ss+out+1+after[ss+out]]),'returned_sp':g.reg('sp'),'returned_bp':g.reg('bp'),'returned_ds':g.reg('ds'),'all_other_memory_equal':not unexpected,'unexpected_change_count':len(unexpected),'unexpected_first_addresses':unexpected[:16]})
+  if unexpected:raise ValueError('original grouped integer changed non-output memory')
+ oracle.write_json(directory/'result.json',{'status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']});oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')});print('original grouped integer',observations,flush=True)
+
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
  if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
  if a.prove_templates:prove_templates(a.prove_templates)
  if a.prove_ui_leaves:prove_ui_leaves(a.prove_ui_leaves)
  if a.prove_formation:prove_formation(a.prove_formation)
- if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation):p.error('choose selection or original transient proof')
+ if a.prove_grouped_integer:prove_grouped_integer(a.prove_grouped_integer)
+ if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()
