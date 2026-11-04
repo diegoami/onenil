@@ -416,3 +416,44 @@ pub(super) fn continue_menu_key(c: &mut Cpu) -> Result<(), String> {
 pub(super) fn validate_menu_lineup(c: &mut Cpu) -> Result<(), String> {
     super::lineup_validation::run(c)
 }
+
+// [confirmed:T41/replacement-banner-r0002;staticd9e20a4 ADD0..AEB5]
+// Numeric styles are computed by724A;
+// the announcement restores Main's saved line. Names/template/delay belong to UI.
+pub(super) fn replacement_announcement(c: &mut Cpu) -> Result<(), String> {
+    if c.watch_trace.is_none() || c.call_chain().last().copied() != Some((0x0AB9, 0xAF62)) {
+        return Err("replacement announcement outside proven caller".into());
+    }
+    let ss = c.r[10];
+    let ds = c.r[11];
+    let sp = c.r[4];
+    let first = c.read(ss, sp.wrapping_add(2), 16)?;
+    let second = c.read(ss, sp.wrapping_add(4), 16)?;
+    if !(1..=3920).contains(&first) || !(1..=3920).contains(&second) {
+        return Err("unsupported announcement player".into());
+    }
+    if c.read(ds, 0xDE8C, 16)? != 0 || c.read(ds, 0xDE8E, 16)? != 0 {
+        return Err("announcement requires no pending external key".into());
+    }
+    c.enter(0x1A0)?;
+    for (player, ret) in [(second, 0xAE16), (first, 0xAE4E)] {
+        let (offset, segment) = c.far(ds, 0xD7BA)?;
+        let role = c.read(
+            segment,
+            offset.wrapping_add(player.wrapping_mul(8)).wrapping_add(6),
+            8,
+        )?;
+        if role > 13 {
+            return Err("unsupported announcement role".into());
+        }
+        c.push(player)?;
+        c.push(role)?;
+        c.invoke(super::action_graph::p_1b55_724a, true, 0x1B55, 0x724A, ret)?;
+        c.pc = (0x232A, 0x043B);
+        c.write(ds, 0xDD64, 16, c.r[0] & 255)?;
+    }
+    c.presentation.push(serde_json::json!({"site":"0AB9:ADD0","kind":"replacement_announcement","first_player":first,"second_player":second,"duration_seconds":2}));
+    c.r[4] = c.r[5];
+    c.r[5] = c.pop()?;
+    c.ret(false, 4)
+}

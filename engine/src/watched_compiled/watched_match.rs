@@ -805,4 +805,96 @@ mod tests {
             .unwrap_err()
             .contains("outside proven menu"));
     }
+    #[test]
+    fn replacement_announcement_matches_eight_original_styles_and_restores_gameplay() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap();
+        let read = |path: &str| -> Value {
+            serde_json::from_slice(&std::fs::read(root.join(path)).unwrap()).unwrap()
+        };
+        let fixture = read("engine/tests/fixtures/watched_caller/case-00.json");
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        let facts = [
+            read("records/T41/formation-input-r0001.json"),
+            read("records/T41/ui-leaves-input-r0001.json"),
+        ];
+        let protocol = read("records/T41/replacement-banner-r0002/start.json");
+        let proof = read("records/T41/replacement-banner-r0002/result.json");
+        assert_eq!(protocol["cases"].as_array().unwrap().len(), 8);
+        for (case, original) in protocol["cases"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .zip(proof["observations"].as_array().unwrap())
+        {
+            let mut c = action::machine(&state).unwrap();
+            c.watch_trace = Some(Vec::new());
+            for input in &facts {
+                for fact in input["facts"].as_array().unwrap() {
+                    let address = fact["address"].as_u64().unwrap() as usize;
+                    c.e.image[address] = fact["value"].as_u64().unwrap() as u8;
+                    c.known[address] = true;
+                }
+            }
+            let ds = 16 * usize::from(c.r[11]);
+            for offset in 0xDE88..0xDE90 {
+                c.e.image[ds + offset] = 0;
+                c.known[ds + offset] = true;
+            }
+            for patch in case["patches"].as_array().unwrap() {
+                let address = patch["address"].as_u64().unwrap() as usize;
+                c.e.image[address] = patch["value"].as_u64().unwrap() as u8;
+                c.known[address] = true;
+            }
+            let regs = c.r;
+            let before = c.e.image.clone();
+            let stack = 16 * usize::from(c.r[10]) + usize::from(c.r[4]);
+            for value in [
+                case["second"].as_u64().unwrap() as u16,
+                case["first"].as_u64().unwrap() as u16,
+            ] {
+                c.push(value).unwrap();
+            }
+            c.invoke(
+                super::super::projections::replacement_announcement,
+                false,
+                0x0AB9,
+                0xADD0,
+                0xAF62,
+            )
+            .unwrap_or_else(|e| panic!("{}:{e}", case["name"]));
+            assert_eq!(
+                c.read(c.r[11], 0xDD64, 16).unwrap(),
+                original["style_after"].as_u64().unwrap() as u16,
+                "{}",
+                case["name"]
+            );
+            assert_eq!((c.r[4], c.r[5], c.r[11]), (regs[4], regs[5], regs[11]));
+            assert!(c.draws.is_empty());
+            assert!(c.events.is_empty());
+            assert_eq!(
+                c.presentation.last().unwrap()["kind"],
+                "replacement_announcement"
+            );
+            for (at, (old, new)) in before.iter().zip(c.e.image.iter()).enumerate() {
+                if !(stack - 4096..stack).contains(&at) && !(ds + 0xDD64..ds + 0xDD66).contains(&at)
+                {
+                    assert_eq!(old, new, "{} address{at:X}", case["name"]);
+                }
+            }
+        }
+        let mut c = action::machine(&state).unwrap();
+        c.watch_trace = Some(Vec::new());
+        assert!(c
+            .invoke(
+                super::super::projections::replacement_announcement,
+                false,
+                0x0AB9,
+                0xADD0,
+                0x1234
+            )
+            .unwrap_err()
+            .contains("outside proven caller"));
+    }
 }

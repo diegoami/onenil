@@ -162,6 +162,20 @@ def lineup_validation_proof():
   if(v['returned_sp'],v['returned_bp'],v['returned_ds'])!=(16026,start['derived_parent_bp'],12423)or v['restored_active_club']!=start['active_club']or v['returned_valid']not in(0,1):raise ValueError('lineup validation ABI/result differs')
  print('all9original lineup validation cases preserve gameplay memory and restore parent selection',flush=True)
 
+REPLACEMENT_BANNER_SHA='a019afeccf9f018adb547224e1c91ab9a37f918a38cc205aef1e78848b05faa8'
+def replacement_banner_proof():
+ directory=ROOT/'records/T41/replacement-banner-r0002';manifest=read(directory/'manifest.json')
+ if sha(directory/'manifest.json')!=REPLACEMENT_BANNER_SHA:raise ValueError('replacement banner root differs')
+ for name in('start','result'):
+  if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('replacement banner observation differs')
+ start=read(directory/'start.json');result=read(directory/'result.json')
+ if result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']or start['root']!='0AB9:ADD0'or start['external_keys']or start['pit_divisor']!=1024 or len(start['cases'])!=8:raise ValueError('replacement banner protocol differs')
+ if [v['name']for v in result['observations']]!=[v['name']for v in start['cases']]:raise ValueError('replacement banner cases differ')
+ for v in result['observations']:
+  if not v['all_other_memory_equal']or v['unexpected_change_count']or v['unexpected_first_addresses']or v['changed_bytes_by_area']['keyboard_driver']:raise ValueError('replacement banner modifies non-presentation memory or consumes a key')
+  if(v['returned_sp'],v['returned_bp'],v['returned_ds'])!=(16026,16032,12423)or not 0<=v['style_after']<=255:raise ValueError('replacement banner ABI/style differs')
+ print('all8original no-key announcements restore Main and preserve gameplay memory',flush=True)
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE
