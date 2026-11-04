@@ -9,6 +9,7 @@ import watched_action_export as facts
 ROOT=oracle.ROOT
 FIXTURES=ROOT/'engine/tests/fixtures/watched_tick'
 ACTUAL_SHA='61321a752ec7f0637a2cf54b534c9fa39618961615a8fe2b886d34ab5da249ef'
+NEUTRAL_SHA='d11d0102eadf31eb0242b37467c90756ef47ed10a1c55ecd171884f699d186da'
 FIXTURE_SHA='769006f19ebf35f5ed39403edbd1c42c4bb4715d3ed0fc41b2be72d233903b59'
 REPEAT_SHA='9bd16e75ab9e32f2afa5933a19f280db1712cb00a259e0c14b977656e1ee42e4'
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -108,6 +109,10 @@ def values_at_entry(state):
     return out
 
 def check():
+    path=ROOT/'records/T39/neutral-input/run-0001.json'
+    if sha(path)!=NEUTRAL_SHA:raise ValueError('original no-key proof pin differs')
+    proof=read(path)
+    if proof['count']!=176 or len(proof['calls'])!=176 or any(c!={'tick':i//22+1,'AL':0,'site':'0AB9:791B'}for i,c in enumerate(proof['calls'])):raise ValueError('original no-key branch proof differs')
     (actual,am),(repeat,rm)=sources();m=read(FIXTURES/'manifest.json')
     if sha(FIXTURES/'manifest.json')!=FIXTURE_SHA:raise ValueError('native tick fixture manifest pin differs')
     if m['actual_manifest_sha256']!=ACTUAL_SHA or m['repeat_manifest_sha256']!=REPEAT_SHA or len(m['cases'])!=9:raise ValueError('decoded tick corpus provenance differs')
