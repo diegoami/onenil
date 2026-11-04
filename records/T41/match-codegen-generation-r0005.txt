@@ -1,0 +1,56 @@
+{
+  "roots": [
+    "0AB9:7C67",
+    "0AB9:7DCB",
+    "0AB9:E05E",
+    "0AB9:E435"
+  ],
+  "procedures": 42,
+  "instructions": 3095,
+  "listing_digests": {
+    "static/1-0-exe/code/seg_0AB9_01.asm": "d14716fcf764421a1dc076df23b754ad6fbc4d475da378aa30077ed476ea0668",
+    "static/1-0-exe/code/seg_0AB9_02.asm": "ee14deb494de2ad80afe7238f15699894a6377f2549ffea91387e8d79dc11ab6",
+    "static/1-0-exe/code/seg_0AB9_12.asm": "af2630092912280994154772ec15a46d8be8983c9478bc7d738e302222f9b937",
+    "static/1-0-exe/code/seg_0AB9_13.asm": "4318632415043eb7dbbe490ce7d637d720423466e2792dc1b584b91507a8e9cc",
+    "static/1-0-exe/code/seg_0AB9_14.asm": "e4f9a622942f648e16f15ec1cca7e8df16b7c47b110ae6779b2b87c1ae500c88",
+    "static/1-0-exe/code/seg_0AB9_17.asm": "202ecd9d1084b124ea22227892d1a43cb0d8deedabdb2b32ba0a0a4b041fc01c",
+    "static/1-0-exe/code/seg_0AB9_20.asm": "263fbe73489ef8e34f6e36a5b5b15c36b2174eb6dd032820b240d1f717c24c4c",
+    "static/1-0-exe/code/seg_0AB9_21.asm": "7c17869e3fb606da7bb5f0d9644b77f1712e6b10ee05e87a9f98f074459e479f",
+    "static/1-0-exe/code/seg_1998_01.asm": "8975e7992cc991c92d6a05b8875eb0960c2893ed122314f984bed4eb77d17148",
+    "static/1-0-exe/code/seg_1998_02.asm": "7db3b484368ec70c2187ce4c90906d3e863cb20034e7c94bed8bacf188d61f05",
+    "static/1-0-exe/code/seg_1B55_03.asm": "2e33c838935757b9bccc6558fe851e2d4e9cc59cc0668ce1e907c536be659869",
+    "static/1-0-exe/code/seg_232A_01.asm": "dc40af4154df75bc213cd40c381184d4dca28d2b3fb34ddba414407a6c9dfa6a",
+    "static/1-0-exe/code/seg_24BC_01.asm": "8415be6d44cce168c19ad565477130cfdc7557218a211f2f778ba745ed60e38f",
+    "static/1-0-exe/code/seg_24BC_02.asm": "05fb7318b6dc4f4a6f5e8f2c422608b2fd565f1260839be5206014b81e5e41b7",
+    "static/1-0-exe/code/seg_26C9_02.asm": "6aec4a2b9333d18723a2d6c220ae1bdd6f5d4713f7174a73ba3d5094e665ea3c"
+  },
+  "generated_sha256": "217e2c4e6f26bba4d8bcf6941beea9753dcf181963baaeaf5040182294d48ce0",
+  "boundaries": {
+    "1998:00CD": {
+      "kind": "projection",
+      "function": "restore_presentation_clock"
+    },
+    "24BC:0243": {
+      "kind": "unported",
+      "reason": "unsupported conditional repeat operation:stosw"
+    }
+  },
+  "reused": [
+    {
+      "module": "action_graph",
+      "sha256": "d897e04a78fcc842ce619994238d49b27190faf11a22523ffd245021c28a2744",
+      "procedures": 377
+    },
+    {
+      "module": "tick_graph",
+      "sha256": "b25630a13738ce80c02a56aec01ea7757c80bf6459f9467af5d53dcad13f5ef8",
+      "procedures": 27
+    },
+    {
+      "module": "caller_graph",
+      "sha256": "fad58cb6ef564025bb26efd295889be3450196f3582cf812eb800958a320f21f",
+      "procedures": 3
+    }
+  ],
+  "source_addresses": true
+}

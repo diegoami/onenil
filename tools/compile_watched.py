@@ -39,8 +39,9 @@ def graph(code,roots,external=None,adapters=None):
             if op in ('ret','retf'):continue
             if op=='call':
                 dest,_=target(root[0],args);todo.append(dest)
-            if op=='jmp' or (op.startswith('j') and op!='jmp'):
-                dest,_=target(root[0],args);assert dest[0]==root[0];pending.append(dest[1])
+            if op in ('jmp','loop') or (op.startswith('j') and op!='jmp'):
+                dest,_=target(root[0],args);assert dest[0]==root[0]
+                if op!='loop'or dest in code:pending.append(dest[1])
                 if op=='jmp':continue
             pending.append(nxt)
         result[root]=seen
@@ -86,6 +87,7 @@ def emit_instruction(seg,ip,row):
     prefix=f'c.pc=({seg},{ip});c.step()?;'
     if op in ('ret','retf'):return prefix+f'c.ret({str(op=="retf").lower()},{int(args,0) if args else 0})?;return Ok(());'
     if op=='jmp':return prefix+f'label={target(seg,args)[0][1]};continue;'
+    if SOURCE_ADDRESSES and op=='loop':return prefix+f'c.r[1]=c.r[1].wrapping_sub(1);label=if c.r[1]!=0{{{target(seg,args)[0][1]}}}else{{{nxt}}};continue;'
     if op.startswith('j'):
         condition={'je':'c.z','jne':'!c.z','ja':'!c.cf&&!c.z','jae':'!c.cf','jb':'c.cf','jbe':'c.cf||c.z','jg':'!c.z&&(c.sf==c.of)','jge':'c.sf==c.of','jl':'c.sf!=c.of','jle':'c.z||(c.sf!=c.of)','js':'c.sf','jns':'!c.sf','jo':'c.of','jno':'!c.of','jp':'c.pf','jnp':'!c.pf','jcxz':'c.r[1]==0'}.get(op)
         if condition is None:raise ValueError(f'unsupported conditional {seg:04X}:{ip:04X} {op}')
@@ -105,17 +107,35 @@ def emit_instruction(seg,ip,row):
         value=read(a[1],width(a[0]));value=f'c.segment_const({value})'if (seg,ip)in RELOCATED else value
         return prefix+f'let v={value};'+write(a[0],'v')
     if op=='xchg':
+        if SOURCE_ADDRESSES and any('['in v for v in a):
+            memory=[i for i,v in enumerate(a)if '['in v]
+            if len(memory)!=1:raise ValueError('unsupported memory exchange operands:'+args)
+            mem=a[memory[0]];reg=a[1-memory[0]]
+            if reg not in BYTES and not(reg in REGS and REGS[reg]<8):raise ValueError('unsupported exchange register:'+reg)
+            w=width(mem)
+            if width(reg)!=w:raise ValueError('exchange operand widths differ:'+args)
+            ss,off=ea(mem)
+            # Capture the effective address before changing a register used by it.
+            return prefix+f'let s={ss};let o={off};let old=c.read(s,o,{w})?;let value={read(reg,w)};c.write(s,o,{w},value)?;'+write(reg,'old')
+        if SOURCE_ADDRESSES and all(v in BYTES for v in a):
+            return prefix+f'let x={read(a[0])};let y={read(a[1])};'+write(a[0],'y')+write(a[1],'x')
         if not all(v in REGS and REGS[v]<8 for v in a):raise ValueError('unsupported exchange operand:'+args)
         return prefix+f'c.exchange_registers({REGS[a[0]]},{REGS[a[1]]});'
     if SOURCE_ADDRESSES and op in ('cld','std'):return prefix+f'c.df={str(op=="std").lower()};'
     if op=='nop':return prefix
     if SOURCE_ADDRESSES and op in ('lodsb','lodsw'):return prefix+f'c.load_string({8 if op=="lodsb"else 16})?;'
+    if SOURCE_ADDRESSES and op in ('movsb','movsw'):return prefix+f'c.move_string({8 if op=="movsb"else 16})?;'
     if SOURCE_ADDRESSES and op in ('stosb','stosw'):return prefix+f'c.store_string({8 if op=="stosb"else 16})?;'
     if SOURCE_ADDRESSES and op=='rep':
         operation=args.split()[0]
         if operation in ('movsb','movsw'):return prefix+f'c.repeat_movs({8 if operation=="movsb"else 16})?;'
         if operation in ('stosb','stosw'):return prefix+f'c.repeat_stos({8 if operation=="stosb"else 16})?;'
         raise ValueError('unsupported repeat operation:'+operation)
+    if SOURCE_ADDRESSES and op in ('repne','repe'):
+        operation=args.split()[0]
+        if operation in ('scasb','scasw','cmpsb','cmpsw'):
+            return prefix+f'c.repeat_compare({8 if operation.endswith("b")else 16},{str(operation.startswith("scas")).lower()},{str(op=="repe").lower()})?;'
+        raise ValueError('unsupported conditional repeat operation:'+operation)
     if op in ('cwde','cbw'):return prefix+'c.r[0]=i16::from(c.r[0] as u8 as i8) as u16;'
     if SOURCE_ADDRESSES and op=='cdq'and nxt-ip==2:return prefix+'let v=if (c.get32(0)as i32)<0{u32::MAX}else{0};c.set32(2,v);'
     if op in ('cdq','cwd'):return prefix+'c.r[2]=if (c.r[0] as i16)<0 {65535}else{0};'
@@ -148,21 +168,25 @@ def compile_procedure(seg,entry,rows,partial_errors=None):
     out=[]
     leaders={entry}
     for ip,(op,args,nxt,path) in rows.items():
-        if op.startswith('j') or op=='call':
-            if op.startswith('j'):leaders.add(target(seg,args)[0][1])
+        if op.startswith('j') or op in('call','loop'):
+            if op.startswith('j')or op=='loop':
+                dest=target(seg,args)[0][1]
+                if dest in rows:leaders.add(dest)
             if nxt in rows:leaders.add(nxt)
     out.append(f'pub(super) fn {name(seg,entry)}(c:&mut Cpu)->Result<(),String>{{let mut label={entry}u16;loop{{match label{{')
     for start in sorted(leaders):
         out.append(f'{start}=>{{');ip=start
         while True:
             row=rows[ip]
-            try:out.append(emit_instruction(seg,ip,row))
+            try:
+                if row[0]=='loop'and target(seg,row[1])[0][1]not in rows:raise ValueError('counted-loop target absent from checked listing')
+                out.append(emit_instruction(seg,ip,row))
             except ValueError as error:
                 if partial_errors is None:raise
                 partial_errors[f'{seg:04X}:{ip:04X}']=str(error)
                 out.append(f'c.pc=({seg},{ip});return Err("unported original instruction {seg:04X}:{ip:04X}".into());')
             op,args,nxt,_=row
-            if op.startswith('j') or op in ('call','ret','retf'):break
+            if op.startswith('j') or op in ('call','ret','retf','loop'):break
             if nxt in leaders:out.append(f'label={nxt};continue;');break
             ip=nxt
         out.append('}')

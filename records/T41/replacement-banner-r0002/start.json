@@ -1,0 +1,93 @@
+{
+  "schema": "original-replacement-banner-protocol/1",
+  "producer": "53631ae8576f93f5b61c6826e576c346dd08edcd",
+  "observer_sha256": "c4814f6263a6882d49cab7d0a836396e8ea35c1ce20a8a29be89725bf6960120",
+  "admission_sha256": "b8f418bfce7111e5f57e96b8a6d194045934a35d38b7e650a0512370d12884cf",
+  "root": "0AB9:ADD0",
+  "return": "0AB9:EBE2",
+  "cases": [
+    {
+      "name": "healthy",
+      "first": 2582,
+      "second": 2581,
+      "patches": []
+    },
+    {
+      "name": "unavailable",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 376338,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "flag-bit8",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 376341,
+          "value": 128
+        }
+      ]
+    },
+    {
+      "name": "flag-bit6",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 376341,
+          "value": 32
+        }
+      ]
+    },
+    {
+      "name": "flag-bit2",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 376341,
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "flag-bit3",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 376341,
+          "value": 4
+        }
+      ]
+    },
+    {
+      "name": "role13",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 326894,
+          "value": 13
+        }
+      ]
+    },
+    {
+      "name": "reversed",
+      "first": 2581,
+      "second": 2582,
+      "patches": []
+    }
+  ],
+  "external_keys": [],
+  "pit_divisor": 1024,
+  "pit_source": "1998:00BA/00C5\u21920096",
+  "maximum_instructions": 100000000,
+  "scope": "Derived original substitution announcement;verify Main is restored and only MainShown bottom line/style/stack/presentation hardware may change. Numeric style helper remains native;no name/template assets exported."
+}

@@ -1,0 +1,364 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+warning: unused import: `super::tick_graph::*`
+ --> src/watched_compiled/caller_graph.rs:5:5
+  |
+5 | use super::tick_graph::*;
+  |     ^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+     --> src/watched_compiled/action_graph.rs:86428:17
+      |
+86427 |                 return Err("unported original instruction 1998:0129".into());
+      |                 ------------------------------------------------------------ any code following this expression is unreachable
+86428 |                 c.pc = (6552, 299);
+      |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+      |
+      = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:109024:17
+       |
+109023 |                 return Err("unported original instruction 232A:0238".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+109024 |                 c.pc = (9002, 570);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:109080:17
+       |
+109079 |                 return Err("unported original instruction 232A:024C".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+109080 |                 c.pc = (9002, 590);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:118364:17
+       |
+118363 |                 return Err("unported original instruction 26C9:011F".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+118364 |                 c.pc = (9929, 288);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:118685:17
+       |
+118684 |                 return Err("unported original instruction 26C9:01AF".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+118685 |                 c.pc = (9929, 433);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:118805:17
+       |
+118804 |                 return Err("unported original instruction 26C9:01EE".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+118805 |                 label = 496;
+       |                 ^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+  --> src/watched_compiled/watched_match.rs:86:9
+   |
+85 |         return Err("explicit T41 lifecycle stub".into());
+   |         ------------------------------------------------ any code following this expression is unreachable
+86 |         c.invoke_entry(super::match_graph::p_0ab9_7c67, 0x0AB9, 0x7DCB)?;
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/action_graph.rs:2462:9
+     |
+2462 |     let mut label = 3906u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:51434:9
+      |
+51434 |     let mut label = 28526u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:63129:9
+      |
+63129 |     let mut label = 40814u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:78132:9
+      |
+78132 |     let mut label = 50355u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:88015:9
+      |
+88015 |     let mut label = 2934u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:94260:9
+      |
+94260 |     let mut label = 13939u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:95002:9
+      |
+95002 |     let mut label = 18265u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:95432:9
+      |
+95432 |     let mut label = 18492u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:96502:9
+      |
+96502 |     let mut label = 18999u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:97853:9
+      |
+97853 |     let mut label = 19906u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:98238:9
+      |
+98238 |     let mut label = 20097u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:104904:9
+       |
+104904 |     let mut label = 25352u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:108543:9
+       |
+108543 |     let mut label = 213u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:108627:9
+       |
+108627 |     let mut label = 248u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:108820:9
+       |
+108820 |     let mut label = 324u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:112994:9
+       |
+112994 |     let mut label = 546u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:113068:9
+       |
+113068 |     let mut label = 601u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116390:9
+       |
+116390 |     let mut label = 3292u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:118153:9
+       |
+118153 |     let mut label = 2578u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:119292:9
+       |
+119292 |     let mut label = 2899u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:119743:9
+       |
+119743 |     let mut label = 3183u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:119785:9
+       |
+119785 |     let mut label = 3476u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:119833:9
+       |
+119833 |     let mut label = 3498u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2859:9
+     |
+2859 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2921:9
+     |
+2921 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/match_graph.rs:4929:9
+     |
+4929 |     let mut label = 32203u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/match_graph.rs:15772:9
+      |
+15772 |     let mut label = 453u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/match_graph.rs:16675:9
+      |
+16675 |     let mut label = 3201u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4486:9
+     |
+4486 |     let mut label = 40814u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4974:9
+     |
+4974 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:5036:9
+     |
+5036 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/tick_graph.rs:9026:9
+     |
+9026 |     let mut label = 483u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: constant `PITCH_CELLS` is never used
+  --> src/layout.rs:22:18
+   |
+22 | pub(crate) const PITCH_CELLS: usize = 17 * 75;
+   |                  ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `sar` is never used
+   --> src/watched_compiled/compiled.rs:639:12
+    |
+ 42 | impl Cpu {
+    | -------- method in this implementation
+...
+639 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {
+    |            ^^^
+
+warning: `onenil-engine` (lib) generated 42 warnings (run `cargo fix --lib -p onenil-engine` to apply 33 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 11.26s
+     Running tests/watched_match.rs (engine/target/debug/deps/watched_match-79def782135be457)
+
+running 1 test
+test one_initial_admission_matches_every_original_tick_draw_action_and_final_return ... FAILED
+
+failures:
+
+---- one_initial_admission_matches_every_original_tick_draw_action_and_final_return stdout ----
+
+thread 'one_initial_admission_matches_every_original_tick_draw_action_and_final_return' (670) panicked at tests/watched_match.rs:16:33:
+native lifecycle failed: watched tick0 draw0: explicit T41 lifecycle stub
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    one_initial_admission_matches_every_original_tick_draw_action_and_final_return
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+error: test failed, to rerun pass `--test watched_match`

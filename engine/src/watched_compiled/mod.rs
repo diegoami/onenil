@@ -6,10 +6,13 @@ mod adjustment;
 pub mod caller;
 mod caller_graph;
 mod compiled;
+mod lineup_validation;
+mod match_graph;
 mod projections;
 mod selection;
 pub mod tick;
 mod tick_graph;
+pub mod watched_match;
 use crate::{terminal::Scene, Draw};
 use serde::{Deserialize, Serialize};
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord)]

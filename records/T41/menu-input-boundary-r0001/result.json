@@ -1,0 +1,99 @@
+{
+  "status": "completed",
+  "protocol_sha256": "d5793edcf585b3ddfe21df5afc398849e490287d2bbfdb6cc40eac21cb9786da",
+  "observations": [
+    {
+      "cursor_before": 1,
+      "external_key": "Down",
+      "cursor_after": 2,
+      "key_code": 6,
+      "last_key_code": 6,
+      "pending_key": 0,
+      "queue_count": 0,
+      "returned_sp": 16026,
+      "returned_bp": 16032,
+      "returned_ds": 12423,
+      "changed_bytes_by_area": {
+        "stack": 71,
+        "cursor": 1,
+        "main": 2731,
+        "keyboard_driver": 4,
+        "presentation_timers": 0,
+        "bios_hardware": 0
+      },
+      "all_other_memory_equal": true,
+      "unexpected_change_count": 0,
+      "unexpected_first_addresses": []
+    },
+    {
+      "cursor_before": 2,
+      "external_key": "Down",
+      "cursor_after": 3,
+      "key_code": 6,
+      "last_key_code": 6,
+      "pending_key": 0,
+      "queue_count": 0,
+      "returned_sp": 16026,
+      "returned_bp": 16032,
+      "returned_ds": 12423,
+      "changed_bytes_by_area": {
+        "stack": 71,
+        "cursor": 1,
+        "main": 2731,
+        "keyboard_driver": 4,
+        "presentation_timers": 0,
+        "bios_hardware": 0
+      },
+      "all_other_memory_equal": true,
+      "unexpected_change_count": 0,
+      "unexpected_first_addresses": []
+    },
+    {
+      "cursor_before": 3,
+      "external_key": "Return",
+      "cursor_after": 3,
+      "key_code": 2,
+      "last_key_code": 2,
+      "pending_key": 0,
+      "queue_count": 0,
+      "returned_sp": 16026,
+      "returned_bp": 16032,
+      "returned_ds": 12423,
+      "changed_bytes_by_area": {
+        "stack": 74,
+        "cursor": 0,
+        "main": 2731,
+        "keyboard_driver": 0,
+        "presentation_timers": 0,
+        "bios_hardware": 0
+      },
+      "all_other_memory_equal": true,
+      "unexpected_change_count": 0,
+      "unexpected_first_addresses": []
+    },
+    {
+      "cursor_before": 4,
+      "external_key": "Up",
+      "cursor_after": 3,
+      "key_code": 5,
+      "last_key_code": 5,
+      "pending_key": 0,
+      "queue_count": 0,
+      "returned_sp": 16026,
+      "returned_bp": 16032,
+      "returned_ds": 12423,
+      "changed_bytes_by_area": {
+        "stack": 71,
+        "cursor": 1,
+        "main": 2731,
+        "keyboard_driver": 4,
+        "presentation_timers": 0,
+        "bios_hardware": 0
+      },
+      "all_other_memory_equal": true,
+      "unexpected_change_count": 0,
+      "unexpected_first_addresses": []
+    }
+  ],
+  "scope": "Derived original menu cursor/input calls with external Down/Return/Up. SourceD8A2-D8A6 identifies option3 as continue;original Week.play chooses PLAY GAME without lineup changes. No external key is supplied to watched gameplay ticks."
+}

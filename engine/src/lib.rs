@@ -408,6 +408,23 @@ mod python {
         }
     }
     #[pyfunction]
+    fn watched_match(input_json: &str) -> PyResult<String> {
+        #[derive(serde::Deserialize)]
+        #[serde(deny_unknown_fields)]
+        struct Request {
+            initial: watched_compiled::action::State,
+            no_pending_key: bool,
+        }
+        let request: Request =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        let output =
+            match watched_compiled::watched_match::run(&request.initial, request.no_pending_key) {
+                Ok(ok) => serde_json::json!({"ok":ok}),
+                Err(error) => serde_json::json!({"error":error}),
+            };
+        serde_json::to_string(&output).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
     fn watched_caller(input_json: &str) -> PyResult<String> {
         #[derive(serde::Deserialize)]
         #[serde(deny_unknown_fields)]
@@ -990,6 +1007,7 @@ mod python {
         module.add_function(wrap_pyfunction!(watched_action, module)?)?;
         module.add_function(wrap_pyfunction!(watched_tick, module)?)?;
         module.add_function(wrap_pyfunction!(watched_caller, module)?)?;
+        module.add_function(wrap_pyfunction!(watched_match, module)?)?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;

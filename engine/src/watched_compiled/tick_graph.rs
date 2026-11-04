@@ -7990,6 +7990,580 @@ pub(super) fn p_0ab9_a4f2(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
+pub(super) fn p_1998_022b(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 555u16;
+    loop {
+        match label {
+            555 => {
+                c.pc = (6552, 555);
+                c.step()?;
+                c.enter(2)?;
+                c.pc = (6552, 559);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6552, 562);
+                c.step()?;
+                let x = c.r[0];
+                let y = 12u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6552, 565);
+                c.step()?;
+                label = if !c.z { 574 } else { 567 };
+                continue;
+            }
+            567 => {
+                c.pc = (6552, 567);
+                c.step()?;
+                let v = 10u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6552, 572);
+                c.step()?;
+                label = 620;
+                continue;
+            }
+            574 => {
+                c.pc = (6552, 574);
+                c.step()?;
+                let x = c.r[0];
+                let y = 22u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6552, 577);
+                c.step()?;
+                label = if !c.z { 586 } else { 579 };
+                continue;
+            }
+            579 => {
+                c.pc = (6552, 579);
+                c.step()?;
+                let v = 20u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6552, 584);
+                c.step()?;
+                label = 620;
+                continue;
+            }
+            586 => {
+                c.pc = (6552, 586);
+                c.step()?;
+                let x = c.r[0];
+                let y = 33u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6552, 589);
+                c.step()?;
+                label = if !c.z { 598 } else { 591 };
+                continue;
+            }
+            591 => {
+                c.pc = (6552, 591);
+                c.step()?;
+                let v = 27u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6552, 596);
+                c.step()?;
+                label = 620;
+                continue;
+            }
+            598 => {
+                c.pc = (6552, 598);
+                c.step()?;
+                let x = c.r[0];
+                let y = 43u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6552, 601);
+                c.step()?;
+                label = if !c.z { 610 } else { 603 };
+                continue;
+            }
+            603 => {
+                c.pc = (6552, 603);
+                c.step()?;
+                let v = 39u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6552, 608);
+                c.step()?;
+                label = 620;
+                continue;
+            }
+            610 => {
+                c.pc = (6552, 610);
+                c.step()?;
+                let x = c.r[0];
+                let y = 53u16;
+                let v = c.sub(x, y, 16);
+                let _ = v;
+                c.pc = (6552, 613);
+                c.step()?;
+                label = if !c.z { 620 } else { 615 };
+                continue;
+            }
+            615 => {
+                c.pc = (6552, 615);
+                c.step()?;
+                let v = 48u16;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                label = 620;
+                continue;
+            }
+            620 => {
+                c.pc = (6552, 620);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6552, 623);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (6552, 624);
+                c.step()?;
+                c.ret(true, 2)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_1998_0273(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 627u16;
+    loop {
+        match label {
+            627 => {
+                c.pc = (6552, 627);
+                c.step()?;
+                c.enter(6)?;
+                c.pc = (6552, 631);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 16)?;
+                c.r[0] = v;
+                c.pc = (6552, 634);
+                c.step()?;
+                let v = c.r[0];
+                c.r[6] = v;
+                c.pc = (6552, 636);
+                c.step()?;
+                let x = c.r[0];
+                let y = 1u16;
+                let v = c.shl(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6552, 638);
+                c.step()?;
+                let x = c.r[0];
+                let y = c.r[6];
+                let v = c.add(x, y, 16);
+                c.r[0] = v;
+                c.pc = (6552, 640);
+                c.step()?;
+                let v = c.r[0];
+                c.r[2] = v;
+                c.pc = (6552, 642);
+                c.step()?;
+                let x = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(8u16), 16)?;
+                let y = 174u16;
+                let v = c.imul3(x, y);
+                c.r[0] = v;
+                c.pc = (6552, 647);
+                c.step()?;
+                let o = 0u16.wrapping_add(55242u16);
+                let s = c.r[11];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6552, 651);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[0];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6552, 653);
+                c.step()?;
+                let x = c.r[7];
+                let y = c.r[2];
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6552, 655);
+                c.step()?;
+                let x = c.r[7];
+                let y = 65359u16;
+                let v = c.add(x, y, 16);
+                c.r[7] = v;
+                c.pc = (6552, 659);
+                c.step()?;
+                let v = c.r[7];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16), 16, v)?;
+                c.pc = (6552, 662);
+                c.step()?;
+                let v = c.r[8];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16, v)?;
+                c.pc = (6552, 665);
+                c.step()?;
+                let x = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                let y = 6u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6552, 669);
+                c.step()?;
+                label = if !c.z { 682 } else { 671 };
+                continue;
+            }
+            671 => {
+                c.pc = (6552, 671);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 674);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 12u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6552, 676);
+                c.step()?;
+                label = if c.z { 723 } else { 678 };
+                continue;
+            }
+            678 => {
+                c.pc = (6552, 678);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 22u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6552, 680);
+                c.step()?;
+                label = if c.z { 723 } else { 682 };
+                continue;
+            }
+            682 => {
+                c.pc = (6552, 682);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6552, 685);
+                c.step()?;
+                let v = c.read(c.r[8], 0u16.wrapping_add(c.r[7]), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 688);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 7u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6552, 690);
+                c.step()?;
+                label = if c.cf { 719 } else { 692 };
+                continue;
+            }
+            692 => {
+                c.pc = (6552, 692);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 8u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6552, 694);
+                c.step()?;
+                label = if !c.cf && !c.z { 719 } else { 696 };
+                continue;
+            }
+            696 => {
+                c.pc = (6552, 696);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(6u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 699);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 12u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6552, 701);
+                c.step()?;
+                label = if c.z { 723 } else { 703 };
+                continue;
+            }
+            703 => {
+                c.pc = (6552, 703);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 22u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6552, 705);
+                c.step()?;
+                label = if c.z { 723 } else { 707 };
+                continue;
+            }
+            707 => {
+                c.pc = (6552, 707);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 33u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6552, 709);
+                c.step()?;
+                label = if c.z { 723 } else { 711 };
+                continue;
+            }
+            711 => {
+                c.pc = (6552, 711);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 43u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6552, 713);
+                c.step()?;
+                label = if c.z { 723 } else { 715 };
+                continue;
+            }
+            715 => {
+                c.pc = (6552, 715);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 53u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (6552, 717);
+                c.step()?;
+                label = if c.z { 723 } else { 719 };
+                continue;
+            }
+            719 => {
+                c.pc = (6552, 719);
+                c.step()?;
+                let v = 0u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 721);
+                c.step()?;
+                label = 725;
+                continue;
+            }
+            723 => {
+                c.pc = (6552, 723);
+                c.step()?;
+                let v = 1u16;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 725;
+                continue;
+            }
+            725 => {
+                c.pc = (6552, 725);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8, v)?;
+                c.pc = (6552, 728);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(1u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 731);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (6552, 732);
+                c.step()?;
+                c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_1998_02df(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 735u16;
+    loop {
+        match label {
+            735 => {
+                c.pc = (6552, 735);
+                c.step()?;
+                c.enter(260)?;
+                c.pc = (6552, 739);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6552, 742);
+                c.step()?;
+                let v = c.r[7];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16), 16, v)?;
+                c.pc = (6552, 745);
+                c.step()?;
+                let v = c.r[8];
+                c.write(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_sub(2u16), 16, v)?;
+                c.pc = (6552, 748);
+                c.step()?;
+                let v = 112u16;
+                c.push(v)?;
+                c.pc = (6552, 750);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(260u16);
+                c.pc = (6552, 754);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (6552, 755);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 756);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(53445u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 759);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6552, 761);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (6552, 763);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (6552, 764);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6552, 765);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 770)?;
+                label = 770;
+                continue;
+            }
+            770 => {
+                c.pc = (6552, 770);
+                c.step()?;
+                let v = 2u16;
+                c.push(v)?;
+                c.pc = (6552, 772);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (6552, 774);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6552, 777);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (6552, 778);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 779);
+                c.step()?;
+                c.invoke(p_232a_030c, true, 9002, 780, 784)?;
+                label = 784;
+                continue;
+            }
+            784 => {
+                c.pc = (6552, 784);
+                c.step()?;
+                let v = 112u16;
+                c.push(v)?;
+                c.pc = (6552, 786);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(260u16);
+                c.pc = (6552, 790);
+                c.step()?;
+                let v = c.r[10];
+                c.push(v)?;
+                c.pc = (6552, 791);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 792);
+                c.step()?;
+                let v = c.read(c.r[11], 0u16.wrapping_add(53444u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (6552, 795);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (6552, 797);
+                c.step()?;
+                let x = c.r[2];
+                let y = c.r[2];
+                let v = c.xor(x, y, 16);
+                c.r[2] = v;
+                c.pc = (6552, 799);
+                c.step()?;
+                let v = c.r[2];
+                c.push(v)?;
+                c.pc = (6552, 800);
+                c.step()?;
+                let v = c.r[0];
+                c.push(v)?;
+                c.pc = (6552, 801);
+                c.step()?;
+                c.invoke(p_232a_07c9, true, 9002, 1993, 806)?;
+                label = 806;
+                continue;
+            }
+            806 => {
+                c.pc = (6552, 806);
+                c.step()?;
+                let v = 4u16;
+                c.push(v)?;
+                c.pc = (6552, 808);
+                c.step()?;
+                let v = 19u16;
+                c.push(v)?;
+                c.pc = (6552, 810);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_sub(4u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (6552, 813);
+                c.step()?;
+                let v = c.r[8];
+                c.push(v)?;
+                c.pc = (6552, 814);
+                c.step()?;
+                let v = c.r[7];
+                c.push(v)?;
+                c.pc = (6552, 815);
+                c.step()?;
+                c.invoke(p_232a_030c, true, 9002, 780, 820)?;
+                label = 820;
+                continue;
+            }
+            820 => {
+                c.pc = (6552, 820);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (6552, 821);
+                c.step()?;
+                c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
 pub(super) fn p_1998_081b(c: &mut Cpu) -> Result<(), String> {
     let mut label = 2075u16;
     loop {
@@ -8442,6 +9016,79 @@ pub(super) fn p_1b55_17f9(c: &mut Cpu) -> Result<(), String> {
                 c.pc = (6997, 6234);
                 c.step()?;
                 c.ret(true, 10)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
+}
+pub(super) fn p_232a_01e3(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 483u16;
+    loop {
+        match label {
+            483 => {
+                c.pc = (9002, 483);
+                c.step()?;
+                let v = c.r[5];
+                c.push(v)?;
+                c.pc = (9002, 484);
+                c.step()?;
+                let v = c.r[4];
+                c.r[5] = v;
+                c.pc = (9002, 486);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 489);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 15u16;
+                let v = c.and(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 491);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9002, 494);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[8], 0u16.wrapping_add(c.r[7]), 8, v)?;
+                c.pc = (9002, 497);
+                c.step()?;
+                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(10u16), 8)?;
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 500);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 240u16;
+                let v = c.and(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                c.pc = (9002, 502);
+                c.step()?;
+                let x = (c.r[0] >> 8) & 255;
+                let y = (c.r[0] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
+                c.pc = (9002, 504);
+                c.step()?;
+                let x = c.r[0];
+                let y = 4u16;
+                let v = c.shr(x, y, 16);
+                c.r[0] = v;
+                c.pc = (9002, 507);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.write(c.r[8], 0u16.wrapping_add(c.r[7]).wrapping_add(1u16), 8, v)?;
+                c.pc = (9002, 511);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9002, 512);
+                c.step()?;
+                c.ret(true, 6)?;
                 return Ok(());
             }
             _ => return Err(format!("invalid compiled label {label:04X}")),

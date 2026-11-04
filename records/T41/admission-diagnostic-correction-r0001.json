@@ -1,0 +1,12 @@
+{
+  "schema": "admission-diagnostic-correction/1",
+  "verified_prefix_ticks_unchanged": 1212,
+  "actual_missing_write": "24BC:02A9 main offset00C4",
+  "bug": "Error diagnostics called the global snapshot reader while DS was temporarily changed by a string-copy helper,overwriting the original missing-write descriptor with a diagnostic-only read.",
+  "correction": "Capture the original missing descriptor before diagnostics;skip global snapshots while DS differs from admission;reject inconsistent read/write descriptors in the selector.",
+  "candidate_facts_restored": 28063,
+  "diagnostic_only_facts_removed": 576,
+  "accepted_fixture": false,
+  "measured_original_or_fixture_records_changed": false,
+  "cleanup": "Previously interrupted selector waited on a child blocked writing unread output. Obsolete selector and child are now terminated;exception cleanup terminates the child with a timeout."
+}

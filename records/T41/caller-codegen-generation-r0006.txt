@@ -1,0 +1,33 @@
+{
+  "roots": [
+    "0AB9:760C",
+    "0AB9:7B7B"
+  ],
+  "procedures": 3,
+  "instructions": 168,
+  "listing_digests": {
+    "static/1-0-exe/code/seg_0AB9_01.asm": "d14716fcf764421a1dc076df23b754ad6fbc4d475da378aa30077ed476ea0668",
+    "static/1-0-exe/code/seg_0AB9_12.asm": "af2630092912280994154772ec15a46d8be8983c9478bc7d738e302222f9b937",
+    "static/1-0-exe/code/seg_0AB9_13.asm": "4318632415043eb7dbbe490ce7d637d720423466e2792dc1b584b91507a8e9cc"
+  },
+  "generated_sha256": "fad58cb6ef564025bb26efd295889be3450196f3582cf812eb800958a320f21f",
+  "boundaries": {
+    "0AB9:00D6": {
+      "kind": "projection",
+      "function": "clock_display"
+    }
+  },
+  "reused": [
+    {
+      "module": "action_graph",
+      "sha256": "1aac9cdf0c0ed9e3d322fd40e0f99b8f32155e024b8f687cf4ed4dcf6bb3cea2",
+      "procedures": 376
+    },
+    {
+      "module": "tick_graph",
+      "sha256": "b25630a13738ce80c02a56aec01ea7757c80bf6459f9467af5d53dcad13f5ef8",
+      "procedures": 27
+    }
+  ],
+  "source_addresses": true
+}

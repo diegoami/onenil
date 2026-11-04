@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/compile_watched.py", line 248, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/compile_watched.py", line 235, in main
+    g=graph(code,[parse(v)for v in roots],external,set(adapters)if args.reuse_existing else None);report={};source=compile_graph(g,deferred,adapters,args.defer_unsupported,report,[parse(v)for v in roots],{parse(v)for v in args.partial},external,module)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/compile_watched.py", line 38, in graph
+    op,args,nxt,path=code[root[0],ip];seen[ip]=(op,args,nxt,path)
+                     ~~~~^^^^^^^^^^^^
+KeyError: (9929, 5972)

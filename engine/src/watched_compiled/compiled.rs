@@ -31,6 +31,9 @@ pub(super) struct Cpu {
     pub track_events: bool,
     pub events: Vec<serde_json::Value>,
     pub presentation: Vec<serde_json::Value>,
+    pub watch_trace: Option<Vec<serde_json::Value>>,
+    pub watch_pending: Option<serde_json::Value>,
+    pub watch_tick: usize,
     stack: Vec<u8>,
     stack_known: Vec<bool>,
     frames: Vec<(u16, u16)>,
@@ -60,6 +63,9 @@ impl Cpu {
             track_events: false,
             events: vec![],
             presentation: vec![],
+            watch_trace: None,
+            watch_pending: None,
+            watch_tick: 0,
             stack: vec![0; 65540],
             stack_known: vec![false; 65540],
             frames: vec![],
@@ -172,6 +178,16 @@ impl Cpu {
         self.string_advance(7, width);
         Ok(())
     }
+    pub fn move_string(&mut self, width: u8) -> Result<(), String> {
+        if width != 8 && width != 16 {
+            return Err("unsupported string move width".into());
+        }
+        let value = self.read(self.r[11], self.r[6], width)?;
+        self.write(self.r[8], self.r[7], width, value)?;
+        self.string_advance(6, width);
+        self.string_advance(7, width);
+        Ok(())
+    }
     pub fn repeat_movs(&mut self, width: u8) -> Result<(), String> {
         if width != 8 && width != 16 {
             return Err("unsupported string move width".into());
@@ -197,6 +213,32 @@ impl Cpu {
         }
         Ok(())
     }
+    // [confirmed] Original26C9:0BFE/0C44 use conditional byte comparisons.
+    // CX=0 leaves flags and addresses untouched; flags come from the last subtraction.
+    pub fn repeat_compare(&mut self, width: u8, scan: bool, equal: bool) -> Result<(), String> {
+        if width != 8 && width != 16 {
+            return Err("unsupported string comparison width".into());
+        }
+        while self.r[1] != 0 {
+            self.step()?;
+            let left = if scan {
+                self.r[0]
+            } else {
+                self.read(self.r[11], self.r[6], width)?
+            };
+            let right = self.read(self.r[8], self.r[7], width)?;
+            self.sub(left, right, width);
+            if !scan {
+                self.string_advance(6, width);
+            }
+            self.string_advance(7, width);
+            self.r[1] = self.r[1].wrapping_sub(1);
+            if self.z != equal {
+                break;
+            }
+        }
+        Ok(())
+    }
     pub fn segment_const(&self, value: u16) -> u16 {
         value.wrapping_add(self.code_base)
     }
@@ -204,7 +246,11 @@ impl Cpu {
     pub fn invoke_entry(&mut self, f: Proc, caller_cs: u16, ret: u16) -> Result<(), String> {
         self.frames.push((caller_cs, ret));
         let result = f(self);
-        self.frames.pop();
+        // Failed nested invocations retain their frames for diagnostics. Do not
+        // pop the failing leaf in place of this entry frame when unwinding.
+        if result.is_ok() {
+            self.frames.pop();
+        }
         result
     }
     pub fn read(&self, s: u16, o: u16, w: u8) -> Result<u16, String> {
@@ -329,10 +375,40 @@ impl Cpu {
         }
         Ok(())
     }
+    pub(super) fn call_chain(&self) -> Vec<(u16, u16)> {
+        self.frames.clone()
+    }
     pub fn reset_root_budget(&mut self) {
         self.fuel = 1_000_000;
     }
     pub fn step(&mut self) -> Result<(), String> {
+        if self.watch_trace.is_some() {
+            if matches!(self.pc, (0x0AB9, 0x7C67) | (0x0AB9, 0x7A02))
+                && self.read(self.r[11], 0xD074, 8)? != 0
+            {
+                return Err("watched match requested unsupported quick fallback".into());
+            }
+            if self.pc == (0x0AB9, 0x7A02) {
+                if self.watch_pending.is_some() || self.watch_tick >= 10000 {
+                    return Err("watched match tick nesting/bound exceeded".into());
+                }
+                self.fuel = 1_000_000;
+                let before = super::watched_match::snapshot(self)?;
+                self.watch_tick += 1;
+                self.watch_pending = Some(
+                    serde_json::json!({"tick":self.watch_tick,"draw_start":self.draws.len(),"before":before}),
+                );
+            } else if self.pc == (0x0AB9, 0x7B79) {
+                let after = super::watched_match::snapshot(self)?;
+                let mut tick = self
+                    .watch_pending
+                    .take()
+                    .ok_or("watched match return without entry")?;
+                tick["draw_end"] = serde_json::json!(self.draws.len());
+                tick["after"] = after;
+                self.watch_trace.as_mut().unwrap().push(tick);
+            }
+        }
         if self.fuel == 0 {
             return Err("compiled procedure budget exhausted".into());
         }
@@ -401,6 +477,9 @@ impl Cpu {
                 event["queue"] = serde_json::json!({"index":head,"code":self.read(ds,a,8)?,"player":self.read(ds,a.wrapping_add(1),16)?,"secondary":self.read(ds,a.wrapping_add(3),16)?,"side":self.read(ds,a.wrapping_add(5),8)?});
                 event["draw_end"] = serde_json::json!(self.draws.len());
                 event["seed_after"] = serde_json::json!(self.read(ds, crate::SEED, 16)?);
+                if self.watch_trace.is_some() {
+                    event["tick"] = serde_json::json!(self.watch_tick);
+                }
                 self.events.push(event);
             }
         }
@@ -641,6 +720,31 @@ mod tests {
         Cpu::new(crate::role_scores::image(Default::default()))
     }
     #[test]
+    fn watched_lifecycle_rejects_nested_ticks_tick_limit_and_exhausted_fuel() {
+        for nested in [false, true] {
+            let mut c = cpu();
+            c.watch_trace = Some(vec![]);
+            c.pc = (0x0AB9, 0x7A02);
+            let quick = usize::from(c.r[11]) * 16 + 0xD074;
+            c.known[quick] = true;
+            c.e.image[quick] = 0;
+            if nested {
+                c.watch_pending = Some(serde_json::json!({"tick":1}));
+            } else {
+                c.watch_tick = 10000;
+            }
+            assert_eq!(
+                c.step().unwrap_err(),
+                "watched match tick nesting/bound exceeded"
+            );
+            assert!(c.watch_trace.as_ref().unwrap().is_empty());
+            assert!(c.draws.is_empty());
+        }
+        let mut c = cpu();
+        c.fuel = 0;
+        assert_eq!(c.step().unwrap_err(), "compiled procedure budget exhausted");
+    }
+    #[test]
     fn add_and_sub_signed_unsigned_boundaries() {
         let mut c = cpu();
         assert_eq!(c.add(0x7FFF, 1, 16), 0x8000);
@@ -831,6 +935,135 @@ mod tests {
         assert_eq!(c.draws[0].seed_after, 30266);
         assert_eq!(c.read(0xF000, 0x100, 16).unwrap(), 30266);
         assert_eq!(c.e.word(crate::SEED), global_before);
+    }
+
+    #[test]
+    fn failed_entry_preserves_the_actual_leaf_call_chain() {
+        fn leaf(_c: &mut Cpu) -> Result<(), String> {
+            Err("leaf failure".into())
+        }
+        fn outer(c: &mut Cpu) -> Result<(), String> {
+            c.invoke(leaf, true, 0x0AB9, 0x1234, 0x1111)
+        }
+        let mut c = cpu();
+        c.invoke_entry(outer, 0x0AB9, 0x2222).unwrap_err();
+        assert_eq!(c.call_chain(), vec![(0x0AB9, 0x2222), (0x0AB9, 0x1111)]);
+        let mut c = cpu();
+        c.invoke_entry(|_c| Ok(()), 0x0AB9, 0x2222).unwrap();
+        assert!(c.call_chain().is_empty());
+    }
+
+    #[test]
+    fn original_byte_swap_preserves_sequential_overlap_and_far_abi() {
+        let mut c = cpu();
+        c.r[11] = 0x2000;
+        c.r[0] = 0xABCD;
+        c.cf = true;
+        for (index, byte) in [1, 2, 3, 4].into_iter().enumerate() {
+            c.write(0x2000, 0x100 + index as u16, 8, byte).unwrap();
+        }
+        let regs = c.r;
+        for value in [0x2000, 0x100, 0x2000, 0x101, 3] {
+            c.push(value).unwrap();
+        }
+        c.invoke(
+            crate::watched_compiled::action_graph::p_24bc_0203,
+            true,
+            0x24BC,
+            0x0203,
+            0x6CA8,
+        )
+        .unwrap();
+        for (index, byte) in [2, 3, 4, 1].into_iter().enumerate() {
+            assert_eq!(c.read(0x2000, 0x100 + index as u16, 8).unwrap(), byte);
+        }
+        assert_eq!((c.r[4], c.r[5], c.r[11]), (regs[4], regs[5], regs[11]));
+        assert_eq!((c.r[0], c.r[1], c.r[6], c.r[7]), (0xAB01, 0, 0x103, 0x104));
+        assert!(c.cf && !c.z && !c.sf && !c.of && c.pf && !c.df);
+    }
+
+    #[test]
+    fn original_pascal_search_retries_and_includes_zero_characters() {
+        let mut c = cpu();
+        for (offset, value) in [
+            (0x100, 2),
+            (0x101, 7),
+            (0x102, 0),
+            (0x200, 5),
+            (0x201, 7),
+            (0x202, 3),
+            (0x203, 7),
+            (0x204, 0),
+            (0x205, 8),
+        ] {
+            c.write(0x2000, offset, 8, value).unwrap();
+        }
+        let (sp, bp, ds) = (c.r[4], c.r[5], c.r[11]);
+        for (length, expected) in [(2, 3), (1, 1), (0, 0)] {
+            c.write(0x2000, 0x100, 8, length).unwrap();
+            for value in [0x2000, 0x100, 0x2000, 0x200] {
+                c.push(value).unwrap();
+            }
+            c.invoke(
+                crate::watched_compiled::action_graph::p_26c9_0bfe,
+                true,
+                0x26C9,
+                0x0BFE,
+                0x3333,
+            )
+            .unwrap();
+            assert_eq!(c.r[0], expected);
+            assert_eq!((c.r[4], c.r[5], c.r[11]), (sp, bp, ds));
+        }
+        c.write(0x2000, 0x100, 8, 1).unwrap();
+        c.write(0x2000, 0x101, 8, 0).unwrap();
+        for value in [0x2000, 0x100, 0x2000, 0x200] {
+            c.push(value).unwrap();
+        }
+        c.invoke(
+            crate::watched_compiled::action_graph::p_26c9_0bfe,
+            true,
+            0x26C9,
+            0x0BFE,
+            0x3333,
+        )
+        .unwrap();
+        assert_eq!(c.r[0], 4);
+    }
+
+    #[test]
+    fn conditional_comparisons_stop_on_match_mismatch_and_zero_count() {
+        let mut c = cpu();
+        c.r[11] = 0x2000;
+        c.r[8] = 0x2000;
+        for (offset, value) in [(0x100, 2), (0x101, 7), (0x102, 9), (0x200, 7), (0x201, 8)] {
+            c.write(0x2000, offset, 8, value).unwrap();
+        }
+        c.r[0] = 0xAB07;
+        c.r[6] = 0x200;
+        c.r[7] = 0x100;
+        c.r[1] = 3;
+        c.repeat_compare(8, true, false).unwrap();
+        assert_eq!((c.r[0], c.r[6], c.r[7], c.r[1]), (0xAB07, 0x200, 0x102, 1));
+        assert!(c.z && !c.cf);
+        c.r[7] = 0x101;
+        c.r[1] = 2;
+        c.repeat_compare(8, false, true).unwrap();
+        assert_eq!((c.r[6], c.r[7], c.r[1]), (0x202, 0x103, 0));
+        assert!(!c.z && c.cf && c.sf);
+        c.r[11] = 0xFFFF;
+        c.r[8] = 0xFFFF;
+        c.repeat_compare(8, false, true).unwrap();
+        assert!(!c.z && c.cf && c.sf);
+        c.r[11] = 0x2000;
+        c.r[8] = 0x2000;
+        c.r[6] = 0x201;
+        c.r[7] = 0x102;
+        c.r[1] = 2;
+        c.df = true;
+        c.repeat_compare(8, false, true).unwrap();
+        assert_eq!((c.r[6], c.r[7], c.r[1]), (0x200, 0x101, 1));
+        assert!(!c.z && c.cf);
     }
 
     #[test]

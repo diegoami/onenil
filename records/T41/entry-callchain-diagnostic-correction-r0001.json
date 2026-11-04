@@ -1,0 +1,7 @@
+{
+  "scope": "Error diagnostics only;successful native execution is unchanged.",
+  "defect": "invoke_entry unconditionally popped one frame after a nested failure,removing the failing leaf because invoke intentionally retains its frames on error.",
+  "correction": "Pop the entry frame only on success;keep the complete actual failure chain. Add a unit check for both failed nested and successful entries.",
+  "example": "The completed4199tick run stopped at sourceE1BF final-screen template,while its old diagnostic omitted that leaf and showed only E435 root continuation.",
+  "preservation": "Earlier measured logs/records are unchanged;fulltime-return parity remains pending."
+}
