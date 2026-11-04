@@ -201,10 +201,47 @@ def prove_statistics(research,wait=False,mode=0):
  if result['key_after']!=0:raise ValueError('original statistics did not clear its presentation key')
  print('original statistics display:all non-presentation memory preserved;far ABI restored;key cleared;changes',counts,flush=True)
 
+def prove_templates(research):
+ directory=ROOT/'records/T41/template-boundary-r0001'
+ if (directory/'result.json').exists():
+  print('completed template footprint exists;verify pinned records before accepting',flush=True);return
+ if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original template proof')
+ sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
+ anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
+ cases=[(0x132E,0x1B55,0x346C),(0x6346,0x1B55,0x347B),(0x25CC,0x0AB9,0xD6E5),(0x4F20,0x0AB9,0x971A)]
+ protocol={'schema':'original-template-boundary-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'232A:052F','cases':[{'template_ds_offset':t,'return':f'{cs:04X}:{ip:04X}'}for t,cs,ip in cases],'destination_header':'DS:DD5C','scope':'Derived isolated original menu-template calls from retained initial ENTRY;whole-memory footprint. No template bytes or historical halftime state exported.'}
+ start=directory/'start.json'
+ if start.exists():raise ValueError('immutable template proof already started')
+ oracle.write_json(start,protocol);observations=[]
+ for template,cs,ip in cases:
+  raw=bytearray(initial);sp=regs['sp']-12;words=[ip,load+cs,0xDD5C,regs['ds'],template,regs['ds']]
+  raw[ss+sp:ss+sp+12]=b''.join(w.to_bytes(2,'little')for w in words)
+  g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x232A,'IP':0x052F,'SP':sp,'EFLAGS':state['flags']})
+  before=g.mem(0,0x110000);page=int.from_bytes(before[ds+0xDD5C:ds+0xDD5E],'little')+16*int.from_bytes(before[ds+0xDD5E:ds+0xDD60],'little')
+  class Returned(Exception):pass
+  def returned(g):raise Returned()
+  g.code_hook(f'{cs:04X}:{ip:04X}',returned);complete=False
+  try:g.run(max_steps=500000)
+  except Returned:complete=True
+  if not complete or g.unsupported:raise ValueError('original template did not return cleanly')
+  if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp'],regs['bp'],regs['ds']):raise ValueError('original template ABI differs')
+  after=g.mem(0,0x110000);counts={'stack':0,'main_shown':0};unexpected=[]
+  for address,(old,new)in enumerate(zip(before,after,strict=True)):
+   if old==new:continue
+   if ss+sp-4096<=address<ss+regs['sp']:counts['stack']+=1
+   elif page<=address<page+4000:counts['main_shown']+=1
+   else:unexpected.append(address)
+  observations.append({'template_ds_offset':template,'return':f'{cs:04X}:{ip:04X}','returned_sp':g.reg('sp'),'returned_bp':g.reg('bp'),'returned_ds':g.reg('ds'),'changed_bytes_by_area':counts,'unexpected_change_count':len(unexpected),'unexpected_first_addresses':unexpected[:16],'all_other_memory_equal':not unexpected})
+  if unexpected:raise ValueError('original template modifies non-presentation memory')
+ result={'schema':'original-template-preservation/1','status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']};oracle.write_json(directory/'result.json',result)
+ oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')})
+ print('all4original templates preserve all memory outside MainShown and stack',observations,flush=True)
+
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
  if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
- if not(a.select or a.prove_transient or a.prove_statistics):p.error('choose selection or original transient proof')
+ if a.prove_templates:prove_templates(a.prove_templates)
+ if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()
