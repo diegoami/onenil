@@ -1,0 +1,62 @@
+{
+  "status": "failed-footprint",
+  "producer": "1ba5ddb",
+  "protocol_sha256": "8b933b9a68120c8c74f951b133fc27703181f392273bf177bb23e3c8f8195185",
+  "observation": {
+    "name": "no-keeper",
+    "returned_valid": 0,
+    "role_counts": [
+      {
+        "side": 0,
+        "counts": [
+          0,
+          1,
+          2,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          0
+        ]
+      }
+    ],
+    "restored_active_club": 130,
+    "returned_sp": 16026,
+    "returned_bp": 16282,
+    "returned_ds": 12423,
+    "changed_bytes_by_area": {
+      "stack": 723,
+      "presentation_pages": 0,
+      "presentation_ds": 4,
+      "bios_hardware": 0
+    },
+    "all_other_memory_equal": false,
+    "unexpected_change_count": 129,
+    "unexpected_first_addresses": [
+      262380,
+      262381,
+      262382,
+      262383,
+      262384,
+      262386,
+      262387,
+      262388,
+      262389,
+      262390,
+      262391,
+      262392,
+      262393,
+      262394,
+      262395,
+      262396
+    ]
+  },
+  "source_correction": "24BC:0568/058A/0593 saves one160-byte presentation line in DS:F878..F917;0598 restores it. Append new protocol/proof including that UI backup;gameplay memory assertion remains unchanged."
+}

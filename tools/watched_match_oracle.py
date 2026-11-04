@@ -417,8 +417,8 @@ def prove_menu_input(research):
   if unexpected:raise ValueError('original menu input modifies gameplay memory:'+str(observation))
  oracle.write_json(directory/'result.json',{'status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']});oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')});print('original menu input cursor/key results',observations,flush=True)
 
-def prove_lineup_validation(research):
- directory=ROOT/'records/T41/lineup-validation-r0001'
+def prove_lineup_validation(research,attempt=1):
+ directory=ROOT/f'records/T41/lineup-validation-r{attempt:04d}'
  if(directory/'result.json').exists():raise ValueError('completed lineup validation exists;verify pinned records')
  if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original lineup-validation proof')
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
@@ -435,7 +435,7 @@ def prove_lineup_validation(research):
  {'name':'unavailable-inmatch','mode':1,'patches':[{'address':pointer(0xD7BE)+15*outfield[0]+8,'value':0}]},
  {'name':'unmanaged-invalid','mode':1,'patches':[{'address':ds+0xDCBA,'value':0},{'address':ds+0xDCBB,'value':0},{'address':pointer(0xD7BA)+8*keeper+6,'value':1}]}]
  parent_bp=regs['sp']+256
- protocol={'schema':'original-lineup-validation-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'0AB9:D29E','return':'0AB9:EBE2','active_club':club,'derived_parent_bp':parent_bp,'cases':cases,'external_warning_key':'space','scope':'Derived original numeric lineup validator,valid/invalid keeper/position/availability/management cases. Observe return,role counts and whole memory. Warning text/assets excluded from records.'};start=directory/'start.json'
+ protocol={'schema':'original-lineup-validation-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'0AB9:D29E','return':'0AB9:EBE2','active_club':club,'derived_parent_bp':parent_bp,'cases':cases,'external_warning_key':'space','presentation_line_backup':'DS:F878..F917,160bytes;source24BC:0568/0598','scope':'Derived original numeric lineup validator,valid/invalid keeper/position/availability/management cases. Observe return,role counts and whole memory. Warning text/assets excluded from records.'};start=directory/'start.json'
  if start.exists():raise ValueError('immutable lineup validation proof already started')
  oracle.write_json(start,protocol);observations=[]
  pages=[pointer(slot)for slot in(0xD08E,0xD092,0xD096,0xD09A)]
@@ -453,12 +453,13 @@ def prove_lineup_validation(research):
   except Returned:complete=True
   if not complete or g.unsupported:raise ValueError('original lineup validator did not return cleanly:'+case['name'])
   if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp'],parent_bp,regs['ds']):raise ValueError('original lineup validator ABI differs')
-  after=g.mem(0,0x110000);changed={'stack':0,'presentation_pages':0,'presentation_ds':0,'bios_hardware':0};unexpected=[]
+  after=g.mem(0,0x110000);changed={'stack':0,'presentation_pages':0,'presentation_ds':0,'presentation_line_backup':0,'bios_hardware':0};unexpected=[]
   for address,(old,new)in enumerate(zip(before,after,strict=True)):
    if old==new:continue
    if ss+sp-4096<=address<ss+parent_bp+64:kind='stack'
    elif any(page<=address<page+4000 for page in pages):kind='presentation_pages'
    elif ds+0xDE00<=address<ds+0xDF00 or address-ds in(0xDD64,0xDD65,0xD5A,0xD5B,0xD088,0xD089):kind='presentation_ds'
+   elif ds+0xF878<=address<ds+0xF918:kind='presentation_line_backup'
    elif 0x400<=address<0x500:kind='bios_hardware'
    else:unexpected.append(address);continue
    changed[kind]+=1
@@ -467,7 +468,7 @@ def prove_lineup_validation(research):
  oracle.write_json(directory/'result.json',{'status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']});oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')});print('original lineup validation completed',observations,flush=True)
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--prove-menu-input',type=Path);p.add_argument('--prove-lineup-validation',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--prove-menu-input',type=Path);p.add_argument('--prove-lineup-validation',type=Path);p.add_argument('--lineup-validation-attempt',type=int,default=1);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
  if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
@@ -477,6 +478,6 @@ def main():
  if a.prove_grouped_integer:prove_grouped_integer(a.prove_grouped_integer)
  if a.prove_fixture_title:prove_fixture_title(a.prove_fixture_title)
  if a.prove_menu_input:prove_menu_input(a.prove_menu_input)
- if a.prove_lineup_validation:prove_lineup_validation(a.prove_lineup_validation)
+ if a.prove_lineup_validation:prove_lineup_validation(a.prove_lineup_validation,a.lineup_validation_attempt)
  if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer or a.prove_fixture_title or a.prove_menu_input or a.prove_lineup_validation):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()
