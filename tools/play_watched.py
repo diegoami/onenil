@@ -148,6 +148,7 @@ class Match:
         self.cursor = 0
         self.phase = 'ready'
         self.events = []
+        self.full_whistle_seen = False
         self.view = self.initial
         return self.state()
 
@@ -174,6 +175,10 @@ class Match:
                 self.view = frame['view']
                 self.events.extend(frame['events'])
                 if any(e['kind'] == 'full-time' for e in frame['events']):
+                    self.full_whistle_seen = True
+                if self.cursor == len(self.frames):
+                    if not self.full_whistle_seen:
+                        raise ValueError('native playback ended without fulltime event')
                     self.phase = 'full-time'
                     break
                 if any(e['kind'] == 'half-time' for e in frame['events']):
