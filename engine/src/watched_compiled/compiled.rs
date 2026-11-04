@@ -37,6 +37,7 @@ pub(super) struct Cpu {
     pub watch_entry_yield: bool,
     pub watch_entry_yielded: bool,
     pub watch_live_goals: Vec<[u16; 2]>,
+    pub watch_clocks: Option<Vec<serde_json::Value>>,
     stack: Vec<u8>,
     stack_known: Vec<bool>,
     frames: Vec<(u16, u16)>,
@@ -72,6 +73,7 @@ impl Cpu {
             watch_entry_yield: false,
             watch_entry_yielded: false,
             watch_live_goals: vec![],
+            watch_clocks: None,
             stack: vec![0; 65540],
             stack_known: vec![false; 65540],
             frames: vec![],
@@ -259,6 +261,35 @@ impl Cpu {
         }
         result
     }
+    // Resume a guest call already present at the explicit watched-entry yield.
+    // No duplicate metadata frame or guest return address is constructed.
+    pub(super) fn resume_frame(&mut self, f: Proc, caller_cs: u16, ret: u16) -> Result<(), String> {
+        let expected = (caller_cs, ret);
+        if self.frames.last() != Some(&expected) {
+            return Err("native retained caller frame differs".into());
+        }
+        f(self)?;
+        if self.frames.last() != Some(&expected) {
+            return Err("native retained caller frame did not unwind cleanly".into());
+        }
+        self.frames.pop();
+        Ok(())
+    }
+    pub(super) fn watched_clock(&self) -> Result<serde_json::Value, String> {
+        let mut clock = serde_json::json!({});
+        for (name, offset, width) in [
+            ("active", 0xD0B8, 8),
+            ("counter", 0xD0B0, 16),
+            ("remaining", 0xD0AE, 16),
+            ("stoppage", 0xD0B4, 16),
+            ("elapsed", 0xD0B2, 16),
+            ("phase", 0xD0AC, 8),
+            ("hold", 0xD0B9, 8),
+        ] {
+            clock[name] = serde_json::json!(self.read(self.r[11], offset, width)?);
+        }
+        Ok(clock)
+    }
     pub fn read(&self, s: u16, o: u16, w: u8) -> Result<u16, String> {
         let mut value = 0u16;
         for i in 0..usize::from(w / 8) {
@@ -423,6 +454,13 @@ impl Cpu {
                     self.read(self.r[11], 0xD0C5, 8)?,
                 ]);
             }
+        }
+        if self.pc == (0x0AB9, 0x7C94) && self.watch_clocks.is_some() {
+            let clock = self.watched_clock()?;
+            self.watch_clocks
+                .as_mut()
+                .unwrap()
+                .push(serde_json::json!({"tick":self.watch_tick,"clock":clock}));
         }
         if self.fuel == 0 {
             return Err("compiled procedure budget exhausted".into());

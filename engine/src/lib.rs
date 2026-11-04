@@ -284,6 +284,17 @@ mod python {
     }
     #[pymethods]
     impl NativePreparedWatchedSession {
+        fn finish(&self) -> PyResult<String> {
+            let mut session = self
+                .session
+                .lock()
+                .map_err(|_| PyValueError::new_err("prepared caller lock poisoned"))?;
+            let result = match session.finish() {
+                Ok(ok) => serde_json::json!({"ok":ok}),
+                Err(error) => serde_json::json!({"error":error}),
+            };
+            serde_json::to_string(&result).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
         #[new]
         fn new(input_json: &str) -> PyResult<Self> {
             let input: watched_compiled::prepared::Input = serde_json::from_str(input_json)

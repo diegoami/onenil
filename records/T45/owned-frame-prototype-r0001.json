@@ -1,0 +1,104 @@
+{
+  "scope": "T45 native owned-frame full-lifecycle prototype;not completed fulltime parity. Compile/build passed;first complete178 ticks and7587 computed draws exactly match the original before a guarded missing role-table input. Expanded source-derived initial tables reach tick227 and stop closed on incoming state;source D1C9 and read-only D34 ownership checked before extending admission. Original full-preservation observer remains live in original-r0001.",
+  "source_base": "0af69b7",
+  "checks": {
+    "T45-full-completion-check-r0001.txt": {
+      "sha256": "f3666eda4be5e2732cc6274494be3fb93bf36d50643b589b779ca121730de7eb",
+      "tail": [
+        "169 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:692:12",
+        "    |",
+        " 46 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "692 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 31.95s"
+      ]
+    },
+    "T45-full-probe-build-r0001.txt": {
+      "sha256": "00a0dca41dcad5d411a320c2c3292373c83629a836931766201fba6e58ac7c73",
+      "tail": [
+        "169 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:692:12",
+        "    |",
+        " 46 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "692 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 44s"
+      ]
+    },
+    "T45-full-probe-build-r0002.txt": {
+      "sha256": "a75e1d624ebf0118c08cb5d2a0e67407e42aa79be999bc06076952f16316f610",
+      "tail": [
+        "169 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:692:12",
+        "    |",
+        " 46 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "692 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 6.79s"
+      ]
+    },
+    "T45-first-native-full-run-r0001.txt": {
+      "sha256": "b7c52af0f68ce781a6870b8d324f27621d5359e292db84e96ca5a26fbf52c5e4",
+      "tail": [
+        "native full-lifecycle probe stopped: prepared tick179 draw7587: missing reached native data at 0AB9:9F9E 0000:9663",
+        "missing {'address': 38499, 'pc': [2745, 40862], 'scratch': False, 'writing': False}",
+        "ticks 178 draws 7587 events 34",
+        "regs [10, 1, 10, 31421, 64892, 64902, 42270, 230, 4096, 57941, 45056, 0]"
+      ]
+    },
+    "T45-expanded-native-probe-r0001.txt": {
+      "sha256": "a39bbd61ed2a5362d0730ebbc256faab650177caca6b21c8ac57749449a13af1",
+      "tail": [
+        "initial source-derived numeric support facts 1119",
+        "prepared tick193 draw8287: missing initial native write baseline at 0AB9:5873 0D0A8",
+        "{'address': 53416, 'pc': [2745, 22643], 'scratch': False, 'writing': True}",
+        "ticks 192 draws 8287"
+      ]
+    },
+    "T45-incoming-support-discovery-r0001.txt": {
+      "sha256": "ff79a5ad461272e6166d6d8cdf00aa344e9fb493404ee035c72c13311c20a7e7",
+      "tail": [
+        "0 prepared tick193 draw8287: missing initial native write baseline at 0AB9:5873 0D0A8 {'address': 53416, 'pc': [2745, 22643], 'scratch': False, 'writing': True}",
+        "1 prepared tick193 draw8287: missing initial native write baseline at 0AB9:5873 0D0A9 {'address': 53417, 'pc': [2745, 22643], 'scratch': False, 'writing': True}",
+        "2 prepared tick227 draw10228: missing initial native write baseline at 0AB9:2D4B 0D1C9 {'address': 53705, 'pc': [2745, 11595], 'scratch': False, 'writing': True}",
+        "STOP:SOURCE OWNERSHIP NOT YET ADMITTED ('ds', 53705)"
+      ]
+    },
+    "T45-incoming-support-discovery-r0002.txt": {
+      "sha256": "530e06304bbe68de5c6148c5d059bdfab52697b31512cf514d651240c5238f86",
+      "tail": [
+        "0 prepared tick227 draw10228: missing initial native write baseline at 0AB9:2D4B 0D1C9 {'address': 53705, 'pc': [2745, 11595], 'scratch': False, 'writing': True}",
+        "1 prepared tick227 draw10228: missing reached native data at 0AB9:2D4E 0000:0D34 {'address': 3380, 'pc': [2745, 11598], 'scratch': False, 'writing': False}",
+        "STOP:SOURCE OWNERSHIP NOT YET ADMITTED ('ds', 3380)"
+      ]
+    }
+  },
+  "source_files": {
+    "engine/src/lib.rs": "c85ab7edd55a5be5544471d29b3867b77e7cdabdf88cfbabe7241f991656fa92",
+    "engine/src/watched_compiled/compiled.rs": "931e843d94e7d031bc1e90bfa524307025765ecc7015bda3a967ed120b538dcb",
+    "engine/src/watched_compiled/prepared.rs": "08d1b5288b7afdb90882d16f393baa83793ee4fc4f9c70bbad6b797fda41feac",
+    "engine/examples/prepared_watched_match_probe.rs": "756000676f8b50717dd2f5649a4d5acfcde816e9b2576fcb6d2f95b15b24bcc7"
+  }
+}
