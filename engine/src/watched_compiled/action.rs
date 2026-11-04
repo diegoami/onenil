@@ -197,7 +197,7 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
                     || (0x1274..0x1288).contains(&offset)
                     || (0x129E..0x12CE).contains(&offset)
                     || (0x8708..0x8716).contains(&offset)
-                    || (0x935B..0x94F7).contains(&offset)
+                    || (0x935B..0x957D).contains(&offset)
                     || (0xD886..0xD936).contains(&offset)
                     || (0xD7D6..0xD7DA).contains(&offset)
                     || (0xD80..0xDA0).contains(&offset)

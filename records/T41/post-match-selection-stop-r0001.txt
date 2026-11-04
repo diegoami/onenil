@@ -1,0 +1,19 @@
+pinned original4199ticks/182811draws/831actions and actual fulltime return verified
+verified completed original prefix 4199 ticks 182553 draws
+initial ENTRY union 32893 facts;native diagnostic {'message': 'watched tick4199 draw182553: missing initial native write baseline at 1998:0CDB 526CA', 'missing': {'address': 337610, 'pc': [6552, 3291], 'scratch': False, 'writing': True}}
+verified completed original prefix 4199 ticks 182553 draws
+verified completed original prefix 4199 ticks 182553 draws
+verified completed original prefix 4199 ticks 182553 draws
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 568, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 555, in main
+    if a.select:select(a.select)
+                ^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 99, in select
+    (cache/'last-diagnostic.json').write_text(json.dumps(error,indent=2));area,offset=named(state,missing['address']);at=address(state,area,offset)
+                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 27, in named
+    raise ValueError(f'unclassified source DS field{offset:04X};requires source/original proof')
+ValueError: unclassified source DS field94F7;requires source/original proof
