@@ -1,0 +1,19 @@
+pinned original4199ticks/182811draws/831actions and actual fulltime return verified
+verified completed original prefix 2630 ticks 115244 draws
+initial ENTRY union 32575 facts;native diagnostic {'message': 'watched tick2631 draw115244: missing reached native data at 26C9:0C12 3087:0D9A', 'missing': {'address': 202250, 'pc': [9929, 3090], 'scratch': False, 'writing': False}}
+verified completed original prefix 2630 ticks 115244 draws
+verified completed original prefix 2630 ticks 115244 draws
+verified completed original prefix 2630 ticks 115244 draws
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 485, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 474, in main
+    if a.select:select(a.select)
+                ^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 99, in select
+    (cache/'last-diagnostic.json').write_text(json.dumps(error,indent=2));area,offset=named(state,missing['address']);at=address(state,area,offset)
+                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 27, in named
+    raise ValueError(f'unclassified source DS field{offset:04X};requires source/original proof')
+ValueError: unclassified source DS field0DA0;requires source/original proof
