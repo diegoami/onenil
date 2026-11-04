@@ -1,0 +1,13 @@
+{
+  "schema": "source-proven-presentation-boundary/1",
+  "extends": "statistics-projection-r0001.json",
+  "original_proofs": [
+    "statistics-boundary-r0001",
+    "statistics-boundary-r0002",
+    "statistics-boundary-r0003",
+    "statistics-boundary-r0004"
+  ],
+  "coverage": "Both display modes and both wait/no-wait inputs. Whole original memory is unchanged outside stack,two display pages,styleDD64 and consumed keyDE88. All return with SP/BP/DS restored and key0.",
+  "asset_boundary": "Original DOS template streams,font bitmaps and name assets are not serialized. Initial25x80 character/attribute page state remains decoded ENTRY data for native page copies.",
+  "historical_parity": "Still required across all4199ticks/RNG/actions after this boundary;isolated preservation proofs do not establish a complete playable match."
+}

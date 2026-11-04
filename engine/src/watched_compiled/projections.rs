@@ -76,7 +76,7 @@ pub(super) fn restore_presentation_clock(c: &mut Cpu) -> Result<(), String> {
     c.ret(true, 0)
 }
 
-// [confirmed:T41 statistics-boundary-r0001/r0002] Original045C changes only
+// [confirmed:T41 statistics-boundary-r0001..r0004] Original045C changes only
 // presentation pages/style,key state and stack;all other memory is unchanged.
 // At7E2F the source caller restores its saved pitch before any watched tick.
 // E45E is after the final watched walk-off. Other callers remain unsupported.
@@ -96,6 +96,8 @@ pub(super) fn statistics_display(c: &mut Cpu) -> Result<(), String> {
     let goals = [c.read(ds, 0xD0C4, 8)?, c.read(ds, 0xD0C5, 8)?];
     let elapsed = c.read(ds, 0xD0B2, 16)?;
     c.presentation.push(serde_json::json!({"site":"1998:045C","kind":"statistics","mode":mode,"wait":wait!=0,"live_goals":goals,"elapsed":elapsed}));
+    c.pc = (0x1998, 0x0812);
     c.write(ds, 0xDE88, 8, 0)?; // Original0812 clears the consumed presentation key.
+    c.pc = (0x1998, 0x0818);
     c.ret(true, 4)
 }

@@ -158,7 +158,7 @@ def prove_statistics(research,wait=False,mode=0):
  import sys
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest,match
  anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');raw=bytearray(oracle.memory(anchor['entry']));state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
- # Explicitly derived original call:statistics variant0,no wait,and a presentation key value7.
+ # Explicitly derived mode/wait arguments and a presentation key value7.
  # Original clears the key at0812;this is not a historical halftime-state capture.
  sp=regs['sp']-8;raw[ss+sp:ss+sp+8]=(0x7E2F).to_bytes(2,'little')+regs['cs'].to_bytes(2,'little')+mode.to_bytes(2,'little')+int(wait).to_bytes(2,'little');raw[ds+0xDE88]=7
  directory=ROOT/f'records/T41/statistics-boundary-r{1+2*mode+int(wait):04d}';directory.mkdir(parents=True,exist_ok=True)
