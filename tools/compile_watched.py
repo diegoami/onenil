@@ -107,6 +107,16 @@ def emit_instruction(seg,ip,row):
         value=read(a[1],width(a[0]));value=f'c.segment_const({value})'if (seg,ip)in RELOCATED else value
         return prefix+f'let v={value};'+write(a[0],'v')
     if op=='xchg':
+        if SOURCE_ADDRESSES and any('['in v for v in a):
+            memory=[i for i,v in enumerate(a)if '['in v]
+            if len(memory)!=1:raise ValueError('unsupported memory exchange operands:'+args)
+            mem=a[memory[0]];reg=a[1-memory[0]]
+            if reg not in BYTES and not(reg in REGS and REGS[reg]<8):raise ValueError('unsupported exchange register:'+reg)
+            w=width(mem)
+            if width(reg)!=w:raise ValueError('exchange operand widths differ:'+args)
+            ss,off=ea(mem)
+            # Capture the effective address before changing a register used by it.
+            return prefix+f'let s={ss};let o={off};let old=c.read(s,o,{w})?;let value={read(reg,w)};c.write(s,o,{w},value)?;'+write(reg,'old')
         if SOURCE_ADDRESSES and all(v in BYTES for v in a):
             return prefix+f'let x={read(a[0])};let y={read(a[1])};'+write(a[0],'y')+write(a[1],'x')
         if not all(v in REGS and REGS[v]<8 for v in a):raise ValueError('unsupported exchange operand:'+args)

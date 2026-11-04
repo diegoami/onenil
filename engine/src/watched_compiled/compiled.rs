@@ -909,6 +909,35 @@ mod tests {
     }
 
     #[test]
+    fn original_byte_swap_preserves_sequential_overlap_and_far_abi() {
+        let mut c = cpu();
+        c.r[11] = 0x2000;
+        c.r[0] = 0xABCD;
+        c.cf = true;
+        for (index, byte) in [1, 2, 3, 4].into_iter().enumerate() {
+            c.write(0x2000, 0x100 + index as u16, 8, byte).unwrap();
+        }
+        let regs = c.r;
+        for value in [0x2000, 0x100, 0x2000, 0x101, 3] {
+            c.push(value).unwrap();
+        }
+        c.invoke(
+            crate::watched_compiled::action_graph::p_24bc_0203,
+            true,
+            0x24BC,
+            0x0203,
+            0x6CA8,
+        )
+        .unwrap();
+        for (index, byte) in [2, 3, 4, 1].into_iter().enumerate() {
+            assert_eq!(c.read(0x2000, 0x100 + index as u16, 8).unwrap(), byte);
+        }
+        assert_eq!((c.r[4], c.r[5], c.r[11]), (regs[4], regs[5], regs[11]));
+        assert_eq!((c.r[0], c.r[1], c.r[6], c.r[7]), (0xAB01, 0, 0x103, 0x104));
+        assert!(c.cf && !c.z && !c.sf && !c.of && c.pf && !c.df);
+    }
+
+    #[test]
     fn original_pascal_search_retries_and_includes_zero_characters() {
         let mut c = cpu();
         for (offset, value) in [
