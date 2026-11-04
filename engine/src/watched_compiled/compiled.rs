@@ -246,7 +246,11 @@ impl Cpu {
     pub fn invoke_entry(&mut self, f: Proc, caller_cs: u16, ret: u16) -> Result<(), String> {
         self.frames.push((caller_cs, ret));
         let result = f(self);
-        self.frames.pop();
+        // Failed nested invocations retain their frames for diagnostics. Do not
+        // pop the failing leaf in place of this entry frame when unwinding.
+        if result.is_ok() {
+            self.frames.pop();
+        }
         result
     }
     pub fn read(&self, s: u16, o: u16, w: u8) -> Result<u16, String> {
@@ -906,6 +910,22 @@ mod tests {
         assert_eq!(c.draws[0].seed_after, 30266);
         assert_eq!(c.read(0xF000, 0x100, 16).unwrap(), 30266);
         assert_eq!(c.e.word(crate::SEED), global_before);
+    }
+
+    #[test]
+    fn failed_entry_preserves_the_actual_leaf_call_chain() {
+        fn leaf(_c: &mut Cpu) -> Result<(), String> {
+            Err("leaf failure".into())
+        }
+        fn outer(c: &mut Cpu) -> Result<(), String> {
+            c.invoke(leaf, true, 0x0AB9, 0x1234, 0x1111)
+        }
+        let mut c = cpu();
+        c.invoke_entry(outer, 0x0AB9, 0x2222).unwrap_err();
+        assert_eq!(c.call_chain(), vec![(0x0AB9, 0x2222), (0x0AB9, 0x1111)]);
+        let mut c = cpu();
+        c.invoke_entry(|_c| Ok(()), 0x0AB9, 0x2222).unwrap();
+        assert!(c.call_chain().is_empty());
     }
 
     #[test]

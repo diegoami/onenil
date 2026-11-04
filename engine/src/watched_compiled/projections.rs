@@ -120,9 +120,15 @@ pub(super) fn menu_template(c: &mut Cpu) -> Result<(), String> {
             | (0x3B82, Some((0x1B55, 0x334F)))
             | (0x3D72, Some((0x0AB9, 0x9FE3)))
     );
+    // [confirmed:T41/final-footer-r0001] E1BF is after all watched ticks.
+    let footer = template == 0x4B12
+        && call == Some((0x0AB9, 0xE1BF))
+        && header == 0xDD58
+        && c.watch_tick > 0
+        && c.watch_pending.is_none()
+        && c.read(c.r[11], 0xD0AE, 16)? == 0;
     if c.watch_trace.is_none()
-        || !supported
-        || header != 0xDD5C
+        || !((supported && header == 0xDD5C) || footer)
         || header_segment != c.r[11]
         || template_segment != c.r[11]
     {
@@ -370,10 +376,13 @@ pub(super) fn menu_fixture_title(c: &mut Cpu) -> Result<(), String> {
 // option3 at sourceD8A2/D8A6. No keys are supplied during watched gameplay ticks.
 pub(super) fn continue_menu_key(c: &mut Cpu) -> Result<(), String> {
     let chain = c.call_chain();
-    if c.watch_trace.is_none()
-        || !chain.ends_with(&[(0x0AB9, 0xD81C), (0x232A, 0x0FA6), (0x232A, 0x09A3)])
-    {
-        return Err("external menu input outside proven halftime controller".into());
+    let halftime = chain.ends_with(&[(0x0AB9, 0xD81C), (0x232A, 0x0FA6), (0x232A, 0x09A3)]);
+    let final_screen = chain.ends_with(&[(0x0AB9, 0xE1C4), (0x232A, 0x09A3)])
+        && c.watch_tick > 0
+        && c.watch_pending.is_none()
+        && c.read(c.r[11], 0xD0AE, 16)? == 0;
+    if c.watch_trace.is_none() || !(halftime || final_screen) {
+        return Err("external menu input outside proven halftime/final controller".into());
     }
     let ss = c.r[10];
     let ds = c.r[11];
@@ -381,24 +390,31 @@ pub(super) fn continue_menu_key(c: &mut Cpu) -> Result<(), String> {
     if c.read(ds, 0xDE8E, 16)? != 0 || c.read(ds, 0xDE8C, 16)? != 0 {
         return Err("external menu input requires empty original key queues".into());
     }
-    // At0C17 entry BP belongs to099B;its saved BP is the0F8B frame.
-    let menu_bp = c.read(ss, c.r[5], 16)?;
-    let controller_bp = c.read(ss, menu_bp, 16)?;
-    let count = c.read(ss, menu_bp.wrapping_add(6), 16)?;
-    let (cursor, segment) = c.far(ss, menu_bp.wrapping_add(8))?;
-    if count != 4 || segment != ss || cursor != controller_bp.wrapping_sub(5) {
-        return Err("external menu input cursor/frame differs".into());
-    }
-    let current = c.read(segment, cursor, 8)?;
-    if !(1..=4).contains(&current) {
-        return Err("unsupported external menu cursor".into());
-    }
-    let key = if current < 3 {
-        6
-    } else if current > 3 {
-        5
+    let (key, current, intent) = if final_screen {
+        // [confirmed:T41/final-footer-r0001] Original Week.play presses n;
+        // E1C8 uppercases it and E1EA exits the finished match screen.
+        (110, None, "finish_match")
     } else {
-        2
+        // At0C17 entry BP belongs to099B;its saved BP is the0F8B frame.
+        let menu_bp = c.read(ss, c.r[5], 16)?;
+        let controller_bp = c.read(ss, menu_bp, 16)?;
+        let count = c.read(ss, menu_bp.wrapping_add(6), 16)?;
+        let (cursor, segment) = c.far(ss, menu_bp.wrapping_add(8))?;
+        if count != 4 || segment != ss || cursor != controller_bp.wrapping_sub(5) {
+            return Err("external menu input cursor/frame differs".into());
+        }
+        let current = c.read(segment, cursor, 8)?;
+        if !(1..=4).contains(&current) {
+            return Err("unsupported external menu cursor".into());
+        }
+        let key = if current < 3 {
+            6
+        } else if current > 3 {
+            5
+        } else {
+            2
+        };
+        (key, Some(current), "play_game")
     };
     c.pc = (0x24BC, 0x0C48);
     c.write(ds, 0xDE88, 16, key)?;
@@ -408,7 +424,7 @@ pub(super) fn continue_menu_key(c: &mut Cpu) -> Result<(), String> {
     c.write(ds, 0xDE8A, 16, key)?;
     c.xor(c.r[0], c.r[0], 16);
     c.r[0] = key;
-    c.presentation.push(serde_json::json!({"site":"24BC:0C17","kind":"external_menu_key","intent":"play_game","cursor_before":current,"key":key}));
+    c.presentation.push(serde_json::json!({"site":"24BC:0C17","kind":"external_menu_key","intent":intent,"cursor_before":current,"key":key}));
     c.ret(true, 0)
 }
 

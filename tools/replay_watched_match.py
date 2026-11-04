@@ -176,6 +176,18 @@ def replacement_banner_proof():
   if(v['returned_sp'],v['returned_bp'],v['returned_ds'])!=(16026,16032,12423)or not 0<=v['style_after']<=255:raise ValueError('replacement banner ABI/style differs')
  print('all8original no-key announcements restore Main and preserve gameplay memory',flush=True)
 
+FINAL_FOOTER_SHA='b0bfff8735860d2970eca4d56f21d9c14f5904e57415e843d01a3850acb51cb7'
+def final_footer_proof():
+ directory=ROOT/'records/T41/final-footer-r0001';manifest=read(directory/'manifest.json')
+ if sha(directory/'manifest.json')!=FINAL_FOOTER_SHA:raise ValueError('final footer root differs')
+ for name in('start','result'):
+  if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('final footer observation differs')
+ start=read(directory/'start.json');result=read(directory/'result.json')
+ if result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']or start['root']!='0AB9:E1B0'or start['template']!='DS:4B12'or start['destination_header']!='DS:DD58'or start['external_key']!='n':raise ValueError('final footer protocol differs')
+ if not result['all_other_memory_equal']or result['unexpected_change_count']or result['unexpected_first_addresses']:raise ValueError('final footer modifies gameplay memory')
+ if(result['returned_sp'],result['returned_bp'],result['returned_ds'])!=(16026,16032,12423)or result['key_code']!=110 or result['last_key_code']!=110 or result['pending_key']or result['queue_count']:raise ValueError('final footer ABI/key consumption differs')
+ print('original final footer/exit parsing preserves gameplay memory and consumes n',flush=True)
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE

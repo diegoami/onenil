@@ -897,4 +897,99 @@ mod tests {
             .unwrap_err()
             .contains("outside proven caller"));
     }
+    #[test]
+    fn final_footer_and_exit_key_preserve_world_and_require_finished_clock() {
+        fn key_only(c: &mut Cpu) -> Result<(), String> {
+            c.invoke(
+                super::super::action_graph::p_232a_099b,
+                true,
+                0x232A,
+                0x099B,
+                0xE1C4,
+            )
+        }
+        fn footer(c: &mut Cpu) -> Result<(), String> {
+            c.enter(0)?;
+            for value in [c.r[11], 0x4B12, c.r[11], 0xDD58] {
+                c.push(value)?;
+            }
+            c.invoke(
+                super::super::action_graph::p_232a_052f,
+                true,
+                0x232A,
+                0x052F,
+                0xE1BF,
+            )?;
+            key_only(c)?;
+            let key = c.read(c.r[11], 0xDE88, 8)?;
+            c.push(key)?;
+            c.invoke(
+                super::super::action_graph::p_26c9_1986,
+                true,
+                0x26C9,
+                0x1986,
+                0xE1CD,
+            )?;
+            if c.r[0] & 255 != 78 {
+                return Err("final exit key did not uppercase to N".into());
+            }
+            c.r[4] = c.r[5];
+            c.r[5] = c.pop()?;
+            c.ret(false, 2)
+        }
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/watched_caller/case-00.json");
+        let fixture: Value = serde_json::from_slice(&std::fs::read(root).unwrap()).unwrap();
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        for finished in [true, false] {
+            let mut c = action::machine(&state).unwrap();
+            c.watch_trace = Some(Vec::new());
+            c.watch_tick = 1;
+            let ds = 16 * usize::from(c.r[11]);
+            for offset in 0xDE88..0xDE90 {
+                c.e.image[ds + offset] = 0;
+                c.known[ds + offset] = true;
+            }
+            let main = state
+                .pointers
+                .iter()
+                .find(|p| p.kind == action::PointerKind::Main)
+                .unwrap();
+            for (index, byte) in [main.offset.to_le_bytes(), main.segment.to_le_bytes()]
+                .concat()
+                .into_iter()
+                .enumerate()
+            {
+                c.e.image[ds + 0xDD58 + index] = byte;
+                c.known[ds + 0xDD58 + index] = true;
+            }
+            if finished {
+                c.e.image[ds + 0xD0AE] = 0;
+                c.e.image[ds + 0xD0AF] = 0;
+            }
+            let before = c.e.image.clone();
+            let regs = c.r;
+            let stack = 16 * usize::from(c.r[10]) + usize::from(c.r[4]);
+            if finished {
+                c.push(0).unwrap();
+                c.invoke(footer, false, 0x0AB9, 0xE1B0, 0xEBE2).unwrap();
+                assert_eq!((c.r[4], c.r[5], c.r[11]), (regs[4], regs[5], regs[11]));
+                assert_eq!(c.read(c.r[11], 0xDE88, 16).unwrap(), 110);
+                assert_eq!(c.read(c.r[11], 0xDE8A, 16).unwrap(), 110);
+                assert_eq!(c.presentation.last().unwrap()["intent"], "finish_match");
+            } else {
+                assert!(key_only(&mut c)
+                    .unwrap_err()
+                    .contains("outside proven halftime/final"));
+            }
+            assert!(c.draws.is_empty());
+            assert!(c.events.is_empty());
+            for (at, (old, new)) in before.iter().zip(c.e.image.iter()).enumerate() {
+                if !(stack - 4096..stack).contains(&at) && !(ds + 0xDE88..ds + 0xDE8E).contains(&at)
+                {
+                    assert_eq!(old, new, "address{at:X}");
+                }
+            }
+        }
+    }
 }

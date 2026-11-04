@@ -519,7 +519,8 @@ def word_from_bytes(raw,address):return int.from_bytes(raw[address:address+2],'l
 
 def prove_final_footer(research):
  directory=ROOT/'records/T41/final-footer-r0001'
- if(directory/'result.json').exists():raise ValueError('completed final footer exists;verify pinned records')
+ if(directory/'result.json').exists():
+  replay.final_footer_proof();print('completed final footer verified;no emulator constructed',flush=True);return
  if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original final-footer proof')
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
  anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
