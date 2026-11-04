@@ -49,3 +49,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T38 Complete native watched actor dispatch](T38.md)
 
 - [T39 Persistent native watched-tick composition](T39.md)
+
+- [T40 Continuous watched caller and logical clock](T40.md)
