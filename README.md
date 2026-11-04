@@ -6,15 +6,20 @@ checked against the original through a Python harness. No byte of the original g
 repository; see [docs/artifacts.md](docs/artifacts.md). Rules: [CLAUDE.md](CLAUDE.md). Process:
 [docs/process.md](docs/process.md).
 
-The next product target is [one playable quick-result match](docs/first-playable.md),
+The next product target is [one playable watched match](docs/first-playable.md),
 tracked in [issue35](https://github.com/diegoami/onenil/issues/35):choose a supported
 lineup/seed,kick off,follow a match clock and text commentary,and reach a final
 score through one continuing native state. Commentary is the minimum; a simple
 pitch view is the preferred stretch goal.
-A local exhibition preview now provides those controls, running commentary and
-a formation pitch. Build the extension below, then run
-`.cache/venv/bin/python tools/play_match.py` and open http://127.0.0.1:8040.
-Two supported XIs and two seeds are available; owner milestone review remains pending.
+The watched preview now provides detailed named player actions,a running clock,
+live scores and actual player/ball positions. Build the release extension below,
+then run `.cache/venv/bin/python tools/play_watched.py` and open
+http://127.0.0.1:8041. Allow time for the initial native match computation.
+Kick off,pause,continue at halftime and restart from the browser.
+This preview supports the reference XI from one post-setup admission;native
+selected-lineup/seed setup and additional complete sessions remain required
+before milestone35 acceptance. The earlier quick-result preview and its
+lineup/seed controls remain at `tools/play_match.py` on port8040.
 
 The first slice is `0AB9:D983`, the quick result's three-contest routine. Its scope is the input
 ratings, random draw sequence, final seed and goal bytes; it is not a complete match/week or a
@@ -1620,3 +1625,35 @@ The release benchmark measures parsing,the persistent native lifecycle and
 output serialization from the pre-serialized admission. It makes no emulator
 speed comparison. The reference's legacy `scores` field is scratch during play;
 running scores use nativeD0C4/C5,with the source-defined final side mapping.
+
+## Watched commentary and pitch preview
+
+[confirmed: T42 browser/controller checks] The local watched viewer presents
+all831 accepted native actions over4,199 ticks,including named passes,tackles,
+shots,save/block/deflection outcomes,goals and substitutions. Its22 players and
+ball use the shared native packed-coordinate pitch;it applies no team mirroring
+or invented movement. Live scores are observed directly atD0C4/C5 after each
+watched tick. A caller event's newer timestamp advances the displayed clock
+when emitted between the tick return and the next entry. Half-time stops
+playback;fulltime consumes the complete native post-whistle run.
+
+[designed] Each server startup computes one Rust match from the pinned initial
+admission and caches only that fresh native result for playback/restart.
+The runtime never reads original reference outcomes,executes the original game
+or models its actions in Python. It reads the initial numeric facts and the
+existing narrowly decoded factual name map. This reference preview does not
+provide lineup/seed choices or replace the remaining native watched setup gate.
+
+```sh
+.cache/venv/bin/python tools/play_watched.py --port 8041
+.cache/venv/bin/python tools/test_play_watched.py
+.cache/venv/bin/python tools/smoke_watched_viewer.py --out records/T42
+python3 records/T42/validate_audits.py
+```
+
+[derived: original09E8/09EB and static data table atd9e20a4] Codes28–31 mean
+possession,save,block,deflection respectively. This direct indexing corrects
+the earlier prose summary,tracked in archaeology issue134. Markers1/2 select
+primary/secondary identities;secondary is not automatically a pass receiver.
+Browser acceptance checks detailed actions,pitch movement,clock/score,pause,
+halftime/continue,fulltime,restart,desktop/mobile and local request guards.

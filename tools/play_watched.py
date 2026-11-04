@@ -72,7 +72,7 @@ MESSAGES = [
     ('goal-kick', 'A goal kick is awarded.'),
     ('penalty', 'The referee awards a penalty!'),
     ('free-kick', 'A free kick is awarded.'),
-    ('toss', '{p} takes the coin toss.'),
+    ('toss', '{p} wins the coin toss.'),
     ('penalty', '{p} prepares to shoot.'),
     ('penalties', 'The match goes to a penalty shootout.'),
     ('extra-time', 'Extra time begins.'),
@@ -137,7 +137,12 @@ class Match:
 
         self.initial = view(output['ticks'][0]['before'], [0, 0])
         for tick, goals in zip(output['ticks'], output['tick_live_goals']):
-            self.frames.append(dict(view=view(tick['after'], goals), events=events.pop(tick['tick'], [])))
+            actions = events.pop(tick['tick'], [])
+            current = view(tick['after'], goals)
+            # [confirmed] Caller clock work can occur after7B79 and emit an event
+            # before the next watched entry. Its actual timestamp is newer.
+            current['clock'] = max([current['clock']] + [e['minute'] for e in actions])
+            self.frames.append(dict(view=current, events=actions))
         if events or not self.frames or self.frames[-1]['view']['score'] != output['live_goals']:
             raise ValueError('native action/live-score timeline differs')
         # [designed] Only this process's freshly computed native result is cached.

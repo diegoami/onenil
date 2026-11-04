@@ -70,6 +70,7 @@ def smoke(directory):
             page.get_by_role('button', name='Continue second half', exact=True).wait_for(timeout=60000)
             half = page.request.get(url + '/api/state').json()
             assert half['phase'] == 'half-time'
+            assert half['view']['clock'] >= half['events'][-1]['minute']
             page.wait_for_timeout(250)
             assert page.request.get(url + '/api/state').json()['steps'] == half['steps']
             desktop = directory / f'{stem}-desktop.png'

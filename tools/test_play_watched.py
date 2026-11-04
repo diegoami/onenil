@@ -18,6 +18,7 @@ class ActionSemantics(unittest.TestCase):
     def test_original_28_to_31_are_possession_save_block_deflection(self):
         for code,kind in [(28,'possession'),(29,'save'),(30,'block'),(31,'deflection')]:
             self.assertEqual(describe(self.event(code),{2591:'Shearer'})['kind'],kind)
+        self.assertIn('wins', describe(self.event(59),{2591:'Shearer'})['text'])
     def test_unknown_codes_and_missing_named_players_fail_explicitly(self):
         with self.assertRaises(ValueError):describe(self.event(255),{2591:'Shearer'})
         with self.assertRaises(ValueError):describe(self.event(8),{2591:'Shearer'})
@@ -62,6 +63,8 @@ class NativeController(unittest.TestCase):
         self.assertTrue({'pass','receive','tackle','shot','save','goal','substitution'} <= {e['kind'] for e in game.events})
         self.assertTrue(all('Play continues' not in e['text'] for e in game.events))
         self.assertTrue(all(len(f['view']['players']) == 22 for f in game.frames))
+        self.assertTrue(all(e['minute'] <= f['view']['clock'] for f in game.frames for e in f['events']),
+                        'display clock trails a later native event on the same tick')
         self.assertGreater(len({tuple((p['x'],p['y']) for p in f['view']['players']) for f in game.frames}), 100)
         self.assertGreater(len({tuple(f['view']['ball'].values()) for f in game.frames}), 100)
         self.assertEqual([e['id'] for e in game.events], list(range(831)))
