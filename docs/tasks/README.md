@@ -51,3 +51,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T39 Persistent native watched-tick composition](T39.md)
 
 - [T40 Continuous watched caller and logical clock](T40.md)
+
+- [T41 Full watched match lifecycle from one admission](T41.md)
