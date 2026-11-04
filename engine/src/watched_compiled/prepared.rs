@@ -77,6 +77,15 @@ impl Session {
         if input.preparation.setup.legacy.history.base_offset != 0 {
             return Err("unsupported prepared results base offset".into());
         }
+        let caller_club = input.preparation.setup.legacy.history.club;
+        let fixture_flags = input
+            .preparation
+            .setup
+            .income
+            .iter()
+            .find(|row| row.club == caller_club)
+            .ok_or("missing current caller fixture flags")?
+            .fixture_flags;
         let support = support_cells(&input.support)?;
         let mut prepared = setup::Session::before_watched_call(
             input.preparation.setup,
@@ -85,6 +94,24 @@ impl Session {
         )?;
         let preparation = prepared.preparation();
         let e = &mut prepared.match_state.inner.e;
+        if e.word(0xD6E6) != caller_club || e.image[0xD29] != u8::from(fixture_flags & 15 == 1) {
+            return Err("current fixture/caller/home-flag alias differs".into());
+        }
+        let flag_offset = caller_club
+            .wrapping_mul(174)
+            .wrapping_add(3 * u16::from(e.image[layout::CONFIG]))
+            .wrapping_sub(175);
+        let address = 0x80000 + usize::from(flag_offset);
+        if support
+            .get(&address)
+            .is_some_and(|value| *value != fixture_flags)
+        {
+            return Err("current raw fixture flags alias differs".into());
+        }
+        e.image[address] = fixture_flags;
+        // [confirmed] E239/E249 decode the initial fixture byte before19CA.
+        // Derive D2A from the supplied raw flags;never admit a captured marker.
+        e.image[0xD2A] = u8::from((fixture_flags >> 4) == 1);
         // [designed] Disjoint native flat namespace,DS0;wrapped code base keeps original CS/DS relation.
         let headers = [
             (PointerKind::P8, layout::P8),
@@ -389,6 +416,24 @@ mod tests {
             preparation: serde_json::from_value(fixture["input"].clone()).unwrap(),
             support: vec![],
             no_pending_key: true,
+        }
+    }
+    #[test]
+    fn current_fixture_flags_compute_the_caller_cup_marker() {
+        for (flags, expected) in [(0x01, 0), (0x11, 1), (0x21, 0)] {
+            let mut value = input();
+            let club = value.preparation.setup.legacy.history.club;
+            value
+                .preparation
+                .setup
+                .income
+                .iter_mut()
+                .find(|row| row.club == club)
+                .unwrap()
+                .fixture_flags = flags;
+            let session = Session::new(value).unwrap();
+            assert_eq!(session.cpu.read(0, 0x0D2A, 8).unwrap(), expected);
+            assert!(session.cpu.known[0x0D2A]);
         }
     }
     #[test]

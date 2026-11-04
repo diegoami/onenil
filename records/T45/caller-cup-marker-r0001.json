@@ -1,0 +1,58 @@
+{
+  "scope": "T45 source-owned E239/E249 fixture-flag decoding. Full native body reached the full-time whistle at4147ticks/182143draws,then correctly stopped at E094 because D2A had not been computed. The caller cup marker is now derived from its raw initial fixture flags and aliases are validated;D2A remains forbidden as captured support.",
+  "checks": {
+    "T45-optimized-support-discovery-r0002.txt": {
+      "sha256": "697dd8b77b2657f992a837ca02240d408f6555f7a71a7dbfd611030efd7d20ed",
+      "tail": [
+        "0 prepared tick4147 draw182143: missing reached native data at 0AB9:E094 0000:0D2A {'address': 3370, 'pc': [2745, 57492], 'scratch': False, 'writing': False}",
+        "STOP:SOURCE OWNERSHIP NOT YET ADMITTED ('ds', 3370)"
+      ]
+    },
+    "T45-caller-cup-marker-red-r0001.txt": {
+      "sha256": "0b18432c3cc7a3d5ea2c70c947ebfa133d7468fe49ec7b5c3b0063ec5167687f",
+      "tail": [
+        "running 1 test",
+        "test watched_compiled::prepared::tests::current_fixture_flags_compute_the_caller_cup_marker ... FAILED",
+        "",
+        "failures:",
+        "",
+        "---- watched_compiled::prepared::tests::current_fixture_flags_compute_the_caller_cup_marker stdout ----",
+        "",
+        "thread 'watched_compiled::prepared::tests::current_fixture_flags_compute_the_caller_cup_marker' (668) panicked at src/watched_compiled/prepared.rs:408:55:",
+        "called `Result::unwrap()` on an `Err` value: \"missing reached native data at 0AB9:7C67 0000:0D2A\"",
+        "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "",
+        "",
+        "failures:",
+        "    watched_compiled::prepared::tests::current_fixture_flags_compute_the_caller_cup_marker",
+        "",
+        "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 421 filtered out; finished in 0.86s",
+        "",
+        "error: test failed, to rerun pass `--lib`"
+      ]
+    },
+    "T45-caller-cup-marker-green-r0001.txt": {
+      "sha256": "a7006b546136b30d93827120ab125128b6d92f763f9df77652670a05464bd1f6",
+      "tail": [
+        "",
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 41 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 35 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.30s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 1 test",
+        "test watched_compiled::prepared::tests::current_fixture_flags_compute_the_caller_cup_marker ... ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 421 filtered out; finished in 2.60s",
+        ""
+      ]
+    }
+  }
+}
