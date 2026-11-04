@@ -1,0 +1,65 @@
+{
+  "schema": "watched-complete-attempt/1",
+  "attempt": 1,
+  "code_commit": "9a92fafac05d8759ddfc044e42b6588db6745914",
+  "started": "2026-11-03T16:11:02Z",
+  "source": {
+    "schema": "watched-action-prefix/1",
+    "record": "runs/T39/T39-r0003.json",
+    "record_sha256": "b7f170d8f5229046717354a973e1a121eb61dacf2f716856efe461bacce6f99c",
+    "actions_sha256": "b0dc892f3fad20634c73dfe1784e7df4ec62e8a5da2ebd166914f2cb36d8b226",
+    "static_sources": {
+      "static/1-0-exe/code/seg_0AB9_01.asm": "d14716fcf764421a1dc076df23b754ad6fbc4d475da378aa30077ed476ea0668",
+      "static/1-0-exe/code/seg_0AB9_02.asm": "ee14deb494de2ad80afe7238f15699894a6377f2549ffea91387e8d79dc11ab6",
+      "static/1-0-exe/code/seg_0AB9_13.asm": "4318632415043eb7dbbe490ce7d637d720423466e2792dc1b584b91507a8e9cc",
+      "static/1-0-exe/code/seg_0AB9_20.asm": "263fbe73489ef8e34f6e36a5b5b15c36b2174eb6dd032820b240d1f717c24c4c"
+    },
+    "producer_commit": "34d751841799343d0f5a6808b1cec09d27106c2b"
+  },
+  "state_sha256": "2f634978859f7c07b3519e4278d8aaf70c2c70b93ad48362408fbcfa210576a1",
+  "game_files": {
+    "1-0.EXE": "89ff9c5f238f24e81a0c2440a46cdd8997280a65fc3cc3d97cb974f55280a80a",
+    "1-0.PAL": "438b08987f9e09034787fe7b2fe9441cf7889a57e9e1deafc73acf2fda1247e4",
+    "1-0.PIF": "d3cbcbc35df6f29b6a84384a0555c79f428aad5eea8b13a63f297a480b5eeeb4",
+    "1-0.TFN": "9934df2b3a4225e1a22ae0846c5b954e7919fc41400f4dee78e83266b7e31465",
+    "ALTER.EXE": "8dc12e825026c226dad79790d65a80f0b1859936ef8534420fc6c7874dd54373",
+    "ALTER.PIF": "641e95bc8077cbfe058aee339445d9364fb136320b1cf25510e7cf6d340a1cac",
+    "ENGL-94.DAT": "88d970b94aa00e7a77e75e1b9fa9db53e997d8eeef75a9faae0998ed914d0515",
+    "ENGL-95.DAT": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+    "INSTALL.EXE": "ba4211946371f864cd48e7f6d06be7f1390260ba5f233c2e4ea2cbcc3c2816e5",
+    "ITAL-94.DAT": "c0ac09985d63cfbfed44334b59e3119174766a0ef9127dadcc23a9bd458941a2",
+    "RUN.BAT": "eda6774b47d1ccde504365308cff5c5363e0fbb5dc521c39e2ebd0abe661f045",
+    "RUN.PIF": "d0d60d041d2cdb2cf9c35f1f8feed3c68e40e18e2328548b536eb2d7a6e50615",
+    "SAVE1.1-0": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36",
+    "SCOT-94.DAT": "66c18f1106777e58ca202393b1dff633632cea03c9e57be8e830caacd5eeb6f8"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4",
+    "settings": {
+      "INSTR_PER_S": 20000000,
+      "KEY_HOLD": 1600000,
+      "PIT_HZ": 1193182,
+      "SLICE_MAX": 1000
+    },
+    "dos_clock": {
+      "date": [
+        1995,
+        8,
+        1,
+        2
+      ],
+      "time": [
+        10,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "bounds": {
+    "ticks": 10000,
+    "draws": 1000000,
+    "run_on": 500000
+  }
+}

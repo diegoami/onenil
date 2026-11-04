@@ -105,6 +105,8 @@ def emit_instruction(seg,ip,row):
         value=read(a[1],width(a[0]));value=f'c.segment_const({value})'if (seg,ip)in RELOCATED else value
         return prefix+f'let v={value};'+write(a[0],'v')
     if op=='xchg':
+        if SOURCE_ADDRESSES and all(v in BYTES for v in a):
+            return prefix+f'let x={read(a[0])};let y={read(a[1])};'+write(a[0],'y')+write(a[1],'x')
         if not all(v in REGS and REGS[v]<8 for v in a):raise ValueError('unsupported exchange operand:'+args)
         return prefix+f'c.exchange_registers({REGS[a[0]]},{REGS[a[1]]});'
     if SOURCE_ADDRESSES and op in ('cld','std'):return prefix+f'c.df={str(op=="std").lower()};'

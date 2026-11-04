@@ -11,6 +11,7 @@ pub enum Kind {
     Actor,
     Tick,
     Caller,
+    WatchedMatch,
 }
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord)]
 #[serde(rename_all = "snake_case")]
@@ -26,6 +27,8 @@ pub enum PointerKind {
     BackgroundShown,
     Commentary,
     Seed,
+    Results,
+    Fixtures,
 }
 impl PointerKind {
     pub(super) fn slot(self) -> u16 {
@@ -41,6 +44,8 @@ impl PointerKind {
             Self::BackgroundShown => 0xD096,
             Self::Commentary => 0xD09A,
             Self::Seed => 0xDE84,
+            Self::Results => 0xD7CE,
+            Self::Fixtures => 0xD7CA,
         }
     }
     fn length(self) -> usize {
@@ -51,6 +56,8 @@ impl PointerKind {
             Self::Config => 256,
             Self::Style => 1,
             Self::Seed => 2,
+            Self::Results => 58 * 176,
+            Self::Fixtures => 174 * 176,
             _ => 4000,
         }
     }
@@ -81,6 +88,8 @@ pub enum Area {
     Background,
     BackgroundShown,
     Frame,
+    Results,
+    Fixtures,
 }
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(deny_unknown_fields)]
@@ -130,6 +139,8 @@ fn area_pointer(area: Area) -> Option<PointerKind> {
         Area::Club => PointerKind::Club,
         Area::Config => PointerKind::Config,
         Area::Style => PointerKind::Style,
+        Area::Results => PointerKind::Results,
+        Area::Fixtures => PointerKind::Fixtures,
         Area::Main => PointerKind::Main,
         Area::MainShown => PointerKind::MainShown,
         Area::Background => PointerKind::Background,
@@ -145,7 +156,9 @@ fn pitch_offset(offset: i32) -> bool {
 }
 pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
     if f.area == Area::Frame {
-        if !(-4096..=-1).contains(&f.offset) {
+        if !(-4096..=-1).contains(&f.offset)
+            && !(s.kind == Kind::WatchedMatch && (8..64).contains(&f.offset))
+        {
             return Err("unsupported entry frame field".into());
         }
         return Ok(16 * usize::from(s.regs[10]) + (i32::from(s.regs[4]) + f.offset) as usize);
@@ -162,7 +175,13 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
             || (0x900..0xC00).contains(&offset)
             || (0xD00..0xD80).contains(&offset)
             || (0x957D..=0xAD9A).contains(&offset)
-            || (0xCCEF..0xD7BA).contains(&offset))
+            || (0xCCEF..0xD7BA).contains(&offset)
+            || (s.kind == Kind::WatchedMatch
+                && ((0xAD9B..0xCD00).contains(&offset)
+                    || (0xD7D6..0xD7DA).contains(&offset)
+                    || (0xD80..0xDA0).contains(&offset)
+                    || (0xDCBA..0xDCBC).contains(&offset)
+                    || [0xDD56, 0xDE88, 0xDE8A].contains(&offset))))
         {
             return Err("unsupported named DS field".into());
         }
@@ -177,11 +196,13 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
         f.area,
         Area::Main | Area::MainShown | Area::Background | Area::BackgroundShown
     ) && !(pitch_offset(f.offset)
-        || (matches!(s.kind, Kind::Actor | Kind::Tick | Kind::Caller)
-            && [-9, 9].into_iter().any(|row| {
-                let start = 0x90E + 160 * row - 74;
-                (start..start + 150).contains(&f.offset)
-            })))
+        || (matches!(
+            s.kind,
+            Kind::Actor | Kind::Tick | Kind::Caller | Kind::WatchedMatch
+        ) && [-9, 9].into_iter().any(|row| {
+            let start = 0x90E + 160 * row - 74;
+            (start..start + 150).contains(&f.offset)
+        })))
     {
         return Err("non-gameplay screen cell".into());
     }
@@ -200,11 +221,16 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
     let scene = ds + 0xCCEF + 25 * usize::from(s.scene.index);
     let seed = ds + usize::from(crate::SEED);
     let stack = 16 * usize::from(s.regs[10]) + usize::from(s.regs[4]);
-    let stack_end = stack + if s.kind == Kind::Caller { 16 } else { 8 };
+    let stack_end = stack
+        + match s.kind {
+            Kind::WatchedMatch => 64,
+            Kind::Caller => 16,
+            _ => 8,
+        };
     if stack - 4096 < ds + 65536 {
         return Err("action stack overlaps data segment".into());
     }
-    if !matches!(s.kind, Kind::Tick | Kind::Caller)
+    if !matches!(s.kind, Kind::Tick | Kind::Caller | Kind::WatchedMatch)
         && (usize::from(s.stack_words[2]) + 16 * usize::from(s.stack_words[3]) != scene
             || s.stack_words[1] != s.regs[9])
     {
@@ -247,8 +273,15 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
     ]
     .into_iter()
     .collect();
-    if matches!(s.kind, Kind::Actor | Kind::Tick | Kind::Caller) {
+    if matches!(
+        s.kind,
+        Kind::Actor | Kind::Tick | Kind::Caller | Kind::WatchedMatch
+    ) {
         required.insert(PointerKind::Style);
+    }
+    if s.kind == Kind::WatchedMatch {
+        required.insert(PointerKind::Results);
+        required.insert(PointerKind::Fixtures);
     }
     if kinds != required {
         return Err("missing named action pointer".into());
@@ -269,6 +302,8 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
                         | PointerKind::Club
                         | PointerKind::Config
                         | PointerKind::Style
+                        | PointerKind::Results
+                        | PointerKind::Fixtures
                 )
             };
             if (pool(p.kind) || pool(q.kind))
@@ -363,7 +398,10 @@ pub fn advance(s: &State) -> Result<Outcome, Fault> {
         message,
         missing: None,
     })?;
-    let style = if matches!(s.kind, Kind::Actor | Kind::Tick | Kind::Caller) {
+    let style = if matches!(
+        s.kind,
+        Kind::Actor | Kind::Tick | Kind::Caller | Kind::WatchedMatch
+    ) {
         let a = find_pointer(s, PointerKind::Style).unwrap().address();
         Some((a, c.e.image[a]))
     } else {
@@ -373,7 +411,7 @@ pub fn advance(s: &State) -> Result<Outcome, Fault> {
         Kind::Action5 => super::action_graph::p_0ab9_448c,
         Kind::Contact => super::action_graph::p_0ab9_4dff,
         Kind::Actor => super::action_graph::p_0ab9_72bb,
-        Kind::Tick | Kind::Caller => {
+        Kind::Tick | Kind::Caller | Kind::WatchedMatch => {
             return Err(Fault {
                 message: "tick requires a persistent TickSession".into(),
                 missing: None,

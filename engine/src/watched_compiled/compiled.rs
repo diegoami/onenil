@@ -31,6 +31,9 @@ pub(super) struct Cpu {
     pub track_events: bool,
     pub events: Vec<serde_json::Value>,
     pub presentation: Vec<serde_json::Value>,
+    pub watch_trace: Option<Vec<serde_json::Value>>,
+    pub watch_pending: Option<serde_json::Value>,
+    pub watch_tick: usize,
     stack: Vec<u8>,
     stack_known: Vec<bool>,
     frames: Vec<(u16, u16)>,
@@ -60,6 +63,9 @@ impl Cpu {
             track_events: false,
             events: vec![],
             presentation: vec![],
+            watch_trace: None,
+            watch_pending: None,
+            watch_tick: 0,
             stack: vec![0; 65540],
             stack_known: vec![false; 65540],
             frames: vec![],
@@ -333,6 +339,33 @@ impl Cpu {
         self.fuel = 1_000_000;
     }
     pub fn step(&mut self) -> Result<(), String> {
+        if self.watch_trace.is_some() {
+            if matches!(self.pc, (0x0AB9, 0x7C67) | (0x0AB9, 0x7A02))
+                && self.read(self.r[11], 0xD074, 8)? != 0
+            {
+                return Err("watched match requested unsupported quick fallback".into());
+            }
+            if self.pc == (0x0AB9, 0x7A02) {
+                if self.watch_pending.is_some() || self.watch_tick >= 10000 {
+                    return Err("watched match tick nesting/bound exceeded".into());
+                }
+                self.fuel = 1_000_000;
+                let before = super::watched_match::snapshot(self)?;
+                self.watch_tick += 1;
+                self.watch_pending = Some(
+                    serde_json::json!({"tick":self.watch_tick,"draw_start":self.draws.len(),"before":before}),
+                );
+            } else if self.pc == (0x0AB9, 0x7B79) {
+                let after = super::watched_match::snapshot(self)?;
+                let mut tick = self
+                    .watch_pending
+                    .take()
+                    .ok_or("watched match return without entry")?;
+                tick["draw_end"] = serde_json::json!(self.draws.len());
+                tick["after"] = after;
+                self.watch_trace.as_mut().unwrap().push(tick);
+            }
+        }
         if self.fuel == 0 {
             return Err("compiled procedure budget exhausted".into());
         }
@@ -401,6 +434,9 @@ impl Cpu {
                 event["queue"] = serde_json::json!({"index":head,"code":self.read(ds,a,8)?,"player":self.read(ds,a.wrapping_add(1),16)?,"secondary":self.read(ds,a.wrapping_add(3),16)?,"side":self.read(ds,a.wrapping_add(5),8)?});
                 event["draw_end"] = serde_json::json!(self.draws.len());
                 event["seed_after"] = serde_json::json!(self.read(ds, crate::SEED, 16)?);
+                if self.watch_trace.is_some() {
+                    event["tick"] = serde_json::json!(self.watch_tick);
+                }
                 self.events.push(event);
             }
         }

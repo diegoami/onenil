@@ -66,3 +66,12 @@ pub(super) fn clock_display(c: &mut Cpu) -> Result<(), String> {
         .push(serde_json::json!({"site":"0AB9:00D6","kind":"remaining_time","value":remaining}));
     c.ret(false, 4)
 }
+
+// [confirmed] 1998:00CD→00AB restores the PIT divisor and interrupt vector only.
+// Source0058/0096 performs no gameplay write;hardware ownership is external.
+// Called at E470 immediately before the outer LEAVE/RET4;no later register consumer.
+pub(super) fn restore_presentation_clock(c: &mut Cpu) -> Result<(), String> {
+    c.presentation
+        .push(serde_json::json!({"site":"1998:00CD","kind":"restore_presentation_clock"}));
+    c.ret(true, 0)
+}
