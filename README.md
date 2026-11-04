@@ -1713,3 +1713,27 @@ phase transitions are checked. `snapshot()` and `observation()` inspect the
 retained session;`step()` advances it. At171 steps,the API reports the prefix
 boundary and retains its native continuation. Fulltime composition and verified
 lineup/seed choices with viewer controls remain required for milestone35.
+
+
+## Native prepared full-match completion
+
+[confirmed: T45 complete-return-parity-r0001] The prepared session's `finish()`
+continues the same owned guest frames from fresh setup or the retained171-step
+boundary to the actual `0AB9:EBE2` return. Both paths produce identical output,
+matching all4199 original ticks,182811 computed setup-and-match draws and831
+watched actions. It accepts only initial selected-squad inputs and1770 decoded
+support facts checked against their original pre19CA values. Current actions,
+RNG outcomes and intermediate images remain computed.
+
+```sh
+python3 tools/replay_prepared_match.py --selftest
+.cache/venv/bin/python tools/replay_prepared_match.py --python
+```
+
+[designed] Acceptance also requires the separate original full-field preservation
+and complete caller-clock observation. That long verification is still pending;
+`--check` and normal replay fail until its completed immutable manifest is pinned.
+The explicit `--development-reference-only` option compares the complete existing
+match reference and known171-clock prefix while keeping that limitation visible.
+Supported additional lineup/seed sessions and viewer controls remain the next
+acceptance task for milestone35.
