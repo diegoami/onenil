@@ -31,7 +31,8 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
             // D0B6/D0BD survive setup,first prefix stores28C1/260F.
             // D1C9 also survives setup;1CEC/2D4B/55E8 own its later action stores.
             Area::Ds
-                if (0x0D34..0x0D36).contains(&o) // 2D4E/3E1C read-only packed goal target
+                if (0xD1D4..0xD1DC).contains(&o) // incoming display aggregates;311E recomputes them from3138..3147
+                    || (0x0D34..0x0D36).contains(&o) // 2D4E/3E1C read-only packed goal target
                     || (0x0D5C..0x0D5E).contains(&o) // 1998:01E0 tone-burst duration multiplier
                     || (0xD0A6..0xD0AC).contains(&o) // incoming scratch;stores28FA/5821/260C,unchanged through setup
                     || (0x09FB..0x0B5A).contains(&o) // 1B91/21AF..5683 numeric tables;7A3B/7B13 three22-entry tick lists
@@ -279,6 +280,9 @@ impl Session {
                 return Err("prepared outer continuation retained nested frames".into());
             }
             c.invoke_entry(super::match_graph::p_0ab9_e435, 0x0AB9, 0xEBE2)?;
+            if c.last_return != Some((0x0AB9, 0xEBE2)) {
+                return Err("prepared actual outer guest return differs".into());
+            }
             if c.watch_pending.is_some()
                 || c.r[4] != 0xFE08
                 || c.r[5] != 0
