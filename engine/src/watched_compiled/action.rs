@@ -29,6 +29,9 @@ pub enum PointerKind {
     Seed,
     Results,
     Fixtures,
+    Screen,
+    ScreenShown,
+    ScreenSaved,
 }
 impl PointerKind {
     pub(super) fn slot(self) -> u16 {
@@ -46,6 +49,9 @@ impl PointerKind {
             Self::Seed => 0xDE84,
             Self::Results => 0xD7CE,
             Self::Fixtures => 0xD7CA,
+            Self::Screen => 0xDD58,
+            Self::ScreenShown => 0xDD5C,
+            Self::ScreenSaved => 0xDD60,
         }
     }
     fn length(self) -> usize {
@@ -181,6 +187,7 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
                     || (0xD7D6..0xD7DA).contains(&offset)
                     || (0xD80..0xDA0).contains(&offset)
                     || (0xDCBA..0xDCBC).contains(&offset)
+                    || (0xDD64..0xDD66).contains(&offset)
                     // [confirmed:T41 transient proof] 1D89 secondary255 reaches1EA6 atE5DD.
                     || [0xDD56, 0xDE88, 0xDE8A, 0xE5DD].contains(&offset))))
         {
@@ -284,9 +291,27 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
     if s.kind == Kind::WatchedMatch {
         required.insert(PointerKind::Results);
         required.insert(PointerKind::Fixtures);
+        for ui in [
+            PointerKind::Screen,
+            PointerKind::ScreenShown,
+            PointerKind::ScreenSaved,
+        ] {
+            required.insert(ui);
+        }
     }
     if kinds != required {
         return Err("missing named action pointer".into());
+    }
+    if s.kind == Kind::WatchedMatch {
+        for (ui, logical) in [
+            (PointerKind::Screen, PointerKind::Main),
+            (PointerKind::ScreenShown, PointerKind::MainShown),
+            (PointerKind::ScreenSaved, PointerKind::BackgroundShown),
+        ] {
+            if find_pointer(s, ui)?.address() != find_pointer(s, logical)?.address() {
+                return Err("watched UI page alias differs from initial source layout".into());
+            }
+        }
     }
     for (i, p) in s.pointers.iter().enumerate() {
         if matches!(p.kind, PointerKind::Seed | PointerKind::Commentary) {

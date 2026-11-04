@@ -7,7 +7,7 @@ import watched_oracle as oracle
 import replay_watched_tick as ticks
 import replay_watched_match as replay
 ROOT=oracle.ROOT
-SLOTS={'results':(0xD7CE,58*176),'fixtures':(0xD7CA,174*176)}
+SLOTS={'results':(0xD7CE,58*176),'fixtures':(0xD7CA,174*176),'screen':(0xDD58,4000),'screen_shown':(0xDD5C,4000),'screen_saved':(0xDD60,4000)}
 def read(p):return json.loads(p.read_text())
 def address(state,area,offset):
  if area in SLOTS or area=='style':
@@ -23,9 +23,9 @@ def named(state,at):
  offset=at-ds
  if 0<=offset<65536:
   if offset in (0xD5A,0xD5B,0xD088,0xD089):raise ValueError('presentation timer outside match ownership')
-  if any(lo<=offset<hi for lo,hi in[(0x380,0x382),(0x900,0xC00),(0xD00,0xDA0),(0x957D,0xD7BA),(0xD7D6,0xD7DA),(0xDCBA,0xDCBC)])or offset in(0xDD56,0xDE88,0xDE8A,0xE5DD):return 'ds',offset
+  if any(lo<=offset<hi for lo,hi in[(0x380,0x382),(0x900,0xC00),(0xD00,0xDA0),(0x957D,0xD7BA),(0xD7D6,0xD7DA),(0xDCBA,0xDCBC),(0xDD64,0xDD66)])or offset in(0xDD56,0xDE88,0xDE8A,0xE5DD):return 'ds',offset
   raise ValueError(f'unclassified source DS field{offset:04X};requires source/original proof')
- for name,(_,length)in {**SLOTS,**{k:(0,4000)for k in('main','main_shown','background','background_shown')}}.items():
+ for name,(_,length)in {**{k:(0,4000)for k in('main','main_shown','background','background_shown')},**SLOTS}.items():
   p=next(p for p in state['pointers']if p['kind']==name);base=16*p['segment']+p['offset']
   if base<=at<base+length:return name,at-base
  return ticks.ticks.named(state,at)
@@ -44,7 +44,14 @@ def entry():
 
 def select(probe):
  raw,state=entry();cache=ROOT/'.cache/T41';cache.mkdir(parents=True,exist_ok=True);saved=cache/'initial-selection.json'
- if saved.exists():state=read(saved)
+ if saved.exists():
+  old=read(saved);existing={p['kind']:p for p in old['pointers']}
+  for pointer in state['pointers']:
+   if pointer['kind']in existing and existing[pointer['kind']]!=pointer:raise ValueError('cached pointer differs from original ENTRY')
+   existing[pointer['kind']]=pointer
+  old['pointers']=list(existing.values());state=old
+  reserved={16*state['regs'][11]+slot+i for slot,_ in SLOTS.values()for i in range(4)}
+  state['cells']=[f for f in state['cells']if address(state,f['area'],f['offset'])not in reserved]
  for fact in state['cells']:
   if raw[address(state,fact['area'],fact['offset'])]!=fact['value']:raise ValueError('cached initial fact differs from original ENTRY')
  known={address(state,f['area'],f['offset'])for f in state['cells']}

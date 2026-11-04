@@ -39,8 +39,9 @@ def graph(code,roots,external=None,adapters=None):
             if op in ('ret','retf'):continue
             if op=='call':
                 dest,_=target(root[0],args);todo.append(dest)
-            if op=='jmp' or (op.startswith('j') and op!='jmp'):
-                dest,_=target(root[0],args);assert dest[0]==root[0];pending.append(dest[1])
+            if op in ('jmp','loop') or (op.startswith('j') and op!='jmp'):
+                dest,_=target(root[0],args);assert dest[0]==root[0]
+                if op!='loop'or dest in code:pending.append(dest[1])
                 if op=='jmp':continue
             pending.append(nxt)
         result[root]=seen
@@ -86,6 +87,7 @@ def emit_instruction(seg,ip,row):
     prefix=f'c.pc=({seg},{ip});c.step()?;'
     if op in ('ret','retf'):return prefix+f'c.ret({str(op=="retf").lower()},{int(args,0) if args else 0})?;return Ok(());'
     if op=='jmp':return prefix+f'label={target(seg,args)[0][1]};continue;'
+    if SOURCE_ADDRESSES and op=='loop':return prefix+f'c.r[1]=c.r[1].wrapping_sub(1);label=if c.r[1]!=0{{{target(seg,args)[0][1]}}}else{{{nxt}}};continue;'
     if op.startswith('j'):
         condition={'je':'c.z','jne':'!c.z','ja':'!c.cf&&!c.z','jae':'!c.cf','jb':'c.cf','jbe':'c.cf||c.z','jg':'!c.z&&(c.sf==c.of)','jge':'c.sf==c.of','jl':'c.sf!=c.of','jle':'c.z||(c.sf!=c.of)','js':'c.sf','jns':'!c.sf','jo':'c.of','jno':'!c.of','jp':'c.pf','jnp':'!c.pf','jcxz':'c.r[1]==0'}.get(op)
         if condition is None:raise ValueError(f'unsupported conditional {seg:04X}:{ip:04X} {op}')
@@ -150,21 +152,25 @@ def compile_procedure(seg,entry,rows,partial_errors=None):
     out=[]
     leaders={entry}
     for ip,(op,args,nxt,path) in rows.items():
-        if op.startswith('j') or op=='call':
-            if op.startswith('j'):leaders.add(target(seg,args)[0][1])
+        if op.startswith('j') or op in('call','loop'):
+            if op.startswith('j')or op=='loop':
+                dest=target(seg,args)[0][1]
+                if dest in rows:leaders.add(dest)
             if nxt in rows:leaders.add(nxt)
     out.append(f'pub(super) fn {name(seg,entry)}(c:&mut Cpu)->Result<(),String>{{let mut label={entry}u16;loop{{match label{{')
     for start in sorted(leaders):
         out.append(f'{start}=>{{');ip=start
         while True:
             row=rows[ip]
-            try:out.append(emit_instruction(seg,ip,row))
+            try:
+                if row[0]=='loop'and target(seg,row[1])[0][1]not in rows:raise ValueError('counted-loop target absent from checked listing')
+                out.append(emit_instruction(seg,ip,row))
             except ValueError as error:
                 if partial_errors is None:raise
                 partial_errors[f'{seg:04X}:{ip:04X}']=str(error)
                 out.append(f'c.pc=({seg},{ip});return Err("unported original instruction {seg:04X}:{ip:04X}".into());')
             op,args,nxt,_=row
-            if op.startswith('j') or op in ('call','ret','retf'):break
+            if op.startswith('j') or op in ('call','ret','retf','loop'):break
             if nxt in leaders:out.append(f'label={nxt};continue;');break
             ip=nxt
         out.append('}')

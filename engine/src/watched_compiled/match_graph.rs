@@ -16268,8 +16268,167 @@ pub(super) fn p_232a_0783(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_24bc_005a(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 24BC:005A".into())
+pub(super) fn p_24bc_005a(c: &mut Cpu) -> Result<(), String> {
+    let mut label = 90u16;
+    loop {
+        match label {
+            90 => {
+                c.pc = (9404, 90);
+                c.step()?;
+                c.enter(256)?;
+                c.pc = (9404, 94);
+                c.step()?;
+                let v = c.r[10];
+                c.r[3] = v;
+                c.pc = (9404, 96);
+                c.step()?;
+                let v = c.r[3];
+                c.r[8] = v;
+                c.pc = (9404, 98);
+                c.step()?;
+                let v = c.r[11];
+                c.r[3] = v;
+                c.pc = (9404, 100);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 101);
+                c.step()?;
+                c.r[7] = 0u16.wrapping_add(c.r[5]).wrapping_sub(256u16);
+                c.pc = (9404, 105);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 108);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 109);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 110);
+                c.step()?;
+                c.exchange_registers(1, 0);
+                c.pc = (9404, 111);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 113);
+                c.step()?;
+                c.repeat_movs(8)?;
+                c.pc = (9404, 115);
+                c.step()?;
+                let v = c.r[3];
+                c.r[11] = v;
+                c.pc = (9404, 117);
+                c.step()?;
+                let v = c.r[11];
+                c.push(v)?;
+                c.pc = (9404, 118);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(6u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[6] = v;
+                c.r[11] = g;
+                c.pc = (9404, 121);
+                c.step()?;
+                let o = 0u16.wrapping_add(c.r[5]).wrapping_add(10u16);
+                let s = c.r[10];
+                let (v, g) = c.far(s, o)?;
+                c.r[7] = v;
+                c.r[8] = g;
+                c.pc = (9404, 124);
+                c.step()?;
+                c.df = false;
+                c.pc = (9404, 125);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 126);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 127);
+                c.step()?;
+                let v = (c.r[0] >> 0) & 255;
+                c.r[1] = (c.r[1] & 65280) | ((v & 255) << 0);
+                c.pc = (9404, 129);
+                c.step()?;
+                let x = (c.r[1] >> 8) & 255;
+                let y = (c.r[1] >> 8) & 255;
+                let v = c.xor(x, y, 8);
+                c.r[1] = (c.r[1] & 255) | ((v & 255) << 8);
+                c.pc = (9404, 131);
+                c.step()?;
+                label = if c.r[1] == 0 { 147 } else { 133 };
+                continue;
+            }
+            133 => {
+                c.pc = (9404, 133);
+                c.step()?;
+                c.load_string(8)?;
+                c.pc = (9404, 134);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 97u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 136);
+                c.step()?;
+                label = if c.cf { 144 } else { 138 };
+                continue;
+            }
+            138 => {
+                c.pc = (9404, 138);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 122u16;
+                let v = c.sub(x, y, 8);
+                let _ = v;
+                c.pc = (9404, 140);
+                c.step()?;
+                label = if !c.cf && !c.z { 144 } else { 142 };
+                continue;
+            }
+            142 => {
+                c.pc = (9404, 142);
+                c.step()?;
+                let x = (c.r[0] >> 0) & 255;
+                let y = 32u16;
+                let v = c.sub(x, y, 8);
+                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
+                label = 144;
+                continue;
+            }
+            144 => {
+                c.pc = (9404, 144);
+                c.step()?;
+                c.store_string(8)?;
+                c.pc = (9404, 145);
+                c.step()?;
+                c.r[1] = c.r[1].wrapping_sub(1);
+                label = if c.r[1] != 0 { 133 } else { 147 };
+                continue;
+            }
+            147 => {
+                c.pc = (9404, 147);
+                c.step()?;
+                let v = c.pop()?;
+                c.r[11] = v;
+                c.pc = (9404, 148);
+                c.step()?;
+                c.r[4] = c.r[5];
+                c.r[5] = c.pop()?;
+                c.pc = (9404, 149);
+                c.step()?;
+                c.ret(true, 4)?;
+                return Ok(());
+            }
+            _ => return Err(format!("invalid compiled label {label:04X}")),
+        }
+    }
 }
 pub(super) fn p_24bc_0243(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 24BC:0243".into())

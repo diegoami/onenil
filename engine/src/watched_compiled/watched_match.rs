@@ -145,4 +145,53 @@ mod tests {
             vec![json!({"site":"1998:00CD","kind":"restore_presentation_clock"})]
         );
     }
+    #[test]
+    fn original_attribute_loop_writes_only_attributes_and_checks_baselines() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/watched_caller/case-00.json");
+        let fixture: Value = serde_json::from_slice(&std::fs::read(root).unwrap()).unwrap();
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        let pointer = state
+            .pointers
+            .iter()
+            .find(|p| p.kind == action::PointerKind::Main)
+            .unwrap();
+        let run = |c: &mut Cpu, count| -> Result<(), String> {
+            c.push(pointer.segment)?;
+            c.push(pointer.offset + 0x90E)?;
+            c.push(0x47)?;
+            c.push(count)?;
+            c.invoke(
+                super::super::action_graph::p_24bc_034b,
+                true,
+                0x24BC,
+                0x034B,
+                0x036A,
+            )
+        };
+        let mut c = action::machine(&state).unwrap();
+        let before = c.e.image.clone();
+        let sp = c.r[4];
+        let bp = c.r[5];
+        let ds = c.r[11];
+        run(&mut c, 2).unwrap();
+        let base = pointer.address() + 0x90E;
+        assert_eq!(
+            [c.e.image[base], c.e.image[base + 2]],
+            [before[base], before[base + 2]]
+        );
+        assert_eq!([c.e.image[base + 1], c.e.image[base + 3]], [0x47, 0x47]);
+        assert_eq!((c.r[4], c.r[5], c.r[11], c.r[1]), (sp, bp, ds, 0));
+        let mut missing = action::machine(&state).unwrap();
+        missing.known[base + 1] = false;
+        assert!(run(&mut missing, 2).is_err());
+        let fault = missing.missing.get().unwrap();
+        assert!(fault.writing);
+        assert_eq!(fault.address, base + 1);
+        assert_eq!(fault.pc, (0x24BC, 0x0365));
+        let mut empty = action::machine(&state).unwrap();
+        empty.known[base + 1] = false;
+        run(&mut empty, 0).unwrap();
+        assert_eq!(&empty.e.image[base..base + 4], &before[base..base + 4]);
+    }
 }
