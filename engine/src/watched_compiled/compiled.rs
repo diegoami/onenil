@@ -335,6 +335,9 @@ impl Cpu {
         }
         Ok(())
     }
+    pub(super) fn call_chain(&self) -> Vec<(u16, u16)> {
+        self.frames.clone()
+    }
     pub fn reset_root_budget(&mut self) {
         self.fuel = 1_000_000;
     }

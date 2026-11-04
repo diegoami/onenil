@@ -43,6 +43,9 @@ def compare_prefix(got):
   for key in('draw_start','draw_end'):event[key]-=base
   expected.append(event)
  if got['events']!=expected:raise ValueError('native accepted-action prefix differs before missing input')
+ if got.get('pending')is not None:
+  original=ticks[len(got['ticks'])];pending=got['pending']
+  if pending!={'tick':original['tick'],'draw_start':original['draw_start']-base,'before':original['before']}:raise ValueError('native pending tick entry differs before missing input')
  return len(got['ticks']),len(got['draws'])
 
 def compare(got):

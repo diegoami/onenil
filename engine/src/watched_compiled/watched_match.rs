@@ -38,6 +38,8 @@ pub struct MatchFault {
     pub ticks: Vec<Value>,
     pub draws: Vec<crate::Draw>,
     pub events: Vec<Value>,
+    pub pending: Option<Value>,
+    pub diagnostic: Value,
 }
 impl From<Fault> for MatchFault {
     fn from(fault: Fault) -> Self {
@@ -46,6 +48,8 @@ impl From<Fault> for MatchFault {
             ticks: vec![],
             draws: vec![],
             events: vec![],
+            pending: None,
+            diagnostic: Value::Null,
         }
     }
 }
@@ -94,7 +98,9 @@ pub fn run(s: &State, no_pending_key: bool) -> Result<Value, MatchFault> {
             json!({"ticks":c.watch_trace,"draws":c.draws,"events":c.events,"final":final_state,"live_goals":live,"return":"0AB9:EBE2"}),
         )
     })();
-    result.map_err(|message| MatchFault {
+    result.map_err(|message| {
+        let diagnostic=json!({"regs":c.r,"actor":c.e.image[16*usize::from(ds)+0xD09F],"secondary":c.e.image[16*usize::from(ds)+0xD0A0],"call_chain":c.call_chain(),"partial":snapshot(&c).ok()});
+        MatchFault {
         fault: Fault {
             message: format!(
                 "watched tick{} draw{}: {message}",
@@ -106,5 +112,37 @@ pub fn run(s: &State, no_pending_key: bool) -> Result<Value, MatchFault> {
         ticks: c.watch_trace.take().unwrap_or_default(),
         draws: std::mem::take(&mut c.draws),
         events: std::mem::take(&mut c.events),
-    })
+        pending:c.watch_pending.take(),
+        diagnostic,
+    }})
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn final_hardware_clock_restoration_preserves_all_admitted_gameplay_and_far_abi() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/watched_caller/case-00.json");
+        let fixture: Value = serde_json::from_slice(&std::fs::read(root).unwrap()).unwrap();
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        let mut c = action::machine(&state).unwrap();
+        let cs = c.r[9];
+        c.push(cs).unwrap();
+        c.push(0xE475).unwrap();
+        let before = c.e.image.clone();
+        let known = c.known.clone();
+        let registers = c.r;
+        super::super::projections::restore_presentation_clock(&mut c).unwrap();
+        assert_eq!(c.e.image, before);
+        assert_eq!(c.known, known);
+        let mut expected = registers;
+        expected[4] += 4;
+        expected[9] = cs;
+        assert_eq!(c.r, expected);
+        assert_eq!(
+            c.presentation,
+            vec![json!({"site":"1998:00CD","kind":"restore_presentation_clock"})]
+        );
+    }
 }
