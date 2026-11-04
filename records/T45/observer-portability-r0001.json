@@ -1,0 +1,67 @@
+{
+  "scope": "Public original-observer identity verification remains possible after squash merge/task-branch deletion. Does not complete or accept any original measurement. Original-r0001 remains live;original-r0002 is aborted and excluded.",
+  "red": "When producer Git object access is deliberately unavailable,the previous validator fails despite valid measured observer source.",
+  "green": "Exact frozen source copies verify both actual start identities with all subprocess Git-object access forbidden. Altered source hashes and unknown protocols reject.",
+  "public_rejections": 22,
+  "frozen_sources": {
+    "records/T45/preservation-observer-r0001.py": {
+      "sha256": "1b0769a780c9e44a99bac128e0a441debdfcd42f5d3860ea41d542da8a4b7a9c",
+      "producer": "0af69b70e51eae0132d47fab3fa5eada6c8b3f3a",
+      "schema": "original-prepared-full-lifecycle/1"
+    },
+    "records/T45/preservation-observer-r0002.py": {
+      "sha256": "8d1574ea3f6c06d75c92657f2a8ea2089fbc6697dd5573bd17201e77f31d173c",
+      "producer": "01bf79173c110581ab4d65323760fe9059a27368",
+      "schema": "original-prepared-full-lifecycle/2"
+    }
+  },
+  "checks": {
+    "T45-observer-portability-red-r0001.txt": {
+      "sha256": "608153e66d8c751101f8f65f22e05c9bc0f76ada735be629403c4550b197f129",
+      "lines": [
+        "Traceback (most recent call last):",
+        "  File \"<stdin>\", line 7, in <module>",
+        "  File \"/tmp/onenil-native/tools/replay_prepared_match.py\", line 116, in validate_observer_identity",
+        "    observer=subprocess.check_output(['git','show',start['producer']+':tools/prepared_match_oracle.py'],cwd=ROOT)",
+        "             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "  File \"/usr/lib/python3.12/unittest/mock.py\", line 1134, in __call__",
+        "    return self._mock_call(*args, **kwargs)",
+        "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "  File \"/usr/lib/python3.12/unittest/mock.py\", line 1138, in _mock_call",
+        "    return self._execute_mock_call(*args, **kwargs)",
+        "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "  File \"/usr/lib/python3.12/unittest/mock.py\", line 1193, in _execute_mock_call",
+        "    raise effect",
+        "AssertionError: intermediate producer git object unavailable in clean squash clone"
+      ]
+    },
+    "T45-observer-portability-green-r0001.txt": {
+      "sha256": "631cb84810e53fef04f16a8bc8eb493d055a2142a8bf9942f5f0bd090c106c07",
+      "lines": [
+        "Exact measured observer identity verifies without any producer git object;altered hash/protocol reject: 1",
+        "Exact measured observer identity verifies without any producer git object;altered hash/protocol reject: 2",
+        "Identity checks only;aborted original-r0002 is not full preservation acceptance"
+      ]
+    },
+    "T45-public-admission-guards-r0003.txt": {
+      "sha256": "220072466f9c91eadd3427712d95bc8260c51882880751aee4aa6a275a67fb1e",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared match input/provenance/outcome/live-score/observer guards: 22 rejected"
+      ]
+    },
+    "T45-originals-audit-r0002.txt": {
+      "sha256": "2c5f8b410f12d4d3f4b03de98adebb39e4a5e28025293dc5802383bf8291d1e7",
+      "lines": [
+        "original-file check: ok"
+      ]
+    },
+    "T45-preservation-audits-r0005.txt": {
+      "sha256": "8e4efc18f40221a3a97b0bd108d072990416e714307846f26d55da6a1357710a",
+      "lines": [
+        "8749 previous evidence/fixtures and 28 measured task files preserved;owned paths only;no embedded data or native oracle backend"
+      ]
+    }
+  }
+}

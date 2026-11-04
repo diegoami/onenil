@@ -88,7 +88,14 @@ def selftest():
         try:validate_goal_trace(changed,events,4199)
         except ValueError:rejected+=1
         else:raise AssertionError('changed live score boundary accepted')
-    print('prepared match input/provenance/outcome and live-score guards:',rejected,'rejected')
+    from unittest.mock import patch
+    with patch.object(subprocess,'check_output',side_effect=AssertionError('producer commit must not be needed')):
+        for number in (1,2):
+            start=read(ROOT/f'records/T45/original-r{number:04d}/start.json')
+            validate_observer_identity(start)
+            changed=copy.deepcopy(start);changed['observer_sha256']='0'*64;reject(changed,validate_observer_identity)
+            changed=copy.deepcopy(start);changed['schema']='unknown';reject(changed,validate_observer_identity)
+    print('prepared match input/provenance/outcome/live-score/observer guards:',rejected,'rejected')
 
 def replay_probe(probe,value,prefix_steps=0):
     result=subprocess.run([str(probe)],input=json.dumps(dict(input=value,prefix_steps=prefix_steps))+'\n',capture_output=True,text=True,check=True)
@@ -112,6 +119,14 @@ def replay_python(value,require_field_proof=True):
         del packet,session
     print('Python fresh and171-retained prepared full lifecycle parity:ok')
 
+def validate_observer_identity(start):
+    paths={'original-prepared-full-lifecycle/1':'preservation-observer-r0001.py',
+           'original-prepared-full-lifecycle/2':'preservation-observer-r0002.py'}
+    if start['schema']not in paths:raise ValueError('unknown original observer protocol')
+    observer=(ROOT/'records/T45'/paths[start['schema']]).read_bytes()
+    if start['observer_sha256']!=hashlib.sha256(observer).hexdigest():
+        raise ValueError('original full-preservation frozen observer identity differs')
+
 def field_preservation():
     if FIELD_MANIFEST_SHA is None:raise ValueError('full original field-preservation observation is not yet pinned')
     manifest=read(FIELD_DIRECTORY/'manifest.json')
@@ -119,9 +134,7 @@ def field_preservation():
     for name,digest in manifest['files'].items():
         if sha(FIELD_DIRECTORY/name)!=digest:raise ValueError('full original preservation leaf differs')
     start=read(FIELD_DIRECTORY/'start.json')
-    observer=subprocess.check_output(['git','show',start['producer']+':tools/prepared_match_oracle.py'],cwd=ROOT)
-    if start['schema'] not in ('original-prepared-full-lifecycle/1','original-prepared-full-lifecycle/2') or start['observer_sha256']!=hashlib.sha256(observer).hexdigest():
-        raise ValueError('original full-preservation committed observer identity differs')
+    validate_observer_identity(start)
     if start['reference_index_sha256']!=reference.INDEX_SHA or start['prepared_admission_sha256']!=sha(prefix.FIXTURE):
         raise ValueError('original full-preservation input/reference identity differs')
     result=read(FIELD_DIRECTORY/'result.json')

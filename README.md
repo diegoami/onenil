@@ -1735,5 +1735,8 @@ and complete caller-clock observation. That long verification is still pending;
 `--check` and normal replay fail until its completed immutable manifest is pinned.
 The explicit `--development-reference-only` option compares the complete existing
 match reference and known171-clock prefix while keeping that limitation visible.
+Exact measured observer sources are frozen under `records/T45/preservation-observer-r*.py`
+so evidence checks survive squash merges and branch deletion. Those copies verify
+source identity;launch captures through `tools/prepared_match_oracle.py`.
 Supported additional lineup/seed sessions and viewer controls remain the next
 acceptance task for milestone35.
