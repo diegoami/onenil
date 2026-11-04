@@ -55,10 +55,10 @@ def select(probe):
  for fact in state['cells']:
   if raw[address(state,fact['area'],fact['offset'])]!=fact['value']:raise ValueError('cached initial fact differs from original ENTRY')
  known={address(state,f['area'],f['offset'])for f in state['cells']}
- # Full physical logical-pitch rows include the border cells reached beyond +/-37.
- # Values remain numeric glyph/attribute cells from ENTRY,not font bitmap data.
+ # Original7E21/7E3E copies complete4000-byte text pages at halftime.
+ # These are2000numeric character/attribute pairs per page,not font bitmap data.
  for area in('main','main_shown','background','background_shown'):
-  for offset in range(0x90E-160*9-74,0x90E+160*9+76):
+  for offset in range(4000):
    at=address(state,area,offset)
    if at not in known:known.add(at);state['cells'].append({'area':area,'offset':offset,'value':raw[at]})
  # Original0E45 advances the numeric queue in1..1700;all baseline rows are ENTRY facts.
@@ -150,9 +150,49 @@ def prove_transient(research):
  else:oracle.write_json(path,result)
  print('original transient scene255 read confirmed',observations,flush=True)
 
+def prove_statistics(research):
+ if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original statistics proof')
+ import sys
+ sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest,match
+ anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');raw=bytearray(oracle.memory(anchor['entry']));state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
+ # Explicitly derived original call:statistics variant0,no wait,and a presentation key value7.
+ # Original clears the key at0812;this is not a historical halftime-state capture.
+ sp=regs['sp']-8;raw[ss+sp:ss+sp+8]=(0x7E2F).to_bytes(2,'little')+regs['cs'].to_bytes(2,'little')+bytes(4);raw[ds+0xDE88]=7
+ directory=ROOT/'records/T41/statistics-boundary-r0001';directory.mkdir(parents=True,exist_ok=True)
+ protocol={'schema':'original-statistics-boundary-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'1998:045C','return':'0AB9:7E2F','arguments':[0,0],'initial_presentation_key':7,'scope':'Derived isolated original statistics display from retained initial ENTRY;check complete memory-change footprint. Not a historical halftime capture.'};start=directory/'start.json'
+ if start.exists():raise ValueError('immutable statistics proof already started;resume recorded observer explicitly')
+ oracle.write_json(start,protocol)
+ g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x1998,'IP':0x045C,'SP':sp,'EFLAGS':state['flags']});g.files=match.game_files();before=g.mem(0,0x110000)
+ class Returned(Exception):pass
+ def returned(g):raise Returned()
+ g.code_hook('0AB9:7E2F',returned);complete=False
+ try:
+  for _ in range(20):g.run(max_steps=500000);g.other_polls=0
+ except Returned:complete=True
+ if not complete or g.unsupported:raise ValueError('original statistics display did not return cleanly')
+ if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp'],regs['bp'],regs['ds']):raise ValueError('original statistics far ABI differs')
+ after=g.mem(0,0x110000)
+ def pointer(slot):return int.from_bytes(before[ds+slot:ds+slot+2],'little')+16*int.from_bytes(before[ds+slot+2:ds+slot+4],'little')
+ pages={'main':pointer(0xDD58),'main_shown':pointer(0xDD5C)}
+ allowed_ds={0xDD64,0xDD65,0xDE88,0xD5A,0xD5B,0xD088,0xD089};counts={'stack':0,'main':0,'main_shown':0,'presentation_ds':0,'bios_hardware':0};unexpected=[]
+ for at,(old,new)in enumerate(zip(before,after,strict=True)):
+  if old==new:continue
+  if ss+sp-4096<=at<ss+regs['sp']+64:kind='stack'
+  elif ds<=at<ds+65536 and at-ds in allowed_ds:kind='presentation_ds'
+  elif pages['main']<=at<pages['main']+4000:kind='main'
+  elif pages['main_shown']<=at<pages['main_shown']+4000:kind='main_shown'
+  elif 0x400<=at<0x500:kind='bios_hardware'
+  else:unexpected.append(at);continue
+  counts[kind]+=1
+ result={'schema':'original-statistics-preservation/1','status':'completed'if not unexpected else'failed-footprint','protocol_sha256':replay.sha(start),'returned_sp':g.reg('sp'),'returned_bp':g.reg('bp'),'returned_ds':g.reg('ds'),'changed_bytes_by_area':counts,'unexpected_change_count':len(unexpected),'unexpected_first_addresses':unexpected[:16],'all_other_memory_equal':not unexpected,'key_before':before[ds+0xDE88],'key_after':after[ds+0xDE88],'style_before':int.from_bytes(before[ds+0xDD64:ds+0xDD66],'little'),'style_after':int.from_bytes(after[ds+0xDD64:ds+0xDD66],'little'),'scope':protocol['scope']};oracle.write_json(directory/'result.json',result)
+ if unexpected:raise ValueError('original statistics has changes outside the declared presentation footprint')
+ if result['key_after']!=0:raise ValueError('original statistics did not clear its presentation key')
+ print('original statistics display:all non-presentation memory preserved;far ABI restored;key cleared;changes',counts,flush=True)
+
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
- if not(a.select or a.prove_transient):p.error('choose selection or original transient proof')
+ if a.prove_statistics:prove_statistics(a.prove_statistics)
+ if not(a.select or a.prove_transient or a.prove_statistics):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()
