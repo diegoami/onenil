@@ -1,0 +1,23 @@
+{
+  "schema": "routine-benchmark/1",
+  "code_commit": "2ffbf59d514db77b10048df1a68492ee81bcca07",
+  "started": "2026-11-04T10:58:50.513495+00:00",
+  "elapsed_ns": 1921874010,
+  "sessions": 27,
+  "transitions": 537,
+  "repetitions": 3,
+  "serialized_output_bytes": 408796341,
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "extension_sha256": "7a9c3684e44562ebffafe9cb1c2f66006b193af42175721005edcc3a41a6a830",
+  "cargo_lock_sha256": "cc02127b09e0cd499a1d400fb6304c6c4bca870518ee0ac70576965529e44b63",
+  "debug_assertions": false,
+  "maturin": "1.16.0",
+  "pins": {
+    "actual": "de9ca39c278d16539f7fa59ef893676a3c159ac2b5e66c5e58a5b6ba7d8fe7fd",
+    "clock": "2bd8417fea36a46988e4b013bbef58d7d7caff93dce7adc7be58eabddf819e2f",
+    "fixtures": "1a39241a0ea36324e10ab726f5278a9fc3d7d44717c620f579ddf9e117c0e286"
+  },
+  "method": "Pre-serialized initial admissions;native parsing,one persistent image,171computed caller advances and serialization;8independent clock cases per repetition",
+  "limits": "First171caller iterations and derived clock cases only;no full match,lifecycle,viewer or emulator-speed comparison"
+}

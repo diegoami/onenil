@@ -89,42 +89,46 @@ impl TickSession {
             ));
         }
         self.started = true;
-        let ds = 16 * usize::from(s.regs[11]);
-        let mut canonical = crate::role_scores::image(Default::default());
-        let mut scenes = Vec::new();
-        for i in 1..=22 {
-            let a = 0xCCEF + 25 * usize::from(i);
-            for k in 0..25 {
-                let b = c
-                    .read(s.regs[11], (a + k) as u16, 8)
-                    .map_err(|e| fault(e, c))?;
-                canonical.image[a + k] = b as u8;
-            }
-            scenes.push(Scene::read(&canonical, i));
-        }
-        let mut pointers = s.pointers.clone();
-        for p in &mut pointers {
-            let slot = p.kind.slot();
-            p.offset = c.read(s.regs[11], slot, 16).map_err(|e| fault(e, c))?;
-            p.segment = c
-                .read(s.regs[11], slot.wrapping_add(2), 16)
-                .map_err(|e| fault(e, c))?;
-        }
-        let mut cells = s.cells.clone();
-        cells.retain(|f| f.area != Area::Frame);
-        for f in &mut cells {
-            let a = action::cell_address(s, f).map_err(|e| fault(e, c))?;
-            f.value = c.e.image[a];
-        }
-        Ok(Outcome {
-            scenes,
-            seed: u16::from_le_bytes([c.e.image[ds + 0xA51C], c.e.image[ds + 0xA51D]]),
-            pointers,
-            cells,
-            draws: c.draws[d..].to_vec(),
-            events: c.events[e..].to_vec(),
-        })
+        snapshot(c, s, d, e)
     }
+}
+
+pub(super) fn snapshot(c: &Cpu, s: &State, d: usize, e: usize) -> Result<Outcome, Fault> {
+    let ds = 16 * usize::from(s.regs[11]);
+    let mut canonical = crate::role_scores::image(Default::default());
+    let mut scenes = Vec::new();
+    for i in 1..=22 {
+        let a = 0xCCEF + 25 * usize::from(i);
+        for k in 0..25 {
+            let b = c
+                .read(s.regs[11], (a + k) as u16, 8)
+                .map_err(|e| fault(e, c))?;
+            canonical.image[a + k] = b as u8;
+        }
+        scenes.push(Scene::read(&canonical, i));
+    }
+    let mut pointers = s.pointers.clone();
+    for p in &mut pointers {
+        let slot = p.kind.slot();
+        p.offset = c.read(s.regs[11], slot, 16).map_err(|e| fault(e, c))?;
+        p.segment = c
+            .read(s.regs[11], slot.wrapping_add(2), 16)
+            .map_err(|e| fault(e, c))?;
+    }
+    let mut cells = s.cells.clone();
+    cells.retain(|f| f.area != Area::Frame);
+    for f in &mut cells {
+        let a = action::cell_address(s, f).map_err(|e| fault(e, c))?;
+        f.value = c.e.image[a];
+    }
+    Ok(Outcome {
+        scenes,
+        seed: u16::from_le_bytes([c.e.image[ds + 0xA51C], c.e.image[ds + 0xA51D]]),
+        pointers,
+        cells,
+        draws: c.draws[d..].to_vec(),
+        events: c.events[e..].to_vec(),
+    })
 }
 
 #[cfg(test)]

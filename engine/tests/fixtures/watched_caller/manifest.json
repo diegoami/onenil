@@ -1,0 +1,45 @@
+{
+  "schema": "decoded-native-watched-caller-sparse/1",
+  "producer": "5fd60e73a218a802a8f9b7739914674fe948855c",
+  "actual_manifest_sha256": "de9ca39c278d16539f7fa59ef893676a3c159ac2b5e66c5e58a5b6ba7d8fe7fd",
+  "clock_manifest_sha256": "2bd8417fea36a46988e4b013bbef58d7d7caff93dce7adc7be58eabddf819e2f",
+  "cases": [
+    {
+      "path": "engine/tests/fixtures/watched_caller/case-00.json",
+      "sha256": "90c690760fb2bdfb3667493e64e803f10ab34855b0bea227ca4552767ddb2646"
+    },
+    {
+      "path": "engine/tests/fixtures/watched_caller/case-01.json",
+      "sha256": "a24369dd4f43a2f0c33e366a5120938b3ee8d3361137530960198e6419cc837a"
+    },
+    {
+      "path": "engine/tests/fixtures/watched_caller/case-02.json",
+      "sha256": "728e3daf92cd3f5e0ae527447c8fbeaf2187c2f1f801d8373111269497d8ff64"
+    },
+    {
+      "path": "engine/tests/fixtures/watched_caller/case-03.json",
+      "sha256": "121c9029d501150d8e0dbfa81e41fb42410e113b2d536c5d413e37377a9179fa"
+    },
+    {
+      "path": "engine/tests/fixtures/watched_caller/case-04.json",
+      "sha256": "fce1285d2ad67fa2c35cb5214433da799e450ebeca915e953037d1733cd2cfff"
+    },
+    {
+      "path": "engine/tests/fixtures/watched_caller/case-05.json",
+      "sha256": "7c164d52af6818f8c9103955b79125700363d66aa798107812f2138fe12cdca4"
+    },
+    {
+      "path": "engine/tests/fixtures/watched_caller/case-06.json",
+      "sha256": "cb7136cf63a12468d90a7fcde24ad883cc923ec06f92ff24651918da337f0dce"
+    },
+    {
+      "path": "engine/tests/fixtures/watched_caller/case-07.json",
+      "sha256": "4bd3938e09bc9d6c03b9d7c42730ebcf83607e3a4e5b88a352b29a7d9b48e1b0"
+    },
+    {
+      "path": "engine/tests/fixtures/watched_caller/case-08.json",
+      "sha256": "be14912567e47a5317213a132cd27d1408ead5e85863ceb782ea3705c10d4239"
+    }
+  ],
+  "scope": "One initial ENTRY union per session;all declared cells compared each step. Sparse original changes avoid duplicating unchanged initial facts. No intermediate runtime inputs."
+}

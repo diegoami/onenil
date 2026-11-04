@@ -497,7 +497,7 @@ impl Cpu {
     pub fn sbb(&mut self, x: u16, y: u16, w: u8) -> u16 {
         self.sub_borrow(x, y, w, u32::from(self.cf))
     }
-    fn logic(&mut self, v: u16, w: u8) -> u16 {
+    pub(super) fn logic(&mut self, v: u16, w: u8) -> u16 {
         let v = v & (Self::mask(w) as u16);
         self.cf = false;
         self.of = false;

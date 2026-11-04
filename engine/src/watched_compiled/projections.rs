@@ -57,3 +57,12 @@ pub(super) fn neutral_watch_input(c: &mut Cpu) -> Result<(), String> {
     }
     c.ret(false, 0)
 }
+
+// [confirmed] Original00D6 renders the remaining-time digits through DD58/UI buffers.
+// [designed] Clock counters/events remain compiled7B7B;this emits only display data.
+pub(super) fn clock_display(c: &mut Cpu) -> Result<(), String> {
+    let remaining = c.read(c.r[10], c.r[4].wrapping_add(4), 16)?;
+    c.presentation
+        .push(serde_json::json!({"site":"0AB9:00D6","kind":"remaining_time","value":remaining}));
+    c.ret(false, 4)
+}

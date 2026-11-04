@@ -380,6 +380,76 @@ mod python {
         }
     }
 
+    #[pyclass]
+    struct NativeWatchedCallerSession {
+        session: std::sync::Mutex<watched_compiled::caller::CallerSession>,
+    }
+    #[pymethods]
+    impl NativeWatchedCallerSession {
+        #[new]
+        fn new(input_json: &str, no_pending_key: bool) -> PyResult<Self> {
+            let input: watched_compiled::action::State = serde_json::from_str(input_json)
+                .map_err(|e| PyValueError::new_err(e.to_string()))?;
+            let session = watched_compiled::caller::CallerSession::admit(&input, no_pending_key)
+                .map_err(|e| PyValueError::new_err(e.message))?;
+            Ok(Self {
+                session: std::sync::Mutex::new(session),
+            })
+        }
+        fn step(&self) -> PyResult<String> {
+            let mut session = self
+                .session
+                .lock()
+                .map_err(|_| PyValueError::new_err("watched caller lock poisoned"))?;
+            let output = session
+                .advance()
+                .map_err(|e| PyValueError::new_err(e.message))?;
+            serde_json::to_string(&output).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+    }
+    #[pyfunction]
+    fn watched_caller(input_json: &str) -> PyResult<String> {
+        #[derive(serde::Deserialize)]
+        #[serde(deny_unknown_fields)]
+        struct Request {
+            initial: watched_compiled::action::State,
+            steps: usize,
+            no_pending_key: bool,
+            clock_only: bool,
+        }
+        let r: Request =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        if !(1..=4096).contains(&r.steps) || r.clock_only && r.steps != 1 {
+            return Err(PyValueError::new_err("invalid watched caller batch length"));
+        }
+        let result =
+            match watched_compiled::caller::CallerSession::admit(&r.initial, r.no_pending_key) {
+                Err(e) => serde_json::json!({"error":e}),
+                Ok(mut session) => {
+                    let mut outputs = Vec::new();
+                    let mut failure = None;
+                    for _ in 0..r.steps {
+                        match if r.clock_only {
+                            session.clock_boundary()
+                        } else {
+                            session.advance()
+                        } {
+                            Ok(o) => outputs.push(o),
+                            Err(e) => {
+                                failure = Some(e);
+                                break;
+                            }
+                        }
+                    }
+                    if let Some(e) = failure {
+                        serde_json::json!({"error":e})
+                    } else {
+                        serde_json::json!({"ok":outputs})
+                    }
+                }
+            };
+        serde_json::to_string(&result).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
     #[pyfunction]
     fn watched_tick(input_json: &str) -> PyResult<String> {
         #[derive(serde::Deserialize)]
@@ -907,6 +977,7 @@ mod python {
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
         module.add_class::<NativeQuickSession>()?;
+        module.add_class::<NativeWatchedCallerSession>()?;
         module.add_class::<NativeMatchSession>()?;
         module.add_class::<NativeExhibitionSession>()?;
         module.add_function(wrap_pyfunction!(watched_move_candidate, module)?)?;
@@ -918,6 +989,7 @@ mod python {
         module.add_function(wrap_pyfunction!(watched_select_target, module)?)?;
         module.add_function(wrap_pyfunction!(watched_action, module)?)?;
         module.add_function(wrap_pyfunction!(watched_tick, module)?)?;
+        module.add_function(wrap_pyfunction!(watched_caller, module)?)?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;

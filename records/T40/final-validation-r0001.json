@@ -1,0 +1,59 @@
+{
+  "schema": "task-validation-receipt/1",
+  "source_head": "2ffbf59d514db77b10048df1a68492ee81bcca07",
+  "rust": {
+    "passed": 493,
+    "suites": 25,
+    "failed": 0
+  },
+  "actual_iterations": 171,
+  "derived_clock_boundaries": 8,
+  "accepted_actions": 33,
+  "retained_prefix_actions": 32,
+  "original_no_key_visits": 3762,
+  "native_sessions": 9,
+  "native_transitions": 179,
+  "prior_release_bridges": 36,
+  "controller_tests": 5,
+  "negative_provenance_checks": 16,
+  "deterministic_generators": [
+    "35F8",
+    "3846",
+    "actor",
+    "tick",
+    "caller"
+  ],
+  "prior_evidence_files_preserved": 8147,
+  "benchmark": {
+    "record": "T40-r0001.json",
+    "transitions": 537,
+    "sessions": 27,
+    "elapsed_ns": 1921874010,
+    "includes": "initial parsing,image admission,all computed steps and output serialization"
+  },
+  "private_persistence": "Owner-approved upload completed;owner-only metadata readback;no remote checksum returned",
+  "audits": "fmt,originals,diff,ownership,preservation and runtime embedding passed",
+  "scope": "First171actual caller iterations reach4elapsed minutes;8derived clock cases. Whole-match setup,halftime/termination composition,additional supported complete sessions and detailed viewer remain milestone35 work. No owner review started.",
+  "outputs": {
+    "records/T40/actor-codegen-check-r0001.txt": "8528169d301cdd9dc67f1610b4a5fb8a4fe83775da150d713a1bb744a18fef62",
+    "records/T40/adjustment-codegen-check-r0001.txt": "8aac357807daf9d09e9bf4a206f61da31aea0008fde137335a0465cd1292a455",
+    "records/T40/audits-r0001.txt": "e9a7554b9ced98d51b1eb7470f426264df5f90739520b3224d0ab3c17e981593",
+    "records/T40/caller-codegen-check-r0001.txt": "3ea6635fafa50dbdd5723c5a05025858ffe1efbaffb0fb5f50c468c2e38f24ba",
+    "records/T40/guards-green-r0001.txt": "412895bdb395766025e8ecb989579570cacc8b5c08ce43cf4d3b9d6df4dadbf1",
+    "records/T40/native-export-r0001.txt": "5fc35c39e012412fc35388033ff14ac9d8651b600e21124049070943810d84b2",
+    "records/T40/offside-guard-observation-r0001.txt": "0c35606d0452bf2004389e823630701f10f8f19a8821084fcf1cb39474c825e7",
+    "records/T40/original-capture-r0001.txt": "8857c6dff3d70749c3d25bcac55ac4c13a243f332779a0e45c290d05d828100e",
+    "records/T40/prior-regressions-r0001.txt": "00acbbc323223824c9841edcfde8963d2a20b5fc2b317436ebba4d55f8403868",
+    "records/T40/prior-tick-r0001.txt": "f96baec9e268f7a19018e1e96e73491de80224eebcbfe50a9140ea80eda42be4",
+    "records/T40/private-reference-check-r0001.txt": "b71c7cb972b8d9258fa34bf9088a933359b9e7c12965f59e9509cc9ddd41d3f5",
+    "records/T40/provenance-check-r0001.txt": "58dd716cc8190d91e2ff2d5c73c6fb5f3e825c057ef683d322bc943646703c2e",
+    "records/T40/reference-check-r0001.txt": "c2bac3efcc55f5b8feeacb213fa77bbf6058aca80eb242b0c1b042f205076f9e",
+    "records/T40/release-build-r0001.txt": "1169fbe28895e56e756c359b1c01a43f751820095c20fe6e7e5330355abff711",
+    "records/T40/release-replay-benchmark-r0001.txt": "59c54fa16c3087c614a5f10bcc565955d62117014e4e3dbb63e2cf7a50879214",
+    "records/T40/resume-check-r0001.txt": "c2d12b5ff2e9d7c6b606cd6e2c8d0b1293b6eb3b59c0bd77a33d8be814a16186",
+    "records/T40/rust-full-green-r0001.txt": "f3096e813beb4440603f530d25f356d5804326825a665ae1057a3aed51095ab5",
+    "records/T40/selection-codegen-check-r0001.txt": "dbd395a87cf01fd9f4384d41e984a266cbb471ec8e99c689f76cfc450b06c77e",
+    "records/T40/tick-codegen-check-r0001.txt": "f8b96052ac2283db64a02b4fa9aa20caae5b7dde726a3f52b96bea21adeb0ab2",
+    "records/T40/valid-stubs-red-r0001.txt": "5d4dde97f9c4dc74b874041fff3f9cfd0284d20050ba635b600ae9e65613e8b5"
+  }
+}
