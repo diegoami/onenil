@@ -80,6 +80,12 @@ def observe(research,directory):
         actual_draws=[normalize.normalized(d)for d in week.events if d['kind']=='draw'];result['draws']=len(actual_draws)
         if week.g.unsupported or result['ticks']!=len(ticks)or result['actions']!=len(events)or actual_draws!=expected_draws or result['final']!=finish['final']:
             raise ValueError('original full-lifecycle field preservation differs')
+        import replay_watched_caller as caller
+        (prefix,_),_=caller.sources()
+        if result['caller_clocks'][:171]!=[dict(tick=i+1,clock=row['output']['clock'])for i,row in enumerate(prefix)]:
+            raise ValueError('derived clock observations differ from the existing original prefix')
+        indices=[row['tick']for row in result['caller_clocks']]
+        if any(a>=b for a,b in zip(indices,indices[1:])):raise ValueError('original caller clocks lack unique increasing tick identities')
         result.update(status='completed',boundary=full.match.MATCH_RETURN,draws_sha256=hashlib.sha256(encoded(actual_draws)).hexdigest())
     except (Exception,KeyboardInterrupt)as error:
         result['status']=f'aborted:{type(error).__name__}:{error}';result['draws']=week.draws
