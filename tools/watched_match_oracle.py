@@ -23,7 +23,7 @@ def named(state,at):
  offset=at-ds
  if 0<=offset<65536:
   if offset in (0xD5A,0xD5B,0xD088,0xD089):raise ValueError('presentation timer outside match ownership')
-  if any(lo<=offset<hi for lo,hi in[(0x380,0x382),(0x900,0xC00),(0xD00,0xDA0),(0x957D,0xD7BA),(0xD7D6,0xD7DA),(0xDCBA,0xDCBC)])or offset in(0xDD56,0xDE88,0xDE8A):return 'ds',offset
+  if any(lo<=offset<hi for lo,hi in[(0x380,0x382),(0x900,0xC00),(0xD00,0xDA0),(0x957D,0xD7BA),(0xD7D6,0xD7DA),(0xDCBA,0xDCBC)])or offset in(0xDD56,0xDE88,0xDE8A,0xE5DD):return 'ds',offset
   raise ValueError(f'unclassified source DS field{offset:04X};requires source/original proof')
  for name,(_,length)in {**SLOTS,**{k:(0,4000)for k in('main','main_shown','background','background_shown')}}.items():
   p=next(p for p in state['pointers']if p['kind']==name);base=16*p['segment']+p['offset']
@@ -54,6 +54,16 @@ def select(probe):
   for offset in range(0x90E-160*9-74,0x90E+160*9+76):
    at=address(state,area,offset)
    if at not in known:known.add(at);state['cells'].append({'area':area,'offset':offset,'value':raw[at]})
+ # Original0E45 advances the numeric queue in1..1700;all baseline rows are ENTRY facts.
+ ds=16*state['regs'][11]
+ batches=[('ds',range(0xA52A,0xA52A+6*1701))]
+ for side in(0,1):
+  club=int.from_bytes(raw[ds+0xD6E4+2*side:ds+0xD6E6+2*side],'little')
+  for area,width in [('club',62),('results',58),('fixtures',174)]:batches.append((area,range(width*(club-1),width*club)))
+ for area,offsets in batches:
+  for offset in offsets:
+   at=address(state,area,offset)
+   if at not in known:known.add(at);state['cells'].append({'area':area,'offset':offset,'value':raw[at]})
  p=subprocess.Popen([str(probe.resolve())],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
  try:
   for attempt in range(10000):
@@ -76,14 +86,16 @@ def select(probe):
     length=8 if area=='p8'else 15;offsets=range(offset//length*length,offset//length*length+length)
    elif area=='ds'and 0xA52A<=offset<0xCCEF:
     start=0xA52A+(offset-0xA52A)//6*6;offsets=range(start,start+6)
-   else:offsets=range(offset,offset+2)
+   else:offsets=range(offset,offset+(1 if area=='ds'and offset==0xE5DD else 2))
    for field in offsets:
     at=address(state,area,field)
     if at not in known:known.add(at);state['cells'].append({'area':area,'offset':field,'value':raw[at]})
-   if attempt%8==0:print('initial ENTRY union',len(state['cells']),'facts;native diagnostic',error,flush=True)
+   if attempt%8==0:print('initial ENTRY union',len(state['cells']),'facts;native diagnostic',{k:error[k]for k in('message','missing')},flush=True)
   raise ValueError('full native match admission did not converge')
  finally:p.stdin.close();p.wait()
 def prove_transient(research):
+ if (ROOT/'records/T41/transient-r0001/result.json').exists():
+  replay.transient_proof();print('completed original proof verified;no emulator constructed',flush=True);return
  if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original proof')
  import sys
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import watched_complete as full

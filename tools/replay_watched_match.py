@@ -25,6 +25,19 @@ def sources():
  print('pinned original4199ticks/182811draws/831actions and actual fulltime return verified',flush=True)
  return ticks,draws,events,finish
 
+TRANSIENT_SHA='428868f09d57b08c528c7a2035b0f0681247d32f7546fddfcee6de49a529cfe2'
+def transient_proof():
+ directory=ROOT/'records/T41/transient-r0001'
+ if sha(directory/'manifest.json')!=TRANSIENT_SHA:raise ValueError('original transient proof root differs')
+ manifest=read(directory/'manifest.json')
+ for name in('start','result'):
+  if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('original transient proof source differs')
+ result=read(directory/'result.json');start=read(directory/'start.json')
+ if result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']or result['original_ticks_joined']!=250 or result['draws_joined']!=11176 or result['initial_value']!=0:raise ValueError('original transient proof coverage differs')
+ if result['reads']!=[{'tick':250,'draw':11138,'actor':1,'es':12423,'di':58838,'ds_offset':58845,'value':0,'source_return':7590}]or start['reference_index_sha256']!=INDEX_SHA:raise ValueError('original transient read differs')
+ print('original250tick prefix and source1D89/1EA6 secondary255 field read verified',flush=True)
+ return result
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE

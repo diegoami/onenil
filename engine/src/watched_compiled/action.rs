@@ -181,7 +181,8 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
                     || (0xD7D6..0xD7DA).contains(&offset)
                     || (0xD80..0xDA0).contains(&offset)
                     || (0xDCBA..0xDCBC).contains(&offset)
-                    || [0xDD56, 0xDE88, 0xDE8A].contains(&offset))))
+                    // [confirmed:T41 transient proof] 1D89 secondary255 reaches1EA6 atE5DD.
+                    || [0xDD56, 0xDE88, 0xDE8A, 0xE5DD].contains(&offset))))
         {
             return Err("unsupported named DS field".into());
         }
