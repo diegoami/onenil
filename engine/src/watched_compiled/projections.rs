@@ -411,3 +411,8 @@ pub(super) fn continue_menu_key(c: &mut Cpu) -> Result<(), String> {
     c.presentation.push(serde_json::json!({"site":"24BC:0C17","kind":"external_menu_key","intent":"play_game","cursor_before":current,"key":key}));
     c.ret(true, 0)
 }
+
+// Native numeric validator;only construction/display of warning text is external.
+pub(super) fn validate_menu_lineup(c: &mut Cpu) -> Result<(), String> {
+    super::lineup_validation::run(c)
+}

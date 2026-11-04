@@ -694,4 +694,115 @@ mod tests {
             .unwrap_err()
             .contains("outside proven halftime"));
     }
+    #[test]
+    fn native_lineup_validator_matches_nine_original_squad_cases_and_preserves_gameplay() {
+        fn controller(c: &mut Cpu) -> Result<(), String> {
+            c.enter(0x106)?;
+            let bp = c.r[5];
+            let sp = c.r[4];
+            let club = c.read(c.r[11], 0xD6E4, 16)?;
+            c.write(c.r[10], bp.wrapping_sub(4), 8, club)?;
+            c.push(bp)?;
+            c.invoke(
+                super::super::lineup_validation::run,
+                false,
+                0x0AB9,
+                0xD29E,
+                0xD8D6,
+            )?;
+            if (c.r[5], c.r[4]) != (bp, sp) {
+                return Err("validator changed parent frame".into());
+            }
+            c.r[2] = c.read(c.r[10], bp.wrapping_sub(4), 8)?;
+            c.r[4] = bp;
+            c.r[5] = c.pop()?;
+            c.ret(true, 0)
+        }
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap();
+        let read = |path: &str| -> Value {
+            serde_json::from_slice(&std::fs::read(root.join(path)).unwrap()).unwrap()
+        };
+        let fixture = read("engine/tests/fixtures/watched_caller/case-00.json");
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        let facts = [
+            read("records/T41/formation-input-r0001.json"),
+            read("records/T41/ui-leaves-input-r0001.json"),
+        ];
+        let protocol = read("records/T41/lineup-validation-r0002/start.json");
+        let proof = read("records/T41/lineup-validation-r0002/result.json");
+        assert_eq!(protocol["cases"].as_array().unwrap().len(), 9);
+        for (case, original) in protocol["cases"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .zip(proof["observations"].as_array().unwrap())
+        {
+            let mut c = action::machine(&state).unwrap();
+            c.watch_trace = Some(Vec::new());
+            for input in &facts {
+                for fact in input["facts"].as_array().unwrap() {
+                    let address = fact["address"].as_u64().unwrap() as usize;
+                    c.e.image[address] = fact["value"].as_u64().unwrap() as u8;
+                    c.known[address] = true;
+                }
+            }
+            let ds = 16 * usize::from(c.r[11]);
+            c.e.image[ds + 0xD18] = case["mode"].as_u64().unwrap() as u8;
+            c.known[ds + 0xD18] = true;
+            for patch in case["patches"].as_array().unwrap() {
+                let address = patch["address"].as_u64().unwrap() as usize;
+                c.e.image[address] = patch["value"].as_u64().unwrap() as u8;
+                c.known[address] = true;
+            }
+            let regs = c.r;
+            let before = c.e.image.clone();
+            let stack = 16 * usize::from(c.r[10]) + usize::from(c.r[4]);
+            c.invoke(controller, true, 0x0AB9, 0xD5D6, 0x7E4F)
+                .unwrap_or_else(|e| panic!("{}:{e}", case["name"]));
+            assert_eq!(
+                c.r[0] & 255,
+                original["returned_valid"].as_u64().unwrap() as u16,
+                "{}",
+                case["name"]
+            );
+            assert_eq!(
+                c.r[2],
+                original["restored_active_club"].as_u64().unwrap() as u16
+            );
+            assert_eq!((c.r[4], c.r[5], c.r[11]), (regs[4], regs[5], regs[11]));
+            let counts: Vec<Value> = c
+                .presentation
+                .iter()
+                .filter(|v| v["kind"] == "lineup_validation")
+                .map(|v| json!({"side":v["side"],"counts":v["counts"]}))
+                .collect();
+            assert_eq!(
+                counts,
+                *original["role_counts"].as_array().unwrap(),
+                "{}",
+                case["name"]
+            );
+            assert!(c.draws.is_empty());
+            assert!(c.events.is_empty());
+            for (at, (old, new)) in before.iter().zip(c.e.image.iter()).enumerate() {
+                if !(stack - 4096..stack).contains(&at) {
+                    assert_eq!(old, new, "{} address{at:X}", case["name"]);
+                }
+            }
+        }
+        let mut c = action::machine(&state).unwrap();
+        c.watch_trace = Some(Vec::new());
+        assert!(c
+            .invoke(
+                super::super::lineup_validation::run,
+                false,
+                0x0AB9,
+                0xD29E,
+                0x1234
+            )
+            .unwrap_err()
+            .contains("outside proven menu"));
+    }
 }

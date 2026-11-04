@@ -1,0 +1,119 @@
+{
+  "schema": "original-lineup-validation-protocol/1",
+  "producer": "3487c40c78b1b180c62aa5f9a6c8a823d4c526cb",
+  "observer_sha256": "7ba7b9f0880f9d6540005f083ab4b690b49abb021f661fd9a04a251671b2a1ab",
+  "admission_sha256": "b8f418bfce7111e5f57e96b8a6d194045934a35d38b7e650a0512370d12884cf",
+  "root": "0AB9:D29E",
+  "return": "0AB9:EBE2",
+  "active_club": 130,
+  "derived_parent_bp": 16282,
+  "cases": [
+    {
+      "name": "original-prematch",
+      "mode": 0,
+      "patches": []
+    },
+    {
+      "name": "original-inmatch",
+      "mode": 1,
+      "patches": []
+    },
+    {
+      "name": "no-keeper",
+      "mode": 1,
+      "patches": [
+        {
+          "address": 326886,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "two-keepers",
+      "mode": 1,
+      "patches": [
+        {
+          "address": 326894,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "overfull-role",
+      "mode": 1,
+      "patches": [
+        {
+          "address": 326894,
+          "value": 1
+        },
+        {
+          "address": 326902,
+          "value": 1
+        },
+        {
+          "address": 326910,
+          "value": 1
+        },
+        {
+          "address": 326918,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "name": "empty-keeper-slot",
+      "mode": 0,
+      "patches": [
+        {
+          "address": 404414,
+          "value": 0
+        },
+        {
+          "address": 404415,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "unavailable-prematch",
+      "mode": 0,
+      "patches": [
+        {
+          "address": 376338,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "unavailable-inmatch",
+      "mode": 1,
+      "patches": [
+        {
+          "address": 376338,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "unmanaged-invalid",
+      "mode": 1,
+      "patches": [
+        {
+          "address": 255274,
+          "value": 0
+        },
+        {
+          "address": 255275,
+          "value": 0
+        },
+        {
+          "address": 326886,
+          "value": 1
+        }
+      ]
+    }
+  ],
+  "external_warning_key": "space",
+  "presentation_line_backup": "DS:F878..F917,160bytes;source24BC:0568/0598",
+  "scope": "Derived original numeric lineup validator,valid/invalid keeper/position/availability/management cases. Observe return,role counts and whole memory. Warning text/assets excluded from records."
+}

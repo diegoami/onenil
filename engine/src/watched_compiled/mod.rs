@@ -6,6 +6,7 @@ mod adjustment;
 pub mod caller;
 mod caller_graph;
 mod compiled;
+mod lineup_validation;
 mod match_graph;
 mod projections;
 mod selection;

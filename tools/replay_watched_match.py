@@ -148,6 +148,20 @@ def menu_input_proof():
   if(v['returned_sp'],v['returned_bp'],v['returned_ds'])!=(16026,16032,12423)or v['last_key_code']!=v['key_code']or v['pending_key']or v['queue_count']:raise ValueError('menu input ABI/consumption differs')
  print('all4original menu key/cursor calls preserve gameplay memory and consume their key',flush=True)
 
+LINEUP_VALIDATION_SHA='887d2b53be8c8c53912e6edd393d846e3ab6d99bff090f3b8cb94595be1e205c'
+def lineup_validation_proof():
+ directory=ROOT/'records/T41/lineup-validation-r0002';manifest=read(directory/'manifest.json')
+ if sha(directory/'manifest.json')!=LINEUP_VALIDATION_SHA:raise ValueError('lineup validation root differs')
+ for name in('start','result'):
+  if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('lineup validation observation differs')
+ start=read(directory/'start.json');result=read(directory/'result.json')
+ if result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']or start['root']!='0AB9:D29E'or len(start['cases'])!=9:raise ValueError('lineup validation protocol differs')
+ if [v['name']for v in result['observations']]!=[v['name']for v in start['cases']]:raise ValueError('lineup validation cases differ')
+ for v in result['observations']:
+  if not v['all_other_memory_equal']or v['unexpected_change_count']or v['unexpected_first_addresses']:raise ValueError('lineup validation modifies gameplay memory')
+  if(v['returned_sp'],v['returned_bp'],v['returned_ds'])!=(16026,start['derived_parent_bp'],12423)or v['restored_active_club']!=start['active_club']or v['returned_valid']not in(0,1):raise ValueError('lineup validation ABI/result differs')
+ print('all9original lineup validation cases preserve gameplay memory and restore parent selection',flush=True)
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE

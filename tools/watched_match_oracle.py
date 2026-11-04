@@ -419,7 +419,9 @@ def prove_menu_input(research):
 
 def prove_lineup_validation(research,attempt=1):
  directory=ROOT/f'records/T41/lineup-validation-r{attempt:04d}'
- if(directory/'result.json').exists():raise ValueError('completed lineup validation exists;verify pinned records')
+ if(directory/'result.json').exists():
+  if attempt!=2:raise ValueError('unrecognized completed lineup protocol')
+  replay.lineup_validation_proof();print('completed lineup validation verified;no emulator constructed',flush=True);return
  if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original lineup-validation proof')
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
  anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
