@@ -31,7 +31,8 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
             // D0B6/D0BD survive setup,first prefix stores28C1/260F.
             // D1C9 also survives setup;1CEC/2D4B/55E8 own its later action stores.
             Area::Ds
-                if (0xD1D4..0xD1DC).contains(&o) // incoming display aggregates;311E recomputes them from3138..3147
+                if (0xD144..0xD148).contains(&o) // incoming weekly award baselines: EAB6:EAC1/EAC4;B526 computes current award
+                    || (0xD1D4..0xD1DC).contains(&o) // incoming display aggregates;311E recomputes them from3138..3147
                     || (0x0D34..0x0D36).contains(&o) // 2D4E/3E1C read-only packed goal target
                     || (0x0D5C..0x0D5E).contains(&o) // 1998:01E0 tone-burst duration multiplier
                     || (0xD0A6..0xD0AC).contains(&o) // incoming scratch;stores28FA/5821/260C,unchanged through setup
@@ -416,6 +417,17 @@ mod tests {
             preparation: serde_json::from_value(fixture["input"].clone()).unwrap(),
             support: vec![],
             no_pending_key: true,
+        }
+    }
+    #[test]
+    fn weekly_award_baselines_are_incoming_but_current_award_is_computed() {
+        let facts = (0xD144..0xD148)
+            .map(|offset| ByteFact { area: Area::Ds, offset, value: 0 })
+            .collect::<Vec<_>>();
+        let cells = support_cells(&facts).unwrap();
+        assert_eq!(cells.len(), 4);
+        for offset in [0xD142, 0xD143, 0xD148, 0xD149] {
+            assert!(support_cells(&[ByteFact { area: Area::Ds, offset, value: 0 }]).is_err());
         }
     }
     #[test]

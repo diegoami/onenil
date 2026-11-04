@@ -25,7 +25,7 @@ STATIC_TABLES=[(0x097A,0x09BE),(0x09FB,0x0B5A),(0x0BF6,0x0C68),
 def owns_incoming(area,offset):
     if type(offset)is not int or offset<0:return False
     if area=='ds':
-        return any(lo<=offset<hi for lo,hi in STATIC_TABLES) or 0xD0A6<=offset<0xD0AC or 0xD1D4<=offset<0xD1DC or offset in(0xD084,0xD09E,0xD0B6,0xD0BD,0xD1C9,0xCF5A,0xCF5B,0xE5DD)
+        return any(lo<=offset<hi for lo,hi in STATIC_TABLES) or 0xD0A6<=offset<0xD0AC or 0xD144<=offset<0xD148 or 0xD1D4<=offset<0xD1DC or offset in(0xD084,0xD09E,0xD0B6,0xD0BD,0xD1C9,0xCF5A,0xCF5B,0xE5DD)
     if area=='config':return offset<256 and offset not in(0,1,2,0xF2,0xF6)
     return offset<dict(counts=4004,results=58*176,fixtures=174*176).get(area,0)
 def incoming_source():
@@ -58,7 +58,7 @@ def field_preservation():
     for name,digest in manifest['files'].items():
         if sha(FIELD_DIRECTORY/name)!=digest:raise ValueError('full original preservation leaf differs')
     start=read(FIELD_DIRECTORY/'start.json')
-    if start['schema']!='original-prepared-full-lifecycle/1' or start['observer_sha256']!=sha(ROOT/'tools/prepared_match_oracle.py'):
+    if start['schema']!='original-prepared-full-lifecycle/2' or start['observer_sha256']!=sha(ROOT/'tools/prepared_match_oracle.py'):
         raise ValueError('original full-preservation observer identity differs')
     if start['reference_index_sha256']!=reference.INDEX_SHA or start['prepared_admission_sha256']!=sha(prefix.FIXTURE):
         raise ValueError('original full-preservation input/reference identity differs')
