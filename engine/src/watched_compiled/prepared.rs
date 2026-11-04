@@ -27,12 +27,12 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
         let base = match fact.area {
             // Source-owned setup, queue, actors, ball, ABI and presentation never enter here.
             // Incoming D09E is read at2573 (stores5A2D/69AF/74F1);
-            // D0B6 is preserved through setup,first prefix store28C1.
+            // D0B6/D0BD survive setup,first prefix stores28C1/260F.
             Area::Ds
                 if (0x0D5C..0x0D5E).contains(&o) // 1998:01E0 tone-burst duration multiplier
-                    || (0xD0A6..0xD0AA).contains(&o) // incoming projection scratch;first stores28FA/5821,unchanged through setup
+                    || (0xD0A6..0xD0AC).contains(&o) // incoming scratch;stores28FA/5821/260C,unchanged through setup
                     || (0x09FB..0x0B5A).contains(&o) // 1B91/21AF..5683 numeric tables;7A3B/7B13 three22-entry tick lists
-                    || (0x097A..0x09BC).contains(&o) // 0F70 numeric commentary weights (codes0..65)
+                    || (0x097A..0x09BE).contains(&o) // 0F70 numeric commentary weights (codes0..67)
                     || (0x0D36..0x0D56).contains(&o) // 70BF/788B read-only256-bit background character set
                     || (0x0BF6..0x0C68).contains(&o)
                     || (0x0CD7..0x0CE0).contains(&o)
@@ -44,7 +44,7 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
                     || (0x8708..0x8716).contains(&o)
                     || (0x935B..0xA51C).contains(&o)
                     || (0xD886..0xD936).contains(&o)
-                    || [0xD084, 0xD09E, 0xD0B6, 0xE5DD, 0xCF5A, 0xCF5B].contains(&o) =>
+                    || [0xD084, 0xD09E, 0xD0B6, 0xD0BD, 0xE5DD, 0xCF5A, 0xCF5B].contains(&o) =>
             {
                 0
             }
@@ -332,6 +332,83 @@ mod tests {
         let error = session.advance().unwrap_err();
         assert!(error.contains("0000:0B18"), "{error}");
         assert!(session.advance().unwrap_err().contains("previously failed"));
+    }
+    #[test]
+    fn one_selected_image_matches_all_171_original_caller_iterations() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
+        let fixture: Value = serde_json::from_slice(
+            &std::fs::read(root.join("tests/fixtures/prepared_watched/admission.json")).unwrap(),
+        )
+        .unwrap();
+        let original: Value = serde_json::from_slice(
+            &std::fs::read(
+                root.parent()
+                    .unwrap()
+                    .join("records/T44/headless-original-r0001/result.json"),
+            )
+            .unwrap(),
+        )
+        .unwrap();
+        let mut session =
+            Session::new(serde_json::from_value(fixture["input"].clone()).unwrap()).unwrap();
+        let pointer = session.cpu.e.image.as_ptr();
+        for index in 0..171 {
+            let out = session.advance().unwrap();
+            assert_eq!(out["tick"], index + 1);
+            assert_eq!(
+                session.cpu.watch_trace.as_ref().unwrap()[index],
+                original["ticks"][index],
+                "tick{}",
+                index + 1
+            );
+            let path = root.parent().unwrap().join(format!(
+                "records/T40/oracle-r0001/iteration-{:03}.json",
+                index + 1
+            ));
+            let caller: Value = serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
+            assert_eq!(
+                out["clock"],
+                caller["output"]["clock"],
+                "caller clock{}",
+                index + 1
+            );
+            assert_eq!(pointer, session.cpu.e.image.as_ptr());
+        }
+        assert_eq!(session.snapshot().unwrap(), original["clock_end"]);
+        assert_eq!(
+            serde_json::to_value(&session.cpu.draws).unwrap(),
+            original["draws"]
+        );
+        let events = session
+            .cpu
+            .events
+            .iter()
+            .filter(|e| e["tick"] != 0)
+            .collect::<Vec<_>>();
+        let expected = original["events"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .cloned()
+            .map(|mut e| {
+                e.as_object_mut().unwrap().remove("event");
+                e
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            serde_json::to_value(events).unwrap(),
+            serde_json::to_value(expected).unwrap()
+        );
+        assert_eq!(session.cpu.watch_tick, 171);
+        assert_eq!(session.cpu.draws.len(), 7280);
+        session.validate_abi().unwrap();
+        let before = session.cpu.e.image.clone();
+        assert!(session
+            .advance()
+            .unwrap_err()
+            .contains("continuation retained"));
+        assert!(!session.failed);
+        assert_eq!(session.cpu.e.image, before);
     }
     #[test]
     fn native_entry_guards_reject_aliases_frames_quick_mode_and_unknown_writes() {
