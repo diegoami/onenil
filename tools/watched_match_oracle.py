@@ -283,12 +283,47 @@ def prove_ui_leaves(research):
  oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')})
  print('original UI leaves preserve all memory outside MainShown/style/stack',len(observations),'cases',flush=True)
 
+def prove_formation(research):
+ directory=ROOT/'records/T41/formation-boundary-r0001'
+ if(directory/'result.json').exists():raise ValueError('completed formation record already exists;verify it instead')
+ if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original formation proof')
+ sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
+ anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
+ clubs=[int.from_bytes(initial[ds+0xD6E4+2*side:ds+0xD6E6+2*side],'little')for side in(0,1)];out=regs['sp']+128
+ protocol={'schema':'original-formation-display-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'1B55:10AF','return':'0AB9:EBE2','clubs':clubs,'output_stack_offset':out,'observe_counts_at':'1B55:1125','scope':'Derived isolated original formation-text formatter;observe computed numeric role counts and complete memory footprint. Only displayed text is omitted from native presentation;numeric role counting remains native. No original text bytes exported.'}
+ start=directory/'start.json'
+ if start.exists():raise ValueError('immutable formation proof already started')
+ oracle.write_json(start,protocol);observations=[]
+ for club in clubs:
+  raw=bytearray(initial);sp=regs['sp']-10;words=[0xEBE2,regs['cs'],club,out,regs['ss']];raw[ss+sp:ss+sp+10]=b''.join(w.to_bytes(2,'little')for w in words)
+  g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x1B55,'IP':0x10AF,'SP':sp,'EFLAGS':state['flags']});before=g.mem(0,0x110000);counts=[]
+  class Returned(Exception):pass
+  def returned(g):raise Returned()
+  def observe(g):counts.append(list(g.mem(16*g.reg('ss')+g.reg('bp')-4,4)))
+  g.code_hook('0AB9:EBE2',returned);g.code_hook('1B55:1125',observe);complete=False
+  try:g.run(max_steps=500000)
+  except Returned:complete=True
+  if not complete or g.unsupported or len(counts)!=1:raise ValueError('original formation did not return cleanly')
+  if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp']-4,regs['bp'],regs['ds']):raise ValueError('original formation hidden-output ABI differs')
+  after=g.mem(0,0x110000);changed={'stack':0,'output_text':0};unexpected=[]
+  for address,(old,new)in enumerate(zip(before,after,strict=True)):
+   if old==new:continue
+   if ss+sp-4096<=address<ss+regs['sp']:changed['stack']+=1
+   elif ss+out<=address<ss+out+256:changed['output_text']+=1
+   else:unexpected.append(address)
+  observations.append({'club':club,'counts':counts[0],'returned_sp':g.reg('sp'),'returned_bp':g.reg('bp'),'returned_ds':g.reg('ds'),'changed_bytes_by_area':changed,'all_other_memory_equal':not unexpected,'unexpected_change_count':len(unexpected),'unexpected_first_addresses':unexpected[:16]})
+  if unexpected:raise ValueError('original formation changed non-presentation memory')
+ oracle.write_json(directory/'result.json',{'status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']})
+ oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')})
+ print('original formation counts and presentation-only footprint',observations,flush=True)
+
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
  if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
  if a.prove_templates:prove_templates(a.prove_templates)
  if a.prove_ui_leaves:prove_ui_leaves(a.prove_ui_leaves)
- if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves):p.error('choose selection or original transient proof')
+ if a.prove_formation:prove_formation(a.prove_formation)
+ if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()

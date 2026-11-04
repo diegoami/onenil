@@ -70,7 +70,14 @@ def template_proof():
  print('all4original templates preserve all memory outside MainShown and stack',flush=True)
 
 UI_LEAVES_SHA='0edede71cc96e75eb50ca5e0dab0eb82e03e13ce3e87084abd0d955bc491a3ba'
+UI_INPUT_SHA='8da02465ea67354c9dd4931f0a08946d2ecd7ea6db0de9f2994ed225c941a9ba'
 def ui_leaves_proof():
+ inputs_path=ROOT/'records/T41/ui-leaves-input-r0001.json'
+ if sha(inputs_path)!=UI_INPUT_SHA:raise ValueError('UI numeric input root differs')
+ inputs=read(inputs_path)
+ if inputs['source_admission_sha256']!=sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'):raise ValueError('UI input original ENTRY provenance differs')
+ addresses=[v['address']for v in inputs['facts']]
+ if addresses!=sorted(set(addresses))or any(not 0<=v['value']<=255 for v in inputs['facts']):raise ValueError('UI numeric input facts differ')
  directory=ROOT/'records/T41/ui-leaves-boundary-r0001';manifest=read(directory/'manifest.json')
  if sha(directory/'manifest.json')!=UI_LEAVES_SHA:raise ValueError('UI leaves proof root differs')
  for name in('start','result'):
@@ -157,6 +164,9 @@ def verify_private(value):
   slot=facts.SLOTS[pointer['kind']][0]if pointer['kind']in facts.SLOTS else(None if pointer['kind']=='style'else facts.ticks.facts.SLOTS[pointer['kind']])
   if slot is None:slot=0xD0C0
   if int.from_bytes(raw[ds+slot:ds+slot+4],'little')!=pointer['offset']+(pointer['segment']<<16):raise ValueError('full watched pointer not from original ENTRY')
+ ui_leaves_proof()
+ for fact in read(ROOT/'records/T41/ui-leaves-input-r0001.json')['facts']:
+  if raw[fact['address']]!=fact['value']:raise ValueError('UI numeric fact differs from original ENTRY')
  print('all full-match admission facts and typed aliases verified against the single original ENTRY',flush=True)
 
 def replay(value):
