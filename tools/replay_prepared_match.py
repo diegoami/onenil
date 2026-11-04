@@ -90,7 +90,7 @@ def selftest():
         else:raise AssertionError('changed live score boundary accepted')
     from unittest.mock import patch
     with patch.object(subprocess,'check_output',side_effect=AssertionError('producer commit must not be needed')):
-        for number in (1,2):
+        for number in (1,2,3):
             start=read(ROOT/f'records/T45/original-r{number:04d}/start.json')
             validate_observer_identity(start)
             changed=copy.deepcopy(start);changed['observer_sha256']='0'*64;reject(changed,validate_observer_identity)
