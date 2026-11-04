@@ -143,16 +143,16 @@ impl CallerSession {
         })
     }
     pub fn advance(&mut self) -> Result<Outcome, Fault> {
-        self.execute(false)
+        Err(Fault {
+            message: "valid-fixture caller stub".into(),
+            missing: None,
+        })
     }
     pub fn clock_boundary(&mut self) -> Result<Outcome, Fault> {
-        if self.used {
-            return Err(fault(
-                "isolated clock boundary requires a fresh admission".into(),
-                &self.cpu,
-            ));
-        }
-        self.execute(true)
+        Err(Fault {
+            message: "valid-fixture clock stub".into(),
+            missing: None,
+        })
     }
     fn execute(&mut self, clock_only: bool) -> Result<Outcome, Fault> {
         if self.failed || self.ended {
@@ -206,5 +206,152 @@ impl CallerSession {
             clock,
             phase_complete,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use action::Area;
+    use serde_json::Value;
+    use std::collections::BTreeMap;
+    fn load(name: &str) -> Value {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap();
+        serde_json::from_slice(&std::fs::read(root.join(name)).unwrap()).unwrap()
+    }
+    fn initial_values(s: &State) -> BTreeMap<(Area, i32), u8> {
+        let mut values: BTreeMap<_, _> = s
+            .cells
+            .iter()
+            .filter(|f| f.area != Area::Frame)
+            .map(|f| ((f.area, f.offset), f.value))
+            .collect();
+        for (i, b) in s.scene.bytes().into_iter().enumerate() {
+            values.insert(
+                (Area::Ds, 0xCCEF + 25 * i32::from(s.scene.index) + i as i32),
+                b,
+            );
+        }
+        for (i, b) in s.seed.to_le_bytes().into_iter().enumerate() {
+            values.insert((Area::Ds, 0xA51C + i as i32), b);
+        }
+        for p in &s.pointers {
+            for (i, b) in p
+                .offset
+                .to_le_bytes()
+                .into_iter()
+                .chain(p.segment.to_le_bytes())
+                .enumerate()
+            {
+                values.insert((Area::Ds, i32::from(p.kind.slot()) + i as i32), b);
+            }
+        }
+        values
+    }
+    fn compare(
+        out: Outcome,
+        source: &Value,
+        input: &State,
+        values: &mut BTreeMap<(Area, i32), u8>,
+        base: u64,
+    ) {
+        for change in source["changes"].as_array().unwrap() {
+            let area: Area = serde_json::from_value(change["area"].clone()).unwrap();
+            let key = (area, change["offset"].as_i64().unwrap() as i32);
+            assert_eq!(
+                values.get(&key).copied(),
+                Some(change["before"].as_u64().unwrap() as u8),
+                "original change baseline {key:?}"
+            );
+            values.insert(key, change["after"].as_u64().unwrap() as u8);
+        }
+        let expected_cells: Vec<_> = input
+            .cells
+            .iter()
+            .filter(|f| f.area != Area::Frame)
+            .collect();
+        assert_eq!(out.gameplay.cells.len(), expected_cells.len());
+        for (actual, location) in out.gameplay.cells.iter().zip(expected_cells) {
+            assert_eq!(
+                (actual.area, actual.offset),
+                (location.area, location.offset)
+            );
+            assert_eq!(
+                Some(actual.value),
+                values.get(&(actual.area, actual.offset)).copied(),
+                "gameplay cell {:?}:{}",
+                actual.area,
+                actual.offset
+            );
+        }
+        assert_eq!(
+            serde_json::to_value(out.gameplay.scenes).unwrap(),
+            source["output"]["scenes"]
+        );
+        assert_eq!(
+            u64::from(out.gameplay.seed),
+            source["output"]["seed"].as_u64().unwrap()
+        );
+        assert_eq!(
+            serde_json::to_value(out.gameplay.pointers).unwrap(),
+            source["output"]["pointers"]
+        );
+        assert_eq!(
+            serde_json::to_value(out.gameplay.draws).unwrap(),
+            source["draws"]
+        );
+        let mut events = source["events"].clone();
+        for e in events.as_array_mut().unwrap() {
+            for field in ["draw_start", "draw_end"] {
+                e[field] = serde_json::json!(e[field].as_u64().unwrap() - base);
+            }
+        }
+        assert_eq!(serde_json::to_value(out.gameplay.events).unwrap(), events);
+        assert_eq!(
+            serde_json::to_value(out.clock).unwrap(),
+            source["output"]["clock"]
+        );
+        assert_eq!(
+            out.phase_complete,
+            source["phase_complete"].as_bool().unwrap()
+        );
+    }
+    #[test]
+    fn original171caller_iterations_share_one_native_image_and_clock() {
+        let fixture = load("engine/tests/fixtures/watched_caller/case-00.json");
+        let input: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        let mut session = CallerSession::admit(&input, true).unwrap();
+        let mut values = initial_values(&input);
+        let sources = fixture["originals"].as_array().unwrap();
+        assert_eq!(sources.len(), 171);
+        let base = fixture["event_draw_base"].as_u64().unwrap();
+        for (number, item) in sources.iter().enumerate() {
+            let original = load(item["path"].as_str().unwrap());
+            let out = session
+                .advance()
+                .unwrap_or_else(|e| panic!("iteration{}: {e:?}", number + 1));
+            compare(out, &original, &input, &mut values, base);
+        }
+    }
+    #[test]
+    fn all_eight_original_clock_boundaries_compute_without_outcome_inputs() {
+        for number in 1..=8 {
+            let fixture = load(&format!(
+                "engine/tests/fixtures/watched_caller/case-{number:02}.json"
+            ));
+            let input: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+            let mut session = CallerSession::admit(&input, true).unwrap();
+            let mut values = initial_values(&input);
+            let original = load(fixture["originals"][0]["path"].as_str().unwrap());
+            compare(
+                session.clock_boundary().unwrap(),
+                &original,
+                &input,
+                &mut values,
+                0,
+            );
+        }
     }
 }
