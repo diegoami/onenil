@@ -1,0 +1,4 @@
+  File "/tmp/onenil-native/records/T44/check_headless_pitch.py", line 13
+    offset=fact['offset'];fact['value']=7 if offset%2 else(9 if offset==0x90E else32);changed+=1
+                                                           ^^^^^^^^^^^^^^^^^^
+SyntaxError: expected 'else' after 'if' expression

@@ -1,0 +1,107 @@
+{
+  "scope": "Native selected-squad setup into171 continuous original caller iterations;fulltime and other sessions are not claimed.",
+  "source_base": "1138fc215b053ceb3a3b174402dc5cc3c787b755",
+  "source_files": {
+    "engine/src/watched_compiled/prepared.rs": "3c49834f457dcf4bb7ca28f6e7c74cfc98637989502953ed8bed452d63c32378",
+    "tools/replay_prepared_watched.py": "8816716f57afa03638bc9ab6bd973410a3b5108698a07283eb9fd3c9f618b309",
+    "engine/src/watched_compiled/compiled.rs": "d38f77f40c0e6f07e6f271cd971ab44cb4bf37bac0a5919430bb8c91b0f842b5",
+    "engine/src/setup.rs": "e3fe0d66a0bd012f8bb7250eb94d5547a6eedd0f38776f46f7b469aef092cd0b",
+    "engine/src/native_image.rs": "c09b774dcd3de9f6a03c3ddc57fee73d713613bebc8bef8855aad47948edf8fb"
+  },
+  "admission_sha256": "0d7f13e5824ac2907c114cd453c34085ae5ea0b20a894862880727aa4c1dccc6",
+  "support_facts": 209,
+  "ticks": 171,
+  "computed_setup_and_caller_draws": 7280,
+  "watched_actions": 33,
+  "setup_actions": 1,
+  "first_entry_sha256": "7731a124041a548d60c1c6683eeb473c369ffc94a974b62da546958e848d5a72",
+  "trace_sha256": "5a4da42da1d1daa839d7816123a855abb4d8e89335dd9d80eb5f2c107a1f381c",
+  "draws_sha256": "a49b2661636a19c82ac9577ba5215d8986d514fbced224a9b9f3ed1136536217",
+  "events_sha256": "e35dfd5b85599855cfb1a3024c3e2781b4f4fea1a6ad69348f7c64f34863edc6",
+  "caller_clocks_sha256": "5c13b1969dda27f075b5e52c69420828551086908ff6fe99d1167fb20934fb2a",
+  "final_clock": {
+    "active": 1,
+    "counter": 7,
+    "elapsed": 4,
+    "hold": 0,
+    "phase": 45,
+    "remaining": 87,
+    "stoppage": 0
+  },
+  "comparison": "Every first-entry/tick field,draw,watched action and caller-clock field matches the pinned original sources. Original event ordinals are metadata;native event order is compared without those ordinals.",
+  "checks": {
+    "T44-native-prefix-tests-r0001.txt": {
+      "sha256": "54c72778574f35d7255ef1fbfa814911580e48b7923abdc1fbff309e939586f4",
+      "tail": [
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 41 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 35 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 19.51s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 4 tests",
+        "test watched_compiled::prepared::tests::prepared_inputs_reject_outcomes_and_pending_keys_before_execution ... ok",
+        "test watched_compiled::prepared::tests::selected_native_image_computes_the_original_watched_entry_and_retains_its_frames ... ok",
+        "test watched_compiled::prepared::tests::one_selected_image_matches_all_171_original_caller_iterations ... ok",
+        "test watched_compiled::prepared::tests::native_entry_guards_reject_aliases_frames_quick_mode_and_unknown_writes ... ok",
+        "",
+        "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 412 filtered out; finished in 5.23s",
+        ""
+      ]
+    },
+    "T44-provenance-guards-r0001.txt": {
+      "sha256": "1241ae1ae70e93c677114019d77fc894d883eacdabf40c17594df2dee355503a",
+      "tail": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared provenance:original valid;16 tamper/outcome/rehash cases rejected"
+      ]
+    },
+    "T44-support-selection-probe-r0017.txt": {
+      "sha256": "ecbf28c118a2a9c6043e0c74f2aec0156f8fee83a155137608e35c5a553d7c31",
+      "tail": [
+        "93 missing reached native data at 0AB9:2B6B 0000:0A22;pc=(2745, 11115);missing=Some(Missing { scratch: false, address: 2594, writing: false, pc: (2745, 11115) })",
+        "94 missing reached native data at 0AB9:0F70 0000:097C;pc=(2745, 3952);missing=Some(Missing { scratch: false, address: 2428, writing: false, pc: (2745, 3952) })",
+        "95 missing reached native data at 0AB9:9F9E 0000:959B;pc=(2745, 40862);missing=Some(Missing { scratch: false, address: 38299, writing: false, pc: (2745, 40862) })",
+        "96 missing reached native data at 0AB9:9FB4 0000:96E8;pc=(2745, 40884);missing=Some(Missing { scratch: false, address: 38632, writing: false, pc: (2745, 40884) })",
+        "97 missing reached native data at 0AB9:9F9E 0000:95B9;pc=(2745, 40862);missing=Some(Missing { scratch: false, address: 38329, writing: false, pc: (2745, 40862) })",
+        "98 missing reached native data at 0AB9:9FB4 0000:978A;pc=(2745, 40884);missing=Some(Missing { scratch: false, address: 38794, writing: false, pc: (2745, 40884) })",
+        "99 missing reached native data at 0AB9:9F9E 0000:95CF;pc=(2745, 40862);missing=Some(Missing { scratch: false, address: 38351, writing: false, pc: (2745, 40862) })",
+        "100 missing reached native data at 0AB9:2F1F 0000:0A39;pc=(2745, 12063);missing=Some(Missing { scratch: false, address: 2617, writing: false, pc: (2745, 12063) })",
+        "101 missing reached native data at 0AB9:2F2F 0000:0A35;pc=(2745, 12079);missing=Some(Missing { scratch: false, address: 2613, writing: false, pc: (2745, 12079) })",
+        "102 missing reached native data at 0AB9:2F3C 0000:0A33;pc=(2745, 12092);missing=Some(Missing { scratch: false, address: 2611, writing: false, pc: (2745, 12092) })",
+        "103 missing reached native data at 0AB9:9F9E 0000:959C;pc=(2745, 40862);missing=Some(Missing { scratch: false, address: 38300, writing: false, pc: (2745, 40862) })",
+        "104 missing reached native data at 0AB9:1B91 0000:0A04;pc=(2745, 7057);missing=Some(Missing { scratch: false, address: 2564, writing: false, pc: (2745, 7057) })",
+        "105 missing reached native data at 0AB9:2F7F 0000:0A37;pc=(2745, 12159);missing=Some(Missing { scratch: false, address: 2615, writing: false, pc: (2745, 12159) })",
+        "106 missing reached native data at 0AB9:2806 0000:0A1F;pc=(2745, 10246);missing=Some(Missing { scratch: false, address: 2591, writing: false, pc: (2745, 10246) })",
+        "107 missing initial native write baseline at 0AB9:260C 0D0AA;pc=(2745, 9740);missing=Some(Missing { scratch: false, address: 53418, writing: true, pc: (2745, 9740) })",
+        "108 unsupported initial support Ds+D0AA"
+      ]
+    },
+    "T44-support-selection-probe-r0018.txt": {
+      "sha256": "0139f7fd7f84d5f6b745bf80a654206886b013ae5aa31b866c153af01560a4de",
+      "tail": [
+        "0 missing initial native write baseline at 0AB9:260C 0D0AB;pc=(2745, 9740);missing=Some(Missing { scratch: false, address: 53419, writing: true, pc: (2745, 9740) })",
+        "1 missing initial native write baseline at 0AB9:260F 0D0BD;pc=(2745, 9743);missing=Some(Missing { scratch: false, address: 53437, writing: true, pc: (2745, 9743) })",
+        "2 unsupported initial support Ds+D0BD"
+      ]
+    },
+    "T44-support-selection-probe-r0019.txt": {
+      "sha256": "9c1c094688cec39c6bd65d39e1f76d3c768a60b238a0f6c4e842bff12ef317e1",
+      "tail": [
+        "0 missing reached native data at 0AB9:0F70 0000:0991;pc=(2745, 3952);missing=Some(Missing { scratch: false, address: 2449, writing: false, pc: (2745, 3952) })",
+        "1 missing initial native write baseline at 0AB9:1A21 0CF5A;pc=(2745, 6689);missing=Some(Missing { scratch: false, address: 53082, writing: true, pc: (2745, 6689) })",
+        "2 missing initial native write baseline at 0AB9:1A21 0CF5B;pc=(2745, 6689);missing=Some(Missing { scratch: false, address: 53083, writing: true, pc: (2745, 6689) })",
+        "3 missing reached native data at 0AB9:0F70 0000:09BD;pc=(2745, 3952);missing=Some(Missing { scratch: false, address: 2493, writing: false, pc: (2745, 3952) })",
+        "SUCCESS 209"
+      ]
+    },
+    "T44-audits-r0001.txt": {
+      "sha256": "3b37d8e0562b9f80399955da7f82812c2969bf19046b4d862336fbd3749ab021",
+      "tail": [
+        "8724 prior evidence/fixtures and 15 committed task records preserved;owned paths only;no embedded data or native runtime fixture/oracle/file dependency"
+      ]
+    }
+  }
+}

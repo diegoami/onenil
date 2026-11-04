@@ -421,7 +421,7 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
         initial(&mut image, &mut known, &mut seen, a, &[f.value])?;
     }
     let mut e = crate::role_scores::image(Default::default());
-    e.image = image.into_boxed_slice();
+    e.image = image.into_boxed_slice().into();
     let mut c = Cpu::new(e);
     c.known = known;
     c.flat_memory = true;

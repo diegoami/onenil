@@ -238,7 +238,7 @@ fn run_image(e: &mut Engine, s: &State, compose_commentary: bool) -> Result<Outc
     let mut helpers = vec![];
     let mut events = vec![];
     let before = observation(e, s);
-    e.image[p15(outgoing) + 11] |= 4;
+    e.image[p15(outgoing) + 11] = e.image[p15(outgoing) + 11] | 4;
     helpers.push(helper(
         "0AB9:AEDF",
         json!([3, outgoing]),

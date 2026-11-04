@@ -625,7 +625,7 @@ impl Engine {
         let side = usize::from(self.image[a + 7] < 12);
         if routine == "0AB9:63E3" {
             self.effect_event(50, None, out);
-            self.image[p15(id, 11)] |= 0x10;
+            self.image[p15(id, 11)] = self.image[p15(id, 11)] | 0x10;
             let c = 0xD0D9 + 10 * side;
             self.image[c] = self.image[c].wrapping_add(1);
             self.effect_added();

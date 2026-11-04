@@ -148,7 +148,16 @@ impl Session {
         gates: Gates,
         tables: Vec<role_scores::TableInput>,
     ) -> Result<Self, String> {
-        let mut inner = continuous::Session::new(legacy)?;
+        Self::from_legacy_with_initial(legacy, replacement, gates, tables, None)
+    }
+    pub(crate) fn from_legacy_with_initial(
+        legacy: continuous::Admission,
+        replacement: ai_selection::ReadSet,
+        gates: Gates,
+        tables: Vec<role_scores::TableInput>,
+        initial: Option<&crate::role_scores::Cells>,
+    ) -> Result<Self, String> {
+        let mut inner = continuous::Session::new_with_initial(legacy, initial)?;
         let expected = inner
             .a
             .players

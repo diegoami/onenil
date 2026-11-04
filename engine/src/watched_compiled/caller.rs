@@ -41,7 +41,7 @@ fn at(c: &mut Cpu, pc: u16) -> Result<(), String> {
     c.pc = (0x0AB9, pc);
     c.step()
 }
-fn iteration(c: &mut Cpu) -> Result<(), String> {
+pub(super) fn iteration(c: &mut Cpu) -> Result<(), String> {
     // Source7C67–7C94 in order;the backedge yields to the native session driver.
     at(c, 0x7C67)?;
     let quick = c.read(c.r[11], 0xD074, 8)?;

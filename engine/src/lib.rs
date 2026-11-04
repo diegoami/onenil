@@ -16,6 +16,7 @@ pub mod extra_event;
 pub mod goal_effects;
 mod layout;
 pub mod match_session;
+mod native_image;
 pub mod neutral_input;
 pub mod placement;
 pub mod player_cache;
@@ -86,13 +87,13 @@ pub struct Outcome {
 }
 
 pub struct Engine {
-    image: Box<[u8]>,
+    image: native_image::Image,
 }
 
 impl Engine {
     pub fn new(input: &Input) -> Self {
         let mut engine = Self {
-            image: vec![0; layout::IMAGE_LEN].into_boxed_slice(),
+            image: vec![0; layout::IMAGE_LEN].into_boxed_slice().into(),
         };
         engine.put_word(SEED, input.seed);
         for (i, value) in input.ratings.iter().enumerate() {
@@ -102,6 +103,30 @@ impl Engine {
             engine.image[GOALS as usize + side] = *value;
         }
         engine
+    }
+
+    pub(crate) fn new_tracked(
+        input: &Input,
+        initial: &std::collections::BTreeMap<usize, u8>,
+    ) -> Result<Self, String> {
+        let mut engine = Self {
+            image: native_image::Image::tracked(layout::IMAGE_LEN),
+        };
+        engine.image.resize(0x110000);
+        engine.put_word(SEED, input.seed);
+        for (index, value) in input.ratings.iter().enumerate() {
+            engine.put_word(RATINGS + 2 * index as u16, *value);
+        }
+        for (side, value) in input.goals.iter().enumerate() {
+            engine.image[GOALS as usize + side] = *value;
+        }
+        for (&address, &value) in initial {
+            if address >= engine.image.len() {
+                return Err("initial native support exceeds image".into());
+            }
+            engine.image[address] = value;
+        }
+        Ok(engine)
     }
 
     fn word(&self, offset: u16) -> u16 {
@@ -157,8 +182,8 @@ impl Engine {
                     }
                 }
                 if won {
-                    let goal = &mut self.image[(GOALS + side) as usize];
-                    *goal = goal.wrapping_add(1);
+                    let address = (GOALS + side) as usize;
+                    self.image[address] = self.image[address].wrapping_add(1);
                 }
             }
         }
@@ -252,6 +277,48 @@ mod python {
     use super::*;
     use pyo3::exceptions::PyValueError;
     use pyo3::prelude::*;
+
+    #[pyclass]
+    struct NativePreparedWatchedSession {
+        session: std::sync::Mutex<watched_compiled::prepared::Session>,
+    }
+    #[pymethods]
+    impl NativePreparedWatchedSession {
+        #[new]
+        fn new(input_json: &str) -> PyResult<Self> {
+            let input: watched_compiled::prepared::Input = serde_json::from_str(input_json)
+                .map_err(|e| PyValueError::new_err(e.to_string()))?;
+            let session =
+                watched_compiled::prepared::Session::new(input).map_err(PyValueError::new_err)?;
+            Ok(Self {
+                session: std::sync::Mutex::new(session),
+            })
+        }
+        fn snapshot(&self) -> PyResult<String> {
+            let session = self
+                .session
+                .lock()
+                .map_err(|_| PyValueError::new_err("prepared caller lock poisoned"))?;
+            let out = session.snapshot().map_err(PyValueError::new_err)?;
+            serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn observation(&self) -> PyResult<String> {
+            let session = self
+                .session
+                .lock()
+                .map_err(|_| PyValueError::new_err("prepared caller lock poisoned"))?;
+            serde_json::to_string(&session.observation())
+                .map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn step(&self) -> PyResult<String> {
+            let mut session = self
+                .session
+                .lock()
+                .map_err(|_| PyValueError::new_err("prepared caller lock poisoned"))?;
+            let out = session.advance().map_err(PyValueError::new_err)?;
+            serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+    }
 
     #[pyclass]
     struct NativeWatchedPreparation {
@@ -1024,6 +1091,7 @@ mod python {
         module.add_class::<NativeMatchSession>()?;
         module.add_class::<NativeExhibitionSession>()?;
         module.add_class::<NativeWatchedPreparation>()?;
+        module.add_class::<NativePreparedWatchedSession>()?;
         module.add_function(wrap_pyfunction!(watched_move_candidate, module)?)?;
         module.add_function(wrap_pyfunction!(watched_choose_direction, module)?)?;
         module.add_function(wrap_pyfunction!(watched_prepare_target, module)?)?;

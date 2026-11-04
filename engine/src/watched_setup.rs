@@ -43,6 +43,33 @@ mod tests {
         serde_json::from_value(fixture()["input"].clone()).unwrap()
     }
     #[test]
+    fn tracked_selected_setup_reaches_pre_call_without_additional_support() {
+        let input = input();
+        match setup::Session::before_watched_call(input.setup, input.incoming, &Default::default())
+        {
+            Ok(mut prepared) => {
+                let known = prepared
+                    .match_state
+                    .inner
+                    .e
+                    .image
+                    .take_initialized()
+                    .unwrap();
+                assert!(known[0xD074]);
+                assert!(!known[0x0330]);
+                assert_eq!(
+                    prepared.preparation()["points"]
+                        .as_array()
+                        .unwrap()
+                        .last()
+                        .unwrap()["site"],
+                    "0AB9:E008"
+                );
+            }
+            Err(error) => panic!("tracked setup probe: {error}"),
+        }
+    }
+    #[test]
     fn selected_squad_computes_original_draws_and_every_first_watched_entry_field() {
         let original = Path::new(env!("CARGO_MANIFEST_DIR"))
             .parent()

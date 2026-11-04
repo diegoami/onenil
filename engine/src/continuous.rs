@@ -79,6 +79,12 @@ fn same<A: Serialize, B: Serialize>(a: &A, b: &B) -> bool {
 }
 impl Session {
     pub fn new(a: Admission) -> Result<Self, String> {
+        Self::new_with_initial(a, None)
+    }
+    pub(crate) fn new_with_initial(
+        a: Admission,
+        initial: Option<&crate::role_scores::Cells>,
+    ) -> Result<Self, String> {
         for (side, r) in a.ratings.iter().enumerate() {
             ratings::validate(r)?;
             if usize::from(r.side) != side {
@@ -153,7 +159,11 @@ impl Session {
         {
             return Err("incomplete/contradictory goal,history or scorer admission".into());
         }
-        let mut e = Engine::new(&a.contest);
+        let mut e = if let Some(initial) = initial {
+            Engine::new_tracked(&a.contest, initial)?
+        } else {
+            Engine::new(&a.contest)
+        };
         // [confirmed static:F07/F14,seg_0AB9_14.asm8700-870E@218490d] Setup fills all1700 numeric rows FF.
         // [designed] Initial-state bootstrap only;does not claim native setup/RNG execution.
         e.image[0xA530..0xA530 + 0x27D8].fill(255);

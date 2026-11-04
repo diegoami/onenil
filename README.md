@@ -1686,3 +1686,30 @@ it is not a full-match benchmark. Continuing this prepared image through the
 full watched lifecycle,additional complete lineup/seed sessions and viewer
 input controls remain required before milestone35 acceptance. The reference
 commentary/pitch preview remains available on port8041.
+
+## Native prepared watched caller
+
+[confirmed: T44 original support and headless-original-r0001 prefix]
+`NativePreparedWatchedSession` moves the selected-squad preparation's tracked
+native image into compiled E008/7D86/7C3F. It computes the first watched entry,
+then advances171 original caller iterations without further inputs. The22 player
+scenes,ball,7280 ordered setup-and-caller draws,33 watched actions and every
+per-iteration caller clock field match the original four-minute passage.
+The source coin-toss event59 is also computed during setup and remains tick0.
+No captured first-entry image or intermediate outcome is an input.
+
+```sh
+.cache/venv/bin/python tools/replay_prepared_watched.py --check --replay --python
+python3 records/T44/validate_provenance.py
+```
+
+[designed] Its frozen initial admission contains the existing selected-squad
+inputs and209 decoded pre19CA support facts. Source-owned initialization leaves
+other memory unknown;reads are checked throughout,with first-write baselines
+checked during play. The pitch background is generated from numeric cells;
+the original field-initializer experiment preserves all171 measured iterations.
+Pointer aliases,return frames,no-pending-key admission and unsupported quick or
+phase transitions are checked. `snapshot()` and `observation()` inspect the
+retained session;`step()` advances it. At171 steps,the API reports the prefix
+boundary and retains its native continuation. Fulltime composition and verified
+lineup/seed choices with viewer controls remain required for milestone35.
