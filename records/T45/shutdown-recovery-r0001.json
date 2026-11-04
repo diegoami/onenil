@@ -1,0 +1,30 @@
+{
+  "scope": "Owner requested wind-down within30minutes. Safe recovery fork into original-r0003 from a verified pre-interruption original-r0002 machine checkpoint;not full-match acceptance.",
+  "producer": "76e3a4f",
+  "source_receipt": "records/T45/original-r0002/checkpoint-r0004.json",
+  "restored_ticks": 15,
+  "restored_draws": 619,
+  "new_receipt": "records/T45/original-r0003/checkpoint-r0001.json",
+  "private_persistent_backup": "/home/diego/projects/onenil-archaeology/.cache/native-recovery/T45",
+  "reason": "The older original-r0001 observer has a verified decoded prefix but no restorable machine checkpoint at that current position. The owner shutdown prevents finishing it. Preserve its evidence without acceptance;the new fork uses the previously verified saved machine,checks exact restored draw prefix,and supports timed/stop-file pause at a safe guest boundary.",
+  "checks": {
+    "T45-checkpoint-fork-red-r0001.txt": {
+      "sha256": "e4e5345d16990be4e1b73cbfe283238cbb492d03c245bb536f745578b250a820",
+      "lines": [
+        "usage: preservation-observer-r0002.py [-h] --research-root RESEARCH_ROOT",
+        "                                      [--resume RESUME]",
+        "                                      [--checkpoint-seconds CHECKPOINT_SECONDS]",
+        "                                      [--stop-after-checkpoints STOP_AFTER_CHECKPOINTS]",
+        "preservation-observer-r0002.py: error: unrecognized arguments: --fork-checkpoint records/T45/original-r0002/checkpoint-r0004.json"
+      ]
+    },
+    "T45-checkpoint-fork-green-r0001.txt": {
+      "sha256": "6bd37b4eaf5e2b4a88fb395f498690128861d83bcf123767806d71d032123437",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "durable original checkpoint 1 ticks 15 draws 619",
+        "records/T45/original-r0003 paused at durable checkpoint"
+      ]
+    }
+  }
+}
