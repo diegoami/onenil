@@ -549,4 +549,43 @@ mod tests {
             }
         }
     }
+    #[test]
+    fn fixture_title_preserves_hidden_output_frame_and_rejects_unproven_inputs() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/watched_caller/case-00.json");
+        let fixture: Value = serde_json::from_slice(&std::fs::read(root).unwrap()).unwrap();
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        for (week, stage, ret, valid) in [
+            (6, 0, 0xD75D, true),
+            (7, 0, 0xD75D, false),
+            (6, 1, 0xD75D, false),
+            (6, 0, 0x1234, false),
+        ] {
+            let mut c = action::machine(&state).unwrap();
+            c.watch_trace = Some(Vec::new());
+            let regs = c.r;
+            let before = c.e.image.clone();
+            let stack = 16 * usize::from(c.r[10]) + usize::from(c.r[4]);
+            for value in [c.r[10], c.r[5] - 0x106, stage, week] {
+                c.push(value).unwrap();
+            }
+            let result = c.invoke(
+                super::super::projections::menu_fixture_title,
+                true,
+                0x1B55,
+                0x142B,
+                ret,
+            );
+            assert_eq!(result.is_ok(), valid);
+            if valid {
+                assert_eq!((c.r[4], c.r[5], c.r[11]), (regs[4] - 4, regs[5], regs[11]));
+                assert_eq!(c.presentation.len(), 1);
+            }
+            for (at, (old, new)) in before.iter().zip(c.e.image.iter()).enumerate() {
+                if !(stack - 4096..stack).contains(&at) {
+                    assert_eq!(old, new, "address{at:X}");
+                }
+            }
+        }
+    }
 }

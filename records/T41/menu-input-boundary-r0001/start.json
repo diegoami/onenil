@@ -1,0 +1,29 @@
+{
+  "schema": "original-menu-input-protocol/1",
+  "producer": "ff264c2fef505a06c5cab381a51f62d720f49091",
+  "observer_sha256": "2e76c4458b49c80aab9303cae84db1e97113a90cb79dee744392d98ed76debdf",
+  "admission_sha256": "b8f418bfce7111e5f57e96b8a6d194045934a35d38b7e650a0512370d12884cf",
+  "root": "232A:0F8B",
+  "return": "0AB9:EBE2",
+  "menu_count": 4,
+  "cases": [
+    {
+      "cursor": 1,
+      "external_key": "Down"
+    },
+    {
+      "cursor": 2,
+      "external_key": "Down"
+    },
+    {
+      "cursor": 3,
+      "external_key": "Return"
+    },
+    {
+      "cursor": 4,
+      "external_key": "Up"
+    }
+  ],
+  "output_stack_offset": 16154,
+  "scope": "Derived original menu cursor/input calls with external Down/Return/Up. SourceD8A2-D8A6 identifies option3 as continue;original Week.play chooses PLAY GAME without lineup changes. No external key is supplied to watched gameplay ticks."
+}

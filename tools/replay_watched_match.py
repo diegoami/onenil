@@ -133,6 +133,21 @@ def fixture_title_proof():
  if(result['returned_sp'],result['returned_bp'],result['returned_ds'])!=(16022,16032,12423):raise ValueError('fixture title ABI differs')
  print('original fixture-title formatter preserves non-output memory and hidden ABI',flush=True)
 
+MENU_INPUT_SHA='d05aed7d390c41caeed3b64e5307b03dfad8b08a3cb560aa4d193144c17a5a2e'
+def menu_input_proof():
+ directory=ROOT/'records/T41/menu-input-boundary-r0001';manifest=read(directory/'manifest.json')
+ if sha(directory/'manifest.json')!=MENU_INPUT_SHA:raise ValueError('menu input root differs')
+ for name in('start','result'):
+  if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('menu input observation differs')
+ start=read(directory/'start.json');result=read(directory/'result.json')
+ if result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']or start['root']!='232A:0F8B'or start['menu_count']!=4:raise ValueError('menu input protocol differs')
+ cases=[(1,'Down',2,6),(2,'Down',3,6),(3,'Return',3,2),(4,'Up',3,5)]
+ if [(v['cursor_before'],v['external_key'],v['cursor_after'],v['key_code'])for v in result['observations']]!=cases:raise ValueError('menu input normalization/cursor differs')
+ for v in result['observations']:
+  if not v['all_other_memory_equal']or v['unexpected_change_count']or v['unexpected_first_addresses']:raise ValueError('menu input modifies gameplay memory')
+  if(v['returned_sp'],v['returned_bp'],v['returned_ds'])!=(16026,16032,12423)or v['last_key_code']!=v['key_code']or v['pending_key']or v['queue_count']:raise ValueError('menu input ABI/consumption differs')
+ print('all4original menu key/cursor calls preserve gameplay memory and consume their key',flush=True)
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE

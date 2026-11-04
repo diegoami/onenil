@@ -379,7 +379,8 @@ def prove_fixture_title(research):
 
 def prove_menu_input(research):
  directory=ROOT/'records/T41/menu-input-boundary-r0001'
- if(directory/'result.json').exists():raise ValueError('completed menu input exists;verify pinned records')
+ if(directory/'result.json').exists():
+  replay.menu_input_proof();print('completed menu input verified;no emulator constructed',flush=True);return
  if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original menu-input proof')
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
  anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9

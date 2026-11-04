@@ -340,3 +340,26 @@ pub(super) fn grouped_integer(c: &mut Cpu) -> Result<(), String> {
     c.r[5] = c.pop()?;
     c.ret(true, 4)
 }
+
+// [confirmed:T41/fixture-title-boundary-r0001] Original142B changes only
+// scratch and title output,which D75D passes only to projected MainShown text.
+pub(super) fn menu_fixture_title(c: &mut Cpu) -> Result<(), String> {
+    let ss = c.r[10];
+    let sp = c.r[4];
+    let week = c.read(ss, sp.wrapping_add(4), 8)?;
+    let stage = c.read(ss, sp.wrapping_add(6), 8)?;
+    let (output, segment) = c.far(ss, sp.wrapping_add(8))?;
+    if c.watch_trace.is_none()
+        || c.call_chain().last().copied() != Some((0x0AB9, 0xD75D))
+        || week != 6
+        || stage != 0
+        || segment != ss
+        || output != c.r[5].wrapping_sub(0x106)
+    {
+        return Err("fixture title outside proven presentation caller/arguments".into());
+    }
+    c.presentation.push(
+        serde_json::json!({"site":"1B55:142B","kind":"fixture_title","week":week,"stage":stage}),
+    );
+    c.ret(true, 4)
+}
