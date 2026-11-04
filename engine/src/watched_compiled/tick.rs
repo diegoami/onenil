@@ -19,6 +19,7 @@ pub struct TickSession {
     cpu: Cpu,
     admission: State,
     started: bool,
+    failed: bool,
     style: (usize, u8),
 }
 fn fault(message: String, c: &Cpu) -> Fault {
@@ -50,16 +51,25 @@ impl TickSession {
             cpu: c,
             admission: s.clone(),
             started: false,
+            failed: false,
             style,
         })
     }
     pub fn advance(&mut self) -> Result<Outcome, Fault> {
-        Err(Fault {
-            message: "valid-fixture T39 tick stub".into(),
-            missing: None,
-        })
+        if self.failed {
+            return Err(Fault {
+                message: "watched tick session is closed after a failed advance".into(),
+                missing: None,
+            });
+        }
+        let result = self.advance_computed();
+        if result.is_err() {
+            self.failed = true;
+        }
+        result
     }
     fn advance_computed(&mut self) -> Result<Outcome, Fault> {
+        self.cpu.reset_root_budget();
         let c = &mut self.cpu;
         let s = &self.admission;
         if self.started {
@@ -120,6 +130,45 @@ impl TickSession {
 #[cfg(test)]
 mod tests {
     use super::*;
+    fn fixture() -> State {
+        let p = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/watched_tick/case-08.json");
+        let v: serde_json::Value = serde_json::from_slice(&std::fs::read(p).unwrap()).unwrap();
+        serde_json::from_value(v["initial"].clone()).unwrap()
+    }
+    #[test]
+    fn typed_tick_admission_rejects_external_key_and_pointer_frame_aliases() {
+        let s = fixture();
+        assert!(TickSession::admit(&s, false).is_err());
+        let mut wrong = s.clone();
+        wrong.kind = Kind::Actor;
+        assert!(TickSession::admit(&wrong, true).is_err());
+        let mut duplicate = s.clone();
+        duplicate.cells.push(s.cells[0].clone());
+        assert!(TickSession::admit(&duplicate, true).is_err());
+        let mut pointer = s.clone();
+        pointer.pointers[0].segment = s.regs[11];
+        assert!(TickSession::admit(&pointer, true).is_err());
+        let mut frame = s;
+        frame.regs[10] = frame.regs[11];
+        assert!(TickSession::admit(&frame, true).is_err());
+    }
+    #[test]
+    fn missing_initial_cell_closes_the_session_without_retrying_a_partial_tick() {
+        let mut s = fixture();
+        let n = s.cells.len();
+        s.cells
+            .retain(|f| !(f.area == Area::Ds && f.offset == 0xCF53));
+        assert!(s.cells.len() < n);
+        let mut session = TickSession::admit(&s, true).unwrap();
+        let error = session.advance().err().unwrap();
+        assert!(error.missing.is_some());
+        let before = session.cpu.e.image.clone();
+        let regs = session.cpu.r;
+        assert!(session.advance().err().unwrap().message.contains("closed"));
+        assert_eq!(before, session.cpu.e.image);
+        assert_eq!(regs, session.cpu.r);
+    }
     #[test]
     fn all_original_watched_ticks_and_one_persistent_sequence() {
         let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))

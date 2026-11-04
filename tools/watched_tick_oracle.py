@@ -42,7 +42,19 @@ def source(research):
     pin=full.prefix.check();record=read(research/pin['record']);expected=full.prefix.setup.contests.outputs(record)
     first=read(research/'runs/T40/chunk-000000.json')['payload'];return full,pin,record,expected,first
 
+def completed(directory,pin):
+    path=directory/'manifest.json'
+    if not path.exists():return False
+    if sha(path)!=pin:raise ValueError('completed original tick manifest pin differs')
+    value=read(path)
+    if value['status']!='completed'or value['count']!=COUNT or len(value['cases'])!=COUNT or sha(directory/'start.json')!=value['protocol_sha256']:raise ValueError('completed original tick protocol differs')
+    for item in value['cases']:
+        if sha(ROOT/item['path'])!=item['sha256']:raise ValueError('completed original tick case differs')
+    print('completed original corpus verified unchanged:',directory.name,flush=True);return True
+
 def actual(research):
+    import replay_watched_tick as replay
+    if completed(DIRECTORY,replay.ACTUAL_SHA):return
     if oracle.common.git('status','--porcelain','--','tools/watched_tick_oracle.py'):raise ValueError('commit observer before capture')
     full,pin,record,expected,reference=source(research);match=full.match
     _,data=match.find_state(record['start_state']['sha256']);week=match.Week(data)
@@ -98,6 +110,8 @@ def actual(research):
     elif read(path)!=out:raise ValueError('original tick manifest differs')
 
 def repeat(research):
+    import replay_watched_tick as replay
+    if completed(ROOT/'records/T39/repeat-r0001',replay.REPEAT_SHA):return
     if oracle.common.git('status','--porcelain','--','tools/watched_tick_oracle.py'):raise ValueError('commit observer before capture')
     sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest,match
     c=read(DIRECTORY/'actual-01.json');raw=oracle.memory(c['entry']);state=c['context'];registers=dict(zip(REGS,state['regs']))
