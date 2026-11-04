@@ -40,6 +40,20 @@ def transient_proof():
  print('original250tick prefix and source1D89/1EA6 secondary255 field read verified',flush=True)
  return result
 
+STATISTICS_SHA=['14c1d8bca4c843ddafc33e3ee68a657ef03ae40a2749e4b452ccc9c22c28307d', 'e02f432a7baed77bdb08d29b36603fdd79029cd0b9e48c34e0134432fa79b5e4']
+def statistics_proof():
+ for number,pin in enumerate(STATISTICS_SHA,1):
+  directory=ROOT/f'records/T41/statistics-boundary-r{number:04d}'
+  if sha(directory/'manifest.json')!=pin:raise ValueError('statistics proof root differs')
+  manifest=read(directory/'manifest.json')
+  for name in('start','result'):
+   if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('statistics original observation differs')
+  start=read(directory/'start.json');result=read(directory/'result.json')
+  if result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']or not result['all_other_memory_equal']or result['unexpected_change_count']!=0 or result['unexpected_first_addresses']:raise ValueError('statistics preservation footprint differs')
+  if start['root']!='1998:045C'or start['return']!='0AB9:7E2F'or start['arguments']!=[0,number-1]or result['key_before']!=7 or result['key_after']!=0:raise ValueError('statistics source/input clearing differs')
+  if(result['returned_sp'],result['returned_bp'],result['returned_ds'])!=(16026,16032,12423):raise ValueError('statistics far ABI differs')
+ print('both original statistics wait/no-wait calls preserve all non-presentation memory and clear the consumed key',flush=True)
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE

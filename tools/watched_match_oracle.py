@@ -95,7 +95,7 @@ def select(probe):
     length=8 if area=='p8'else 15;offsets=range(offset//length*length,offset//length*length+length)
    elif area=='ds'and 0xA52A<=offset<0xCCEF:
     start=0xA52A+(offset-0xA52A)//6*6;offsets=range(start,start+6)
-   else:offsets=range(offset,offset+(1 if area=='ds'and offset==0xE5DD else 2))
+   else:offsets=range(offset,offset+(1 if area=='ds'and offset in(0xDD56,0xDE88,0xDE8A,0xE5DD)else 2))
    for field in offsets:
     at=address(state,area,field)
     if at not in known:known.add(at);state['cells'].append({'area':area,'offset':field,'value':raw[at]})
@@ -150,16 +150,19 @@ def prove_transient(research):
  else:oracle.write_json(path,result)
  print('original transient scene255 read confirmed',observations,flush=True)
 
-def prove_statistics(research,wait=False):
+def prove_statistics(research,wait=False,mode=0):
+ directory=ROOT/f'records/T41/statistics-boundary-r{1+2*mode+int(wait):04d}'
+ if (directory/'result.json').exists():
+  replay.statistics_proof();print('completed statistics proof verified;no emulator constructed',flush=True);return
  if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original statistics proof')
  import sys
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest,match
  anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');raw=bytearray(oracle.memory(anchor['entry']));state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
  # Explicitly derived original call:statistics variant0,no wait,and a presentation key value7.
  # Original clears the key at0812;this is not a historical halftime-state capture.
- sp=regs['sp']-8;raw[ss+sp:ss+sp+8]=(0x7E2F).to_bytes(2,'little')+regs['cs'].to_bytes(2,'little')+bytes(2)+int(wait).to_bytes(2,'little');raw[ds+0xDE88]=7
- directory=ROOT/('records/T41/statistics-boundary-r0002'if wait else'records/T41/statistics-boundary-r0001');directory.mkdir(parents=True,exist_ok=True)
- protocol={'schema':'original-statistics-boundary-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'1998:045C','return':'0AB9:7E2F','arguments':[0,int(wait)],'external_key':'Return'if wait else None,'initial_presentation_key':7,'scope':'Derived isolated original statistics display from retained initial ENTRY;check complete memory-change footprint. Not a historical halftime capture.'};start=directory/'start.json'
+ sp=regs['sp']-8;raw[ss+sp:ss+sp+8]=(0x7E2F).to_bytes(2,'little')+regs['cs'].to_bytes(2,'little')+mode.to_bytes(2,'little')+int(wait).to_bytes(2,'little');raw[ds+0xDE88]=7
+ directory=ROOT/f'records/T41/statistics-boundary-r{1+2*mode+int(wait):04d}';directory.mkdir(parents=True,exist_ok=True)
+ protocol={'schema':'original-statistics-boundary-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'1998:045C','return':'0AB9:7E2F','arguments':[mode,int(wait)],'external_key':'Return'if wait else None,'initial_presentation_key':7,'scope':'Derived isolated original statistics display from retained initial ENTRY;check complete memory-change footprint. Not a historical halftime capture.'};start=directory/'start.json'
  if start.exists():raise ValueError('immutable statistics proof already started;resume recorded observer explicitly')
  oracle.write_json(start,protocol)
  g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x1998,'IP':0x045C,'SP':sp,'EFLAGS':state['flags']});g.files=match.game_files()
@@ -192,9 +195,9 @@ def prove_statistics(research,wait=False):
  print('original statistics display:all non-presentation memory preserved;far ABI restored;key cleared;changes',counts,flush=True)
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--statistics-wait',action='store_true');a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
- if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait)
+ if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
  if not(a.select or a.prove_transient or a.prove_statistics):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()

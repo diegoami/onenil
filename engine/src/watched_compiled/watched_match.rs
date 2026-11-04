@@ -240,4 +240,55 @@ mod tests {
         assert!(!c.z);
         assert!(!c.cf);
     }
+    #[test]
+    fn statistics_projection_changes_only_the_consumed_key_and_checks_callers() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/watched_caller/case-00.json");
+        let fixture: Value = serde_json::from_slice(&std::fs::read(root).unwrap()).unwrap();
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        for return_site in [0x7E2F, 0xE45E] {
+            let mut c = action::machine(&state).unwrap();
+            let ds = 16 * usize::from(c.r[11]);
+            let stack = 16 * usize::from(c.r[10]) + usize::from(c.r[4]);
+            let regs = c.r;
+            // Derived presentation-key input,matching the original isolation probes.
+            c.known[ds + 0xDE88] = true;
+            c.e.image[ds + 0xDE88] = 7;
+            let before = c.e.image.clone();
+            c.push(1).unwrap();
+            c.push(0).unwrap();
+            c.invoke(
+                super::super::projections::statistics_display,
+                true,
+                0x1998,
+                0x045C,
+                return_site,
+            )
+            .unwrap();
+            for (at, (actual, original)) in c.e.image.iter().zip(before.iter()).enumerate() {
+                if !(stack - 4096..stack + 16).contains(&at) && at != ds + 0xDE88 {
+                    assert_eq!(
+                        actual, original,
+                        "statistics projection changed non-presentation address{at:X}"
+                    );
+                }
+            }
+            assert_eq!(c.e.image[ds + 0xDE88], 0);
+            assert_eq!(c.r, regs);
+            assert_eq!(c.presentation.len(), 1);
+        }
+        let mut c = action::machine(&state).unwrap();
+        c.push(0).unwrap();
+        c.push(0).unwrap();
+        assert!(c
+            .invoke(
+                super::super::projections::statistics_display,
+                true,
+                0x1998,
+                0x045C,
+                0x1234
+            )
+            .unwrap_err()
+            .contains("outside the proven lifecycle"));
+    }
 }
