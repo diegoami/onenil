@@ -517,8 +517,40 @@ def prove_replacement_banner(research,attempt=1):
 
 def word_from_bytes(raw,address):return int.from_bytes(raw[address:address+2],'little')
 
+def prove_final_footer(research):
+ directory=ROOT/'records/T41/final-footer-r0001'
+ if(directory/'result.json').exists():raise ValueError('completed final footer exists;verify pinned records')
+ if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original final-footer proof')
+ sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
+ anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
+ protocol={'schema':'original-final-footer-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'0AB9:E1B0','return':'0AB9:EBE2','template':'DS:4B12','destination_header':'DS:DD58','external_key':'n','pit_divisor':1024,'scope':'Derived isolated original final-screen footer plus actual exit-key parsing. Numeric match cleanup remains outside this presentation probe;no original text/template bytes exported.'};start=directory/'start.json'
+ if start.exists():raise ValueError('immutable final-footer proof already started')
+ oracle.write_json(start,protocol);raw=bytearray(initial);sp=regs['sp']-6;words=[regs['bp'],0xEBE2,0];raw[ss+sp:ss+sp+6]=b''.join(w.to_bytes(2,'little')for w in words)
+ g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x0AB9,'IP':0xE1B0,'SP':sp,'BP':sp,'EFLAGS':state['flags']});g.divisor=1024;g.press('n');before=g.mem(0,0x110000)
+ class Returned(Exception):pass
+ def returned(g):raise Returned()
+ g.code_hook('0AB9:EBE2',returned);complete=False
+ try:
+  for _ in range(20):g.run(max_steps=500000);g.other_polls=0
+ except Returned:complete=True
+ if not complete or g.unsupported:raise ValueError('original final footer did not return cleanly')
+ if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp'],regs['bp'],regs['ds']):raise ValueError('original final-footer ABI differs')
+ after=g.mem(0,0x110000);page=word_from_bytes(before,ds+0xDD58)+16*word_from_bytes(before,ds+0xDD5A);changed={'stack':0,'main':0,'keyboard_driver':0,'presentation_timers':0,'bios_hardware':0};unexpected=[]
+ for address,(old,new)in enumerate(zip(before,after,strict=True)):
+  if old==new:continue
+  if ss+sp-4096<=address<ss+regs['sp']:kind='stack'
+  elif page<=address<page+4000:kind='main'
+  elif ds+0xDE88<=address<ds+0xDF00:kind='keyboard_driver'
+  elif address-ds in(0xD5A,0xD5B,0xD088,0xD089):kind='presentation_timers'
+  elif 0x400<=address<0x500:kind='bios_hardware'
+  else:unexpected.append(address);continue
+  changed[kind]+=1
+ result={'status':'completed'if not unexpected else'failed-footprint','protocol_sha256':replay.sha(start),'key_code':word_from_bytes(after,ds+0xDE88),'last_key_code':word_from_bytes(after,ds+0xDE8A),'pending_key':word_from_bytes(after,ds+0xDE8C),'queue_count':word_from_bytes(after,ds+0xDE8E),'returned_sp':g.reg('sp'),'returned_bp':g.reg('bp'),'returned_ds':g.reg('ds'),'changed_bytes_by_area':changed,'all_other_memory_equal':not unexpected,'unexpected_change_count':len(unexpected),'unexpected_first_addresses':unexpected[:16],'scope':protocol['scope']};oracle.write_json(directory/'result.json',result);oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')})
+ if unexpected:raise ValueError('original final footer modifies gameplay memory')
+ print('original final footer and exit key',result,flush=True)
+
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--prove-menu-input',type=Path);p.add_argument('--prove-lineup-validation',type=Path);p.add_argument('--prove-replacement-banner',type=Path);p.add_argument('--replacement-banner-attempt',type=int,default=1);p.add_argument('--lineup-validation-attempt',type=int,default=1);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--prove-menu-input',type=Path);p.add_argument('--prove-lineup-validation',type=Path);p.add_argument('--prove-replacement-banner',type=Path);p.add_argument('--prove-final-footer',type=Path);p.add_argument('--replacement-banner-attempt',type=int,default=1);p.add_argument('--lineup-validation-attempt',type=int,default=1);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
  if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
@@ -530,5 +562,6 @@ def main():
  if a.prove_menu_input:prove_menu_input(a.prove_menu_input)
  if a.prove_lineup_validation:prove_lineup_validation(a.prove_lineup_validation,a.lineup_validation_attempt)
  if a.prove_replacement_banner:prove_replacement_banner(a.prove_replacement_banner,a.replacement_banner_attempt)
- if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer or a.prove_fixture_title or a.prove_menu_input or a.prove_lineup_validation or a.prove_replacement_banner):p.error('choose selection or original transient proof')
+ if a.prove_final_footer:prove_final_footer(a.prove_final_footer)
+ if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer or a.prove_fixture_title or a.prove_menu_input or a.prove_lineup_validation or a.prove_replacement_banner or a.prove_final_footer):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()
