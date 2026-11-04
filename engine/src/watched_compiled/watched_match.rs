@@ -99,7 +99,9 @@ pub fn run(s: &State, no_pending_key: bool) -> Result<Value, MatchFault> {
         )
     })();
     result.map_err(|message| {
-        let diagnostic=json!({"regs":c.r,"actor":c.e.image[16*usize::from(ds)+0xD09F],"secondary":c.e.image[16*usize::from(ds)+0xD0A0],"call_chain":c.call_chain(),"partial":snapshot(&c).ok()});
+        let original_missing=c.missing.get();
+        let partial=if c.r[11]==ds {snapshot(&c).ok()}else{None};
+        let diagnostic=json!({"regs":c.r,"actor":c.e.image[16*usize::from(ds)+0xD09F],"secondary":c.e.image[16*usize::from(ds)+0xD0A0],"call_chain":c.call_chain(),"partial":partial});
         MatchFault {
         fault: Fault {
             message: format!(
@@ -107,7 +109,7 @@ pub fn run(s: &State, no_pending_key: bool) -> Result<Value, MatchFault> {
                 c.watch_tick,
                 c.draws.len()
             ),
-            missing: c.missing.get(),
+            missing: original_missing,
         },
         ticks: c.watch_trace.take().unwrap_or_default(),
         draws: std::mem::take(&mut c.draws),

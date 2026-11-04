@@ -1,7 +1,7 @@
 """[designed] Select numeric initial facts from the single retained original ENTRY.
 No clock/gameplay calculation;native missing-input diagnostics select locations only.
 """
-import argparse,copy,json,subprocess
+import argparse,copy,json,subprocess,sys
 from pathlib import Path
 import watched_oracle as oracle
 import replay_watched_tick as ticks
@@ -23,7 +23,7 @@ def named(state,at):
  offset=at-ds
  if 0<=offset<65536:
   if offset in (0xD5A,0xD5B,0xD088,0xD089):raise ValueError('presentation timer outside match ownership')
-  if any(lo<=offset<hi for lo,hi in[(0x380,0x382),(0x900,0xC00),(0xD00,0xDA0),(0x957D,0xD7BA),(0xD7D6,0xD7DA),(0xDCBA,0xDCBC),(0xDD64,0xDD66)])or offset in(0xDD56,0xDE88,0xDE8A,0xE5DD):return 'ds',offset
+  if any(lo<=offset<hi for lo,hi in[(0x380,0x382),(0x900,0xC00),(0xD00,0xDA0),(0x957D,0xD7BA),(0xD7D6,0xD7DA),(0xDCBA,0xDCBC),(0xDD64,0xDD66),(0x0C66,0x0C68),(0x93F7,0x94F7),(0xD886,0xD936)])or offset in(0xDD56,0xDE88,0xDE8A,0xE5DD):return 'ds',offset
   raise ValueError(f'unclassified source DS field{offset:04X};requires source/original proof')
  for name,(_,length)in {**{k:(0,4000)for k in('main','main_shown','background','background_shown')},**SLOTS}.items():
   p=next(p for p in state['pointers']if p['kind']==name);base=16*p['segment']+p['offset']
@@ -63,9 +63,10 @@ def select(probe):
    if at not in known:known.add(at);state['cells'].append({'area':area,'offset':offset,'value':raw[at]})
  # Original0E45 advances the numeric queue in1..1700;all baseline rows are ENTRY facts.
  ds=16*state['regs'][11]
- batches=[('ds',range(0xA52A,0xA52A+6*1701))]
+ batches=[('ds',range(0xA52A,0xA52A+6*1701)),('ds',range(0xC66,0xC68))]
  for side in(0,1):
   club=int.from_bytes(raw[ds+0xD6E4+2*side:ds+0xD6E6+2*side],'little')
+  baseline=0xD885+club;table=0x93F7+raw[ds+baseline];batches.extend([('ds',[baseline]),('ds',[table])])
   for area,width in [('club',62),('results',58),('fixtures',174)]:batches.append((area,range(width*(club-1),width*club)))
  for area,offsets in batches:
   for offset in offsets:
@@ -86,6 +87,7 @@ def select(probe):
     count,draws=replay.compare_prefix(error);print('verified completed original prefix',count,'ticks',draws,'draws',flush=True)
     error={k:v for k,v in error.items()if k not in('ticks','draws','events')}
    if missing is None:raise ValueError('native match unsupported:'+error['message'])
+   if 'missing initial native write baseline'in error['message']and not missing['writing']:raise ValueError('native diagnostic overwrote the original missing-write descriptor')
    (cache/'last-diagnostic.json').write_text(json.dumps(error,indent=2));area,offset=named(state,missing['address']);at=address(state,area,offset)
    if at in known:raise ValueError('native repeated missing initial fact:'+str(error))
    offsets=[offset]
@@ -99,7 +101,15 @@ def select(probe):
     if at not in known:known.add(at);state['cells'].append({'area':area,'offset':field,'value':raw[at]})
    if attempt%8==0:print('initial ENTRY union',len(state['cells']),'facts;native diagnostic',{k:error[k]for k in('message','missing')},flush=True)
   raise ValueError('full native match admission did not converge')
- finally:p.stdin.close();p.wait()
+ finally:
+  if p.poll()is None:
+   if sys.exc_info()[0]is not None:p.terminate()
+   else:p.stdin.close()
+   try:p.wait(timeout=10)
+   except subprocess.TimeoutExpired:p.kill();p.wait()
+  for stream in(p.stdin,p.stdout):
+   try:stream.close()
+   except OSError:pass
 def prove_transient(research):
  if (ROOT/'records/T41/transient-r0001/result.json').exists():
   replay.transient_proof();print('completed original proof verified;no emulator constructed',flush=True);return

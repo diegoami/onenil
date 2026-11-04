@@ -184,6 +184,9 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
             || (0xCCEF..0xD7BA).contains(&offset)
             || (s.kind == Kind::WatchedMatch
                 && ((0xAD9B..0xCD00).contains(&offset)
+                    || (0x0C66..0x0C68).contains(&offset)
+                    || (0x93F7..0x94F7).contains(&offset)
+                    || (0xD886..0xD936).contains(&offset)
                     || (0xD7D6..0xD7DA).contains(&offset)
                     || (0xD80..0xDA0).contains(&offset)
                     || (0xDCBA..0xDCBC).contains(&offset)

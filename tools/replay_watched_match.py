@@ -1,5 +1,7 @@
 """[designed] Full original watched reference assertions;never a gameplay model."""
-import argparse,hashlib,json
+import argparse,hashlib,json,subprocess,time,platform
+from datetime import datetime,timezone
+from importlib.metadata import version
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 REFERENCE=ROOT/'records/T41/reference'
@@ -82,6 +84,54 @@ def compare(got):
  if got['events']!=expected_events:raise ValueError('full native ordered accepted actions differ')
  if got['final']!=finish['final']or got['return']!=finish['boundary']:raise ValueError('full native final snapshot/return differs')
  print('native4199watched ticks,182553computed draws plus258setup context,831actions and fulltime return match',flush=True)
+
+INITIAL_SHA='pending-positive-admission'
+def admission():
+ path=ROOT/'engine/tests/fixtures/watched_match/initial.json'
+ if sha(path)!=INITIAL_SHA:raise ValueError('full watched admission root differs')
+ value=read(path);anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');state=value['initial']
+ if value['source_admission_sha256']!=sha(ROOT/'records/T40/oracle-r0001/iteration-001.json')or value['no_pending_key']is not True or state['kind']!='watched_match':raise ValueError('full watched admission provenance differs')
+ for key in('scene','seed','regs','flags','stack_words'):
+  if state[key]!=anchor['context'][key]:raise ValueError('full watched initial context differs')
+ original={p['kind']:p for p in anchor['context']['pointers']};pointers={p['kind']:p for p in state['pointers']}
+ if len(pointers)!=len(state['pointers'])or set(pointers)!=set(original)|{'results','fixtures','screen','screen_shown','screen_saved'}:raise ValueError('full watched pointer kinds differ')
+ for key,pointer in original.items():
+  if pointers[key]!=pointer:raise ValueError('full watched source pointer differs')
+ for ui,logical in[('screen','main'),('screen_shown','main_shown'),('screen_saved','background_shown')]:
+  if any(pointers[ui][k]!=pointers[logical][k]for k in('segment','offset')):raise ValueError('full watched UI page alias differs')
+ return value
+
+def verify_private(value):
+ import watched_match_oracle as facts
+ raw,_=facts.entry();state=value['initial'];seen=set();ds=16*state['regs'][11]
+ for fact in state['cells']:
+  at=facts.address(state,fact['area'],fact['offset'])
+  if at in seen or facts.named(state,at)!=(fact['area'],fact['offset'])or raw[at]!=fact['value']:raise ValueError('full watched fact is not a unique typed initial ENTRY value')
+  seen.add(at)
+ for pointer in state['pointers']:
+  slot=facts.SLOTS[pointer['kind']][0]if pointer['kind']in facts.SLOTS else(None if pointer['kind']=='style'else facts.ticks.facts.SLOTS[pointer['kind']])
+  if slot is None:slot=0xD0C0
+  if int.from_bytes(raw[ds+slot:ds+slot+4],'little')!=pointer['offset']+(pointer['segment']<<16):raise ValueError('full watched pointer not from original ENTRY')
+ print('all full-match admission facts and typed aliases verified against the single original ENTRY',flush=True)
+
+def replay(value):
+ import onenil_engine as native
+ output=json.loads(native.watched_match(json.dumps({k:value[k]for k in('initial','no_pending_key')})))
+ if 'ok'not in output:raise ValueError('native full watched match failed:'+output['error']['message'])
+ compare(output['ok'])
+
+def benchmark(value,repetitions):
+ from onenil_engine import onenil_engine as native
+ import watched_oracle as oracle
+ if oracle.common.git('status','--porcelain','--','engine','tools','pyproject.toml'):raise ValueError('commit native benchmark sources first')
+ if native.__debug_assertions__:raise ValueError('release extension required')
+ request=json.dumps({k:value[k]for k in('initial','no_pending_key')},sort_keys=True,separators=(',',':'))
+ began=datetime.now(timezone.utc).isoformat();start=time.perf_counter_ns();size=0
+ for _ in range(repetitions):size+=len(native.watched_match(request))
+ elapsed=time.perf_counter_ns()-start;directory=ROOT/'records/T41';n=len(list(directory.glob('T41-r*.json')))+1;path=directory/f'T41-r{n:04d}.json'
+ record={'schema':'routine-benchmark/1','code_commit':oracle.common.git('rev-parse','HEAD'),'started':began,'elapsed_ns':elapsed,'matches':repetitions,'watched_ticks':4199*repetitions,'computed_draws':182553*repetitions,'setup_context_draws_per_match':258,'serialized_output_bytes':size,'platform':platform.platform(),'rustc':subprocess.check_output(['rustc','--version'],text=True).strip(),'extension_sha256':sha(Path(native.__file__)),'cargo_lock_sha256':sha(ROOT/'engine/Cargo.lock'),'debug_assertions':native.__debug_assertions__,'maturin':version('maturin'),'pins':{'reference':INDEX_SHA,'initial':INITIAL_SHA,'transient':TRANSIENT_SHA},'method':'Pre-serialized initial admission;native parsing,one persistent image,complete watched lifecycle and output serialization','limits':'One reference admission after initial setup;selected-lineup native watched setup and playable viewer remain required. No emulator-speed comparison.'}
+ if path.exists():raise ValueError('immutable benchmark record exists')
+ path.write_text(json.dumps(record,indent=2)+'\n');print(path.relative_to(ROOT),flush=True)
 
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--check',action='store_true');a=p.parse_args()
