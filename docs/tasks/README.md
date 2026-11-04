@@ -53,3 +53,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T40 Continuous watched caller and logical clock](T40.md)
 
 - [T41 Full watched match lifecycle from one admission](T41.md)
+
+- [T42 Native watched commentary and pitch preview](T42.md)
