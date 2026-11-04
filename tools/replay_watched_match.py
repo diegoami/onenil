@@ -69,6 +69,20 @@ def template_proof():
   if(observation['returned_sp'],observation['returned_bp'],observation['returned_ds'])!=(16026,16032,12423):raise ValueError('template far ABI differs')
  print('all4original templates preserve all memory outside MainShown and stack',flush=True)
 
+UI_LEAVES_SHA='0edede71cc96e75eb50ca5e0dab0eb82e03e13ce3e87084abd0d955bc491a3ba'
+def ui_leaves_proof():
+ directory=ROOT/'records/T41/ui-leaves-boundary-r0001';manifest=read(directory/'manifest.json')
+ if sha(directory/'manifest.json')!=UI_LEAVES_SHA:raise ValueError('UI leaves proof root differs')
+ for name in('start','result'):
+  if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('UI leaves original observation differs')
+ start=read(directory/'start.json');result=read(directory/'result.json')
+ if result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']or len(result['observations'])!=48:raise ValueError('UI leaves completion differs')
+ if [{'root':v['root'],'arguments':v['arguments']}for v in result['observations']]!=start['cases']:raise ValueError('UI leaves cases differ')
+ for observation in result['observations']:
+  if not observation['all_other_memory_equal']or observation['unexpected_change_count']or observation['unexpected_first_addresses']or set(observation['changed_bytes_by_area'])!={'stack','main_shown','style'}:raise ValueError('UI leaf modifies non-presentation memory')
+  if(observation['returned_sp'],observation['returned_bp'],observation['returned_ds'])!=(16026,16032,12423):raise ValueError('UI leaves far ABI differs')
+ print('all48original UI leaf calls preserve all memory outside MainShown/style/stack',flush=True)
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE

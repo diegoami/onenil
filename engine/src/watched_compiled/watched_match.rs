@@ -355,4 +355,96 @@ mod tests {
             }
         }
     }
+    #[test]
+    fn original_ui_leaves_match_all_48_style_results_and_preserve_gameplay() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap();
+        let read = |path: &str| -> Value {
+            serde_json::from_slice(&std::fs::read(root.join(path)).unwrap()).unwrap()
+        };
+        let fixture = read("engine/tests/fixtures/watched_caller/case-00.json");
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        let inputs = read("records/T41/ui-leaves-input-r0001.json");
+        let proof = read("records/T41/ui-leaves-boundary-r0001/result.json");
+        let observations = proof["observations"].as_array().unwrap();
+        assert_eq!(observations.len(), 48);
+        for observation in observations {
+            let mut c = action::machine(&state).unwrap();
+            for fact in inputs["facts"].as_array().unwrap() {
+                let address = fact["address"].as_u64().unwrap() as usize;
+                c.e.image[address] = fact["value"].as_u64().unwrap() as u8;
+                c.known[address] = true;
+            }
+            let shown = state
+                .pointers
+                .iter()
+                .find(|p| p.kind == action::PointerKind::MainShown)
+                .unwrap();
+            let ds = 16 * usize::from(c.r[11]);
+            for (index, value) in [shown.offset.to_le_bytes(), shown.segment.to_le_bytes()]
+                .concat()
+                .into_iter()
+                .enumerate()
+            {
+                c.e.image[ds + 0xDD5C + index] = value;
+                c.known[ds + 0xDD5C + index] = true;
+            }
+            c.watch_trace = Some(Vec::new());
+            let args: Vec<u16> = observation["arguments"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|v| v.as_u64().unwrap() as u16)
+                .collect();
+            let root = observation["root"].as_str().unwrap();
+            let (function, cs, ip): (super::super::compiled::Proc, u16, u16) = match root {
+                "232A:052F" => (super::super::projections::menu_template, 0x232A, 0x052F),
+                "232A:0283" => (super::super::projections::menu_right_text, 0x232A, 0x0283),
+                "232A:039D" => (super::super::projections::menu_left_text, 0x232A, 0x039D),
+                "232A:041B" => (super::super::projections::menu_styled_text, 0x232A, 0x041B),
+                "1B55:0EE3" => (super::super::projections::menu_team_name, 0x1B55, 0x0EE3),
+                "1B55:1FF1" => (super::super::projections::menu_player_name, 0x1B55, 0x1FF1),
+                _ => panic!("unknown proof root"),
+            };
+            let (caller, ret) = if root == "232A:052F" {
+                match args[2] {
+                    0x132E => (0x1B55, 0x346C),
+                    0x6346 => (0x1B55, 0x347B),
+                    0x25CC => (0x0AB9, 0xD6E5),
+                    0x4F20 => (0x0AB9, 0x971A),
+                    0x3B82 => (0x1B55, 0x334F),
+                    0x3D72 => (0x0AB9, 0x9FE3),
+                    _ => unreachable!(),
+                }
+            } else {
+                (0x0AB9, 0xEBE2)
+            };
+            c.r[9] = c.segment_const(caller);
+            let regs = c.r;
+            let stack = 16 * usize::from(c.r[10]) + usize::from(c.r[4]);
+            let before = c.e.image.clone();
+            for value in args.iter().rev() {
+                c.push(*value).unwrap();
+            }
+            c.invoke(function, true, cs, ip, ret)
+                .unwrap_or_else(|e| panic!("{root} {args:?}: {e}"));
+            assert_eq!(
+                (c.r[4], c.r[5], c.r[11]),
+                (regs[4], regs[5], regs[11]),
+                "{root} {args:?}"
+            );
+            assert_eq!(
+                c.read(c.r[11], 0xDD64, 16).unwrap(),
+                observation["style_after"].as_u64().unwrap() as u16,
+                "{root} {args:?}"
+            );
+            for (at, (old, new)) in before.iter().zip(c.e.image.iter()).enumerate() {
+                if !(stack - 4096..stack).contains(&at) && !(ds + 0xDD64..ds + 0xDD66).contains(&at)
+                {
+                    assert_eq!(old, new, "{root} {args:?} address{at:X}");
+                }
+            }
+        }
+    }
 }

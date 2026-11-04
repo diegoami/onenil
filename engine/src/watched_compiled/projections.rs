@@ -117,6 +117,8 @@ pub(super) fn menu_template(c: &mut Cpu) -> Result<(), String> {
             | (0x6346, Some((0x1B55, 0x347B)))
             | (0x25CC, Some((0x0AB9, 0xD6E5)))
             | (0x4F20, Some((0x0AB9, 0x971A)))
+            | (0x3B82, Some((0x1B55, 0x334F)))
+            | (0x3D72, Some((0x0AB9, 0x9FE3)))
     );
     if c.watch_trace.is_none()
         || !supported
@@ -130,4 +132,98 @@ pub(super) fn menu_template(c: &mut Cpu) -> Result<(), String> {
     c.presentation
         .push(serde_json::json!({"site":"232A:052F","kind":"menu_template","template":template}));
     c.ret(true, 8)
+}
+
+// [confirmed:T41/ui-leaves-boundary-r0001] Text/name rendering affects only
+// MainShown/style/stack. Preserve the numeric style writes from the source.
+fn menu_text(c: &mut Cpu, root: u16, styled: bool) -> Result<(), String> {
+    let sp = c.r[4];
+    let ss = c.r[10];
+    let ds = c.r[11];
+    let (header, segment) = c.far(ss, sp.wrapping_add(4))?;
+    let col = c.read(ss, sp.wrapping_add(8), 8)?;
+    let row = c.read(ss, sp.wrapping_add(10), 8)?;
+    if c.watch_trace.is_none()
+        || header != 0xDD5C
+        || segment != ds
+        || col > 80
+        || row == 0
+        || row > 25
+    {
+        return Err("menu text outside proven presentation page/domain".into());
+    }
+    c.far(ds, header)?;
+    if styled {
+        let style = c.read(ss, sp.wrapping_add(16), 8)?;
+        c.pc = (0x232A, 0x043B);
+        c.write(ds, 0xDD64, 16, style)?;
+    }
+    c.presentation.push(serde_json::json!({"site":format!("232A:{root:04X}"),"kind":"menu_text","column":col,"row":row}));
+    c.ret(true, if styled { 14 } else { 12 })
+}
+pub(super) fn menu_right_text(c: &mut Cpu) -> Result<(), String> {
+    menu_text(c, 0x0283, false)
+}
+pub(super) fn menu_left_text(c: &mut Cpu) -> Result<(), String> {
+    menu_text(c, 0x039D, false)
+}
+pub(super) fn menu_styled_text(c: &mut Cpu) -> Result<(), String> {
+    menu_text(c, 0x041B, true)
+}
+pub(super) fn menu_team_name(c: &mut Cpu) -> Result<(), String> {
+    if c.watch_trace.is_none() {
+        return Err("team name outside watched presentation".into());
+    }
+    let col = c.read(c.r[10], c.r[4].wrapping_add(4), 8)?;
+    let row = c.read(c.r[10], c.r[4].wrapping_add(6), 8)?;
+    let club = c.read(c.r[10], c.r[4].wrapping_add(8), 16)?;
+    if club > 176 || col > 80 || row == 0 || row > 25 {
+        return Err("unsupported team-name presentation arguments".into());
+    }
+    c.enter(0)?;
+    c.pc = (0x232A, 0x043B);
+    c.write(c.r[11], 0xDD64, 16, 9)?;
+    if club != 0 {
+        c.push(club)?;
+        c.invoke(
+            super::action_graph::p_1b55_0ea2,
+            true,
+            0x1B55,
+            0x0EA2,
+            0x0F0E,
+        )?;
+        c.pc = (0x1B55, 0x0F10);
+        c.write(c.r[11], 0xDD64, 16, c.r[0] & 255)?;
+    }
+    c.presentation.push(serde_json::json!({"site":"1B55:0EE3","kind":"team_name","club":club,"column":col,"row":row}));
+    c.r[4] = c.r[5];
+    c.r[5] = c.pop()?;
+    c.ret(true, 6)
+}
+pub(super) fn menu_player_name(c: &mut Cpu) -> Result<(), String> {
+    if c.watch_trace.is_none() {
+        return Err("player name outside watched presentation".into());
+    }
+    let col = c.read(c.r[10], c.r[4].wrapping_add(4), 8)?;
+    let row = c.read(c.r[10], c.r[4].wrapping_add(6), 8)?;
+    let player = c.read(c.r[10], c.r[4].wrapping_add(8), 16)?;
+    if player > 3920 || col > 80 || row == 0 || row > 25 {
+        return Err("unsupported player-name presentation arguments".into());
+    }
+    if player != 0 {
+        let (offset, segment) = c.far(c.r[11], 0xD7BA)?;
+        let role = c.read(
+            segment,
+            offset.wrapping_add(player.wrapping_mul(8)).wrapping_add(6),
+            8,
+        )?;
+        if role > 13 {
+            return Err("unsupported player-name role style".into());
+        }
+        let style = c.read(c.r[11], 0x8708 + role, 8)?;
+        c.pc = (0x232A, 0x043B);
+        c.write(c.r[11], 0xDD64, 16, style)?;
+    }
+    c.presentation.push(serde_json::json!({"site":"1B55:1FF1","kind":"player_name","player":player,"column":col,"row":row}));
+    c.ret(true, 6)
 }
