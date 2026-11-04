@@ -47,3 +47,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T37 Native watched passing and contact actions](T37.md)
 
 - [T38 Complete native watched actor dispatch](T38.md)
+
+- [T39 Persistent native watched-tick composition](T39.md)
