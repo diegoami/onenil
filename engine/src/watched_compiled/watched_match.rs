@@ -498,4 +498,55 @@ mod tests {
             }
         }
     }
+    #[test]
+    fn grouped_number_native_helper_matches_all_original_outputs_and_hidden_abi() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap();
+        let read = |path: &str| -> Value {
+            serde_json::from_slice(&std::fs::read(root.join(path)).unwrap()).unwrap()
+        };
+        let fixture = read("engine/tests/fixtures/watched_caller/case-00.json");
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        let proof = read("records/T41/grouped-integer-r0001/result.json");
+        assert_eq!(proof["observations"].as_array().unwrap().len(), 12);
+        for observation in proof["observations"].as_array().unwrap() {
+            let mut c = action::machine(&state).unwrap();
+            let regs = c.r;
+            let before = c.e.image.clone();
+            let stack = 16 * usize::from(c.r[10]) + usize::from(c.r[4]);
+            let number = observation["raw_value"].as_u64().unwrap() as u32;
+            let output = c.r[4] - 512;
+            for value in [c.r[10], output, (number >> 16) as u16, number as u16] {
+                c.push(value).unwrap();
+            }
+            c.invoke(
+                super::super::projections::grouped_integer,
+                true,
+                0x1B55,
+                0x0F95,
+                0x1038,
+            )
+            .unwrap();
+            for (index, byte) in observation["pascal_bytes"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .enumerate()
+            {
+                assert_eq!(
+                    c.read(c.r[10], output + index as u16, 8).unwrap(),
+                    byte.as_u64().unwrap() as u16,
+                    "number{number}"
+                );
+            }
+            assert_eq!((c.r[4], c.r[5], c.r[11]), (regs[4] - 4, regs[5], regs[11]));
+            assert!(c.draws.is_empty());
+            for (at, (old, new)) in before.iter().zip(c.e.image.iter()).enumerate() {
+                if !(stack - 4096..stack).contains(&at) {
+                    assert_eq!(old, new, "number{number}/address{at:X}");
+                }
+            }
+        }
+    }
 }

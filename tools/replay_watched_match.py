@@ -107,6 +107,20 @@ def formation_proof():
  if sha(path)!=FORMATION_INPUT_SHA or read(path)['source_admission_sha256']!=sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'):raise ValueError('formation numeric input provenance differs')
  print('both original formation count/format calls preserve non-presentation memory',flush=True)
 
+GROUPED_INTEGER_SHA='d855a83169c5d55a90c08fa8a76490b32b032979f9eaf94c6e57822b18258c60'
+def grouped_integer_proof():
+ directory=ROOT/'records/T41/grouped-integer-r0001';manifest=read(directory/'manifest.json')
+ if sha(directory/'manifest.json')!=GROUPED_INTEGER_SHA:raise ValueError('grouped integer root differs')
+ for name in('start','result'):
+  if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('grouped integer observation differs')
+ start=read(directory/'start.json');result=read(directory/'result.json')
+ if result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']or start['root']!='1B55:0F95':raise ValueError('grouped integer protocol differs')
+ if [v['raw_value']for v in result['observations']]!=start['values']or len(start['values'])!=12:raise ValueError('grouped integer cases differ')
+ for v in result['observations']:
+  if not v['all_other_memory_equal']or v['unexpected_change_count']or v['unexpected_first_addresses']:raise ValueError('grouped integer modifies non-output memory')
+  if(v['returned_sp'],v['returned_bp'],v['returned_ds'])!=(16022,16032,12423)or len(v['pascal_bytes'])!=1+v['pascal_bytes'][0]:raise ValueError('grouped integer ABI/text length differs')
+ print('all12original signed32 grouped-number outputs and non-output memory verified',flush=True)
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE

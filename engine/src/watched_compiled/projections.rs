@@ -299,3 +299,44 @@ pub(super) fn menu_formation(c: &mut Cpu) -> Result<(), String> {
     c.r[5] = c.pop()?;
     c.ret(true, 2)
 }
+
+// [confirmed:T41/grouped-integer-r0001] Native numeric implementation of
+// 1B55:0F95 signed32 decimal grouping. Punctuation follows source0FE4/101E:1059;
+// no original string asset or expected helper result is read at runtime.
+pub(super) fn grouped_integer(c: &mut Cpu) -> Result<(), String> {
+    let ss = c.r[10];
+    let sp = c.r[4];
+    let low = c.read(ss, sp.wrapping_add(4), 16)?;
+    let high = c.read(ss, sp.wrapping_add(6), 16)?;
+    let (output, segment) = c.far(ss, sp.wrapping_add(8))?;
+    if segment != ss {
+        return Err("grouped integer requires an owned stack output buffer".into());
+    }
+    let number = (u32::from(low) | (u32::from(high) << 16)) as i32;
+    let digits = i64::from(number).abs().to_string();
+    let mut text = Vec::new();
+    if number < 0 {
+        text.push(45u8);
+    }
+    for (index, digit) in digits.bytes().enumerate() {
+        if index != 0 && (digits.len() - index) % 3 == 0 {
+            text.push(44);
+        }
+        text.push(digit);
+    }
+    c.enter(0x11A)?;
+    c.pc = (0x26C9, 0x0B85);
+    c.write(segment, output, 8, text.len() as u16)?;
+    for (index, byte) in text.into_iter().enumerate() {
+        c.pc = (0x26C9, 0x0B8A);
+        c.write(
+            segment,
+            output.wrapping_add(1 + index as u16),
+            8,
+            u16::from(byte),
+        )?;
+    }
+    c.r[4] = c.r[5];
+    c.r[5] = c.pop()?;
+    c.ret(true, 4)
+}

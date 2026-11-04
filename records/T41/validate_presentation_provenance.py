@@ -7,8 +7,8 @@ import replay_watched_match as replay
 def main():
  original_read,original_sha=replay.read,replay.sha
  families=[(f'statistics-boundary-r{i:04d}',replay.statistics_proof)for i in range(1,5)]
- families += [('template-boundary-r0001',replay.template_proof),('ui-leaves-boundary-r0001',replay.ui_leaves_proof),('formation-boundary-r0001',replay.formation_proof)]
- for check in (replay.statistics_proof,replay.template_proof,replay.ui_leaves_proof,replay.formation_proof):check()
+ families += [('template-boundary-r0001',replay.template_proof),('ui-leaves-boundary-r0001',replay.ui_leaves_proof),('formation-boundary-r0001',replay.formation_proof),('grouped-integer-r0001',replay.grouped_integer_proof)]
+ for check in (replay.statistics_proof,replay.template_proof,replay.ui_leaves_proof,replay.formation_proof,replay.grouped_integer_proof):check()
  checks=0
  for name,check in families:
   directory=replay.ROOT/'records/T41'/name
