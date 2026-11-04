@@ -7,7 +7,18 @@ use super::{
 use serde_json::{json, Value};
 pub(super) fn snapshot(c: &Cpu) -> Result<Value, String> {
     let ds = c.r[11];
-    let read = |offset, width| c.read(ds, offset, width);
+    snapshot_with(|offset, width| c.read(ds, offset, width))
+}
+pub(crate) fn logical_snapshot(e: &crate::Engine) -> Result<Value, String> {
+    snapshot_with(|offset, width| {
+        Ok(if width == 16 {
+            e.word(offset)
+        } else {
+            u16::from(e.image[usize::from(offset)])
+        })
+    })
+}
+fn snapshot_with(read: impl Fn(u16, u8) -> Result<u16, String>) -> Result<Value, String> {
     let mut scenes = Vec::new();
     for index in 1..=22u16 {
         let mut scene = json!({"index":index});

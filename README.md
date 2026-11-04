@@ -1657,3 +1657,32 @@ the earlier prose summary,tracked in archaeology issue134. Markers1/2 select
 primary/secondary identities;secondary is not automatically a pass receiver.
 Browser acceptance checks detailed actions,pitch movement,clock/score,pause,
 halftime/continue,fulltime,restart,desktop/mobile and local request guards.
+
+## Native selected-squad watched preparation
+
+[confirmed: T43 original preparation and complete first-entry join] The
+`NativeWatchedPreparation` API computes258 ordered setup draws and11 watched
+preparation boundaries from selected-squad/readonly/legacy inputs. Every field
+of the first watched entry's22scenes,ball,clock,actor and seed matches the
+complete original reference. The owned prepared Engine remains in the object;
+inspection neither advances it nor reloads an expected snapshot. The input
+contains T28's initial selected data and a typed pre-seeding supplement for
+ball fields preserved by1998:09E9 and incoming scratch-score aliases.
+It contains no captured setup/helper outcomes or T41 post-setup admission.
+
+```sh
+.cache/venv/bin/python tools/replay_watched_setup.py --check --replay
+.cache/venv/bin/python tools/replay_watched_setup.py --benchmark
+python3 records/T43/validate_provenance.py
+python3 records/T43/validate_audits.py
+```
+
+[designed] Private validation reruns the original only through the first
+watched entry and compares the decoded inputs/assertions,without persisting
+new RAM archives. Use the research virtualenv's Python with
+`tools/watched_setup_oracle.py --research-root ../onenil-archaeology --private records/T43/original-r0001/result.json`.
+The release receipt measures preparation,observation serialization and drop;
+it is not a full-match benchmark. Continuing this prepared image through the
+full watched lifecycle,additional complete lineup/seed sessions and viewer
+input controls remain required before milestone35 acceptance. The reference
+commentary/pitch preview remains available on port8041.
