@@ -1,5 +1,7 @@
 """[designed] Replay one persistent native watched caller against original outcomes."""
-import argparse,copy,hashlib,json,subprocess
+import argparse,copy,hashlib,json,subprocess,time,platform
+from datetime import datetime,timezone
+from importlib.metadata import version
 from pathlib import Path
 import watched_caller_oracle as caller
 import watched_tick_oracle as tick
@@ -7,13 +9,19 @@ import watched_oracle as oracle
 import replay_watched_tick as tick_replay
 ROOT=oracle.ROOT
 FIXTURES=ROOT/'engine/tests/fixtures/watched_caller'
+ACTUAL_SHA='de9ca39c278d16539f7fa59ef893676a3c159ac2b5e66c5e58a5b6ba7d8fe7fd'
+CLOCK_SHA='2bd8417fea36a46988e4b013bbef58d7d7caff93dce7adc7be58eabddf819e2f'
+FIXTURE_SHA='1a39241a0ea36324e10ab726f5278a9fc3d7d44717c620f579ddf9e117c0e286'
+PREFIX_SHA='0afdfe47c7244f833371ab65f25011d2a709e290a8d3b783388036146f0122bf'
 
 def read(p):return json.loads(p.read_text())
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def sources():
  values=[]
  for name in('oracle-r0001','clock-r0001'):
-  directory=ROOT/'records/T40'/name;manifest=read(directory/'manifest.json')
+  directory=ROOT/'records/T40'/name
+  if sha(directory/'manifest.json')!=(ACTUAL_SHA if name=='oracle-r0001'else CLOCK_SHA):raise ValueError('original caller/clock manifest pin differs')
+  manifest=read(directory/'manifest.json')
   if manifest['status']!='completed'or sha(directory/'start.json')!=manifest['protocol_sha256']:raise ValueError('original caller/clock protocol differs')
   cases=[]
   for item in manifest['cases']:
@@ -21,6 +29,26 @@ def sources():
    if sha(path)!=item['sha256']:raise ValueError('original caller/clock case differs')
    cases.append(read(path))
   values.append((cases,manifest))
+ actual,am=values[0];clocks,cm=values[1]
+ if am['count']!=171 or len(actual)!=171 or am['accepted_actions']!=33 or am['no_key_visits']!=3762 or am['retained32prefix_joined']is not True:raise ValueError('original caller coverage/prefix differs')
+ if cm['count']!=8 or len(clocks)!=8:raise ValueError('original clock coverage differs')
+ for i,c in enumerate(actual,1):
+  if c['iteration']!=i or c['parent_return']!=0x7DCB or c['no_key_visits']!=22 or c['context']['regs'][5]!=c['context']['regs'][4]+6:raise ValueError('original caller identity/ABI differs')
+  if c['exit_registers']['sp']!=c['context']['regs'][4]or c['exit_registers']['bp']!=c['context']['regs'][5]:raise ValueError('original caller return frame differs')
+  if c['draw_end']-c['draw_start']!=len(c['draws']):raise ValueError('original caller RNG interval differs')
+  if i>1 and(c['input']!=actual[i-2]['output']or c['draw_start']!=actual[i-2]['draw_end']):raise ValueError('original caller continuity differs')
+ for i,c in enumerate(clocks):
+  if c['case']!=i or c['input_overlay']!=caller.CLOCK_CASES[i]or c['admission_sha256']!=am['cases'][0]['sha256']:raise ValueError('derived original clock admission differs')
+ path=ROOT/'records/T40/reference-prefix-r0001.json'
+ if sha(path)!=PREFIX_SHA:raise ValueError('retained original prefix pin differs')
+ prefix=read(path);protocol=read(ROOT/'records/T40/oracle-r0001/start.json')
+ if prefix['source']!=protocol['reference_prefix']:raise ValueError('original caller prefix source differs')
+ draws=prefix['setup_draws']+[d for c in actual for d in c['draws']];n=prefix['prefix_draw_count']
+ if len(prefix['setup_draws'])!=258 or n!=7248 or len(draws)<n or hashlib.sha256(json.dumps(draws[:n],sort_keys=True,separators=(',',':')).encode()).hexdigest()!=prefix['normalized_prefix_sha256']:raise ValueError('retained7248draw prefix differs')
+ actions=[]
+ for c in actual:
+  for e in c['events']:actions.append(dict(e,tick=c['iteration'],event=len(actions)))
+ if len(actions)!=33 or actions[:32]!=prefix['actions']:raise ValueError('retained32accepted actions differ')
  return values
 class Probe:
  def __init__(self,path):self.p=subprocess.Popen([str(path)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
@@ -126,6 +154,7 @@ def initial_fields(raw,state):
     return seen
 
 def export(probe):
+ if (FIXTURES/'manifest.json').exists():return check()
  (actual,am),(clocks,cm)=sources();anchor=actual[0];FIXTURES.mkdir(parents=True,exist_ok=True);native=Probe(probe);items=[]
  cache=ROOT/'.cache/T40/selection';cache.mkdir(parents=True,exist_ok=True)
  catalog=[(actual,False,None)]+[([c],True,c)for c in clocks]
@@ -168,8 +197,125 @@ def export(probe):
  if not path.exists():oracle.write_json(path,manifest)
  elif read(path)!=manifest:raise ValueError('native caller manifest differs')
 
+def check():
+ (actual,am),(clocks,cm)=sources();manifest=read(FIXTURES/'manifest.json')
+ if sha(FIXTURES/'manifest.json')!=FIXTURE_SHA:raise ValueError('native caller fixture manifest pin differs')
+ if manifest['actual_manifest_sha256']!=ACTUAL_SHA or manifest['clock_manifest_sha256']!=CLOCK_SHA or len(manifest['cases'])!=9:raise ValueError('native caller corpus provenance differs')
+ values=[];anchor=actual[0]
+ for number,item in enumerate(manifest['cases']):
+  path=ROOT/item['path']
+  if sha(path)!=item['sha256']:raise ValueError('native caller fixture digest differs')
+  v=read(path);state=v['initial'];outputs=actual if number==0 else[clocks[number-1]];source_items=am['cases']if number==0 else[cm['cases'][number-1]]
+  if v['case']!=number or v['steps']!=len(outputs)or v['clock_only']!=(number>0)or v['no_pending_key']is not True or v['originals']!=source_items or v['event_draw_base']!=(258 if number==0 else 0):raise ValueError('decoded native caller source/context differs')
+  for key in anchor['context']:
+   if key!='cells'and state[key]!=anchor['context'][key]:raise ValueError('native initial caller admission differs')
+  # Expected state derives only from original ENTRY values and sparse original writes.
+  for _ in public_outputs(v,outputs):pass
+  values.append(v)
+ return values
+
+def public_outputs(value,outputs):
+ state=value['initial'];facts=tick_replay.values_at_entry(state)
+ for source in outputs:
+  if source.get('context',state)['pointers']!=state['pointers']or source['output']['pointers']!=state['pointers']:raise ValueError('caller corpus pointer mapping changed')
+  for d in source['changes']:
+   if set(d)!={'area','offset','before','after'}or type(d['before'])is not int or type(d['after'])is not int or not(0<=d['before']<=255 and 0<=d['after']<=255):raise ValueError('invalid decoded original caller change')
+   key=d['area'],d['offset']
+   if key not in facts or facts[key]!=d['before']:raise ValueError('original caller sparse baseline/ownership differs')
+   facts[key]=d['after']
+  def word_at(offset,width):return sum(facts['ds',offset+i]<<(8*i)for i in range(width))
+  decoded_clock={key:word_at(offset,width)for key,(offset,width)in caller.CLOCK_FIELDS.items()}
+  if decoded_clock!=source['output']['clock']or word_at(0xA51C,2)!=source['output']['seed']:raise ValueError('original clock/seed snapshot does not agree with sparse physical writes')
+  for scene in source['output']['scenes']:
+   for key,field_value in scene.items():
+    if key!='index'and word_at(0xCCEF+25*scene['index']+int(key[4:]),2 if key.startswith('word')else 1)!=field_value:raise ValueError('original scene snapshot does not agree with physical writes')
+  out=copy.deepcopy(source['output']);out['cells']=[{**f,'value':facts[f['area'],f['offset']]}for f in state['cells']if f['area']!='frame'];out['draws']=source['draws'];out['events']=copy.deepcopy(source['events']);out['phase_complete']=source['phase_complete']
+  for e in out['events']:
+   for field in('draw_start','draw_end'):e[field]-=value['event_draw_base']
+  yield out
+
+def verify_private(values):
+ (actual,_),(clocks,_)=sources();anchor=actual[0]
+ for i,v in enumerate(values):
+  raw,context=admission(anchor,None if i==0 else clocks[i-1]);state=v['initial'];seen=set()
+  for f in state['cells']:
+   at=tick_replay.address(state,f['area'],f['offset'])
+   if at in seen or tick.named(state,at)!=(f['area'],f['offset'])or raw[at]!=f['value']:raise ValueError('native caller fact is not a unique initial ENTRY value')
+   seen.add(at)
+  outputs=actual if i==0 else[clocks[i-1]];make=expected_builder(state,v['event_draw_base'])
+  for source,want in zip(outputs,public_outputs(v,outputs),strict=True):
+   if make(source)!=want:raise ValueError('public sparse expectation differs from actual original exit/ownership')
+ print('all9 caller sessions/179original transitions:initial ENTRY facts,exit expectations and ownership verified',flush=True)
+
+def replay(values):
+ import onenil_engine as native
+ (actual,_),(clocks,_)=sources()
+ for i,v in enumerate(values):
+  outputs=actual if i==0 else[clocks[i-1]]
+  if i==0:
+   session=native.NativeWatchedCallerSession(json.dumps(v['initial']),v['no_pending_key'])
+   for step,want in enumerate(public_outputs(v,outputs),1):
+    got=json.loads(session.step())
+    if got!=want:raise ValueError(f'native caller iteration{step} mismatch')
+  else:
+   request={k:v[k]for k in('initial','steps','clock_only','no_pending_key')};got=json.loads(native.watched_caller(json.dumps(request)))
+   if got.get('ok')!=list(public_outputs(v,outputs)):raise ValueError(f'native clock boundary{i-1} mismatch:'+str(got.get('error')))
+ print('native caller:171persistent iterations/33actions and8clock boundaries matched',flush=True)
+
+def check_research(research):
+ (actual,_),_=sources();protocol=read(ROOT/'records/T40/oracle-r0001/start.json')
+ if sha(research/'traces/T40/index.json')!=protocol['reference_index_sha256']:raise ValueError('complete original reference index differs')
+ ticks=[];draws=[];actions=[]
+ for item in protocol['reference_chunks']:
+  path=research/item['path']
+  if sha(path)!=item['sha256']:raise ValueError('complete original reference chunk differs')
+  chunk=read(path);payload=chunk['payload']
+  if hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()!=chunk['payload_sha256']:raise ValueError('complete original reference payload differs')
+  ticks+=payload['ticks'];draws+=payload['draws'];actions+=payload['actions']
+ def decoded(scene):
+  raw=bytearray(25)
+  for key,value in scene.items():
+   if key!='index':
+    width=2 if key.startswith('word')else 1;offset=int(key[4:]);raw[offset:offset+width]=value.to_bytes(width,'little')
+  return raw
+ for i,c in enumerate(actual):
+  for side,reference in [('input',ticks[i]['before']),('output',ticks[i+1]['before'])]:
+   observed=c[side]
+   if observed['seed']!=reference['seed']or[decoded(scene)for scene in observed['scenes']]!=[decoded(scene)for scene in reference['scenes']]:raise ValueError('original caller/reference scenes or seed differ')
+   for key in ('active','remaining','stoppage','elapsed','phase','hold'):
+    if observed['clock'][key]!=reference[key]:raise ValueError('original caller/reference logical clock differs')
+  if(c['draw_start'],c['draw_end'])!=(ticks[i]['draw_start'],ticks[i+1]['draw_start']):raise ValueError('original caller/reference draw cursors differ')
+  if c['draws']!=[oracle.normalized(d)for d in draws[c['draw_start']:c['draw_end']]]:raise ValueError('original caller/reference ordered draws differ')
+  expected=[{k:v for k,v in event.items()if k not in('tick','event')}for event in actions if event['tick']==i+1]
+  if c['events']!=expected:raise ValueError('original caller/reference accepted actions differ')
+ print('171original caller entries/cutpoints join pinned complete reference scenes,clock,RNG and33actions',flush=True)
+
+def benchmark(values,repetitions):
+ from onenil_engine import onenil_engine as native
+ if oracle.common.git('status','--porcelain','--','engine','tools','pyproject.toml'):raise ValueError('commit native benchmark sources first')
+ if native.__debug_assertions__:raise ValueError('release extension required')
+ initial=json.dumps(values[0]['initial'],sort_keys=True,separators=(',',':'))
+ clocks=[json.dumps({k:v[k]for k in('initial','steps','clock_only','no_pending_key')},sort_keys=True,separators=(',',':'))for v in values[1:]]
+ began=datetime.now(timezone.utc).isoformat();start=time.perf_counter_ns();size=0
+ for _ in range(repetitions):
+  session=native.NativeWatchedCallerSession(initial,True)
+  for _ in range(values[0]['steps']):size+=len(session.step())
+  for request in clocks:size+=len(native.watched_caller(request))
+ elapsed=time.perf_counter_ns()-start;directory=ROOT/'records/T40';n=len(list(directory.glob('T40-r*.json')))+1;path=directory/f'T40-r{n:04d}.json'
+ oracle.write_json(path,{'schema':'routine-benchmark/1','code_commit':oracle.common.git('rev-parse','HEAD'),'started':began,'elapsed_ns':elapsed,'sessions':len(values)*repetitions,'transitions':179*repetitions,'repetitions':repetitions,'serialized_output_bytes':size,'platform':platform.platform(),'rustc':subprocess.check_output(['rustc','--version'],text=True).strip(),'extension_sha256':sha(Path(native.__file__)),'cargo_lock_sha256':sha(ROOT/'engine/Cargo.lock'),'debug_assertions':native.__debug_assertions__,'maturin':version('maturin'),'pins':{'actual':ACTUAL_SHA,'clock':CLOCK_SHA,'fixtures':FIXTURE_SHA},'method':'Pre-serialized initial admissions;native parsing,one persistent image,171computed caller advances and serialization;8independent clock cases per repetition','limits':'First171caller iterations and derived clock cases only;no full match,lifecycle,viewer or emulator-speed comparison'})
+ print(path.relative_to(ROOT),flush=True)
+
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--export',action='store_true');p.add_argument('--probe',type=Path,required=True);a=p.parse_args()
- if a.export:export(a.probe)
- else:p.error('choose export')
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--export',action='store_true');p.add_argument('--probe',type=Path);p.add_argument('--check',action='store_true');p.add_argument('--check-private',action='store_true');p.add_argument('--replay',action='store_true');p.add_argument('--check-research',type=Path);p.add_argument('--benchmark',action='store_true');p.add_argument('--repetitions',type=int,default=3);a=p.parse_args()
+ if a.repetitions<1:p.error('positive repetitions required')
+ if a.check_research:check_research(a.check_research)
+ if a.export:
+  if a.probe is None:p.error('--export requires --probe')
+  export(a.probe)
+ if a.check or a.check_private or a.replay or a.benchmark:
+  values=check();print('decoded caller corpus:171actual iterations/8clock boundaries verified',flush=True)
+  if a.check_private:verify_private(values)
+  if a.replay or a.benchmark:replay(values)
+  if a.benchmark:benchmark(values,a.repetitions)
+ if not(a.export or a.check or a.check_private or a.replay or a.benchmark or a.check_research):p.error('choose export/check/private/replay')
 if __name__=='__main__':main()

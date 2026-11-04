@@ -39,6 +39,9 @@ def reference(research):
  return full,source,base,expected,ticks,draws,actions,pins
 
 def capture(research):
+ if (DIRECTORY/'manifest.json').exists():
+  import replay_watched_caller as replay
+  replay.sources();replay.check_research(research);print('completed caller capture verified;no original rerun',flush=True);return
  if oracle.common.git('status','--porcelain','--','tools/watched_caller_oracle.py'):raise ValueError('commit original observer before capture')
  full,source,base,expected,ref_ticks,ref_draws,ref_actions,pins=reference(research)
  _,data=full.match.find_state(base['start_state']['sha256']);week=full.match.Week(data);pages=oracle.Pages(ROOT/'.cache/T40/oracle-r0001');DIRECTORY.mkdir(parents=True,exist_ok=True)
@@ -104,6 +107,9 @@ def capture(research):
  elif read(path)!=result:raise ValueError('original caller manifest differs')
 
 def clock_cases(research):
+ if (ROOT/'records/T40/clock-r0001/manifest.json').exists():
+  import replay_watched_caller as replay
+  replay.sources();print('completed8original clock cases verified;no original rerun',flush=True);return
  if oracle.common.git('status','--porcelain','--','tools/watched_caller_oracle.py'):raise ValueError('commit observer before clock measurements')
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest,match
  full,_,_,_,_,_,_,_=reference(research);anchor=read(DIRECTORY/'iteration-001.json');raw_entry=oracle.memory(anchor['entry']);directory=ROOT/'records/T40/clock-r0001';directory.mkdir(parents=True,exist_ok=True);pages=oracle.Pages(ROOT/'.cache/T40/clock-r0001')

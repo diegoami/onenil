@@ -143,16 +143,16 @@ impl CallerSession {
         })
     }
     pub fn advance(&mut self) -> Result<Outcome, Fault> {
-        Err(Fault {
-            message: "valid-fixture caller stub".into(),
-            missing: None,
-        })
+        self.execute(false)
     }
     pub fn clock_boundary(&mut self) -> Result<Outcome, Fault> {
-        Err(Fault {
-            message: "valid-fixture clock stub".into(),
-            missing: None,
-        })
+        if self.used {
+            return Err(fault(
+                "isolated clock boundary requires a fresh admission".into(),
+                &self.cpu,
+            ));
+        }
+        self.execute(true)
     }
     fn execute(&mut self, clock_only: bool) -> Result<Outcome, Fault> {
         if self.failed || self.ended {
@@ -317,6 +317,93 @@ mod tests {
             out.phase_complete,
             source["phase_complete"].as_bool().unwrap()
         );
+    }
+    fn fixture_input(number: usize) -> State {
+        serde_json::from_value(
+            load(&format!(
+                "engine/tests/fixtures/watched_caller/case-{number:02}.json"
+            ))["initial"]
+                .clone(),
+        )
+        .unwrap()
+    }
+    #[test]
+    fn caller_admission_and_failed_advance_keep_alias_and_domain_guards() {
+        let s = fixture_input(0);
+        assert!(CallerSession::admit(&s, false).is_err());
+        let mut frame = s.clone();
+        frame.regs[5] += 2;
+        assert!(CallerSession::admit(&frame, true).is_err());
+        let mut alias = s.clone();
+        alias.pointers[0].segment = s.regs[11];
+        assert!(CallerSession::admit(&alias, true).is_err());
+        let mut duplicate = s.clone();
+        duplicate.cells.push(s.cells[0].clone());
+        assert!(CallerSession::admit(&duplicate, true).is_err());
+        let mut quick = s;
+        quick
+            .cells
+            .iter_mut()
+            .find(|f| f.area == Area::Ds && f.offset == 0xD074)
+            .unwrap()
+            .value = 1;
+        let mut session = CallerSession::admit(&quick, true).unwrap();
+        assert!(session
+            .advance()
+            .err()
+            .unwrap()
+            .message
+            .contains("quick fallback"));
+        let image = session.cpu.e.image.clone();
+        let regs = session.cpu.r;
+        assert!(session.advance().err().unwrap().message.contains("closed"));
+        assert_eq!(image, session.cpu.e.image);
+        assert_eq!(regs, session.cpu.r);
+    }
+    #[test]
+    fn missing_offside_word_read_closes_the_caller_before_the_later_store() {
+        let mut s = fixture_input(0);
+        let n = s.cells.len();
+        s.cells
+            .retain(|f| !(f.area == Area::Ds && f.offset == 0xCF2F));
+        assert!(s.cells.len() < n);
+        let mut session = CallerSession::admit(&s, true).unwrap();
+        let error = session.advance().err().unwrap();
+        let missing = error.missing.unwrap();
+        assert!(!missing.writing, "{error:?}");
+        assert_eq!(missing.pc, (0x0AB9, 0x0352));
+        assert!(session.advance().err().unwrap().message.contains("closed"));
+    }
+    #[test]
+    fn original_compiled_offside_store_rejects_a_missing_write_baseline() {
+        let mut input = fixture_input(0);
+        input
+            .cells
+            .retain(|f| !(f.area == Area::Ds && f.offset == 0xCF2F));
+        let mut session = CallerSession::admit(&input, true).unwrap();
+        let result = session.cpu.invoke(
+            super::super::caller_graph::p_0ab9_760c,
+            false,
+            0x0AB9,
+            0x760C,
+            0x7C83,
+        );
+        assert!(result.is_err());
+        let missing = session.cpu.missing.get().unwrap();
+        assert!(missing.writing);
+        assert_eq!(missing.address, 16 * usize::from(input.regs[11]) + 0xCF2F);
+    }
+    #[test]
+    fn computed_half_and_full_time_clock_results_close_the_parent_loop() {
+        for number in [3, 6] {
+            let s = fixture_input(number);
+            let mut session = CallerSession::admit(&s, true).unwrap();
+            assert!(session.clock_boundary().unwrap().phase_complete);
+            let image = session.cpu.e.image.clone();
+            assert!(session.advance().is_err());
+            assert!(session.clock_boundary().is_err());
+            assert_eq!(image, session.cpu.e.image);
+        }
     }
     #[test]
     fn original171caller_iterations_share_one_native_image_and_clock() {

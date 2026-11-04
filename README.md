@@ -1562,3 +1562,32 @@ bytes. The repeated-root sequence omits the outer caller and clock. Logical7B7B
 clock progression,full caller/match composition and the detailed commentary
 viewer remain required by milestone35;these kernel checks do not establish a
 complete playable watched match.
+
+## Continuous watched caller and clock
+
+[confirmed: T40 original caller corpus and clock cases] `CallerSession` composes
+171 actual original caller iterations,including watched actions,occupancy,
+offside work and the original logical clock. One initial admission supplies all
+state; `advance()` accepts no intermediate inputs. The sequence reaches four
+elapsed game minutes and33 accepted actions,including the retained32-action
+prefix. Eight independently derived original clock cases cover halftime,
+fulltime,stoppage,saturation and16-bit wrap. These are boundary tests;the full
+match lifecycle and detailed commentary/pitch viewer remain milestone35 work.
+
+```sh
+.cache/venv/bin/python tools/replay_watched_caller.py --check --replay
+.cache/venv/bin/python tools/replay_watched_caller.py --benchmark
+.cache/venv/bin/python tools/replay_watched_caller.py --check-private
+.cache/venv/bin/python tools/replay_watched_caller.py --check-research ../onenil-archaeology
+python3 records/T40/validate_provenance.py
+python3 tools/watched_caller_oracle.py --research-root ../onenil-archaeology --capture --clock-cases
+```
+
+[designed] Public fixtures store one ENTRY fact union and pinned original sparse
+changes. The checker reconstructs every declared gameplay cell for each step;
+these expectations enter only assertions. Public replay needs no original bytes.
+Private validation additionally compares the original RAM exits. Completed
+capture commands validate retained records without rerunning the original;
+incomplete captures require their recorded observer version and private inputs.
+The release benchmark includes admission,all computed steps and serialization,
+with one persistent native image per trajectory;it measures this caller slice.
