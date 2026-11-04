@@ -4,6 +4,10 @@ import argparse
 import hashlib
 import json
 import subprocess
+import time
+import platform
+from datetime import datetime, timezone
+from importlib.metadata import version
 from pathlib import Path
 import replay_match_setup as prior
 import replay_watched_match as reference
@@ -108,18 +112,54 @@ def replay(value, original):
     print('native selected-squad watched preparation:258draws/11boundaries and complete first ENTRY match',flush=True)
 
 
+def benchmark(value, repetitions):
+    import onenil_engine as api
+    from onenil_engine import onenil_engine as native
+    if subprocess.check_output(['git','status','--porcelain','--','engine','tools'],cwd=ROOT,text=True):
+        raise ValueError('commit watched preparation sources before measuring')
+    if native.__debug_assertions__:
+        raise ValueError('release extension required')
+    request=json.dumps(value['input'],sort_keys=True,separators=(',',':'))
+    began=datetime.now(timezone.utc).isoformat();size=0;start=time.perf_counter_ns()
+    for _ in range(repetitions):
+        session=api.NativeWatchedPreparation(request)
+        size+=len(session.preparation())+len(session.snapshot())
+        del session
+    elapsed=time.perf_counter_ns()-start
+    directory=ROOT/'records/T43'
+    number=max((int(p.stem.split('-r')[1]) for p in directory.glob('T43-r*.json')),default=0)+1
+    path=directory/f'T43-r{number:04d}.json'
+    record=dict(schema='routine-benchmark/1',code_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+                started=began,elapsed_ns=elapsed,repetitions=repetitions,setup_draws=258*repetitions,
+                setup_boundaries=11*repetitions,serialized_output_bytes=size,debug_assertions=native.__debug_assertions__,
+                extension_sha256=sha(Path(native.__file__)),cargo_lock_sha256=sha(ROOT/'engine/Cargo.lock'),
+                admission_sha256=sha(FIXTURE),original_manifest_sha256=MANIFEST_SHA,
+                platform=platform.platform(),rustc=subprocess.check_output(['rustc','--version'],text=True).strip(),maturin=version('maturin'),
+                method='Pre-serialized selected-squad and pre-seeding incoming input;release parse,owned native preparation,all boundary/first-entry serialization and drop.',
+                scope='Preparation to first watched ENTRY only;full continuing watched lifecycle composition and supported choices remain required. No emulator-speed comparison.')
+    with path.open('x') as output:
+        json.dump(record,output,indent=2);output.write('\n')
+    print(path.relative_to(ROOT),flush=True)
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--freeze',action='store_true')
     parser.add_argument('--check',action='store_true')
     parser.add_argument('--replay',action='store_true')
+    parser.add_argument('--benchmark',action='store_true')
+    parser.add_argument('--repetitions',type=int,default=3)
     args=parser.parse_args()
-    if not(args.freeze or args.check or args.replay):
-        parser.error('choose --freeze,--check or --replay')
+    if not(args.freeze or args.check or args.replay or args.benchmark):
+        parser.error('choose --freeze,--check,--replay or --benchmark')
+    if args.repetitions<1:
+        parser.error('repetitions must be positive')
     value,original=admission(args.freeze)
     print('pinned incoming supplement and watched setup reference verified',flush=True)
-    if args.replay:
+    if args.replay or args.benchmark:
         replay(value,original)
+    if args.benchmark:
+        benchmark(value,args.repetitions)
 
 
 if __name__=='__main__':
