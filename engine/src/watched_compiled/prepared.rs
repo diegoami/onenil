@@ -422,12 +422,21 @@ mod tests {
     #[test]
     fn weekly_award_baselines_are_incoming_but_current_award_is_computed() {
         let facts = (0xD144..0xD148)
-            .map(|offset| ByteFact { area: Area::Ds, offset, value: 0 })
+            .map(|offset| ByteFact {
+                area: Area::Ds,
+                offset,
+                value: 0,
+            })
             .collect::<Vec<_>>();
         let cells = support_cells(&facts).unwrap();
         assert_eq!(cells.len(), 4);
         for offset in [0xD142, 0xD143, 0xD148, 0xD149] {
-            assert!(support_cells(&[ByteFact { area: Area::Ds, offset, value: 0 }]).is_err());
+            assert!(support_cells(&[ByteFact {
+                area: Area::Ds,
+                offset,
+                value: 0
+            }])
+            .is_err());
         }
     }
     #[test]

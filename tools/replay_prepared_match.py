@@ -58,8 +58,9 @@ def field_preservation():
     for name,digest in manifest['files'].items():
         if sha(FIELD_DIRECTORY/name)!=digest:raise ValueError('full original preservation leaf differs')
     start=read(FIELD_DIRECTORY/'start.json')
-    if start['schema']!='original-prepared-full-lifecycle/2' or start['observer_sha256']!=sha(ROOT/'tools/prepared_match_oracle.py'):
-        raise ValueError('original full-preservation observer identity differs')
+    observer=subprocess.check_output(['git','show',start['producer']+':tools/prepared_match_oracle.py'],cwd=ROOT)
+    if start['schema'] not in ('original-prepared-full-lifecycle/1','original-prepared-full-lifecycle/2') or start['observer_sha256']!=hashlib.sha256(observer).hexdigest():
+        raise ValueError('original full-preservation committed observer identity differs')
     if start['reference_index_sha256']!=reference.INDEX_SHA or start['prepared_admission_sha256']!=sha(prefix.FIXTURE):
         raise ValueError('original full-preservation input/reference identity differs')
     result=read(FIELD_DIRECTORY/'result.json')
