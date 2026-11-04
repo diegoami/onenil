@@ -1,0 +1,616 @@
+{
+  "scope": "Native entry guard/checkpoint and incremental incoming support discovery;171 caller parity is not yet established. No unknown reads are bypassed. Each input value is from the original before19CA observation,not a first-entry or tick outcome.",
+  "notes": [
+    "native entry focused guards:3 passed",
+    "support-selection-probe-r0011 ran the previous binary while r0012 build was live;it is not validation of the newer source",
+    "read-only numeric ranges are source-indexed tables;D09E/D0A6..D0A9/D0B6 are preserved incoming state with source stores documented in prepared.rs"
+  ],
+  "logs": {
+    "T44-support-selection-probe-r0001.txt": {
+      "sha256": "8b37c201c0a3cc5d71af9679d89189abeabb1ee22b613826a3bad0fdd603192f",
+      "lines": [
+        "0 prepared watched entry: Err(\"missing initial native write baseline at 0AB9:7607 0CF43\");pc=(2745, 30215);missing=Some(Missing { scratch: false, address: 53059, writing: true, pc: (2745, 30215) })",
+        "CHANGED BY SETUP: COMPUTE {'area': 'ds', 'offset': 53059, 'before': 0, 'entry': 1}"
+      ]
+    },
+    "T44-support-selection-probe-r0002.txt": {
+      "sha256": "cbe7f283bab53d1dfe1678d1850cde9da89ab67a8f628b61f11cfcdd803cc71f",
+      "lines": [
+        "0 missing reached native data at 0AB9:7B13 0000:0B18;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2840, writing: false, pc: (2745, 31507) })",
+        "1 missing reached native data at 0AB9:5641 0000:0AB7;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2743, writing: false, pc: (2745, 22081) })",
+        "2 unsupported initial support Ds+0AB7"
+      ]
+    },
+    "T44-support-selection-probe-r0003.txt": {
+      "sha256": "3b62b77153cd235199167087524fc2e0da53677a72bdf42228f1dd0b2902821c",
+      "lines": [
+        "0 missing reached native data at 0AB9:7B13 0000:0B18;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2840, writing: false, pc: (2745, 31507) })",
+        "1 missing reached native data at 0AB9:5641 0000:0AB7;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2743, writing: false, pc: (2745, 22081) })",
+        "2 missing reached native data at 0AB9:5683 0000:0ABA;pc=(2745, 22147);missing=Some(Missing { scratch: false, address: 2746, writing: false, pc: (2745, 22147) })",
+        "3 unsupported initial support Ds+0ABA"
+      ]
+    },
+    "T44-support-selection-probe-r0004.txt": {
+      "sha256": "800b04e16d774c075dafe0288c01f749ebb8c39fa6502da2267e04b55adb1728",
+      "lines": [
+        "0 prepared pointer alias/ABI differs: Commentary"
+      ]
+    },
+    "T44-support-selection-probe-r0005.txt": {
+      "sha256": "f37a3580b889103a69bce728fa0a7a5a68dd2517753384a543cc16ce67f65c60",
+      "lines": [
+        "0 missing reached native data at 0AB9:7B13 0000:0B18;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2840, writing: false, pc: (2745, 31507) })",
+        "1 missing reached native data at 0AB9:5641 0000:0AB7;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2743, writing: false, pc: (2745, 22081) })",
+        "2 missing reached native data at 0AB9:5683 0000:0ABA;pc=(2745, 22147);missing=Some(Missing { scratch: false, address: 2746, writing: false, pc: (2745, 22147) })",
+        "3 missing reached native data at 0AB9:5683 0000:0ABA;pc=(2745, 22147);missing=Some(Missing { scratch: false, address: 2747, writing: false, pc: (2745, 22147) })",
+        "4 missing reached native data at 1998:0ABF 0000:0D70;pc=(6552, 2751);missing=Some(Missing { scratch: false, address: 3440, writing: false, pc: (6552, 2751) })",
+        "5 unsupported initial support Ds+0D70"
+      ]
+    },
+    "T44-support-selection-probe-r0006.txt": {
+      "sha256": "64f5834421d86c3e1fe50880bdf56b1e9f235d62093c40c18cb57cfc5e07ae19",
+      "lines": [
+        "0 missing reached native data at 0AB9:7B13 0000:0B18;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2840, writing: false, pc: (2745, 31507) })",
+        "1 missing reached native data at 0AB9:5641 0000:0AB7;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2743, writing: false, pc: (2745, 22081) })",
+        "2 missing reached native data at 0AB9:5683 0000:0ABA;pc=(2745, 22147);missing=Some(Missing { scratch: false, address: 2746, writing: false, pc: (2745, 22147) })",
+        "3 missing reached native data at 0AB9:5683 0000:0ABA;pc=(2745, 22147);missing=Some(Missing { scratch: false, address: 2747, writing: false, pc: (2745, 22147) })",
+        "4 missing reached native data at 1998:0ABF 0000:0D70;pc=(6552, 2751);missing=Some(Missing { scratch: false, address: 3440, writing: false, pc: (6552, 2751) })",
+        "5 missing reached native data at 0AB9:7B13 0000:0B19;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2841, writing: false, pc: (2745, 31507) })",
+        "6 missing reached native data at 0AB9:5641 0000:0AB6;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2742, writing: false, pc: (2745, 22081) })",
+        "7 missing reached native data at 0AB9:7B13 0000:0B1A;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2842, writing: false, pc: (2745, 31507) })",
+        "8 missing reached native data at 0AB9:5641 0000:0AAA;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2730, writing: false, pc: (2745, 22081) })",
+        "9 missing reached native data at 0AB9:7B13 0000:0B1B;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2843, writing: false, pc: (2745, 31507) })",
+        "10 missing reached native data at 0AB9:7B13 0000:0B1C;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2844, writing: false, pc: (2745, 31507) })",
+        "11 missing reached native data at 0AB9:5641 0000:0AAF;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2735, writing: false, pc: (2745, 22081) })",
+        "12 missing reached native data at 0AB9:7B13 0000:0B1D;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2845, writing: false, pc: (2745, 31507) })",
+        "13 missing reached native data at 0AB9:7B13 0000:0B1E;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2846, writing: false, pc: (2745, 31507) })",
+        "14 missing reached native data at 0AB9:5641 0000:0AAB;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2731, writing: false, pc: (2745, 22081) })",
+        "15 missing reached native data at 0AB9:7B13 0000:0B1F;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2847, writing: false, pc: (2745, 31507) })",
+        "16 missing reached native data at 0AB9:5641 0000:0AAC;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2732, writing: false, pc: (2745, 22081) })",
+        "17 missing reached native data at 0AB9:7B13 0000:0B20;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2848, writing: false, pc: (2745, 31507) })",
+        "18 missing reached native data at 0AB9:56A0 0000:0AB8;pc=(2745, 22176);missing=Some(Missing { scratch: false, address: 2744, writing: false, pc: (2745, 22176) })",
+        "19 missing reached native data at 0AB9:56A0 0000:0AB8;pc=(2745, 22176);missing=Some(Missing { scratch: false, address: 2745, writing: false, pc: (2745, 22176) })",
+        "20 missing reached native data at 0AB9:7B13 0000:0B21;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2849, writing: false, pc: (2745, 31507) })",
+        "21 missing reached native data at 0AB9:5641 0000:0AB5;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2741, writing: false, pc: (2745, 22081) })",
+        "22 missing reached native data at 0AB9:7B13 0000:0B22;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2850, writing: false, pc: (2745, 31507) })",
+        "23 missing reached native data at 0AB9:5641 0000:0AB0;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2736, writing: false, pc: (2745, 22081) })",
+        "24 missing reached native data at 0AB9:7B13 0000:0B23;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2851, writing: false, pc: (2745, 31507) })",
+        "25 missing reached native data at 0AB9:7B13 0000:0B24;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2852, writing: false, pc: (2745, 31507) })",
+        "26 missing reached native data at 0AB9:7B13 0000:0B25;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2853, writing: false, pc: (2745, 31507) })",
+        "27 missing reached native data at 0AB9:7B13 0000:0B26;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2854, writing: false, pc: (2745, 31507) })",
+        "28 missing reached native data at 0AB9:5641 0000:0AB4;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2740, writing: false, pc: (2745, 22081) })",
+        "29 missing reached native data at 0AB9:7B13 0000:0B27;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2855, writing: false, pc: (2745, 31507) })",
+        "30 missing reached native data at 0AB9:7B13 0000:0B28;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2856, writing: false, pc: (2745, 31507) })",
+        "31 missing reached native data at 0AB9:5641 0000:0AAE;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2734, writing: false, pc: (2745, 22081) })",
+        "32 missing reached native data at 0AB9:7B13 0000:0B29;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2857, writing: false, pc: (2745, 31507) })",
+        "33 missing reached native data at 0AB9:7B13 0000:0B2A;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2858, writing: false, pc: (2745, 31507) })",
+        "34 missing reached native data at 0AB9:5641 0000:0AAD;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2733, writing: false, pc: (2745, 22081) })",
+        "35 missing reached native data at 0AB9:7B13 0000:0B2B;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2859, writing: false, pc: (2745, 31507) })",
+        "36 missing reached native data at 0AB9:7B13 0000:0B2C;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2860, writing: false, pc: (2745, 31507) })",
+        "37 missing reached native data at 0AB9:5641 0000:0AB3;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2739, writing: false, pc: (2745, 22081) })",
+        "38 missing reached native data at 0AB9:7B13 0000:0B2D;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2861, writing: false, pc: (2745, 31507) })",
+        "39 missing reached native data at 0AB9:788B 0000:0D3A;pc=(2745, 30859);missing=Some(Missing { scratch: false, address: 3386, writing: false, pc: (2745, 30859) })",
+        "40 unsupported initial support Ds+0D3A"
+      ]
+    },
+    "T44-support-selection-probe-r0007.txt": {
+      "sha256": "401cdb960d3505537879a4f421a38f24845e4d75fa4e9daf71f2ed3753c27950",
+      "lines": [
+        "0 missing reached native data at 0AB9:0F70 0000:09AB;pc=(2745, 3952);missing=Some(Missing { scratch: false, address: 2475, writing: false, pc: (2745, 3952) })",
+        "1 unsupported initial support Ds+09AB"
+      ]
+    },
+    "T44-support-selection-probe-r0008.txt": {
+      "sha256": "1666afb20556167e3d40ac00d687b75841a091f9514f9456bf470b5d05d60ca3",
+      "lines": [
+        "0 missing reached native data at 0AB9:56FF 0000:0ABC;pc=(2745, 22271);missing=Some(Missing { scratch: false, address: 2748, writing: false, pc: (2745, 22271) })",
+        "1 missing reached native data at 0AB9:56FF 0000:0ABC;pc=(2745, 22271);missing=Some(Missing { scratch: false, address: 2749, writing: false, pc: (2745, 22271) })",
+        "2 missing reached native data at 0AB9:2806 0000:0A1B;pc=(2745, 10246);missing=Some(Missing { scratch: false, address: 2587, writing: false, pc: (2745, 10246) })",
+        "3 unsupported initial support Ds+0A1B"
+      ]
+    },
+    "T44-support-selection-probe-r0009.txt": {
+      "sha256": "c3f24a12688f409a859446f74a11be24ed6adc09f0cb6ca379042135554490ef",
+      "lines": [
+        "0 missing reached native data at 0AB9:9F9E 0000:9690;pc=(2745, 40862);missing=Some(Missing { scratch: false, address: 38544, writing: false, pc: (2745, 40862) })",
+        "1 missing reached native data at 0AB9:9FB4 0000:97EC;pc=(2745, 40884);missing=Some(Missing { scratch: false, address: 38892, writing: false, pc: (2745, 40884) })",
+        "2 missing reached native data at 0AB9:1B91 0000:0A06;pc=(2745, 7057);missing=Some(Missing { scratch: false, address: 2566, writing: false, pc: (2745, 7057) })",
+        "3 unsupported initial support Ds+0A06"
+      ]
+    },
+    "T44-support-selection-probe-r0010.txt": {
+      "sha256": "ef430cff12f02c90c8fdd1e6bb3344007f2d4207e2aeaa89597563efcb0479a8",
+      "lines": [
+        "0 missing initial native write baseline at 0AB9:28C1 0D0B6;pc=(2745, 10433);missing=Some(Missing { scratch: false, address: 53430, writing: true, pc: (2745, 10433) })",
+        "1 unsupported initial support Ds+D0B6"
+      ]
+    },
+    "T44-support-selection-probe-r0011.txt": {
+      "sha256": "3f44d7d6f20c6dacae2b52c5566fd68f167d6f7e30e2e0f8e3db274270deed2c",
+      "lines": [
+        "0 unsupported initial support Ds+D0B6"
+      ]
+    },
+    "T44-support-selection-probe-r0012.txt": {
+      "sha256": "5cd5f0677723cf52e1628e4ce07dca8c7a4b5319f95e66e89be088a37eb954a5",
+      "lines": [
+        "0 missing initial native write baseline at 0AB9:28FA 0D0A6;pc=(2745, 10490);missing=Some(Missing { scratch: false, address: 53414, writing: true, pc: (2745, 10490) })",
+        "1 unsupported initial support Ds+D0A6"
+      ]
+    },
+    "T44-support-selection-probe-r0013.txt": {
+      "sha256": "a8d29e8f9da7f7f4fe46e4720a47b95b85c70f2bc53a6e9618dd113686c99784",
+      "lines": [
+        "0 missing initial native write baseline at 0AB9:28FA 0D0A7;pc=(2745, 10490);missing=Some(Missing { scratch: false, address: 53415, writing: true, pc: (2745, 10490) })",
+        "1 missing reached native data at 0AB9:571F 0000:0D5C;pc=(2745, 22303);missing=Some(Missing { scratch: false, address: 3420, writing: false, pc: (2745, 22303) })",
+        "2 unsupported initial support Ds+0D5C"
+      ]
+    },
+    "T44-support-selection-probe-r0014.txt": {
+      "sha256": "6d21fdeae0fbd49ce1801dfb8f3ecb9b151e51a3da02e91934e0e6caa5cb353f",
+      "lines": [
+        "0 missing reached native data at 0AB9:571F 0000:0D5C;pc=(2745, 22303);missing=Some(Missing { scratch: false, address: 3421, writing: false, pc: (2745, 22303) })",
+        "1 missing reached native data at 0AB9:7A3B 0000:0B37;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2871, writing: false, pc: (2745, 31291) })",
+        "2 missing reached native data at 0AB9:32CA 0000:0A58;pc=(2745, 13002);missing=Some(Missing { scratch: false, address: 2648, writing: false, pc: (2745, 13002) })",
+        "3 unsupported initial support Ds+0A58"
+      ]
+    },
+    "T44-support-selection-probe-r0015.txt": {
+      "sha256": "86d6290e1e05e3ebcd7eb93796c41e625c80322ffb59ea8e0ce168b688194e90",
+      "lines": [
+        "0 missing reached native data at 0AB9:3551 0000:0A69;pc=(2745, 13649);missing=Some(Missing { scratch: false, address: 2665, writing: false, pc: (2745, 13649) })",
+        "1 missing reached native data at 0AB9:7A3B 0000:0B38;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2872, writing: false, pc: (2745, 31291) })",
+        "2 missing reached native data at 0AB9:32CA 0000:0A59;pc=(2745, 13002);missing=Some(Missing { scratch: false, address: 2649, writing: false, pc: (2745, 13002) })",
+        "3 missing reached native data at 0AB9:343B 0000:0A7C;pc=(2745, 13371);missing=Some(Missing { scratch: false, address: 2684, writing: false, pc: (2745, 13371) })",
+        "4 missing reached native data at 0AB9:7A3B 0000:0B39;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2873, writing: false, pc: (2745, 31291) })",
+        "5 missing reached native data at 0AB9:7A3B 0000:0B3A;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2874, writing: false, pc: (2745, 31291) })",
+        "6 missing reached native data at 0AB9:32CA 0000:0A56;pc=(2745, 13002);missing=Some(Missing { scratch: false, address: 2646, writing: false, pc: (2745, 13002) })",
+        "7 missing reached native data at 0AB9:3551 0000:0A6A;pc=(2745, 13649);missing=Some(Missing { scratch: false, address: 2666, writing: false, pc: (2745, 13649) })",
+        "8 missing reached native data at 0AB9:7A3B 0000:0B3B;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2875, writing: false, pc: (2745, 31291) })",
+        "9 missing reached native data at 0AB9:7A3B 0000:0B3C;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2876, writing: false, pc: (2745, 31291) })",
+        "10 missing reached native data at 0AB9:7A3B 0000:0B3D;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2877, writing: false, pc: (2745, 31291) })",
+        "11 missing reached native data at 0AB9:343B 0000:0A7E;pc=(2745, 13371);missing=Some(Missing { scratch: false, address: 2686, writing: false, pc: (2745, 13371) })",
+        "12 missing reached native data at 0AB9:7A3B 0000:0B3E;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2878, writing: false, pc: (2745, 31291) })",
+        "13 missing reached native data at 0AB9:7A3B 0000:0B3F;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2879, writing: false, pc: (2745, 31291) })",
+        "14 missing reached native data at 0AB9:32CA 0000:0A57;pc=(2745, 13002);missing=Some(Missing { scratch: false, address: 2647, writing: false, pc: (2745, 13002) })",
+        "15 missing reached native data at 0AB9:343B 0000:0A7D;pc=(2745, 13371);missing=Some(Missing { scratch: false, address: 2685, writing: false, pc: (2745, 13371) })",
+        "16 missing reached native data at 0AB9:7A3B 0000:0B40;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2880, writing: false, pc: (2745, 31291) })",
+        "17 missing reached native data at 0AB9:7A3B 0000:0B41;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2881, writing: false, pc: (2745, 31291) })",
+        "18 missing reached native data at 0AB9:7A3B 0000:0B42;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2882, writing: false, pc: (2745, 31291) })",
+        "19 missing reached native data at 0AB9:7A3B 0000:0B43;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2883, writing: false, pc: (2745, 31291) })",
+        "20 unsupported initial support Ds+0B43"
+      ]
+    },
+    "T44-support-selection-probe-r0016.txt": {
+      "sha256": "302ce2a2c7d8efe23d27ace5bcb80c12147afef4f37a6d65868e9ec2c8a3cf29",
+      "lines": [
+        "0 missing reached native data at 0AB9:7A3B 0000:0B2E;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2862, writing: false, pc: (2745, 31291) })",
+        "1 missing reached native data at 0AB9:7A3B 0000:0B2F;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2863, writing: false, pc: (2745, 31291) })",
+        "2 missing reached native data at 0AB9:3551 0000:0A68;pc=(2745, 13649);missing=Some(Missing { scratch: false, address: 2664, writing: false, pc: (2745, 13649) })",
+        "3 missing reached native data at 0AB9:7A3B 0000:0B30;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2864, writing: false, pc: (2745, 31291) })",
+        "4 missing reached native data at 0AB9:3551 0000:0A6B;pc=(2745, 13649);missing=Some(Missing { scratch: false, address: 2667, writing: false, pc: (2745, 13649) })",
+        "5 missing reached native data at 0AB9:7A3B 0000:0B31;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2865, writing: false, pc: (2745, 31291) })",
+        "6 missing reached native data at 0AB9:343B 0000:0A7F;pc=(2745, 13371);missing=Some(Missing { scratch: false, address: 2687, writing: false, pc: (2745, 13371) })",
+        "7 missing reached native data at 0AB9:7A3B 0000:0B32;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2866, writing: false, pc: (2745, 31291) })",
+        "8 missing reached native data at 0AB9:7A3B 0000:0B33;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2867, writing: false, pc: (2745, 31291) })",
+        "9 missing reached native data at 0AB9:7A3B 0000:0B34;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2868, writing: false, pc: (2745, 31291) })",
+        "10 missing reached native data at 0AB9:33BC 0000:0A5B;pc=(2745, 13244);missing=Some(Missing { scratch: false, address: 2651, writing: false, pc: (2745, 13244) })",
+        "11 missing reached native data at 0AB9:7A3B 0000:0B35;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2869, writing: false, pc: (2745, 31291) })",
+        "12 missing reached native data at 0AB9:7A3B 0000:0B36;pc=(2745, 31291);missing=Some(Missing { scratch: false, address: 2870, writing: false, pc: (2745, 31291) })",
+        "13 missing reached native data at 0AB9:9F9E 0000:95B1;pc=(2745, 40862);missing=Some(Missing { scratch: false, address: 38321, writing: false, pc: (2745, 40862) })",
+        "14 missing reached native data at 0AB9:1B91 0000:0A03;pc=(2745, 7057);missing=Some(Missing { scratch: false, address: 2563, writing: false, pc: (2745, 7057) })",
+        "15 missing reached native data at 0AB9:9F9E 0000:96AB;pc=(2745, 40862);missing=Some(Missing { scratch: false, address: 38571, writing: false, pc: (2745, 40862) })",
+        "16 missing reached native data at 0AB9:9FB4 0000:9737;pc=(2745, 40884);missing=Some(Missing { scratch: false, address: 38711, writing: false, pc: (2745, 40884) })",
+        "17 missing reached native data at 0AB9:1B91 0000:0A0B;pc=(2745, 7057);missing=Some(Missing { scratch: false, address: 2571, writing: false, pc: (2745, 7057) })",
+        "18 missing reached native data at 0AB9:0F70 0000:099D;pc=(2745, 3952);missing=Some(Missing { scratch: false, address: 2461, writing: false, pc: (2745, 3952) })",
+        "19 missing reached native data at 0AB9:3CF1 0000:0A80;pc=(2745, 15601);missing=Some(Missing { scratch: false, address: 2688, writing: false, pc: (2745, 15601) })",
+        "20 missing reached native data at 0AB9:2573 0000:D09E;pc=(2745, 9587);missing=Some(Missing { scratch: false, address: 53406, writing: false, pc: (2745, 9587) })",
+        "21 unsupported initial support Ds+D09E"
+      ]
+    },
+    "T44-bridge-probe-build-r0001.txt": {
+      "sha256": "ade2a192d661f2e59adeb9610727dc8fa01b343eec3407ae12b12180babdf5a8",
+      "lines": [
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "For more information about this error, try `rustc --explain E0599`.",
+        "warning: `onenil-engine` (lib) generated 41 warnings",
+        "error: could not compile `onenil-engine` (lib) due to 1 previous error; 41 warnings emitted"
+      ]
+    },
+    "T44-bridge-probe-build-r0002.txt": {
+      "sha256": "78120cf66b9e5560f4a600462a6ff4ae6593afd5ee094757bc76a8f1de4fa33e",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 22s"
+      ]
+    },
+    "T44-bridge-probe-build-r0003.txt": {
+      "sha256": "e9765bb35f616bf6b9b04fa076d50c1ba2b920807c5efd9abc7c9e30cc82993f",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.40s"
+      ]
+    },
+    "T44-bridge-probe-build-r0004.txt": {
+      "sha256": "68fb21da39ae82262b072b7f2a82c2bcfbfd42f80d782e2ba32da0b306c59f88",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 12.46s"
+      ]
+    },
+    "T44-bridge-probe-build-r0005.txt": {
+      "sha256": "f4461036b991c0a20a9363dd8b9313a3e1b98edbb0eccfb8dd126d6650726e3e",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.43s"
+      ]
+    },
+    "T44-bridge-probe-build-r0006.txt": {
+      "sha256": "bb087ac264965fde83d903d53f0102c8f4237884f1b022518322ec98201e3b89",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.68s"
+      ]
+    },
+    "T44-bridge-probe-build-r0007.txt": {
+      "sha256": "1fde0ba94ec60b6f57e06acc73084cac2929309a0610c697cd8426c5d600a694",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 31.98s"
+      ]
+    },
+    "T44-bridge-probe-build-r0008.txt": {
+      "sha256": "f622437df2be218c5b58ba37d4bda1bc11cf6a2b129442f6350f1fb1bea97460",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.59s"
+      ]
+    },
+    "T44-bridge-probe-build-r0009.txt": {
+      "sha256": "fe9a01c5ec88b11b1e381bc396b09d4e5b49bb92807e39eb19d36a8fb13de12b",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.30s"
+      ]
+    },
+    "T44-bridge-probe-build-r0010.txt": {
+      "sha256": "b867ccc27cd77eaa44fca19c84b15deab66b1742c8a264d613ff9214b7478d31",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.95s"
+      ]
+    },
+    "T44-bridge-probe-build-r0011.txt": {
+      "sha256": "685a4b705c4764e7c748587156580e8212432afc372fc6943b1dfb80fd39b43d",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.93s"
+      ]
+    },
+    "T44-bridge-probe-build-r0012.txt": {
+      "sha256": "f45c4c0e64d7c85fe44be90aa778a713051f0a97c241dec7c4e95812e820dd2f",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.44s"
+      ]
+    },
+    "T44-bridge-probe-build-r0013.txt": {
+      "sha256": "ccffb6adfbe23dec4dedf6e5534a02a7d4411ec4ce5db6cb2e88cb99e17851a7",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.17s"
+      ]
+    },
+    "T44-bridge-probe-build-r0014.txt": {
+      "sha256": "78b9a8486d22edad3358a11853ad6619c43c3fc109a73d1bc49b654fb1328cfe",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.21s"
+      ]
+    },
+    "T44-bridge-probe-build-r0015.txt": {
+      "sha256": "b9b6fae118230a62702838c23439179217a3145976b8da2f9e5cdb4a4060661b",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.16s"
+      ]
+    },
+    "T44-bridge-probe-build-r0016.txt": {
+      "sha256": "06e7fa1ab0deaa71567cd8666aea1cbd2d910c17df05a9ac63bf726676e94a1a",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.78s"
+      ]
+    },
+    "T44-bridge-probe-build-r0017.txt": {
+      "sha256": "10b1da20b8958748b63fd1759192b96ad81b7747057a29b9563a008bca16d19e",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.39s"
+      ]
+    },
+    "T44-bridge-probe-build-r0018.txt": {
+      "sha256": "1bbf117b75bf2f3b0d0cb2ac8bea4a439d650c9e149414914c42f9d727b632dd",
+      "lines": [
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.07s"
+      ]
+    },
+    "T44-native-entry-tests-r0002.txt": {
+      "sha256": "4bdf760018e6026f4f0e2259bb63765e8bbfa6242a32fe5559fcd584a2e28aed",
+      "lines": [
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 41 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 35 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.84s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 3 tests",
+        "test watched_compiled::prepared::tests::prepared_inputs_reject_outcomes_and_pending_keys_before_execution ... ok",
+        "test watched_compiled::prepared::tests::selected_native_image_computes_the_original_watched_entry_and_retains_its_frames ... ok",
+        "test watched_compiled::prepared::tests::native_entry_guards_reject_aliases_frames_quick_mode_and_unknown_writes ... ok",
+        "",
+        "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 412 filtered out; finished in 5.78s",
+        ""
+      ]
+    },
+    "T44-generated-check-r0001.txt": {
+      "sha256": "a15a974e71db95f7aaad9f29551afdb16a89c4db71e7b61881d8dbc4f2040fae",
+      "lines": [
+        "      \"procedures\": 27",
+        "    },",
+        "    {",
+        "      \"module\": \"caller_graph\",",
+        "      \"sha256\": \"fad58cb6ef564025bb26efd295889be3450196f3582cf812eb800958a320f21f\",",
+        "      \"procedures\": 3",
+        "    },",
+        "    {",
+        "      \"module\": \"match_graph\",",
+        "      \"sha256\": \"2671582c71fdf52c2063c0473a32d0bae76cfc484d1fafd4faeb49554600c057\",",
+        "      \"procedures\": 43",
+        "    }",
+        "  ],",
+        "  \"source_addresses\": true",
+        "}"
+      ]
+    }
+  },
+  "source_files": {
+    "engine/src/watched_compiled/prepared.rs": "74e39b0d729718cfc7070a837219e31fcdb50e0cc724853bea4a5c714e6e7883",
+    "tools/replay_prepared_watched.py": "3d7966d2b473b8143dd04f12770704d66eece655a9991d2a0a5d4a4b4b6a5c90"
+  }
+}

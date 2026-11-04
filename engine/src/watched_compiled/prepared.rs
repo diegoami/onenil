@@ -26,9 +26,14 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
         let o = usize::try_from(fact.offset).map_err(|_| "negative initial support offset")?;
         let base = match fact.area {
             // Source-owned setup, queue, actors, ball, ABI and presentation never enter here.
+            // Incoming D09E is read at2573 (stores5A2D/69AF/74F1);
+            // D0B6 is preserved through setup,first prefix store28C1.
             Area::Ds
-                if (0x0AA0..0x0B17).contains(&o) // 4BD1/4D5F/55B5/5641/5683/56A0/5F16/5F87 numeric movement tables
-                    || (0x0B17..0x0B43).contains(&o)
+                if (0x0D5C..0x0D5E).contains(&o) // 1998:01E0 tone-burst duration multiplier
+                    || (0xD0A6..0xD0AA).contains(&o) // incoming projection scratch;first stores28FA/5821,unchanged through setup
+                    || (0x09FB..0x0B5A).contains(&o) // 1B91/21AF..5683 numeric tables;7A3B/7B13 three22-entry tick lists
+                    || (0x097A..0x09BC).contains(&o) // 0F70 numeric commentary weights (codes0..65)
+                    || (0x0D36..0x0D56).contains(&o) // 70BF/788B read-only256-bit background character set
                     || (0x0BF6..0x0C68).contains(&o)
                     || (0x0CD7..0x0CE0).contains(&o)
                     || (0x0D60..0x0D91).contains(&o)
@@ -39,7 +44,7 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
                     || (0x8708..0x8716).contains(&o)
                     || (0x935B..0xA51C).contains(&o)
                     || (0xD886..0xD936).contains(&o)
-                    || [0xD084, 0xE5DD, 0xCF5A, 0xCF5B].contains(&o) =>
+                    || [0xD084, 0xD09E, 0xD0B6, 0xE5DD, 0xCF5A, 0xCF5B].contains(&o) =>
             {
                 0
             }
@@ -250,13 +255,31 @@ impl Session {
         if self.failed {
             return Err("prepared caller previously failed".into());
         }
+        if self.cpu.watch_tick >= 171 {
+            return Err(
+                "prepared caller prefix boundary reached;native continuation retained".into(),
+            );
+        }
         let result = (|| {
             self.validate_abi()?;
-            if self.cpu.watch_tick >= 171 {
-                return Err("prepared caller prefix boundary reached".into());
-            }
             super::caller::iteration(&mut self.cpu)?;
-            Ok(json!({"state":self.snapshot()?,"tick":self.cpu.watch_tick}))
+            if self.cpu.r[0] & 255 != 0 {
+                return Err("prepared prefix reached an unsupported phase transition".into());
+            }
+            self.validate_abi()?;
+            let mut clock = json!({});
+            for (name, offset, width) in [
+                ("active", 0xD0B8, 8),
+                ("counter", 0xD0B0, 16),
+                ("remaining", 0xD0AE, 16),
+                ("stoppage", 0xD0B4, 16),
+                ("elapsed", 0xD0B2, 16),
+                ("phase", 0xD0AC, 8),
+                ("hold", 0xD0B9, 8),
+            ] {
+                clock[name] = json!(self.cpu.read(0, offset, width)?);
+            }
+            Ok(json!({"state":self.snapshot()?,"clock":clock,"tick":self.cpu.watch_tick}))
         })();
         if result.is_err() {
             self.failed = true;
@@ -309,6 +332,39 @@ mod tests {
         let error = session.advance().unwrap_err();
         assert!(error.contains("0000:0B18"), "{error}");
         assert!(session.advance().unwrap_err().contains("previously failed"));
+    }
+    #[test]
+    fn native_entry_guards_reject_aliases_frames_quick_mode_and_unknown_writes() {
+        for mutation in 0..5 {
+            let mut session = Session::new(input()).unwrap();
+            match mutation {
+                0 => session.cpu.e.image[0xD7BD] = 0x20,
+                1 => session.cpu.e.image[0xBFDDC] = 0,
+                2 => session.cpu.r[9] = 0,
+                3 => session.cpu.e.image[0xD074] = 1,
+                _ => {
+                    assert!(!session.cpu.known[0x0330]);
+                    assert!(session
+                        .cpu
+                        .write(0, 0x0330, 8, 1)
+                        .unwrap_err()
+                        .contains("write baseline"));
+                    assert!(session.cpu.missing.get().unwrap().writing);
+                    assert!(!session.cpu.known[0x0330]);
+                    continue;
+                }
+            }
+            let error = session.advance().unwrap_err();
+            assert!(
+                error.contains(match mutation {
+                    0 => "pointer alias",
+                    1 => "return frame",
+                    2 => "ABI",
+                    _ => "quick fallback",
+                }),
+                "{error}"
+            );
+        }
     }
     #[test]
     fn prepared_inputs_reject_outcomes_and_pending_keys_before_execution() {

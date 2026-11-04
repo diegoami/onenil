@@ -7,6 +7,7 @@ import re
 import subprocess
 from pathlib import Path
 import replay_watched_setup as setup
+import replay_watched_caller as caller
 ROOT=Path(__file__).resolve().parents[1]
 FIXTURE=ROOT/'engine/tests/fixtures/prepared_watched/admission.json'
 MANIFESTS={'original-r0002':'fe7abcc3c374071703816ee38df14806665ba73742581e2a7d0fcad55ad3fb92',
@@ -56,19 +57,19 @@ def select(probe):
         child.stdin.close()
     fixture=dict(schema='native-prepared-watched/1',sources=MANIFESTS,input=request['input'])
     if FIXTURE.exists():raise ValueError('refusing to overwrite a frozen admission')
-    FIXTURE.parent.mkdir(parents=True,exist_ok=True);FIXTURE.write_text(json.dumps(fixture,indent=2)+'\n')
     verify(fixture)
     compare(out['ok'])
+    FIXTURE.parent.mkdir(parents=True,exist_ok=True);FIXTURE.write_text(json.dumps(fixture,indent=2)+'\n')
     print('prepared initial support selected:',len(request['input']['support']))
 
 def allowed(area, offset):
     # Numeric read-only ranges from the reached original helper graph. Mutable
     # queue/scene/ball/seed/ABI/page state is excluded independently of its values.
-    ranges=[(0x0AA0,0x0B17),(0x0B17,0x0B43),(0x0BF6,0x0C68),
+    ranges=[(0x0D5C,0x0D5E),(0xD0A6,0xD0AA),(0x09FB,0x0B5A),(0x097A,0x09BC),(0x0D36,0x0D56),(0x0BF6,0x0C68),
             (0x0CD7,0x0CE0),(0x0D60,0x0D91),(0x0D92,0x0E6A),
             (0x0F20,0x0F30),(0x1274,0x1288),(0x129E,0x12CE),
             (0x8708,0x8716),(0x935B,0xA51C),(0xD886,0xD936)]
-    if area=='ds':return any(lo<=offset<hi for lo,hi in ranges) or offset in (0xD084,0xE5DD,0xCF5A,0xCF5B)
+    if area=='ds':return any(lo<=offset<hi for lo,hi in ranges) or offset in (0xD084,0xD09E,0xD0B6,0xE5DD,0xCF5A,0xCF5B)
     if area=='config':return 0<=offset<256 and offset not in (0,1,2,0xF2,0xF6)
     return 0<=offset<dict(counts=4004,results=58*176,fixtures=174*176).get(area,0)
 
@@ -80,7 +81,7 @@ def verify(fixture):
     if value['preparation']!=read(setup.FIXTURE)['input']:raise ValueError('selected setup input differs')
     lookup={(f['area'],f['offset']):f for f in original['fields']};seen=set()
     for fact in value['support']:
-        if set(fact)!={'area','offset','value'}:raise ValueError('initial support shape differs')
+        if set(fact)!={'area','offset','value'} or type(fact['offset']) is not int or type(fact['value']) is not int or not 0<=fact['value']<=255:raise ValueError('initial support shape differs')
         key=fact['area'],fact['offset'];source=lookup.get(key)
         if not allowed(*key) or key in seen or source is None or source['before']!=source['entry'] or fact['value']!=source['before']:raise ValueError('initial support source differs')
         seen.add(key)
@@ -94,6 +95,8 @@ def compare(out):
     if observation['draws']!=prefix['draws']:raise ValueError('computed setup/caller draws differ')
     events=[e for e in observation['events'] if e['tick']>0]
     if events!=prefix['events']:raise ValueError('computed watched actions differ')
+    (actual,_),_=caller.sources()
+    if [c['clock'] for c in out['clocks']] != [c['output']['clock'] for c in actual]:raise ValueError('computed per-iteration caller clocks differ')
     if out['clocks'][-1]['state']!=prefix['clock_end']:raise ValueError('computed caller clock end differs')
 
 def main():
