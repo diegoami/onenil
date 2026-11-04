@@ -34,6 +34,7 @@ pub(super) struct Cpu {
     pub watch_trace: Option<Vec<serde_json::Value>>,
     pub watch_pending: Option<serde_json::Value>,
     pub watch_tick: usize,
+    pub watch_live_goals: Vec<[u16; 2]>,
     stack: Vec<u8>,
     stack_known: Vec<bool>,
     frames: Vec<(u16, u16)>,
@@ -66,6 +67,7 @@ impl Cpu {
             watch_trace: None,
             watch_pending: None,
             watch_tick: 0,
+            watch_live_goals: vec![],
             stack: vec![0; 65540],
             stack_known: vec![false; 65540],
             frames: vec![],
@@ -407,6 +409,11 @@ impl Cpu {
                 tick["draw_end"] = serde_json::json!(self.draws.len());
                 tick["after"] = after;
                 self.watch_trace.as_mut().unwrap().push(tick);
+                // [confirmed] Original live counters;D086/87 are scratch during play.
+                self.watch_live_goals.push([
+                    self.read(self.r[11], 0xD0C4, 8)?,
+                    self.read(self.r[11], 0xD0C5, 8)?,
+                ]);
             }
         }
         if self.fuel == 0 {

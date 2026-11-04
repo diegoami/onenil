@@ -17,6 +17,27 @@ fn one_initial_admission_matches_every_original_tick_draw_action_and_final_retur
     assert_eq!(got["ticks"].as_array().unwrap().len(), 4199);
     assert_eq!(got["draws"].as_array().unwrap().len(), 182553);
     assert_eq!(got["events"].as_array().unwrap().len(), 831);
+    let live = got["tick_live_goals"].as_array().unwrap();
+    assert_eq!(live.len(), 4199);
+    assert_eq!(live.first().unwrap(), &json!([0, 0]));
+    assert_eq!(live.last().unwrap(), &got["live_goals"]);
+    let goals = got["events"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|e| e["code"] == 38 || e["code"] == 39)
+        .count();
+    let mut previous = [0u64; 2];
+    let mut changes = 0;
+    for score in live {
+        let current = [score[0].as_u64().unwrap(), score[1].as_u64().unwrap()];
+        for side in 0..2 {
+            assert!(current[side] >= previous[side]);
+            changes += current[side] - previous[side];
+        }
+        previous = current;
+    }
+    assert_eq!(changes as usize, goals);
     let reference = root.join("records/T41/reference");
     let index = read(&reference.join("index.json"));
     let (mut ticks, mut draws, mut actions) = (0, 0, 0);
