@@ -447,4 +447,55 @@ mod tests {
             }
         }
     }
+    #[test]
+    fn formation_counts_match_both_original_clubs_without_text_or_gameplay_writes() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap();
+        let read = |path: &str| -> Value {
+            serde_json::from_slice(&std::fs::read(root.join(path)).unwrap()).unwrap()
+        };
+        let fixture = read("engine/tests/fixtures/watched_caller/case-00.json");
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        let inputs = read("records/T41/formation-input-r0001.json");
+        let proof = read("records/T41/formation-boundary-r0001/result.json");
+        for observation in proof["observations"].as_array().unwrap() {
+            let mut c = action::machine(&state).unwrap();
+            for fact in inputs["facts"].as_array().unwrap() {
+                let address = fact["address"].as_u64().unwrap() as usize;
+                c.e.image[address] = fact["value"].as_u64().unwrap() as u8;
+                c.known[address] = true;
+            }
+            c.watch_trace = Some(Vec::new());
+            c.r[9] = c.segment_const(0x1B55);
+            let regs = c.r;
+            let before = c.e.image.clone();
+            let stack = 16 * usize::from(c.r[10]) + usize::from(c.r[4]);
+            let club = observation["club"].as_u64().unwrap() as u16;
+            for value in [c.r[10], c.r[5] - 0x106, club] {
+                c.push(value).unwrap();
+            }
+            c.invoke(
+                super::super::projections::menu_formation,
+                true,
+                0x1B55,
+                0x10AF,
+                0x33AE,
+            )
+            .unwrap();
+            assert_eq!((c.r[4], c.r[5], c.r[11]), (regs[4] - 4, regs[5], regs[11]));
+            assert_eq!(
+                c.presentation,
+                vec![
+                    json!({"site":"1B55:10AF","kind":"formation","club":club,"counts":observation["counts"]})
+                ]
+            );
+            assert!(c.draws.is_empty());
+            for (at, (old, new)) in before.iter().zip(c.e.image.iter()).enumerate() {
+                if !(stack - 4096..stack).contains(&at) {
+                    assert_eq!(old, new, "club{club}/address{at:X}");
+                }
+            }
+        }
+    }
 }

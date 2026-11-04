@@ -212,6 +212,7 @@ pub(super) fn menu_player_name(c: &mut Cpu) -> Result<(), String> {
     }
     if player != 0 {
         let (offset, segment) = c.far(c.r[11], 0xD7BA)?;
+        c.pc = (0x1B55, 0x2070);
         let role = c.read(
             segment,
             offset.wrapping_add(player.wrapping_mul(8)).wrapping_add(6),
@@ -220,10 +221,81 @@ pub(super) fn menu_player_name(c: &mut Cpu) -> Result<(), String> {
         if role > 13 {
             return Err("unsupported player-name role style".into());
         }
+        c.pc = (0x1B55, 0x2078);
         let style = c.read(c.r[11], 0x8708 + role, 8)?;
         c.pc = (0x232A, 0x043B);
         c.write(c.r[11], 0xDD64, 16, style)?;
     }
     c.presentation.push(serde_json::json!({"site":"1B55:1FF1","kind":"player_name","player":player,"column":col,"row":row}));
     c.ret(true, 6)
+}
+
+// [confirmed:T41/formation-boundary-r0001] Original10AF counts roles before
+// formatting an output string used only at33AE→0283 on MainShown. Retain the
+// numeric algorithm and original local frame;emit structured counts for the UI.
+pub(super) fn menu_formation(c: &mut Cpu) -> Result<(), String> {
+    if c.watch_trace.is_none() || c.call_chain().last().copied() != Some((0x1B55, 0x33AE)) {
+        return Err("formation outside proven presentation caller".into());
+    }
+    let ss = c.r[10];
+    let ds = c.r[11];
+    let sp = c.r[4];
+    let club = c.read(ss, sp.wrapping_add(4), 16)?;
+    let (output, segment) = c.far(ss, sp.wrapping_add(6))?;
+    if club == 0 || club > 176 || segment != ss || output != c.r[5].wrapping_sub(0x106) {
+        return Err("formation hidden-output frame differs".into());
+    }
+    c.enter(0x30A)?;
+    let bp = c.r[5];
+    c.pc = (0x1B55, 0x10B7);
+    let (offset, segment) = c.far(ds, 0xD7C2)?;
+    let club_offset = offset.wrapping_add((club - 1).wrapping_mul(62));
+    c.write(ss, bp.wrapping_sub(10), 16, club_offset)?;
+    c.write(ss, bp.wrapping_sub(8), 16, segment)?;
+    c.write(ss, bp.wrapping_sub(4), 16, 0)?;
+    c.write(ss, bp.wrapping_sub(2), 16, 0)?;
+    for slot in 1..=11u16 {
+        c.write(ss, bp.wrapping_sub(6), 16, slot)?;
+        c.pc = (0x1B55, 0x10E3);
+        let player = c.read(segment, club_offset.wrapping_add(2 * (slot - 1)), 16)?;
+        c.push(player)?;
+        c.invoke(
+            super::action_graph::p_1b55_4f89,
+            true,
+            0x1B55,
+            0x4F89,
+            0x10EB,
+        )?;
+        if c.r[0] & 255 == 0 {
+            let (offset, segment) = c.far(ds, 0xD7BA)?;
+            let role = c.read(
+                segment,
+                offset.wrapping_add(player.wrapping_mul(8)).wrapping_add(6),
+                8,
+            )?;
+            if role > 13 {
+                return Err("unsupported formation role mapping".into());
+            }
+            c.pc = (0x1B55, 0x110E);
+            let category = c.read(ds, 0x0F22 + role, 8)?;
+            if category > 3 {
+                return Err("unsupported formation role category".into());
+            }
+            let address = bp.wrapping_sub(4).wrapping_add(category);
+            let value = c.read(ss, address, 8)?;
+            let value = c.inc(value, 8);
+            c.pc = (0x1B55, 0x1116);
+            c.write(ss, address, 8, value)?;
+        }
+    }
+    let mut counts = Vec::new();
+    for index in 0..4 {
+        counts.push(c.read(ss, bp.wrapping_sub(4).wrapping_add(index), 8)?);
+    }
+    c.presentation.push(
+        serde_json::json!({"site":"1B55:10AF","kind":"formation","club":club,"counts":counts}),
+    );
+    c.r[4] = bp;
+    c.r[5] = c.pop()?;
+    c.ret(true, 2)
 }

@@ -90,6 +90,23 @@ def ui_leaves_proof():
   if(observation['returned_sp'],observation['returned_bp'],observation['returned_ds'])!=(16026,16032,12423):raise ValueError('UI leaves far ABI differs')
  print('all48original UI leaf calls preserve all memory outside MainShown/style/stack',flush=True)
 
+FORMATION_SHA='20ac56b45ebaab6b989ae79a819287fca9c473d73a68633b566d7e6dbab29c23'
+FORMATION_INPUT_SHA='3f30fbc6b49a365ffe7d94c3476eef229ee25213b98e6d1fc6754b895b676fee'
+def formation_proof():
+ directory=ROOT/'records/T41/formation-boundary-r0001';manifest=read(directory/'manifest.json')
+ if sha(directory/'manifest.json')!=FORMATION_SHA:raise ValueError('formation proof root differs')
+ for name in('start','result'):
+  if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('formation original observation differs')
+ start=read(directory/'start.json');result=read(directory/'result.json')
+ if result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']or start['root']!='1B55:10AF'or start['observe_counts_at']!='1B55:1125':raise ValueError('formation protocol differs')
+ if [v['club']for v in result['observations']]!=start['clubs']:raise ValueError('formation cases differ')
+ for v in result['observations']:
+  if not v['all_other_memory_equal']or v['unexpected_change_count']or v['unexpected_first_addresses']or set(v['changed_bytes_by_area'])!={'stack','output_text'}:raise ValueError('formation modifies non-presentation memory')
+  if(v['returned_sp'],v['returned_bp'],v['returned_ds'])!=(16022,16032,12423)or len(v['counts'])!=4:raise ValueError('formation ABI/counts differ')
+ path=ROOT/'records/T41/formation-input-r0001.json'
+ if sha(path)!=FORMATION_INPUT_SHA or read(path)['source_admission_sha256']!=sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'):raise ValueError('formation numeric input provenance differs')
+ print('both original formation count/format calls preserve non-presentation memory',flush=True)
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE
@@ -164,9 +181,11 @@ def verify_private(value):
   slot=facts.SLOTS[pointer['kind']][0]if pointer['kind']in facts.SLOTS else(None if pointer['kind']=='style'else facts.ticks.facts.SLOTS[pointer['kind']])
   if slot is None:slot=0xD0C0
   if int.from_bytes(raw[ds+slot:ds+slot+4],'little')!=pointer['offset']+(pointer['segment']<<16):raise ValueError('full watched pointer not from original ENTRY')
- ui_leaves_proof()
+ ui_leaves_proof();formation_proof()
  for fact in read(ROOT/'records/T41/ui-leaves-input-r0001.json')['facts']:
   if raw[fact['address']]!=fact['value']:raise ValueError('UI numeric fact differs from original ENTRY')
+ for fact in read(ROOT/'records/T41/formation-input-r0001.json')['facts']:
+  if raw[fact['address']]!=fact['value']:raise ValueError('formation numeric fact differs from original ENTRY')
  print('all full-match admission facts and typed aliases verified against the single original ENTRY',flush=True)
 
 def replay(value):
