@@ -346,8 +346,38 @@ def prove_grouped_integer(research):
   if unexpected:raise ValueError('original grouped integer changed non-output memory')
  oracle.write_json(directory/'result.json',{'status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']});oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')});print('original grouped integer',observations,flush=True)
 
+def prove_fixture_title(research):
+ directory=ROOT/'records/T41/fixture-title-boundary-r0001'
+ if(directory/'result.json').exists():raise ValueError('completed fixture title exists;verify pinned records')
+ if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original fixture title proof')
+ sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
+ anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
+ def word(at):return int.from_bytes(initial[at:at+2],'little')
+ def pointer(slot):return word(ds+slot)+16*word(ds+slot+2)
+ week=initial[pointer(0xD7D2)];club=word(ds+0xD6E6);stage=initial[pointer(0xD7CA)+174*(club-1)+3*(week-1)];out=regs['sp']+128
+ protocol={'schema':'original-fixture-title-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'1B55:142B','return':'0AB9:EBE2','arguments':[week,stage],'output_stack_offset':out,'scope':'Derived isolated actual fixture-title arguments from retained initial ENTRY;verify complete memory footprint. Original title text is omitted from records/runtime.'};start=directory/'start.json'
+ if start.exists():raise ValueError('immutable fixture title proof already started')
+ oracle.write_json(start,protocol);raw=bytearray(initial);sp=regs['sp']-12;words=[0xEBE2,regs['cs'],week,stage,out,regs['ss']];raw[ss+sp:ss+sp+12]=b''.join(w.to_bytes(2,'little')for w in words)
+ g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x1B55,'IP':0x142B,'SP':sp,'EFLAGS':state['flags']});before=g.mem(0,0x110000)
+ class Returned(Exception):pass
+ def returned(g):raise Returned()
+ g.code_hook('0AB9:EBE2',returned);complete=False
+ try:g.run(max_steps=500000)
+ except Returned:complete=True
+ if not complete or g.unsupported:raise ValueError('original fixture title did not return cleanly')
+ if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp']-4,regs['bp'],regs['ds']):raise ValueError('original fixture title hidden-output ABI differs')
+ after=g.mem(0,0x110000);changed={'stack':0,'output_text':0};unexpected=[]
+ for address,(old,new)in enumerate(zip(before,after,strict=True)):
+  if old==new:continue
+  if ss+sp-4096<=address<ss+regs['sp']:changed['stack']+=1
+  elif ss+out<=address<ss+out+256:changed['output_text']+=1
+  else:unexpected.append(address)
+ result={'status':'completed'if not unexpected else'failed-footprint','protocol_sha256':replay.sha(start),'returned_sp':g.reg('sp'),'returned_bp':g.reg('bp'),'returned_ds':g.reg('ds'),'changed_bytes_by_area':changed,'all_other_memory_equal':not unexpected,'unexpected_change_count':len(unexpected),'unexpected_first_addresses':unexpected[:16],'scope':protocol['scope']};oracle.write_json(directory/'result.json',result);oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')})
+ if unexpected:raise ValueError('original fixture title modified non-output memory')
+ print('original fixture title preserves all memory outside stack/output text',result,flush=True)
+
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
  if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
@@ -355,5 +385,6 @@ def main():
  if a.prove_ui_leaves:prove_ui_leaves(a.prove_ui_leaves)
  if a.prove_formation:prove_formation(a.prove_formation)
  if a.prove_grouped_integer:prove_grouped_integer(a.prove_grouped_integer)
- if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer):p.error('choose selection or original transient proof')
+ if a.prove_fixture_title:prove_fixture_title(a.prove_fixture_title)
+ if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer or a.prove_fixture_title):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()
