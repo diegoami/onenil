@@ -171,7 +171,8 @@ def compile_procedure(seg,entry,rows,partial_errors=None):
 
 def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roots=None,partial=None,external=None,module=None):
     out=['//! [confirmed] Mechanically compiled numeric control flow;F39/c7637bd,static d9e20a4.','//! [designed] Direct Rust calls/blocks;no runtime decoder or original executable.','use super::compiled::Cpu;']
-    if module:out.append(f'use super::{module}::*;')
+    if module:
+        for entry in module:out.append(f'use super::{entry}::*;')
     deferred=deferred or set();adapters=adapters or {};report=report if report is not None else {};bodies={}
     for (seg,entry),rows in sorted(g.items()):
         key=(seg,entry)
@@ -205,7 +206,7 @@ def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roo
 
 def main():
     global SOURCE_ADDRESSES,RELOCATED
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',action='append');p.add_argument('--defer',action='append',default=[]);p.add_argument('--partial',action='append',default=[]);p.add_argument('--projection',action='append',default=[]);p.add_argument('--defer-unsupported',action='store_true');p.add_argument('--reuse-existing',type=Path);p.add_argument('--source-addresses',action='store_true');args=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',action='append');p.add_argument('--defer',action='append',default=[]);p.add_argument('--partial',action='append',default=[]);p.add_argument('--projection',action='append',default=[]);p.add_argument('--defer-unsupported',action='store_true');p.add_argument('--reuse-existing',type=Path,action='append');p.add_argument('--source-addresses',action='store_true');args=p.parse_args()
     code,files=listing(args.research_root);roots=args.root or ['0AB9:35F8'];parse=lambda value:tuple(int(v,16)for v in value.split(':'))
     SOURCE_ADDRESSES=args.source_addresses
     if SOURCE_ADDRESSES:
@@ -219,11 +220,15 @@ def main():
         address,function=item.split('=')
         if not re.fullmatch('[a-z_][a-z_0-9]*',function):raise ValueError('invalid projection name')
         adapters[parse(address)]=function
-    external=set();module=None
+    external=set();module=None;reused=[]
     if args.reuse_existing:
-        module=args.reuse_existing.stem
-        if not re.fullmatch('[a-z_][a-z_0-9]*',module):raise ValueError('invalid reused module')
-        external={(int(a,16),int(b,16))for a,b in re.findall(r'pub\(super\) fn p_([0-9a-f]{4})_([0-9a-f]{4})',args.reuse_existing.read_text())}
+        module=[]
+        for path in args.reuse_existing:
+            name=path.stem
+            if not re.fullmatch('[a-z_][a-z_0-9]*',name):raise ValueError('invalid reused module')
+            functions={(int(a,16),int(b,16))for a,b in re.findall(r'pub\(super\) fn p_([0-9a-f]{4})_([0-9a-f]{4})',path.read_text())}
+            if external.intersection(functions):raise ValueError('duplicate reused procedure')
+            external.update(functions);module.append(name);reused.append({'module':name,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'procedures':len(functions)})
     g=graph(code,[parse(v)for v in roots],external,set(adapters)if args.reuse_existing else None);report={};source=compile_graph(g,deferred,adapters,args.defer_unsupported,report,[parse(v)for v in roots],{parse(v)for v in args.partial},external,module)
     import subprocess,tempfile
     with tempfile.TemporaryDirectory()as d:
@@ -234,7 +239,7 @@ def main():
     used={row[3] for rows in g.values()for row in rows.values()}
     result={'roots':roots,'procedures':len(g),'instructions':sum(map(len,g.values())),'listing_digests':{p:files[p] for p in sorted(used)},'generated_sha256':hashlib.sha256(source).hexdigest()}
     if report:result['boundaries']=report
-    if args.reuse_existing:result['reused']={'module':module,'sha256':hashlib.sha256(args.reuse_existing.read_bytes()).hexdigest(),'procedures':len(external)}
+    if reused:result['reused']=reused[0]if len(reused)==1 else reused
     if SOURCE_ADDRESSES:result['source_addresses']=True
     print(json.dumps(result,indent=2))
 if __name__=='__main__':main()

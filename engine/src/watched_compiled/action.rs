@@ -10,6 +10,7 @@ pub enum Kind {
     Contact,
     Actor,
     Tick,
+    Caller,
 }
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, PartialOrd, Ord)]
 #[serde(rename_all = "snake_case")]
@@ -176,7 +177,7 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
         f.area,
         Area::Main | Area::MainShown | Area::Background | Area::BackgroundShown
     ) && !(pitch_offset(f.offset)
-        || (matches!(s.kind, Kind::Actor | Kind::Tick)
+        || (matches!(s.kind, Kind::Actor | Kind::Tick | Kind::Caller)
             && [-9, 9].into_iter().any(|row| {
                 let start = 0x90E + 160 * row - 74;
                 (start..start + 150).contains(&f.offset)
@@ -199,10 +200,11 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
     let scene = ds + 0xCCEF + 25 * usize::from(s.scene.index);
     let seed = ds + usize::from(crate::SEED);
     let stack = 16 * usize::from(s.regs[10]) + usize::from(s.regs[4]);
+    let stack_end = stack + if s.kind == Kind::Caller { 16 } else { 8 };
     if stack - 4096 < ds + 65536 {
         return Err("action stack overlaps data segment".into());
     }
-    if s.kind != Kind::Tick
+    if !matches!(s.kind, Kind::Tick | Kind::Caller)
         && (usize::from(s.stack_words[2]) + 16 * usize::from(s.stack_words[3]) != scene
             || s.stack_words[1] != s.regs[9])
     {
@@ -225,7 +227,7 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
             if p.address() < ds + 65536
                 || range.contains(&seed)
                 || range.contains(&scene)
-                || (range.start < stack + 8 && stack - 4096 < range.end)
+                || (range.start < stack_end && stack - 4096 < range.end)
             {
                 return Err("named pointer aliases protected entry state".into());
             }
@@ -245,7 +247,7 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
     ]
     .into_iter()
     .collect();
-    if matches!(s.kind, Kind::Actor | Kind::Tick) {
+    if matches!(s.kind, Kind::Actor | Kind::Tick | Kind::Caller) {
         required.insert(PointerKind::Style);
     }
     if kinds != required {
@@ -345,7 +347,7 @@ pub(super) fn machine(s: &State) -> Result<Cpu, String> {
     c.flat_memory = true;
     c.code_base = s.regs[9].wrapping_sub(0x0AB9);
     c.r = s.regs;
-    c.stack_bounds = Some((stack - 4096, stack + 8));
+    c.stack_bounds = Some((stack - 4096, stack_end));
     c.cf = s.flags & 1 != 0;
     c.pf = s.flags & 4 != 0;
     c.z = s.flags & 0x40 != 0;
@@ -361,7 +363,7 @@ pub fn advance(s: &State) -> Result<Outcome, Fault> {
         message,
         missing: None,
     })?;
-    let style = if matches!(s.kind, Kind::Actor | Kind::Tick) {
+    let style = if matches!(s.kind, Kind::Actor | Kind::Tick | Kind::Caller) {
         let a = find_pointer(s, PointerKind::Style).unwrap().address();
         Some((a, c.e.image[a]))
     } else {
@@ -371,7 +373,7 @@ pub fn advance(s: &State) -> Result<Outcome, Fault> {
         Kind::Action5 => super::action_graph::p_0ab9_448c,
         Kind::Contact => super::action_graph::p_0ab9_4dff,
         Kind::Actor => super::action_graph::p_0ab9_72bb,
-        Kind::Tick => {
+        Kind::Tick | Kind::Caller => {
             return Err(Fault {
                 message: "tick requires a persistent TickSession".into(),
                 missing: None,
