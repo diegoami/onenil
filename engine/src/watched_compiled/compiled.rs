@@ -870,7 +870,7 @@ mod tests {
         let mut e = crate::role_scores::image(Default::default());
         let mut image = e.image.to_vec();
         image.resize(0x110000, 0);
-        e.image = image.into_boxed_slice();
+        e.image = image.into_boxed_slice().into();
         let mut c = Cpu::new(e);
         c.flat_memory = true;
         c.stack_bounds = Some((0xFF000, 0x100000));

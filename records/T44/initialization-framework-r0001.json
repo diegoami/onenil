@@ -1,0 +1,111 @@
+{
+  "scope": "Native initialization framework checkpoint;not the prepared watched bridge. Original preservation proofs live in original-r0002/headless-original-r0001.",
+  "source_base": "e3d07fdc0925889f6cd5f5afc3464ed565bfcd3f",
+  "checks": [
+    {
+      "log": "T44-initialization-tests-r0001.txt",
+      "sha256": "358e2576d9a00b0e9ee2aac55f864436103b5b13609dbb01eaa21ce0f27ba425",
+      "tail": [
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "Some errors have detailed explanations: E0277, E0599.",
+        "For more information about an error, try `rustc --explain E0277`.",
+        "warning: `onenil-engine` (lib test) generated 39 warnings",
+        "error: could not compile `onenil-engine` (lib test) due to 14 previous errors; 39 warnings emitted"
+      ]
+    },
+    {
+      "log": "T44-initialization-tests-r0002.txt",
+      "sha256": "d26be728f3fb14b50d3c6d67af2edaa63311f52d946dd3a64b58a1ceed39b32b",
+      "tail": [
+        "...",
+        "278 |     pub(crate) fn before_watched_call(",
+        "    |                   ^^^^^^^^^^^^^^^^^^^",
+        "    |",
+        "    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default",
+        "",
+        "warning: `onenil-engine` (lib test) generated 40 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 33 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 44.97s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 2 tests",
+        "test native_image::tests::copying_and_growing_memory_preserves_unknown_byte_provenance ... ok",
+        "test native_image::tests::zero_allocation_is_unknown_and_explicit_stores_define_only_their_cells ... ok",
+        "",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 409 filtered out; finished in 0.00s",
+        ""
+      ]
+    },
+    {
+      "log": "T44-tracked-setup-probe-r0001.txt",
+      "sha256": "ad12d9c434bd287bd6e81850e82ac4855c9f5f693015c5ddbf956266aec49818",
+      "tail": [
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 39 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 33 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.05s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 1 test",
+        "tracked setup reached E008 without additional initial support",
+        "test watched_setup::tests::tracked_selected_setup_reports_undeclared_reads ... ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 411 filtered out; finished in 2.46s",
+        ""
+      ]
+    },
+    {
+      "log": "T44-tracked-setup-probe-r0002.txt",
+      "sha256": "dc7f038c2dcad827851814f953dafe28f5f72ffc211c2b47a43aa84251f56f8b",
+      "tail": [
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 39 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 33 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.67s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 1 test",
+        "test watched_setup::tests::tracked_selected_setup_reaches_pre_call_without_additional_support ... ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 411 filtered out; finished in 0.80s",
+        ""
+      ]
+    },
+    {
+      "log": "T44-generate-prepared-r0001.txt",
+      "sha256": "6d8b392df8780505da1041e65245c36b035fcddba215e4d2834ca8e301de01fc",
+      "tail": [
+        "error: could not create home directory: '/home/diego/.rustup': Read-only file system (os error 30)",
+        "Traceback (most recent call last):",
+        "  File \"/tmp/onenil-native/tools/compile_watched.py\", line 269, in <module>",
+        "    if __name__=='__main__':main()",
+        "                            ^^^^^^",
+        "  File \"/tmp/onenil-native/tools/compile_watched.py\", line 259, in main",
+        "    temp=Path(d)/'generated.rs';temp.write_text(source);subprocess.run(['rustfmt','--edition','2021',str(temp)],check=True);source=temp.read_bytes()",
+        "                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "  File \"/usr/lib/python3.12/subprocess.py\", line 571, in run",
+        "    raise CalledProcessError(retcode, process.args,",
+        "subprocess.CalledProcessError: Command '['rustfmt', '--edition', '2021', '/tmp/tmpcu0f34jn/generated.rs']' returned non-zero exit status 1."
+      ]
+    }
+  ]
+}

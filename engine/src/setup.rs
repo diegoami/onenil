@@ -267,15 +267,30 @@ pub struct Session {
 }
 impl Session {
     pub fn new(data: Data) -> Result<Self, String> {
-        Self::new_mode(data, None)
+        Self::new_mode(data, None, None, false)
     }
     pub(crate) fn new_watched(data: Data, incoming: WatchedIncoming) -> Result<Self, String> {
         if incoming.scores != data.legacy.contest.goals {
             return Err("incoming watched scratch-score alias differs".into());
         }
-        Self::new_mode(data, Some(incoming))
+        Self::new_mode(data, Some(incoming), None, false)
     }
-    fn new_mode(data: Data, incoming: Option<WatchedIncoming>) -> Result<Self, String> {
+    pub(crate) fn before_watched_call(
+        data: Data,
+        incoming: WatchedIncoming,
+        initial: &crate::role_scores::Cells,
+    ) -> Result<Self, String> {
+        if incoming.scores != data.legacy.contest.goals {
+            return Err("incoming watched scratch-score alias differs".into());
+        }
+        Self::new_mode(data, Some(incoming), Some(initial), true)
+    }
+    fn new_mode(
+        data: Data,
+        incoming: Option<WatchedIncoming>,
+        initial: Option<&crate::role_scores::Cells>,
+        before_call: bool,
+    ) -> Result<Self, String> {
         Self::validate(&data)?;
         let Data {
             legacy,
@@ -289,7 +304,13 @@ impl Session {
             income,
             supplement,
         } = data;
-        let m = match_session::Session::from_legacy(legacy, replacement, gates, skill_tables)?;
+        let m = match_session::Session::from_legacy_with_initial(
+            legacy,
+            replacement,
+            gates,
+            skill_tables,
+            initial,
+        )?;
         let mut out = Self {
             match_state: m,
             points: vec![],
@@ -316,6 +337,15 @@ impl Session {
         put(e, 0xA52D, legacy_queue_zero.second_player);
         e.image[0xA52F] = legacy_queue_zero.side;
         out.load_inputs(&setup_cells, &income, &supplement)?;
+        if let Some(support) = initial {
+            for (&address, &value) in support {
+                if out.match_state.inner.e.image[address] != value {
+                    return Err(format!(
+                        "initial support aliases selected/setup input at{address:05X}"
+                    ));
+                }
+            }
+        }
         if let Some(initial) = incoming {
             let e = &mut out.match_state.inner.e;
             // [designed] Select watched mode before19CA;original T39 intervention.
@@ -324,7 +354,15 @@ impl Session {
             put(e, 0xCF4D, initial.ball_word7);
             put(e, 0xCF4F, initial.ball_word9);
         }
-        out.prepare(&setup_cells, &income, &supplement, incoming.is_some())?;
+        let result = out.prepare(
+            &setup_cells,
+            &income,
+            &supplement,
+            incoming.is_some(),
+            before_call,
+        );
+        out.match_state.inner.e.image.check_initialized()?;
+        result?;
         Ok(out)
     }
     fn validate(a: &Data) -> Result<(), String> {
@@ -654,6 +692,8 @@ impl Session {
         self.match_state.inner.e.rate_side(&input)?;
         self.match_state.project_display_ratings();
         // [designed] No lineup edit after supplied starting squads;actual return key2.
+        // [confirmed] 24BC:0C17 stores both normalized-key words (T41 menu proof).
+        self.match_state.inner.e.image[0xDE88] = 2;
         self.match_state.inner.e.image[0xDE8A] = 2;
         self.match_state.inner.e.image[0xD18] = 1;
         self.match_state.rearrange()?;
@@ -723,6 +763,7 @@ impl Session {
         incomes: &[Income],
         _s: &Supplement,
         watched: bool,
+        before_call: bool,
     ) -> Result<(), String> {
         self.mark("0AB9:E24C");
         let e = &mut self.match_state.inner.e;
@@ -762,6 +803,9 @@ impl Session {
         self.mark("0AB9:E303");
         self.caller_ready()?;
         self.mark("0AB9:E008");
+        if before_call {
+            return Ok(());
+        }
         // [confirmed] E03C..E053 calls1998:186C for every supplied starting XI
         // at archaeology d9e20a4;186C increments P15+4 and word0 if allowance !=0.
         let e = &mut self.match_state.inner.e;

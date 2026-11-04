@@ -343,7 +343,7 @@ impl Engine {
         let value = self.image[0x93F7 + usize::from(index)];
         self.post_set(template, id, value, out);
         if side == 1 {
-            self.image[club(id, 57)] |= 1;
+            self.image[club(id, 57)] = self.image[club(id, 57)] | 1;
             self.post_set(template, id, self.image[club(id, 57)], out);
         }
         let other = self.word(0xD6E4 + 2 * (side ^ 1) as u16);
@@ -352,7 +352,7 @@ impl Engine {
         if (second.wrapping_sub(first) as i16) > i16::from(self.image[0x0C66 + side]) {
             for _ in 0..2 {
                 let bit = self.draw(6, "0AB9:A305", &mut out.draws);
-                self.image[club(id, 57)] |= 1u8 << (bit - 1);
+                self.image[club(id, 57)] = self.image[club(id, 57)] | 1u8 << (bit - 1);
             }
             self.post_set(template, id, self.image[club(id, 57)], out);
         }
@@ -371,9 +371,9 @@ impl Engine {
             );
             let mask = 1u8 << (bit - 1);
             if raise {
-                self.image[club(id, 57)] |= mask;
+                self.image[club(id, 57)] = self.image[club(id, 57)] | mask;
             } else {
-                self.image[club(id, 57)] &= !mask;
+                self.image[club(id, 57)] = self.image[club(id, 57)] & !mask;
             }
         }
         self.post_set(template, id, self.image[club(id, 57)], out);
@@ -398,15 +398,15 @@ impl Engine {
             );
             let mask = 1u8 << (bit - 1);
             if raise {
-                self.image[club(id, 57)] |= mask;
+                self.image[club(id, 57)] = self.image[club(id, 57)] | mask;
             } else {
-                self.image[club(id, 57)] &= !mask;
+                self.image[club(id, 57)] = self.image[club(id, 57)] & !mask;
             }
         }
         if raise {
-            self.image[club(id, 57)] |= 0x20;
+            self.image[club(id, 57)] = self.image[club(id, 57)] | 0x20;
         } else {
-            self.image[club(id, 57)] &= !0x20;
+            self.image[club(id, 57)] = self.image[club(id, 57)] & !0x20;
         }
         self.post_set(template, id, self.image[club(id, 57)], out);
         self.image[latch] = 1;

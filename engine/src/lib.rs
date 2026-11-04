@@ -16,6 +16,7 @@ pub mod extra_event;
 pub mod goal_effects;
 mod layout;
 pub mod match_session;
+mod native_image;
 pub mod neutral_input;
 pub mod placement;
 pub mod player_cache;
@@ -86,13 +87,13 @@ pub struct Outcome {
 }
 
 pub struct Engine {
-    image: Box<[u8]>,
+    image: native_image::Image,
 }
 
 impl Engine {
     pub fn new(input: &Input) -> Self {
         let mut engine = Self {
-            image: vec![0; layout::IMAGE_LEN].into_boxed_slice(),
+            image: vec![0; layout::IMAGE_LEN].into_boxed_slice().into(),
         };
         engine.put_word(SEED, input.seed);
         for (i, value) in input.ratings.iter().enumerate() {
@@ -102,6 +103,30 @@ impl Engine {
             engine.image[GOALS as usize + side] = *value;
         }
         engine
+    }
+
+    pub(crate) fn new_tracked(
+        input: &Input,
+        initial: &std::collections::BTreeMap<usize, u8>,
+    ) -> Result<Self, String> {
+        let mut engine = Self {
+            image: native_image::Image::tracked(layout::IMAGE_LEN),
+        };
+        engine.image.resize(0x110000);
+        engine.put_word(SEED, input.seed);
+        for (index, value) in input.ratings.iter().enumerate() {
+            engine.put_word(RATINGS + 2 * index as u16, *value);
+        }
+        for (side, value) in input.goals.iter().enumerate() {
+            engine.image[GOALS as usize + side] = *value;
+        }
+        for (&address, &value) in initial {
+            if address >= engine.image.len() {
+                return Err("initial native support exceeds image".into());
+            }
+            engine.image[address] = value;
+        }
+        Ok(engine)
     }
 
     fn word(&self, offset: u16) -> u16 {
@@ -157,8 +182,8 @@ impl Engine {
                     }
                 }
                 if won {
-                    let goal = &mut self.image[(GOALS + side) as usize];
-                    *goal = goal.wrapping_add(1);
+                    let address = (GOALS + side) as usize;
+                    self.image[address] = self.image[address].wrapping_add(1);
                 }
             }
         }
