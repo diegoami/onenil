@@ -348,7 +348,8 @@ def prove_grouped_integer(research):
 
 def prove_fixture_title(research):
  directory=ROOT/'records/T41/fixture-title-boundary-r0001'
- if(directory/'result.json').exists():raise ValueError('completed fixture title exists;verify pinned records')
+ if(directory/'result.json').exists():
+  replay.fixture_title_proof();print('completed fixture title verified;no emulator constructed',flush=True);return
  if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original fixture title proof')
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
  anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
@@ -376,8 +377,47 @@ def prove_fixture_title(research):
  if unexpected:raise ValueError('original fixture title modified non-output memory')
  print('original fixture title preserves all memory outside stack/output text',result,flush=True)
 
+def prove_menu_input(research):
+ directory=ROOT/'records/T41/menu-input-boundary-r0001'
+ if(directory/'result.json').exists():raise ValueError('completed menu input exists;verify pinned records')
+ if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original menu-input proof')
+ sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
+ anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
+ def word(raw,at):return int.from_bytes(raw[at:at+2],'little')
+ if word(initial,ds+0xDE8C)or word(initial,ds+0xDE8E):raise ValueError('menu input requires original empty pending-key queues')
+ out=regs['sp']+128;cases=[(1,'Down'),(2,'Down'),(3,'Return'),(4,'Up')]
+ protocol={'schema':'original-menu-input-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'232A:0F8B','return':'0AB9:EBE2','menu_count':4,'cases':[{'cursor':cursor,'external_key':key}for cursor,key in cases],'output_stack_offset':out,'scope':'Derived original menu cursor/input calls with external Down/Return/Up. SourceD8A2-D8A6 identifies option3 as continue;original Week.play chooses PLAY GAME without lineup changes. No external key is supplied to watched gameplay ticks.'};start=directory/'start.json'
+ if start.exists():raise ValueError('immutable menu input proof already started')
+ oracle.write_json(start,protocol);observations=[]
+ page=word(initial,ds+0xDD58)+16*word(initial,ds+0xDD5A)
+ for cursor,key in cases:
+  raw=bytearray(initial);sp=regs['sp']-10;words=[0xEBE2,regs['cs'],4,out,regs['ss']];raw[ss+sp:ss+sp+10]=b''.join(w.to_bytes(2,'little')for w in words);raw[ss+out]=cursor
+  g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x232A,'IP':0x0F8B,'SP':sp,'EFLAGS':state['flags']});g.press(key);before=g.mem(0,0x110000)
+  class Returned(Exception):pass
+  def returned(g):raise Returned()
+  g.code_hook('0AB9:EBE2',returned);complete=False
+  try:
+   for _ in range(20):g.run(max_steps=500000);g.other_polls=0
+  except Returned:complete=True
+  if not complete or g.unsupported:raise ValueError('original menu input did not return cleanly')
+  if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp'],regs['bp'],regs['ds']):raise ValueError('original menu input ABI differs')
+  after=g.mem(0,0x110000);changed={'stack':0,'cursor':0,'main':0,'keyboard_driver':0,'presentation_timers':0,'bios_hardware':0};unexpected=[]
+  for address,(old,new)in enumerate(zip(before,after,strict=True)):
+   if old==new:continue
+   if ss+sp-4096<=address<ss+regs['sp']:kind='stack'
+   elif address==ss+out:kind='cursor'
+   elif page<=address<page+4000:kind='main'
+   elif ds+0xDE88<=address<ds+0xDF00:kind='keyboard_driver'
+   elif address-ds in(0xD5A,0xD5B,0xD088,0xD089):kind='presentation_timers'
+   elif 0x400<=address<0x500:kind='bios_hardware'
+   else:unexpected.append(address);continue
+   changed[kind]+=1
+  observation={'cursor_before':cursor,'external_key':key,'cursor_after':after[ss+out],'key_code':word(after,ds+0xDE88),'last_key_code':word(after,ds+0xDE8A),'pending_key':word(after,ds+0xDE8C),'queue_count':word(after,ds+0xDE8E),'returned_sp':g.reg('sp'),'returned_bp':g.reg('bp'),'returned_ds':g.reg('ds'),'changed_bytes_by_area':changed,'all_other_memory_equal':not unexpected,'unexpected_change_count':len(unexpected),'unexpected_first_addresses':unexpected[:16]};observations.append(observation)
+  if unexpected:raise ValueError('original menu input modifies gameplay memory:'+str(observation))
+ oracle.write_json(directory/'result.json',{'status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']});oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')});print('original menu input cursor/key results',observations,flush=True)
+
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--prove-menu-input',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
  if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
@@ -386,5 +426,6 @@ def main():
  if a.prove_formation:prove_formation(a.prove_formation)
  if a.prove_grouped_integer:prove_grouped_integer(a.prove_grouped_integer)
  if a.prove_fixture_title:prove_fixture_title(a.prove_fixture_title)
- if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer or a.prove_fixture_title):p.error('choose selection or original transient proof')
+ if a.prove_menu_input:prove_menu_input(a.prove_menu_input)
+ if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer or a.prove_fixture_title or a.prove_menu_input):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()

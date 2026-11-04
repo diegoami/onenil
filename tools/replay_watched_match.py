@@ -121,6 +121,18 @@ def grouped_integer_proof():
   if(v['returned_sp'],v['returned_bp'],v['returned_ds'])!=(16022,16032,12423)or len(v['pascal_bytes'])!=1+v['pascal_bytes'][0]:raise ValueError('grouped integer ABI/text length differs')
  print('all12original signed32 grouped-number outputs and non-output memory verified',flush=True)
 
+FIXTURE_TITLE_SHA='75d0a72910c5028d581dad2725eff71133cff34a949ad4faa1f36ded524a5f48'
+def fixture_title_proof():
+ directory=ROOT/'records/T41/fixture-title-boundary-r0001';manifest=read(directory/'manifest.json')
+ if sha(directory/'manifest.json')!=FIXTURE_TITLE_SHA:raise ValueError('fixture title root differs')
+ for name in('start','result'):
+  if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('fixture title observation differs')
+ start=read(directory/'start.json');result=read(directory/'result.json')
+ if result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']or start['root']!='1B55:142B'or start['arguments']!=[6,0]:raise ValueError('fixture title protocol differs')
+ if not result['all_other_memory_equal']or result['unexpected_change_count']or result['unexpected_first_addresses']or set(result['changed_bytes_by_area'])!={'stack','output_text'}:raise ValueError('fixture title modifies non-output memory')
+ if(result['returned_sp'],result['returned_bp'],result['returned_ds'])!=(16022,16032,12423):raise ValueError('fixture title ABI differs')
+ print('original fixture-title formatter preserves non-output memory and hidden ABI',flush=True)
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE
