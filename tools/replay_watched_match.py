@@ -25,6 +25,26 @@ def sources():
  print('pinned original4199ticks/182811draws/831actions and actual fulltime return verified',flush=True)
  return ticks,draws,events,finish
 
+PREFIX_SOURCE=None
+def compare_prefix(got):
+ global PREFIX_SOURCE
+ if PREFIX_SOURCE is None:PREFIX_SOURCE=sources()
+ ticks,draws,events,_=PREFIX_SOURCE;base=258
+ for index,actual in enumerate(got['ticks']):
+  source=ticks[index];expected=dict(source,draw_start=source['draw_start']-base,draw_end=source['draw_end']-base)
+  if actual!=expected:
+   path=ROOT/'.cache/T41/tick-mismatch.json';path.write_text(json.dumps({'tick':index+1,'actual':actual,'expected':expected},indent=2));raise ValueError(f'native completed tick{index+1} differs before missing input;private diagnostic retained')
+ import watched_oracle as oracle
+ expected=[oracle.normalized(d)for d in draws[base:base+len(got['draws'])]]
+ if got['draws']!=expected:raise ValueError('native ordered RNG prefix differs before missing input')
+ expected=[]
+ for source in events[:len(got['events'])]:
+  event={k:v for k,v in source.items()if k!='event'}
+  for key in('draw_start','draw_end'):event[key]-=base
+  expected.append(event)
+ if got['events']!=expected:raise ValueError('native accepted-action prefix differs before missing input')
+ return len(got['ticks']),len(got['draws'])
+
 def compare(got):
  import watched_oracle as oracle
  ticks,draws,events,finish=sources();base=258

@@ -31,10 +31,30 @@ pub(super) fn snapshot(c: &Cpu) -> Result<Value, String> {
         json!({"seed":read(0xA51C,16)?,"elapsed":read(0xD0B2,16)?,"remaining":read(0xD0AE,16)?,"quick":read(0xD074,8)?,"actor":read(0xD09F,8)?,"secondary":read(0xD0A0,8)?,"ball":ball,"scenes":scenes,"scores":[read(0xD086,8)?,read(0xD087,8)?],"phase":read(0xD0AC,8)?,"active":read(0xD0B8,8)?,"hold":read(0xD0B9,8)?,"stoppage":read(0xD0B4,16)?}),
     )
 }
-pub fn run(s: &State, no_pending_key: bool) -> Result<Value, Fault> {
-    let failure = |message| Fault {
-        message,
-        missing: None,
+#[derive(serde::Serialize)]
+pub struct MatchFault {
+    #[serde(flatten)]
+    pub fault: Fault,
+    pub ticks: Vec<Value>,
+    pub draws: Vec<crate::Draw>,
+    pub events: Vec<Value>,
+}
+impl From<Fault> for MatchFault {
+    fn from(fault: Fault) -> Self {
+        Self {
+            fault,
+            ticks: vec![],
+            draws: vec![],
+            events: vec![],
+        }
+    }
+}
+pub fn run(s: &State, no_pending_key: bool) -> Result<Value, MatchFault> {
+    let failure = |message| {
+        MatchFault::from(Fault {
+            message,
+            missing: None,
+        })
     };
     if s.kind != Kind::WatchedMatch || !no_pending_key || s.regs[5] != s.regs[4].wrapping_add(6) {
         return Err(failure(
@@ -74,12 +94,17 @@ pub fn run(s: &State, no_pending_key: bool) -> Result<Value, Fault> {
             json!({"ticks":c.watch_trace,"draws":c.draws,"events":c.events,"final":final_state,"live_goals":live,"return":"0AB9:EBE2"}),
         )
     })();
-    result.map_err(|message| Fault {
-        message: format!(
-            "watched tick{} draw{}: {message}",
-            c.watch_tick,
-            c.draws.len()
-        ),
-        missing: c.missing.get(),
+    result.map_err(|message| MatchFault {
+        fault: Fault {
+            message: format!(
+                "watched tick{} draw{}: {message}",
+                c.watch_tick,
+                c.draws.len()
+            ),
+            missing: c.missing.get(),
+        },
+        ticks: c.watch_trace.take().unwrap_or_default(),
+        draws: std::mem::take(&mut c.draws),
+        events: std::mem::take(&mut c.events),
     })
 }
