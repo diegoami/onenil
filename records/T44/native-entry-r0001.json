@@ -1,0 +1,250 @@
+{
+  "scope": "T44 native entry/ABI checkpoint,not completed caller prefix. First entry matches the original;258 computed draws and source coin event59. Support selection probes stop closed on undeclared fields. Rust wrapper type compilation failure and early setup write-baseline boundary/Commentary alias validation mistakes retained.",
+  "checks": [
+    {
+      "name": "T44-bridge-check-r0001.txt",
+      "sha256": "9bd75f3023f5e3f9657ff8edcf79dac8d7bcff0806174437333d09d7e9eba3aa",
+      "tail": [
+        "    --> src/watched_compiled/selection.rs:5036:9",
+        "     |",
+        "5036 |     let mut label = 3292u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "For more information about this error, try `rustc --explain E0599`.",
+        "warning: `onenil-engine` (lib) generated 41 warnings",
+        "error: could not compile `onenil-engine` (lib) due to 1 previous error; 41 warnings emitted"
+      ]
+    },
+    {
+      "name": "T44-bridge-probe-build-r0001.txt",
+      "sha256": "ade2a192d661f2e59adeb9610727dc8fa01b343eec3407ae12b12180babdf5a8",
+      "tail": [
+        "    --> src/watched_compiled/selection.rs:5036:9",
+        "     |",
+        "5036 |     let mut label = 3292u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "For more information about this error, try `rustc --explain E0599`.",
+        "warning: `onenil-engine` (lib) generated 41 warnings",
+        "error: could not compile `onenil-engine` (lib) due to 1 previous error; 41 warnings emitted"
+      ]
+    },
+    {
+      "name": "T44-bridge-probe-build-r0002.txt",
+      "sha256": "78120cf66b9e5560f4a600462a6ff4ae6593afd5ee094757bc76a8f1de4fa33e",
+      "tail": [
+        "    |",
+        "108 | impl Image {",
+        "    | ---------- method in this implementation",
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 22s"
+      ]
+    },
+    {
+      "name": "T44-bridge-probe-build-r0003.txt",
+      "sha256": "e9765bb35f616bf6b9b04fa076d50c1ba2b920807c5efd9abc7c9e30cc82993f",
+      "tail": [
+        "    |",
+        "108 | impl Image {",
+        "    | ---------- method in this implementation",
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.40s"
+      ]
+    },
+    {
+      "name": "T44-bridge-probe-build-r0004.txt",
+      "sha256": "68fb21da39ae82262b072b7f2a82c2bcfbfd42f80d782e2ba32da0b306c59f88",
+      "tail": [
+        "    |",
+        "108 | impl Image {",
+        "    | ---------- method in this implementation",
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 12.46s"
+      ]
+    },
+    {
+      "name": "T44-bridge-probe-build-r0005.txt",
+      "sha256": "f4461036b991c0a20a9363dd8b9313a3e1b98edbb0eccfb8dd126d6650726e3e",
+      "tail": [
+        "    |",
+        "108 | impl Image {",
+        "    | ---------- method in this implementation",
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.43s"
+      ]
+    },
+    {
+      "name": "T44-bridge-probe-build-r0006.txt",
+      "sha256": "bb087ac264965fde83d903d53f0102c8f4237884f1b022518322ec98201e3b89",
+      "tail": [
+        "    |",
+        "108 | impl Image {",
+        "    | ---------- method in this implementation",
+        "...",
+        "140 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.68s"
+      ]
+    },
+    {
+      "name": "T44-native-entry-tests-r0001.txt",
+      "sha256": "1409a21ab2077ed64815dce5630969704933e0b81c5f5164d4bfd249b8f0c7d5",
+      "tail": [
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 41 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 35 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 34.81s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 2 tests",
+        "test watched_compiled::prepared::tests::prepared_inputs_reject_outcomes_and_pending_keys_before_execution ... ok",
+        "test watched_compiled::prepared::tests::selected_native_image_computes_the_original_watched_entry_and_retains_its_frames ... ok",
+        "",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 412 filtered out; finished in 1.47s",
+        ""
+      ]
+    },
+    {
+      "name": "T44-support-selection-probe-r0001.txt",
+      "sha256": "8b37c201c0a3cc5d71af9679d89189abeabb1ee22b613826a3bad0fdd603192f",
+      "tail": [
+        "0 prepared watched entry: Err(\"missing initial native write baseline at 0AB9:7607 0CF43\");pc=(2745, 30215);missing=Some(Missing { scratch: false, address: 53059, writing: true, pc: (2745, 30215) })",
+        "CHANGED BY SETUP: COMPUTE {'area': 'ds', 'offset': 53059, 'before': 0, 'entry': 1}"
+      ]
+    },
+    {
+      "name": "T44-support-selection-probe-r0002.txt",
+      "sha256": "cbe7f283bab53d1dfe1678d1850cde9da89ab67a8f628b61f11cfcdd803cc71f",
+      "tail": [
+        "0 missing reached native data at 0AB9:7B13 0000:0B18;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2840, writing: false, pc: (2745, 31507) })",
+        "1 missing reached native data at 0AB9:5641 0000:0AB7;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2743, writing: false, pc: (2745, 22081) })",
+        "2 unsupported initial support Ds+0AB7"
+      ]
+    },
+    {
+      "name": "T44-support-selection-probe-r0003.txt",
+      "sha256": "3b62b77153cd235199167087524fc2e0da53677a72bdf42228f1dd0b2902821c",
+      "tail": [
+        "0 missing reached native data at 0AB9:7B13 0000:0B18;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2840, writing: false, pc: (2745, 31507) })",
+        "1 missing reached native data at 0AB9:5641 0000:0AB7;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2743, writing: false, pc: (2745, 22081) })",
+        "2 missing reached native data at 0AB9:5683 0000:0ABA;pc=(2745, 22147);missing=Some(Missing { scratch: false, address: 2746, writing: false, pc: (2745, 22147) })",
+        "3 unsupported initial support Ds+0ABA"
+      ]
+    },
+    {
+      "name": "T44-support-selection-probe-r0004.txt",
+      "sha256": "800b04e16d774c075dafe0288c01f749ebb8c39fa6502da2267e04b55adb1728",
+      "tail": [
+        "0 prepared pointer alias/ABI differs: Commentary"
+      ]
+    },
+    {
+      "name": "T44-support-selection-probe-r0005.txt",
+      "sha256": "f37a3580b889103a69bce728fa0a7a5a68dd2517753384a543cc16ce67f65c60",
+      "tail": [
+        "0 missing reached native data at 0AB9:7B13 0000:0B18;pc=(2745, 31507);missing=Some(Missing { scratch: false, address: 2840, writing: false, pc: (2745, 31507) })",
+        "1 missing reached native data at 0AB9:5641 0000:0AB7;pc=(2745, 22081);missing=Some(Missing { scratch: false, address: 2743, writing: false, pc: (2745, 22081) })",
+        "2 missing reached native data at 0AB9:5683 0000:0ABA;pc=(2745, 22147);missing=Some(Missing { scratch: false, address: 2746, writing: false, pc: (2745, 22147) })",
+        "3 missing reached native data at 0AB9:5683 0000:0ABA;pc=(2745, 22147);missing=Some(Missing { scratch: false, address: 2747, writing: false, pc: (2745, 22147) })",
+        "4 missing reached native data at 1998:0ABF 0000:0D70;pc=(6552, 2751);missing=Some(Missing { scratch: false, address: 3440, writing: false, pc: (6552, 2751) })",
+        "5 unsupported initial support Ds+0D70"
+      ]
+    }
+  ],
+  "source_files": {
+    "engine/src/watched_compiled/prepared.rs": "e15c1d9ba16ab44bfa9c737790a28d5af4b1d488d17f336b3230b0058f48aa51",
+    "engine/src/watched_compiled/prepared_graph.rs": "378f353237c664caa12350f1dd0078043d1e05beea38f9d6e2185b4599095f39",
+    "engine/src/watched_compiled/compiled.rs": "d38f77f40c0e6f07e6f271cd971ab44cb4bf37bac0a5919430bb8c91b0f842b5",
+    "engine/src/setup.rs": "e3fe0d66a0bd012f8bb7250eb94d5547a6eedd0f38776f46f7b469aef092cd0b",
+    "engine/src/native_image.rs": "c09b774dcd3de9f6a03c3ddc57fee73d713613bebc8bef8855aad47948edf8fb"
+  }
+}

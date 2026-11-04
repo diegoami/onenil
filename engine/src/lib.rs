@@ -279,6 +279,48 @@ mod python {
     use pyo3::prelude::*;
 
     #[pyclass]
+    struct NativePreparedWatchedSession {
+        session: std::sync::Mutex<watched_compiled::prepared::Session>,
+    }
+    #[pymethods]
+    impl NativePreparedWatchedSession {
+        #[new]
+        fn new(input_json: &str) -> PyResult<Self> {
+            let input: watched_compiled::prepared::Input = serde_json::from_str(input_json)
+                .map_err(|e| PyValueError::new_err(e.to_string()))?;
+            let session =
+                watched_compiled::prepared::Session::new(input).map_err(PyValueError::new_err)?;
+            Ok(Self {
+                session: std::sync::Mutex::new(session),
+            })
+        }
+        fn snapshot(&self) -> PyResult<String> {
+            let session = self
+                .session
+                .lock()
+                .map_err(|_| PyValueError::new_err("prepared caller lock poisoned"))?;
+            let out = session.snapshot().map_err(PyValueError::new_err)?;
+            serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn observation(&self) -> PyResult<String> {
+            let session = self
+                .session
+                .lock()
+                .map_err(|_| PyValueError::new_err("prepared caller lock poisoned"))?;
+            serde_json::to_string(&session.observation())
+                .map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+        fn step(&self) -> PyResult<String> {
+            let mut session = self
+                .session
+                .lock()
+                .map_err(|_| PyValueError::new_err("prepared caller lock poisoned"))?;
+            let out = session.advance().map_err(PyValueError::new_err)?;
+            serde_json::to_string(&out).map_err(|e| PyValueError::new_err(e.to_string()))
+        }
+    }
+
+    #[pyclass]
     struct NativeWatchedPreparation {
         prepared: crate::watched_setup::Preparation,
     }
@@ -1049,6 +1091,7 @@ mod python {
         module.add_class::<NativeMatchSession>()?;
         module.add_class::<NativeExhibitionSession>()?;
         module.add_class::<NativeWatchedPreparation>()?;
+        module.add_class::<NativePreparedWatchedSession>()?;
         module.add_function(wrap_pyfunction!(watched_move_candidate, module)?)?;
         module.add_function(wrap_pyfunction!(watched_choose_direction, module)?)?;
         module.add_function(wrap_pyfunction!(watched_prepare_target, module)?)?;

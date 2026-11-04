@@ -34,6 +34,8 @@ pub(super) struct Cpu {
     pub watch_trace: Option<Vec<serde_json::Value>>,
     pub watch_pending: Option<serde_json::Value>,
     pub watch_tick: usize,
+    pub watch_entry_yield: bool,
+    pub watch_entry_yielded: bool,
     pub watch_live_goals: Vec<[u16; 2]>,
     stack: Vec<u8>,
     stack_known: Vec<bool>,
@@ -67,6 +69,8 @@ impl Cpu {
             watch_trace: None,
             watch_pending: None,
             watch_tick: 0,
+            watch_entry_yield: false,
+            watch_entry_yielded: false,
             watch_live_goals: vec![],
             stack: vec![0; 65540],
             stack_known: vec![false; 65540],
@@ -389,6 +393,10 @@ impl Cpu {
                 && self.read(self.r[11], 0xD074, 8)? != 0
             {
                 return Err("watched match requested unsupported quick fallback".into());
+            }
+            if self.pc == (0x0AB9, 0x7C67) && self.watch_entry_yield {
+                self.watch_entry_yielded = true;
+                return Err("native watched entry yield".into());
             }
             if self.pc == (0x0AB9, 0x7A02) {
                 if self.watch_pending.is_some() || self.watch_tick >= 10000 {
