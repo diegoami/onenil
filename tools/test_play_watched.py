@@ -1,6 +1,8 @@
 """[designed] Detailed native action semantics and full-match controller acceptance."""
 import json
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import patch
 from play_watched import describe, Match, ROOT
 
@@ -22,6 +24,13 @@ class ActionSemantics(unittest.TestCase):
     def test_unknown_codes_and_missing_named_players_fail_explicitly(self):
         with self.assertRaises(ValueError):describe(self.event(255),{2591:'Shearer'})
         with self.assertRaises(ValueError):describe(self.event(8),{2591:'Shearer'})
+    def test_partial_browser_evidence_is_never_reused(self):
+        from smoke_watched_viewer import next_stem
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.assertEqual(next_stem(root),'T42-r0001')
+            (root/'T42-r0001-desktop.png').write_bytes(b'partial-test-evidence')
+            self.assertEqual(next_stem(root),'T42-r0002')
 
 
 class NativeController(unittest.TestCase):

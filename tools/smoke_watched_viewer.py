@@ -14,6 +14,13 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def next_stem(directory):
+    # A failed run may leave a screenshot without its final JSON receipt.
+    numbers = [int(match[1]) for p in directory.glob('T42-r*')
+               if (match := re.fullmatch(r'T42-r(\d+)(?:\.json|-desktop\.png|-mobile\.png)', p.name))]
+    return f'T42-r{max(numbers, default=0) + 1:04d}'
+
+
 def smoke(directory):
     from playwright.sync_api import sync_playwright
     from onenil_engine import onenil_engine as native
@@ -22,8 +29,7 @@ def smoke(directory):
     if git('status', '--porcelain', '--', 'engine', 'tools/play_watched.py', 'tools/test_play_watched.py', 'tools/smoke_watched_viewer.py', 'web/watched'):
         raise ValueError('commit watched viewer source before recording browser evidence')
     directory.mkdir(parents=True, exist_ok=True)
-    number = max((int(re.search(r'T42-r(\d+)', p.name)[1]) for p in directory.glob('T42-r*.json')), default=0) + 1
-    stem = f'T42-r{number:04d}'
+    stem = next_stem(directory)
     record = directory / f'{stem}.json'
     if record.exists():
         raise ValueError('immutable browser record exists')
@@ -74,6 +80,7 @@ def smoke(directory):
             page.wait_for_timeout(250)
             assert page.request.get(url + '/api/state').json()['steps'] == half['steps']
             desktop = directory / f'{stem}-desktop.png'
+            assert not desktop.exists(), 'immutable screenshot exists'
             page.screenshot(path=str(desktop), full_page=True)
             page.get_by_role('button', name='Continue second half', exact=True).click()
             page.get_by_role('button', name='Match finished', exact=True).wait_for(timeout=60000)
@@ -91,6 +98,7 @@ def smoke(directory):
             page.set_viewport_size({'width':390,'height':844})
             page.locator('#commentary').evaluate('(e) => { e.scrollTop = e.scrollHeight; }')
             mobile = directory / f'{stem}-mobile.png'
+            assert not mobile.exists(), 'immutable screenshot exists'
             page.screenshot(path=str(mobile), full_page=True)
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
             assert page.locator('#score').bounding_box()['height'] < 60
