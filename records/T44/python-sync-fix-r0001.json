@@ -1,0 +1,55 @@
+{
+  "scope": "Preserve initial PyO3 release integration failure and focused image-tracker fix validation. The former Cell-based tracker made four existing plain session classes fail Sync;the tracker now uses an atomic first-read latch without changing gameplay bytes.",
+  "failed_source": "435d875093a3c5cd01b7fccbc176b7c305125da9",
+  "checks": {
+    "T44-release-build-r0001.txt": {
+      "sha256": "5d9480a3e9cc265c935f090388f6f2ea0cb53b15c5e778a0a71fe6fbc7575978",
+      "tail": [
+        "5036 |     let mut label = 3292u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "For more information about this error, try `rustc --explain E0277`.",
+        "warning: `onenil-engine` (lib) generated 41 warnings",
+        "error: could not compile `onenil-engine` (lib) due to 4 previous errors; 41 warnings emitted",
+        "\ud83d\udca5 maturin failed",
+        "  Caused by: Failed to build a native library through cargo",
+        "  Caused by: Cargo build finished with \"exit status: 101\": `env -u CARGO PYO3_BUILD_EXTENSION_MODULE=\"1\" PYO3_CONFIG_FILE=\"/tmp/onenil-native/engine/target/maturin/pyo3-config-x86_64-unknown-linux-gnu-3.12-abi3.txt\" PYO3_ENVIRONMENT_SIGNATURE=\"cpython-3.12-64bit\" PYO3_PYTHON=\"/tmp/onenil-native/.cache/venv/bin/python\" PYTHON_SYS_EXECUTABLE=\"/tmp/onenil-native/.cache/venv/bin/python\" \"cargo\" \"rustc\" \"--profile\" \"release\" \"--features\" \"python\" \"--message-format\" \"json-render-diagnostics\" \"--locked\" \"--manifest-path\" \"/tmp/onenil-native/engine/Cargo.toml\" \"--lib\" \"--crate-type\" \"cdylib\"`"
+      ]
+    },
+    "T44-thread-safe-image-tests-r0001.txt": {
+      "sha256": "c36f412885858c6af356fbe009df2f84d9d2d66173cd3d13a30c3e72dd5ec6a0",
+      "tail": [
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 41 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 35 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 39.79s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 3 tests",
+        "test native_image::tests::copying_and_growing_memory_preserves_unknown_byte_provenance ... ok",
+        "test native_image::tests::zero_allocation_is_unknown_and_explicit_stores_define_only_their_cells ... ok",
+        "test native_image::tests::concurrent_read_fault_latching_preserves_engine_send_and_sync ... ok",
+        "",
+        "test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 414 filtered out; finished in 0.00s",
+        ""
+      ]
+    }
+  },
+  "tracker_sha256": "0195c39422fbc0814e15064614190e29459490dd03d28cef49378fe69875bff3"
+}

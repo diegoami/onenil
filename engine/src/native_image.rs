@@ -2,27 +2,43 @@
 //! Existing untracked kernels keep their byte-image behavior. Tracked setup starts
 //! unknown;declared input stores and native writes establish byte presence.
 use std::{
-    cell::Cell,
     fmt,
     ops::{
         Deref, Index, IndexMut, Range, RangeFrom, RangeFull, RangeInclusive, RangeTo,
         RangeToInclusive,
     },
     slice::SliceIndex,
+    sync::atomic::{AtomicUsize, Ordering::Relaxed},
 };
 
-#[derive(Clone, PartialEq, Eq)]
 pub(crate) struct Image {
     bytes: Box<[u8]>,
     initialized: Option<Vec<bool>>,
-    first_read: Cell<Option<usize>>,
+    first_read: AtomicUsize,
 }
+impl Clone for Image {
+    fn clone(&self) -> Self {
+        Self {
+            bytes: self.bytes.clone(),
+            initialized: self.initialized.clone(),
+            first_read: AtomicUsize::new(self.first_read.load(Relaxed)),
+        }
+    }
+}
+impl PartialEq for Image {
+    fn eq(&self, other: &Self) -> bool {
+        self.bytes == other.bytes
+            && self.initialized == other.initialized
+            && self.first_read.load(Relaxed) == other.first_read.load(Relaxed)
+    }
+}
+impl Eq for Image {}
 impl From<Box<[u8]>> for Image {
     fn from(bytes: Box<[u8]>) -> Self {
         Self {
             bytes,
             initialized: None,
-            first_read: Cell::new(None),
+            first_read: AtomicUsize::new(usize::MAX),
         }
     }
 }
@@ -31,7 +47,7 @@ impl fmt::Debug for Image {
         f.debug_struct("Image")
             .field("len", &self.bytes.len())
             .field("tracked", &self.initialized.is_some())
-            .field("first_uninitialized_read", &self.first_read.get())
+            .field("first_uninitialized_read", &self.first_read.load(Relaxed))
             .finish()
     }
 }
@@ -110,20 +126,28 @@ impl Image {
         Self {
             bytes: vec![0; len].into_boxed_slice(),
             initialized: Some(vec![false; len]),
-            first_read: Cell::new(None),
+            first_read: AtomicUsize::new(usize::MAX),
         }
     }
     fn observe(&self, range: Range<usize>) {
-        if self.first_read.get().is_none() {
-            if let Some(present) = &self.initialized {
+        // Untracked product kernels avoid atomic reads altogether. Tracked
+        // immutable inspections may share the image across Python threads.
+        if let Some(present) = &self.initialized {
+            if self.first_read.load(Relaxed) == usize::MAX {
                 if let Some(offset) = present[range.clone()].iter().position(|value| !value) {
-                    self.first_read.set(Some(range.start + offset));
+                    let _ = self.first_read.compare_exchange(
+                        usize::MAX,
+                        range.start + offset,
+                        Relaxed,
+                        Relaxed,
+                    );
                 }
             }
         }
     }
     pub(crate) fn check_initialized(&self) -> Result<(), String> {
-        if let Some(address) = self.first_read.get() {
+        let address = self.first_read.load(Relaxed);
+        if address != usize::MAX {
             Err(format!("native setup read uninitialized byte{address:05X}"))
         } else {
             Ok(())
@@ -162,6 +186,19 @@ impl Image {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn concurrent_read_fault_latching_preserves_engine_send_and_sync() {
+        fn send_sync<T: Send + Sync>() {}
+        send_sync::<crate::Engine>();
+        let image = Image::tracked(20);
+        std::thread::scope(|scope| {
+            for _ in 0..4 {
+                scope.spawn(|| assert_eq!(image[3], 0));
+            }
+        });
+        assert!(image.check_initialized().unwrap_err().contains("00003"));
+        assert_eq!(image, image.clone());
+    }
     #[test]
     fn zero_allocation_is_unknown_and_explicit_stores_define_only_their_cells() {
         let mut image = Image::tracked(20);
