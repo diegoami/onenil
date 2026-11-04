@@ -195,7 +195,8 @@ pub(super) fn cell_address(s: &State, f: &ByteFact) -> Result<usize, String> {
     if matches!(
         f.area,
         Area::Main | Area::MainShown | Area::Background | Area::BackgroundShown
-    ) && !(pitch_offset(f.offset)
+    ) && !(s.kind == Kind::WatchedMatch
+        || pitch_offset(f.offset)
         || (matches!(
             s.kind,
             Kind::Actor | Kind::Tick | Kind::Caller | Kind::WatchedMatch

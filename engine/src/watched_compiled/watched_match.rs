@@ -57,7 +57,7 @@ pub fn run(s: &State, no_pending_key: bool) -> Result<Value, Fault> {
         }
     }
     c.watch_trace = Some(Vec::new());
-    let result = (|| {
+    let result: Result<Value, String> = (|| {
         c.invoke_entry(super::match_graph::p_0ab9_7c67, 0x0AB9, 0x7DCB)?;
         c.invoke_entry(super::match_graph::p_0ab9_7dcb, 0x0AB9, 0xE05E)?;
         c.invoke_entry(super::match_graph::p_0ab9_e05e, 0x0AB9, 0xE435)?;

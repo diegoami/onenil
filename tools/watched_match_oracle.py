@@ -19,7 +19,7 @@ def named(state,at):
  if -4096<=at-frame<64:return 'frame',at-frame
  ds=16*state['regs'][11]
  if 0<=at-ds<65536:return 'ds',at-ds
- for name,(_,length)in SLOTS.items():
+ for name,(_,length)in {**SLOTS,**{k:(0,4000)for k in('main','main_shown','background','background_shown')}}.items():
   p=next(p for p in state['pointers']if p['kind']==name);base=16*p['segment']+p['offset']
   if base<=at<base+length:return name,at-base
  return ticks.ticks.named(state,at)
@@ -42,6 +42,12 @@ def select(probe):
  for fact in state['cells']:
   if raw[address(state,fact['area'],fact['offset'])]!=fact['value']:raise ValueError('cached initial fact differs from original ENTRY')
  known={address(state,f['area'],f['offset'])for f in state['cells']}
+ # Full physical logical-pitch rows include the border cells reached beyond +/-37.
+ # Values remain numeric glyph/attribute cells from ENTRY,not font bitmap data.
+ for area in('main','main_shown','background','background_shown'):
+  for offset in range(0x90E-160*9-74,0x90E+160*9+76):
+   at=address(state,area,offset)
+   if at not in known:known.add(at);state['cells'].append({'area':area,'offset':offset,'value':raw[at]})
  p=subprocess.Popen([str(probe.resolve())],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
  try:
   for attempt in range(10000):
@@ -54,7 +60,7 @@ def select(probe):
     oracle.write_json(path,{'initial':state,'no_pending_key':True,'source_admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'scope':'One initial ENTRY union;full original reference used only for assertions;no per-step inputs.'});print('native full match admission selected and parity verified',len(state['cells']),'facts',flush=True);return
    error=packet['error'];missing=error.get('missing')
    if missing is None:raise ValueError('native match unsupported:'+error['message'])
-   area,offset=named(state,missing['address']);at=address(state,area,offset)
+   (cache/'last-diagnostic.json').write_text(json.dumps(error,indent=2));area,offset=named(state,missing['address']);at=address(state,area,offset)
    if at in known:raise ValueError('native repeated missing initial fact:'+str(error))
    offsets=[offset]
    if area in('p8','p15'):
