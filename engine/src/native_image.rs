@@ -8,20 +8,25 @@ use std::{
         RangeToInclusive,
     },
     slice::SliceIndex,
-    sync::atomic::{AtomicUsize, Ordering::Relaxed},
+    sync::{
+        atomic::{AtomicUsize, Ordering::Relaxed},
+        Arc,
+    },
 };
 
 pub(crate) struct Image {
     bytes: Box<[u8]>,
     initialized: Option<Vec<bool>>,
-    first_read: AtomicUsize,
+    first_read: Arc<AtomicUsize>,
 }
+// [designed] Trial images share the fault latch so discarding/rolling back a
+// speculative image cannot discard evidence of an undeclared semantic read.
 impl Clone for Image {
     fn clone(&self) -> Self {
         Self {
             bytes: self.bytes.clone(),
             initialized: self.initialized.clone(),
-            first_read: AtomicUsize::new(self.first_read.load(Relaxed)),
+            first_read: Arc::clone(&self.first_read),
         }
     }
 }
@@ -38,7 +43,7 @@ impl From<Box<[u8]>> for Image {
         Self {
             bytes,
             initialized: None,
-            first_read: AtomicUsize::new(usize::MAX),
+            first_read: Arc::new(AtomicUsize::new(usize::MAX)),
         }
     }
 }
@@ -126,7 +131,7 @@ impl Image {
         Self {
             bytes: vec![0; len].into_boxed_slice(),
             initialized: Some(vec![false; len]),
-            first_read: AtomicUsize::new(usize::MAX),
+            first_read: Arc::new(AtomicUsize::new(usize::MAX)),
         }
     }
     fn observe(&self, range: Range<usize>) {
@@ -186,6 +191,13 @@ impl Image {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn trial_image_unknown_reads_cannot_disappear_on_rollback() {
+        let original = Image::tracked(20);
+        let trial = original.clone();
+        assert_eq!(trial[3], 0);
+        assert!(original.check_initialized().unwrap_err().contains("00003"));
+    }
     #[test]
     fn concurrent_read_fault_latching_preserves_engine_send_and_sync() {
         fn send_sync<T: Send + Sync>() {}

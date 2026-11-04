@@ -1,0 +1,90 @@
+{
+  "scope": "Preserve the successful66614f7 PyO3 release/prefix replay and the trial-image fault propagation red/green. The shared atomic latch preserves undeclared-read evidence across speculative copies and rollback;it changes no gameplay bytes. Final release/full-suite replay follows from the committed fixed source.",
+  "release_source": "66614f7483c3608e09115b094cd681b4522d407d",
+  "checks": {
+    "T44-release-build-r0002.txt": {
+      "sha256": "4a227edf01e03ebadf30a1fbf44c5febc4c122e1b3f2af61f7e77ee393451f4c",
+      "tail": [
+        "124 | impl Image {",
+        "    | ---------- method in this implementation",
+        "...",
+        "164 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:654:12",
+        "    |",
+        " 45 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "654 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `release` profile [optimized] target(s) in 1m 15s",
+        "\ud83d\udce6 Built wheel for abi3 Python \u2265 3.12 to /tmp/.tmpGA3N2C/onenil_engine-0.1.0-cp312-abi3-linux_x86_64.whl",
+        "\u270f\ufe0f Setting installed package as editable",
+        "\ud83d\udee0 Installed onenil-engine-0.1.0"
+      ]
+    },
+    "T44-python-release-prefix-r0001.txt": {
+      "sha256": "bd82a0c682be4c689eeec527c20cc7d95527ba8fdf3afb153004f25d058598b5",
+      "tail": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared watched provenance/replay: ok"
+      ]
+    },
+    "T44-trial-read-latch-red-r0001.txt": {
+      "sha256": "c6098813ce984044237b9d1968b5ab0124807c46671191c3ed07511f556134cb",
+      "tail": [
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 1 test",
+        "test native_image::tests::trial_image_unknown_reads_cannot_disappear_on_rollback ... FAILED",
+        "",
+        "failures:",
+        "",
+        "---- native_image::tests::trial_image_unknown_reads_cannot_disappear_on_rollback stdout ----",
+        "",
+        "thread 'native_image::tests::trial_image_unknown_reads_cannot_disappear_on_rollback' (668) panicked at src/native_image.rs:194:46:",
+        "called `Result::unwrap_err()` on an `Ok` value: ()",
+        "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "",
+        "",
+        "failures:",
+        "    native_image::tests::trial_image_unknown_reads_cannot_disappear_on_rollback",
+        "",
+        "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 417 filtered out; finished in 0.00s",
+        "",
+        "error: test failed, to rerun pass `--lib`"
+      ]
+    },
+    "T44-trial-read-latch-green-r0001.txt": {
+      "sha256": "74601601c3e521385134ec82f10ce484ec05790aeb8daf9154c469425e3774b7",
+      "tail": [
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 41 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 35 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 24.30s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 4 tests",
+        "test native_image::tests::copying_and_growing_memory_preserves_unknown_byte_provenance ... ok",
+        "test native_image::tests::zero_allocation_is_unknown_and_explicit_stores_define_only_their_cells ... ok",
+        "test native_image::tests::trial_image_unknown_reads_cannot_disappear_on_rollback ... ok",
+        "test native_image::tests::concurrent_read_fault_latching_preserves_engine_send_and_sync ... ok",
+        "",
+        "test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 414 filtered out; finished in 0.00s",
+        ""
+      ]
+    }
+  },
+  "tracker_sha256": "f92ef6de961e139c032f24036eb6e9d048254577a940d4cf2a4002cb7848820c"
+}
