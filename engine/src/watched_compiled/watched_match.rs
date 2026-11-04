@@ -291,4 +291,68 @@ mod tests {
             .unwrap_err()
             .contains("outside the proven lifecycle"));
     }
+    #[test]
+    fn menu_templates_preserve_gameplay_and_reject_unproven_page_or_caller() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/watched_caller/case-00.json");
+        let fixture: Value = serde_json::from_slice(&std::fs::read(root).unwrap()).unwrap();
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        for (template, caller, ret, header, watching, succeeds) in [
+            (0x132E, 0x1B55, 0x346C, 0xDD5C, true, true),
+            (0x6346, 0x1B55, 0x347B, 0xDD5C, true, true),
+            (0x132E, 0x0AB9, 0xD6D6, 0xDD5C, true, true),
+            (0x25CC, 0x0AB9, 0xD6E5, 0xDD5C, true, true),
+            (0x4F20, 0x0AB9, 0x971A, 0xDD5C, true, true),
+            (0x132E, 0x1B55, 0x346C, 0xDD58, true, false),
+            (0x132E, 0x1B55, 0x1234, 0xDD5C, true, false),
+            (0x132E, 0x1B55, 0x346C, 0xDD5C, false, false),
+        ] {
+            let mut c = action::machine(&state).unwrap();
+            let pointer = state
+                .pointers
+                .iter()
+                .find(|p| p.kind == action::PointerKind::MainShown)
+                .unwrap();
+            let ds = 16 * usize::from(c.r[11]);
+            for (index, value) in [pointer.offset.to_le_bytes(), pointer.segment.to_le_bytes()]
+                .concat()
+                .into_iter()
+                .enumerate()
+            {
+                c.known[ds + 0xDD5C + index] = true;
+                c.e.image[ds + 0xDD5C + index] = value;
+            }
+            if watching {
+                c.watch_trace = Some(Vec::new());
+            }
+            c.r[9] = c.segment_const(caller);
+            let regs = c.r;
+            let stack = 16 * usize::from(c.r[10]) + usize::from(c.r[4]);
+            let before = c.e.image.clone();
+            for value in [c.r[11], template, c.r[11], header] {
+                c.push(value).unwrap();
+            }
+            let outcome = c.invoke(
+                super::super::projections::menu_template,
+                true,
+                0x232A,
+                0x052F,
+                ret,
+            );
+            assert_eq!(
+                outcome.is_ok(),
+                succeeds,
+                "template{template:X}/caller{caller:X}:{ret:X}"
+            );
+            for (at, (old, new)) in before.iter().zip(c.e.image.iter()).enumerate() {
+                if !(stack - 4096..stack).contains(&at) {
+                    assert_eq!(old, new, "address{at:X}");
+                }
+            }
+            if succeeds {
+                assert_eq!(c.r, regs);
+                assert_eq!(c.presentation.len(), 1);
+            }
+        }
+    }
 }

@@ -204,7 +204,7 @@ def prove_statistics(research,wait=False,mode=0):
 def prove_templates(research):
  directory=ROOT/'records/T41/template-boundary-r0001'
  if (directory/'result.json').exists():
-  print('completed template footprint exists;verify pinned records before accepting',flush=True);return
+  replay.template_proof();print('completed template proof verified;no emulator constructed',flush=True);return
  if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original template proof')
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
  anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9

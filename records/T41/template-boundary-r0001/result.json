@@ -1,0 +1,64 @@
+{
+  "schema": "original-template-preservation/1",
+  "status": "completed",
+  "protocol_sha256": "8ed60bb17cccd5d197e3ef0c6f5d7fcb2db982cd1bc4a3772b78ae5665abdf0a",
+  "observations": [
+    {
+      "template_ds_offset": 4910,
+      "return": "1B55:346C",
+      "returned_sp": 16026,
+      "returned_bp": 16032,
+      "returned_ds": 12423,
+      "changed_bytes_by_area": {
+        "stack": 22,
+        "main_shown": 0
+      },
+      "unexpected_change_count": 0,
+      "unexpected_first_addresses": [],
+      "all_other_memory_equal": true
+    },
+    {
+      "template_ds_offset": 25414,
+      "return": "1B55:347B",
+      "returned_sp": 16026,
+      "returned_bp": 16032,
+      "returned_ds": 12423,
+      "changed_bytes_by_area": {
+        "stack": 20,
+        "main_shown": 12
+      },
+      "unexpected_change_count": 0,
+      "unexpected_first_addresses": [],
+      "all_other_memory_equal": true
+    },
+    {
+      "template_ds_offset": 9676,
+      "return": "0AB9:D6E5",
+      "returned_sp": 16026,
+      "returned_bp": 16032,
+      "returned_ds": 12423,
+      "changed_bytes_by_area": {
+        "stack": 22,
+        "main_shown": 179
+      },
+      "unexpected_change_count": 0,
+      "unexpected_first_addresses": [],
+      "all_other_memory_equal": true
+    },
+    {
+      "template_ds_offset": 20256,
+      "return": "0AB9:971A",
+      "returned_sp": 16026,
+      "returned_bp": 16032,
+      "returned_ds": 12423,
+      "changed_bytes_by_area": {
+        "stack": 22,
+        "main_shown": 60
+      },
+      "unexpected_change_count": 0,
+      "unexpected_first_addresses": [],
+      "all_other_memory_equal": true
+    }
+  ],
+  "scope": "Derived isolated original menu-template calls from retained initial ENTRY;whole-memory footprint. No template bytes or historical halftime state exported."
+}

@@ -101,3 +101,33 @@ pub(super) fn statistics_display(c: &mut Cpu) -> Result<(), String> {
     c.pc = (0x1998, 0x0818);
     c.ret(true, 4)
 }
+
+// [confirmed:T41/template-boundary-r0001] Source232A:052F→24BC:0000
+// writes only the destination text page and restores DS/BP/SP. MainShown is
+// presentation here;all lineup/substitution computations stay source-compiled.
+pub(super) fn menu_template(c: &mut Cpu) -> Result<(), String> {
+    let ss = c.r[10];
+    let sp = c.r[4];
+    let (header, header_segment) = c.far(ss, sp.wrapping_add(4))?;
+    let (template, template_segment) = c.far(ss, sp.wrapping_add(8))?;
+    let call = c.call_chain().last().copied();
+    let supported = matches!(
+        (template, call),
+        (0x132E, Some((0x1B55, 0x346C)) | Some((0x0AB9, 0xD6D6)))
+            | (0x6346, Some((0x1B55, 0x347B)))
+            | (0x25CC, Some((0x0AB9, 0xD6E5)))
+            | (0x4F20, Some((0x0AB9, 0x971A)))
+    );
+    if c.watch_trace.is_none()
+        || !supported
+        || header != 0xDD5C
+        || header_segment != c.r[11]
+        || template_segment != c.r[11]
+    {
+        return Err("menu template outside proven presentation caller/page".into());
+    }
+    c.far(header_segment, header)?; // Requires the admitted typed presentation pointer.
+    c.presentation
+        .push(serde_json::json!({"site":"232A:052F","kind":"menu_template","template":template}));
+    c.ret(true, 8)
+}

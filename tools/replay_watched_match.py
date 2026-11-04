@@ -54,6 +54,21 @@ def statistics_proof():
   if(result['returned_sp'],result['returned_bp'],result['returned_ds'])!=(16026,16032,12423):raise ValueError('statistics far ABI differs')
  print('all4original statistics mode/wait calls preserve all non-presentation memory and clear the consumed key',flush=True)
 
+TEMPLATE_SHA='c044f620ce67bdae78e07caf667e6b969d27615930b3348104ad278c4e8e1092'
+def template_proof():
+ directory=ROOT/'records/T41/template-boundary-r0001';manifest=read(directory/'manifest.json')
+ if sha(directory/'manifest.json')!=TEMPLATE_SHA:raise ValueError('template proof root differs')
+ for name in('start','result'):
+  if sha(directory/f'{name}.json')!=manifest[f'{name}_sha256']:raise ValueError('template original observation differs')
+ start=read(directory/'start.json');result=read(directory/'result.json')
+ expected=[(0x132E,'1B55:346C'),(0x6346,'1B55:347B'),(0x25CC,'0AB9:D6E5'),(0x4F20,'0AB9:971A')]
+ if start['root']!='232A:052F'or start['destination_header']!='DS:DD5C'or result['status']!='completed'or result['protocol_sha256']!=manifest['start_sha256']:raise ValueError('template proof protocol differs')
+ if [(v['template_ds_offset'],v['return'])for v in result['observations']]!=expected:raise ValueError('template cases differ')
+ for observation in result['observations']:
+  if not observation['all_other_memory_equal']or observation['unexpected_change_count']or observation['unexpected_first_addresses']or set(observation['changed_bytes_by_area'])!={'stack','main_shown'}:raise ValueError('template modifies non-presentation memory')
+  if(observation['returned_sp'],observation['returned_bp'],observation['returned_ds'])!=(16026,16032,12423):raise ValueError('template far ABI differs')
+ print('all4original templates preserve all memory outside MainShown and stack',flush=True)
+
 PREFIX_SOURCE=None
 def compare_prefix(got):
  global PREFIX_SOURCE
