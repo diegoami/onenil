@@ -469,8 +469,8 @@ def prove_lineup_validation(research,attempt=1):
   if unexpected:raise ValueError('original lineup validator modifies unexpected memory:'+str(observation))
  oracle.write_json(directory/'result.json',{'status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']});oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')});print('original lineup validation completed',observations,flush=True)
 
-def prove_replacement_banner(research):
- directory=ROOT/'records/T41/replacement-banner-r0001'
+def prove_replacement_banner(research,attempt=1):
+ directory=ROOT/f'records/T41/replacement-banner-r{attempt:04d}'
  if(directory/'result.json').exists():raise ValueError('completed banner exists;verify pinned records')
  if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original banner proof')
  sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
@@ -481,21 +481,22 @@ def prove_replacement_banner(research):
  cases=[{'name':'healthy','first':first,'second':second,'patches':[]},{'name':'unavailable','first':first,'second':second,'patches':[{'address':pointer(0xD7BE)+15*first+8,'value':0}]}]
  for bit in(8,6,2,3):cases.append({'name':f'flag-bit{bit}','first':first,'second':second,'patches':[{'address':pointer(0xD7BE)+15*first+11,'value':1<<(bit-1)}]})
  cases.extend([{'name':'role13','first':first,'second':second,'patches':[{'address':pointer(0xD7BA)+8*first+6,'value':13}]},{'name':'reversed','first':second,'second':first,'patches':[]}])
- protocol={'schema':'original-replacement-banner-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'0AB9:ADD0','return':'0AB9:EBE2','cases':cases,'external_keys':[],'scope':'Derived original substitution announcement;verify Main is restored and only MainShown bottom line/style/stack/presentation hardware may change. Numeric style helper remains native;no name/template assets exported.'};start=directory/'start.json'
+ protocol={'schema':'original-replacement-banner-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'0AB9:ADD0','return':'0AB9:EBE2','cases':cases,'external_keys':[],'pit_divisor':1024,'pit_source':'1998:00BA/00C5→0096','maximum_instructions':100000000,'scope':'Derived original substitution announcement;verify Main is restored and only MainShown bottom line/style/stack/presentation hardware may change. Numeric style helper remains native;no name/template assets exported.'};start=directory/'start.json'
  if start.exists():raise ValueError('immutable banner proof already started')
  oracle.write_json(start,protocol);observations=[];shown=pointer(0xDD5C)
  for case in cases:
   raw=bytearray(initial)
   for patch in case['patches']:raw[patch['address']]=patch['value']
   sp=regs['sp']-6;words=[0xEBE2,case['first'],case['second']];raw[ss+sp:ss+sp+6]=b''.join(w.to_bytes(2,'little')for w in words)
-  g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x0AB9,'IP':0xADD0,'SP':sp,'EFLAGS':state['flags']});before=g.mem(0,0x110000)
+  g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x0AB9,'IP':0xADD0,'SP':sp,'EFLAGS':state['flags']});g.divisor=1024;before=g.mem(0,0x110000)
   class Returned(Exception):pass
   def returned(g):raise Returned()
   g.code_hook('0AB9:EBE2',returned);complete=False
   try:
-   for _ in range(40):g.run(max_steps=500000);g.other_polls=0
+   for _ in range(200):g.run(max_steps=500000);g.other_polls=0
   except Returned:complete=True
-  if not complete or g.unsupported:raise ValueError('original banner did not return cleanly:'+case['name'])
+  if not complete or g.unsupported:
+   failure={'status':'aborted-before-acceptance','case':case['name'],'complete':complete,'unsupported':g.unsupported,'budget':g.budget,'game_timer_ticks':g.game_timer_ticks,'pc':g.image_address(g.reg('cs'),g.reg('ip')),'protocol_sha256':replay.sha(start)};oracle.write_json(directory/'failure.json',failure);raise ValueError('original banner did not return cleanly:'+str(failure))
   if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp'],regs['bp'],regs['ds']):raise ValueError('original banner ABI differs')
   after=g.mem(0,0x110000);changed={'stack':0,'main_shown_bottom':0,'style':0,'keyboard_driver':0,'presentation_timers':0,'bios_hardware':0};unexpected=[]
   for address,(old,new)in enumerate(zip(before,after,strict=True)):
@@ -515,7 +516,7 @@ def prove_replacement_banner(research):
 def word_from_bytes(raw,address):return int.from_bytes(raw[address:address+2],'little')
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--prove-menu-input',type=Path);p.add_argument('--prove-lineup-validation',type=Path);p.add_argument('--prove-replacement-banner',type=Path);p.add_argument('--lineup-validation-attempt',type=int,default=1);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--prove-menu-input',type=Path);p.add_argument('--prove-lineup-validation',type=Path);p.add_argument('--prove-replacement-banner',type=Path);p.add_argument('--replacement-banner-attempt',type=int,default=1);p.add_argument('--lineup-validation-attempt',type=int,default=1);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
  if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
@@ -526,6 +527,6 @@ def main():
  if a.prove_fixture_title:prove_fixture_title(a.prove_fixture_title)
  if a.prove_menu_input:prove_menu_input(a.prove_menu_input)
  if a.prove_lineup_validation:prove_lineup_validation(a.prove_lineup_validation,a.lineup_validation_attempt)
- if a.prove_replacement_banner:prove_replacement_banner(a.prove_replacement_banner)
+ if a.prove_replacement_banner:prove_replacement_banner(a.prove_replacement_banner,a.replacement_banner_attempt)
  if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer or a.prove_fixture_title or a.prove_menu_input or a.prove_lineup_validation or a.prove_replacement_banner):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()

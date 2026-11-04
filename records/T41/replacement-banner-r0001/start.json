@@ -1,0 +1,90 @@
+{
+  "schema": "original-replacement-banner-protocol/1",
+  "producer": "faab1841b9f1277081ec1b748f69c7a3aa095dc2",
+  "observer_sha256": "0e83702b49b82e506bd1872191f7675dd3809afeaf752b15d052f1b6b1903784",
+  "admission_sha256": "b8f418bfce7111e5f57e96b8a6d194045934a35d38b7e650a0512370d12884cf",
+  "root": "0AB9:ADD0",
+  "return": "0AB9:EBE2",
+  "cases": [
+    {
+      "name": "healthy",
+      "first": 2582,
+      "second": 2581,
+      "patches": []
+    },
+    {
+      "name": "unavailable",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 376338,
+          "value": 0
+        }
+      ]
+    },
+    {
+      "name": "flag-bit8",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 376341,
+          "value": 128
+        }
+      ]
+    },
+    {
+      "name": "flag-bit6",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 376341,
+          "value": 32
+        }
+      ]
+    },
+    {
+      "name": "flag-bit2",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 376341,
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "flag-bit3",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 376341,
+          "value": 4
+        }
+      ]
+    },
+    {
+      "name": "role13",
+      "first": 2582,
+      "second": 2581,
+      "patches": [
+        {
+          "address": 326894,
+          "value": 13
+        }
+      ]
+    },
+    {
+      "name": "reversed",
+      "first": 2581,
+      "second": 2582,
+      "patches": []
+    }
+  ],
+  "external_keys": [],
+  "scope": "Derived original substitution announcement;verify Main is restored and only MainShown bottom line/style/stack/presentation hardware may change. Numeric style helper remains native;no name/template assets exported."
+}

@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 531, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 529, in main
+    if a.prove_replacement_banner:prove_replacement_banner(a.prove_replacement_banner)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/onenil-native/tools/watched_match_oracle.py", line 498, in prove_replacement_banner
+    if not complete or g.unsupported:raise ValueError('original banner did not return cleanly:'+case['name'])
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: original banner did not return cleanly:healthy
