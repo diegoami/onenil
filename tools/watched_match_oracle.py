@@ -417,8 +417,57 @@ def prove_menu_input(research):
   if unexpected:raise ValueError('original menu input modifies gameplay memory:'+str(observation))
  oracle.write_json(directory/'result.json',{'status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']});oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')});print('original menu input cursor/key results',observations,flush=True)
 
+def prove_lineup_validation(research):
+ directory=ROOT/'records/T41/lineup-validation-r0001'
+ if(directory/'result.json').exists():raise ValueError('completed lineup validation exists;verify pinned records')
+ if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original lineup-validation proof')
+ sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
+ anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
+ def word(at):return int.from_bytes(initial[at:at+2],'little')
+ def pointer(slot):return word(ds+slot)+16*word(ds+slot+2)
+ club=word(ds+0xD6E4);club_at=pointer(0xD7C2)+62*(club-1);players=[word(club_at+2*slot)for slot in range(11)];roles={player:initial[pointer(0xD7BA)+8*player+6]for player in players};keeper=next(p for p in players if roles[p]==0);outfield=[p for p in players if roles[p]!=0]
+ cases=[{'name':'original-prematch','mode':0,'patches':[]},{'name':'original-inmatch','mode':1,'patches':[]},
+ {'name':'no-keeper','mode':1,'patches':[{'address':pointer(0xD7BA)+8*keeper+6,'value':1}]},
+ {'name':'two-keepers','mode':1,'patches':[{'address':pointer(0xD7BA)+8*outfield[0]+6,'value':0}]},
+ {'name':'overfull-role','mode':1,'patches':[{'address':pointer(0xD7BA)+8*p+6,'value':1}for p in outfield[:4]]},
+ {'name':'empty-keeper-slot','mode':0,'patches':[{'address':club_at+2*players.index(keeper)+i,'value':0}for i in(0,1)]},
+ {'name':'unavailable-prematch','mode':0,'patches':[{'address':pointer(0xD7BE)+15*outfield[0]+8,'value':0}]},
+ {'name':'unavailable-inmatch','mode':1,'patches':[{'address':pointer(0xD7BE)+15*outfield[0]+8,'value':0}]},
+ {'name':'unmanaged-invalid','mode':1,'patches':[{'address':ds+0xDCBA,'value':0},{'address':ds+0xDCBB,'value':0},{'address':pointer(0xD7BA)+8*keeper+6,'value':1}]}]
+ parent_bp=regs['sp']+256
+ protocol={'schema':'original-lineup-validation-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'root':'0AB9:D29E','return':'0AB9:EBE2','active_club':club,'derived_parent_bp':parent_bp,'cases':cases,'external_warning_key':'space','scope':'Derived original numeric lineup validator,valid/invalid keeper/position/availability/management cases. Observe return,role counts and whole memory. Warning text/assets excluded from records.'};start=directory/'start.json'
+ if start.exists():raise ValueError('immutable lineup validation proof already started')
+ oracle.write_json(start,protocol);observations=[]
+ pages=[pointer(slot)for slot in(0xD08E,0xD092,0xD096,0xD09A)]
+ for case in cases:
+  raw=bytearray(initial);raw[ds+0xD18]=case['mode'];raw[ss+parent_bp-4]=club
+  for patch in case['patches']:raw[patch['address']]=patch['value']
+  sp=regs['sp']-4;raw[ss+sp:ss+sp+4]=(0xEBE2).to_bytes(2,'little')+parent_bp.to_bytes(2,'little')
+  g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+0x0AB9,'IP':0xD29E,'SP':sp,'BP':parent_bp,'EFLAGS':state['flags']});g.press('space');before=g.mem(0,0x110000);counts=[]
+  class Returned(Exception):pass
+  def returned(g):raise Returned()
+  def observe(g):counts.append({'side':g.mem(16*g.reg('ss')+g.reg('bp')-0x13,1)[0],'counts':list(g.mem(16*g.reg('ss')+g.reg('bp')-0x10,15))})
+  g.code_hook('0AB9:EBE2',returned);g.code_hook('0AB9:D3CF',observe);complete=False
+  try:
+   for _ in range(20):g.run(max_steps=500000);g.other_polls=0
+  except Returned:complete=True
+  if not complete or g.unsupported:raise ValueError('original lineup validator did not return cleanly:'+case['name'])
+  if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp'],parent_bp,regs['ds']):raise ValueError('original lineup validator ABI differs')
+  after=g.mem(0,0x110000);changed={'stack':0,'presentation_pages':0,'presentation_ds':0,'bios_hardware':0};unexpected=[]
+  for address,(old,new)in enumerate(zip(before,after,strict=True)):
+   if old==new:continue
+   if ss+sp-4096<=address<ss+parent_bp+64:kind='stack'
+   elif any(page<=address<page+4000 for page in pages):kind='presentation_pages'
+   elif ds+0xDE00<=address<ds+0xDF00 or address-ds in(0xDD64,0xDD65,0xD5A,0xD5B,0xD088,0xD089):kind='presentation_ds'
+   elif 0x400<=address<0x500:kind='bios_hardware'
+   else:unexpected.append(address);continue
+   changed[kind]+=1
+  observation={'name':case['name'],'returned_valid':g.reg('ax')&255,'role_counts':counts,'restored_active_club':after[ss+parent_bp-4],'returned_sp':g.reg('sp'),'returned_bp':g.reg('bp'),'returned_ds':g.reg('ds'),'changed_bytes_by_area':changed,'all_other_memory_equal':not unexpected,'unexpected_change_count':len(unexpected),'unexpected_first_addresses':unexpected[:16]};observations.append(observation)
+  if unexpected:raise ValueError('original lineup validator modifies unexpected memory:'+str(observation))
+ oracle.write_json(directory/'result.json',{'status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']});oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')});print('original lineup validation completed',observations,flush=True)
+
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--prove-menu-input',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--prove-formation',type=Path);p.add_argument('--prove-grouped-integer',type=Path);p.add_argument('--prove-fixture-title',type=Path);p.add_argument('--prove-menu-input',type=Path);p.add_argument('--prove-lineup-validation',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
  if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
@@ -428,5 +477,6 @@ def main():
  if a.prove_grouped_integer:prove_grouped_integer(a.prove_grouped_integer)
  if a.prove_fixture_title:prove_fixture_title(a.prove_fixture_title)
  if a.prove_menu_input:prove_menu_input(a.prove_menu_input)
- if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer or a.prove_fixture_title or a.prove_menu_input):p.error('choose selection or original transient proof')
+ if a.prove_lineup_validation:prove_lineup_validation(a.prove_lineup_validation)
+ if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves or a.prove_formation or a.prove_grouped_integer or a.prove_fixture_title or a.prove_menu_input or a.prove_lineup_validation):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()
