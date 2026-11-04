@@ -93,6 +93,7 @@ def select(probe):
    if 'ticks'in error:
     count,draws=replay.compare_prefix(error);print('verified completed original prefix',count,'ticks',draws,'draws',flush=True)
     error={k:v for k,v in error.items()if k not in('ticks','draws','events')}
+   (cache/'last-diagnostic.json').write_text(json.dumps(error,indent=2))
    if missing is None:raise ValueError('native match unsupported:'+error['message'])
    if 'missing initial native write baseline'in error['message']and not missing['writing']:raise ValueError('native diagnostic overwrote the original missing-write descriptor')
    (cache/'last-diagnostic.json').write_text(json.dumps(error,indent=2));area,offset=named(state,missing['address']);at=address(state,area,offset)
@@ -237,11 +238,57 @@ def prove_templates(research):
  oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')})
  print('all4original templates preserve all memory outside MainShown and stack',observations,flush=True)
 
+def prove_ui_leaves(research):
+ directory=ROOT/'records/T41/ui-leaves-boundary-r0001'
+ if (directory/'result.json').exists():
+  print('completed UI leaf footprint exists;verify pinned records before accepting',flush=True);return
+ if oracle.common.git('status','--porcelain','--','tools/watched_match_oracle.py'):raise ValueError('commit observer before original UI leaf proof')
+ sys.path.insert(0,str(research.resolve()/'runtime/emul'));import guest
+ anchor=read(ROOT/'records/T40/oracle-r0001/iteration-001.json');initial=oracle.memory(anchor['entry']);state=anchor['context'];regs=dict(zip(oracle.REGS,state['regs']));ds=16*regs['ds'];ss=16*regs['ss'];load=regs['cs']-0x0AB9
+ def word(at):return int.from_bytes(initial[at:at+2],'little')
+ def pointer(slot):return word(ds+slot)+16*word(ds+slot+2)
+ cases=[]
+ for template in(0x132E,0x6346,0x25CC,0x4F20,0x3B82,0x3D72):cases.append((0x232A,0x052F,[0xDD5C,regs['ds'],template,regs['ds']]))
+ for root in(0x0283,0x039D,0x041B):cases.append((0x232A,root,[0xDD5C,regs['ds'],50,10,0x0F10,regs['ds']]+([7]if root==0x041B else[])))
+ clubs=[word(ds+0xD6E4+2*side)for side in(0,1)]
+ for club in[0]+clubs:cases.append((0x1B55,0x0EE3,[23,1,club]))
+ players=sorted({0}|{word(pointer(0xD7C2)+62*(club-1)+2*slot)for club in clubs for slot in range(20)})
+ for player in players:cases.append((0x1B55,0x1FF1,[10,3,player]))
+ protocol={'schema':'original-ui-leaf-boundary-protocol/1','producer':oracle.common.git('rev-parse','HEAD'),'observer_sha256':replay.sha(Path(__file__)),'admission_sha256':replay.sha(ROOT/'records/T40/oracle-r0001/iteration-001.json'),'return':'0AB9:EBE2','cases':[{'root':f'{cs:04X}:{ip:04X}','arguments':args}for cs,ip,args in cases],'scope':'Derived isolated original UI leaves from retained initial ENTRY;whole-memory footprint including all selected squad player rows. Numeric summary and substitution routines excluded. No original text/name/template bytes exported.'}
+ start=directory/'start.json'
+ if start.exists():raise ValueError('immutable UI leaf proof already started')
+ oracle.write_json(start,protocol);observations=[]
+ for cs,ip,args in cases:
+  raw=bytearray(initial);sp=regs['sp']-4-2*len(args);words=[0xEBE2,regs['cs']]+args
+  raw[ss+sp:ss+sp+2*len(words)]=b''.join(w.to_bytes(2,'little')for w in words)
+  g=guest.Guest(memory=bytes(raw),load=load,regs={k.upper():v for k,v in regs.items()}|{'CS':load+cs,'IP':ip,'SP':sp,'EFLAGS':state['flags']})
+  before=g.mem(0,0x110000);page=pointer(0xDD5C)
+  class Returned(Exception):pass
+  def returned(g):raise Returned()
+  g.code_hook('0AB9:EBE2',returned);complete=False
+  try:g.run(max_steps=500000)
+  except Returned:complete=True
+  if not complete or g.unsupported:raise ValueError(f'original UI leaf{cs:04X}:{ip:04X} did not return cleanly')
+  if(g.reg('sp'),g.reg('bp'),g.reg('ds'))!=(regs['sp'],regs['bp'],regs['ds']):raise ValueError('original UI leaf ABI differs')
+  after=g.mem(0,0x110000);counts={'stack':0,'main_shown':0,'style':0};unexpected=[]
+  for address,(old,new)in enumerate(zip(before,after,strict=True)):
+   if old==new:continue
+   if ss+sp-4096<=address<ss+regs['sp']:counts['stack']+=1
+   elif page<=address<page+4000:counts['main_shown']+=1
+   elif ds+0xDD64<=address<ds+0xDD66:counts['style']+=1
+   else:unexpected.append(address)
+  observation={'root':f'{cs:04X}:{ip:04X}','arguments':args,'returned_sp':g.reg('sp'),'returned_bp':g.reg('bp'),'returned_ds':g.reg('ds'),'changed_bytes_by_area':counts,'unexpected_change_count':len(unexpected),'unexpected_first_addresses':unexpected[:16],'all_other_memory_equal':not unexpected,'style_after':int.from_bytes(after[ds+0xDD64:ds+0xDD66],'little')};observations.append(observation)
+  if unexpected:raise ValueError('original UI leaf modifies non-presentation memory:'+str(observation))
+ result={'schema':'original-ui-leaf-preservation/1','status':'completed','protocol_sha256':replay.sha(start),'observations':observations,'scope':protocol['scope']};oracle.write_json(directory/'result.json',result)
+ oracle.write_json(directory/'manifest.json',{'start_sha256':replay.sha(start),'result_sha256':replay.sha(directory/'result.json')})
+ print('original UI leaves preserve all memory outside MainShown/style/stack',len(observations),'cases',flush=True)
+
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--select',type=Path);p.add_argument('--prove-transient',type=Path);p.add_argument('--prove-statistics',type=Path);p.add_argument('--prove-templates',type=Path);p.add_argument('--prove-ui-leaves',type=Path);p.add_argument('--statistics-wait',action='store_true');p.add_argument('--statistics-mode',type=int,choices=(0,1),default=0);a=p.parse_args()
  if a.select:select(a.select)
  if a.prove_transient:prove_transient(a.prove_transient)
  if a.prove_statistics:prove_statistics(a.prove_statistics,a.statistics_wait,a.statistics_mode)
  if a.prove_templates:prove_templates(a.prove_templates)
- if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates):p.error('choose selection or original transient proof')
+ if a.prove_ui_leaves:prove_ui_leaves(a.prove_ui_leaves)
+ if not(a.select or a.prove_transient or a.prove_statistics or a.prove_templates or a.prove_ui_leaves):p.error('choose selection or original transient proof')
 if __name__=='__main__':main()
