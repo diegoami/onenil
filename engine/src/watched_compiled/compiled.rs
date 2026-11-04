@@ -178,6 +178,16 @@ impl Cpu {
         self.string_advance(7, width);
         Ok(())
     }
+    pub fn move_string(&mut self, width: u8) -> Result<(), String> {
+        if width != 8 && width != 16 {
+            return Err("unsupported string move width".into());
+        }
+        let value = self.read(self.r[11], self.r[6], width)?;
+        self.write(self.r[8], self.r[7], width, value)?;
+        self.string_advance(6, width);
+        self.string_advance(7, width);
+        Ok(())
+    }
     pub fn repeat_movs(&mut self, width: u8) -> Result<(), String> {
         if width != 8 && width != 16 {
             return Err("unsupported string move width".into());

@@ -114,6 +114,7 @@ def emit_instruction(seg,ip,row):
     if SOURCE_ADDRESSES and op in ('cld','std'):return prefix+f'c.df={str(op=="std").lower()};'
     if op=='nop':return prefix
     if SOURCE_ADDRESSES and op in ('lodsb','lodsw'):return prefix+f'c.load_string({8 if op=="lodsb"else 16})?;'
+    if SOURCE_ADDRESSES and op in ('movsb','movsw'):return prefix+f'c.move_string({8 if op=="movsb"else 16})?;'
     if SOURCE_ADDRESSES and op in ('stosb','stosw'):return prefix+f'c.store_string({8 if op=="stosb"else 16})?;'
     if SOURCE_ADDRESSES and op=='rep':
         operation=args.split()[0]

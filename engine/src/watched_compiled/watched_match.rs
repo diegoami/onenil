@@ -194,4 +194,48 @@ mod tests {
         run(&mut empty, 0).unwrap();
         assert_eq!(&empty.e.image[base..base + 4], &before[base..base + 4]);
     }
+    #[test]
+    fn original_reverse_glyph_copy_preserves_attributes_ax_and_direction() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("tests/fixtures/watched_caller/case-00.json");
+        let fixture: Value = serde_json::from_slice(&std::fs::read(root).unwrap()).unwrap();
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        let pointer = state
+            .pointers
+            .iter()
+            .find(|p| p.kind == action::PointerKind::Main)
+            .unwrap();
+        let mut c = action::machine(&state).unwrap();
+        let sp = c.r[4];
+        let bp = c.r[5];
+        let ds = c.r[11];
+        let ax = c.r[0];
+        let source = sp - 512;
+        for (i, value) in [2, 52, 50].into_iter().enumerate() {
+            c.write(c.r[10], source + i as u16, 8, value).unwrap();
+        }
+        let base = pointer.address() + 0x90E;
+        let attributes = [c.e.image[base + 1], c.e.image[base + 3]];
+        c.push(c.r[10]).unwrap();
+        c.push(source).unwrap();
+        c.push(pointer.segment).unwrap();
+        c.push(pointer.offset + 0x910).unwrap();
+        c.invoke(
+            super::super::action_graph::p_24bc_0294,
+            true,
+            0x24BC,
+            0x0294,
+            0x02AF,
+        )
+        .unwrap();
+        assert_eq!([c.e.image[base], c.e.image[base + 2]], [52, 50]);
+        assert_eq!([c.e.image[base + 1], c.e.image[base + 3]], attributes);
+        assert_eq!(
+            (c.r[0], c.r[1], c.r[4], c.r[5], c.r[6], c.r[11]),
+            (ax, 0, sp, bp, source, ds)
+        );
+        assert!(c.df);
+        assert!(!c.z);
+        assert!(!c.cf);
+    }
 }
