@@ -31,8 +31,12 @@ def observe(research):
     incoming=None;headers=None
     def values(g):
         result={}
+        bases={area:g.far(slot) for area,slot in SLOTS.items()}
+        for area,base in bases.items():
+            if base<16*g.reg('ds')+65536:
+                raise ValueError(f'original {area} pool is not initialized before support observation')
         for area,offset in candidates:
-            address=(16*g.reg('ds')+offset) if area=='ds' else (g.far(SLOTS[area])+offset)
+            address=(16*g.reg('ds')+offset) if area=='ds' else (bases[area]+offset)
             if not 0<=address<0x110000:
                 raise ValueError('initial support probe exceeds original memory')
             result[area,offset]=g.mem(address,1)[0]
