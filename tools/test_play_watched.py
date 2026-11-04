@@ -38,11 +38,24 @@ class NativeController(unittest.TestCase):
     def setUpClass(cls):
         import onenil_engine as native
         original = native.watched_match
-        with patch.object(native, 'watched_match', wraps=original) as compute:
+        allowed = {ROOT/'engine/tests/fixtures/watched_match/initial.json',ROOT/'demo/metadata.json'}
+        reads = set()
+        def audit(function):
+            def read(path, *args, **kwargs):
+                if path not in allowed:
+                    raise AssertionError(f'unexpected product runtime input: {path}')
+                reads.add(path)
+                return function(path,*args,**kwargs)
+            return read
+        with patch.object(native, 'watched_match', wraps=original) as compute, \
+             patch.object(Path,'read_bytes',audit(Path.read_bytes)), \
+             patch.object(Path,'read_text',audit(Path.read_text)):
             cls.game = Match()
             cls.game.restart()
             if compute.call_count != 1:
                 raise AssertionError('viewer did not compute exactly one native result for its playback cache')
+            if reads != allowed:
+                raise AssertionError('runtime did not use the exact declared initial/name inputs')
 
     def setUp(self):
         self.game.restart()
