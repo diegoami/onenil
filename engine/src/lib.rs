@@ -38,6 +38,7 @@ pub mod watched_compiled;
 pub mod watched_direction;
 pub mod watched_kickoff;
 pub mod watched_movement;
+pub mod watched_setup;
 pub mod watched_target;
 
 const SEED: u16 = 0xA51C;
@@ -251,6 +252,31 @@ mod python {
     use super::*;
     use pyo3::exceptions::PyValueError;
     use pyo3::prelude::*;
+
+    #[pyclass]
+    struct NativeWatchedPreparation {
+        prepared: crate::watched_setup::Preparation,
+    }
+    #[pymethods]
+    impl NativeWatchedPreparation {
+        #[new]
+        fn new(input_json: &str) -> PyResult<Self> {
+            let input: crate::watched_setup::Input = serde_json::from_str(input_json)
+                .map_err(|error| PyValueError::new_err(error.to_string()))?;
+            Ok(Self {
+                prepared: crate::watched_setup::Preparation::new(input)
+                    .map_err(PyValueError::new_err)?,
+            })
+        }
+        fn snapshot(&self) -> PyResult<String> {
+            let value = self.prepared.snapshot().map_err(PyValueError::new_err)?;
+            serde_json::to_string(&value).map_err(|error| PyValueError::new_err(error.to_string()))
+        }
+        fn preparation(&self) -> PyResult<String> {
+            serde_json::to_string(&self.prepared.preparation())
+                .map_err(|error| PyValueError::new_err(error.to_string()))
+        }
+    }
 
     #[pyclass]
     struct NativeExhibitionSession {
@@ -997,6 +1023,7 @@ mod python {
         module.add_class::<NativeWatchedCallerSession>()?;
         module.add_class::<NativeMatchSession>()?;
         module.add_class::<NativeExhibitionSession>()?;
+        module.add_class::<NativeWatchedPreparation>()?;
         module.add_function(wrap_pyfunction!(watched_move_candidate, module)?)?;
         module.add_function(wrap_pyfunction!(watched_choose_direction, module)?)?;
         module.add_function(wrap_pyfunction!(watched_prepare_target, module)?)?;

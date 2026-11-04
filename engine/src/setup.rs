@@ -80,6 +80,15 @@ pub struct Data {
     pub income: Vec<Income>,
     pub supplement: Supplement,
 }
+/// [confirmed] Original09E9 preserves these incoming fields before watched play.
+#[derive(Clone, Copy, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct WatchedIncoming {
+    pub ball_byte6: u8,
+    pub ball_word7: u16,
+    pub ball_word9: u16,
+    pub scores: [u8; 2],
+}
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -258,6 +267,15 @@ pub struct Session {
 }
 impl Session {
     pub fn new(data: Data) -> Result<Self, String> {
+        Self::new_mode(data, None)
+    }
+    pub(crate) fn new_watched(data: Data, incoming: WatchedIncoming) -> Result<Self, String> {
+        if incoming.scores != data.legacy.contest.goals {
+            return Err("incoming watched scratch-score alias differs".into());
+        }
+        Self::new_mode(data, Some(incoming))
+    }
+    fn new_mode(data: Data, incoming: Option<WatchedIncoming>) -> Result<Self, String> {
         Self::validate(&data)?;
         let Data {
             legacy,
@@ -298,7 +316,15 @@ impl Session {
         put(e, 0xA52D, legacy_queue_zero.second_player);
         e.image[0xA52F] = legacy_queue_zero.side;
         out.load_inputs(&setup_cells, &income, &supplement)?;
-        out.prepare(&setup_cells, &income, &supplement)?;
+        if let Some(initial) = incoming {
+            let e = &mut out.match_state.inner.e;
+            // [designed] Select watched mode before19CA;original T39 intervention.
+            e.image[layout::CONFIG + 0xF2] = 1;
+            e.image[0xCF4C] = initial.ball_byte6;
+            put(e, 0xCF4D, initial.ball_word7);
+            put(e, 0xCF4F, initial.ball_word9);
+        }
+        out.prepare(&setup_cells, &income, &supplement, incoming.is_some())?;
         Ok(out)
     }
     fn validate(a: &Data) -> Result<(), String> {
@@ -580,6 +606,7 @@ impl Session {
         put(e, 0xCF46, sentinel);
         put(e, 0xCF48, sentinel);
         put(e, 0xCF4A, 0x0F07);
+        // [confirmed] Original1998:09E9 owns these fields;bytes6..10 survive.
         put(e, 0xCF51, 0);
         e.image[0xCF53] = 0;
         e.image[0xCF54] = 0;
@@ -652,7 +679,8 @@ impl Session {
             }
         }
         if e.image[layout::CONFIG + 0xF2] != 0 {
-            return Err("unsupported watched-start gate".into());
+            // [confirmed] E303..E432 bypasses DB68 when watched mode is selected.
+            return Ok(());
         }
         // [confirmed:DB68/DBAC] Actual native quick-start state writes.
         e.image[0xD0B8] = 1;
@@ -689,7 +717,13 @@ impl Session {
         self.match_state.replacement = self.match_state.current();
         Ok(())
     }
-    fn prepare(&mut self, c: &Cells, incomes: &[Income], _s: &Supplement) -> Result<(), String> {
+    fn prepare(
+        &mut self,
+        c: &Cells,
+        incomes: &[Income],
+        _s: &Supplement,
+        watched: bool,
+    ) -> Result<(), String> {
         self.mark("0AB9:E24C");
         let e = &mut self.match_state.inner.e;
         let seed = u16::from(e.image[layout::CONFIG])
@@ -746,7 +780,31 @@ impl Session {
         self.kickoff()?;
         self.mark("0AB9:7DC8");
         self.pre_loop()?;
-        self.mark("0AB9:DD02");
+        if watched {
+            // [confirmed] 7C5A/1C7E assigns state1 to every physical scene.
+            let e = &mut self.match_state.inner.e;
+            for index in 1..=22 {
+                e.image[0xCCEF + 25 * index + 19] = 1;
+            }
+            // [confirmed] 75E5/759A initialize both offside records via1ECC.
+            for side in [1, 0] {
+                let index = usize::from(e.image[0xD56 + side]) + 1;
+                let slot = e.image[0xCCEF + 25 * index + 7];
+                let sign = crate::terminal::direction_slot_image(e, slot);
+                let base = 0xCF2E + 7 * side;
+                e.image[base] = sign.wrapping_shl(3);
+                e.image[base + 1] = 0;
+                put(e, base + 2, word(e, base));
+            }
+            e.image[0xCF3D] = 0;
+            e.image[0xCF3C] = 1;
+            let value = word(e, 0xCF3C);
+            put(e, 0xCF3E, value);
+            put(e, 0xCF43, value);
+            self.mark("0AB9:7C67");
+        } else {
+            self.mark("0AB9:DD02");
+        }
         Ok(())
     }
     pub fn preparation(&self) -> Value {
