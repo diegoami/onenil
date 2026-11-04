@@ -81,7 +81,14 @@ def selftest():
     changed=read(FIXTURE);changed['input']['support'][0]['value']^=1
     # Updating an untrusted advertised digest cannot change the pinned root.
     changed['reference_index_sha256']=hashlib.sha256(canonical(changed)).hexdigest();reject(changed,admission)
-    print('prepared match input/provenance/outcome guards:',rejected,'rejected')
+    _,_,events,_=reference.sources()
+    expected=reference_goal_trace(events,4199)
+    for index,goals in [(1211,[1,0]),(1212,[0,0]),(1537,[1,1])]:
+        changed=copy.deepcopy(expected);changed[index]=goals
+        try:validate_goal_trace(changed,events,4199)
+        except ValueError:rejected+=1
+        else:raise AssertionError('changed live score boundary accepted')
+    print('prepared match input/provenance/outcome and live-score guards:',rejected,'rejected')
 
 def replay_probe(probe,value,prefix_steps=0):
     result=subprocess.run([str(probe)],input=json.dumps(dict(input=value,prefix_steps=prefix_steps))+'\n',capture_output=True,text=True,check=True)
@@ -130,6 +137,23 @@ def field_preservation():
         raise ValueError('original preservation draws/final differ')
     return result
 
+def reference_goal_trace(events,tick_count):
+    # [derived] Pinned reference has three ordinary goals and no own-goal event.
+    # Source5424/542A increments D0C4+side inside the watched call;its accepted
+    # event38 is emitted before7B79. Do not generalize this to other sessions.
+    goals=[e for e in events if e['code'] in (38,39)]
+    if [(e['tick'],e['code'],e['side'])for e in goals]!=[(1213,38,0),(1538,38,0),(3747,38,1)]:
+        raise ValueError('pinned reference scoring-event identity differs')
+    score=[0,0];cursor=0;trace=[]
+    for tick in range(1,tick_count+1):
+        while cursor<len(goals)and goals[cursor]['tick']==tick:
+            score[goals[cursor]['side']]+=1;cursor+=1
+        trace.append(score.copy())
+    return trace
+
+def validate_goal_trace(actual,events,tick_count):
+    if actual!=reference_goal_trace(events,tick_count):raise ValueError('owned live goal score boundaries differ')
+
 def compare(out,require_field_proof=True):
     ticks,draws,events,finish=reference.sources()
     if out['return']!='0AB9:EBE2'or out['ticks']!=ticks:raise ValueError('owned prepared full tick lifecycle/return differs')
@@ -139,7 +163,7 @@ def compare(out,require_field_proof=True):
     if out['final']!=finish['final']:raise ValueError('owned prepared final state differs')
     # Source E069/E06E stores C5/C4 into final D086/D087.
     if out['live_goals']!=list(reversed(finish['final']['scores'])):raise ValueError('owned live/final score mapping differs')
-    if len(out['tick_live_goals'])!=len(ticks):raise ValueError('owned live goal counter trace is incomplete')
+    validate_goal_trace(out['tick_live_goals'],events,len(ticks))
     if len(out['setup_events'])!=1 or out['setup_events'][0]['code']!=59 or out['setup_events'][0]['tick']!=0:
         raise ValueError('owned setup coin commentary differs')
     if require_field_proof:

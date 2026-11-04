@@ -1,0 +1,62 @@
+{
+  "scope": "Strengthened reference-only live score acceptance. No engine or viewer runtime change. Independent full original field/clock proof remains pending.",
+  "derived_source": "Original source0AB9:53F7/5410/5424/542A selects the scoring side and increments D0C4+side within the watched call. Pinned reference contains exactly three ordinary goal38 actions and no own goal. Their score changes must appear at the matching7B79 return,not earlier/later.",
+  "research_commit": "60179ee16009e175591b79d9230ff59027ccf6a5",
+  "reference_index_sha256": "30a4fe8003f4677c2e2af0966d5fe81055c728a1b41c998a9d03766637414886",
+  "expected_goal_boundaries": [
+    {
+      "tick": 1213,
+      "score": [
+        1,
+        0
+      ]
+    },
+    {
+      "tick": 1538,
+      "score": [
+        2,
+        0
+      ]
+    },
+    {
+      "tick": 3747,
+      "score": [
+        2,
+        1
+      ]
+    }
+  ],
+  "public_rejections": 18,
+  "checks": {
+    "T45-live-score-boundary-red-r0001.txt": {
+      "sha256": "61437f4af43dd758549c176eacda89ab3cbdee2e0fb509debc387051bd92994d",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "RED: existing acceptance incorrectly accepted the first goal one watched tick early"
+      ]
+    },
+    "T45-live-score-boundary-green-r0001.txt": {
+      "sha256": "df8f35e1f2735825f4ebe87415ccffbb774f0246d24bff621f9192eaaabb1fc6",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "Complete native reference output including every live score boundary passes",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "GREEN: first goal one watched tick early rejects: owned live goal score boundaries differ"
+      ]
+    },
+    "T45-public-admission-guards-r0002.txt": {
+      "sha256": "0f338aa86c253b73c3a1c60da6492039db696b456402201a49f361ead90bba13",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared match input/provenance/outcome and live-score guards: 18 rejected"
+      ]
+    },
+    "T45-pending-proof-guard-r0001.txt": {
+      "sha256": "62f00ddf8c593e9bf860fd5931fc8190a11ac4fdc6ea1b1a915a62e1c954a080",
+      "lines": [
+        "Incomplete original proof explicitly rejects: full original field-preservation observation is not yet pinned"
+      ]
+    }
+  }
+}
