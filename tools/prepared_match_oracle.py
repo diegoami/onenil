@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def encoded(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode()
-def observe(research,directory,resume=None,checkpoint_seconds=300,stop_after=0):
+def observe(research,directory,resume=None,checkpoint_seconds=300,stop_after=0,expected_observer_sha=None,stop_after_seconds=0,stop_file=None):
     sys.path.insert(0,str(research.resolve()/'runtime/emul'))
     import watched_complete as full
     import watched_oracle as normalize
@@ -26,19 +26,22 @@ def observe(research,directory,resume=None,checkpoint_seconds=300,stop_after=0):
         receipt=json.loads(resume.read_text());private=ROOT/receipt['private_path']
         if checkpoint.digest(private)!=receipt['private_sha256']:raise ValueError('private preservation checkpoint digest differs')
         state=checkpoint.read_private(private)
-        if state['observer_sha256']!=sha(Path(__file__)) or state['reference_index_sha256']!=reference.INDEX_SHA:
+        if state['observer_sha256']!=(expected_observer_sha or sha(Path(__file__))) or state['reference_index_sha256']!=reference.INDEX_SHA:
             raise ValueError('private preservation checkpoint source/reference differs')
         week=checkpoint.restore(state['machine'],full.match.Week,state['events'])
         result=state['result'];tick=state['tick'];pending=state['pending'];event_pending=state['event_pending']
-        if (result['ticks'],week.draws)!=(receipt['ticks'],receipt['draws']):raise ValueError('private/public checkpoint cursors differ')
+        if (result['ticks'],week.draws,result['actions'])!=(receipt['ticks'],receipt['draws'],receipt['actions']):raise ValueError('private/public checkpoint cursors differ')
+        restored_draws=[normalize.normalized(d)for d in week.events if d['kind']=='draw']
+        if restored_draws!=expected_draws[:week.draws]:raise ValueError('restored original draw prefix differs')
         for row in ticks[:result['ticks']]:tick_digest.update(encoded(row)+b'\n')
         for row in events[:result['actions']]:event_digest.update(encoded(row)+b'\n')
-    checkpoint_count=0;due=time.monotonic()
+    checkpoint_count=0;began=time.monotonic();due=began
     class Complete(Exception):pass
     class Paused(Exception):pass
     def boundary(current):
         nonlocal due,checkpoint_count
-        if time.monotonic()<due:return
+        stopping=(stop_file is not None and stop_file.exists())or(stop_after_seconds>0 and time.monotonic()-began>=stop_after_seconds)
+        if time.monotonic()<due and not stopping:return
         checkpoint_count+=1;due=time.monotonic()+checkpoint_seconds
         number=max((int(p.stem.split('-r')[1])for p in directory.glob('checkpoint-r*.json')),default=0)+1
         private=ROOT/'.cache'/'prepared-match-checkpoints'/directory.name/f'checkpoint-r{number:04d}.pkl.gz'
@@ -48,7 +51,7 @@ def observe(research,directory,resume=None,checkpoint_seconds=300,stop_after=0):
         receipt=dict(private_path=str(private.relative_to(ROOT)),private_sha256=digest,ticks=result['ticks'],draws=current.draws,actions=result['actions'])
         with (directory/f'checkpoint-r{number:04d}.json').open('x')as out:json.dump(receipt,out,indent=2);out.write('\n')
         print('durable original checkpoint',number,'ticks',result['ticks'],'draws',current.draws,flush=True)
-        if stop_after and checkpoint_count>=stop_after:raise Paused()
+        if stopping or(stop_after and checkpoint_count>=stop_after):raise Paused()
 
     def enable(g):g.put(g.far(0xD7D2)+0xF2,b'\x01')
     def initialize(g):
@@ -124,8 +127,9 @@ def observe(research,directory,resume=None,checkpoint_seconds=300,stop_after=0):
     return result
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--resume',type=Path);p.add_argument('--checkpoint-seconds',type=float,default=300);p.add_argument('--stop-after-checkpoints',type=int,default=0);a=p.parse_args()
-    if a.checkpoint_seconds<=0 or a.stop_after_checkpoints<0:p.error('invalid checkpoint interval/count')
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--resume',type=Path);p.add_argument('--fork-checkpoint',type=Path);p.add_argument('--stop-after-seconds',type=float,default=0);p.add_argument('--stop-file',type=Path);p.add_argument('--checkpoint-seconds',type=float,default=300);p.add_argument('--stop-after-checkpoints',type=int,default=0);a=p.parse_args()
+    if a.checkpoint_seconds<=0 or a.stop_after_checkpoints<0 or a.stop_after_seconds<0:p.error('invalid checkpoint interval/count')
+    if a.resume and a.fork_checkpoint:p.error('choose resume or fork-checkpoint')
     if subprocess.check_output(['git','status','--porcelain','--','tools/prepared_match_oracle.py'],cwd=ROOT,text=True):raise ValueError('commit observer before original measurement')
     import replay_watched_match as reference
     directory=ROOT/'records/T45';directory.mkdir(exist_ok=True)
@@ -133,10 +137,26 @@ def main():
     directory=a.resume.parent.resolve() if a.resume else directory/f'original-r{number:04d}'
     if not a.resume:directory.mkdir()
     elif directory.parent!=ROOT/'records/T45' or (directory/'manifest.json').exists():raise ValueError('invalid/already finished resume directory')
-    protocol=dict(schema='original-prepared-full-lifecycle/2',producer=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+    protocol=dict(schema='original-prepared-full-lifecycle/3',producer=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         observer_sha256=sha(Path(__file__)),research_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=a.research_root,text=True).strip(),
         reference_index_sha256=reference.INDEX_SHA,prepared_admission_sha256=sha(ROOT/'engine/tests/fixtures/prepared_watched/admission.json'),
         scope='Derived original field initializer;all4199 ticks/182811draws/831actions and actual final return compared to the unchanged reference. Actual caller clocks decoded separately. No RAM archive or native runtime backend.')
+    expected_observer_sha=None
+    if a.fork_checkpoint:
+        receipt_path=a.fork_checkpoint.resolve();source=receipt_path.parent
+        if source.parent!=ROOT/'records/T45':raise ValueError('fork checkpoint outside original records')
+        prior=json.loads((source/'start.json').read_text())
+        receipt=json.loads(receipt_path.read_text())
+        manifest=json.loads((source/'manifest.json').read_text())
+        if manifest['files'].get(receipt_path.name)!=sha(receipt_path) or manifest['files'].get('start.json')!=sha(source/'start.json'):
+            raise ValueError('fork checkpoint/start not bound to the prior manifest')
+        import replay_prepared_match as checks
+        checks.validate_observer_identity(prior)
+        for key in ('research_commit','reference_index_sha256','prepared_admission_sha256'):
+            if prior[key]!=protocol[key]:raise ValueError('fork protocol differs:'+key)
+        expected_observer_sha=prior['observer_sha256']
+        protocol['resume_from']=dict(receipt=str(receipt_path.relative_to(ROOT)),receipt_sha256=sha(receipt_path),
+            start_sha256=sha(source/'start.json'),manifest_sha256=sha(source/'manifest.json'),private_sha256=receipt['private_sha256'])
     if a.resume:
         prior=json.loads((directory/'start.json').read_text())
         for key in ('observer_sha256','research_commit','reference_index_sha256','prepared_admission_sha256'):
@@ -145,7 +165,7 @@ def main():
         if a.resume.resolve()!=latest:raise ValueError('resume requires the latest durable checkpoint')
     else:
         with (directory/'start.json').open('x')as out:out.write(json.dumps(protocol,indent=2)+'\n')
-    result=observe(a.research_root,directory,a.resume,a.checkpoint_seconds,a.stop_after_checkpoints)
+    result=observe(a.research_root,directory,a.resume or a.fork_checkpoint,a.checkpoint_seconds,a.stop_after_checkpoints,expected_observer_sha,a.stop_after_seconds,a.stop_file)
     if result is None:
         print(directory.relative_to(ROOT),'paused at durable checkpoint',flush=True);return
     with (directory/'result.json').open('x')as out:out.write(json.dumps(result,indent=2)+'\n')

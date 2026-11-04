@@ -121,7 +121,8 @@ def replay_python(value,require_field_proof=True):
 
 def validate_observer_identity(start):
     paths={'original-prepared-full-lifecycle/1':'preservation-observer-r0001.py',
-           'original-prepared-full-lifecycle/2':'preservation-observer-r0002.py'}
+           'original-prepared-full-lifecycle/2':'preservation-observer-r0002.py',
+           'original-prepared-full-lifecycle/3':'preservation-observer-r0003.py'}
     if start['schema']not in paths:raise ValueError('unknown original observer protocol')
     observer=(ROOT/'records/T45'/paths[start['schema']]).read_bytes()
     if start['observer_sha256']!=hashlib.sha256(observer).hexdigest():
