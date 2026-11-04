@@ -95,7 +95,7 @@ pub fn run(s: &State, no_pending_key: bool) -> Result<Value, MatchFault> {
         let final_state = snapshot(&c)?;
         let live = [c.read(ds, 0xD0C4, 8)?, c.read(ds, 0xD0C5, 8)?];
         Ok(
-            json!({"ticks":c.watch_trace,"draws":c.draws,"events":c.events,"final":final_state,"live_goals":live,"return":"0AB9:EBE2"}),
+            json!({"ticks":c.watch_trace,"draws":c.draws,"events":c.events,"final":final_state,"live_goals":live,"tick_live_goals":c.watch_live_goals,"return":"0AB9:EBE2"}),
         )
     })();
     result.map_err(|message| {

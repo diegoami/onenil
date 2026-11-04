@@ -1,0 +1,21 @@
+.F.F.
+======================================================================
+FAIL: test_original_28_to_31_are_possession_save_block_deflection (__main__.ActionSemantics.test_original_28_to_31_are_possession_save_block_deflection)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/test_play_watched.py", line 21, in test_original_28_to_31_are_possession_save_block_deflection
+    self.assertIn('wins', describe(self.event(59),{2591:'Shearer'})['text'])
+AssertionError: 'wins' not found in 'Shearer takes the coin toss.'
+
+======================================================================
+FAIL: test_complete_native_actions_positions_scores_and_halftime (__main__.NativeController.test_complete_native_actions_positions_scores_and_halftime)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/onenil-native/tools/test_play_watched.py", line 66, in test_complete_native_actions_positions_scores_and_halftime
+    self.assertTrue(all(e['minute'] <= f['view']['clock'] for f in game.frames for e in f['events']),
+AssertionError: False is not true : display clock trails a later native event on the same tick
+
+----------------------------------------------------------------------
+Ran 5 tests in 12.637s
+
+FAILED (failures=2)
