@@ -1532,3 +1532,33 @@ repeated with the research virtualenv's Python and
 The microkernel benchmark includes parsing,image construction and serialization;
 it does not measure a continuous tick or playable match. Continuous7A02 state,
 logical7B7B clock progression and detailed viewer commentary remain required.
+
+## Persistent watched ticks
+
+[confirmed: T39 original tick captures and repeated-root corpus] A native
+`TickSession` keeps one admitted memory image across successive original7A02
+calls. Eight captured original tick transitions and an independent eight-call
+sequence match all declared gameplay,22scenes,pointers,seeds,ordered draws and
+accepted events. Only the initial ENTRY fact union enters the native session;
+`advance()` accepts no fixture state or outcomes. A missing input closes the
+session rather than allowing a partial tick to be retried.
+
+[confirmed: T39 neutral-input proof] All176 observed player visits take the
+original no-pending-key branch. This explicit external input preserves the
+existing native mode-switch writes while status rendering/speaker requests
+remain presentation events. Strict unknown reads,first-write baselines,typed
+pointer aliases and raw stack guards remain enforced.
+
+```sh
+.cache/venv/bin/python tools/replay_watched_tick.py --check --replay
+.cache/venv/bin/python tools/replay_watched_tick.py --benchmark
+.cache/venv/bin/python tools/replay_watched_tick.py --check-private
+python3 records/T39/validate_provenance.py
+```
+
+[designed] Private validation uses restored original capture pages from the
+owner's private project artifacts;public validation/replay needs no original
+bytes. The repeated-root sequence omits the outer caller and clock. Logical7B7B
+clock progression,full caller/match composition and the detailed commentary
+viewer remain required by milestone35;these kernel checks do not establish a
+complete playable watched match.

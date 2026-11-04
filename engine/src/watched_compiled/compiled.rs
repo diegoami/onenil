@@ -329,6 +329,9 @@ impl Cpu {
         }
         Ok(())
     }
+    pub fn reset_root_budget(&mut self) {
+        self.fuel = 1_000_000;
+    }
     pub fn step(&mut self) -> Result<(), String> {
         if self.fuel == 0 {
             return Err("compiled procedure budget exhausted".into());

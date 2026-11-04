@@ -24,11 +24,13 @@ def target(seg,args):
     if not re.fullmatch(r'(?:0x[0-9a-f]+|[0-9]+)',args):raise ValueError('indirect control transfer:'+args)
     return(seg,int(args,0)&65535),False
 
-def graph(code,roots):
+def graph(code,roots,external=None,adapters=None):
     result={};todo=list(roots)
     while todo:
         root=todo.pop()
-        if root in result:continue
+        if root in result or root in(external or set()):continue
+        if root in(adapters or set()):
+            result[root]={root[1]:code[root]};continue
         seen={};pending=[root[1]]
         while pending:
             ip=pending.pop()
@@ -167,8 +169,9 @@ def compile_procedure(seg,entry,rows,partial_errors=None):
     out.append('_=>return Err(format!("invalid compiled label {label:04X}")),}}}')
     return out
 
-def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roots=None,partial=None):
+def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roots=None,partial=None,external=None,module=None):
     out=['//! [confirmed] Mechanically compiled numeric control flow;F39/c7637bd,static d9e20a4.','//! [designed] Direct Rust calls/blocks;no runtime decoder or original executable.','use super::compiled::Cpu;']
+    if module:out.append(f'use super::{module}::*;')
     deferred=deferred or set();adapters=adapters or {};report=report if report is not None else {};bodies={}
     for (seg,entry),rows in sorted(g.items()):
         key=(seg,entry)
@@ -189,7 +192,7 @@ def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roo
     reached=set();pending=list(roots)if roots else list(g)
     while pending:
         key=pending.pop()
-        if key in reached:continue
+        if key in reached or key in(external or set()):continue
         reached.add(key)
         boundary=report.get(f'{key[0]:04X}:{key[1]:04X}')
         if boundary and boundary['kind']!='partial':continue
@@ -202,7 +205,7 @@ def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roo
 
 def main():
     global SOURCE_ADDRESSES,RELOCATED
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',action='append');p.add_argument('--defer',action='append',default=[]);p.add_argument('--partial',action='append',default=[]);p.add_argument('--projection',action='append',default=[]);p.add_argument('--defer-unsupported',action='store_true');p.add_argument('--source-addresses',action='store_true');args=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',action='append');p.add_argument('--defer',action='append',default=[]);p.add_argument('--partial',action='append',default=[]);p.add_argument('--projection',action='append',default=[]);p.add_argument('--defer-unsupported',action='store_true');p.add_argument('--reuse-existing',type=Path);p.add_argument('--source-addresses',action='store_true');args=p.parse_args()
     code,files=listing(args.research_root);roots=args.root or ['0AB9:35F8'];parse=lambda value:tuple(int(v,16)for v in value.split(':'))
     SOURCE_ADDRESSES=args.source_addresses
     if SOURCE_ADDRESSES:
@@ -216,7 +219,12 @@ def main():
         address,function=item.split('=')
         if not re.fullmatch('[a-z_][a-z_0-9]*',function):raise ValueError('invalid projection name')
         adapters[parse(address)]=function
-    g=graph(code,[parse(v)for v in roots]);report={};source=compile_graph(g,deferred,adapters,args.defer_unsupported,report,[parse(v)for v in roots],{parse(v)for v in args.partial})
+    external=set();module=None
+    if args.reuse_existing:
+        module=args.reuse_existing.stem
+        if not re.fullmatch('[a-z_][a-z_0-9]*',module):raise ValueError('invalid reused module')
+        external={(int(a,16),int(b,16))for a,b in re.findall(r'pub\(super\) fn p_([0-9a-f]{4})_([0-9a-f]{4})',args.reuse_existing.read_text())}
+    g=graph(code,[parse(v)for v in roots],external,set(adapters)if args.reuse_existing else None);report={};source=compile_graph(g,deferred,adapters,args.defer_unsupported,report,[parse(v)for v in roots],{parse(v)for v in args.partial},external,module)
     import subprocess,tempfile
     with tempfile.TemporaryDirectory()as d:
         temp=Path(d)/'generated.rs';temp.write_text(source);subprocess.run(['rustfmt','--edition','2021',str(temp)],check=True);source=temp.read_bytes()
@@ -226,6 +234,7 @@ def main():
     used={row[3] for rows in g.values()for row in rows.values()}
     result={'roots':roots,'procedures':len(g),'instructions':sum(map(len,g.values())),'listing_digests':{p:files[p] for p in sorted(used)},'generated_sha256':hashlib.sha256(source).hexdigest()}
     if report:result['boundaries']=report
+    if args.reuse_existing:result['reused']={'module':module,'sha256':hashlib.sha256(args.reuse_existing.read_bytes()).hexdigest(),'procedures':len(external)}
     if SOURCE_ADDRESSES:result['source_addresses']=True
     print(json.dumps(result,indent=2))
 if __name__=='__main__':main()

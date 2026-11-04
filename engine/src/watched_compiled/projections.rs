@@ -28,3 +28,32 @@ pub(super) fn sound_delay(c: &mut Cpu) -> Result<(), String> {
 pub(super) fn sound_burst(c: &mut Cpu) -> Result<(), String> {
     sound_request(c, true)
 }
+
+// [confirmed] Original78B7 no-key path791B→79D5,DB68 guards (static d9e20a4).
+// [designed] TickSession explicitly admits a no-pending-key external input.
+// Status text lives outside the declared gameplay pitch;mode writes remain native.
+pub(super) fn neutral_watch_input(c: &mut Cpu) -> Result<(), String> {
+    let ds = c.r[11];
+    let (o, s) = c.far(ds, 0xD7D2)?;
+    let speed = c.read(s, o.wrapping_add(2), 8)?;
+    c.presentation
+        .push(serde_json::json!({"site":"0AB9:78B7","kind":"speed_status","speed":speed}));
+    if c.read(ds, 0xD1CC, 8)? != 0
+        && c.read(ds, 0xD074, 8)? == 0
+        && c.read(ds, 0xD0AE, 16)? != 0
+        && c.read(ds, 0xD0B9, 8)? == 0
+    {
+        if c.read(ds, 0xD0B8, 8)? == 0 {
+            c.write(ds, 0xD1CC, 8, 1)?;
+        } else {
+            c.write(ds, 0xD074, 8, 1)?;
+            c.write(ds, 0xD075, 8, 1)?;
+            c.write(ds, 0xD1CC, 8, 0)?;
+        }
+    }
+    if c.read(ds, 0xD074, 8)? != 0 {
+        c.presentation
+            .push(serde_json::json!({"site":"0AB9:79E6","kind":"speaker_off"}));
+    }
+    c.ret(false, 0)
+}

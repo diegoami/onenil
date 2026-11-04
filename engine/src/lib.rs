@@ -381,6 +381,46 @@ mod python {
     }
 
     #[pyfunction]
+    fn watched_tick(input_json: &str) -> PyResult<String> {
+        #[derive(serde::Deserialize)]
+        #[serde(deny_unknown_fields)]
+        struct Request {
+            initial: watched_compiled::action::State,
+            steps: usize,
+            no_pending_key: bool,
+        }
+        let request: Request =
+            serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
+        if !(1..=64).contains(&request.steps) {
+            return Err(PyValueError::new_err("tick count outside1–64"));
+        }
+        let value = match watched_compiled::tick::TickSession::admit(
+            &request.initial,
+            request.no_pending_key,
+        ) {
+            Err(e) => serde_json::json!({"error":e}),
+            Ok(mut session) => {
+                let mut outputs = Vec::new();
+                let mut failure = None;
+                for _ in 0..request.steps {
+                    match session.advance() {
+                        Ok(out) => outputs.push(out),
+                        Err(e) => {
+                            failure = Some(e);
+                            break;
+                        }
+                    }
+                }
+                if let Some(e) = failure {
+                    serde_json::json!({"error":e})
+                } else {
+                    serde_json::json!({"ok":outputs})
+                }
+            }
+        };
+        serde_json::to_string(&value).map_err(|e| PyValueError::new_err(e.to_string()))
+    }
+    #[pyfunction]
     fn watched_action(input_json: &str) -> PyResult<String> {
         let state: watched_compiled::action::State =
             serde_json::from_str(input_json).map_err(|e| PyValueError::new_err(e.to_string()))?;
@@ -877,6 +917,7 @@ mod python {
         module.add_function(wrap_pyfunction!(watched_adjust_target, module)?)?;
         module.add_function(wrap_pyfunction!(watched_select_target, module)?)?;
         module.add_function(wrap_pyfunction!(watched_action, module)?)?;
+        module.add_function(wrap_pyfunction!(watched_tick, module)?)?;
         module.add_function(wrap_pyfunction!(quick_contests, module)?)?;
         module.add_function(wrap_pyfunction!(goal_placement, module)?)?;
         module.add_function(wrap_pyfunction!(player_unavailable, module)?)?;

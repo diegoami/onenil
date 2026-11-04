@@ -1,0 +1,506 @@
+   Compiling onenil-engine v0.1.0 (/tmp/onenil-native/engine)
+warning: unreachable statement
+     --> src/watched_compiled/action_graph.rs:88579:17
+      |
+88578 |                 return Err("unported original instruction 1998:0129".into());
+      |                 ------------------------------------------------------------ any code following this expression is unreachable
+88579 |                 c.pc = (6552, 299);
+      |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+      |
+      = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:116996:17
+       |
+116995 |                 return Err("unported original instruction 232A:0238".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+116996 |                 c.pc = (9002, 570);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:117052:17
+       |
+117051 |                 return Err("unported original instruction 232A:024C".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+117052 |                 c.pc = (9002, 590);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:127137:17
+       |
+127136 |                 return Err("unported original instruction 26C9:011F".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+127137 |                 c.pc = (9929, 288);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:127454:17
+       |
+127453 |                 return Err("unported original instruction 26C9:01AF".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+127454 |                 c.pc = (9929, 433);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:127569:17
+       |
+127568 |                 return Err("unported original instruction 26C9:01EE".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+127569 |                 label = 496;
+       |                 ^^^^^^^^^^^^ unreachable statement
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/action_graph.rs:2462:9
+     |
+2462 |     let mut label = 3906u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:51434:9
+      |
+51434 |     let mut label = 28526u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:63129:9
+      |
+63129 |     let mut label = 40814u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:78559:9
+      |
+78559 |     let mut label = 50355u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:93214:9
+      |
+93214 |     let mut label = 2934u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:102159:9
+       |
+102159 |     let mut label = 13939u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:102901:9
+       |
+102901 |     let mut label = 18265u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:103331:9
+       |
+103331 |     let mut label = 18492u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:104401:9
+       |
+104401 |     let mut label = 18999u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:105752:9
+       |
+105752 |     let mut label = 19906u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:106137:9
+       |
+106137 |     let mut label = 20097u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:112803:9
+       |
+112803 |     let mut label = 25352u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116442:9
+       |
+116442 |     let mut label = 213u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116526:9
+       |
+116526 |     let mut label = 248u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116719:9
+       |
+116719 |     let mut label = 324u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116803:9
+       |
+116803 |     let mut label = 483u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:121878:9
+       |
+121878 |     let mut label = 546u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:121952:9
+       |
+121952 |     let mut label = 601u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:125163:9
+       |
+125163 |     let mut label = 3292u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:126926:9
+       |
+126926 |     let mut label = 2578u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:128056:9
+       |
+128056 |     let mut label = 2899u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:128478:9
+       |
+128478 |     let mut label = 3183u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:128750:9
+       |
+128750 |     let mut label = 3476u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:128798:9
+       |
+128798 |     let mut label = 3498u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2859:9
+     |
+2859 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2921:9
+     |
+2921 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4486:9
+     |
+4486 |     let mut label = 40814u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4974:9
+     |
+4974 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:5036:9
+     |
+5036 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: constant `PITCH_CELLS` is never used
+  --> src/layout.rs:22:18
+   |
+22 | pub(crate) const PITCH_CELLS: usize = 17 * 75;
+   |                  ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `sar` is never used
+   --> src/watched_compiled/compiled.rs:557:12
+    |
+ 39 | impl Cpu {
+    | -------- method in this implementation
+...
+557 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {
+    |            ^^^
+
+warning: function `neutral_watch_input` is never used
+  --> src/watched_compiled/projections.rs:35:15
+   |
+35 | pub(super) fn neutral_watch_input(c: &mut Cpu) -> Result<(), String> {
+   |               ^^^^^^^^^^^^^^^^^^^
+
+warning: fields `cpu`, `admission`, `started`, and `style` are never read
+  --> src/watched_compiled/tick.rs:19:5
+   |
+18 | pub struct TickSession {
+   |            ----------- fields in this struct
+19 |     cpu: Cpu,
+   |     ^^^
+20 |     admission: State,
+   |     ^^^^^^^^^
+21 |     started: bool,
+   |     ^^^^^^^
+22 |     style: (usize, u8),
+   |     ^^^^^
+
+warning: function `fault` is never used
+  --> src/watched_compiled/tick.rs:24:4
+   |
+24 | fn fault(message: String, c: &Cpu) -> Fault {
+   |    ^^^^^
+
+warning: method `advance_computed` is never used
+  --> src/watched_compiled/tick.rs:62:8
+   |
+30 | impl TickSession {
+   | ---------------- method in this implementation
+...
+62 |     fn advance_computed(&mut self) -> Result<Outcome, Fault> {
+   |        ^^^^^^^^^^^^^^^^
+
+warning: function `p_0ab9_4665` is never used
+ --> src/watched_compiled/tick_graph.rs:5:15
+  |
+5 | pub(super) fn p_0ab9_4665(c: &mut Cpu) -> Result<(), String> {
+  |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_46d4` is never used
+   --> src/watched_compiled/tick_graph.rs:224:15
+    |
+224 | pub(super) fn p_0ab9_46d4(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_4f95` is never used
+   --> src/watched_compiled/tick_graph.rs:497:15
+    |
+497 | pub(super) fn p_0ab9_4f95(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5083` is never used
+   --> src/watched_compiled/tick_graph.rs:989:15
+    |
+989 | pub(super) fn p_0ab9_5083(c: &mut Cpu) -> Result<(), String> {
+    |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5267` is never used
+    --> src/watched_compiled/tick_graph.rs:1999:15
+     |
+1999 | pub(super) fn p_0ab9_5267(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_52b6` is never used
+    --> src/watched_compiled/tick_graph.rs:2172:15
+     |
+2172 | pub(super) fn p_0ab9_52b6(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_537c` is never used
+    --> src/watched_compiled/tick_graph.rs:2618:15
+     |
+2618 | pub(super) fn p_0ab9_537c(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_53d7` is never used
+    --> src/watched_compiled/tick_graph.rs:2828:15
+     |
+2828 | pub(super) fn p_0ab9_53d7(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_54e2` is never used
+    --> src/watched_compiled/tick_graph.rs:3417:15
+     |
+3417 | pub(super) fn p_0ab9_54e2(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_55ef` is never used
+    --> src/watched_compiled/tick_graph.rs:3987:15
+     |
+3987 | pub(super) fn p_0ab9_55ef(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_59b7` is never used
+    --> src/watched_compiled/tick_graph.rs:4097:15
+     |
+4097 | pub(super) fn p_0ab9_59b7(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_5a06` is never used
+    --> src/watched_compiled/tick_graph.rs:4298:15
+     |
+4298 | pub(super) fn p_0ab9_5a06(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_7423` is never used
+    --> src/watched_compiled/tick_graph.rs:4498:15
+     |
+4498 | pub(super) fn p_0ab9_7423(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_78b7` is never used
+    --> src/watched_compiled/tick_graph.rs:5298:15
+     |
+5298 | pub(super) fn p_0ab9_78b7(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_7a02` is never used
+    --> src/watched_compiled/tick_graph.rs:5301:15
+     |
+5301 | pub(super) fn p_0ab9_7a02(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a23c` is never used
+    --> src/watched_compiled/tick_graph.rs:6160:15
+     |
+6160 | pub(super) fn p_0ab9_a23c(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a34d` is never used
+    --> src/watched_compiled/tick_graph.rs:6706:15
+     |
+6706 | pub(super) fn p_0ab9_a34d(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a3d6` is never used
+    --> src/watched_compiled/tick_graph.rs:6978:15
+     |
+6978 | pub(super) fn p_0ab9_a3d6(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a464` is never used
+    --> src/watched_compiled/tick_graph.rs:7259:15
+     |
+7259 | pub(super) fn p_0ab9_a464(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_0ab9_a4f2` is never used
+    --> src/watched_compiled/tick_graph.rs:7540:15
+     |
+7540 | pub(super) fn p_0ab9_a4f2(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_1998_081b` is never used
+    --> src/watched_compiled/tick_graph.rs:7993:15
+     |
+7993 | pub(super) fn p_1998_081b(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_1998_0c23` is never used
+    --> src/watched_compiled/tick_graph.rs:8108:15
+     |
+8108 | pub(super) fn p_1998_0c23(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: function `p_1b55_17f9` is never used
+    --> src/watched_compiled/tick_graph.rs:8270:15
+     |
+8270 | pub(super) fn p_1b55_17f9(c: &mut Cpu) -> Result<(), String> {
+     |               ^^^^^^^^^^^
+
+warning: `onenil-engine` (lib) generated 64 warnings (run `cargo fix --lib -p onenil-engine` to apply 29 suggestions)
+warning: function `neutral_watch_input` is never used
+  --> src/watched_compiled/projections.rs:35:15
+   |
+35 | pub(super) fn neutral_watch_input(c: &mut Cpu) -> Result<(), String> {
+   |               ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `onenil-engine` (lib test) generated 62 warnings (61 duplicates)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1m 03s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)
+
+running 1 test
+test watched_compiled::tick::tests::all_original_watched_ticks_and_one_persistent_sequence ... FAILED
+
+failures:
+
+---- watched_compiled::tick::tests::all_original_watched_ticks_and_one_persistent_sequence stdout ----
+
+thread 'watched_compiled::tick::tests::all_original_watched_ticks_and_one_persistent_sequence' (3097) panicked at src/watched_compiled/tick.rs:144:60:
+called `Result::unwrap()` on an `Err` value: Fault { message: "valid-fixture T39 tick stub", missing: None }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    watched_compiled::tick::tests::all_original_watched_ticks_and_one_persistent_sequence
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 379 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--lib`
