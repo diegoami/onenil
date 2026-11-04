@@ -1,0 +1,8 @@
+{
+  "kind": "designed external presentation controller,not gameplay result input",
+  "source_policy": "Original research runtime/emul/match.py Week.play selects PLAY GAME with Down/Return. Original0AB9:D8A2-D8A6 identifies option3 as continue.",
+  "native": "At strict0AB9:D81C\u2192232A:0FA6\u2192232A:09A3 input call chain,emit Down/Up/Return normalized external keys6/5/2 according to current source-owned cursor. Original compiled0F8B/0EC4 updates the cursor;sourceD5D6 retains lineup/substitution/validation calculations.",
+  "scope": "Continue the reference match without requesting lineup changes. No keys during watched gameplay ticks. No per-tick expected state,seed,registers or engine-helper outcomes supplied. Buffered/pending input or unknown caller/frame fails closed.",
+  "evidence": "records/T41/menu-input-boundary-r0001 and native guard test original_menu_cursor_helpers_apply_external_continue_keys_and_reject_other_callers",
+  "remaining": "Full second-half trace and whole-match comparison still required;this is not a complete-match parity claim."
+}

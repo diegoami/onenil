@@ -363,3 +363,51 @@ pub(super) fn menu_fixture_title(c: &mut Cpu) -> Result<(), String> {
     );
     c.ret(true, 4)
 }
+
+// [confirmed:T41/menu-input-boundary-r0001] Down/Up/Return normalize to6/5/2;
+// original0F8B/0EC4 computes cursor changes and consumes the external key.
+// [designed] Reference controller uses the original harness's PLAY GAME intent:
+// option3 at sourceD8A2/D8A6. No keys are supplied during watched gameplay ticks.
+pub(super) fn continue_menu_key(c: &mut Cpu) -> Result<(), String> {
+    let chain = c.call_chain();
+    if c.watch_trace.is_none()
+        || !chain.ends_with(&[(0x0AB9, 0xD81C), (0x232A, 0x0FA6), (0x232A, 0x09A3)])
+    {
+        return Err("external menu input outside proven halftime controller".into());
+    }
+    let ss = c.r[10];
+    let ds = c.r[11];
+    c.pc = (0x24BC, 0x0C1A);
+    if c.read(ds, 0xDE8E, 16)? != 0 || c.read(ds, 0xDE8C, 16)? != 0 {
+        return Err("external menu input requires empty original key queues".into());
+    }
+    // At0C17 entry BP belongs to099B;its saved BP is the0F8B frame.
+    let menu_bp = c.read(ss, c.r[5], 16)?;
+    let controller_bp = c.read(ss, menu_bp, 16)?;
+    let count = c.read(ss, menu_bp.wrapping_add(6), 16)?;
+    let (cursor, segment) = c.far(ss, menu_bp.wrapping_add(8))?;
+    if count != 4 || segment != ss || cursor != controller_bp.wrapping_sub(5) {
+        return Err("external menu input cursor/frame differs".into());
+    }
+    let current = c.read(segment, cursor, 8)?;
+    if !(1..=4).contains(&current) {
+        return Err("unsupported external menu cursor".into());
+    }
+    let key = if current < 3 {
+        6
+    } else if current > 3 {
+        5
+    } else {
+        2
+    };
+    c.pc = (0x24BC, 0x0C48);
+    c.write(ds, 0xDE88, 16, key)?;
+    c.pc = (0x24BC, 0x0C4D);
+    c.write(ds, 0xDE8C, 16, 0)?;
+    c.pc = (0x24BC, 0x0C53);
+    c.write(ds, 0xDE8A, 16, key)?;
+    c.xor(c.r[0], c.r[0], 16);
+    c.r[0] = key;
+    c.presentation.push(serde_json::json!({"site":"24BC:0C17","kind":"external_menu_key","intent":"play_game","cursor_before":current,"key":key}));
+    c.ret(true, 0)
+}

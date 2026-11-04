@@ -588,4 +588,110 @@ mod tests {
             }
         }
     }
+    #[test]
+    fn original_menu_cursor_helpers_apply_external_continue_keys_and_reject_other_callers() {
+        fn controller(c: &mut Cpu) -> Result<(), String> {
+            c.enter(0x106)?;
+            let cursor = c.r[5].wrapping_sub(5);
+            c.write(c.r[10], cursor, 8, c.r[0])?;
+            for value in [c.r[10], cursor, 4] {
+                c.push(value)?;
+            }
+            c.invoke(
+                super::super::action_graph::p_232a_0f8b,
+                true,
+                0x232A,
+                0x0F8B,
+                0xD81C,
+            )?;
+            c.r[2] = c.read(c.r[10], cursor, 8)?;
+            c.r[4] = c.r[5];
+            c.r[5] = c.pop()?;
+            c.ret(true, 0)
+        }
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap();
+        let read = |path: &str| -> Value {
+            serde_json::from_slice(&std::fs::read(root.join(path)).unwrap()).unwrap()
+        };
+        let fixture = read("engine/tests/fixtures/watched_caller/case-00.json");
+        let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
+        let proof = read("records/T41/menu-input-boundary-r0001/result.json");
+        for observation in proof["observations"].as_array().unwrap() {
+            let mut c = action::machine(&state).unwrap();
+            c.watch_trace = Some(Vec::new());
+            let ds = 16 * usize::from(c.r[11]);
+            let main = state
+                .pointers
+                .iter()
+                .find(|p| p.kind == action::PointerKind::Main)
+                .unwrap();
+            let shown = state
+                .pointers
+                .iter()
+                .find(|p| p.kind == action::PointerKind::MainShown)
+                .unwrap();
+            for (header, pointer) in [(0xDD58, main), (0xDD5C, shown)] {
+                for (index, byte) in [pointer.offset.to_le_bytes(), pointer.segment.to_le_bytes()]
+                    .concat()
+                    .into_iter()
+                    .enumerate()
+                {
+                    c.e.image[ds + header + index] = byte;
+                    c.known[ds + header + index] = true;
+                }
+                for index in 0..4000 {
+                    let at = pointer.address() + index;
+                    c.e.image[at] = if header == 0xDD58 {
+                        0
+                    } else {
+                        (index % 251) as u8
+                    };
+                    c.known[at] = true;
+                }
+            }
+            for offset in 0xDE88..0xDE90 {
+                c.e.image[ds + offset] = 0;
+                c.known[ds + offset] = true;
+            }
+            c.r[0] = observation["cursor_before"].as_u64().unwrap() as u16;
+            let regs = c.r;
+            let before = c.e.image.clone();
+            let stack = 16 * usize::from(c.r[10]) + usize::from(c.r[4]);
+            c.invoke(controller, true, 0x0AB9, 0xD5D6, 0x7E4F).unwrap();
+            assert_eq!(c.r[2], observation["cursor_after"].as_u64().unwrap() as u16);
+            let key = observation["key_code"].as_u64().unwrap() as u16;
+            assert_eq!(c.read(c.r[11], 0xDE88, 16).unwrap(), key);
+            assert_eq!(c.read(c.r[11], 0xDE8A, 16).unwrap(), key);
+            assert_eq!(c.read(c.r[11], 0xDE8C, 16).unwrap(), 0);
+            assert_eq!((c.r[4], c.r[5], c.r[11]), (regs[4], regs[5], regs[11]));
+            assert_eq!(
+                &c.e.image[main.address()..main.address() + 4000],
+                &before[shown.address()..shown.address() + 4000]
+            );
+            assert!(c.draws.is_empty());
+            assert!(c.events.is_empty());
+            for (at, (old, new)) in before.iter().zip(c.e.image.iter()).enumerate() {
+                if !(stack - 4096..stack).contains(&at)
+                    && !(main.address()..main.address() + 4000).contains(&at)
+                    && !(ds + 0xDE88..ds + 0xDE8E).contains(&at)
+                {
+                    assert_eq!(old, new, "address{at:X}");
+                }
+            }
+        }
+        let mut c = action::machine(&state).unwrap();
+        c.watch_trace = Some(Vec::new());
+        assert!(c
+            .invoke(
+                super::super::projections::continue_menu_key,
+                true,
+                0x24BC,
+                0x0C17,
+                0x1234
+            )
+            .unwrap_err()
+            .contains("outside proven halftime"));
+    }
 }
