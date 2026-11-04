@@ -10,7 +10,7 @@ def main():
  value=replay.admission();state=value['initial'];changed=0
  for fact in state['cells']:
   if fact['area']in('main','background','background_shown'):
-   offset=fact['offset'];fact['value']=7 if offset%2 else(9 if offset==0x90E else32);changed+=1
+   offset=fact['offset'];fact['value']=7 if offset%2 else(9 if offset==0x90E else 32);changed+=1
  result=json.loads(api.watched_match(json.dumps({'initial':state,'no_pending_key':True})))
  record={'scope':'Native-only derived floor-page experiment using T41 debug kernel. This is not the prepared-image bridge and does not establish original presentation preservation.','changed_page_facts':changed,'extension_sha256':hashlib.sha256(Path(native.__file__).read_bytes()).hexdigest(),'debug_assertions':native.__debug_assertions__}
  if 'ok'in result:
