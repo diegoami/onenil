@@ -392,6 +392,17 @@ mod tests {
         }
     }
     #[test]
+    fn native_editor_owns_both_bytes_of_normalized_key_words() {
+        let session = Session::new(input()).unwrap();
+        for address in [0xDE88, 0xDE8A] {
+            assert_eq!(session.cpu.read(0, address, 16).unwrap(), 2);
+            assert!(
+                session.cpu.known[usize::from(address)]
+                    && session.cpu.known[usize::from(address) + 1]
+            );
+        }
+    }
+    #[test]
     fn selected_native_image_computes_the_original_watched_entry_and_retains_its_frames() {
         let mut session = Session::new(input()).unwrap();
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))

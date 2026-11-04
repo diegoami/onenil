@@ -1,0 +1,88 @@
+{
+  "scope": "T45 source-owned normalized-key word initialization. The half-time menu reached a strict missing first-write baseline for DE89;it is the high byte of the editor-owned DE88 word and must be computed by the editor,not admitted as captured state. Source24BC:0C24/0C48/0C53 stores both full16-bit words.",
+  "checks": {
+    "T45-editor-key-words-red-r0001.txt": {
+      "sha256": "6d54636cb9619e277e873a023c9e0d592e5777e7e576a739e2d66acdd7701a07",
+      "tail": [
+        "running 1 test",
+        "test watched_compiled::prepared::tests::native_editor_owns_both_bytes_of_normalized_key_words ... FAILED",
+        "",
+        "failures:",
+        "",
+        "---- watched_compiled::prepared::tests::native_editor_owns_both_bytes_of_normalized_key_words stdout ----",
+        "",
+        "thread 'watched_compiled::prepared::tests::native_editor_owns_both_bytes_of_normalized_key_words' (668) panicked at src/watched_compiled/prepared.rs:398:57:",
+        "called `Result::unwrap()` on an `Err` value: \"missing reached native data at 0AB9:7C67 0000:DE88\"",
+        "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "",
+        "",
+        "failures:",
+        "    watched_compiled::prepared::tests::native_editor_owns_both_bytes_of_normalized_key_words",
+        "",
+        "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 420 filtered out; finished in 1.36s",
+        "",
+        "error: test failed, to rerun pass `--lib`"
+      ]
+    },
+    "T45-editor-key-words-green-r0001.txt": {
+      "sha256": "0906f7b8d632405d55f1b7d7c8f238bb8a0efb8bab63720cf2738fa2d9bb5843",
+      "tail": [
+        "",
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 41 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 35 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 14.83s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 1 test",
+        "test watched_compiled::prepared::tests::native_editor_owns_both_bytes_of_normalized_key_words ... ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 420 filtered out; finished in 2.77s",
+        ""
+      ]
+    },
+    "T45-first-half-prefix-parity-r0001.txt": {
+      "sha256": "f68c43d966b84b636c99db5afde91b0e925f1a121d53c23eb7dc0df9142ba2b1",
+      "tail": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "native first-half passage exactly matches 2079 complete original ticks, 91813 computed draws and 417 watched actions before the guarded UI read",
+        "first-half return frame already resumed;stop: prepared tick2079 draw91813: missing reached native data at 1B55:4893 0000:1285"
+      ]
+    },
+    "T45-release-probe-build-r0001.txt": {
+      "sha256": "ea764d6305822307f767f7ff62d57b94aa4654aa73eb468ce4068df7ac5dbf28",
+      "tail": [
+        "    |",
+        "129 | impl Image {",
+        "    | ---------- method in this implementation",
+        "...",
+        "169 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {",
+        "    |                   ^^^^^^^^^^^",
+        "",
+        "warning: method `sar` is never used",
+        "   --> src/watched_compiled/compiled.rs:699:12",
+        "    |",
+        " 47 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "699 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `release` profile [optimized] target(s) in 2m 20s"
+      ]
+    }
+  },
+  "first_half_parity": {
+    "ticks": 2079,
+    "computed_draws": 91813,
+    "watched_actions": 417,
+    "reference_index_sha256": "30a4fe8003f4677c2e2af0966d5fe81055c728a1b41c998a9d03766637414886"
+  }
+}
