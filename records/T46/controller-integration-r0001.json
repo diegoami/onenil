@@ -1,0 +1,42 @@
+{
+  "scope": "Prepared controller/HTTP/selection frontend integration. Four native controller playthroughs and8controller/semantics tests pass;formal committed-source desktop/mobile matrix still pending.",
+  "controller_results": {
+    "T46-controller-preflight-r0002.log": {
+      "sha256": "694b5c2447fe99f4912c54e804c73f2a5355fc8dd3e388e07fd88ab483ba8965",
+      "lines": [
+        "CONTROLLER COMPLETE {'lineup': 'reference', 'seed': '64'} 4199 832 [2, 1] 93",
+        "CONTROLLER COMPLETE {'lineup': 'reference', 'seed': '122'} 4153 967 [3, 0] 96",
+        "CONTROLLER COMPLETE {'lineup': 'reserve', 'seed': '64'} 3752 778 [0, 0] 92",
+        "CONTROLLER COMPLETE {'lineup': 'reserve', 'seed': '122'} 4111 821 [4, 2] 92"
+      ]
+    },
+    "T46-controller-tests-r0001.log": {
+      "sha256": "f6e0bc0cc11f93b733807a2598e5da33835d9bbf7d47dc85638cf08553df4dd6",
+      "lines": [
+        "........",
+        "----------------------------------------------------------------------",
+        "Ran 8 tests in 38.282s",
+        "",
+        "OK"
+      ]
+    }
+  },
+  "runtime_inputs": "Only pinned initial prepared fixture,metadata,and source-static initial fixture for alternative choices;old postsetup backend forbidden by audited controller tests.",
+  "presentation": "All actual native watched actions plus native tick0 setup coin toss;actual caller elapsed clock and per-tick live goals;22native positions and ball.",
+  "cache": "This application computed each choice once;restart/configure cached choices make no native call.",
+  "live_preview": {
+    "url": "http://127.0.0.1:8041",
+    "session": 53335,
+    "host_pid": 113949,
+    "replaced_old_reference_pid": 10256,
+    "readback": "HTTP200 ready,reference64,actualstarter2590/seed64/22players;Chromiuminitialrender has selection controls and no page errors."
+  },
+  "implementation_sha256": {
+    "tools/play_watched.py": "b09bf018c701ee7235a9f7785724474966c6b10d3d5bd600998babcabb395a93",
+    "tools/test_play_watched.py": "520a4c05b19ae4f01f2b84a9e2523e4998582dd9e9686f20a857876543ce1ec2",
+    "tools/smoke_watched_viewer.py": "71aa336560603a5ae3be3ff6d6660e5beb35a22ab9d2e475e9ddb8f53e468cbe",
+    "web/watched/app.js": "40b323b85664b9d9046148284f1cf0a3cf558b7a8df43064e026ae39e20659b8",
+    "web/watched/index.html": "e48ea30e343def6e75e36044da26220ffd9dc55d522d120d81094a76e97e8eb5"
+  },
+  "remaining": "Chromiummatrixall4desktop+mobile with real preparation responsiveness,release receipt,fullregressions/audits/exactCI/merge/milestoneaudit/reviewprompt."
+}
