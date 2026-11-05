@@ -9,8 +9,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 INITIAL_SHA = '88274a14f94fb526c1f0777d06017355b73e41946aabaafc7d65233da5492311'
 PREPARED_SHA = '842f1453cae4ba9ab626d7e57316494cfe7e70f64ea80e746c3834de0e12989f'
-STATIC_INPUT = ROOT/'engine/tests/fixtures/prepared_choices/initial_static-r0001.json'
-STATIC_INPUT_SHA = 'dd329d61809ed221280ee83a6f2f2e7a25230889f6655e333b3cd09dbd54617a'
+STATIC_INPUT = ROOT/'engine/tests/fixtures/prepared_choices/initial_static-r0002.json'
+STATIC_INPUT_SHA = 'a135cc41ee516bf07e518036323ba62638ed7d71a21376ab4c0653328c4e87eb'
 
 
 def validate_choices(choices):
@@ -59,7 +59,7 @@ def prepared_input(choices):
         if hashlib.sha256(raw).hexdigest() != STATIC_INPUT_SHA:
             raise ValueError('initial numeric table digest differs')
         tables = json.loads(raw)
-        if tables['schema'] != 'initial-source-numeric-tables/1' or tables['ranges'] != [[0x935B,0x9A2A]]:
+        if tables['schema'] != 'initial-source-numeric-tables/1' or tables['ranges'] != [[0x0D36,0x0D56],[0x935B,0x9A2A]]:
             raise ValueError('initial numeric table shape differs')
         known = {(f['area'],f['offset']):f['value'] for f in value['support']}
         for fact in tables['facts']:

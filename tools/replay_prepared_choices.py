@@ -46,9 +46,9 @@ def check_static_source(research):
             parts=line.split('|',1)[0].split();start=int(parts[0],16)
             for i,byte in enumerate(parts[1:]):
                 if re.fullmatch('[0-9A-Fa-f]{2}',byte):memory[start+i]=int(byte,16)
-    assert [f['offset'] for f in tables['facts']]==list(range(0x935B,0x9A2A))
+    assert [f['offset'] for f in tables['facts']]==[a for lo,hi in tables['ranges']for a in range(lo,hi)]
     assert all(f['area']=='ds' and f['value']==memory[f['offset']] for f in tables['facts'])
-    print('All1743 source-static numeric entries independently regenerate from pinned research listing',flush=True)
+    print(f"All{len(tables['facts'])} source-static numeric entries independently regenerate from pinned research listing",flush=True)
 
 def validate_output(choices, output, initial, setup_draws):
     import replay_prepared_match as reference
