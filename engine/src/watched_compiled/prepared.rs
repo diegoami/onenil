@@ -9,6 +9,11 @@ use crate::{layout, role_scores::Cells, setup, watched_setup};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
+// [confirmed:archaeology60179ee,DS8708..8715;1B55:72C8] Read-only role
+// lookup,also used at01EF:162A/1C94,1998:0688 and0AB9:BC35. Own every
+// source entry,including roles not visited by the original reference session.
+const ROLE_LOOKUP: [u8; 14] = [2, 12, 12, 12, 12, 3, 3, 3, 3, 3, 3, 3, 14, 14];
+
 #[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Input {
@@ -88,6 +93,14 @@ impl Session {
             .ok_or("missing current caller fixture flags")?
             .fixture_flags;
         let support = support_cells(&input.support)?;
+        for (index, expected) in ROLE_LOOKUP.iter().enumerate() {
+            if support
+                .get(&(0x8708 + index))
+                .is_some_and(|value| value != expected)
+            {
+                return Err("source role lookup alias differs".into());
+            }
+        }
         let mut prepared = setup::Session::before_watched_call(
             input.preparation.setup,
             input.preparation.incoming,
@@ -95,6 +108,7 @@ impl Session {
         )?;
         let preparation = prepared.preparation();
         let e = &mut prepared.match_state.inner.e;
+        e.image[0x8708..0x8716].copy_from_slice(&ROLE_LOOKUP);
         if e.word(0xD6E6) != caller_club || e.image[0xD29] != u8::from(fixture_flags & 15 == 1) {
             return Err("current fixture/caller/home-flag alias differs".into());
         }
@@ -462,6 +476,19 @@ mod tests {
             assert_eq!(session.cpu.read(0, 0x0D2A, 8).unwrap(), expected);
             assert!(session.cpu.known[0x0D2A]);
         }
+    }
+    #[test]
+    fn source_role_lookup_rejects_conflicting_incoming_alias() {
+        let mut value = input();
+        value.support.push(ByteFact {
+            area: Area::Ds,
+            offset: 0x8711,
+            value: 99,
+        });
+        assert_eq!(
+            Session::new(value).err().unwrap(),
+            "source role lookup alias differs"
+        );
     }
     #[test]
     fn headless_input_poll_runs_compiled_no_key_path() {

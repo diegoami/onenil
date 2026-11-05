@@ -1,0 +1,80 @@
+{
+  "scope": "Complete source-static role lookup ownership and reject conflicting incoming aliases;no gameplay outcomes or helper results are supplied.",
+  "source_commit": "60179ee16009e175591b79d9230ff59027ccf6a5",
+  "source_table": "static/1-0-exe/data/ds_2864_04.hex:DS8708..8715",
+  "source_values": [
+    2,
+    12,
+    12,
+    12,
+    12,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    14,
+    14
+  ],
+  "source_reads": "1B55:72C8 and other static indexed reads;this region was already classified read-only initial support by T45.",
+  "before_fix_failure": "ValueError: native prepared match failed: prepared tick3542 draw149684: missing reached native data at 1B55:72C8 0000:8711;missing={'address': 34577, 'pc': [6997, 29384], 'scratch': False, 'writing': False}",
+  "before_fix_log_sha256": "911cf7d4163a2328e67c354f1d3b0d7ce3d2c055eea1e0da6c04e87f3fb26f4d",
+  "alias_red": "records/T46/role-table-red-r0001.txt",
+  "alias_green_log_sha256": "e086e3f528dc2f6cd859cf39d41eaad6d3f79439be01efb04488a6fbed5752dd",
+  "alias_green_tail": [
+    "",
+    "running 1 test",
+    "test watched_compiled::prepared::tests::source_role_lookup_rejects_conflicting_incoming_alias ... ok",
+    "",
+    "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 424 filtered out; finished in 0.03s",
+    ""
+  ],
+  "reference_parity_after_mouse_bootstrap": {
+    "actions": 831,
+    "actual_return": "0AB9:EBE2",
+    "actual_starting_players": [
+      2661,
+      2662,
+      2675,
+      2664,
+      2665,
+      2666,
+      2667,
+      2673,
+      2669,
+      2670,
+      2676,
+      2581,
+      2582,
+      2583,
+      2584,
+      2585,
+      2586,
+      2587,
+      2588,
+      2589,
+      2590,
+      2591
+    ],
+    "choices": {
+      "lineup": "reference",
+      "seed": "64"
+    },
+    "clock_rows": 4101,
+    "clock_sha256": "51a788461fc34ee23200147285c5162a3a639e1f62155ca867639697059e00d3",
+    "draws": 182811,
+    "initial_seed": 64,
+    "input_sha256": "8238051cf2ee35d39b7dcdc3da6dc8a8a9989cb78c326cb52c964e7a660e900a",
+    "output_sha256": "c3e55594f93feb82066dff0c712e12f1262a96f64e7927451a984930d2426013",
+    "score": [
+      2,
+      1
+    ],
+    "setup_draws": 258,
+    "ticks": 4199
+  },
+  "prepared_source_sha256": "90585c03d3df5f176e99900e59ef876867879f9f78fe2039f5c4d10a9a479164",
+  "T45_reference_fixture": "unchanged;initial request remains exactly the pinned admission"
+}
