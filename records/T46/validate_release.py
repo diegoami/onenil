@@ -17,6 +17,7 @@ from onenil_engine import onenil_engine as native
 if subprocess.check_output(['git','status','--porcelain','--','engine','tools','web/watched',str(Path(__file__).relative_to(ROOT))],cwd=ROOT,text=True):
     raise ValueError('commit release/product sources before measuring')
 if native.__debug_assertions__:raise ValueError('release extension required')
+started=datetime.now(timezone.utc).isoformat()
 check_inputs();samples=[]
 for choices in CHOICES:
     began=time.perf_counter_ns()
@@ -27,7 +28,7 @@ for choices in CHOICES:
     samples.append(summary)
     print('Release complete:',choices,elapsed,'ns',flush=True)
     del output,initial,draws
-record=dict(schema='supported-prepared-release/1',started=datetime.now(timezone.utc).isoformat(),
+record=dict(schema='supported-prepared-release/1',started=started,completed=datetime.now(timezone.utc).isoformat(),
     source_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
     engine_tree=subprocess.check_output(['git','rev-parse','HEAD:engine'],cwd=ROOT,text=True).strip(),
     extension_sha256=hashlib.sha256(Path(native.__file__).read_bytes()).hexdigest(),debug_assertions=native.__debug_assertions__,
