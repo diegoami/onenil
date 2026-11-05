@@ -13,8 +13,9 @@ import watched_oracle as oracle
 ROOT=Path(__file__).resolve().parents[1]
 FIXTURE=ROOT/'engine/tests/fixtures/prepared_match/admission.json'
 FIXTURE_SHA='842f1453cae4ba9ab626d7e57316494cfe7e70f64ea80e746c3834de0e12989f'
-# Filled only after the immutable original full-lifecycle observation completes.
-FIELD_MANIFEST_SHA=None
+# Completed independent original observation:all ticks/draws/actions/actual clocks
+# through the real outer return;frozen observer and recovery lineage checked.
+FIELD_MANIFEST_SHA='9006f2df5853ca8922b7e0a17b8c5899493178f80ec82a321e641b194d56dfd7'
 FIELD_DIRECTORY=ROOT/'records/T45/original-r0003'
 def read(path):return json.loads(path.read_text())
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()

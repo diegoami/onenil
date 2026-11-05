@@ -1728,15 +1728,19 @@ support facts checked against their original pre19CA values. Current actions,
 RNG outcomes and intermediate images remain computed.
 
 ```sh
+python3 tools/replay_prepared_match.py --check
 python3 tools/replay_prepared_match.py --selftest
 .cache/venv/bin/python tools/replay_prepared_match.py --python
 ```
 
-[designed] Acceptance also requires the separate original full-field preservation
-and complete caller-clock observation. That long verification is still pending;
-`--check` and normal replay fail until its completed immutable manifest is pinned.
-The explicit `--development-reference-only` option compares the complete existing
-match reference and known171-clock prefix while keeping that limitation visible.
+[confirmed: T45 original-r0003,full-original-proof-r0001] The independent original
+full-field preservation run completes all4199 ticks,182811 draws and831 actions
+through the actual outer return. All4101 actual caller-clock rows match the native
+result in every field,including the counter and halftime/fulltime tick identities.
+Its immutable manifest is pinned by the public checker;`--check` and normal replay
+require the complete proof. The explicit `--development-reference-only` diagnostic
+compares the existing match reference and known171-clock prefix;it is not the
+strict acceptance command.
 Exact measured observer sources are frozen under `records/T45/preservation-observer-r*.py`
 so evidence checks survive squash merges and branch deletion. Those copies verify
 source identity;launch captures through `tools/prepared_match_oracle.py`.
