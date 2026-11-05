@@ -693,8 +693,8 @@ impl Session {
         self.match_state.project_display_ratings();
         // [designed] No lineup edit after supplied starting squads;actual return key2.
         // [confirmed] 24BC:0C17 stores both normalized-key words (T41 menu proof).
-        self.match_state.inner.e.image[0xDE88] = 2;
-        self.match_state.inner.e.image[0xDE8A] = 2;
+        put(&mut self.match_state.inner.e, 0xDE88, 2);
+        put(&mut self.match_state.inner.e, 0xDE8A, 2);
         self.match_state.inner.e.image[0xD18] = 1;
         self.match_state.rearrange()?;
         Ok(())

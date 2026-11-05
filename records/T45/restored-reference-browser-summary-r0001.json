@@ -1,0 +1,37 @@
+{
+  "scope": "Restored product browser regression of existing fixed post-setup reference viewer. Selectable prepared sessions and full original field proof remain pending.",
+  "source_commit": "eb374c2711f510e9d1ec509093f143a5a9845a82",
+  "engine_tree": "b70dc1ae0b371b4ca5cef71ba66c0ef737b2ff3d",
+  "successful_receipt": "records/T45/restored-reference-browser-r0001/T42-r0002.json",
+  "first_receipt": "records/T45/restored-reference-browser-r0001/T42-r0001.json",
+  "first_exit": "All browser assertions and receipt writes completed;final path printing failed because relative --out cannot be relative_to absolute ROOT. Preserved all evidence;corrected absolute --out passed without any source or assertion change.",
+  "screenshots_reviewed": [
+    "T42-r0001-desktop.png",
+    "T42-r0002-mobile.png"
+  ],
+  "visual_check": "Desktop shows actual named possession/tackle/dribble commentary beside native pitch;mobile full-time score2:1,90+3 and complete action text visible without horizontal overflow. Native players have completed walk-off at fulltime.",
+  "logs": {
+    "T45-restored-reference-browser-r0001.log": {
+      "exit_code": 1,
+      "sha256": "3a36a2b863c90d2c91debe1569f959b16974794c5a342d09e66d44195c12473f",
+      "lines": [
+        "Traceback (most recent call last):",
+        "  File \"/home/diego/projects/onenil-archaeology/.cache/onenil-native/tools/smoke_watched_viewer.py\", line 133, in <module>",
+        "    smoke(parser.parse_args().out)",
+        "  File \"/home/diego/projects/onenil-archaeology/.cache/onenil-native/tools/smoke_watched_viewer.py\", line 124, in smoke",
+        "    print(record.relative_to(ROOT), flush=True)",
+        "          ^^^^^^^^^^^^^^^^^^^^^^^^",
+        "  File \"/usr/lib/python3.12/pathlib.py\", line 682, in relative_to",
+        "    raise ValueError(f\"{str(self)!r} is not in the subpath of {str(other)!r}\")",
+        "ValueError: 'records/T45/restored-reference-browser-r0001/T42-r0001.json' is not in the subpath of '/home/diego/projects/onenil-archaeology/.cache/onenil-native'"
+      ]
+    },
+    "T45-restored-reference-browser-r0002.log": {
+      "exit_code": 0,
+      "sha256": "74ca8a786f1ac203ef74df59eb1f4d72bd0de0a9601ec56feea90e175e11d0f9",
+      "lines": [
+        "records/T45/restored-reference-browser-r0001/T42-r0002.json"
+      ]
+    }
+  }
+}

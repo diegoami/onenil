@@ -1,0 +1,55 @@
+{
+  "scope": "T45 retained guest-return guard red/green;full lifecycle parity is still in progress. Changed/stub guest returns must be rejected even when metadata frames appear correct. Actual final EBE2 is now validated from the consumed guest return address.",
+  "checks": {
+    "T45-retained-return-red-r0001.txt": {
+      "sha256": "27e9286d395a739624bcd0774f995d1a0e2010bf30b7085bc89ae61be9b9deac",
+      "tail": [
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 1 test",
+        "test watched_compiled::compiled::tests::retained_frame_resume_rejects_a_changed_guest_return ... FAILED",
+        "",
+        "failures:",
+        "",
+        "---- watched_compiled::compiled::tests::retained_frame_resume_rejects_a_changed_guest_return stdout ----",
+        "",
+        "thread 'watched_compiled::compiled::tests::retained_frame_resume_rejects_a_changed_guest_return' (668) panicked at src/watched_compiled/compiled.rs:783:9:",
+        "assertion failed: c.resume_frame(leave, 0x0AB9, 0x1234).is_err()",
+        "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "",
+        "",
+        "failures:",
+        "    watched_compiled::compiled::tests::retained_frame_resume_rejects_a_changed_guest_return",
+        "",
+        "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 418 filtered out; finished in 0.00s",
+        "",
+        "error: test failed, to rerun pass `--lib`"
+      ]
+    },
+    "T45-retained-return-green-r0001.txt": {
+      "sha256": "f569f4098c53c261576c0c28c3fd6caf2054ea11987918909cef07ec340af879",
+      "tail": [
+        "     |         help: remove this `mut`",
+        "",
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 41 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 35 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 52.69s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 2 tests",
+        "test watched_compiled::compiled::tests::retained_frame_resume_rejects_a_changed_guest_return ... ok",
+        "test watched_compiled::compiled::tests::retained_frame_resumes_once_and_requires_an_actual_guest_return ... ok",
+        "",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 418 filtered out; finished in 0.00s",
+        ""
+      ]
+    }
+  }
+}

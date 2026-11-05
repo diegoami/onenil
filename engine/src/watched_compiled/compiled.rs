@@ -37,6 +37,8 @@ pub(super) struct Cpu {
     pub watch_entry_yield: bool,
     pub watch_entry_yielded: bool,
     pub watch_live_goals: Vec<[u16; 2]>,
+    pub watch_clocks: Option<Vec<serde_json::Value>>,
+    pub last_return: Option<(u16, u16)>,
     stack: Vec<u8>,
     stack_known: Vec<bool>,
     frames: Vec<(u16, u16)>,
@@ -72,6 +74,8 @@ impl Cpu {
             watch_entry_yield: false,
             watch_entry_yielded: false,
             watch_live_goals: vec![],
+            watch_clocks: None,
+            last_return: None,
             stack: vec![0; 65540],
             stack_known: vec![false; 65540],
             frames: vec![],
@@ -259,6 +263,39 @@ impl Cpu {
         }
         result
     }
+    // Resume a guest call already present at the explicit watched-entry yield.
+    // No duplicate metadata frame or guest return address is constructed.
+    pub(super) fn resume_frame(&mut self, f: Proc, caller_cs: u16, ret: u16) -> Result<(), String> {
+        let expected = (caller_cs, ret);
+        if self.frames.last() != Some(&expected) {
+            return Err("native retained caller frame differs".into());
+        }
+        self.last_return = None;
+        f(self)?;
+        if self.last_return != Some(expected) {
+            return Err("native retained guest return differs".into());
+        }
+        if self.frames.last() != Some(&expected) {
+            return Err("native retained caller frame did not unwind cleanly".into());
+        }
+        self.frames.pop();
+        Ok(())
+    }
+    pub(super) fn watched_clock(&self) -> Result<serde_json::Value, String> {
+        let mut clock = serde_json::json!({});
+        for (name, offset, width) in [
+            ("active", 0xD0B8, 8),
+            ("counter", 0xD0B0, 16),
+            ("remaining", 0xD0AE, 16),
+            ("stoppage", 0xD0B4, 16),
+            ("elapsed", 0xD0B2, 16),
+            ("phase", 0xD0AC, 8),
+            ("hold", 0xD0B9, 8),
+        ] {
+            clock[name] = serde_json::json!(self.read(self.r[11], offset, width)?);
+        }
+        Ok(clock)
+    }
     pub fn read(&self, s: u16, o: u16, w: u8) -> Result<u16, String> {
         let mut value = 0u16;
         for i in 0..usize::from(w / 8) {
@@ -424,6 +461,13 @@ impl Cpu {
                 ]);
             }
         }
+        if self.pc == (0x0AB9, 0x7C94) && self.watch_clocks.is_some() {
+            let clock = self.watched_clock()?;
+            self.watch_clocks
+                .as_mut()
+                .unwrap()
+                .push(serde_json::json!({"tick":self.watch_tick,"clock":clock}));
+        }
         if self.fuel == 0 {
             return Err("compiled procedure budget exhausted".into());
         }
@@ -446,11 +490,12 @@ impl Cpu {
         Ok(())
     }
     pub fn ret(&mut self, far: bool, n: u16) -> Result<(), String> {
-        let _return_ip = self.pop()?;
+        let return_ip = self.pop()?;
         if far {
             self.r[9] = self.pop()?
         }
         self.r[4] = self.r[4].wrapping_add(n);
+        self.last_return = Some((self.r[9].wrapping_sub(self.code_base), return_ip));
         Ok(())
     }
     #[inline(never)]
@@ -733,6 +778,35 @@ mod tests {
     use super::*;
     fn cpu() -> Cpu {
         Cpu::new(crate::role_scores::image(Default::default()))
+    }
+    #[test]
+    fn retained_frame_resumes_once_and_requires_an_actual_guest_return() {
+        fn leave(c: &mut Cpu) -> Result<(), String> {
+            c.ret(false, 0)
+        }
+        let mut c = cpu();
+        c.push(0x1234).unwrap();
+        c.frames.push((0x0AB9, 0x1234));
+        c.resume_frame(leave, 0x0AB9, 0x1234).unwrap();
+        assert!(c.call_chain().is_empty());
+        assert_eq!(c.last_return, Some((0x0AB9, 0x1234)));
+        fn stub(_: &mut Cpu) -> Result<(), String> {
+            Ok(())
+        }
+        c.frames.push((0x0AB9, 0x1234));
+        assert!(c.resume_frame(stub, 0x0AB9, 0x1234).is_err());
+        assert_eq!(c.call_chain(), vec![(0x0AB9, 0x1234)]);
+    }
+    #[test]
+    fn retained_frame_resume_rejects_a_changed_guest_return() {
+        fn leave(c: &mut Cpu) -> Result<(), String> {
+            c.ret(false, 0)
+        }
+        let mut c = cpu();
+        c.push(0x1235).unwrap();
+        c.frames.push((0x0AB9, 0x1234));
+        assert!(c.resume_frame(leave, 0x0AB9, 0x1234).is_err());
+        assert_eq!(c.call_chain(), vec![(0x0AB9, 0x1234)]);
     }
     #[test]
     fn watched_lifecycle_rejects_nested_ticks_tick_limit_and_exhausted_fuel() {

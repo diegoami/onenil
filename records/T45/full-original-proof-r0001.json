@@ -1,0 +1,48 @@
+{
+  "scope": "Completed independent original full-field and full caller-clock preservation proof;strict release replay and final task checks still required. Supported prepared choices/viewer remain T46.",
+  "directory": "records/T45/original-r0003",
+  "manifest_sha256": "9006f2df5853ca8922b7e0a17b8c5899493178f80ec82a321e641b194d56dfd7",
+  "result_sha256": "f2314c53cf0f8c4b56c73ad7851379cd5af9cc411009f6496f18f24f8c031c19",
+  "observer_sha256": "e6eaf5da519c3d075e3439bc323ffb6fcef92503b1ca7fc60bd35e4324d1d6e0",
+  "research_commit": "60179ee16009e175591b79d9230ff59027ccf6a5",
+  "recovery_lineage": "Authenticated parent receipt/start/manifest/private hash and unchanged source/input/reference checked;normal same-machine resume to actual return.",
+  "status": "completed",
+  "ticks": 4199,
+  "computed_draws": 182811,
+  "watched_actions": 831,
+  "actual_return": "0AB9:EBE2",
+  "actual_clock_rows": 4101,
+  "actual_clock_sha256": "51a788461fc34ee23200147285c5162a3a639e1f62155ca867639697059e00d3",
+  "clock_comparison": "Exact equality with complete previously verified fresh/retained native result;all7fields and tick identities.",
+  "original_trace_comparison": "Every4199tick/831action digest,ordered182811draw digest,projection and final state exactly match unchanged reference;strict --check passed.",
+  "checker_sha256": "e306cb768e794720488b8c969411353fc0b2da38bf30ecbfc2852d40f9f2de74",
+  "guards_rejected": 44,
+  "checks": {
+    "T45-full-field-proof-check-r0001.log": {
+      "sha256": "a9c4f33bfa4063420fde8f3bda3927fd6e7aa9386d774534ea145534e9168675",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared match provenance and full original field/clock proof:ok"
+      ]
+    },
+    "T45-full-field-proof-guards-r0001.log": {
+      "sha256": "d3deb409f4094b03619c5ce15386bd24f8d3774d25353d214fe08db9953057a3",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared match input/provenance/outcome/live-score/observer/recovery/clock guards: 44 rejected"
+      ]
+    },
+    "T45-full-field-proof-clock-unit-r0001.log": {
+      "sha256": "48393da5c2bcf4ecf5d597ceb9b51492ea69ea199fca10792feac1a3f3ea503d",
+      "lines": [
+        "Missing clock stream rejected by standalone proof checker: original caller clock census incomplete"
+      ]
+    }
+  },
+  "original_exit_code": 0,
+  "original_execution_session": 70688,
+  "original_host_pid": 4201,
+  "original_process_status": "completed;do not restart or resume finalized directory"
+}

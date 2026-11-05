@@ -1,0 +1,17 @@
+{
+  "scope": "Explicit owner shutdown wind-down;old original-r0001 process stopped without claiming full completion.",
+  "reason": "Owner requested all work finish within30minutes. The old schema1 observer had no restorable machine snapshots and could not finish within that window. Its decoded verified prefix is preserved;the independently checkpointed original-r0003 is the resumable continuation attempt.",
+  "old_host_pid": 544128,
+  "termination": "SIGTERM after exact command/cwd validation;no original result.json/manifest.json synthesized.",
+  "last_recorded_verified_prefix": {
+    "tick": 1750,
+    "draws": 78219,
+    "actions": 352
+  },
+  "recovery_attempt": "records/T45/original-r0003",
+  "recovery_progress_at_stop": {
+    "ticks": 57,
+    "draws": 1406
+  },
+  "full_field_clock_proof": "incomplete;strict acceptance still rejects"
+}

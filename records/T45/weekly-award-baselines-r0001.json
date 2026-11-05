@@ -1,0 +1,54 @@
+{
+  "scope": "Original weekly caller EAB6 zeroes D144/D146 at EAC1/EAC4 before EBDF calls owned E1F2. These four initial bytes survive setup and are incoming baselines. B526 computes the current selected award from native player ratings;D142/current ratings remain forbidden inputs.",
+  "source_research_commit": "60179ee16009e175591b79d9230ff59027ccf6a5",
+  "checks": {
+    "T45-weekly-award-red-r0001.txt": {
+      "sha256": "510738c21641b5d5f1d11e6d761e2b88d321e35dc68bf93e1d5f26406cdf7210",
+      "tail": [
+        "",
+        "running 1 test",
+        "test watched_compiled::prepared::tests::weekly_award_baselines_are_incoming_but_current_award_is_computed ... FAILED",
+        "",
+        "failures:",
+        "",
+        "---- watched_compiled::prepared::tests::weekly_award_baselines_are_incoming_but_current_award_is_computed stdout ----",
+        "",
+        "thread 'watched_compiled::prepared::tests::weekly_award_baselines_are_incoming_but_current_award_is_computed' (649) panicked at src/watched_compiled/prepared.rs:426:43:",
+        "called `Result::unwrap()` on an `Err` value: \"unsupported initial support Ds+D144\"",
+        "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+        "",
+        "",
+        "failures:",
+        "    watched_compiled::prepared::tests::weekly_award_baselines_are_incoming_but_current_award_is_computed",
+        "",
+        "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 422 filtered out; finished in 0.00s",
+        "",
+        "error: test failed, to rerun pass `--lib`"
+      ]
+    },
+    "T45-weekly-award-green-r0001.txt": {
+      "sha256": "687e83c48542481a9e03721cd91723c801965f42826a6e4a720b6a2f56c025df",
+      "tail": [
+        "     |         help: remove this `mut`",
+        "",
+        "warning: variable does not need to be mutable",
+        "    --> src/watched_compiled/tick_graph.rs:9026:9",
+        "     |",
+        "9026 |     let mut label = 483u16;",
+        "     |         ----^^^^^",
+        "     |         |",
+        "     |         help: remove this `mut`",
+        "",
+        "warning: `onenil-engine` (lib test) generated 41 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 35 suggestions)",
+        "    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.94s",
+        "     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-6b303741e75763b9)",
+        "",
+        "running 1 test",
+        "test watched_compiled::prepared::tests::weekly_award_baselines_are_incoming_but_current_award_is_computed ... ok",
+        "",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 422 filtered out; finished in 0.00s",
+        ""
+      ]
+    }
+  }
+}

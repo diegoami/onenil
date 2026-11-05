@@ -1,0 +1,37 @@
+{
+  "scope": "Shutdown recovery source identity and lineage validation;does not accept incomplete original proof.",
+  "full_proof_directory": "records/T45/original-r0003",
+  "full_proof_manifest_sha256": null,
+  "public_rejections": 29,
+  "lineage_checks": "Parent receipt/start/manifest hashes,authenticated private checkpoint binding,source observer identity and exact research/reference/preparation input roots must agree. Changed parent hashes/private binding/path traversal reject. No private bytes are needed by the public checker.",
+  "checks": {
+    "T45-shutdown-public-guards-r0001.txt": {
+      "sha256": "0ed9b66ccfe20c9b38972d36e3e743d7941e33c635a209c82db9d57ed6fbd263",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared match input/provenance/outcome/live-score/observer guards: 24 rejected"
+      ]
+    },
+    "T45-shutdown-public-guards-r0002.txt": {
+      "sha256": "7f338f0b1c46c9eacc63e70a96d6f1dac12da7ca7455adc60ca3113aed95303e",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared match input/provenance/outcome/live-score/observer/recovery guards: 29 rejected"
+      ]
+    },
+    "T45-shutdown-originals-r0001.txt": {
+      "sha256": "2c5f8b410f12d4d3f4b03de98adebb39e4a5e28025293dc5802383bf8291d1e7",
+      "lines": [
+        "original-file check: ok"
+      ]
+    },
+    "T45-shutdown-preservation-r0001.txt": {
+      "sha256": "6c20969329dd7456c9cf2eac80da0ea18ceaef5c11dc3b665019ae623d1be94d",
+      "lines": [
+        "8749 previous evidence/fixtures and 35 measured task files preserved;owned paths only;no embedded data or native oracle backend"
+      ]
+    }
+  }
+}

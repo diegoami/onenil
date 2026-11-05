@@ -1,0 +1,37 @@
+{
+  "scope": "Standalone proof checker census guard regression only;synthetic proof fixture is not original evidence. Full original manifest remains unpinned.",
+  "checks": {
+    "red": {
+      "sha256": "590ec169edbeea32581336365603cef63f886466fcdc513e600e13332079338d",
+      "lines": [
+        "Traceback (most recent call last):",
+        "  File \"/tmp/T45-empty-clock-proof-regression.py\", line 18, in <module>",
+        "    else:raise AssertionError('Standalone proof checker accepted a synthetic complete metadata record with zero actual clock rows')",
+        "         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "AssertionError: Standalone proof checker accepted a synthetic complete metadata record with zero actual clock rows"
+      ]
+    },
+    "green": {
+      "sha256": "48393da5c2bcf4ecf5d597ceb9b51492ea69ea199fca10792feac1a3f3ea503d",
+      "lines": [
+        "Missing clock stream rejected by standalone proof checker: original caller clock census incomplete"
+      ]
+    },
+    "selftest": {
+      "sha256": "d3deb409f4094b03619c5ce15386bd24f8d3774d25353d214fe08db9953057a3",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared match input/provenance/outcome/live-score/observer/recovery/clock guards: 44 rejected"
+      ]
+    }
+  },
+  "public_regression": "records/T45/validate_clock_census.py",
+  "mutation_guards_rejected": 44,
+  "complete_computed_native_census": "4101 rows accepted;IDs1..2033 and2080..4147;exact captured values still independently required.",
+  "original_observer": "unchanged;live run continues",
+  "source": {
+    "path": "tools/replay_prepared_match.py",
+    "sha256": "d751a24023ef56375152beb1fadde1be3346d8dd0dda9523a8fb5b324e6bb708"
+  }
+}

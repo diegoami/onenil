@@ -1,0 +1,31 @@
+{
+  "scope": "Owner-requested shutdown handover;milestone35/T45 acceptance remain incomplete.",
+  "engine_tree": "b70dc1ae0b371b4ca5cef71ba66c0ef737b2ff3d",
+  "rust_regressions": "530tests/27suites already passed on unchanged engine;11viewer and priorT28/T43/T44 APIs passed.",
+  "current_public_rejections": 29,
+  "checks": {
+    "T45-shutdown-public-guards-r0003.txt": {
+      "sha256": "7f338f0b1c46c9eacc63e70a96d6f1dac12da7ca7455adc60ca3113aed95303e",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared match input/provenance/outcome/live-score/observer/recovery guards: 29 rejected"
+      ]
+    },
+    "T45-shutdown-originals-r0002.txt": {
+      "sha256": "2c5f8b410f12d4d3f4b03de98adebb39e4a5e28025293dc5802383bf8291d1e7",
+      "lines": [
+        "original-file check: ok"
+      ]
+    },
+    "T45-shutdown-preservation-r0002.txt": {
+      "sha256": "0c84e235fa80fcfada3631f8b7662f5cdc2024c3fa10bec6241edfde08c2812b",
+      "lines": [
+        "8749 previous evidence/fixtures and 37 measured task files preserved;owned paths only;no embedded data or native oracle backend"
+      ]
+    }
+  },
+  "resume_receipt": "records/T45/original-r0003/checkpoint-r0010.json",
+  "next_task": "https://github.com/diegoami/onenil/issues/95",
+  "full_field_clock_proof": "not complete;FIELD_MANIFEST_SHA remainsNone"
+}

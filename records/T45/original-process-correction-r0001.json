@@ -1,0 +1,13 @@
+{
+  "corrects": "original-interruption-r0001.json",
+  "reason": "Sandbox ps uses a separate PID namespace and could not see the host process. Host-level ps confirms original PID544128 is live;the earlier terminal inference was wrong.",
+  "host_process": {
+    "pid": 544128,
+    "state": "R",
+    "cpu_percent": 99.9,
+    "elapsed": "01:23:16"
+  },
+  "original_r0001": "Continue original unchanged measurement;no restart or accepted completion.",
+  "original_r0002": "Controlled checkpoint stop/resume passed from tick15/draw619/action1. Duplicate resumed measurement PID598541 interrupted after its durable checkpoint4;original PID544128 untouched.",
+  "private_checkpoint_bytes": "Ignored local cache only;not uploaded or committed."
+}

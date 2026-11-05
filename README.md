@@ -1642,7 +1642,7 @@ admission and caches only that fresh native result for playback/restart.
 The runtime never reads original reference outcomes,executes the original game
 or models its actions in Python. It reads the initial numeric facts and the
 existing narrowly decoded factual name map. This reference preview does not
-provide lineup/seed choices or replace the remaining native watched setup gate.
+provide lineup/seed choices or integrate the prepared native setup described below.
 
 ```sh
 .cache/venv/bin/python tools/play_watched.py --port 8041
@@ -1682,10 +1682,11 @@ watched entry and compares the decoded inputs/assertions,without persisting
 new RAM archives. Use the research virtualenv's Python with
 `tools/watched_setup_oracle.py --research-root ../onenil-archaeology --private records/T43/original-r0001/result.json`.
 The release receipt measures preparation,observation serialization and drop;
-it is not a full-match benchmark. Continuing this prepared image through the
-full watched lifecycle,additional complete lineup/seed sessions and viewer
-input controls remain required before milestone35 acceptance. The reference
-commentary/pitch preview remains available on port8041.
+it is not a full-match benchmark. T44/T45 below continue this prepared image
+through the watched lifecycle. Independent full-field/clock proof,additional
+complete lineup/seed sessions and viewer input controls remain required before
+milestone35 acceptance. The reference commentary/pitch preview can be launched
+on port8041 with the command above.
 
 ## Native prepared watched caller
 
@@ -1711,5 +1712,68 @@ the original field-initializer experiment preserves all171 measured iterations.
 Pointer aliases,return frames,no-pending-key admission and unsupported quick or
 phase transitions are checked. `snapshot()` and `observation()` inspect the
 retained session;`step()` advances it. At171 steps,the API reports the prefix
-boundary and retains its native continuation. Fulltime composition and verified
-lineup/seed choices with viewer controls remain required for milestone35.
+boundary and retains its native continuation. The T45 `finish()` API below adds
+fulltime continuation;verified lineup/seed choices and viewer controls remain
+required for milestone35.
+
+
+## Native prepared full-match completion
+
+[confirmed: T45 complete-return-parity-r0001] The prepared session's `finish()`
+continues the same owned guest frames from fresh setup or the retained171-step
+boundary to the actual `0AB9:EBE2` return. Both paths produce identical output,
+matching all4199 original ticks,182811 computed setup-and-match draws and831
+watched actions. It accepts only initial selected-squad inputs and1770 decoded
+support facts checked against their original pre19CA values. Current actions,
+RNG outcomes and intermediate images remain computed.
+
+```sh
+python3 tools/replay_prepared_match.py --check
+python3 tools/replay_prepared_match.py --selftest
+.cache/venv/bin/python tools/replay_prepared_match.py --python
+```
+
+[confirmed: T45 original-r0003,full-original-proof-r0001] The independent original
+full-field preservation run completes all4199 ticks,182811 draws and831 actions
+through the actual outer return. All4101 actual caller-clock rows match the native
+result in every field,including the counter and halftime/fulltime tick identities.
+Its immutable manifest is pinned by the public checker;`--check` and normal replay
+require the complete proof. The explicit `--development-reference-only` diagnostic
+compares the existing match reference and known171-clock prefix;it is not the
+strict acceptance command.
+Exact measured observer sources are frozen under `records/T45/preservation-observer-r*.py`
+so evidence checks survive squash merges and branch deletion. Those copies verify
+source identity;launch captures through `tools/prepared_match_oracle.py`.
+Supported additional lineup/seed sessions and viewer controls remain the next
+acceptance task for milestone35.
+
+
+### Stopping and recovering the original verifier
+
+[designed] Run original observations with the research virtualenv's Python.
+`tools/prepared_match_oracle.py --checkpoint-seconds 60 --stop-after-seconds 600`
+saves a private machine snapshot at safe guest boundaries and pauses after the
+time limit. `--stop-file` instead pauses when its specified file exists. A pause
+has no completed result/manifest and cannot satisfy full-match acceptance.
+
+The snapshot contains original-game bytes and stays outside git. Before shutdown,
+copy receipt-referenced snapshots to the research repository's ignored persistent
+`.cache/native-recovery/T45/`, preserving their native-root-relative paths and
+verifying each receipt's SHA256. This avoids relying on `/tmp` surviving reboot.
+After recreating the native checkout,restore that cache with:
+
+```sh
+mkdir -p .cache
+cp -a /home/diego/projects/onenil-archaeology/.cache/native-recovery/T45/.cache/prepared-match-checkpoints .cache/
+```
+
+Read the latest [checkpoint](https://github.com/diegoami/onenil/issues/1) for the
+exact unfinished run and latest receipt. Pass that receipt to `--resume`,with
+`--research-root /home/diego/projects/onenil-archaeology`;the observer verifies
+source/reference/input identity,private checksum,cursors and restored RNG prefix.
+A normal resume leaves prior records intact and continues the same machine.
+`--fork-checkpoint` starts a separately recorded attempt from an authenticated
+checkpoint in an already finalized attempt;it does not accept an aborted result.
+The older schema1 observer has decoded progress only,so its progress journal
+cannot restore the original machine. Use the checkpointed attempt identified
+in the live issue,not that older progress journal.

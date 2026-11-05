@@ -1,0 +1,44 @@
+{
+  "scope": "Restore browser/build caches after shutdown;isolated browser environment smoke only,no new product browser acceptance claim.",
+  "source_commit": "d1f2a9bd4ee3b7755dd8ce2af9e8d144b1716dec",
+  "browser_cache": "/home/diego/projects/onenil-archaeology/.cache/native-toolchain/playwright",
+  "browser_libraries": "/home/diego/projects/onenil-archaeology/.cache/native-toolchain/browser-sysroot/usr/lib/x86_64-linux-gnu",
+  "playwright": "1.58.0",
+  "chromium": "145.0.7632.6",
+  "runtime_check": "Headless launch,isolated paragraph DOM render/assertion and clean close;fixed preview itself remains HTTP200. Full selectable viewer browser acceptance belongs toT46.",
+  "latest_durable_original_receipt": "records/T45/original-r0003/checkpoint-r0015.json",
+  "durable_cursor": {
+    "ticks": 577,
+    "draws": 28317,
+    "actions": 105
+  },
+  "checks": {
+    "T45-browser-restore-r0001.log": {
+      "sha256": "0faa00becefa9569a1a6e798e79f41f2123cc179fa2d74f859d72a2de8042c6f",
+      "tail": [
+        "|\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0                                                |  40% of 110.9 MiB",
+        "|\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0                                        |  50% of 110.9 MiB",
+        "|\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0                                |  60% of 110.9 MiB",
+        "|\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0                        |  70% of 110.9 MiB",
+        "|\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0                |  80% of 110.9 MiB",
+        "|\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0        |  90% of 110.9 MiB",
+        "|\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0\u25a0| 100% of 110.9 MiB",
+        "Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) downloaded to /home/diego/projects/onenil-archaeology/.cache/native-toolchain/playwright/chromium_headless_shell-1208"
+      ]
+    },
+    "T45-browser-runtime-smoke-r0001.log": {
+      "sha256": "82450d7d1eed526af236e2fb677a49b85fa954ed616350778cf5cf0e637025ac",
+      "tail": [
+        "Playwright 1.58.0 Chromium 145.0.7632.6 headless local runtime:ok"
+      ]
+    },
+    "T45-restored-extension-identity-r0001.log": {
+      "sha256": "027dff212cd862db35f299a1c47ad322eef23b103676595b6fd27539d50e61a6",
+      "tail": [
+        "Release extension /home/diego/projects/onenil-archaeology/.cache/onenil-native/.cache/venv/lib/python3.12/site-packages/onenil_engine/onenil_engine.abi3.so",
+        "SHA256 0dfe0f472ac8d629589580e10bec312ca09bdd105618e20d946686f7be57188b",
+        "Prepared complete-session Python API present;debug assertions false"
+      ]
+    }
+  }
+}

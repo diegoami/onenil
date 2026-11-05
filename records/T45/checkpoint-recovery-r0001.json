@@ -1,0 +1,42 @@
+{
+  "scope": "Controlled private checkpoint recovery;not full field/clock acceptance.",
+  "observer_commit": "01bf791",
+  "initial_stop": "original-r0002/checkpoint-r0001.json at tick0/draw0",
+  "resumed_stop": "original-r0002/checkpoint-r0003.json at tick15/draw619/action1",
+  "second_restore": "original-r0002/checkpoint-r0004.json at tick15/draw619/action1",
+  "verified_after_second_restore": "ticks16 through18 matched the unchanged original reference before external SIGINT stopped the duplicate.",
+  "interruption": "SIGINT reached a Unicorn ctypes interrupt callback,was logged there,and subsequent tick19 comparison failed. This externally interrupted result is excluded from acceptance. Original PID544128 was left running unchanged.",
+  "logs": {
+    "T45-original-checkpoint-stop-r0001.txt": {
+      "sha256": "11b9258b061ab2f88356295edf9894291589316e4ec46d66781aedff9cd44455",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "durable original checkpoint 1 ticks 0 draws 0",
+        "records/T45/original-r0002 paused at durable checkpoint"
+      ]
+    },
+    "T45-original-checkpoint-resume-r0001.txt": {
+      "sha256": "c3deb60c1a6caa6bda80e9aa13902da51e8464aeda85bf65b51372ebfaa98adc",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "durable original checkpoint 2 ticks 0 draws 0",
+        "durable original checkpoint 3 ticks 15 draws 619",
+        "records/T45/original-r0002 paused at durable checkpoint"
+      ]
+    },
+    "T45-original-full-preservation-r0002.txt": {
+      "sha256": "cceb54e07fd79161aa500754d873fabd677b6444d2e83588bdc52f49e69f1adf",
+      "lines": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "durable original checkpoint 4 ticks 15 draws 619",
+        "Exception ignored on calling ctypes callback function: <function Uc.hook_add.<locals>.__hook_intr.<locals>.__hook_intr_cb at 0x7f0a1e854360>",
+        "Traceback (most recent call last):",
+        "  File \"/home/diego/projects/onenil-archaeology/.cache/venv/lib/python3.12/site-packages/unicorn/unicorn_py3/unicorn.py\", line 360, in wrapper",
+        "    @functools.wraps(func)",
+        "",
+        "KeyboardInterrupt: ",
+        "records/T45/original-r0002 aborted:ValueError:field initializer changes original tick19"
+      ]
+    }
+  }
+}

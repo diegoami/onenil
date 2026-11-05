@@ -19,6 +19,7 @@ pub struct Input {
 pub struct Session {
     cpu: Cpu,
     failed: bool,
+    finished: bool,
 }
 fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
     let mut cells = Cells::new();
@@ -28,8 +29,12 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
             // Source-owned setup, queue, actors, ball, ABI and presentation never enter here.
             // Incoming D09E is read at2573 (stores5A2D/69AF/74F1);
             // D0B6/D0BD survive setup,first prefix stores28C1/260F.
+            // D1C9 also survives setup;1CEC/2D4B/55E8 own its later action stores.
             Area::Ds
-                if (0x0D5C..0x0D5E).contains(&o) // 1998:01E0 tone-burst duration multiplier
+                if (0xD144..0xD148).contains(&o) // incoming weekly award baselines: EAB6:EAC1/EAC4;B526 computes current award
+                    || (0xD1D4..0xD1DC).contains(&o) // incoming display aggregates;311E recomputes them from3138..3147
+                    || (0x0D34..0x0D36).contains(&o) // 2D4E/3E1C read-only packed goal target
+                    || (0x0D5C..0x0D5E).contains(&o) // 1998:01E0 tone-burst duration multiplier
                     || (0xD0A6..0xD0AC).contains(&o) // incoming scratch;stores28FA/5821/260C,unchanged through setup
                     || (0x09FB..0x0B5A).contains(&o) // 1B91/21AF..5683 numeric tables;7A3B/7B13 three22-entry tick lists
                     || (0x097A..0x09BE).contains(&o) // 0F70 numeric commentary weights (codes0..67)
@@ -44,7 +49,7 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
                     || (0x8708..0x8716).contains(&o)
                     || (0x935B..0xA51C).contains(&o)
                     || (0xD886..0xD936).contains(&o)
-                    || [0xD084, 0xD09E, 0xD0B6, 0xD0BD, 0xE5DD, 0xCF5A, 0xCF5B].contains(&o) =>
+                    || [0xD084, 0xD09E, 0xD0B6, 0xD0BD, 0xD1C9, 0xE5DD, 0xCF5A, 0xCF5B].contains(&o) =>
             {
                 0
             }
@@ -73,6 +78,15 @@ impl Session {
         if input.preparation.setup.legacy.history.base_offset != 0 {
             return Err("unsupported prepared results base offset".into());
         }
+        let caller_club = input.preparation.setup.legacy.history.club;
+        let fixture_flags = input
+            .preparation
+            .setup
+            .income
+            .iter()
+            .find(|row| row.club == caller_club)
+            .ok_or("missing current caller fixture flags")?
+            .fixture_flags;
         let support = support_cells(&input.support)?;
         let mut prepared = setup::Session::before_watched_call(
             input.preparation.setup,
@@ -81,6 +95,24 @@ impl Session {
         )?;
         let preparation = prepared.preparation();
         let e = &mut prepared.match_state.inner.e;
+        if e.word(0xD6E6) != caller_club || e.image[0xD29] != u8::from(fixture_flags & 15 == 1) {
+            return Err("current fixture/caller/home-flag alias differs".into());
+        }
+        let flag_offset = caller_club
+            .wrapping_mul(174)
+            .wrapping_add(3 * u16::from(e.image[layout::CONFIG]))
+            .wrapping_sub(175);
+        let address = 0x80000 + usize::from(flag_offset);
+        if support
+            .get(&address)
+            .is_some_and(|value| *value != fixture_flags)
+        {
+            return Err("current raw fixture flags alias differs".into());
+        }
+        e.image[address] = fixture_flags;
+        // [confirmed] E239/E249 decode the initial fixture byte before19CA.
+        // Derive D2A from the supplied raw flags;never admit a captured marker.
+        e.image[0xD2A] = u8::from((fixture_flags >> 4) == 1);
         // [designed] Disjoint native flat namespace,DS0;wrapped code base keeps original CS/DS relation.
         let headers = [
             (PointerKind::P8, layout::P8),
@@ -168,6 +200,7 @@ impl Session {
         // Reads remain strict;enable first-write baselines only at the watched entry.
         c.track_events = true;
         c.watch_trace = Some(vec![]);
+        c.watch_clocks = Some(vec![]);
         c.watch_entry_yield = true;
         c.push(c.r[5])?;
         let result = c.invoke(
@@ -193,6 +226,7 @@ impl Session {
         let out = Self {
             cpu: c,
             failed: false,
+            finished: false,
         };
         out.validate_abi()?;
         Ok(out)
@@ -251,9 +285,98 @@ impl Session {
     pub fn observation(&self) -> Value {
         json!({"ticks":self.cpu.watch_trace,"draws":self.cpu.draws,"events":self.cpu.events,"regs":self.cpu.r})
     }
+    /// Continue the already owned source frames through the actual outer return.
+    pub fn finish(&mut self) -> Result<Value, watched_match::MatchFault> {
+        let failure = |message: String| {
+            watched_match::MatchFault::from(super::action::Fault {
+                message,
+                missing: None,
+            })
+        };
+        if self.failed || self.finished {
+            return Err(failure(
+                "prepared session cannot finish again/after a failure".into(),
+            ));
+        }
+        let result = (|| -> Result<Value, String> {
+            self.validate_abi()?;
+            let c = &mut self.cpu;
+            c.resume_frame(super::match_graph::p_0ab9_7c67, 0x0AB9, 0x7DCB)?;
+            c.resume_frame(super::match_graph::p_0ab9_7dcb, 0x0AB9, 0xE05E)?;
+            c.resume_frame(super::match_graph::p_0ab9_e05e, 0x0AB9, 0xE435)?;
+            if !c.call_chain().is_empty() {
+                return Err("prepared outer continuation retained nested frames".into());
+            }
+            c.invoke_entry(super::match_graph::p_0ab9_e435, 0x0AB9, 0xEBE2)?;
+            if c.last_return != Some((0x0AB9, 0xEBE2)) {
+                return Err("prepared actual outer guest return differs".into());
+            }
+            if c.watch_pending.is_some()
+                || c.r[4] != 0xFE08
+                || c.r[5] != 0
+                || c.r[11] != 0
+                || c.r[10] != 0xB000
+                || c.r[9] != 0xE255
+                || !c.call_chain().is_empty()
+            {
+                return Err("prepared fulltime outer return ABI differs".into());
+            }
+            let final_state = watched_match::snapshot(c)?;
+            let live = [c.read(0, 0xD0C4, 8)?, c.read(0, 0xD0C5, 8)?];
+            let setup_events = c
+                .events
+                .iter()
+                .filter(|e| e["tick"] == 0)
+                .collect::<Vec<_>>();
+            let events = c
+                .events
+                .iter()
+                .filter(|e| e["tick"] != 0)
+                .collect::<Vec<_>>();
+            Ok(
+                json!({"ticks":c.watch_trace,"draws":c.draws,"events":events,"setup_events":setup_events,
+                "final":final_state,"live_goals":live,"tick_live_goals":c.watch_live_goals,
+                "caller_clocks":c.watch_clocks,"return":"0AB9:EBE2"}),
+            )
+        })();
+        match result {
+            Ok(out) => {
+                self.finished = true;
+                Ok(out)
+            }
+            Err(message) => {
+                self.failed = true;
+                let c = &mut self.cpu;
+                let missing = c.missing.get();
+                let partial = if c.r[11] == 0 {
+                    watched_match::snapshot(c).ok()
+                } else {
+                    None
+                };
+                Err(watched_match::MatchFault {
+                    fault: super::action::Fault {
+                        message: format!(
+                            "prepared tick{} draw{}: {message}",
+                            c.watch_tick,
+                            c.draws.len()
+                        ),
+                        missing,
+                    },
+                    ticks: c.watch_trace.clone().unwrap_or_default(),
+                    draws: c.draws.clone(),
+                    events: c.events.clone(),
+                    pending: c.watch_pending.clone(),
+                    diagnostic: json!({"regs":c.r,"call_chain":c.call_chain(),"partial":partial}),
+                })
+            }
+        }
+    }
     pub fn advance(&mut self) -> Result<Value, String> {
         if self.failed {
             return Err("prepared caller previously failed".into());
+        }
+        if self.finished {
+            return Err("prepared caller already finished".into());
         }
         if self.cpu.watch_tick >= 171 {
             return Err(
@@ -267,18 +390,7 @@ impl Session {
                 return Err("prepared prefix reached an unsupported phase transition".into());
             }
             self.validate_abi()?;
-            let mut clock = json!({});
-            for (name, offset, width) in [
-                ("active", 0xD0B8, 8),
-                ("counter", 0xD0B0, 16),
-                ("remaining", 0xD0AE, 16),
-                ("stoppage", 0xD0B4, 16),
-                ("elapsed", 0xD0B2, 16),
-                ("phase", 0xD0AC, 8),
-                ("hold", 0xD0B9, 8),
-            ] {
-                clock[name] = json!(self.cpu.read(0, offset, width)?);
-            }
+            let clock = self.cpu.watched_clock()?;
             Ok(json!({"state":self.snapshot()?,"clock":clock,"tick":self.cpu.watch_tick}))
         })();
         if result.is_err() {
@@ -305,6 +417,55 @@ mod tests {
             preparation: serde_json::from_value(fixture["input"].clone()).unwrap(),
             support: vec![],
             no_pending_key: true,
+        }
+    }
+    #[test]
+    fn weekly_award_baselines_are_incoming_but_current_award_is_computed() {
+        let facts = (0xD144..0xD148)
+            .map(|offset| ByteFact {
+                area: Area::Ds,
+                offset,
+                value: 0,
+            })
+            .collect::<Vec<_>>();
+        let cells = support_cells(&facts).unwrap();
+        assert_eq!(cells.len(), 4);
+        for offset in [0xD142, 0xD143, 0xD148, 0xD149] {
+            assert!(support_cells(&[ByteFact {
+                area: Area::Ds,
+                offset,
+                value: 0
+            }])
+            .is_err());
+        }
+    }
+    #[test]
+    fn current_fixture_flags_compute_the_caller_cup_marker() {
+        for (flags, expected) in [(0x01, 0), (0x11, 1), (0x21, 0)] {
+            let mut value = input();
+            let club = value.preparation.setup.legacy.history.club;
+            value
+                .preparation
+                .setup
+                .income
+                .iter_mut()
+                .find(|row| row.club == club)
+                .unwrap()
+                .fixture_flags = flags;
+            let session = Session::new(value).unwrap();
+            assert_eq!(session.cpu.read(0, 0x0D2A, 8).unwrap(), expected);
+            assert!(session.cpu.known[0x0D2A]);
+        }
+    }
+    #[test]
+    fn native_editor_owns_both_bytes_of_normalized_key_words() {
+        let session = Session::new(input()).unwrap();
+        for address in [0xDE88, 0xDE8A] {
+            assert_eq!(session.cpu.read(0, address, 16).unwrap(), 2);
+            assert!(
+                session.cpu.known[usize::from(address)]
+                    && session.cpu.known[usize::from(address) + 1]
+            );
         }
     }
     #[test]
