@@ -63,3 +63,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T45 Complete the owned prepared watched lifecycle](T45.md)
 
 - [T46 Selectable prepared watched match and detailed viewer](T46.md)
+
+- [T47 Review follow-ups: viewer scope and smoke output paths](T47.md)
