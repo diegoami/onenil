@@ -1,0 +1,7 @@
+{
+  "source": "93c83db7968ca7acd3505e7af0c8b9f9e7b75a5f",
+  "expression": "record.relative_to(ROOT)",
+  "external_record": "/tmp/onenil-T47-external-output/T46-r0001.json",
+  "error": "Traceback (most recent call last):\n  File \"<stdin>\", line 6, in <module>\n  File \"tools/smoke_watched_viewer.py\", line 174, in <module>\n    print(record.relative_to(ROOT),flush=True)\n          ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 682, in relative_to\n    raise ValueError(f\"{str(self)!r} is not in the subpath of {str(other)!r}\")\nValueError: '/tmp/onenil-T47-external-output/T46-r0001.json' is not in the subpath of '/home/diego/projects/onenil-archaeology/.cache/onenil-native'\n",
+  "scope": "Reproduces final path-print failure independently of already reviewed passing browser assertions."
+}

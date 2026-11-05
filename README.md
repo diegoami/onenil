@@ -1795,6 +1795,11 @@ caller-clock minutes and live goals. Pause,halftime/continue,fulltime and restar
 are checked on desktop and mobile for every choice. Restart replays only the
 fresh native presentation computed by this running application.
 
+[designed] Use one controlling browser tab per local server. Match state is
+shared across tabs and API clients. Pause stops only this viewer's playback
+requests; another tab or API client can still advance the shared match. Run
+separate servers on different ports for independent viewers.
+
 ```sh
 .cache/venv/bin/python tools/play_watched.py --port 8041
 # Open http://127.0.0.1:8041; choose lineup/seed, Prepare match, then Kick off.

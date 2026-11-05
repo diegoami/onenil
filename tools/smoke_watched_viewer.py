@@ -171,7 +171,7 @@ def smoke(directory):
                              'actualpostwhistle completion','restart','localrequestguards','nohorizontaloverflow','noconsoleerrors'],
                      scope='Fresh application-computed native prepared sessions;onlyreference64 hasoriginal parity.No captured postsetup/runtime outcome backend.')
         with record.open('x')as out:json.dump(outcome,out,indent=2);out.write('\n')
-        print(record.relative_to(ROOT),flush=True)
+        print(record,flush=True)
     finally:
         process.terminate();process.wait(timeout=10)
 
