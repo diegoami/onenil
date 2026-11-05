@@ -1,0 +1,141 @@
+{
+  "schema": "prepared-viewer-final-regressions/1",
+  "completed": "2026-11-05T13:39:30.382717+00:00",
+  "source_at_regression_start": "c674f17a187cbe3856c472ab381fb808883a8596",
+  "recorded_on_commit": "9aad509defdf9f416ceece51bd2b9cf8e0db34c3",
+  "product_source_unchanged_during_checks": true,
+  "trees": {
+    "engine": "c8a0078957d9460c319dd0ff39a9653d51ba26d8",
+    "tools": "eaffa999ff931b9d542a4dafa18e7a6f3b689b4d",
+    "web": "ca34913107b990c9e2c00bcb8cc3a071731b2b2f"
+  },
+  "rust_log_sha256": "8747a4a54466249e7133991d6b7bbb3669e9d198391091d1466ed7710607acff",
+  "checks": [
+    {
+      "command": "cargo test --manifest-path engine/Cargo.toml --locked",
+      "result": "532 passed across26 nonempty suites;0 doctests;0 failures",
+      "status": "passed"
+    },
+    {
+      "command": "cargo fmt --manifest-path engine/Cargo.toml -- --check",
+      "result": "passed",
+      "status": "passed"
+    },
+    {
+      "command": "tools/replay_match_setup.py --check",
+      "result": "native258draw setup through95DD02steps and actual final result",
+      "status": "passed"
+    },
+    {
+      "command": "tools/replay_watched_setup.py --check --replay",
+      "result": "native selected-squad first watched entry matches",
+      "status": "passed"
+    },
+    {
+      "command": "tools/replay_prepared_watched.py --check --replay --python",
+      "result": "retained171caller iterations and provenance pass",
+      "status": "passed"
+    },
+    {
+      "command": "tools/replay_prepared_match.py --check",
+      "result": "full original field preservation and4101clock proof pass",
+      "status": "passed"
+    },
+    {
+      "command": "tools/replay_prepared_match.py --selftest",
+      "result": "44 input/provenance/outcome/clock guards reject",
+      "status": "passed"
+    },
+    {
+      "command": "tools/replay_prepared_match.py --python",
+      "result": "fresh and171-retained complete original parity",
+      "status": "passed"
+    },
+    {
+      "command": "records/T45/validate_clock_census.py",
+      "result": "coherently rehashed zero-clock synthetic proof rejected",
+      "status": "passed"
+    },
+    {
+      "command": "tools/test_play_match.py",
+      "result": "5 passed",
+      "status": "passed"
+    },
+    {
+      "command": "tools/test_play_watched.py",
+      "result": "8 passed;all4 native choices,exact runtime-input isolation,controls/cache/preparation",
+      "status": "passed"
+    },
+    {
+      "command": "tools/replay_prepared_choices.py --check --research-root /home/diego/projects/onenil-archaeology",
+      "result": "reference input unchanged;8invalidchoices/tabletamper reject;all1775 numeric entries regenerate from source",
+      "status": "passed"
+    },
+    {
+      "command": "tools/compile_watched.py --root 0AB9:E008 --out engine/src/watched_compiled/prepared_graph.rs --reuse-existing engine/src/watched_compiled/action_graph.rs --reuse-existing engine/src/watched_compiled/tick_graph.rs --reuse-existing engine/src/watched_compiled/caller_graph.rs --reuse-existing engine/src/watched_compiled/match_graph.rs --source-addresses --check",
+      "result": "deterministic source generation;research-root /home/diego/projects/onenil-archaeology",
+      "status": "passed"
+    },
+    {
+      "command": "tools/compile_watched.py --check",
+      "result": "deterministic base graph generation;research-root as above",
+      "status": "passed"
+    },
+    {
+      "command": "tools/compile_watched.py --root 0AB9:3846 --out engine/src/watched_compiled/selection.rs --check",
+      "result": "deterministic selection generation;research-root as above",
+      "status": "passed"
+    },
+    {
+      "command": "records/T41/validate_provenance.py",
+      "result": "full reference and13 tamper cases pass",
+      "status": "passed"
+    },
+    {
+      "command": "records/T41/validate_presentation_provenance.py",
+      "result": "source footprint checks and26 tamper cases pass",
+      "status": "passed"
+    },
+    {
+      "command": "records/T41/validate_native_guards.py",
+      "result": "9 native admission/alias/ABI/read/write/fallback/outcome guards pass",
+      "status": "passed"
+    },
+    {
+      "command": "records/T43/validate_provenance.py",
+      "result": "10 setup tamper/rehash/outcome guards pass",
+      "status": "passed"
+    },
+    {
+      "command": "records/T44/validate_provenance.py",
+      "result": "16 prepared provenance/tamper/outcome guards pass",
+      "status": "passed"
+    },
+    {
+      "command": "records/T46/validate_audits.py",
+      "result": "8873prior evidence/fixtures/task plus41task measurements unchanged;owned paths;no new embeds/captured runtime backend",
+      "status": "passed"
+    },
+    {
+      "command": "tools/check_originals.py",
+      "result": "passed",
+      "status": "passed"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed",
+      "status": "passed"
+    },
+    {
+      "command": "browser screenshot hashes and measured source tree comparison",
+      "result": "all16 screenshot hashes match;engine/tools/web trees equal measured6dd77b1",
+      "status": "passed"
+    }
+  ],
+  "native_four_choice_evidence": [
+    "records/T46/native-completions-r0004.json",
+    "records/T46/release-r0001.json"
+  ],
+  "browser_evidence": "records/T46/T46-r0002.json",
+  "merge_gate": "Exact final-head CI and pinned squash merge still follow this local receipt;no owner review started."
+}

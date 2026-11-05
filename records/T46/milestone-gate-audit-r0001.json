@@ -1,0 +1,84 @@
+{
+  "schema": "first-playable-implementation-gate-audit/1",
+  "completed": "2026-11-05T13:40:06.684119+00:00",
+  "milestone": "https://github.com/diegoami/onenil/issues/35",
+  "scope": "Implementation acceptance evidence;exact final-head CI/pinned merge and owner-run review follow. No review started.",
+  "source_commit": "9aad509defdf9f416ceece51bd2b9cf8e0db34c3",
+  "gates": [
+    {
+      "gate": 1,
+      "requirement": "Every reached watched movement,ball,collision,action/shot and commentary callee executes natively",
+      "result": "implementation verified",
+      "evidence": [
+        "T30\u2013T41 native source-owned routines and strict tracking",
+        "records/T45/original-r0003/manifest.json",
+        "records/T46/native-completions-r0004.json",
+        "records/T46/full-rust-r0001.txt"
+      ],
+      "checks": "Full reference covers4199ticks,182811ordered draws,831actions/finalstate;all4 supported choices finish without unsupported/missing paths. Original presentation projection independently preserves full lifecycle. No outcomes imported."
+    },
+    {
+      "gate": 2,
+      "requirement": "One initial selected-squad image/RNG advances original watched setup,ticks and clock without expected-state handoffs",
+      "result": "implementation verified",
+      "evidence": [
+        "engine/src/watched_compiled/prepared.rs",
+        "tools/play_watched.py",
+        "records/T46/final-regressions-r0001.json"
+      ],
+      "checks": "NativePreparedWatchedSession retains actual guest frames/image/RNG from258draw setup toEBE2. Fresh and171-retained Rust/Python parity pass. Actual4101reference clock rows are required;empty-clock rehashed proof rejected. No intermediate inputs."
+    },
+    {
+      "gate": 3,
+      "requirement": "At least one complete watched original parity reference and every supported initial session finishes",
+      "result": "implementation verified",
+      "evidence": [
+        "records/T45/original-r0003/manifest.json",
+        "records/T46/native-completions-r0004.json",
+        "records/T46/release-r0001.json",
+        "tools/replay_prepared_choices.py"
+      ],
+      "checks": "Reference64 exact original ticks/draws/actions/clocks/finalstate;reference122,reserve64,reserve122 actualEBE2 completion only. Actualstarter2590or2593 and seed64or122/258draw handoff verified. Tick counts3752\u20134199 and scores2:1/3:0/0:0/4:2 follow computation."
+    },
+    {
+      "gate": 4,
+      "requirement": "Documented selectable playable shell with detailed actual named commentary,pitch,clock/score and controls on desktop/mobile",
+      "result": "implementation verified;owner review pending",
+      "evidence": [
+        "README.md",
+        "tools/test_play_watched.py",
+        "records/T46/T46-r0002.json",
+        "records/T46/browser-pause-red-r0001.json",
+        "records/T46/final-regressions-r0001.json"
+      ],
+      "checks": "All8browser cases and13viewer tests pass;chronological named actions/outcomes;22native moving players/ball;actual clock/livegoals;visible responsive preparation;pause including real in-flight step,halftime/fulltime/restart;actual final return;guards/no overflow/no console errors. Old asynchronous playback generations invalidated."
+    }
+  ],
+  "cross_cutting": {
+    "runtime_backend": "Only public initial admission,optional readonly initial static numeric facts and identity metadata. Controller read audit and forbidden oldnative.watched_match patch pass. No original executable,postsetupadmission,recorded actions or expected outcomes. Cache only application-computed presentation.",
+    "source_owned_initialization": "Headless original no-mouse availability byte;compiled inputpoll stillruns. Complete14entry rolelookup rejects conflicts.1775readonly numeric/character initialfacts independently regenerate from research60179ee,1228oldoverlapfacts identical. Bootstrapfacts not blindly replaced.",
+    "performance": "Committed-source release e6ffe56e debugfalse,7.73\u201310.02seconds input+native setup/full lifecycle+serialization/decoding. GUIconversion excluded;no emulator comparison. Three preparing HTTPresponses0.95\u20133.43ms in browser run.",
+    "preservation": "8873prior records/fixtures/frozen task and measuredT46outputs unchanged;owned paths only;no new engine embeds;original-file/fmt/diff and deterministic generation pass.",
+    "private_artifacts": "No new captures required. Finalized T45 original-r0003 never resumed. Owner-approved checkpoint47 private backup verified;no pending upload."
+  },
+  "limitations": [
+    "Only four exhibition choices;additional choices show supported completion,not additional original parity.",
+    "Pitch follows native coordinates;playback pacing is a designed browser control. Fulltime walkoff may leave dots outside the playing field.",
+    "Season,career,transfers,finances and broad evidence archaeology120/121 deferred.",
+    "Archaeology134 old code28\u201331 prose correction remains separate;native formatter uses corrected meanings.",
+    "Owner runs milestone review and required fixes before milestone closure."
+  ],
+  "next_required_actions": [
+    "Exact final PR-head CI green",
+    "Squash pinned to checked SHA and compare merged tree",
+    "Public merged proof/runtime readiness and checkpoint updates",
+    "Post owner review prompt on milestone35;keep milestoneOPEN;do not run review"
+  ],
+  "evidence_sha256": {
+    "records/T46/final-regressions-r0001.json": "5b1e0cbee2bbfa6927bdad4c959384979415d8a785771633307a5762bb9991e3",
+    "records/T46/native-completions-r0004.json": "3bfcd591a84d4fad574780c9301683319a43071510f560eeffd88751934e63d4",
+    "records/T46/T46-r0002.json": "b17a1068c9b0aebea9f1012d32038c65e8ecd1f005cd766ba16155cdf5a144a2",
+    "records/T46/release-r0001.json": "65ae985667db38450c7ec6c96e0466f28630ee0ba142bbe6f9ad728c1e741bd5",
+    "records/T45/original-r0003/manifest.json": "9006f2df5853ca8922b7e0a17b8c5899493178f80ec82a321e641b194d56dfd7"
+  }
+}
