@@ -1,0 +1,25 @@
+{
+  "scope": "Focused real compiled24BC:0C58 input poll fails on valid prepared native state before headless startup ownership is implemented.",
+  "command": "cargo test --manifest-path engine/Cargo.toml --locked headless_input_poll_runs_compiled_no_key_path --lib",
+  "exit_code": 101,
+  "log_sha256": "3a7294b577de397bb54c2e9100675c06d50c41c9381f2b35d58db84d6a44123c",
+  "failure": [
+    "thread 'watched_compiled::prepared::tests::headless_input_poll_runs_compiled_no_key_path' (1065) panicked at src/watched_compiled/prepared.rs:471:9:",
+    "compiled no-key poll failed: Err(\"missing reached native data at 24BC:0996 0000:F91F\")",
+    "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace"
+  ],
+  "tail": [
+    "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace",
+    "",
+    "",
+    "failures:",
+    "    watched_compiled::prepared::tests::headless_input_poll_runs_compiled_no_key_path",
+    "",
+    "test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 423 filtered out; finished in 0.89s",
+    "",
+    "error: test failed, to rerun pass `--lib`"
+  ],
+  "prepared_source_sha256": "39542c4f0018db68f53a8f21f77b608c26cb332d65c8ef7b15b639e6b55e3096",
+  "source_basis": "research60179ee:24BC:1F97/092B/0940..094C initializes mouse availability;0C5C/0996 reads F918+7 before polling.",
+  "headless_ownership": "Native runner has no DOS mouse driver;own its source-defined unavailable capability byte,leave unrelated mouse data unknown,and continue executing compiled poll/queue checks. No gameplay helper result or outcome is admitted."
+}

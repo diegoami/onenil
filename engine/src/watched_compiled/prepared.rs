@@ -458,6 +458,22 @@ mod tests {
         }
     }
     #[test]
+    fn headless_input_poll_runs_compiled_no_key_path() {
+        let mut session = Session::new(input()).unwrap();
+        let c = &mut session.cpu;
+        let result = c.invoke(
+            super::super::action_graph::p_24bc_0c58,
+            true,
+            0x24BC,
+            0x0C58,
+            0x6384,
+        );
+        assert!(result.is_ok(), "compiled no-key poll failed: {result:?}");
+        assert_eq!(c.r[0] & 255, 0);
+        assert_eq!(c.read(0, 0xDE8C, 16).unwrap(), 0);
+        assert_eq!(c.read(0, 0xDE8E, 16).unwrap(), 0);
+    }
+    #[test]
     fn native_editor_owns_both_bytes_of_normalized_key_words() {
         let session = Session::new(input()).unwrap();
         for address in [0xDE88, 0xDE8A] {

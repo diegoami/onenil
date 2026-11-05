@@ -1,0 +1,15 @@
+{
+  "scope": "Historical valid-choice red before T46 implementation. Existing native reference match constructs successfully,then each valid configure request fails because API is absent.",
+  "baseline_commit": "71c9723398f63ca0fcdc9c83324782725d787c1e",
+  "baseline_product_source_sha256": "0ddfa83b1d167cd8b52b26c39f73a7a8a188113770e7fea8c12986df14360d5e",
+  "output_sha256": "3292e6650d364352ac75575601af157d5b7a244b6e6fa20f3e6c87fe96fc62d3",
+  "output": [
+    "Valid native reference viewer constructed: ready 4199 ticks,22players",
+    "EXPECTED MISSING VALID CHOICE API: {'lineup': 'reference', 'seed': '64'} 'Match' object has no attribute 'configure'",
+    "EXPECTED MISSING VALID CHOICE API: {'lineup': 'reference', 'seed': '122'} 'Match' object has no attribute 'configure'",
+    "EXPECTED MISSING VALID CHOICE API: {'lineup': 'reserve', 'seed': '64'} 'Match' object has no attribute 'configure'",
+    "EXPECTED MISSING VALID CHOICE API: {'lineup': 'reserve', 'seed': '122'} 'Match' object has no attribute 'configure'",
+    "All four valid supported choices lack configuration before T46;baseline native state unchanged"
+  ],
+  "original_fixtures_unchanged": true
+}

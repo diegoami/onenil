@@ -8,6 +8,72 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INITIAL_SHA = '88274a14f94fb526c1f0777d06017355b73e41946aabaafc7d65233da5492311'
+PREPARED_SHA = '842f1453cae4ba9ab626d7e57316494cfe7e70f64ea80e746c3834de0e12989f'
+
+
+def validate_choices(choices):
+    if (type(choices) is not dict or set(choices) != {'lineup', 'seed'}
+            or choices['lineup'] not in ('reference', 'reserve')
+            or choices['seed'] not in ('64', '122')):
+        raise ValueError('choose a supported lineup and seed')
+    return choices.copy()
+
+
+def prepared_input(choices):
+    choices = validate_choices(choices)
+    raw = (ROOT/'engine/tests/fixtures/prepared_match/admission.json').read_bytes()
+    if hashlib.sha256(raw).hexdigest() != PREPARED_SHA:
+        raise ValueError('prepared initial admission digest differs')
+    value = json.loads(raw)['input']
+    setup = value['preparation']['setup']
+    if choices['lineup'] == 'reserve':
+        # [designed] Same supported initial roster choice as T28/T29. Only
+        # structural aliases/raw witnesses change;Rust owns all subsequent work.
+        original = setup['legacy']['substitution']['context']['clubs'][0]['roster']
+        roster = original.copy()
+        roster[9], roster[12] = roster[12], roster[9]
+
+        def link(item):
+            if isinstance(item, list):
+                if len(item) >= 11 and item == original[:len(item)]:
+                    return roster[:len(item)]
+                return [link(v) for v in item]
+            if isinstance(item, dict):
+                return {k:link(v) for k,v in item.items()}
+            return item
+        setup = link(setup)
+        pool = {p['id']:p for p in setup['legacy']['players']}
+        for rating in setup['legacy']['ratings']:
+            rating['players'] = [dict(id=identifier,
+                **{f'p8_{k}':pool[identifier]['p8'][k] for k in (4,6,7)},
+                **{f'p15_{k}':pool[identifier]['p15'][k] for k in (6,8,11)})
+                for identifier in sorted(set(rating['roster'])) if identifier]
+        value['preparation']['setup'] = setup
+    assert setup['legacy']['config'][0] == 6
+    setup['legacy']['config'][1] = {'64':1, '122':2}[choices['seed']]
+    return value
+
+
+def compute_prepared(choices):
+    from onenil_engine import NativePreparedWatchedSession
+    value = prepared_input(choices)
+    session = NativePreparedWatchedSession(json.dumps(value, separators=(',', ':')))
+    initial = json.loads(session.snapshot())
+    setup_draws = json.loads(session.observation())['draws']
+    if not setup_draws or setup_draws[0]['seed_before'] != int(choices['seed']):
+        raise ValueError('computed initial seed handoff differs')
+    starter = 2590 if choices['lineup'] == 'reference' else 2593
+    if starter not in [p['word14'] for p in initial['scenes']]:
+        raise ValueError('selected starter missing from native first entry')
+    packet = json.loads(session.finish())
+    if set(packet) != {'ok'}:
+        fault = packet.get('error', {})
+        raise ValueError('native prepared match failed: '+str(fault.get('message'))
+                         +';missing='+str(fault.get('missing')))
+    output = packet['ok']
+    if output['return'] != '0AB9:EBE2' or output['draws'][:len(setup_draws)] != setup_draws:
+        raise ValueError('prepared native continuation/return differs')
+    return output, initial, setup_draws
 
 # [derived] Original09E8/09EB indexes DS0382+21*code;09A06..0AD2 uses
 # marker1=primary,marker2=secondary. Staticd9e20a4/data/ds_2864_01.hex.
