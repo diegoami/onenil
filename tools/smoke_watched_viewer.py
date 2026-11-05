@@ -89,6 +89,7 @@ def smoke(directory):
                     assert ready['selection']['players']==want['actual_starting_players']
                     starter=2590 if choices['lineup']=='reference' else 2593
                     assert ready['selection']['starter']==starter
+                    page.wait_for_function("starter=>[...document.querySelectorAll('#players circle')].some(n=>n.dataset.player===String(starter))",arg=starter)
                     assert str(starter) in page.locator('#players circle').evaluate_all('(nodes)=>nodes.map(n=>n.dataset.player)')
                     assert page.locator('#players circle').count()==22 and page.locator('#ball').is_visible()
                     assert ready['meta']['players'][str(starter)] in page.locator('#selected').inner_text()
