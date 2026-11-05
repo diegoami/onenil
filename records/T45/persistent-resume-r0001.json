@@ -1,0 +1,91 @@
+{
+  "scope": "Explicit owner goal resumption after shutdown. Restored public task checkout/private saved machine and build environment;not full original acceptance.",
+  "source_commit": "c6d1a96f504bff2975f551fbda6c6d8eca7a3d48",
+  "engine_tree": "b70dc1ae0b371b4ca5cef71ba66c0ef737b2ff3d",
+  "native_checkout": "/home/diego/projects/onenil-archaeology/.cache/onenil-native",
+  "why_persistent": "Previous temporary checkout/compiler caches disappeared at shutdown;now stored in ignored research.cache outside /tmp.",
+  "restored_from": "records/T45/original-r0003/checkpoint-r0010.json",
+  "latest_durable_receipt": "records/T45/original-r0003/checkpoint-r0013.json",
+  "durable_cursor": {
+    "ticks": 344,
+    "draws": 15666,
+    "actions": 67
+  },
+  "resumed_log_snapshot": [
+    "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+    "durable original checkpoint 11 ticks 145 draws 5601",
+    "durable original checkpoint 12 ticks 241 draws 10768",
+    "preserved original tick 250 draws 11176",
+    "durable original checkpoint 13 ticks 344 draws 15666"
+  ],
+  "original_execution_session": 70688,
+  "original_host_pid": 4201,
+  "stop_control": ".cache/T45-stop-request;touch and wait for a safe checkpoint pause when requested",
+  "private_backup_root": "/home/diego/projects/onenil-archaeology/.cache/native-recovery/T45",
+  "private_artifact_status": "New snapshots verified in persistent local caches;the previously approved145-tick archive remains on private Drive. No new upload assumed authorized.",
+  "toolchain_root": "/home/diego/projects/onenil-archaeology/.cache/native-toolchain",
+  "rustc": "1.99.1 (58cf8f9c3 2026-10-13)",
+  "maturin": "1.16.0",
+  "linker": "native-toolchain/bin/cc:isolated official Ubuntu GCC13 sysroot with standard usr-merge aliases",
+  "preview": {
+    "url": "http://127.0.0.1:8041",
+    "execution_session": 77660,
+    "http_status": 200,
+    "scope": "Existing fixed T41 reference preview;not selectable prepared milestone acceptance."
+  },
+  "checks": {
+    "T45-restored-release-build-r0001.log": {
+      "sha256": "961d3fa298ed083bdd6b18e221e0448b558ad1cbd8dea047e6f99a82eb3486df",
+      "tail": [
+        "    |",
+        " 47 | impl Cpu {",
+        "    | -------- method in this implementation",
+        "...",
+        "699 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {",
+        "    |            ^^^",
+        "",
+        "warning: `onenil-engine` (lib) generated 45 warnings (run `cargo fix --lib -p onenil-engine` to apply 35 suggestions)",
+        "    Finished `release` profile [optimized] target(s) in 1m 57s",
+        "\ud83d\udce6 Built wheel for abi3 Python \u2265 3.12 to /tmp/.tmpy4CSF7/onenil_engine-0.1.0-cp312-abi3-linux_x86_64.whl",
+        "\u270f\ufe0f Setting installed package as editable",
+        "\ud83d\udee0 Installed onenil-engine-0.1.0"
+      ]
+    },
+    "T45-clean-clone-guards-r0001.log": {
+      "sha256": "7f338f0b1c46c9eacc63e70a96d6f1dac12da7ca7455adc60ca3113aed95303e",
+      "tail": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared match input/provenance/outcome/live-score/observer/recovery guards: 29 rejected"
+      ]
+    },
+    "T45-clean-clone-audits-r0001.log": {
+      "sha256": "21367bd6340bf7b650c6efb15b822cd0d00d495ad0a685ea5d80dafa819b391d",
+      "tail": [
+        "8749 previous evidence/fixtures and 50 measured task files preserved;owned paths only;no embedded data or native oracle backend"
+      ]
+    },
+    "T45-clean-clone-originals-r0001.log": {
+      "sha256": "2c5f8b410f12d4d3f4b03de98adebb39e4a5e28025293dc5802383bf8291d1e7",
+      "tail": [
+        "original-file check: ok"
+      ]
+    },
+    "T45-restored-prefix-api-r0001.log": {
+      "sha256": "bd82a0c682be4c689eeec527c20cc7d95527ba8fdf3afb153004f25d058598b5",
+      "tail": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "prepared watched provenance/replay: ok"
+      ]
+    },
+    "T45-restored-setup-api-r0001.log": {
+      "sha256": "025eecf9f03b069889928a326ae3c955645f512afc19209dee594e71a4da191d",
+      "tail": [
+        "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+        "pinned incoming supplement and watched setup reference verified",
+        "native selected-squad watched preparation:258draws/11boundaries and complete first ENTRY match"
+      ]
+    }
+  }
+}
