@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/diego/projects/onenil-archaeology/.cache/onenil-native/tools/smoke_watched_viewer.py", line 181, in <module>
+    smoke(parser.parse_args().out)
+  File "/home/diego/projects/onenil-archaeology/.cache/onenil-native/tools/smoke_watched_viewer.py", line 92, in smoke
+    assert str(starter) in page.locator('#players circle').evaluate_all('(nodes)=>nodes.map(n=>n.dataset.player)')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

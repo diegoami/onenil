@@ -89,6 +89,7 @@ def smoke(directory):
                     assert ready['selection']['players']==want['actual_starting_players']
                     starter=2590 if choices['lineup']=='reference' else 2593
                     assert ready['selection']['starter']==starter
+                    page.wait_for_function("starter=>[...document.querySelectorAll('#players circle')].some(n=>n.dataset.player===String(starter))",arg=starter)
                     assert str(starter) in page.locator('#players circle').evaluate_all('(nodes)=>nodes.map(n=>n.dataset.player)')
                     assert page.locator('#players circle').count()==22 and page.locator('#ball').is_visible()
                     assert ready['meta']['players'][str(starter)] in page.locator('#selected').inner_text()
@@ -171,7 +172,7 @@ def smoke(directory):
                              'actualpostwhistle completion','restart','localrequestguards','nohorizontaloverflow','noconsoleerrors'],
                      scope='Fresh application-computed native prepared sessions;onlyreference64 hasoriginal parity.No captured postsetup/runtime outcome backend.')
         with record.open('x')as out:json.dump(outcome,out,indent=2);out.write('\n')
-        print(record.relative_to(ROOT),flush=True)
+        print(record,flush=True)
     finally:
         process.terminate();process.wait(timeout=10)
 
