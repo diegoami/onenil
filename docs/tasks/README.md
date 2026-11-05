@@ -61,3 +61,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T44 Prepared native image into the continuous watched caller](T44.md)
 
 - [T45 Complete the owned prepared watched lifecycle](T45.md)
+
+- [T46 Selectable prepared watched match and detailed viewer](T46.md)
