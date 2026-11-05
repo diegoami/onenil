@@ -1,0 +1,67 @@
+{
+  "scope": "Actual original clock values through halftime/walk-off and second-half restart match the complete native result. Partial proof only;full4199tick/4101clock acceptance remains pending.",
+  "receipt": "records/T45/original-r0003/checkpoint-r0029.json",
+  "private_sha256": "f84903f65c0b5cc78399c40eb642c2f0966d99f9c92c504fef56cc74928c4557",
+  "watched_ticks": 2165,
+  "actual_clock_rows": 2119,
+  "complete_native_clock_rows": 4101,
+  "all_seven_clock_fields": "exact equality for every captured row,including counter and watched tick identity",
+  "unclocked_walkoff_gap": [
+    {
+      "before": 2033,
+      "after": 2080
+    }
+  ],
+  "boundary_samples": [
+    {
+      "tick": 2032,
+      "clock": {
+        "active": 1,
+        "counter": 0,
+        "remaining": 46,
+        "stoppage": 0,
+        "elapsed": 45,
+        "phase": 45,
+        "hold": 0
+      }
+    },
+    {
+      "tick": 2033,
+      "clock": {
+        "active": 1,
+        "counter": 32,
+        "remaining": 45,
+        "stoppage": 0,
+        "elapsed": 46,
+        "phase": 45,
+        "hold": 0
+      }
+    },
+    {
+      "tick": 2080,
+      "clock": {
+        "active": 0,
+        "counter": 32,
+        "remaining": 45,
+        "stoppage": 0,
+        "elapsed": 46,
+        "phase": 45,
+        "hold": 0
+      }
+    },
+    {
+      "tick": 2081,
+      "clock": {
+        "active": 0,
+        "counter": 32,
+        "remaining": 45,
+        "stoppage": 0,
+        "elapsed": 46,
+        "phase": 45,
+        "hold": 0
+      }
+    }
+  ],
+  "clock_prefix_sha256": "d209bebbf47547abca35012f8c51ea7876af9c38f20dc71493e93871729d71e6",
+  "native_full_clock_sha256": "51a788461fc34ee23200147285c5162a3a639e1f62155ca867639697059e00d3"
+}
