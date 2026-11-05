@@ -99,7 +99,27 @@ def selftest():
     for key in ('receipt_sha256','start_sha256','manifest_sha256','private_sha256'):
         changed=copy.deepcopy(recovered);changed['resume_from'][key]='0'*64;reject(changed,validate_recovery_lineage)
     changed=copy.deepcopy(recovered);changed['resume_from']['receipt']='../outside.json';reject(changed,validate_recovery_lineage)
-    print('prepared match input/provenance/outcome/live-score/observer/recovery guards:',rejected,'rejected')
+    # Synthetic shape-only fixture;full proof still requires the pinned original
+    # manifest and exact native/original value comparison in compare().
+    clocks=[dict(tick=tick,clock=dict(active=0,counter=0,remaining=0,stoppage=0,elapsed=0,phase=0,hold=0))for tick in CLOCK_TICKS]
+    validate_clock_census(clocks)
+    for mutation in ('empty','truncated','duplicate','order','walkoff','tick_bool','row_extra','clock_missing','clock_extra','counter_bool','counter_negative','counter_overflow','active_overflow','phase_negative','not_list'):
+        changed=copy.deepcopy(clocks)
+        if mutation=='empty':changed=[]
+        elif mutation=='truncated':changed.pop()
+        elif mutation=='duplicate':changed[1]=changed[0].copy()
+        elif mutation=='order':changed[0],changed[1]=changed[1],changed[0]
+        elif mutation=='walkoff':changed[2033]['tick']=2034
+        elif mutation=='tick_bool':changed[0]['tick']=True
+        elif mutation=='row_extra':changed[0]['extra']=0
+        elif mutation=='clock_missing':del changed[0]['clock']['counter']
+        elif mutation=='clock_extra':changed[0]['clock']['extra']=0
+        elif mutation=='not_list':changed={}
+        else:
+            key,value={'counter_bool':('counter',True),'counter_negative':('counter',-1),'counter_overflow':('counter',65536),'active_overflow':('active',256),'phase_negative':('phase',-1)}[mutation]
+            changed[0]['clock'][key]=value
+        reject(changed,validate_clock_census)
+    print('prepared match input/provenance/outcome/live-score/observer/recovery/clock guards:',rejected,'rejected')
 
 def replay_probe(probe,value,prefix_steps=0):
     result=subprocess.run([str(probe)],input=json.dumps(dict(input=value,prefix_steps=prefix_steps))+'\n',capture_output=True,text=True,check=True)
@@ -151,6 +171,22 @@ def validate_recovery_lineage(start):
         if parent[key]!=start[key]:raise ValueError('recovery input/reference identity differs')
     if read(receipt)['private_sha256']!=link['private_sha256']:raise ValueError('recovery private checkpoint binding differs')
 
+# [derived] Fixed reference only:7C67--7C94 clocks normal watched calls;
+# 7D53/7D73 walk-off calls bypass that clock. Original halftime captures confirm
+# the2033->2080 gap;reference full-time whistle63 is at4147,then52walk-off ticks.
+# These are proof-census expectations,never inputs to the native engine.
+CLOCK_TICKS=tuple(range(1,2034))+tuple(range(2080,4148))
+CLOCK_FIELDS=dict(active=255,counter=65535,remaining=65535,stoppage=65535,elapsed=65535,phase=255,hold=255)
+def validate_clock_census(rows):
+    if type(rows)is not list or len(rows)!=len(CLOCK_TICKS):raise ValueError('original caller clock census incomplete')
+    for row,tick in zip(rows,CLOCK_TICKS):
+        if type(row)is not dict or set(row)!={'tick','clock'}or type(row['tick'])is not int or row['tick']!=tick:
+            raise ValueError('original caller clock tick identity differs')
+        clock=row['clock']
+        if type(clock)is not dict or set(clock)!=set(CLOCK_FIELDS):raise ValueError('original caller clock fields differ')
+        if any(type(clock[key])is not int or not 0<=clock[key]<=maximum for key,maximum in CLOCK_FIELDS.items()):
+            raise ValueError('original caller clock field width differs')
+
 def field_preservation():
     if FIELD_MANIFEST_SHA is None:raise ValueError('full original field-preservation observation is not yet pinned')
     manifest=read(FIELD_DIRECTORY/'manifest.json')
@@ -168,6 +204,7 @@ def field_preservation():
     if result['projection']!=projection:raise ValueError('original field-initializer projection differs')
     if result['status']!='completed'or(result['ticks'],result['draws'],result['actions'])!=(4199,182811,831)or result['boundary']!='0AB9:EBE2':
         raise ValueError('incomplete original full-lifecycle preservation')
+    validate_clock_census(result.get('caller_clocks'))
     ticks,draws,events,finish=reference.sources()
     digest=lambda values:hashlib.sha256(b''.join(canonical(v)+b'\n'for v in values)).hexdigest()
     if result['ticks_sha256']!=digest(ticks)or result['actions_sha256']!=digest(events):raise ValueError('original preservation trace digest differs')
