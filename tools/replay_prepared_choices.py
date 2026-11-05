@@ -5,7 +5,7 @@ import hashlib
 import json
 import subprocess
 from pathlib import Path
-from play_watched import ROOT, prepared_input, compute_prepared, validate_choices, describe
+from play_watched import ROOT, STATIC_INPUT, prepared_input, compute_prepared, validate_choices, describe
 
 CHOICES = [dict(lineup=lineup, seed=seed) for lineup in ('reference', 'reserve') for seed in ('64', '122')]
 def canonical(value):
@@ -22,7 +22,33 @@ def check_inputs():
         try: validate_choices(candidate)
         except ValueError: pass
         else: raise AssertionError('invalid supported choice accepted')
-    print('Pinned reference initial input unchanged;8 invalid choices rejected', flush=True)
+    for choices in CHOICES:prepared_input(choices)
+    from unittest.mock import patch
+    read = Path.read_bytes
+    altered = json.loads(STATIC_INPUT.read_bytes());altered['facts'][0]['value'] ^= 1
+    def tamper(path):
+        return canonical(altered) if path == STATIC_INPUT else read(path)
+    with patch.object(Path,'read_bytes',tamper):
+        try:prepared_input(CHOICES[-1])
+        except ValueError:pass
+        else:raise AssertionError('tampered numeric table accepted')
+    print('Pinned reference initial input unchanged;8 invalid choices and tampered numeric table rejected', flush=True)
+
+def check_static_source(research):
+    import re
+    tables=json.loads(STATIC_INPUT.read_text());memory={}
+    assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=research,text=True).strip()==tables['research_commit']
+    for name,digest in tables['source_files'].items():
+        path=research/name
+        assert hashlib.sha256(path.read_bytes()).hexdigest()==digest
+        for line in path.read_text().splitlines():
+            if not re.match(r'^[0-9A-F]{4}  ',line):continue
+            parts=line.split('|',1)[0].split();start=int(parts[0],16)
+            for i,byte in enumerate(parts[1:]):
+                if re.fullmatch('[0-9A-Fa-f]{2}',byte):memory[start+i]=int(byte,16)
+    assert [f['offset'] for f in tables['facts']]==list(range(0x935B,0x9A2A))
+    assert all(f['area']=='ds' and f['value']==memory[f['offset']] for f in tables['facts'])
+    print('All1743 source-static numeric entries independently regenerate from pinned research listing',flush=True)
 
 def validate_output(choices, output, initial, setup_draws):
     import replay_prepared_match as reference
@@ -62,9 +88,11 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--check', action='store_true');parser.add_argument('--replay', action='store_true')
     parser.add_argument('--out', type=Path)
+    parser.add_argument('--research-root', type=Path)
     args=parser.parse_args()
     if not (args.check or args.replay):parser.error('choose --check and/or --replay')
     if args.check:check_inputs()
+    if args.research_root:check_static_source(args.research_root)
     summaries=[]
     if args.replay:
         for choices in CHOICES:
