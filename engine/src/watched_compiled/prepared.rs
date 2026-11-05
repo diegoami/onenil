@@ -159,6 +159,12 @@ impl Session {
         for (address, value) in [(0xDD64, 0u16), (0xDE8C, 0), (0xDE8E, 0)] {
             e.image[address..address + 2].copy_from_slice(&value.to_le_bytes());
         }
+        // [confirmed:static60179ee,24BC:1F97/092B/0940--094C] Startup
+        // stores INT33 reset availability at F918+7;0996 checks it before
+        // reading mouse state. [designed] This headless runner supplies no DOS
+        // mouse driver. Own only that capability byte;the compiled key poll
+        // and queue checks still execute,with other mouse data left unknown.
+        e.image[0xF91F] = 0;
         let week = u16::from(e.image[layout::CONFIG]);
         let club = e.word(0xD6E6);
         let known = e.image.take_initialized()?;
