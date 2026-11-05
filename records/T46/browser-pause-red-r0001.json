@@ -1,0 +1,26 @@
+{
+  "scope": "Partial committed-source browser matrix;all4desktop sessions reached fulltime but firstmobile pause stability assertion failed. Not full browser acceptance. Preserve every partial screenshot.",
+  "source_commit": "55693a6",
+  "app_source_sha256": "40b323b85664b9d9046148284f1cf0a3cf558b7a8df43064e026ae39e20659b8",
+  "log_sha256": "fa475ec93f275757e747b62133769389f91765d1698329fa68da8f21d7b72117",
+  "failure": [
+    "  File \"/home/diego/projects/onenil-archaeology/.cache/onenil-native/tools/smoke_watched_viewer.py\", line 164, in <module>",
+    "    smoke(parser.parse_args().out)",
+    "  File \"/home/diego/projects/onenil-archaeology/.cache/onenil-native/tools/smoke_watched_viewer.py\", line 104, in smoke",
+    "    assert api(url)['steps']==paused['steps']",
+    "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "AssertionError"
+  ],
+  "screenshots": {
+    "T46-r0001-reference-122-desktop-full.png": "e0a879169fc293655d0ff64a6d5f5b6ce70db91874b745da2375c4950f9eb3a1",
+    "T46-r0001-reference-122-desktop-half.png": "7548841a3b344b19d1e64a3492ee6d5b7dad3ddd966cc9ba24dce9fd5c99a4ef",
+    "T46-r0001-reference-64-desktop-full.png": "be42fa8ada4d3610e80fb58f642b67d47b3d85f4352f1f04d4f956f842a8fd87",
+    "T46-r0001-reference-64-desktop-half.png": "d54f841fd864e63e679d72b491cfda71c6b398cb892e6e56c8e43bfa80ffa0ac",
+    "T46-r0001-reserve-122-desktop-full.png": "21341734df09b8ad94b23172bf057a4a5dab081437531f80aeedbae243eaf7d0",
+    "T46-r0001-reserve-122-desktop-half.png": "14214dcadd3ba3076d94a8332b8af45707379250ebae360a6dff0f5430f4dec2",
+    "T46-r0001-reserve-64-desktop-full.png": "fea0f91fe13e11c7d358b60b5052d6c658ea742bec80ef9355359ee733576a65",
+    "T46-r0001-reserve-64-desktop-half.png": "a7a036d4a28a6b91f1e68c6d3806b288c5943f39abeb6ed1981763630e86d6fa"
+  },
+  "observed": "API steps changed after Pause click;intermediate request/click timing was not logged.",
+  "fix_plan": "Allow pause during an in-flight step,show settling state,bind timers to a play generation,and test pause with an intentionally held real step response before checking stable state."
+}

@@ -1,6 +1,6 @@
 'use strict';
 const $ = id => document.getElementById(id);
-let state, running = false, busy = false, timer, preparationTimer, rendered = 0, requestError = '';
+let state, running = false, busy = false, timer, preparationTimer, rendered = 0, requestError = '', runGeneration = 0;
 const phases = {preparing:'Preparing match…', ready:'Ready for kickoff', 'first-half':'First half', 'half-time':'Half-time', 'second-half':'Second half', 'full-time':'Full-time', error:'Match preparation failed'};
 const minute = n => n > 90 ? `90+${n-90}′` : `${n}′`;
 function playerName(id) {
@@ -8,7 +8,7 @@ function playerName(id) {
   if (!value) throw new Error(`Missing native player identity ${id}`);
   return value;
 }
-function stop() { running = false; clearTimeout(timer); }
+function stop() { running = false; runGeneration += 1; clearTimeout(timer); }
 function point(p) {
   // [designed] Shared native coordinates for both teams and ball;no extra mirroring.
   return {x:500 + p.y * 12, y:300 + p.x * 29};
@@ -26,8 +26,8 @@ function render() {
   $('clock').textContent = v ? minute(v.clock) : '—';
   $('phase').textContent = `${phases[state.phase]}${running ? ' · Live' : ''}`;
   $('status-dot').classList.toggle('active', running);
-  $('primary').textContent = preparing ? 'Preparing…' : state.phase === 'error' ? 'Preparation failed' : state.phase === 'ready' ? 'Kick off' : state.phase === 'half-time' ? 'Continue second half' : state.phase === 'full-time' ? 'Match finished' : running ? 'Pause' : 'Resume';
-  $('primary').disabled = busy || preparing || dirty || ['full-time','error'].includes(state.phase);
+  $('primary').textContent = preparing ? 'Preparing…' : state.phase === 'error' ? 'Preparation failed' : state.phase === 'ready' ? 'Kick off' : state.phase === 'half-time' ? 'Continue second half' : state.phase === 'full-time' ? 'Match finished' : running ? 'Pause' : busy ? 'Pausing…' : 'Resume';
+  $('primary').disabled = (busy && !running) || preparing || dirty || ['full-time','error'].includes(state.phase);
   $('restart').disabled = busy || preparing;
   $('live-label').textContent = preparing ? 'PREPARING' : running ? 'LIVE' : state.phase === 'ready' ? 'READY' : state.phase === 'full-time' ? 'FULL-TIME' : state.phase === 'half-time' ? 'HALF-TIME' : 'PAUSED';
   $('pitch-note').textContent = state.phase === 'full-time' ? 'Full-time. The players have left the pitch.' : 'Player and ball positions follow the native match. Gold ring marks the current actor.';
@@ -106,19 +106,20 @@ async function action(kind, body) {
   catch (error) { stop(); requestError = error.message; }
   finally { busy = false; render(); }
 }
-async function tick() {
-  if (!running) return;
+async function tick(generation) {
+  if (!running || generation !== runGeneration) return;
   await action('step');
+  if (generation !== runGeneration) return;
   if (['half-time','full-time','error'].includes(state.phase)) stop();
   render();
-  if (running) timer = setTimeout(tick, Number($('speed').value));
+  if (running) timer = setTimeout(() => tick(generation), Number($('speed').value));
 }
 $('primary').addEventListener('click', async () => {
-  if (busy) return;
   if (running) { stop(); render(); return; }
+  if (busy) return;
   if (state.phase === 'ready') await action('start');
   else if (state.phase === 'half-time') await action('continue');
-  if (['first-half','second-half'].includes(state.phase)) { running = true; render(); tick(); }
+  if (['first-half','second-half'].includes(state.phase)) { running = true; runGeneration += 1; render(); tick(runGeneration); }
 });
 $('restart').addEventListener('click', async () => { stop(); await action('restart'); });
 $('lineup').addEventListener('change', render);

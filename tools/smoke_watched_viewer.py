@@ -96,10 +96,27 @@ def smoke(directory):
                     assert invalid.status==400 and api(url)==ready
                     positions=page.locator('#players circle').evaluate_all("nodes=>nodes.map(n=>[n.getAttribute('cx'),n.getAttribute('cy')])")
                     page.locator('#speed').select_option('80')
+                    held=[]
+                    def hold_step(route):held.append(route)
+                    force_inflight=viewport=='desktop' and choices==expected[0]['choices']
+                    if force_inflight:page.route('**/api/step',hold_step)
                     page.get_by_role('button',name='Kick off',exact=True).click()
+                    if force_inflight:
+                        deadline=time.monotonic()+10
+                        while not held and time.monotonic()<deadline:page.wait_for_timeout(20)
+                        assert len(held)==1
+                        assert page.get_by_role('button',name='Pause',exact=True).is_enabled()
+                        page.get_by_role('button',name='Pause',exact=True).click()
+                        assert page.get_by_role('button',name='Pausing…',exact=True).is_disabled()
+                        held[0].continue_();page.unroute('**/api/step',hold_step)
+                        page.get_by_role('button',name='Resume',exact=True).wait_for()
+                        settled=api(url)['steps'];page.wait_for_timeout(350)
+                        assert api(url)['steps']==settled
+                        page.get_by_role('button',name='Resume',exact=True).click()
                     page.wait_for_selector('.event.pass',timeout=30000)
                     page.wait_for_function("before=>JSON.stringify([...document.querySelectorAll('#players circle')].map(n=>[n.getAttribute('cx'),n.getAttribute('cy')]))!==JSON.stringify(before)",arg=positions,timeout=30000)
                     page.get_by_role('button',name='Pause',exact=True).click()
+                    page.get_by_role('button',name='Resume',exact=True).wait_for()
                     paused=api(url);page.wait_for_timeout(350)
                     assert api(url)['steps']==paused['steps']
                     assert page.locator('#lineup').is_disabled() and page.locator('#seed').is_disabled()
@@ -150,7 +167,7 @@ def smoke(directory):
                      visible_native_preparations=preparations,screenshots=screenshots,
                      checks=['all4choices ondesktop+mobile','actualstarter/initialseed','liveactualnativeclock/score',
                              'allnamednativeactions','22movingnativeplayers+ball','sharedcoordinates',
-                             'responsive visiblepreparation','invalidchoice atomicity','pause/resume','halftime/continue',
+                             'responsive visiblepreparation','invalidchoice atomicity','inflightpause/settle','pause/resume','halftime/continue',
                              'actualpostwhistle completion','restart','localrequestguards','nohorizontaloverflow','noconsoleerrors'],
                      scope='Fresh application-computed native prepared sessions;onlyreference64 hasoriginal parity.No captured postsetup/runtime outcome backend.')
         with record.open('x')as out:json.dump(outcome,out,indent=2);out.write('\n')
