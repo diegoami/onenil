@@ -1,0 +1,1062 @@
+   Compiling onenil-engine v0.1.0 (/home/diego/projects/onenil-archaeology/.cache/onenil-native/engine)
+warning: unused import: `super::tick_graph::*`
+ --> src/watched_compiled/caller_graph.rs:5:5
+  |
+5 | use super::tick_graph::*;
+  |     ^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `super::caller_graph::*`
+ --> src/watched_compiled/prepared_graph.rs:4:5
+  |
+4 | use super::caller_graph::*;
+  |     ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `super::tick_graph::*`
+ --> src/watched_compiled/prepared_graph.rs:7:5
+  |
+7 | use super::tick_graph::*;
+  |     ^^^^^^^^^^^^^^^^^^^^
+
+warning: unreachable statement
+     --> src/watched_compiled/action_graph.rs:86428:17
+      |
+86427 |                 return Err("unported original instruction 1998:0129".into());
+      |                 ------------------------------------------------------------ any code following this expression is unreachable
+86428 |                 c.pc = (6552, 299);
+      |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+      |
+      = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:109024:17
+       |
+109023 |                 return Err("unported original instruction 232A:0238".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+109024 |                 c.pc = (9002, 570);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:109080:17
+       |
+109079 |                 return Err("unported original instruction 232A:024C".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+109080 |                 c.pc = (9002, 590);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:118364:17
+       |
+118363 |                 return Err("unported original instruction 26C9:011F".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+118364 |                 c.pc = (9929, 288);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:118685:17
+       |
+118684 |                 return Err("unported original instruction 26C9:01AF".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+118685 |                 c.pc = (9929, 433);
+       |                 ^^^^^^^^^^^^^^^^^^^ unreachable statement
+
+warning: unreachable statement
+      --> src/watched_compiled/action_graph.rs:118805:17
+       |
+118804 |                 return Err("unported original instruction 26C9:01EE".into());
+       |                 ------------------------------------------------------------ any code following this expression is unreachable
+118805 |                 label = 496;
+       |                 ^^^^^^^^^^^^ unreachable statement
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/action_graph.rs:2462:9
+     |
+2462 |     let mut label = 3906u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:51434:9
+      |
+51434 |     let mut label = 28526u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:63129:9
+      |
+63129 |     let mut label = 40814u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:78132:9
+      |
+78132 |     let mut label = 50355u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:88015:9
+      |
+88015 |     let mut label = 2934u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:94260:9
+      |
+94260 |     let mut label = 13939u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:95002:9
+      |
+95002 |     let mut label = 18265u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:95432:9
+      |
+95432 |     let mut label = 18492u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:96502:9
+      |
+96502 |     let mut label = 18999u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:97853:9
+      |
+97853 |     let mut label = 19906u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/action_graph.rs:98238:9
+      |
+98238 |     let mut label = 20097u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:104904:9
+       |
+104904 |     let mut label = 25352u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:108543:9
+       |
+108543 |     let mut label = 213u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:108627:9
+       |
+108627 |     let mut label = 248u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:108820:9
+       |
+108820 |     let mut label = 324u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:112994:9
+       |
+112994 |     let mut label = 546u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:113068:9
+       |
+113068 |     let mut label = 601u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:116390:9
+       |
+116390 |     let mut label = 3292u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:118153:9
+       |
+118153 |     let mut label = 2578u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:119292:9
+       |
+119292 |     let mut label = 2899u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:119743:9
+       |
+119743 |     let mut label = 3183u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:119785:9
+       |
+119785 |     let mut label = 3476u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+      --> src/watched_compiled/action_graph.rs:119833:9
+       |
+119833 |     let mut label = 3498u16;
+       |         ----^^^^^
+       |         |
+       |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2859:9
+     |
+2859 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/adjustment.rs:2921:9
+     |
+2921 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/match_graph.rs:4929:9
+     |
+4929 |     let mut label = 32203u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/match_graph.rs:15772:9
+      |
+15772 |     let mut label = 453u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+     --> src/watched_compiled/match_graph.rs:16675:9
+      |
+16675 |     let mut label = 3201u16;
+      |         ----^^^^^
+      |         |
+      |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4486:9
+     |
+4486 |     let mut label = 40814u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:4974:9
+     |
+4974 |     let mut label = 601u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/selection.rs:5036:9
+     |
+5036 |     let mut label = 3292u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+    --> src/watched_compiled/tick_graph.rs:9026:9
+     |
+9026 |     let mut label = 483u16;
+     |         ----^^^^^
+     |         |
+     |         help: remove this `mut`
+
+warning: `onenil-engine` (lib test) generated 41 warnings (run `cargo fix --lib -p onenil-engine --tests` to apply 35 suggestions)
+warning: constant `PITCH_CELLS` is never used
+  --> src/layout.rs:22:18
+   |
+22 | pub(crate) const PITCH_CELLS: usize = 17 * 75;
+   |                  ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated function `from_legacy` is never used
+   --> src/match_session.rs:145:19
+    |
+ 62 | impl Session {
+    | ------------ associated function in this implementation
+...
+145 |     pub(crate) fn from_legacy(
+    |                   ^^^^^^^^^^^
+
+warning: method `copy_within` is never used
+   --> src/native_image.rs:169:19
+    |
+129 | impl Image {
+    | ---------- method in this implementation
+...
+169 |     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {
+    |                   ^^^^^^^^^^^
+
+warning: method `sar` is never used
+   --> src/watched_compiled/compiled.rs:699:12
+    |
+ 47 | impl Cpu {
+    | -------- method in this implementation
+...
+699 |     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {
+    |            ^^^
+
+warning: `onenil-engine` (lib) generated 45 warnings (41 duplicates)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1m 13s
+     Running unittests src/lib.rs (engine/target/debug/deps/onenil_engine-bdd780999ab2ebf5)
+
+running 425 tests
+test ai_selection::tests::preferred_retains_last_nonzero_candidate_not_first ... ok
+test ai_selection::tests::offset_exclusion_reads_normalized_scene_as_listing_a8d8_requires ... ok
+test ai_selection::tests::capacity_gate_uses_signed_byte_only_and_special_keeper_capacity_reaches_later_fallback ... ok
+test ai_selection::tests::candidate_last_overwrite_unavailable_and_normalized_current_exclusion ... ok
+test ai_selection::tests::pascal_search_includes_nul_and_raw_hand_must_equal_predicate ... ok
+test cache_helpers::tests::both_side_phases_compose_on_one_image_without_cache_or_seed_changes ... ok
+test ai_selection::tests::weighted_halves_on_raw_hand_mismatch_using_search_index_above_three ... ok
+test cache_helpers::tests::managed_matches_either_byte_and_duplicate_zero_entries ... ok
+test cache_helpers::tests::boost_zero_cached_id_reads_its_canonical_rating ... ok
+test cache_helpers::tests::managed_query_compares_full_word_without_low_byte_alias ... ok
+test cache_helpers::tests::slot_rejects_unsupported_domains_without_mutating_caller ... ok
+test cache_helpers::tests::primitive_image_and_seed_are_read_only ... ok
+test cache_helpers::tests::slot_returns_first_duplicate_last_slot_or_twelve ... ok
+test cache_helpers::tests::slot_uses_requested_side_kind_and_maximum_club_player ... ok
+test cache_helpers::tests::slot_zero_id_matches_first_zero_without_availability_filter ... ok
+test cache_helpers::tests::changed_raw_cached_rating_drives_actual_store ... ok
+test ai_selection::tests::weighted_strict_ties_skip_unavailable_and_zero_is_no_choice ... ok
+test cache_selection::tests::read_only_helpers_preserve_entire_image_and_seed ... ok
+test cache_helpers::tests::malformed_boost_inputs_diagnose_without_changing_caller ... ok
+test cache_helpers::tests::negative_remainder_and_logical_shift_preserve_word_and_low_byte ... ok
+test cache_helpers::tests::boost_calls_cached_player_for_every_target_and_wraps_byte ... ok
+test ai_selection::tests::standalone_selection_only_writes_candidate_cells ... ok
+test continuous::tests::missing_selector_and_duplicate_player_rejected ... ok
+test cache_helpers::tests::alternate_sides_offsets_and_maximum_player_are_supported ... ok
+test cache_helpers::tests::expected_returns_and_nested_fields_are_not_inputs ... ok
+test continuous::tests::invalid_admission_domains_are_diagnostics ... ok
+test continuous::tests::missing_redundant_goal_fields_cannot_hide_behind_other_views ... ok
+test continuous::tests::contradictory_global_alias_rejected ... ok
+test continuous::tests::contradictory_player_alias_rejected ... ok
+test continuous::tests::one_admission_two_steps_consume_current_image_and_rng ... ok
+test continuous::tests::current_player_mutation_changes_next_computation ... ok
+test event_effects::tests::chance_short_circuit_has_both_lcg_paths_and_seed_wrap ... ok
+test event_effects::tests::caution_then_injury_can_accept_two_numeric_events_in_one_window ... ok
+test ai_selection::tests::reached_replacement_requires_raw_read_set_without_a_chosen_slot_input ... ok
+test event_effects::tests::ai_caution_updates_raw_flags_while_managed_caution_preserves_them ... ok
+test ai_selection::tests::canonical_table_extra_output_and_index_domains_reject_before_allocation ... ok
+test event_effects::tests::managed_injury_draws_updates_cache_and_preserves_tie_choice ... ok
+test extra_event::tests::availability_exits_have_exact_draw_counts_and_do_not_mutate_records ... ok
+test event_effects::tests::duplicate_numeric_event_still_weights_and_applies_player_effects ... ok
+test extra_event::tests::both_coin_selectors_and_equal_rating_exit_are_observed ... ok
+test extra_event::tests::canonical_aliases_are_shared_and_conflicts_are_rejected ... ok
+test extra_event::tests::contingent_chance_has_both_paths_and_predicate_short_circuits_it ... ok
+test extra_event::tests::failed_handoff_preserves_entire_existing_image_and_unrelated_bytes ... ok
+test event_effects::tests::managed_budget_blocks_effects_and_uses_word_sum_not_byte_wrap ... ok
+test extra_event::tests::invalid_shapes_domains_and_unexpected_expected_fields_are_rejected ... ok
+test event_effects::tests::injury_bounds_zero_and_underflow_are_word_sized_and_store_the_low_byte ... ok
+test extra_event::tests::predicate_player_override_club_fallback_and_disabled_event_flag ... ok
+test extra_event::tests::rating_uses_signed_bytes_low_word_products_and_each_bonus_in_order ... ok
+test extra_event::tests::seed_wrap_and_the_reached_final_raw_lookup_cell_are_not_inferred ... ok
+test event_effects::tests::physical_event_side_and_scene_slot_counter_side_are_distinct ... ok
+test extra_event::tests::signed_final_comparison_and_unsigned_rating_comparison_differ ... ok
+test extra_event::tests::scratch_local_is_raw_helper_input_and_composed_diagnostic_is_transactional ... ok
+test extra_event::tests::threshold_clamps_youth_branch_and_wraps_older_branch ... ok
+test extra_event::tests::zero_thresholds_still_draw_and_ties_do_not_dispatch ... ok
+test goal_effects::preservation_tests::head_zero_accepts_an_equal_tuple_and_preserves_unmodelled_bytes ... ok
+test goal_effects::tests::aliased_players_observe_sequential_mutations_in_one_record ... ok
+test goal_effects::tests::byte6_signed_word_clamp_and_signed_cache_reload ... ok
+test goal_effects::tests::counters_and_queue_wrap_with_only_sentinel_code_replaced ... ok
+test goal_effects::tests::duplicate_commentary_suppresses_queue_count_not_weight_or_player_effects ... ok
+test goal_effects::tests::alternate_flag_flips_log_side_but_preserves_original_roster_lookup ... ok
+test goal_effects::tests::finished_clock_suppresses_only_side_counter ... ok
+test goal_effects::tests::invalid_handoff_and_missing_data_are_errors ... ok
+test layout::tests::logical_pools_are_disjoint_and_domain_endpoints_fit ... ok
+test goal_effects::tests::independent_global_actor_scene_slot_and_keeper_selectors ... ok
+test goal_effects::tests::standard_goal_updates_both_roles_and_logical_commentary ... ok
+test event_effects::tests::selector_wrap_is_independent_of_the_lcg ... ok
+test goal_effects::tests::zero_coin_still_updates_keeper_but_preserves_its_cache ... ok
+test goal_effects::tests::log_cap_overwrites_last_and_minute_marker_uses_wrapping_addition ... ok
+test event_effects::tests::dismissal_updates_shared_ids_sequentially_and_skips_newly_unavailable_aliases ... ok
+test event_effects::tests::scene_clear_uses_the_passed_slot_preserves_clock_fields_and_is_idempotent ... ok
+test event_effects::tests::signed_event_weights_counter_wrap_queue_wrap_and_added_cap ... ok
+test event_effects::tests::reached_ai_roster_changes_and_wrong_requests_are_transactional_diagnostics ... ok
+test event_effects::tests::injury_availability_budget_and_pending_flags_take_their_own_paths ... ok
+test native_image::tests::concurrent_read_fault_latching_preserves_engine_send_and_sync ... ok
+test native_image::tests::copying_and_growing_memory_preserves_unknown_byte_provenance ... ok
+test native_image::tests::trial_image_unknown_reads_cannot_disappear_on_rollback ... ok
+test native_image::tests::zero_allocation_is_unknown_and_explicit_stores_define_only_their_cells ... ok
+test match_session::tests::presentation_reads_live_signed_coordinates_without_mutation ... ok
+test neutral_input::tests::borrowed_path_reads_current_bytes_and_preserves_unrelated_pools ... ok
+test neutral_input::tests::direct_switch_hint_is_distinct_from_neutral_already_requested_path ... ok
+test neutral_input::tests::guard_and_word_endpoints_preserve_requested_flags ... ok
+test neutral_input::tests::keyboard_present_and_expected_result_fields_are_outside_neutral_input_contract ... ok
+test neutral_input::tests::no_request_does_not_switch_even_if_active_and_watched ... ok
+test placement::tests::a_goal_stops_before_the_other_outer_side_can_be_subtracted ... ok
+test placement::tests::availability_uses_signed_field_and_one_based_status_bits ... ok
+test placement::tests::full_elapsed_word_is_not_narrowed_to_a_minute_byte ... ok
+test placement::tests::invalid_inputs_fail_instead_of_fabricating_player_data_or_aliasing_frames ... ok
+test placement::tests::no_eligible_scorer_is_an_explicit_replay_domain_error ... ok
+test placement::tests::one_goal_uses_first_roster_match_and_wrapping_actor_offset ... ok
+test placement::tests::repeated_passes_refill_both_sides_and_preserve_residual_counts ... ok
+test placement::tests::roster_search_returns_first_match_including_zero ... ok
+test placement::tests::score_cap_prevents_an_earlier_side_from_recording_a_goal ... ok
+test placement::tests::unavailable_sample_retries_and_consumes_the_next_scorer_draw ... ok
+test placement::tests::zero_counts_preserve_seed_scores_and_incoming_actor ... ok
+test match_session::tests::incomplete_or_conflicting_initial_read_sets_rejected ... ok
+test continuous::tests::first_half_ends_on_actual_clock_result ... ok
+test match_session::tests::static_unsigned_display_cap_edges ... ok
+test event_effects::tests::malformed_context_aliases_and_expected_inputs_are_rejected ... ok
+test neutral_input::tests::all_static_cases_only_write_the_three_owned_mode_bytes ... ok
+test match_session::tests::invalid_phase_actions_preserve_state ... ok
+test match_session::tests::failed_reached_continuation_rolls_back_all_mutations ... ok
+test cache_helpers::tests::whole_image_ownership_on_all_four_original_phases ... ok
+test player_cache::tests::complete_multi_criterion_read_sets_and_aliases_are_required ... ok
+test player_cache::tests::canonical_domains_duplicates_and_missing_references_reject ... ok
+test player_cache::tests::automatic_managed_fallback_selects_from_current_image ... ok
+test ai_selection::tests::replacement_uses_live_counter_mutation_without_reloading_recorded_state ... ok
+test ai_selection::tests::composed_selection_preserves_seed_and_only_adds_incoming_role_write_to_replacement_ownership ... ok
+test player_cache::tests::criterion_zero_global_alias_must_agree_before_image_setup ... ok
+test player_cache::tests::empty_candidate_ranges_clear_roles_and_still_apply_cached_ratings ... ok
+test player_cache::tests::reached_managed_fallback_diagnoses_and_caller_input_is_unchanged ... ok
+test post_score::tests::failed_shared_footprints_preserve_the_image_and_success_preserves_unrelated_bytes ... ok
+test post_score::tests::aliased_clubs_share_one_strategy_and_conflicting_aliases_are_rejected ... ok
+test post_score::tests::five_bit_paths_latch_and_skip_only_their_own_nonzero_flag ... ok
+test post_score::tests::ignored_argument_and_managed_skips_preserve_the_named_state ... ok
+test post_score::tests::malformed_inputs_and_expected_outputs_are_not_accepted ... ok
+test post_score::tests::opposite_then_own_rating_and_strict_positive_limit_can_add_two_draws ... ok
+test post_score::tests::rating_subtraction_wraps_before_its_signed_comparison ... ok
+test post_score::tests::side_one_baseline_bit_and_shared_player_visits_follow_actual_order ... ok
+test post_score::tests::signed_difference_is_narrowed_before_absolute_value ... ok
+test post_score::tests::three_bit_paths_use_unsigned_score_order_and_preserve_high_bits ... ok
+test post_score::tests::normalizer_handles_threshold_underflow_clamp_and_every_position_group ... ok
+test post_score::tests::zero_keeper_lookup_is_raw_but_zero_roster_entries_are_not_normalized ... ok
+test quick_reset::tests::alternate_inverts_live_table_delta_and_all_clamps_remain_signed ... ok
+test quick_reset::tests::both_keeper_preludes_transform_the_pair_and_select_on_the_shared_seed ... ok
+test quick_reset::tests::invalid_handoffs_preserve_the_entire_image_and_success_preserves_unowned_fields ... ok
+test quick_reset::tests::keeper_cycle_wraps_from_eleven_back_to_two ... ok
+test player_cache::tests::first_side_stores_precede_second_side_managed_and_roles ... ok
+test quick_reset::tests::keeper_retry_observes_current_eligibility_without_redrawing ... ok
+test quick_reset::tests::no_eligible_keeper_cycle_is_a_transactional_diagnostic ... ok
+test quick_reset::tests::pair_factor_uses_signed_kind_signed_bytes_and_low_byte_products ... ok
+test quick_reset::tests::physical_keeper_exclusion_and_stored_slot_sides_are_independent ... ok
+test quick_reset::tests::repeated_ids_reload_signed_byte6_and_never_write_the_cache ... ok
+test player_cache::tests::native_role_scores_drive_caches_and_subsequent_role_inputs ... ok
+test quick_reset::tests::strategy_uses_actual_post_keeper_seed_without_resetting_it ... ok
+test ratings::tests::bonus_supports_zero_staff_id_and_shared_staff_records ... ok
+test ratings::tests::conflicting_shared_records_and_tables_cannot_be_overwritten_between_sides ... ok
+test ratings::tests::drop_divisor_is_raw_and_truncates_signed_quotient ... ok
+test ratings::tests::image_updates_preserve_unmodelled_fields_and_actual_seed_goals ... ok
+test ratings::tests::nonzero_flag_and_both_club_divisors_use_raw_tables ... ok
+test ratings::tests::paired_computation_keeps_actual_seed_goals_and_both_side_words ... ok
+test ratings::tests::paired_computation_rejects_wrong_handoffs_without_reseeding_or_resetting_ratings ... ok
+test quick_reset::tests::zero_flag_sets_active_and_copies_every_position_without_other_work ... ok
+test ratings::tests::position_style_mismatches_halve_and_odd_value_truncates ... ok
+test ratings::tests::raw_selector_tables_and_short_circuit_occurrences_are_observed ... ok
+test ratings::tests::raw_signed_bytes_clamp_and_mode_branches_are_distinct ... ok
+test ratings::tests::split_odd_values_lose_the_remainder_and_classes_are_raw ... ok
+test ratings::tests::unavailable_short_circuits_and_all_status_bits_use_guest_numbering ... ok
+test ratings::tests::unsupported_missing_and_duplicate_raw_records_are_errors ... ok
+test ratings::tests::side_repeated_ids_skip_zero_and_preserve_other_side_seed_and_raw_records ... ok
+test ratings::tests::valid_raw_domain_keeps_accumulators_bounded_even_at_maximum_player_and_staff_bytes ... ok
+test ratings::tests::zero_value_players_never_receive_the_club_bonus ... ok
+test quick_reset::tests::malformed_domains_and_expected_intermediate_fields_are_rejected ... ok
+test quick_reset::tests::unavailable_and_zero_id_players_are_skipped_but_still_have_motion ... ok
+test match_session::tests::halftime_continue_records_the_actual_space_response ... ok
+test player_cache::tests::managed_gate_zero_preserves_zero_kind_one_and_rates_its_raw_bytes ... ok
+test player_cache::tests::undefined_no_eligible_selector_is_not_replaced_with_player_zero ... ok
+test rearrangement::tests::signed32_division_quotient_remainder_and_exception_domains ... ok
+test rearrangement::tests::conflicting_component_aliases_and_missing_canonical_references_reject ... ok
+test rearrangement::tests::mixed_roles_use_strict_unsigned_nested_comparisons_not_stable_sort ... ok
+test match_session::tests::live_condition_flows_through_halftime_into_second_half ... ok
+test player_cache::tests::selector_return_is_stored_by_caller_before_roles_and_ratings ... ok
+test rearrangement::tests::strict_equal_roles_do_not_exchange_and_unsigned_byte_sum_sets_opposite_total ... ok
+test replacement::tests::identity_offset_canonical_and_extra_output_errors_diagnose ... ok
+test rearrangement::tests::unsupported_actor_offset_mode_and_assignment_metadata_reject ... ok
+test replacement::tests::role_bits_and_preset_flags_are_preserved_except_explicit_bit_four_clear ... ok
+test rearrangement::tests::complete_parent_whole_image_ownership_and_seed_preservation ... ok
+test replacement::tests::motion_reuses_signed_clamp_and_routes_by_stored_selector_not_physical_index ... ok
+test rearrangement::tests::exchange_transaction_moves_entire_scene_totals_cache_and_both_selectors ... ok
+test replacement::tests::special_substitution_and_reserve_choices_preserve_unselected_side ... ok
+test replacement::tests::season_counters_wrap_only_for_nonzero_allowance ... ok
+test replacement::tests::young_signed_word_clamp_and_adult_al_wrap_have_distinct_thresholds ... ok
+test role_cache::tests::absent_roster_returns_zero_but_reached_row_zero_scoring_diagnoses ... ok
+test role_cache::tests::all_blocked_leaves_defined_zero_cache_without_scoring ... ok
+test role_cache::tests::alternate_side_swapped_offsets_and_maximum_club_and_player ... ok
+test role_cache::tests::blocked_and_zero_candidates_skip_all_other_helpers ... ok
+test role_cache::tests::clear_then_first_eligible_and_equal_scores_retain_first ... ok
+test rearrangement::tests::five_tails_use_current_image_and_final_keeper_word12_clear_is_owned_by_parent ... ok
+test role_cache::tests::contradictory_raw_table_and_global_aliases_reject_before_setup ... ok
+test role_cache::tests::empty_ranges_clear_and_kind_five_uses_alternate_start_byte ... ok
+test role_cache::tests::expected_and_nested_score_fields_are_rejected ... ok
+test role_cache::tests::lookup_uses_last_roster_match_and_shared_canonical_player ... ok
+test role_cache::tests::malformed_canonical_inputs_reject_without_changing_caller ... ok
+test replacement::tests::managed_replacement_skips_unmanaged_flags_and_presentation ... ok
+test role_cache::tests::mismatched_last_match_scene_diagnoses ... ok
+test role_cache::tests::strictly_better_score_stores_then_lesser_score_retains ... ok
+test role_cache::tests::raw_cells_drive_actual_nested_computation_and_observation ... ok
+test role_pairing::tests::availability_and_reserved_flag_masks_have_distinct_effects ... ok
+test role_pairing::tests::club_bit_eight_gate_and_roster_words_drive_actual_scene_stores ... ok
+test role_pairing::tests::earlier_preference_pass_wins_and_fourth_pass_is_reached_after_misses ... ok
+test role_cache::tests::unsupported_baseline_only_diagnoses_when_score_is_reached ... ok
+test role_pairing::tests::early_keeper_and_second_role_one_clears_override_retained_flags ... ok
+test role_pairing::tests::inclusive_bounds_skip_zero_and_outside_roles ... ok
+test role_pairing::tests::invalid_ranges_and_local_sentinels_or_roles_reject ... ok
+test role_pairing::tests::malformed_canonical_inputs_reject_without_changing_caller ... ok
+test role_pairing::tests::miss_preserves_existing_assignments_and_length_byte_is_not_searched ... ok
+test role_pairing::tests::nul_preference_matches_zero_and_can_overwrite_existing_assignment ... ok
+test player_cache::tests::reached_role_score_and_cached_scene_diagnostics_are_preserved ... ok
+test role_pairing::tests::expected_or_parent_local_results_are_not_inputs ... ok
+test role_pairing::tests::own_role_one_is_excluded_but_opponent_role_one_can_be_assigned ... ok
+test role_pairing::tests::parent_composes_actual_arrays_across_ordered_ranges ... ok
+test role_pairing::tests::parent_initializes_all_used_locals_without_zero_scratch_assumption ... ok
+test role_pairing::tests::reverse_opponent_order_and_first_duplicate_own_match_are_material ... ok
+test role_pairing::tests::reserved_unavailable_player_excludes_every_matching_roster_slot ... ok
+test replacement::tests::presentation_branches_emit_typed_reach_events_without_port_or_display_backend ... ok
+test role_cache::tests::complete_image_preserved_except_selected_cache_word_on_all_originals ... ok
+test role_scores::tests::actual_raw_cell_changes_nested_computation ... ok
+test role_scores::tests::canonical_zero_and_maximum_ids_are_defined ... ok
+test role_scores::tests::consistent_alias_reads_one_byte_conflicting_alias_rejects ... ok
+test role_scores::tests::expected_results_and_nested_intermediates_are_not_inputs ... ok
+test role_scores::tests::logical_halving_nonzero_flag ... ok
+test role_scores::tests::low_word_product_is_truncated_before_shift ... ok
+test role_scores::tests::indices_and_addresses_wrap_as_guest_words ... ok
+test role_scores::tests::missing_or_incorrect_index_witness_rejects ... ok
+test role_scores::tests::signed_baseline_and_criterion_boundary ... ok
+test role_scores::tests::unsupported_domains_diagnose_without_changing_input ... ok
+test role_scores::tests::unsigned_scene_bonus_side_threshold_and_minimum ... ok
+test role_pairing::tests::swapped_offsets_and_maximum_club_player_are_supported ... ok
+test role_scores::tests::whole_image_scene_and_seed_preserved ... ok
+test scene_assignment::tests::admission_errors_do_not_mutate_inputs ... ok
+test scene_assignment::tests::counts_follow_actual_player_club_and_minimum_then_age ... ok
+test scene_assignment::tests::hand_selector_and_cell_cross_aliases_reject_before_image_setup ... ok
+test scene_assignment::tests::kernels_compose_without_reloading_observed_state ... ok
+test scene_assignment::tests::keeper_direction_and_reset_order_preserve_callers_word2_responsibility ... ok
+test scene_assignment::tests::selector_is_independent_of_physical_index_and_reads_live_roster ... ok
+test player_cache::tests::whole_image_owned_only_by_cache_words_and_byte18_on_both_originals ... ok
+test scene_assignment::tests::sentinel_is_allowed_unselected_but_never_invents_club_zero_count ... ok
+test scene_assignment::tests::signed32_minimum_keeps_high_and_low_words ... ok
+test scene_assignment::tests::raw_hand_values_and_predicate_branch_order ... ok
+test scene_assignment::tests::wrapped_table_aliases_share_a_byte_and_reject_conflicts ... ok
+test scene_assignment::tests::injected_expected_and_intermediate_fields_are_rejected ... ok
+test scene_codes::tests::canonical_domains_and_expected_result_fields_are_checked ... ok
+test scene_codes::tests::clock_is_unsigned_phase_is_signed_and_stored_selector_selects_side ... ok
+test scene_codes::tests::direction_bytes_are_sign_extended_and_special_ff_test_is_literal ... ok
+test scene_codes::tests::actor_predicate_and_side_offsets_choose_shared_cache_target ... ok
+test scene_codes::tests::equal_arguments_return_old_byte6_and_preserve_it ... ok
+test scene_codes::tests::all_five_modes_select_native_low_codes ... ok
+test scene_codes::tests::mode_one_uses_stored_selector_scene_player_not_physical_scene_player ... ok
+test scene_assignment::tests::whole_image_write_ownership_and_separate_table_pool ... ok
+test scene_codes::tests::mode_three_ignores_clock_and_mode_four_wraps_selector_as_word ... ok
+test scene_codes::tests::mode_zero_uses_word2_then_word0_and_truncates_only_the_low_code ... ok
+test scene_codes::tests::mode_two_uses_signed_phase_and_boolean_side_without_direction_byte ... ok
+test scene_codes::tests::keeper_branch_uses_stored_selector_and_keeper_high_byte_in_every_mode ... ok
+test scene_codes::tests::reusable_image_path_reads_current_mode_clock_and_player_bytes ... ok
+test scene_codes::tests::signed_high_bytes_and_signed_low_word_comparison_choose_offsets ... ok
+test role_pairing::tests::standalone_range_changes_only_normalized_caller_arrays ... ok
+test scene_codes::tests::unequal_low_bytes_use_alternate_base_and_logical_not_after_return ... ok
+test scene_codes::tests::undefined_modes_and_reached_invalid_mode_one_selectors_diagnose ... ok
+test scene_codes::tests::scene_to_cache_and_three_cache_calls_share_actual_byte6_handoff ... ok
+test scene_codes::tests::scalar_code_preserves_every_image_byte_except_selected_byte6 ... ok
+test setup::tests::selected_input_has_old_legacy_not_ready_match ... ok
+test setup::tests::live_views_follow_scene_and_cache_reference_changes ... ok
+test replacement::tests::temporary_cached_player_fallback_is_input_to_rearrangement_then_cleared ... ok
+test replacement::tests::whole_image_writes_belong_to_replacement_or_its_native_callees ... ok
+test shared_image_tests::shared_image_neutral_speed_reads_the_config_object_used_by_prefix ... ok
+test role_pairing::tests::original_parent_image_ownership_and_named_word_deltas ... ok
+test shared_image_tests::shared_image_legacy_player_load_is_visible_to_new_assignment_snapshot ... ok
+test shared_image_tests::shared_image_new_player_load_is_visible_to_legacy_extra_event_projection ... ok
+test shared_image_tests::shared_image_prefix_history_write_preserves_canonical_player_bytes ... ok
+test shared_image_tests::shared_staff_count_high_index_bits_alias_the_same_original_word_shifted_entry ... ok
+test match_session::tests::substitution_numeric_queue_is_live_at_clock_boundary ... ok
+test shared_image_tests::shared_staff_count_cells_feed_the_existing_rating_bonus_reader ... ok
+test shared_image_tests::shared_staff_legacy_loader_updates_assignment_count_cells ... ok
+test step_tail::tests::actor_zero_weights_touch_exact_ds_alias_and_preserve_adjacent_words ... ok
+test step_tail::tests::clock_kind_is_sign_extended_to_long_not_cast_to_unsigned_word ... ok
+test step_tail::tests::actual_prefix_image_guards_reject_before_loading_or_resetting_fields ... ok
+test step_tail::tests::added_clock_decrements_and_elapsed_saturates_without_event ... ok
+test step_tail::tests::duplicate_clock_event_still_weights_alias_and_clears_cf51 ... ok
+test step_tail::tests::half_boundary_writes_actor_zero_event_counts_queue_and_pair ... ok
+test step_tail::tests::inactive_and_delay_clock_paths_do_not_reload_or_touch_other_state ... ok
+test step_tail::tests::malformed_clock_queue_context_rejects ... ok
+test step_tail::tests::pending_late_requests_remain_explicit_and_ordered ... ok
+test step_tail::tests::prefix_preserves_prior_goal_statistics_and_other_history_cells ... ok
+test step_tail::tests::prefix_restores_scores_and_history_uses_addition_with_wrapped_far_offset ... ok
+test step_tail::tests::queue_wrap_changes_only_new_entry_and_next_code_sentinel ... ok
+test step_tail::tests::scene_decrement_uses_unsigned_remaining_modulo_and_signed_threshold ... ok
+test step_tail::tests::shared_players_decrement_sequentially_then_stop_at_one ... ok
+test step_tail::tests::unavailable_status_and_signed_bytes_replace_scene_words_without_decrement ... ok
+test step_tail::tests::unsupported_prefix_fields_and_incomplete_or_aliased_definitions_reject ... ok
+test step_tail::tests::wrapped_sum_zero_terminates_without_advancing_and_signed_weight_wraps ... ok
+test substitution::tests::ai_uses_only_mask20_and_signed_positive_byte8_before_selection ... ok
+test substitution::tests::capacity_is_unsigned_word_wrapping_not_saturating_or_signed ... ok
+test substitution::tests::both_sides_are_visited_in_order_and_ai_scan_is_reverse_physical_slots ... ok
+test substitution::tests::managed_available_time_wrap_and_zero_capacity_skip_prompt_but_eligible_ui_diagnoses ... ok
+test substitution::tests::managed_pending_gate_precedes_all_ui_paths_even_for_unavailable_keeper ... ok
+test shared_image_tests::shared_image_legacy_club_load_is_visible_to_new_pairing_snapshot ... ok
+test substitution::tests::no_ai_dispatch_preserves_every_byte_and_seed ... ok
+test substitution::tests::ai_time_endpoints_and_signed_event_total_strict_comparison ... ok
+test substitution::tests::stored_selector_is_passed_instead_of_loop_index_and_bad_side_mapping_diagnoses ... ok
+test substitution::tests::zero_reserves_stop_immediately_after_ai_even_when_it_makes_no_change ... ok
+test scene_codes::tests::original_parent_image_ownership_includes_hidden_cache_writes ... ok
+test tests::comparison_is_signed_even_when_rating_and_draw_are_large ... ok
+test tests::zero_arguments_still_draw_and_ties_do_not_score ... ok
+test tests::zero_chances_preserve_the_entire_slice_image ... ok
+test watched_ball::tests::distance_air_metrics_overflow_and_second_helper_call ... ok
+test watched_ball::tests::independent_wrapping_extended_move_guard_and_playing_bounds ... ok
+test terminal::tests::image_preserves_unrelated_bytes_and_seed ... ok
+test shared_image_tests::shared_image_new_club_is_visible_to_legacy_extra_event_projection ... ok
+test watched_ball::tests::restore_guards_sentinel_same_coordinate_and_codes ... ok
+test replacement::tests::saved_word2_sentinel_and_ordinary_value_survive_rebuild_and_parent ... ok
+test substitution::tests::missing_reached_read_set_aliases_and_expected_outputs_reject ... ok
+test watched_compiled::action::tests::a_pool_cannot_clip_the_entry_stack_after_its_first_byte ... ok
+test watched_compiled::action::tests::actor_set_piece_margin_keeps_logical_occupancy_and_prior_bounds ... ok
+test watched_compiled::action::tests::actual_required_entry_fact_cannot_be_silently_defaulted ... ok
+test watched_compiled::action::tests::actor_entry_requires_an_explicit_logical_render_style_pointer ... ok
+test watched_compiled::action::tests::entry_player_pools_cannot_alias_each_other_or_pitch_storage ... ok
+test watched_compiled::action::tests::entry_schema_and_reserved_aliases_are_strict ... ok
+test match_session::tests::one_native_match_reaches_original_result_and_two_actual_replacements ... ok
+test watched_compiled::action::tests::original_entry_context_initializes_one_data_image_and_real_abi ... ok
+test watched_compiled::action::tests::original_wait_requests_presentation_time_without_gameplay_or_rng_effects ... ok
+test watched_compiled::action::tests::real_original_action_and_commentary_roots_replay ... ok
+test watched_compiled::action::tests::the_private_call_stack_cannot_alias_the_data_segment ... ok
+test watched_compiled::action::tests::valid_original_parent_fixture_replays ... ok
+test watched_ball::tests::original_restore_stamp_and_owned_packet_fields ... ok
+test watched_ball::tests::strict_input_missing_reached_cells_and_aliases ... ok
+test rearrangement::tests::signed_availability_and_flags_exclude_sum_and_sort_as_fourteen ... ok
+test watched_compiled::action::tests::all_original_parent_dispatch_and_shot_fixtures_replay ... ok
+test player_cache::tests::expected_results_and_nested_observations_are_not_inputs ... ok
+test watched_compiled::caller::tests::missing_offside_word_read_closes_the_caller_before_the_later_store ... ok
+test watched_compiled::compiled::tests::add_and_sub_signed_unsigned_boundaries ... ok
+test watched_compiled::compiled::tests::conditional_comparisons_stop_on_match_mismatch_and_zero_count ... ok
+test watched_compiled::compiled::tests::division_signed_word_and_overflow ... ok
+test watched_compiled::compiled::tests::exchange_preserves_flags_and_unrelated_registers ... ok
+test watched_compiled::compiled::tests::failed_entry_preserves_the_actual_leaf_call_chain ... ok
+test watched_compiled::compiled::tests::far_and_near_frames_have_original_pascal_argument_offsets ... ok
+test watched_compiled::compiled::tests::flat_memory_preserves_segment_aliases_for_stack_data ... ok
+test watched_compiled::compiled::tests::inc_dec_preserve_carry_and_logic_clear_it ... ok
+test watched_compiled::compiled::tests::missing_diagnostics_identify_actual_data_and_scratch_bytes ... ok
+test watched_compiled::compiled::tests::missing_engine_and_scratch_reads_diagnose ... ok
+test watched_compiled::compiled::tests::original_byte_swap_preserves_sequential_overlap_and_far_abi ... ok
+test watched_compiled::compiled::tests::original_pascal_search_retries_and_includes_zero_characters ... ok
+test watched_compiled::compiled::tests::relocated_calls_keep_real_cs_words_and_logical_procedure_names ... ok
+test watched_compiled::compiled::tests::repeated_move_honors_reverse_overlap_and_preserves_flags ... ok
+test watched_compiled::compiled::tests::retained_frame_resume_rejects_a_changed_guest_return ... ok
+test watched_compiled::compiled::tests::retained_frame_resumes_once_and_requires_an_actual_guest_return ... ok
+test watched_compiled::compiled::tests::rng_trace_uses_actual_seed_parameter_not_unrelated_global ... ok
+test watched_compiled::compiled::tests::rotate_left_forms_original_membership_bits_without_changing_status_flags ... ok
+test watched_compiled::compiled::tests::shifts_mask_counts_and_signed_extension ... ok
+test watched_compiled::caller::tests::caller_admission_and_failed_advance_keep_alias_and_domain_guards ... ok
+test watched_compiled::compiled::tests::strict_first_write_requires_original_baseline_even_for_zero ... ok
+test watched_compiled::compiled::tests::thirty_two_bit_pair_multiply_keeps_carries_sign_and_word_aliases ... ok
+test watched_compiled::compiled::tests::watched_lifecycle_rejects_nested_ticks_tick_limit_and_exhausted_fuel ... ok
+test watched_compiled::compiled::tests::wide_divide_has_signed_remainder_and_rejects_zero_overflow ... ok
+test watched_compiled::compiled::tests::word_crosses_segment_end_after_effective_offset_wrap ... ok
+test watched_compiled::caller::tests::original_compiled_offside_store_rejects_a_missing_write_baseline ... ok
+test watched_compiled::caller::tests::computed_half_and_full_time_clock_results_close_the_parent_loop ... ok
+test player_cache::tests::all_managed_gate_branch_combinations_follow_static_order ... ok
+test substitution::tests::five_selection_calls_share_replacement_state_and_live_counter_mutations ... ok
+test setup::tests::setup_input_guards_reject_incomplete_and_conflicting_data ... ok
+test substitution::tests::shared_parent_image_write_ownership_includes_only_reached_selection_replacement_cells ... ok
+test watched_compiled::prepared::tests::source_role_lookup_rejects_conflicting_incoming_alias ... ok
+test watched_compiled::prepared::tests::weekly_award_baselines_are_incoming_but_current_award_is_computed ... ok
+test setup::tests::preparation_preserves_nonstarter_canonical_bytes_and_legacy_until_owned ... ok
+test watched_compiled::tests::actual_compiled_coin_and_seed_control_adjustment ... ok
+test watched_compiled::tests::adjustment_paths_tactic_precedence_and_wrapped_increment ... ok
+test watched_compiled::prepared::tests::prepared_inputs_reject_outcomes_and_pending_keys_before_execution ... ok
+test watched_compiled::tests::selection_active_side_random_short_circuit ... ok
+test watched_compiled::tests::selection_formation_updates_offset_and_target ... ok
+test watched_compiled::tests::selection_frame_is_required_and_does_not_extend_adjustment_schema ... ok
+test watched_compiled::tests::selection_missing_and_alias_guards ... ok
+test watched_compiled::tests::selection_raw_frame_flag_controls_inactive_keeper_clear ... ok
+test watched_compiled::tests::strict_missing_alias_and_expected_inputs ... ok
+test watched_compiled::tests::strict_regions_duplicates_and_readonly_aliases ... ok
+test watched_compiled::tick::tests::all_original_watched_ticks_and_one_persistent_sequence ... ok
+test watched_compiled::tick::tests::missing_initial_cell_closes_the_session_without_retrying_a_partial_tick ... ok
+test watched_compiled::tick::tests::typed_tick_admission_rejects_external_key_and_pointer_frame_aliases ... ok
+test watched_compiled::prepared::tests::headless_input_poll_runs_compiled_no_key_path ... ok
+test match_session::tests::repeated_supported_sessions_finish_identically ... ok
+test watched_compiled::caller::tests::all_eight_original_clock_boundaries_compute_without_outcome_inputs ... ok
+test watched_compiled::watched_match::tests::final_hardware_clock_restoration_preserves_all_admitted_gameplay_and_far_abi ... ok
+test watched_compiled::watched_match::tests::final_footer_and_exit_key_preserve_world_and_require_finished_clock ... ok
+test watched_compiled::watched_match::tests::formation_counts_match_both_original_clubs_without_text_or_gameplay_writes ... ok
+test watched_compiled::prepared::tests::native_editor_owns_both_bytes_of_normalized_key_words ... ok
+test watched_compiled::watched_match::tests::fixture_title_preserves_hidden_output_frame_and_rejects_unproven_inputs ... ok
+test watched_compiled::watched_match::tests::original_attribute_loop_writes_only_attributes_and_checks_baselines ... ok
+test rearrangement::tests::expected_results_and_all_nested_intermediates_are_not_inputs ... ok
+test watched_compiled::watched_match::tests::original_reverse_glyph_copy_preserves_attributes_ax_and_direction ... ok
+test watched_compiled::watched_match::tests::native_lineup_validator_matches_nine_original_squad_cases_and_preserves_gameplay ... ok
+test watched_compiled::watched_match::tests::menu_templates_preserve_gameplay_and_reject_unproven_page_or_caller ... ok
+test watched_direction::tests::blocked_retries_share_image_and_reached_witnesses_are_required ... ok
+test watched_direction::tests::coin_axes_wrapped_byte_deltas_and_equal_target ... ok
+test setup::tests::native_preparation_reaches_ready_match_then_actual_full_time ... ok
+test watched_direction::tests::signed_clamp_guards_and_only_target_high_byte ... ok
+test watched_direction::tests::original_root_direction_and_retry_calls ... ok
+test watched_direction::tests::strict_input_and_write_ownership ... ok
+test watched_kickoff::tests::all_rng_retry_branches_and_signed_gate_threshold ... ok
+test watched_kickoff::tests::invalid_alias_missing_reached_facts_and_explicit_domains ... ok
+test watched_kickoff::tests::mode_upgrades_score_success_and_failure_and_original_rng_sites ... ok
+test watched_kickoff::tests::native_launch_state_and_all_twenty_two_action_stores ... ok
+test watched_kickoff::tests::orientation_signed_byte_wrap_axis_ties_and_half_distance ... ok
+test watched_compiled::prepared::tests::selected_native_image_computes_the_original_watched_entry_and_retains_its_frames ... ok
+test watched_kickoff::tests::readiness_scans_and_short_circuits_actual_availability ... ok
+test watched_movement::tests::actual_tag_five_and_all_occupancy_mask_byte_edges ... ok
+test watched_movement::tests::bounds_endpoints_and_stay_precede_active_actor_and_role_guards ... ok
+test watched_movement::tests::directions_and_signed_byte_wrapping_use_old_position_not_target_or_input_candidate ... ok
+test watched_movement::tests::identities_and_expected_output_fields_are_not_admitted ... ok
+test watched_compiled::watched_match::tests::statistics_projection_changes_only_the_consumed_key_and_checks_callers ... ok
+test watched_movement::tests::original_guard_order_avoids_unreached_pitch_reads ... ok
+test watched_compiled::watched_match::tests::grouped_number_native_helper_matches_all_original_outputs_and_hidden_abi ... ok
+test watched_movement::tests::indexed_witness_is_not_an_expected_candidate_and_only_word_zero_is_owned ... ok
+test watched_movement::tests::original_watched_movement_calls ... ok
+test watched_compiled::watched_match::tests::original_menu_cursor_helpers_apply_external_continue_keys_and_reject_other_callers ... ok
+test watched_kickoff::tests::original_initial_kickoff_roots ... ok
+test watched_target::tests::at_target_hold_and_actor_action_transitions ... ok
+test watched_target::tests::code49_queue_weight_identity_dedup_and_wrap ... ok
+test watched_setup::tests::incomplete_computed_outcome_and_inconsistent_selected_inputs_reject ... ok
+test watched_target::tests::commentary_uses_actor_scene_identity_and_zero_slots_on_opposite_side ... ok
+test watched_target::tests::orientation_wrap_and_original_override_order ... ok
+test watched_target::tests::selector_matches_slot_not_index_and_actor_override_wins ... ok
+test watched_target::tests::strict_inputs_aliases_and_reached_missing_identities ... ok
+test watched_target::tests::original_target_parent_calls ... ok
+test watched_ball::tests::original_ball_roots ... ok
+test watched_compiled::watched_match::tests::replacement_announcement_matches_eight_original_styles_and_restores_gameplay ... ok
+test watched_setup::tests::genuinely_incoming_ball_words_survive_owned_initialization ... ok
+test watched_compiled::prepared::tests::current_fixture_flags_compute_the_caller_cup_marker ... ok
+test watched_compiled::tests::original_adjustment_roots ... ok
+test watched_setup::tests::tracked_selected_setup_reaches_pre_call_without_additional_support ... ok
+test watched_compiled::tests::original_selection_roots ... ok
+test watched_setup::tests::selected_squad_computes_original_draws_and_every_first_watched_entry_field ... ok
+test watched_kickoff::tests::exact_whole_image_ownership ... ok
+test watched_compiled::prepared::tests::one_selected_image_matches_all_171_original_caller_iterations ... ok
+test watched_compiled::action::tests::every_captured_original_action_boundary_replays ... ok
+test watched_compiled::prepared::tests::native_entry_guards_reject_aliases_frames_quick_mode_and_unknown_writes ... ok
+test watched_compiled::watched_match::tests::original_ui_leaves_match_all_48_style_results_and_preserve_gameplay ... ok
+test watched_compiled::caller::tests::original171caller_iterations_share_one_native_image_and_clock ... ok
+test watched_target::tests::whole_image_write_ownership ... ok
+
+test result: ok. 425 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 57.65s
+
+     Running tests/ai_selection.rs (engine/target/debug/deps/ai_selection-6ddc8b5463045302)
+
+running 1 test
+test original_thirty_seven_calls_and_thirty_three_helpers ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.79s
+
+     Running tests/cache_helpers.rs (engine/target/debug/deps/cache_helpers-ae5d13b8bf1ff70e)
+
+running 3 tests
+test actual_original_managed_club_calls ... ok
+test actual_original_cached_roster_slot_calls ... ok
+test actual_original_side_phases_and_all_rating_store_continuations ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/cache_selection.rs (engine/target/debug/deps/cache_selection-88255c7d50890980)
+
+running 15 tests
+test first_eligible_after_unavailable_entries_is_selected_even_with_zero_score ... ok
+test independent_side_club_bounds_and_maximum_player_are_supported ... ok
+test equal_raw_high_bit_ratings_replace_because_current_is_sign_extended ... ok
+test native_visit_census_follows_static_double_rating_on_improvement ... ok
+test actual_original_cached_selectors_replay ... ok
+test ordinary_tie_keeps_first_but_high_bit_current_is_not_unsigned_maximum ... ok
+test malformed_and_expected_inputs_reject_without_mutating_callers ... ok
+test no_eligible_reports_undefined_local_instead_of_inventing_a_player ... ok
+test shared_roster_ids_use_one_canonical_record_and_zero_id_is_unavailable ... ok
+test shifted_negative_score_is_positive_and_keeps_an_ordinary_tie ... ok
+test signed_remainder_is_not_quotient_and_logical_shift_preserves_word_bits ... ok
+test zero_signed_byte_and_status_flags_skip_candidates_without_rating ... ok
+test original_fixture_provenance_and_stream_hashes_are_pinned ... ok
+test changed_expected_results_cannot_steer_native_selection_or_rating ... ok
+test actual_original_cached_ratings_replay ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/event_effects.rs (engine/target/debug/deps/event_effects-6950e18515b05cb9)
+
+running 5 tests
+test first_actual_original_69b8_effect_case_replays ... ok
+test expected_after_states_helpers_and_selectors_cannot_steer_updates ... ok
+test all_22_original_logical_effects_selectors_draws_and_ordered_helpers_replay ... ok
+test composed_effects_reject_wrong_handoffs_and_rosters ... ok
+test computed_placement_prefix_decision_requests_feed_all_effects ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.90s
+
+     Running tests/extra_event.rs (engine/target/debug/deps/extra_event-14038a4ba74654b6)
+
+running 6 tests
+test changed_expected_output_helper_or_draw_cannot_steer_the_decision ... ok
+test first_actual_original_dbc6_case_replays ... ok
+test all_909_original_helpers_replay_independently_from_raw_inputs ... ok
+test all_original_decisions_draws_helpers_and_dispatches_replay ... ok
+test conflicting_actual_handoffs_are_rejected_instead_of_reset ... ok
+test all_decisions_use_actual_computed_placement_and_prefix_images ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.37s
+
+     Running tests/goal_effects.rs (engine/target/debug/deps/goal_effects-cf0a238d783bb642)
+
+running 6 tests
+test all_original_byte6_helpers_replay ... ok
+test first_original_goal_effect_replays ... ok
+test changed_expectation_cannot_steer_native_effects ... ok
+test all_original_goal_effects_replay ... ok
+test changed_coin_request_or_composed_actor_is_rejected ... ok
+test composed_placement_effects_keep_the_real_consumed_seed ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.37s
+
+     Running tests/neutral_input.rs (engine/target/debug/deps/neutral_input-08f3308b0b5a129d)
+
+running 1 test
+test fourteen_static_neutral_branch_cases_are_not_original_observations ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/placement.rs (engine/target/debug/deps/placement-1515d19d429e7aa3)
+
+running 9 tests
+test a_wrong_composed_handoff_is_rejected_without_resetting_it_to_the_fixture ... ok
+test first_original_placement_replays ... ok
+test no_goal_cases_still_require_complete_original_roster_inputs ... ok
+test changed_input_seed_is_rejected_at_first_divergence ... ok
+test changed_expected_draw_is_rejected_at_first_divergence ... ok
+test all_original_availability_predicates_match ... ok
+test changed_or_missing_goal_callback_cannot_steer_the_native_algorithm ... ok
+test all_original_placements_and_callbacks_replay ... ok
+test contests_compose_without_resetting_seed_or_generated_handoff ... ok
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s
+
+     Running tests/player_cache.rs (engine/target/debug/deps/player_cache-5fae3c5ab910bf7b)
+
+running 2 tests
+test actual_original_parent_direct_and_nested_census ... ok
+test actual_original_parent_roots_and_every_continuation_replay ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.70s
+
+     Running tests/post_score.rs (engine/target/debug/deps/post_score-820a16f6ec8bf83b)
+
+running 5 tests
+test first_actual_original_post_score_case_replays ... ok
+test expected_results_do_not_steer_strategy_or_helpers ... ok
+test invalid_prefix_footprints_and_keeper_preludes_diagnose ... ok
+test all_original_strategies_and_ordered_helpers_replay ... ok
+test actual_prefix_shared_footprints_feed_all_original_strategies ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.44s
+
+     Running tests/prepared_match.rs (engine/target/debug/deps/prepared_match-9e28fa3716ffcbc7)
+
+running 1 test
+test fresh_and_retained_prepared_sessions_match_every_original_tick_draw_action_and_return has been running for over 60 seconds
+test fresh_and_retained_prepared_sessions_match_every_original_tick_draw_action_and_return ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 99.34s
+
+     Running tests/quick_reset.rs (engine/target/debug/deps/quick_reset-1812acda39a309ed)
+
+running 5 tests
+test first_actual_original_quick_reset_case_replays ... ok
+test composed_reset_rejects_inconsistent_shared_fields ... ok
+test expected_intermediate_and_helper_results_cannot_steer_reset ... ok
+test all_original_resets_and_ordered_copies_motions_helpers_strategy_replay ... ok
+test actual_prefix_image_feeds_all_resets_and_strategy_boundaries ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+     Running tests/ratings.rs (engine/target/debug/deps/ratings-818e63444bd0b5c3)
+
+running 5 tests
+test first_original_ratings_replay ... ok
+test changed_expected_ratings_or_helper_outputs_cannot_steer_computation ... ok
+test all_original_side_ratings_replay ... ok
+test all_original_computed_ratings_contests_replay ... ok
+test all_original_player_and_bonus_helpers_replay ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.28s
+
+     Running tests/rearrangement.rs (engine/target/debug/deps/rearrangement-047c3aed2be88462)
+
+running 1 test
+test original_two_parents_and_all_164_caller_observations ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.67s
+
+     Running tests/replacement.rs (engine/target/debug/deps/replacement-bf2951c40070ddf6)
+
+running 2 tests
+test original_twenty_five_compact_rating_flags ... ok
+test original_two_replacements_and_twenty_six_helpers ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.57s
+
+     Running tests/replay.rs (engine/target/debug/deps/replay-e14acc5a13c82d83)
+
+running 5 tests
+test first_original_case_replays ... ok
+test changed_expected_draw_is_rejected_at_first_divergence ... ok
+test existing_goal_bytes_accumulate_with_byte_wrapping ... ok
+test changed_input_seed_is_rejected_at_first_divergence ... ok
+test all_original_cases_replay ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+
+     Running tests/role_cache.rs (engine/target/debug/deps/role_cache-1653bc8bfb26d41b)
+
+running 2 tests
+test actual_original_nested_helper_and_store_census ... ok
+test actual_original_role_roots_and_all_continuations_replay ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/role_pairing.rs (engine/target/debug/deps/role_pairing-2a9b8b4fe1779fe9)
+
+running 2 tests
+test actual_original_twenty_standalone_range_boundaries ... ok
+test actual_original_parent_pairings_and_every_ordered_range ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/role_scores.rs (engine/target/debug/deps/role_scores-d19fcf3e821198b5)
+
+running 2 tests
+test actual_original_table_scores_replay ... ok
+test actual_original_scene_scores_and_nested_handoff_replay ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/scene_assignment.rs (engine/target/debug/deps/scene_assignment-d2b7e792809107aa)
+
+running 2 tests
+test actual_original_two_rebuilds_and_twenty_observed_helpers ... ok
+test actual_original_forty_four_assignment_boundaries ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.14s
+
+     Running tests/scene_codes.rs (engine/target/debug/deps/scene_codes-9b0345618965396b)
+
+running 2 tests
+test actual_original_six_code_calls_and_scene_results ... ok
+test actual_original_scene_cache_parents_and_every_continuation ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/step_tail.rs (engine/target/debug/deps/step_tail-b8ccfa7981728395)
+
+running 7 tests
+test first_original_clock_replay ... ok
+test first_original_prefix_replay ... ok
+test composed_prefix_rejects_wrong_observed_handoffs_instead_of_resetting_them ... ok
+test expected_outputs_cannot_steer_prefix_or_clock ... ok
+test all_original_clocks_and_actor_zero_numeric_events_replay ... ok
+test all_original_prefixes_and_sequential_scene_helpers_replay ... ok
+test actual_native_placement_outputs_feed_all_prefixes ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.77s
+
+     Running tests/substitution.rs (engine/target/debug/deps/substitution-2c27a09be8395d84)
+
+running 1 test
+test original_ninety_one_dispatchers_401_events_and_37_ai_continuations ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.82s
+
+     Running tests/terminal.rs (engine/target/debug/deps/terminal-947f23796811634d)
+
+running 16 tests
+test fixture_hashes_bind_originals_indexes_and_projection ... ok
+test synthetic_near_duplicate_wraps_previous_low_byte_without_borrow ... ok
+test synthetic_duplicate_uses_current_previous_row_not_its_table_value ... ok
+test synthetic_first_scene_never_compares_previous_side_tail ... ok
+test synthetic_canonical_shared_player_reads_one_position_cell ... ok
+test synthetic_swapped_physical_offsets_have_independent_defaults ... ok
+test synthetic_direction_time_boundary_and_independent_scene_selector ... ok
+test synthetic_composition_keeps_actual_position_writes_and_all_other_fields ... ok
+test synthetic_ahead_uses_signed_y_direction_and_keeps_distance_tie ... ok
+test synthetic_signed_product_extremes_and_distance_domain ... ok
+test changed_expected_observations_cannot_steer_native_computation ... ok
+test synthetic_near_tie_keeps_first_and_threshold_is_unsigned_strict ... ok
+test actual_original_terminal_cases_replay ... ok
+test synthetic_wide_duplicate_sign_and_previous_high_byte_wrap ... ok
+test synthetic_actor_byte19_and_unavailable_skip_direction_and_stores ... ok
+test malformed_states_diagnose_before_mutating_input ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.32s
+
+     Running tests/watched_match.rs (engine/target/debug/deps/watched_match-a85f49d2c2d33a2c)
+
+running 1 test
+test one_initial_admission_matches_every_original_tick_draw_action_and_final_return ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 46.28s
+
+   Doc-tests onenil_engine
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -284,16 +284,21 @@ mod python {
     }
     #[pymethods]
     impl NativePreparedWatchedSession {
-        fn finish(&self) -> PyResult<String> {
-            let mut session = self
-                .session
-                .lock()
-                .map_err(|_| PyValueError::new_err("prepared caller lock poisoned"))?;
-            let result = match session.finish() {
-                Ok(ok) => serde_json::json!({"ok":ok}),
-                Err(error) => serde_json::json!({"error":error}),
-            };
-            serde_json::to_string(&result).map_err(|e| PyValueError::new_err(e.to_string()))
+        fn finish(&self, py: Python<'_>) -> PyResult<String> {
+            // Computation owns only Rust state;let the server answer preparation
+            // polls while its worker retains this one native session.
+            py.detach(|| {
+                let mut session = self
+                    .session
+                    .lock()
+                    .map_err(|_| "prepared caller lock poisoned".to_owned())?;
+                let result = match session.finish() {
+                    Ok(ok) => serde_json::json!({"ok":ok}),
+                    Err(error) => serde_json::json!({"error":error}),
+                };
+                serde_json::to_string(&result).map_err(|e| e.to_string())
+            })
+            .map_err(PyValueError::new_err)
         }
         #[new]
         fn new(input_json: &str) -> PyResult<Self> {

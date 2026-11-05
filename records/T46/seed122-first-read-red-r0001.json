@@ -1,0 +1,83 @@
+{
+  "scope": "Valid reference lineup/seed122 native full-session preflight fails at newly reached compiled device-input poll;no gameplay expected state or helper result was supplied.",
+  "baseline_engine_tree": "b70dc1ae0b371b4ca5cef71ba66c0ef737b2ff3d",
+  "choices": {
+    "lineup": "reference",
+    "seed": "122"
+  },
+  "valid_initial_input_sha256": "31442cb8f114f06451255702c80a18c13a44074bb478d42d62cac53a075e4423",
+  "completed_ticks": 439,
+  "draws": 20512,
+  "message": "prepared tick440 draw20512: missing reached native data at 24BC:0996 0000:F91F",
+  "missing": {
+    "address": 63775,
+    "pc": [
+      9404,
+      2454
+    ],
+    "scratch": false,
+    "writing": false
+  },
+  "call_chain": [
+    [
+      2745,
+      58421
+    ],
+    [
+      2745,
+      57438
+    ],
+    [
+      2745,
+      32203
+    ],
+    [
+      2745,
+      31862
+    ],
+    [
+      2745,
+      31547
+    ],
+    [
+      2745,
+      29412
+    ],
+    [
+      2745,
+      17579
+    ],
+    [
+      2745,
+      17266
+    ],
+    [
+      2745,
+      16979
+    ],
+    [
+      2745,
+      27964
+    ],
+    [
+      2745,
+      27256
+    ],
+    [
+      2745,
+      26770
+    ],
+    [
+      2745,
+      25476
+    ],
+    [
+      9404,
+      3173
+    ]
+  ],
+  "full_local_log_sha256": "4316b4c59fdd771df38953764d76cd4ba7454aa05c1f22a03eae6ea7ce8931fc",
+  "reference64_preflight": "4199ticks/182811draws/831actions/score2:1/actualEBE2 succeeded before seed122 failed",
+  "static_source": "research60179ee:24BC:0C5C passes DS:F918 to098F;0996 reads capabilitybyte+7;boot1F97 calls092B,which sets+7 from INT33 reset availability at0940..094C.",
+  "no_new_original_measurement": true
+}

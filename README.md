@@ -15,10 +15,13 @@ The watched preview now provides detailed named player actions,a running clock,
 live scores and actual player/ball positions. Build the release extension below,
 then run `.cache/venv/bin/python tools/play_watched.py` and open
 http://127.0.0.1:8041. Allow time for the initial native match computation.
-Kick off,pause,continue at halftime and restart from the browser.
-This preview supports the reference XI from one post-setup admission;native
-selected-lineup/seed setup and additional complete sessions remain required
-before milestone35 acceptance. The earlier quick-result preview and its
+Choose the reference XI (Newell starts) or reserve XI (Warhurst starts),and
+seed64 or122,then click Prepare match. The preparation indicator remains visible
+while Rust computes the match;when ready,kick off,pause,continue at halftime
+and restart from the browser. All four choices execute native selected-squad
+setup through the actual full-match return. Only reference64 has complete
+original-match parity evidence;the alternatives establish supported completion.
+The earlier quick-result preview and its
 lineup/seed controls remain at `tools/play_match.py` on port8040.
 
 The first slice is `0AB9:D983`, the quick result's three-contest routine. Its scope is the input
@@ -1626,7 +1629,7 @@ output serialization from the pre-serialized admission. It makes no emulator
 speed comparison. The reference's legacy `scores` field is scratch during play;
 running scores use nativeD0C4/C5,with the source-defined final side mapping.
 
-## Watched commentary and pitch preview
+## Watched commentary and pitch preview (T42 baseline)
 
 [confirmed: T42 browser/controller checks] The local watched viewer presents
 all831 accepted native actions over4,199 ticks,including named passes,tackles,
@@ -1637,17 +1640,17 @@ watched tick. A caller event's newer timestamp advances the displayed clock
 when emitted between the tick return and the next entry. Half-time stops
 playback;fulltime consumes the complete native post-whistle run.
 
-[designed] Each server startup computes one Rust match from the pinned initial
+[designed: historical T42 delivery] Each server startup computed one Rust match from the pinned initial
 admission and caches only that fresh native result for playback/restart.
 The runtime never reads original reference outcomes,executes the original game
 or models its actions in Python. It reads the initial numeric facts and the
-existing narrowly decoded factual name map. This reference preview does not
-provide lineup/seed choices or integrate the prepared native setup described below.
+existing narrowly decoded factual name map. T46 below replaces this fixed
+post-setup admission with selected-squad native preparation.
 
 ```sh
 .cache/venv/bin/python tools/play_watched.py --port 8041
 .cache/venv/bin/python tools/test_play_watched.py
-.cache/venv/bin/python tools/smoke_watched_viewer.py --out records/T42
+.cache/venv/bin/python tools/smoke_watched_viewer.py --out records/T46
 python3 records/T42/validate_audits.py
 ```
 
@@ -1777,3 +1780,49 @@ checkpoint in an already finalized attempt;it does not accept an aborted result.
 The older schema1 observer has decoded progress only,so its progress journal
 cannot restore the original machine. Use the checkpointed attempt identified
 in the live issue,not that older progress journal.
+
+
+## Selectable prepared watched viewer
+
+[confirmed: T46 `records/T46/native-completions-r0004.json`,
+`four-native-verification-r0001.json`, `T46-r0002.json`] The current watched
+viewer starts with selected initial data,computes the original setup,and retains
+one Rust image/RNG through the actual outer `0AB9:EBE2` return. Choose Newell or
+Warhurst starting,and seed64 or122. Preparation runs in the background with a
+visible indicator;the local HTTP server remains responsive. Kick off then plays
+chronological named actions alongside actual native player/ball coordinates,
+caller-clock minutes and live goals. Pause,halftime/continue,fulltime and restart
+are checked on desktop and mobile for every choice. Restart replays only the
+fresh native presentation computed by this running application.
+
+```sh
+.cache/venv/bin/python tools/play_watched.py --port 8041
+# Open http://127.0.0.1:8041; choose lineup/seed, Prepare match, then Kick off.
+.cache/venv/bin/python tools/replay_prepared_choices.py --check --replay
+.cache/venv/bin/python tools/test_play_watched.py
+.cache/venv/bin/python tools/smoke_watched_viewer.py --out records/T46
+python3 records/T46/validate_audits.py
+```
+
+[confirmed: T45 original-r0003 and T46 release-r0001] Reference64 matches
+all4,199 original ticks,182,811 ordered draws,831 watched actions,4,101 actual
+caller-clock rows and final state. Reference122,reserve64 and reserve122 finish
+natively with3:0,0:0 and4:2 respectively;these establish completion support,
+not additional original parity. Full-time whistle and post-whistle walkoff
+follow native control flow rather than a fixed tick count.
+
+[designed] Runtime reads only public initial numeric facts and decoded identity
+metadata. It uses neither original executables nor captured post-setup states,
+per-step inputs or expected outcomes. The additional source-owned initial facts
+are readonly numeric descriptor/character-membership tables,not game assets.
+Headless startup owns the original mouse-driver availability byte;compiled
+input polling still executes. Native errors remain explicit.
+
+[confirmed: `records/T46/release-r0001.json`] Release computation took
+7.73–10.02seconds per complete supported match on the recorded host. This
+measurement includes input preparation,native setup/full match,serialization
+and decoding;it excludes GUI presentation conversion and does not compare
+against emulator speed. Native match time is displayed during paced playback;
+wall-clock playback speed is a prototype control. This is a four-choice
+exhibition,with season/management systems and broader replacement evidence
+still deferred. Milestone35 remains open for owner-run review and fixes.

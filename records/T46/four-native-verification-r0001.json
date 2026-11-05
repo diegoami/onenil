@@ -1,0 +1,71 @@
+{
+  "scope": "All four supported initial lineup/seed sessions complete natively;only reference64 claims original-reference parity. Prepared viewer integration/browser acceptance still pending.",
+  "source_commit": "d8f9e8a3380addc2f4c56c54b4b0ca8c79c1164f",
+  "native_rust_source_unchanged_since_release_build": "b1a8c52 engine/src equals current source;new static fixtures are typed initial inputs,not embedded runtime results.",
+  "completion_record": "records/T46/native-completions-r0004.json",
+  "completion_record_sha256": "3bfcd591a84d4fad574780c9301683319a43071510f560eeffd88751934e63d4",
+  "extension_sha256": "e6ffe56ef8c31e994cb6b3e8690c1726257b61c4c1c33a7d31adf8f0621c7397",
+  "debug_assertions": false,
+  "sessions": [
+    {
+      "choices": {
+        "lineup": "reference",
+        "seed": "64"
+      },
+      "ticks": 4199,
+      "actions": 831,
+      "score": [
+        2,
+        1
+      ],
+      "clock_rows": 4101,
+      "actual_return": "0AB9:EBE2"
+    },
+    {
+      "choices": {
+        "lineup": "reference",
+        "seed": "122"
+      },
+      "ticks": 4153,
+      "actions": 966,
+      "score": [
+        3,
+        0
+      ],
+      "clock_rows": 4053,
+      "actual_return": "0AB9:EBE2"
+    },
+    {
+      "choices": {
+        "lineup": "reserve",
+        "seed": "64"
+      },
+      "ticks": 3752,
+      "actions": 777,
+      "score": [
+        0,
+        0
+      ],
+      "clock_rows": 3660,
+      "actual_return": "0AB9:EBE2"
+    },
+    {
+      "choices": {
+        "lineup": "reserve",
+        "seed": "122"
+      },
+      "ticks": 4111,
+      "actions": 820,
+      "score": [
+        4,
+        2
+      ],
+      "clock_rows": 4011,
+      "actual_return": "0AB9:EBE2"
+    }
+  ],
+  "reference_output_sha256": "c3e55594f93feb82066dff0c712e12f1262a96f64e7927451a984930d2426013",
+  "reference_clock_sha256": "51a788461fc34ee23200147285c5162a3a639e1f62155ca867639697059e00d3",
+  "static_source_fixture": "initial_static-r0002.json;1775source-matched entries,1228overlap facts unchanged,547additional initial facts for alternatives",
+  "no_intermediate_inputs": true
+}

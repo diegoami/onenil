@@ -1,0 +1,18 @@
+{
+  "scope": "Source-owned headless startup capability makes the actual compiled24BC:0C58 queue poll succeed;native gameplay code and T45 reference fixture remain unchanged.",
+  "source_basis": "research60179ee:24BC:1F97 calls092B;0940..094C stores mouse reset availability at F918+7;0996 checks that byte before mouse reads.",
+  "platform_policy": "No DOS mouse driver supplied by native headless runner. Only capabilitybyteF91F is initialized to0;no mouse timers/state or gameplay results are admitted.",
+  "red_record": "records/T46/compiled-input-red-r0001.json",
+  "green_log_sha256": "3c39259af420490dfbd991af6303c32924789c0cb9ac81e9a73faa5681521c20",
+  "green_tail": [
+    "",
+    "running 1 test",
+    "test watched_compiled::prepared::tests::headless_input_poll_runs_compiled_no_key_path ... ok",
+    "",
+    "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 423 filtered out; finished in 0.82s",
+    ""
+  ],
+  "prepared_source_sha256": "03d8c6e40b21b958ca9c8d7addfdd4eadadf57bf40a2f47498471088737b3f88",
+  "python_binding_source_sha256": "7ee203bfaf695a5dd9e6d43e9e873dde45f38aec7711e1b27421d223e8eb68d8",
+  "release_build": "maturin develop --features python --release --locked passed;newfinish detaches Python during owned Rust computation;HTTP/browser responsiveness still to verify"
+}

@@ -1,0 +1,160 @@
+{
+  "scope": "Complete the source-read-only background-character membership bitset for the last supported combination;all previously frozen fixtures remain unchanged.",
+  "source_commit": "60179ee16009e175591b79d9230ff59027ccf6a5",
+  "source_reads": [
+    "0AB9:70BF",
+    "0AB9:788B"
+  ],
+  "new_range": [
+    3382,
+    3414
+  ],
+  "fixture": "engine/tests/fixtures/prepared_choices/initial_static-r0002.json",
+  "facts": 1775,
+  "reference_overlap": 1228,
+  "all_overlap_equal": true,
+  "additional_initial_facts": 547,
+  "before_fix_successful_sessions": [
+    {
+      "actions": 831,
+      "actual_return": "0AB9:EBE2",
+      "actual_starting_players": [
+        2661,
+        2662,
+        2675,
+        2664,
+        2665,
+        2666,
+        2667,
+        2673,
+        2669,
+        2670,
+        2676,
+        2581,
+        2582,
+        2583,
+        2584,
+        2585,
+        2586,
+        2587,
+        2588,
+        2589,
+        2590,
+        2591
+      ],
+      "choices": {
+        "lineup": "reference",
+        "seed": "64"
+      },
+      "clock_rows": 4101,
+      "clock_sha256": "51a788461fc34ee23200147285c5162a3a639e1f62155ca867639697059e00d3",
+      "draws": 182811,
+      "initial_seed": 64,
+      "input_sha256": "8238051cf2ee35d39b7dcdc3da6dc8a8a9989cb78c326cb52c964e7a660e900a",
+      "output_sha256": "c3e55594f93feb82066dff0c712e12f1262a96f64e7927451a984930d2426013",
+      "score": [
+        2,
+        1
+      ],
+      "setup_draws": 258,
+      "ticks": 4199
+    },
+    {
+      "actions": 966,
+      "actual_return": "0AB9:EBE2",
+      "actual_starting_players": [
+        2661,
+        2662,
+        2675,
+        2664,
+        2665,
+        2666,
+        2667,
+        2673,
+        2669,
+        2670,
+        2676,
+        2581,
+        2582,
+        2583,
+        2584,
+        2585,
+        2586,
+        2587,
+        2588,
+        2589,
+        2590,
+        2591
+      ],
+      "choices": {
+        "lineup": "reference",
+        "seed": "122"
+      },
+      "clock_rows": 4053,
+      "clock_sha256": "96971ba0cfacef031616ddf40ae70dd6027fead759773a02059f1d88e5f64950",
+      "draws": 176495,
+      "initial_seed": 122,
+      "input_sha256": "a5e9a27a945bba7e68bb79463306c0fc47aca5cfb28a31b1600fc4944cf9bee4",
+      "output_sha256": "c154b2e6a9cddf81faf9fd5044fcefb83bce318bf61d5588e85e50994ffb458d",
+      "score": [
+        3,
+        0
+      ],
+      "setup_draws": 258,
+      "ticks": 4153
+    },
+    {
+      "actions": 777,
+      "actual_return": "0AB9:EBE2",
+      "actual_starting_players": [
+        2661,
+        2662,
+        2675,
+        2664,
+        2665,
+        2666,
+        2667,
+        2673,
+        2669,
+        2670,
+        2676,
+        2581,
+        2582,
+        2583,
+        2584,
+        2585,
+        2586,
+        2587,
+        2588,
+        2589,
+        2593,
+        2591
+      ],
+      "choices": {
+        "lineup": "reserve",
+        "seed": "64"
+      },
+      "clock_rows": 3660,
+      "clock_sha256": "141827c7502aef4f0dd0ccb2e4ec16006061e9a544b3354917ac925583894185",
+      "draws": 174309,
+      "initial_seed": 64,
+      "input_sha256": "49b0b25f92c9ab2b281c2543fcf7b6d8fcd8f6072a66768fe39242863fffd184",
+      "output_sha256": "4d08581820d74a7ea6328b1007f903316f9cd7808718ba0ba185e174faa82b6b",
+      "score": [
+        0,
+        0
+      ],
+      "setup_draws": 258,
+      "ticks": 3752
+    }
+  ],
+  "before_fix_failure": "ValueError: native prepared match failed: prepared tick632 draw30020: missing reached native data at 0AB9:70BF 0000:0D4B;missing={'address': 3403, 'pc': [2745, 28863], 'scratch': False, 'writing': False}",
+  "before_fix_log_sha256": "69c2cfac5d4197aeaba80eccb86cec0aed631894d03e912f82192001cab25248",
+  "source_check": [
+    "pinned original4199ticks/182811draws/831actions and actual fulltime return verified",
+    "Pinned reference initial input unchanged;8 invalid choices and tampered numeric table rejected",
+    "All1775 source-static numeric entries independently regenerate from pinned research listing"
+  ],
+  "source_check_log_sha256": "2a30da33de7cbd87b1684fd53efba0ffef999ffca5a811240364a7eb8dac2d0d",
+  "initialization_limit": "Only the explicitly identified read-only bitset and numeric mappings are completed from static source. Other initial facts stay as observed;for example F20 has an observed bootstrap change and is not replaced from raw executable defaults."
+}

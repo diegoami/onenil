@@ -7,11 +7,15 @@
 <main>
 <section class="scoreboard" aria-label="Scoreboard">
 <div class="fixture-label">ENGLISH CLUB FOOTBALL <span>·</span> EXHIBITION MATCH</div>
-<div class="score-row"><div class="team home"><span class="badge blue">BR</span><h1 id="home">Blackburn R</h1></div><div class="score"><strong id="score">0 <span>:</span> 0</strong><div id="clock">0′</div></div><div class="team away"><span class="badge red">SW</span><h1 id="away">Sheffield Wed</h1></div></div>
-<div class="status"><span id="status-dot"></span><span id="phase">Ready for kickoff</span></div>
+<div class="score-row"><div class="team home"><span class="badge blue">BR</span><h1 id="home">Blackburn R</h1></div><div class="score"><strong id="score">—</strong><div id="clock">—</div></div><div class="team away"><span class="badge red">SW</span><h1 id="away">Sheffield Wed</h1></div></div>
+<div class="status"><span id="status-dot"></span><span id="phase">Preparing match…</span></div>
 </section>
-<p class="fixture-label">WATCHED MATCH · REFERENCE XI</p>
-<div class="toolbar"><button id="primary">Kick off</button><button id="restart" class="secondary">Restart</button><label for="speed">Match pace</label><select id="speed"><option value="300">Steady</option><option value="80" selected>Quick</option><option value="8">Fast</option></select><span class="connection" id="connection">Local native engine</span></div>
+<section class="setup" aria-label="Match setup">
+<label for="lineup">Starting XI</label><select id="lineup" disabled><option value="reference">Reference XI</option><option value="reserve">Reserve starter</option></select>
+<label for="seed">Seed</label><select id="seed" disabled><option value="64">64</option><option value="122">122</option></select>
+<button id="configure" class="secondary" disabled>Prepare match</button><span id="selected" aria-live="polite">Preparing your match…</span>
+</section><p class="fixture-label">WATCHED EXHIBITION</p>
+<div class="toolbar"><button id="primary" disabled>Preparing…</button><button id="restart" class="secondary">Restart</button><label for="speed">Match pace</label><select id="speed"><option value="300">Steady</option><option value="80" selected>Quick</option><option value="8">Fast</option></select><span class="connection" id="connection">Local native engine</span></div>
 <p class="error" id="error" role="alert" hidden></p>
 <div class="match-grid">
 <section class="pitch-card"><div class="section-head"><h2>The pitch</h2><span>LIVE PLAYER POSITIONS</span></div>
@@ -19,11 +23,11 @@
 <defs><pattern id="grass" width="180" height="600" patternUnits="userSpaceOnUse"><rect width="90" height="600" fill="#1b644b"/><rect x="90" width="90" height="600" fill="#1d6b50"/></pattern></defs>
 <rect width="1000" height="600" rx="12" fill="#174f3e"/><rect x="50" y="50" width="900" height="500" fill="url(#grass)"/>
 <g fill="none" stroke="#c0d7c3" stroke-width="2" opacity=".7"><rect x="50" y="50" width="900" height="500"/><path d="M500 50V550"/><circle cx="500" cy="300" r="70"/><rect x="50" y="160" width="140" height="280"/><rect x="810" y="160" width="140" height="280"/><rect x="50" y="230" width="50" height="140"/><rect x="900" y="230" width="50" height="140"/><path d="M50 275H35V325H50 M950 275H965V325H950"/><circle cx="500" cy="300" r="2" fill="#c0d7c3"/></g>
-<g id="players"></g><circle id="ball" r="5" fill="white" stroke="#182b22" stroke-width="2"/></svg>
-<p class="pitch-note">Player and ball positions follow the native match. Gold ring marks the current actor.</p>
+<g id="players"></g><circle id="ball" style="display:none" r="5" fill="white" stroke="#182b22" stroke-width="2"/></svg>
+<p id="pitch-note" class="pitch-note">Player and ball positions follow the native match. Gold ring marks the current actor.</p>
 <div class="lineups" id="lineups"></div>
 </section>
-<section class="commentary-card"><div class="section-head"><h2>Live commentary</h2><span id="live-label">AWAITING KICKOFF</span></div><div id="commentary" role="log" aria-live="polite" aria-relevant="additions"><p class="empty">The teams are ready.<br>Kick off to follow the match.</p></div></section>
+<section class="commentary-card"><div class="section-head"><h2>Live commentary</h2><span id="live-label">AWAITING KICKOFF</span></div><div id="commentary" role="log" aria-live="polite" aria-relevant="additions"><p class="empty">Preparing the selected match.<br>The pitch and commentary will be ready shortly.</p></div></section>
 </div>
-<footer><strong>Watch the native match.</strong> Kick off to follow detailed player actions and the pitch. This preview supports the reference XI; lineup and seed choices are coming next.</footer>
+<footer><strong>Watch the native match.</strong> Kick off to follow detailed player actions and the pitch. Choose a starting XI and seed, prepare the match, then kick off.</footer>
 </main></body></html>

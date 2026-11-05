@@ -9,6 +9,11 @@ use crate::{layout, role_scores::Cells, setup, watched_setup};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
+// [confirmed:archaeology60179ee,DS8708..8715;1B55:72C8] Read-only role
+// lookup,also used at01EF:162A/1C94,1998:0688 and0AB9:BC35. Own every
+// source entry,including roles not visited by the original reference session.
+const ROLE_LOOKUP: [u8; 14] = [2, 12, 12, 12, 12, 3, 3, 3, 3, 3, 3, 3, 14, 14];
+
 #[derive(Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Input {
@@ -88,6 +93,14 @@ impl Session {
             .ok_or("missing current caller fixture flags")?
             .fixture_flags;
         let support = support_cells(&input.support)?;
+        for (index, expected) in ROLE_LOOKUP.iter().enumerate() {
+            if support
+                .get(&(0x8708 + index))
+                .is_some_and(|value| value != expected)
+            {
+                return Err("source role lookup alias differs".into());
+            }
+        }
         let mut prepared = setup::Session::before_watched_call(
             input.preparation.setup,
             input.preparation.incoming,
@@ -95,6 +108,7 @@ impl Session {
         )?;
         let preparation = prepared.preparation();
         let e = &mut prepared.match_state.inner.e;
+        e.image[0x8708..0x8716].copy_from_slice(&ROLE_LOOKUP);
         if e.word(0xD6E6) != caller_club || e.image[0xD29] != u8::from(fixture_flags & 15 == 1) {
             return Err("current fixture/caller/home-flag alias differs".into());
         }
@@ -159,6 +173,12 @@ impl Session {
         for (address, value) in [(0xDD64, 0u16), (0xDE8C, 0), (0xDE8E, 0)] {
             e.image[address..address + 2].copy_from_slice(&value.to_le_bytes());
         }
+        // [confirmed:static60179ee,24BC:1F97/092B/0940--094C] Startup
+        // stores INT33 reset availability at F918+7;0996 checks it before
+        // reading mouse state. [designed] This headless runner supplies no DOS
+        // mouse driver. Own only that capability byte;the compiled key poll
+        // and queue checks still execute,with other mouse data left unknown.
+        e.image[0xF91F] = 0;
         let week = u16::from(e.image[layout::CONFIG]);
         let club = e.word(0xD6E6);
         let known = e.image.take_initialized()?;
@@ -456,6 +476,35 @@ mod tests {
             assert_eq!(session.cpu.read(0, 0x0D2A, 8).unwrap(), expected);
             assert!(session.cpu.known[0x0D2A]);
         }
+    }
+    #[test]
+    fn source_role_lookup_rejects_conflicting_incoming_alias() {
+        let mut value = input();
+        value.support.push(ByteFact {
+            area: Area::Ds,
+            offset: 0x8711,
+            value: 99,
+        });
+        assert_eq!(
+            Session::new(value).err().unwrap(),
+            "source role lookup alias differs"
+        );
+    }
+    #[test]
+    fn headless_input_poll_runs_compiled_no_key_path() {
+        let mut session = Session::new(input()).unwrap();
+        let c = &mut session.cpu;
+        let result = c.invoke(
+            super::super::action_graph::p_24bc_0c58,
+            true,
+            0x24BC,
+            0x0C58,
+            0x6384,
+        );
+        assert!(result.is_ok(), "compiled no-key poll failed: {result:?}");
+        assert_eq!(c.r[0] & 255, 0);
+        assert_eq!(c.read(0, 0xDE8C, 16).unwrap(), 0);
+        assert_eq!(c.read(0, 0xDE8E, 16).unwrap(), 0);
     }
     #[test]
     fn native_editor_owns_both_bytes_of_normalized_key_words() {
