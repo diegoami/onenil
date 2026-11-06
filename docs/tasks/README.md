@@ -65,3 +65,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T46 Selectable prepared watched match and detailed viewer](T46.md)
 
 - [T47 Review follow-ups: viewer scope and smoke output paths](T47.md)
+
+- [T48 Browser and packaged desktop delivery comparison](T48.md)
