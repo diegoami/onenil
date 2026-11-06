@@ -110,4 +110,4 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   record=dict(schema='native-window-check/1',scope='native focus/menu/move' if args.focus_only else 'full native keyboard/save/match lifecycle',producer=producer,binary_sha256=binary_sha256,font_sha256=hashlib.sha256(args.font.read_bytes()).hexdigest(),display=os.environ.get('DISPLAY'),elapsed_seconds=time.monotonic()-start,steps=steps,screenshots=shots,worker_pids=worker_pids,status='failed' if error or xerrors else 'passed',x11_errors=xerrors,error=error,stderr=stderr.read_text() if stderr.exists() else '')
   with args.record.open('x') as f:json.dump(record,f,indent=2);f.write('\n')
   print(record['status'],len(steps),'native input steps',len(shots),'screenshots')
- if error:raise AssertionError(error)
+ if error or xerrors:raise AssertionError(error or xerrors)
