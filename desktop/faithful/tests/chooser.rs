@@ -62,7 +62,15 @@ fn browsing_and_refusal_keep_state_and_save_target() {
     assert_eq!(a.controller.screen, Screen::SavedGames);
     assert_eq!(a.controller.load_entries, vec!["MANUAL", "SAVE1"]);
     assert_eq!(a.controller.load_index, 0);
+    a.key(Key::Up);
+    assert_eq!(a.controller.load_index, 0); // Native list-edge choice, not a DOS claim.
+    assert_eq!(a.controller.editor.campaign, initial);
+    assert_eq!(a.save_path, old_target);
     a.key(Key::Down);
+    a.key(Key::Down);
+    assert_eq!(a.controller.load_index, 1);
+    assert_eq!(a.controller.editor.campaign, initial);
+    assert_eq!(a.save_path, old_target);
     a.key(Key::Escape);
     assert_eq!(a.controller.screen, Screen::SavedGames);
     assert_eq!(a.controller.load_index, 1);

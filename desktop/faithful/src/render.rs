@@ -430,6 +430,9 @@ impl Renderer {
                         34,
                     );
                 }
+                // [confirmed] S025 displays a fifth row; [designed] Mark editing is unavailable.
+                self.text(2, 17, "Mark", TEXT, GROUND, 15);
+                self.text(18, 17, "unavailable", TEXT, GROUND, 18);
             }
         }
     }

@@ -1,0 +1,8 @@
+{
+  "schema": "review126-red/1",
+  "base": "4b60b65",
+  "command": "ONENIL_DESKTOP_FONT=<absolute-font> cargo test --manifest-path desktop/faithful/Cargo.toml --features software,egui --locked --test window mark_row_stays_explicit",
+  "exit_status": 101,
+  "log_sha256": "41ab924edafb7e4322faaa296b449642782cf9b53d4838dd54d719f43062b24a",
+  "failure": "Mark/unavailable row changes between captured and owned card"
+}

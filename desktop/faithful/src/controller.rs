@@ -147,6 +147,7 @@ impl Controller {
     pub fn key(&mut self, key: Key) {
         self.message.clear();
         match self.screen {
+            // [designed] Clamp at list edges; W006 establishes interior movement only.
             Screen::SavedGames => match key {
                 Key::Up => self.load_index = self.load_index.saturating_sub(1),
                 Key::Down => {
@@ -248,6 +249,7 @@ impl Controller {
                 }
                 _ => self.unsupported(),
             },
+            // [confirmed] B271 disables the fifth Mark selection in management (0D91=0).
             Screen::Instructions => match key {
                 Key::Up => self.instruction = self.instruction.saturating_sub(1),
                 Key::Down => self.instruction = (self.instruction + 1).min(3),
