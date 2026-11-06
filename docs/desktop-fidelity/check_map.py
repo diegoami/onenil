@@ -7,6 +7,7 @@ import json
 import re
 import subprocess
 from datetime import datetime, timezone
+from functools import lru_cache
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -14,6 +15,7 @@ ROOT = HERE.parents[1]
 PIN = '6aca98caeebc1b9b5410852139fa305462224a05'
 
 
+@lru_cache(maxsize=None)
 def read_at(research, name):
     return subprocess.check_output(['git', '-C', str(research), 'show', f'{PIN}:{name}'])
 
@@ -54,12 +56,12 @@ def markdown(data):
               '[derived] Each row preserves the catalog title and complete original screenshot/record',
               'set in the JSON. The source chapter supplies exact keys and order; a family is reused',
               'only for its presentation, never to generalize cancellation or persistent effects.', '',
-              '| Workflow / original procedure | Desktop families | Variant / transaction requirement |',
-              '| --- | --- | --- |']
+              '| Workflow / original procedure | Desktop families | Variant anchors | Transaction requirement |',
+              '| --- | --- | --- | --- |']
     for row in data['workflows']:
-        lines.append(f"| [{row['id']} {row['title']}]({ref}{row['chapter']}) | {', '.join(row['families'])} | {row['boundary_note']} |")
+        lines.append(f"| [{row['id']} {row['title']}]({ref}{row['chapter']}) | {', '.join(row['families'])} | {'; '.join(row['variants'])} | {row['boundary_note']} |")
     lines += ['', '## All executable main-menu slots', '',
-              '[confirmed/derived] Labels and observed/static boundaries retain the accepted audit;',
+              '[derived from the accepted audit] Labels and observed/static boundaries retain their source;',
               'the desktop destination is proposed. Previous player is visible/static only.', '',
               '| Slot | Original action | Desktop destination | Original coverage boundary |',
               '| --- | --- | --- | --- |']
