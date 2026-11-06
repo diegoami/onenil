@@ -1856,3 +1856,10 @@ against emulator speed. Native match time is displayed during paced playback;
 wall-clock playback speed is a prototype control. This is a four-choice
 exhibition,with season/management systems and broader replacement evidence
 still deferred. Milestone35 remains open for owner-run review and fixes.
+
+
+The faithful desktop prototype also accepts `--choose-save`: choose native campaign
+JSON files beside `--save`, using Up/Down and Enter. Escape keeps the original-style
+list open; F9 cancels this native invocation. F7 saves to the successfully loaded
+file. `--load` remains direct restore. See [campaign state](docs/campaign-state.md)
+for supported routes and the remaining original startup/new-game work.

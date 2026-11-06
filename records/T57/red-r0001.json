@@ -1,0 +1,22 @@
+{
+  "schema": "native-chooser-red/1",
+  "base_commit": "7a9478bd23b8e06c6bbed74946994c370c041216",
+  "command": "cargo test --manifest-path desktop/faithful/Cargo.toml --test chooser --locked",
+  "exit_status": 101,
+  "log_sha256": "468fdcee84f29915439f119735138ffc4a0951eb12056470055f852a44db453a",
+  "errors": [
+    "error[E0599]: no method named `choose_save` found for struct `Application` in the current scope",
+    "error[E0599]: no method named `choose_save` found for struct `Application` in the current scope",
+    "error[E0599]: no method named `choose_save` found for struct `Application` in the current scope",
+    "error[E0599]: no variant, associated function, or constant named `SavedGames` found for enum `Screen` in the current scope",
+    "error[E0609]: no field `load_entries` on type `Controller`",
+    "error[E0609]: no field `load_index` on type `Controller`",
+    "error[E0599]: no variant, associated function, or constant named `SavedGames` found for enum `Screen` in the current scope",
+    "error[E0609]: no field `load_index` on type `Controller`",
+    "error[E0599]: no method named `choose_save` found for struct `Application` in the current scope",
+    "error[E0599]: no variant, associated function, or constant named `SavedGames` found for enum `Screen` in the current scope",
+    "error[E0609]: no field `load_index` on type `Controller`",
+    "error[E0599]: no method named `choose_save` found for struct `Application` in the current scope",
+    "error[E0609]: no field `game_name` on type `Controller`"
+  ]
+}

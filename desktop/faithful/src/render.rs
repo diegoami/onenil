@@ -570,6 +570,30 @@ impl Renderer {
     }
     pub fn draw(&mut self, c: &Controller) {
         match c.screen {
+            Screen::SavedGames => {
+                self.sheet("saved-games");
+                self.rect(26 * 9, 13 * 16, 18 * 9, 9 * 16, 0);
+                let start = c.load_index.saturating_sub(8);
+                for (row, name) in c.load_entries.iter().enumerate().skip(start).take(9) {
+                    let selected = row == c.load_index;
+                    self.text(
+                        26,
+                        13 + row - start,
+                        name,
+                        if selected { 0 } else { TEXT },
+                        if selected { TEXT } else { 0 },
+                        18,
+                    );
+                }
+                self.text(
+                    0,
+                    24,
+                    "Native saves: Enter-load  F9-return  Esc-keeps list",
+                    CYAN,
+                    0,
+                    80,
+                );
+            }
             Screen::Players | Screen::Options => self.players(c),
             Screen::Pitch | Screen::History | Screen::HalfTime | Screen::FullTime => {
                 self.match_view(c)
@@ -643,6 +667,7 @@ impl Renderer {
             Screen::Main | Screen::Quit => {
                 self.sheet("main");
                 self.team_panel(c);
+                self.text(70, 1, &c.game_name, TEXT, GROUND, 8);
                 self.text(2, 2, &c.editor.campaign.club.name, TEXT, GROUND, 16);
                 self.text(2, 4, &c.editor.campaign.manager.name, TEXT, GROUND, 16);
                 let digits = c.editor.campaign.cash.to_string();
