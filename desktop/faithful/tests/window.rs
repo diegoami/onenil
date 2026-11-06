@@ -89,3 +89,32 @@ fn instruction_labels_follow_owned_state_and_options_keep_original_border() {
             .unwrap();
     }
 }
+
+#[cfg(feature = "raster")]
+#[test]
+fn changed_card_retains_original_detail_panel_dividers() {
+    use onenil_desktop::{
+        controller::{Controller, Key},
+        editor::Location,
+        render::Renderer,
+    };
+    let font = std::env::var_os("ONENIL_DESKTOP_FONT").unwrap();
+    let mut r = Renderer::new(std::path::Path::new(&font)).unwrap();
+    let mut c = Controller::default();
+    c.key(Key::Space);
+    c.editor.select(Location::First(17)).unwrap();
+    c.key(Key::Space);
+    c.editor
+        .campaign
+        .cycle_goalkeeper_positioning(2598)
+        .unwrap();
+    r.draw(&c);
+    let cells: serde_json::Value =
+        serde_json::from_str(include_str!("../assets/cells.json")).unwrap();
+    for (x, y) in [(36, 12), (53, 8), (36, 18)] {
+        assert_eq!(
+            r.pixels[(y * 16 + 8) * 720 + x * 9 + 4],
+            cells["screens"]["details"][y * 80 + x][1].as_u64().unwrap() as u32
+        );
+    }
+}

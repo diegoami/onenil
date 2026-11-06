@@ -20,6 +20,9 @@ Space opens Players; Insert switches skills/details; Enter picks/places a player
 cancels/returns. F7 saves the complete campaign; F9 loads a native save, showing a chooser when several exist. Main-menu Enter opens the actual PSG
 fixture preparation; campaign match admission is still pending. Press E to open the separate
 native exhibition. See [saved-club state, launch and limits](docs/campaign-state.md).
+Player options now implement Reposition, Club position and the observed goalkeeper
+Positioning cycle under Change tactics. Save/reload retains those edits. Other
+instruction rows and management actions remain unavailable.
 Campaign edits do not yet feed the exhibition or advance the fixture. This is a tested Linux desktop
 candidate, with several UI/statistics/management gaps; no final toolkit or Windows package is claimed.
 
