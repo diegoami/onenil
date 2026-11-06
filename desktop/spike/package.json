@@ -6,7 +6,7 @@
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
-    "package:linux": "electron-packager . OneNilUISpike --platform=linux --arch=x64 --out=../../.cache/T48-packages --overwrite --ignore=node_modules --ignore=package-lock.json"
+    "package:linux": "node package.cjs"
   },
   "devDependencies": {
     "@electron/packager": "20.3.0",

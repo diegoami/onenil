@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; frame-src http://127.0.0.1:8041; connect-src 'none'; object-src 'none'; base-uri 'none'">
+  <title>One-Nil · UI delivery comparison</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div><p class="eyebrow">ONE-NIL / DELIVERY SPIKE</p><h1>Northbridge Athletic</h1></div><div class="context">Pre-season · Week <span id="week">1</span><br><strong id="money"></strong></div></header>
+<main>
+  <p class="notice">UI comparison · Designed sample squad and finances. This is a disposable prototype, not a playable campaign.</p>
+  <nav aria-label="Club views"><button id="squad-tab" aria-pressed="true">Squad</button><button id="fixtures-tab" aria-pressed="false">Fixtures</button><button id="match-tab" aria-pressed="false">Watched exhibition</button></nav>
+  <section id="squad-view" aria-label="Squad management">
+    <div class="toolbar"><div><h2>Players <span class="badge">24</span></h2><p id="keyboard-help">↑ ↓ select · Enter details · Move player previews a swap · Escape cancels</p></div><div class="files"><button id="save">Save file</button><button id="load">Load file</button><input id="load-input" type="file" accept=".json,application/json" hidden></div></div>
+    <div class="squad-layout"><div class="table-scroll" tabindex="0" aria-label="Scrollable squad table"><table aria-describedby="keyboard-help"><thead><tr><th>Position</th><th>Player</th><th>Role</th><th>Age</th><th>Skill</th><th>Fitness</th><th>Availability</th></tr></thead><tbody id="players"></tbody></table></div>
+    <aside id="detail" aria-label="Selected player details"><p class="eyebrow">SELECTED PLAYER</p><h2 id="player-name"></h2><p id="player-position"></p><dl id="player-details"></dl><button id="move">Move player</button><p class="muted">Swapping positions here tests the UI transaction. Original position and eligibility rules will be connected in later campaign tasks.</p><label for="instructions">Team instruction (sample)</label><select id="instructions"><option>Balanced</option><option>Attacking</option><option>Defensive</option></select></aside></div>
+  </section>
+  <section id="fixtures-view" aria-label="Sample fixtures" hidden><h2>Fixture navigation</h2><p>Designed example schedule; no simulated results or competition rules.</p><label for="fixture-page">Fixture page</label><select id="fixture-page"><option value="0">Weeks 1–8</option><option value="1">Weeks 9–16</option><option value="2">Weeks 17–24</option></select><ol id="fixtures"></ol></section>
+  <section id="match-view" aria-label="Existing watched exhibition" hidden><h2>Existing native watched match</h2><p id="exhibition-boundary">This exhibition does not use this edited squad or update its week, money or fixtures. Its supported lineups, detailed commentary and pitch come from the existing Rust engine.</p><p>Start <code>tools/play_watched.py --port 8041</code> locally, then open the view below. No internet connection is needed.</p><button id="open-match">Open local exhibition</button><div id="match-container"></div></section>
+  <p id="status" role="status" aria-live="polite">Ready · sample state is held in this window until saved.</p>
+</main>
+<dialog id="move-dialog" aria-labelledby="move-title"><form method="dialog"><p class="eyebrow">PREVIEW CHANGE</p><h2 id="move-title">Move player</h2><p id="move-summary"></p><label for="destination">Swap with position</label><select id="destination"></select><p>Only Confirm move changes the squad. Escape or Cancel move leaves it as it was.</p><div class="dialog-actions"><button value="cancel">Cancel move</button><button value="confirm" class="primary">Confirm move</button></div></form></dialog>
+<script src="app.js"></script>
+</body></html>
