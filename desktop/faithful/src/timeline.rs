@@ -243,6 +243,7 @@ pub enum Phase {
     FullTime,
 }
 pub struct Playback {
+    full_whistle_seen: bool,
     pub timeline: Timeline,
     pub phase: Phase,
     pub cursor: usize,
@@ -252,6 +253,7 @@ impl Playback {
     pub fn new(timeline: Timeline) -> Self {
         Self {
             timeline,
+            full_whistle_seen: false,
             phase: Phase::Ready,
             cursor: 0,
             events: Vec::new(),
@@ -287,15 +289,18 @@ impl Playback {
                 .ok_or("timeline ended without full-time whistle")?;
             self.events.extend(f.events.clone());
             self.cursor += 1;
-            if f.events.iter().any(|e| e.kind == "half-time") {
-                self.phase = Phase::HalfTime;
-                break;
-            }
             if f.events.iter().any(|e| e.kind == "full-time") {
-                if self.cursor != self.timeline.frames.len() {
-                    return Err("unconsumed frames after final whistle".into());
+                self.full_whistle_seen = true;
+            }
+            if self.cursor == self.timeline.frames.len() {
+                if !self.full_whistle_seen {
+                    return Err("native playback ended without final whistle".into());
                 }
                 self.phase = Phase::FullTime;
+                break;
+            }
+            if f.events.iter().any(|e| e.kind == "half-time") {
+                self.phase = Phase::HalfTime;
                 break;
             }
         }
@@ -304,6 +309,7 @@ impl Playback {
     pub fn restart(&mut self) {
         self.cursor = 0;
         self.events.clear();
+        self.full_whistle_seen = false;
         self.phase = Phase::Ready;
     }
 }

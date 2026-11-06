@@ -1,0 +1,253 @@
+//! [confirmed] Navigation: research manual W007/W013–W017/W031/W034–W040.
+//! [designed] Unsupported actions are diagnosed; they do not invent campaign behavior.
+use crate::{
+    editor::{Editor, Location, Panel},
+    timeline::{Phase, Playback, Timeline},
+};
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Screen {
+    Main,
+    Players,
+    Options,
+    Preparation,
+    Preparing,
+    Pitch,
+    History,
+    Bench,
+    HalfTime,
+    FullTime,
+    Quit,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Key {
+    Up,
+    Down,
+    Left,
+    Right,
+    Enter,
+    Escape,
+    Space,
+    Insert,
+    F7,
+    F9,
+    F10,
+    Y,
+    N,
+}
+pub struct Controller {
+    pub editor: Editor,
+    pub screen: Screen,
+    pub caller: Screen,
+    pub menu: usize,
+    pub preparation_menu: usize,
+    pub option: usize,
+    pub message: String,
+    pub prepare_requested: bool,
+    pub job_id: u64,
+    pub playback: Option<Playback>,
+    pub save_requested: bool,
+    pub load_requested: bool,
+    pub close_requested: bool,
+    pub speed: u8,
+    remembered_first: usize,
+}
+impl Default for Controller {
+    fn default() -> Self {
+        Self {
+            editor: Editor::default(),
+            screen: Screen::Main,
+            caller: Screen::Main,
+            menu: 0,
+            preparation_menu: 2,
+            option: 0,
+            message: String::new(),
+            prepare_requested: false,
+            job_id: 0,
+            playback: None,
+            save_requested: false,
+            load_requested: false,
+            close_requested: false,
+            speed: 23,
+            remembered_first: 0,
+        }
+    }
+}
+impl Controller {
+    fn players(&mut self) {
+        self.caller = self.screen;
+        self.screen = Screen::Players;
+    }
+    fn unsupported(&mut self) {
+        self.message = "This action is outside the desktop feasibility slice.".into();
+    }
+    pub fn accept_error(&mut self, id: u64, error: String) -> bool {
+        if id != self.job_id || self.screen != Screen::Preparing {
+            return false;
+        }
+        self.message = error;
+        self.screen = Screen::Preparation;
+        self.prepare_requested = false;
+        true
+    }
+    pub fn accept_timeline(&mut self, id: u64, timeline: Timeline) -> bool {
+        if id != self.job_id || self.screen != Screen::Preparing {
+            return false;
+        }
+        let mut playback = Playback::new(timeline);
+        if let Err(e) = playback.start_or_continue() {
+            return self.accept_error(id, e);
+        }
+        self.playback = Some(playback);
+        self.prepare_requested = false;
+        self.screen = Screen::Pitch;
+        true
+    }
+    pub fn tick(&mut self) {
+        if self.screen != Screen::Pitch {
+            return;
+        }
+        if let Some(p) = self.playback.as_mut() {
+            if let Err(e) = p.step(usize::from(self.speed.saturating_sub(20)).max(1)) {
+                self.message = e;
+                self.screen = Screen::Bench;
+                return;
+            }
+            match p.phase {
+                Phase::HalfTime => self.screen = Screen::HalfTime,
+                Phase::FullTime => self.screen = Screen::FullTime,
+                _ => (),
+            }
+        }
+    }
+    pub fn key(&mut self, key: Key) {
+        self.message.clear();
+        match self.screen {
+            Screen::Main => match key {
+                Key::Up => self.menu = (self.menu + 16) % 17,
+                Key::Down => self.menu = (self.menu + 1) % 17,
+                Key::Space => self.players(),
+                Key::Enter if self.menu == 0 => self.screen = Screen::Preparation,
+                Key::Enter if self.menu == 1 => self.players(),
+                Key::F7 => self.save_requested = true,
+                Key::F9 => {
+                    self.load_requested = true;
+                    self.message = "F9 is an experiment reload shortcut.".into();
+                }
+                Key::F10 => self.screen = Screen::Quit,
+                _ => self.unsupported(),
+            },
+            Screen::Players => match key {
+                Key::Up | Key::Down => {
+                    if let Location::First(i) = self.editor.selected {
+                        let next = if key == Key::Down {
+                            (i + 1).min(17)
+                        } else {
+                            i.saturating_sub(1)
+                        };
+                        self.editor.select(Location::First(next)).unwrap();
+                        self.remembered_first = next;
+                    }
+                }
+                Key::Left | Key::Right => {
+                    let destination = match self.editor.selected {
+                        Location::First(i) => {
+                            self.remembered_first = i;
+                            Location::Reserve
+                        }
+                        Location::Reserve => Location::First(self.remembered_first),
+                    };
+                    self.editor.select(destination).unwrap();
+                }
+                Key::Insert => {
+                    self.editor.panel = if self.editor.panel == Panel::Skills {
+                        Panel::Details
+                    } else {
+                        Panel::Skills
+                    }
+                }
+                Key::Enter => {
+                    let result = if self.editor.carried_player().is_some() {
+                        self.editor.place()
+                    } else {
+                        self.editor.pick()
+                    };
+                    if let Err(e) = result {
+                        self.message = e;
+                    }
+                }
+                Key::Escape => {
+                    if self.editor.carried_player().is_some() {
+                        self.editor.cancel();
+                    } else {
+                        self.screen = self.caller;
+                    }
+                }
+                Key::Space if self.editor.carried_player().is_none() => {
+                    self.screen = Screen::Options
+                }
+                _ => self.unsupported(),
+            },
+            Screen::Options => match key {
+                Key::Up => self.option = self.option.saturating_sub(1),
+                Key::Down => self.option = (self.option + 1).min(6),
+                Key::Escape => self.screen = Screen::Players,
+                _ => self.unsupported(),
+            },
+            Screen::Preparation | Screen::Bench => match key {
+                Key::Up => self.preparation_menu = self.preparation_menu.saturating_sub(1),
+                Key::Down => self.preparation_menu = (self.preparation_menu + 1).min(3),
+                Key::Space if self.screen == Screen::Preparation => self.players(),
+                Key::Enter if self.preparation_menu == 2 => {
+                    if self.screen == Screen::Preparation {
+                        self.job_id += 1;
+                        self.prepare_requested = true;
+                        self.screen = Screen::Preparing;
+                    } else {
+                        if let Some(p) = self.playback.as_mut() {
+                            if p.phase == Phase::HalfTime {
+                                let _ = p.start_or_continue();
+                            }
+                        }
+                        self.screen = Screen::Pitch;
+                    }
+                }
+                Key::Escape if self.screen == Screen::Preparation => self.screen = Screen::Main,
+                _ => self.unsupported(),
+            },
+            Screen::Preparing => {
+                if key == Key::Escape {
+                    self.job_id += 1;
+                    self.prepare_requested = false;
+                    self.screen = Screen::Preparation;
+                }
+            }
+            Screen::Pitch => match key {
+                Key::Space => self.screen = Screen::History,
+                Key::Escape | Key::Enter => {
+                    self.preparation_menu = 2;
+                    self.screen = Screen::Bench;
+                }
+                Key::Right => self.speed = self.speed.saturating_add(1).min(24),
+                Key::Left => self.speed = self.speed.saturating_sub(1).max(1),
+                _ => self.unsupported(),
+            },
+            Screen::History => match key {
+                Key::Space | Key::Escape => self.screen = Screen::Pitch,
+                _ => self.unsupported(),
+            },
+            Screen::HalfTime => {
+                self.preparation_menu = 2;
+                self.screen = Screen::Bench;
+            }
+            Screen::FullTime => {
+                self.screen = Screen::Main;
+                self.message = "Exhibition complete. No campaign result was posted.".into();
+            }
+            Screen::Quit => match key {
+                Key::Y => self.close_requested = true,
+                Key::N | Key::Escape => self.screen = Screen::Main,
+                _ => (),
+            },
+        }
+    }
+}
