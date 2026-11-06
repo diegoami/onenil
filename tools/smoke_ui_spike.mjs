@@ -1,0 +1,220 @@
+// [designed] Equivalent delivery acceptance; never an original-engine model.
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {createRequire} from 'node:module';
+import {execFileSync} from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath, pathToFileURL} from 'node:url';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const require = createRequire(path.join(root, 'desktop/spike/package.json'));
+const {chromium, _electron: electron} = require('playwright');
+const out = path.resolve(process.argv[2] || path.join(root, 'records/T48'));
+fs.mkdirSync(out, {recursive: true});
+let n = 1;
+while (fs.existsSync(path.join(out, `ui-r${String(n).padStart(4, '0')}.json`))) n++;
+const stem = `ui-r${String(n).padStart(4, '0')}`;
+const sha = data => createHash('sha256').update(data).digest('hex');
+const git = (...args) => execFileSync('git', args, {cwd: root, encoding: 'utf8'}).trim();
+const record = {schema: 'ui-delivery-spike/1', source: git('rev-parse', 'HEAD'),
+  started: new Date().toISOString(), status: 'running', cases: [], screenshots: {},
+  playwright: require('playwright/package.json').version, runtime: process.version,
+  designed_data: true, campaign_engine_integration: false};
+record.sources = Object.fromEntries(git('ls-files', 'web/spike', 'desktop/spike', 'tools/smoke_ui_spike.mjs')
+  .split('\n').filter(Boolean).map(name => [name, sha(fs.readFileSync(path.join(root, name)))]));
+record.desktop_test_flags = ['--no-sandbox'];
+record.native_dialogs = 'file paths supplied by main-process test doubles; native dialog appearance untested';
+let browser, desktop;
+async function image(page, name) {
+  const target = path.join(out, `${stem}-${name}.png`);
+  assert(!fs.existsSync(target));
+  await page.screenshot({path: target, fullPage: true});
+  record.screenshots[path.basename(target)] = sha(fs.readFileSync(target));
+}
+async function scenario(page, mode) {
+  const failures = [];
+  page.on('pageerror', e => failures.push(e.message));
+  await page.getByRole('heading', {name: 'Northbridge Athletic'}).waitFor();
+  assert.equal(await page.locator('tbody tr').count(), 24);
+  // Arrow movement, detail identity and cancellation must preserve actual state.
+  await page.locator('tbody tr').first().focus();
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  assert.equal(await page.locator('#player-name').textContent(), 'Alex Morgan');
+  const before = await page.evaluate(() => JSON.stringify(window.spikeState()));
+  await page.keyboard.press('Enter');
+  await page.getByRole('button', {name: 'Move player'}).click();
+  await page.locator('#destination').selectOption('17');
+  await page.keyboard.press('Escape');
+  await page.locator('#move-dialog').waitFor({state: 'hidden'});
+  assert.equal(await page.evaluate(() => JSON.stringify(window.spikeState())), before);
+  await page.getByRole('button', {name: 'Move player'}).click();
+  await page.locator('#destination').selectOption('17');
+  await page.getByRole('button', {name: 'Confirm move'}).click();
+  await page.locator('#player-position').filter({hasText: 'Reserve 2'}).waitFor();
+  assert.equal(await page.locator('#player-name').textContent(), 'Alex Morgan');
+  assert.match(await page.locator('#player-position').textContent(), /Reserve 2/);
+  // A pending transaction cannot be discarded by file operations.
+  await page.getByRole('button', {name: 'Move player'}).click();
+  assert(await page.locator('#move-dialog').isVisible());
+  await page.getByRole('button', {name: 'Cancel move'}).click();
+  await page.locator('#instructions').selectOption('Attacking');
+  await image(page, `${mode}-squad`);
+  const saved = path.join(root, '.cache', `${stem}-${mode}-save.json`);
+  if (mode === 'browser') {
+    const download = page.waitForEvent('download');
+    await page.getByRole('button', {name: 'Save file'}).click();
+    await (await download).saveAs(saved);
+  } else {
+    const live = await page.evaluate(() => window.spikeState());
+    await desktop.evaluate(({dialog}) => {
+      dialog.showSaveDialog = async () => ({canceled: true});
+      dialog.showOpenDialog = async () => ({canceled: true, filePaths: []});
+    });
+    await page.getByRole('button', {name: 'Save file'}).click();
+    await page.getByRole('status').filter({hasText: 'Save cancelled'}).waitFor();
+    await page.getByRole('button', {name: 'Load file'}).click();
+    await page.getByRole('status').filter({hasText: 'Load cancelled'}).waitFor();
+    assert.deepEqual(await page.evaluate(() => window.spikeState()), live);
+    record.cases.push('desktop: native file-dialog cancellation keeps live state');
+    await desktop.evaluate(({dialog}, target) => {
+      dialog.showSaveDialog = async () => ({canceled: false, filePath: target});
+    }, saved);
+    await page.getByRole('button', {name: 'Save file'}).click();
+    await page.getByRole('status').filter({hasText: 'Saved'}).waitFor();
+  }
+  assert(fs.existsSync(saved));
+  const state = JSON.parse(fs.readFileSync(saved, 'utf8'));
+  assert.equal(state.slots[17], 'p03');
+  const load = async target => {
+    if (mode === 'browser') await page.locator('#load-input').setInputFiles(target);
+    else {
+      await desktop.evaluate(({dialog}, file) => {
+        dialog.showOpenDialog = async () => ({canceled: false, filePaths: [file]});
+      }, target);
+      await page.getByRole('button', {name: 'Load file'}).click();
+    }
+  };
+  for (const [name, data] of [['version', {...state, version: 99}],
+    ['duplicate', {...state, slots: state.slots.map(() => 'p03')}],
+    ['malformed', '{'], ['html-name', {...state, club: '<img src=x>'}]]) {
+    const bad = path.join(root, '.cache', `${stem}-${mode}-${name}.json`);
+    fs.writeFileSync(bad, typeof data === 'string' ? data : JSON.stringify(data), {flag: 'wx'});
+    const live = await page.evaluate(() => JSON.stringify(window.spikeState()));
+    await load(bad);
+    await page.getByRole('status').filter({hasText: 'Load refused'}).waitFor();
+    assert.equal(await page.evaluate(() => JSON.stringify(window.spikeState())), live);
+    record.cases.push(`${mode}: rejected ${name} atomically`);
+  }
+  // Real reload after a change, not a snapshot supplied to the page.
+  await page.getByRole('button', {name: 'Move player'}).click();
+  await page.locator('#destination').selectOption('2');
+  await page.getByRole('button', {name: 'Confirm move'}).click();
+  await load(saved);
+  await page.getByRole('status').filter({hasText: 'Loaded'}).waitFor();
+  assert.deepEqual(await page.evaluate(() => window.spikeState()), state);
+  record.cases.push(`${mode}: keyboard/detail identity, cancel, swap, file round-trip`);
+  await page.getByRole('button', {name: 'Fixtures', exact: true}).click();
+  await page.locator('#fixture-page').selectOption('2');
+  assert.match(await page.locator('#fixtures li').first().textContent(), /Week 17/);
+  await page.getByRole('button', {name: 'Squad', exact: true}).click();
+  assert.equal(await page.locator('#player-name').textContent(), 'Alex Morgan');
+  record.cases.push(`${mode}: paged fixture navigation preserves selected player`);
+  assert.equal(await page.locator('iframe').count(), 0);
+  assert.match(await page.locator('#exhibition-boundary').textContent(), /does not use this edited squad/);
+  assert.deepEqual(failures, []);
+  return {saved, state, load};
+}
+async function exhibition(page, mode) {
+  const before = await page.evaluate(() => window.spikeState());
+  await page.getByRole('button', {name: 'Watched exhibition', exact: true}).click();
+  await page.getByRole('button', {name: 'Open local exhibition', exact: true}).click();
+  const frame = page.frameLocator('iframe');
+  await frame.getByRole('button', {name: 'Restart', exact: true}).click({timeout: 60000});
+  await frame.getByRole('button', {name: 'Kick off', exact: true}).waitFor({timeout: 60000});
+  await frame.getByRole('button', {name: 'Kick off', exact: true}).click();
+  await frame.locator('.event.pass').first().waitFor({timeout: 30000});
+  await frame.getByRole('button', {name: 'Pause', exact: true}).click();
+  await frame.getByRole('button', {name: 'Resume', exact: true}).waitFor();
+  assert.equal(await frame.locator('#players circle').count(), 22);
+  assert(!((await frame.locator('#commentary').textContent()).includes('Play continues')));
+  assert.deepEqual(await page.evaluate(() => window.spikeState()), before);
+  await image(page, `${mode}-native-exhibition`);
+  await page.getByRole('button', {name: 'Squad', exact: true}).click();
+  assert.deepEqual(await page.evaluate(() => window.spikeState()), before);
+  record.cases.push(`${mode}: live Rust exhibition pitch/named pass, pause and return without sample-state mutation`);
+}
+try {
+  assert.equal(git('status', '--porcelain', '--', 'web/spike', 'desktop/spike', 'tools/smoke_ui_spike.mjs'), '',
+    'commit spike producer sources before measurement');
+  browser = await chromium.launch({headless: true,
+    ...(process.env.CHROMIUM_PATH ? {executablePath: process.env.CHROMIUM_PATH} : {})});
+  record.chromium = browser.version();
+  let context = await browser.newContext({acceptDownloads: true, viewport: {width: 1440, height: 1000}, offline: true});
+  let page = await context.newPage();
+  await page.goto(pathToFileURL(path.join(root, 'web/spike/index.html')).href);
+  const browserResult = await scenario(page, 'browser');
+  await context.close();
+  context = await browser.newContext({offline: true, viewport: {width: 390, height: 844}});
+  page = await context.newPage();
+  await page.goto(pathToFileURL(path.join(root, 'web/spike/index.html')).href);
+  await page.locator('#load-input').setInputFiles(browserResult.saved);
+  await page.getByRole('status').filter({hasText: 'Loaded'}).waitFor();
+  assert.deepEqual(await page.evaluate(() => window.spikeState()), browserResult.state);
+  assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  await image(page, 'browser-mobile-offline-reopened');
+  record.cases.push('browser: new offline context loads real exported file; mobile page has no viewport overflow');
+  await context.setOffline(false);
+  await page.setViewportSize({width: 1440, height: 1000});
+  await exhibition(page, 'browser');
+  await browser.close();browser = undefined;
+
+  const executable = path.join(root, '.cache/T48-packages/OneNilUISpike-linux-x64/OneNilUISpike');
+  desktop = await electron.launch({executablePath: executable, args: ['--no-sandbox', `--user-data-dir=${path.join(root, '.cache', stem+'-desktop-profile')}`]});
+  await desktop.evaluate(({session}) => session.defaultSession.enableNetworkEmulation({offline: true}));
+  record.electron = await desktop.evaluate(() => process.versions);
+  page = await desktop.firstWindow();
+  const desktopResult = await scenario(page, 'desktop');
+  await desktop.evaluate(({session}) => session.defaultSession.enableNetworkEmulation({offline: false}));
+  await exhibition(page, 'desktop');
+  assert.equal(await page.evaluate(() => typeof window.require), 'undefined');
+  const packaged = await desktop.evaluate(({app}) => app.isPackaged);
+  assert.equal(packaged, true);
+  record.cases.push('desktop: packaged application; renderer has no Node require');
+  await desktop.close();desktop = undefined;
+  desktop = await electron.launch({executablePath: executable, args: ['--no-sandbox', `--user-data-dir=${path.join(root, '.cache', stem+'-desktop-profile')}`]});
+  await desktop.evaluate(({session}) => session.defaultSession.enableNetworkEmulation({offline: true}));
+  page = await desktop.firstWindow();
+  await desktop.evaluate(({dialog}, file) => {dialog.showOpenDialog = async () => ({canceled: false, filePaths: [file]});}, desktopResult.saved);
+  await page.getByRole('button', {name: 'Load file'}).click();
+  await page.getByRole('status').filter({hasText: 'Loaded'}).waitFor();
+  assert.deepEqual(await page.evaluate(() => window.spikeState()), desktopResult.state);
+  await image(page, 'desktop-reopened');
+  record.cases.push('desktop: fresh packaged process loads saved file with network emulation offline');
+  record.package_binary_sha256 = sha(fs.readFileSync(executable));
+  record.package_asar_sha256 = sha(fs.readFileSync(path.join(path.dirname(executable), 'resources/app.asar')));
+  const {extractFile} = require('@electron/asar');
+  for (const name of ['index.html', 'style.css', 'app.js']) {
+    assert.equal(sha(extractFile(path.join(path.dirname(executable), 'resources/app.asar'), `ui/${name}`)),
+      record.sources[`web/spike/${name}`]);
+  }
+  for (const name of ['main.cjs','preload.cjs']) {
+    assert.equal(sha(extractFile(path.join(path.dirname(executable), 'resources/app.asar'), name)),
+      record.sources[`desktop/spike/${name}`]);
+  }
+  function bytes(directory) {return fs.readdirSync(directory,{withFileTypes:true}).reduce((total,e)=>{
+    const name=path.join(directory,e.name);return total+(e.isDirectory()?bytes(name):fs.lstatSync(name).size);
+  },0);}
+  record.package_bytes = bytes(path.dirname(executable));
+  record.shared_ui_bytes = bytes(path.join(root,'web/spike'));
+  record.status = 'passed';
+} catch (error) {
+  record.status = 'failed';record.error = String(error.stack || error);process.exitCode = 1;
+} finally {
+  if (browser) await browser.close();
+  if (desktop) await desktop.close();
+  record.finished = new Date().toISOString();
+  fs.writeFileSync(path.join(out, stem+'.json'), JSON.stringify(record, null, 2)+'\n', {flag: 'wx'});
+  console.log(JSON.stringify({record: path.join(out, stem+'.json'), status: record.status, error: record.error}));
+}
