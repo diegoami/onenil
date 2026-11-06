@@ -213,7 +213,7 @@ impl Renderer {
             self.cell(x + 15, row, role, TEXT, GROUND);
         }
     }
-    fn instruction_text(
+    pub fn instruction_text(
         &self,
         c: &Controller,
         player: &onenil_campaign::Player,
@@ -252,92 +252,96 @@ impl Renderer {
         } else {
             None
         };
-        self.sheet(name.unwrap_or("skills"));
+        self.sheet(name.unwrap_or(if c.editor.panel == Panel::Details {
+            "details"
+        } else {
+            "skills"
+        }));
         if name.is_none() {
-            self.rect(0, 0, 495, 376, GROUND);
-            for (x, y, ex, ey) in [
-                (0, 8, 494, 8),
-                (0, 375, 494, 375),
-                (0, 8, 0, 375),
-                (494, 8, 494, 375),
-            ] {
-                self.line(x, y, ex, ey, TEXT);
+            // [derived] Keep original card borders; remove uncaptured values before drawing
+            // the owned identity/position/instruction fields in their original grouping.
+            let sheet = if c.editor.panel == Panel::Details {
+                "details"
+            } else {
+                "skills"
+            };
+            let cells = self.assets.screens[sheet].clone();
+            for (i, (ch, fg, _)) in cells.into_iter().enumerate() {
+                if i % 80 < 54 && i / 80 < 24 {
+                    let border = "─│┌┐└┘├┤┬┴┼═║╔╗╚╝╠╣╦╩╬".contains(ch);
+                    self.cell(i % 80, i / 80, if border { ch } else { ' ' }, fg, GROUND);
+                }
             }
             self.text(
                 2,
                 0,
-                if c.editor.panel == Panel::Skills {
-                    "PLAYER SKILLS"
-                } else {
+                if c.editor.panel == Panel::Details {
                     "PLAYER DETAILS"
+                } else {
+                    "PLAYER SKILLS"
                 },
                 CYAN,
                 GROUND,
-                25,
+                18,
             );
             if let Some(player) = player {
+                self.text(2, 1, &player.name, TEXT, GROUND, 16);
+                self.text(18, 1, &format!("Age {}", player.age), TEXT, GROUND, 8);
                 self.text(
-                    2,
-                    2,
-                    &format!("{}   Age {}", player.name, player.age),
+                    26,
+                    1,
+                    &format!("Team {}", c.editor.campaign.club.name),
                     TEXT,
                     GROUND,
-                    51,
+                    27,
                 );
                 self.text(
                     2,
-                    3,
+                    2,
                     &format!(
                         "Pos. {}",
                         self.labels.positions[player.current_position as usize]
                     ),
                     TEXT,
                     GROUND,
-                    51,
+                    24,
                 );
                 self.text(
+                    26,
                     2,
-                    4,
                     &format!(
                         "1st pos {}",
                         self.labels.positions[player.club_position as usize]
                     ),
                     TEXT,
                     GROUND,
-                    51,
+                    27,
+                );
+                self.text(
+                    2,
+                    5,
+                    "Remaining player data not yet decoded",
+                    TEXT,
+                    GROUND,
+                    49,
                 );
                 if c.editor.panel == Panel::Details {
-                    self.text(
-                        2,
-                        6,
-                        &format!("Team {}", c.editor.campaign.club.name),
-                        TEXT,
-                        GROUND,
-                        51,
-                    );
-                    self.text(2, 9, "Remaining details not yet decoded", TEXT, GROUND, 51);
                     for (i, label) in ["Positioning", "Possession", "Passing", "Tackling"]
                         .iter()
                         .enumerate()
                     {
+                        self.text(2, 13 + i, label, TEXT, GROUND, 15);
                         self.text(
-                            2,
+                            18,
                             13 + i,
-                            &format!("{label:15} {}", self.instruction_text(c, player, i)),
+                            &self.instruction_text(c, player, i),
                             TEXT,
                             GROUND,
-                            51,
+                            18,
                         );
                     }
-                } else {
-                    self.text(
-                        2,
-                        8,
-                        "Skills for this state are not yet decoded",
-                        TEXT,
-                        GROUND,
-                        51,
-                    );
+                    self.text(2, 17, "Mark", TEXT, GROUND, 15);
+                    self.text(18, 17, "unavailable", TEXT, GROUND, 18);
                 }
             }
             self.text(
@@ -379,6 +383,10 @@ impl Renderer {
             );
         }
         if c.screen == Screen::Options {
+            self.control_region("player-options");
+            if let Some(player) = player {
+                self.text(59, 2, &player.name, TEXT, GROUND, 18);
+            }
             let options = [
                 "Reposition",
                 "Club position",
@@ -389,19 +397,52 @@ impl Renderer {
                 "Fire",
                 "Continue",
             ];
-            self.rect(180, 64, 270, 160, 0);
-            for (i, text) in options.iter().enumerate() {
+            for (i, label) in options.iter().enumerate() {
                 self.text(
-                    21,
-                    5 + i,
-                    text,
+                    58,
+                    5 + i * 2,
+                    &format!(" {label}"),
                     if i == c.option { GROUND } else { TEXT },
-                    if i == c.option { TEXT } else { 0 },
-                    26,
+                    if i == c.option { TEXT } else { GROUND },
+                    17,
                 );
+                self.cell(
+                    76,
+                    5 + i * 2,
+                    if c.option_available(i) { '√' } else { 'x' },
+                    0xffff55,
+                    GROUND,
+                );
+            }
+        } else if c.screen == Screen::Instructions {
+            self.control_region("player-instructions");
+            if let Some(player) = player {
+                for (i, label) in ["Positioning", "Possession", "Passing", "Tackling"]
+                    .iter()
+                    .enumerate()
+                {
+                    self.text(
+                        2,
+                        13 + i,
+                        &format!("{label:15} {}", self.instruction_text(c, player, i)),
+                        if c.instruction == i { GROUND } else { TEXT },
+                        if c.instruction == i { TEXT } else { GROUND },
+                        34,
+                    );
+                }
             }
         }
     }
+    /// [derived] Only the original right control grouping; the card is owned live state.
+    fn control_region(&mut self, name: &str) {
+        let cells = self.assets.screens[name].clone();
+        for (i, (ch, fg, bg)) in cells.into_iter().enumerate() {
+            if i % 80 >= 56 {
+                self.cell(i % 80, i / 80, ch, fg, bg);
+            }
+        }
+    }
+
     fn team_panel(&mut self, c: &Controller) {
         self.text(22, 0, &c.editor.campaign.club.name, TEXT, GROUND, 15);
         if c.editor.campaign.club.first_team != self.initial.club.first_team
@@ -594,7 +635,7 @@ impl Renderer {
                     80,
                 );
             }
-            Screen::Players | Screen::Options => self.players(c),
+            Screen::Players | Screen::Options | Screen::Instructions => self.players(c),
             Screen::Pitch | Screen::History | Screen::HalfTime | Screen::FullTime => {
                 self.match_view(c)
             }
@@ -754,6 +795,16 @@ impl Renderer {
         if !c.message.is_empty() {
             self.text(0, 24, &c.message, 0xffff55, 0, 80);
         }
+    }
+    /// [designed] Read-only diagnostic binds a state observation to its rendered RGB pixels.
+    pub fn observed(&self, mut state: serde_json::Value) -> serde_json::Value {
+        let rgb: Vec<u8> = self
+            .pixels
+            .iter()
+            .flat_map(|p| [(p >> 16) as u8, (p >> 8) as u8, *p as u8])
+            .collect();
+        state["raster_sha256"] = format!("{:x}", Sha256::digest(rgb)).into();
+        state
     }
     pub fn scaled(&self, width: usize, height: usize) -> Vec<u32> {
         let mut out = vec![0x111111; width * height];

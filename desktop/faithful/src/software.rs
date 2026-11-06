@@ -74,15 +74,6 @@ pub fn run(
             renderer.draw(&app.controller);
             last_visual = visual;
         }
-        if let Some(path) = &observe {
-            let bytes = serde_json::to_vec(&app.snapshot()).map_err(|e| e.to_string())?;
-            if bytes != last_observation {
-                let temporary = path.with_extension("tmp");
-                std::fs::write(&temporary, &bytes).map_err(|e| e.to_string())?;
-                std::fs::rename(temporary, path).map_err(|e| e.to_string())?;
-                last_observation = bytes;
-            }
-        }
         let (w, h) = window.get_size();
         if w == 0 || h == 0 {
             window.update();
@@ -95,6 +86,19 @@ pub fn run(
         window
             .update_with_buffer(&scaled, w, h)
             .map_err(|e| e.to_string())?;
+        if let Some(path) = observe
+            .as_ref()
+            .filter(|_| changed || last_observation.is_empty())
+        {
+            let bytes = serde_json::to_vec(&renderer.observed(app.snapshot()))
+                .map_err(|e| e.to_string())?;
+            if bytes != last_observation {
+                let temporary = path.with_extension("tmp");
+                std::fs::write(&temporary, &bytes).map_err(|e| e.to_string())?;
+                std::fs::rename(temporary, path).map_err(|e| e.to_string())?;
+                last_observation = bytes;
+            }
+        }
     }
     Ok(())
 }

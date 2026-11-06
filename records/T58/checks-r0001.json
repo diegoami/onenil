@@ -1,0 +1,54 @@
+{
+  "schema": "native-player-controls-checks/1",
+  "checked_head": "44adbd47f759a7f4412589d9e04b0cae36c77065",
+  "commands": [
+    "cargo test --manifest-path campaign/Cargo.toml --locked",
+    "ONENIL_DESKTOP_FONT=<verified-independent-font> cargo test --manifest-path desktop/faithful/Cargo.toml --features software,egui --locked",
+    "cargo fmt --manifest-path campaign/Cargo.toml --check",
+    "cargo fmt --manifest-path desktop/faithful/Cargo.toml --check",
+    "python3 tools/check_originals.py",
+    "git diff --check",
+    "verify_controls_sources.py --research-root <research>",
+    "check_controls_records.py records/T58/window-r0003.json"
+  ],
+  "logs": {
+    "campaign": {
+      "log_sha256": "5e0d49470f1c066dc144a39bfced441222dfdc275a45140a781b1e68e520d7a6",
+      "results": [
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.45s",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    },
+    "desktop": {
+      "log_sha256": "ccef6dd3a29b1f69a782cdb51415a3c4db8a0dbfd03570c80f371b3981254aff",
+      "results": [
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s",
+        "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+        "test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.59s",
+        "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 53.47s",
+        "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+      ]
+    }
+  },
+  "outcome": "passed",
+  "measurement": "window-r0003.json",
+  "scope": {
+    "native_checks": 40,
+    "screenshots": 15,
+    "fresh_processes": 2,
+    "negative_record_controls": 6,
+    "headless_campaign_edits": 0,
+    "positioning_bit_cases": 512
+  },
+  "preservation_receipt": "preservation-r0001.json",
+  "source": "source-r0001.json"
+}

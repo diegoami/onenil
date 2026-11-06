@@ -128,3 +128,40 @@ the exact configured file directly; combining both options is refused. The defau
 prototype entry still opens the supplied saved-club seed. The original Y/N startup,
 N/new-game filename/league/manager/club setup, club creation and DOS-save loading
 remain B2 work. No final toolkit choice or campaign progression is implied.
+
+## T58 original player controls
+
+[confirmed] Research W015–W017 at68cd3396 and the original handlers/listings
+identified by `records/T58/source-r0001.json` govern the bounded controls. From
+Players, Space opens player options in Details, remembering the option highlight.
+Reposition immediately cycles current role through all14 codes; a club goalkeeper
+cannot use it. The guard checks club role, so a repositioned outfield player can
+cycle through goalkeeper and onward to sweeper. Club position restores the stored
+club role for age18 and above, leaving every other field unchanged. An already
+restored position is a no-op, including the native revision.
+
+Change tactics enters the original instruction grouping in Details. The four
+instruction-row selection is remembered; Up/Down selects, Enter changes the
+supported goalkeeper Positioning row. W015's displayed cycle is `come out of box P`
+→ `come out of box` → `stay in box P` → `come out of box P`. The original B271
+handler changes only choice bit0/override bit4; on returning to inherited it also
+copies choice bit0 from club instructions. Other packed bits are preserved.
+Escape returns to options, then Players. Insert from instructions returns to
+options in Skills; Insert within options toggles the card without changing state.
+The P marker is presentation evidence, not a claim about match effects.
+
+[designed] Only this exercised goalkeeper instruction action is enabled; other
+instruction rows and Sell/Take off T.M/New contract/Fire report unavailable. The
+availability column shows supported prototype actions, so those original actions
+have x marks here. Mark targets, complete skills/details, team instructions and
+management calculations remain missing. F7 saves changed positions/instructions;
+F9 or startup --load/--choose-save restores them. The keyboard proof performs all
+edits in the window; no headless campaign editing is used. Original changed-save
+projection equality and a fresh desktop restore are checked.
+
+This reaches a saved-squad editing checkpoint, not the full first management week
+in #104. B2's original new-game/club selection and B3's unavailable/incomplete XI
+admission still need their own accepted source/implementation. B4 requires the
+actual PSG campaign's prepared engine state and result transaction; the separate
+Sheffield exhibition still consumes its fixed source and posts no campaign result.
+Toolkit decision #103 remains open.
