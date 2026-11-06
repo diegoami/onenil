@@ -52,6 +52,13 @@ they are not shipped product assets or an implementation.
 
 ## Corrected roadmap
 
+[designed] The [visual study](visual-study.md) now pairs ten initial proposed
+desktop compositions with their exact original references. It includes thirty
+rendered sheets, scaling examples and the explicit font/role/marker differences.
+These are static design artifacts for inspection, not an implemented desktop UI
+or approval of departures. Representative native feasibility and toolkit choice
+remain next.
+
 [designed] The [complete screen map](screen-map.md) assigns all83 documented
 workflows and18 executable menu slots to proposed desktop compositions/variants.
 Its [manifest](screen-map.json) preserves original references and G01–G14;
