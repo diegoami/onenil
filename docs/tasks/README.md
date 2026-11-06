@@ -83,3 +83,7 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T55 Source-backed campaign state and atomic persistence](T55.md)
 
 - [T56 Real saved-club state in the faithful desktop prototype](T56.md)
+
+- [T57 Original-style saved-game chooser and atomic load target](T57.md)
+
+- [T58 Observed player position and goalkeeper instruction controls](T58.md)
