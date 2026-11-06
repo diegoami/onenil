@@ -54,6 +54,20 @@ fn invalid_save_is_atomic_in_memory_and_on_disk() {
         .load_bytes(&serde_json::to_vec(&duplicate).unwrap())
         .is_err());
     assert_eq!(loaded, unchanged);
+    let temporary = path.with_extension(format!("tmp-{}", std::process::id()));
+    fs::write(&temporary, b"occupied temporary file").unwrap();
+    assert!(loaded.save(&path).is_err());
+    assert_eq!(fs::read(&path).unwrap(), good);
+    fs::remove_file(temporary).unwrap();
+    for bad in [
+        b"{\"schema\":\"onenil-captured-editor\",\"version\":1,\"first\":[]}".as_slice(),
+        b"{\"unexpected\":true}".as_slice(),
+    ] {
+        fs::write(&path, bad).unwrap();
+        assert!(loaded.load(&path).is_err());
+        assert_eq!(loaded, unchanged);
+    }
+    fs::write(&path, &good).unwrap();
     loaded.select(Location::First(1)).unwrap();
     loaded.pick().unwrap();
     assert!(loaded.save(&path).is_err());
