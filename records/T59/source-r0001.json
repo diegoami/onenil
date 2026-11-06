@@ -1,0 +1,154 @@
+{
+  "schema": "review126-source/1",
+  "research_commit": "68cd3396ec3621d55df8c9377cd5c4b7b74c1314",
+  "sources": {
+    "static/1-0-exe/code/seg_0AB9_14.asm": {
+      "sha256": "e4f9a622942f648e16f15ec1cca7e8df16b7c47b110ae6779b2b87c1ae500c88",
+      "addresses": [
+        "8B0B",
+        "8B47",
+        "8B58"
+      ]
+    },
+    "static/1-0-exe/code/seg_0AB9_17.asm": {
+      "sha256": "202ecd9d1084b124ea22227892d1a43cb0d8deedabdb2b32ba0a0a4b041fc01c",
+      "addresses": [
+        "B2A8",
+        "B2EB",
+        "B2F4"
+      ]
+    }
+  },
+  "observations": [
+    {
+      "step": 15,
+      "record": "runs/T46/session-r0001/step-0015.json",
+      "record_sha256": "05738cca7dbe75edaf1c93760dbe77fec9230e0e1ed0302e8afbdc7732cc8d82",
+      "screenshot_sha256": "e127d0810efef6060fc45cb3ec493ba9488fef91b63a70401f5107c51a853f7d",
+      "current_position": "goalkeeper",
+      "club_position": "goalkeeper",
+      "rows": {
+        "Positioning": {
+          "row": 13,
+          "value": "come out of box P"
+        },
+        "Possession": {
+          "row": 14,
+          "value": "pass quickly"
+        },
+        "Passing": {
+          "row": 15,
+          "value": "throw the ball"
+        },
+        "Tackling": {
+          "row": 16,
+          "value": "go in hard"
+        },
+        "Mark": {
+          "row": 17,
+          "value": ""
+        }
+      }
+    },
+    {
+      "step": 44,
+      "record": "runs/T46/session-r0001/step-0044.json",
+      "record_sha256": "f504212fba38e394319aad94a9b8a9b9d7e37a04d89aaddadb530e4210314aac",
+      "screenshot_sha256": "f2dc13c141398920a11ab9c758d1daed0621bf3270fea12daa538109bdfeb444",
+      "current_position": "striker",
+      "club_position": "centre back",
+      "rows": {
+        "Positioning": {
+          "row": 13,
+          "value": "stay back P"
+        },
+        "Possession": {
+          "row": 14,
+          "value": "pass quickly P"
+        },
+        "Passing": {
+          "row": 15,
+          "value": "short passes"
+        },
+        "Tackling": {
+          "row": 16,
+          "value": "avoid injury P"
+        },
+        "Mark": {
+          "row": 17,
+          "value": "zonal"
+        }
+      }
+    },
+    {
+      "step": 45,
+      "record": "runs/T46/session-r0001/step-0045.json",
+      "record_sha256": "1111d4cab4d531c504712002ed1b4ee06ede132fed31685313be59d1f118f2cf",
+      "screenshot_sha256": "589d1433768e9191a5d70caeaa53595d67605c057d5f0c251a39c4740b1160f0",
+      "current_position": "goalkeeper",
+      "club_position": "centre back",
+      "rows": {
+        "Positioning": {
+          "row": 13,
+          "value": "stay in box P"
+        },
+        "Possession": {
+          "row": 14,
+          "value": "pass quickly P"
+        },
+        "Passing": {
+          "row": 15,
+          "value": "throw the ball"
+        },
+        "Tackling": {
+          "row": 16,
+          "value": "avoid injury P"
+        },
+        "Mark": {
+          "row": 17,
+          "value": ""
+        }
+      }
+    },
+    {
+      "step": 46,
+      "record": "runs/T46/session-r0001/step-0046.json",
+      "record_sha256": "d1d0f021eef0f86fa05a0d69f36fc2e174a1406fa1f811651e67ee7b3b053c2f",
+      "screenshot_sha256": "82f5d9d7ce2df4918c28752c8344bc5a9d5fa1d302964c4d79c546c709fb73d5",
+      "current_position": "sweeper",
+      "club_position": "centre back",
+      "rows": {
+        "Positioning": {
+          "row": 13,
+          "value": "stay back P"
+        },
+        "Possession": {
+          "row": 14,
+          "value": "pass quickly P"
+        },
+        "Passing": {
+          "row": 15,
+          "value": "short passes"
+        },
+        "Tackling": {
+          "row": 16,
+          "value": "avoid injury P"
+        },
+        "Mark": {
+          "row": 17,
+          "value": ""
+        }
+      }
+    }
+  ],
+  "conclusions": [
+    "Five displayed rows, including blank Mark for the captured goalkeeper",
+    "Repositioned Pearce already displays goalkeeper alternatives in Details despite his club role",
+    "Current-role table substitution is shared by the Details/instruction presenter"
+  ],
+  "limits": [
+    "No new original run",
+    "No broader outfield instruction-action claim",
+    "Chooser edge clamping is native design, not an original observation"
+  ]
+}

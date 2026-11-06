@@ -159,3 +159,66 @@ fn cached_glyphs_and_repeated_redraws_produce_identical_owned_card() {
         fresh.observed(serde_json::json!({}))["raster_sha256"]
     );
 }
+
+#[cfg(feature = "raster")]
+#[test]
+fn mark_row_stays_explicit_on_captured_and_changed_instruction_cards() {
+    use onenil_desktop::{
+        controller::{Controller, Key, Screen},
+        editor::Location,
+        render::Renderer,
+    };
+    let font = std::env::var_os("ONENIL_DESKTOP_FONT").unwrap();
+    let mut r = Renderer::new(std::path::Path::new(&font)).unwrap();
+    let mut c = Controller::default();
+    c.key(Key::Space);
+    c.editor.select(Location::First(17)).unwrap();
+    c.key(Key::Space);
+    for _ in 0..4 {
+        c.key(Key::Down);
+    }
+    c.key(Key::Enter);
+    assert_eq!(c.screen, Screen::Instructions);
+    let strip = |r: &Renderer| {
+        (17 * 16..18 * 16)
+            .flat_map(|y| (2 * 9..36 * 9).map(move |x| r.pixels[y * 720 + x]))
+            .collect::<Vec<_>>()
+    };
+    r.draw(&c);
+    let captured = strip(&r);
+    c.key(Key::Enter);
+    r.draw(&c);
+    assert!(
+        captured == strip(&r),
+        "Mark/unavailable row changes between captured and owned card"
+    );
+    let before = c.editor.campaign.clone();
+    for _ in 0..8 {
+        c.key(Key::Down);
+    }
+    assert_eq!(c.instruction, 3);
+    c.key(Key::Enter);
+    assert!(c.message.contains("unavailable"));
+    assert_eq!(c.editor.campaign, before);
+}
+
+#[cfg(feature = "raster")]
+#[test]
+fn original_pearce_card_switches_goalkeeper_tables_by_current_role() {
+    use onenil_desktop::{controller::Controller, render::Renderer};
+    let font = std::env::var_os("ONENIL_DESKTOP_FONT").unwrap();
+    let r = Renderer::new(std::path::Path::new(&font)).unwrap();
+    let mut c = Controller::default();
+    // [confirmed] Research68cd3396 T46 steps44,45,46 show these Details labels.
+    for (role, positioning, passing) in [
+        (13, "stay back P", "short passes"),
+        (0, "stay in box P", "throw the ball"),
+        (1, "stay back P", "short passes"),
+    ] {
+        c.editor.campaign.set_position(2582, role).unwrap();
+        let p = c.editor.player(2582).unwrap();
+        assert_eq!(p.club_position, 2);
+        assert_eq!(r.instruction_text(&c, p, 0), positioning);
+        assert_eq!(r.instruction_text(&c, p, 2), passing);
+    }
+}

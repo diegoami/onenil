@@ -1,0 +1,39 @@
+{
+  "schema": "review126-checks/1",
+  "checked_head": "7b8895e4d9bc9b4c677da94c1512c70e4ff5b7b9",
+  "tests_command": "ONENIL_DESKTOP_FONT=<absolute-independent-font> cargo test --manifest-path desktop/faithful/Cargo.toml --features software,egui --locked",
+  "tests_log_sha256": "031d1895a665ba58e52560a2f07d9268f63f226c9fa762ad2df5779150abb245",
+  "results": [
+    "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s",
+    "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s",
+    "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s",
+    "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s",
+    "test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s",
+    "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+    "test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.60s",
+    "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 47.91s",
+    "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"
+  ],
+  "checks": {
+    "fmt": "passed",
+    "original_extensions": "passed",
+    "diff": "passed",
+    "source_checker": "4 original captures and images;5 displayed rows;Pearce role-dependent labels;2 listings",
+    "native_record": "window-r0001.json",
+    "native_checks": 40,
+    "images": 15,
+    "fresh_processes": 2,
+    "negative_controls": 6,
+    "mark_image_comparisons": 7,
+    "old_mark_inconsistency_rejected": true,
+    "old_negative_log_sha256": "2233578db540ca139142893ba6cd90167cd2e79279886a1acfa052b588edc1d7"
+  },
+  "preservation": "preservation-r0001.json",
+  "review_dispositions": {
+    "127": "uniform visible Mark/unavailable;4 selectable rows unchanged",
+    "128": "native list-edge clamp documented and tested",
+    "129": "existing original step45 observes GK labels with club role2;regression/source checker",
+    "130": "diagnostic representation limits explicit;no compatibility claim"
+  }
+}

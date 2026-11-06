@@ -119,7 +119,9 @@ Invalid files preserve all three and keep the list open. F9 again returns from
 this native shortcut; Escape follows the original observed self-loop. One file
 loads directly, no files reports a message. Native discovery sorts case-insensitive
 stems then paths, refuses more than1024 files, ignores symlinks, and scrolls nine
-visible rows; those filesystem choices are not claimed as DOS behaviour. The list
+visible rows. Up at the first row and Down at the last row clamp in place: this
+is also native design; W006 does not establish the original list-edge behaviour.
+Those filesystem/navigation choices are not claimed as DOS behaviour. The list
 shows18 filename characters and the original game-name box shows8; diagnostics
 retain the full native target. Use a dedicated directory for native campaign JSON.
 
@@ -140,8 +142,8 @@ cycle through goalkeeper and onward to sweeper. Club position restores the store
 club role for age18 and above, leaving every other field unchanged. An already
 restored position is a no-op, including the native revision.
 
-Change tactics enters the original instruction grouping in Details. The four
-instruction-row selection is remembered; Up/Down selects, Enter changes the
+Change tactics displays five instruction rows in Details, including Mark. The
+selection among the first four rows is remembered; Up/Down selects, Enter changes the
 supported goalkeeper Positioning row. W015's displayed cycle is `come out of box P`
 → `come out of box` → `stay in box P` → `come out of box P`. The original B271
 handler changes only choice bit0/override bit4; on returning to inherited it also
@@ -153,7 +155,10 @@ The P marker is presentation evidence, not a claim about match effects.
 [designed] Only this exercised goalkeeper instruction action is enabled; other
 instruction rows and Sell/Take off T.M/New contract/Fire report unavailable. The
 availability column shows supported prototype actions, so those original actions
-have x marks here. Mark targets, complete skills/details, team instructions and
+have x marks here. The fifth Mark row always shows `unavailable`, including on an
+unchanged captured card; this explicit marker is native design. It remains outside
+the four selectable management rows (original B271 disables Mark when0D91=0).
+Mark targets, complete skills/details, team instructions and
 management calculations remain missing. F7 saves changed positions/instructions;
 F9 or startup --load/--choose-save restores them. The keyboard proof performs all
 edits in the window; no headless campaign editing is used. Original changed-save
@@ -165,3 +170,23 @@ admission still need their own accepted source/implementation. B4 requires the
 actual PSG campaign's prepared engine state and result transaction; the separate
 Sheffield exhibition still consumes its fixed source and posts no campaign result.
 Toolkit decision #103 remains open.
+
+
+## Milestone126 review clarifications (T59)
+
+[confirmed] Research68cd3396 T46/session-r0001 steps44–46 already show the
+current-role label edge on Pearce's Details card. His club role remains centre
+back throughout: striker displays `stay back P` / `short passes`, goalkeeper
+shows `stay in box P` / `throw the ball`, then sweeper returns to `stay back P` /
+`short passes`. Original0AB9:8B0B tests player+6 (current position) and substitutes
+tables0B70/0B90; the instruction editor calls the same Details presenter. These
+existing observations corroborate label selection without claiming unobserved
+outfield instruction edits or broadening their admission. T59's source checker
+pins the capture/image/listing identities and verifies these named observations.
+
+[designed] Headless `position`/`instruction` commands are diagnostic native
+representation edits. The instruction command accepts any u8, including packed
+patterns not established as reachable through the original UI. Packed availability
+fields likewise are representation data. Neither those commands nor native JSON
+validation establish original-UI reachability or DOS-save-format compatibility;
+the desktop's bounded controls retain their separately verified transitions.
