@@ -24,6 +24,13 @@ original-match parity evidence;the alternatives establish supported completion.
 The earlier quick-result preview and its
 lineup/seed controls remain at `tools/play_match.py` on port8040.
 
+The original-game illustrated manual is accepted in research milestone135.
+The next design gate is [UI delivery comparison](docs/ui-delivery.md): a shared
+sample squad editor runs in a local browser and a packaged Linux Electron app,
+with keyboard controls, real save/load and the existing watched exhibition.
+These are disposable comparison prototypes; the owner has not selected the
+game-shell technology, and edited sample squads do not feed the match engine.
+
 The first slice is `0AB9:D983`, the quick result's three-contest routine. Its scope is the input
 ratings, random draw sequence, final seed and goal bytes; it is not a complete match/week or a
 timer/CPU-register emulator. Evidence is pinned under `engine/tests/fixtures/`: decoded original
