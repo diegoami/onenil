@@ -24,6 +24,10 @@ PACK_URL = 'https://int10h.org/oldschool-pc-fonts/download/oldschool_pc_font_pac
 FONT_MEMBER = 'ttf - Px (pixel outline)/PxPlus_IBM_VGA_8x16.ttf'
 REQUIRED = {'main', 'skills', 'details', 'put-here', 'preparation', 'pitch',
             'history', 'bench', 'halftime', 'fulltime'}
+BOX_ARMS = dict(zip('─│┌┐└┘├┤┬┴┼═║╔╗╚╝╠╣╦╩╬',
+                    ['LR','UD','RD','LD','RU','LU','URD','ULD','LRD','LRU','ULRD']*2))
+BLOCKS = {'▀':(0,0,9,8), '▄':(0,8,9,8), '█':(0,0,9,16),
+          '▌':(0,0,4.5,16), '▐':(4.5,0,4.5,16)}
 SIZES = [('desktop', 1440, 900, 1), ('compact', 960, 640, 1), ('hidpi', 720, 450, 2)]
 sha = lambda data: hashlib.sha256(data).hexdigest()
 
@@ -39,7 +43,8 @@ def original(research, name):
 
 def font_bytes(path, fetch=False):
     if not path.exists() and fetch:
-        with urllib.request.urlopen(PACK_URL, timeout=90) as response:
+        request=urllib.request.Request(PACK_URL, headers={'User-Agent':'OneNil-Design-Study/1.0'})
+        with urllib.request.urlopen(request, timeout=90) as response:
             archive = response.read()
         assert sha(archive) == PACK_SHA, 'font pack checksum differs'
         with zipfile.ZipFile(io.BytesIO(archive)) as pack:
@@ -109,7 +114,12 @@ def svg_for(row, research):
             # Most pixels supply a normal text-cell background; block/figure
             # primitives instead use the screen ground and their visible colour.
             primitive = row['pitch_layer'] and 5 <= y < 24 and ch in 'ôÆ£¥öò•'
-            if primitive:
+            vector = ch in BOX_ARMS or ch in BLOCKS
+            if vector:
+                background = (0,0,0) if colors[(0,0,0)] > colors[ground] else ground
+                candidates = [item for item in colors.most_common() if item[0] != background]
+                foreground = candidates[0][0] if candidates else background
+            elif primitive:
                 background = ground
                 candidates = [item for item in colors.most_common() if item[0] != ground]
                 foreground = candidates[0][0] if candidates else ground
@@ -122,7 +132,21 @@ def svg_for(row, research):
             if ch == ' ':
                 continue
             fill = colour(foreground)
-            if ch == '■':
+            if ch in BOX_ARMS:
+                arms=BOX_ARMS[ch]
+                edges={'L':(0,8),'R':(9,8),'U':(4.5,0),'D':(4.5,16)}
+                # Independent thin vector rules keep continuous box joins; font
+                # metrics and inverse skill-cell backgrounds do not define frames.
+                double=ch in '═║╔╗╚╝╠╣╦╩╬'
+                for arm in arms:
+                    ex,ey=edges[arm]
+                    for offset in (-.6,.6) if double else (0,):
+                        dx,dy=(offset,0) if arm in 'UD' else (0,offset)
+                        parts.append(f'<path data-kind="frame" d="M{px+4.5+dx} {py+8+dy}L{px+ex+dx} {py+ey+dy}" stroke="{fill}" stroke-width="1" fill="none"/>')
+            elif ch in BLOCKS:
+                bx,by,bw,bh=BLOCKS[ch]
+                parts.append(f'<rect data-kind="block" x="{px+bx}" y="{py+by}" width="{bw}" height="{bh}" fill="{fill}"/>')
+            elif ch == '■':
                 # [derived] Filled original bars invert the cell: light band
                 # around a dark slot. Empty cells have dark ground/olive slot.
                 # Preserve that displayed state rather than turning both into
