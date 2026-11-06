@@ -1,0 +1,22 @@
+{
+  "schema": "desktop-study-artifact-verification/1",
+  "status": "passed",
+  "verifier_sha256": "5121a939f44b32d8119fb8bb0da11820f03336df6a91f292e958895216f1e479",
+  "render_record": "records/T51/render-r0003.json",
+  "source": "5f3f093f0e0fd5d49ccfcc8aa0bec37c155a84f6",
+  "render_record_sha256": "a91983a207562c3afcc723cba7aeb57b8873db51bd439560b5ed68ed5cbe5b9d",
+  "checked": {
+    "variants": 10,
+    "screenshots": 30,
+    "producer_files": 14,
+    "sizes": 3
+  },
+  "rejected_negative_controls": [
+    "missing screenshot",
+    "duplicate screenshot",
+    "wrong PNG digest",
+    "clipped geometry",
+    "wrong font identity",
+    "wrong producer identity"
+  ]
+}

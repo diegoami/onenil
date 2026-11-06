@@ -1,0 +1,215 @@
+{
+  "schema": "faithful-desktop-study/1",
+  "status": "proposed-static-design",
+  "research_commit": "6aca98caeebc1b9b5410852139fa305462224a05",
+  "logical_surface": [
+    720,
+    400
+  ],
+  "character_grid": [
+    80,
+    25
+  ],
+  "screens": [
+    {
+      "id": "main",
+      "title": "Weekly main menu",
+      "record": "runs/T41/T41-r0002/record.json",
+      "step": "S002",
+      "record_sha256": "a0cf49e212a6d2c130a7f112706a5d123ea44ab645c304d4e0d4d2ba1a5eacd0",
+      "reference": "runs/T41/T41-r0002/S002.png",
+      "reference_sha256": "fbca3798822c7fd5e69176c2019a81fc2e449d68e37e3a571095452a0ec54d43",
+      "screen_family": "D01",
+      "pitch_layer": false,
+      "departures": [
+        "P01",
+        "P02"
+      ],
+      "interaction_contract": "Original three-column landing screen; menu, central information and footer stay together."
+    },
+    {
+      "id": "skills",
+      "title": "Players \u00b7 skills",
+      "record": "runs/T45/session-r0001/step-0003.json",
+      "step": 3,
+      "record_sha256": "ea1691cb5314f20b42859b48a7abdf48ee67f79b023035b8fcd9534f2b4fb8d5",
+      "reference": "runs/T45/session-r0001/step-0003.png",
+      "reference_sha256": "fd898e89ad49408231c78a36807e202d7025470758a76a573d2b30d3a517e04c",
+      "screen_family": "D02",
+      "pitch_layer": false,
+      "departures": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "interaction_contract": "Full22 skill bars beside original roster and role column; no aggregate skill table."
+    },
+    {
+      "id": "details",
+      "title": "Players \u00b7 details",
+      "record": "runs/T45/session-r0001/step-0004.json",
+      "step": 4,
+      "record_sha256": "b4b155876093b9d68d959ef22f815ef0740af342d1d7637a093772fcb7e5212f",
+      "reference": "runs/T45/session-r0001/step-0004.png",
+      "reference_sha256": "58b3f0ae92392db21d2733121ca16a80bfae40a6af004a3165eb989bc77657d1",
+      "screen_family": "D02",
+      "pitch_layer": false,
+      "departures": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "interaction_contract": "Insert replaces skills with the complete player details while keeping selected identity."
+    },
+    {
+      "id": "put-here",
+      "title": "Players \u00b7 PUT HERE",
+      "record": "runs/T46/session-r0001/step-0003.json",
+      "step": 3,
+      "record_sha256": "dfc0dc4ab599d052f9f74d1652043ef23b25a7f7ec9950722c255f838f3e5357",
+      "reference": "runs/T46/session-r0001/step-0003.png",
+      "reference_sha256": "066607a0ae9ebda9fcc61092e2dd531de7235a0e4e8b0ce403578955024e97ac",
+      "screen_family": "D02",
+      "pitch_layer": false,
+      "departures": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "interaction_contract": "Keep carried-player card separate from destination highlight; Escape cancels this pre-match move."
+    },
+    {
+      "id": "preparation",
+      "title": "Match preparation",
+      "record": "runs/T47/session-r0001/step-0011.json",
+      "step": 11,
+      "record_sha256": "2b2f51d341d96ea57717a34a6205f929e8c4bb9216fde80b162fc2d73eb9958b",
+      "reference": "runs/T47/session-r0001/step-0011.png",
+      "reference_sha256": "d70f0f38b23af5cd3bac5ca329b02dae7b7da7fc96dd849ddc17d2eb43776adf",
+      "screen_family": "D08",
+      "pitch_layer": false,
+      "departures": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "interaction_contract": "Original PLAY GAME default and opponent/statistics/tactics menu, team panel and roster."
+    },
+    {
+      "id": "pitch",
+      "title": "Watched match \u00b7 live pitch",
+      "record": "runs/T48/session-r0001/step-0003.json",
+      "step": 3,
+      "record_sha256": "786d62322d431499524bf4ff5d0643da435669dd761787144924bbb77dd66870",
+      "reference": "runs/T48/session-r0001/step-0003.png",
+      "reference_sha256": "c88f5e879df222fb32664068895a6ff533a5172c7e7839d8e88ff74f96c0c944",
+      "screen_family": "D03",
+      "pitch_layer": true,
+      "departures": [
+        "P01",
+        "P02",
+        "P04"
+      ],
+      "interaction_contract": "Original score/indicators and short commentary above the large pitch; contextual keys below."
+    },
+    {
+      "id": "history",
+      "title": "Watched match \u00b7 commentary history",
+      "record": "runs/T48/session-r0001/step-0020.json",
+      "step": 20,
+      "record_sha256": "a4c499e9ceadb983fadf9e85166ba8587bb39e33ae79c68d3383425241c12a2c",
+      "reference": "runs/T48/session-r0001/step-0020.png",
+      "reference_sha256": "506e982a4275235b121cd6c1dbd6ea7e224630d17d21e42a9c5a948f7ce0185e",
+      "screen_family": "D03",
+      "pitch_layer": true,
+      "departures": [
+        "P01",
+        "P02",
+        "P04"
+      ],
+      "interaction_contract": "Detailed action history is an overlay over the live screen; keep its paging keys and return."
+    },
+    {
+      "id": "bench",
+      "title": "Watched match \u00b7 live bench",
+      "record": "runs/T48/session-r0001/step-0004.json",
+      "step": 4,
+      "record_sha256": "c258d2abbf74b6c9c1490208e3e5f8c9ccad7bd4e881251554c8738c491eb1b0",
+      "reference": "runs/T48/session-r0001/step-0004.png",
+      "reference_sha256": "11cd7fa11c096b41de298549d6755df39ad7e27706e2f95ee2bfe4606069ab24",
+      "screen_family": "D08",
+      "pitch_layer": false,
+      "departures": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "interaction_contract": "Live bench retains original remaining-sub display and context; not a second preparation instance."
+    },
+    {
+      "id": "halftime",
+      "title": "Watched match \u00b7 halftime board",
+      "record": "runs/T48/session-r0001/step-0035.json",
+      "step": 35,
+      "record_sha256": "de5494227fd4d5b0bc783f30fae1f403035019f7f0bade50962592045c46b7e9",
+      "reference": "runs/T48/session-r0001/step-0035.png",
+      "reference_sha256": "b58cbebfa35d8d31a6896bc75d06fadca023dacf994346f39e541eab8754a324",
+      "screen_family": "D03",
+      "pitch_layer": false,
+      "departures": [
+        "P01",
+        "P02"
+      ],
+      "interaction_contract": "Actual halftime board precedes bench access; preserve supplied statistics and acknowledgement."
+    },
+    {
+      "id": "fulltime",
+      "title": "Watched match \u00b7 final statistics",
+      "record": "runs/T48/session-r0001/step-0061.json",
+      "step": 61,
+      "record_sha256": "4a9f245376f19ef233163da97b63dff0750e8b40df9e973176f35be5cbffd1e4",
+      "reference": "runs/T48/session-r0001/step-0061.png",
+      "reference_sha256": "5a77eb15c448bf796f84379681922bc136313992c726932ec3017b97252cdcd1",
+      "screen_family": "D03",
+      "pitch_layer": false,
+      "departures": [
+        "P01",
+        "P02"
+      ],
+      "interaction_contract": "Actual completed-match exit reaches final board before cashflow/news/next-week continuation."
+    }
+  ],
+  "departures": [
+    {
+      "id": "P01",
+      "status": "proposed-not-owner-approved",
+      "difference": "Independent VGA-style replacement font rather than One-Nil private custom font",
+      "reason": "Reproducible new rendering without original font bytes; exact letterforms/width treatment remain a visual comparison point"
+    },
+    {
+      "id": "P02",
+      "status": "proposed-not-owner-approved",
+      "difference": "Uniform scalable desktop surface with letterboxing",
+      "reason": "Retain original composition/information at documented viewport sizes; this does not establish final minimum window size or supported platform/DPI"
+    },
+    {
+      "id": "P03",
+      "status": "unresolved-glyph-fidelity",
+      "difference": "Roster role cells use captured decoded aliases in replacement font",
+      "reason": "Original role font has custom glyphs not reliably mapped by CP437; do not treat aliases as a verified visual or semantic mapping"
+    },
+    {
+      "id": "P04",
+      "status": "proposed-not-owner-approved",
+      "difference": "Independently drawn schematic player/ball markers at captured text-cell positions",
+      "reason": "Do not copy original sprites; these static quantized positions are not a native engine-coordinate or action-parity claim"
+    }
+  ],
+  "limits": [
+    "All player/score/statistic/clock displays are captured design content, not a new simulation or default career.",
+    "Original images are read for displayed colour observations only; proposed SVGs contain text/vector primitives and no embedded reference pixels.",
+    "Per-cell colour inference and replacement font may differ from original pixel-level glyph/background treatment; inspect side by side.",
+    "No changed screen order, control or transaction is approved by these static pictures.",
+    "This renderer uses a headless browser as an artifact tool; desktop remains the product and no GUI toolkit is selected."
+  ]
+}
