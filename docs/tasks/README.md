@@ -89,3 +89,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T58 Observed player position and goalkeeper instruction controls](T58.md)
 
 - [T59 Milestone126 review: visible Mark row and bounded behaviour evidence](T59.md)
+
+- [T60 Fresh saved-campaign preparation through watched kickoff](T60.md)
