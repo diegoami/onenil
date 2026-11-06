@@ -157,7 +157,36 @@ impl Session {
         tables: Vec<role_scores::TableInput>,
         initial: Option<&crate::role_scores::Cells>,
     ) -> Result<Self, String> {
-        let mut inner = continuous::Session::new_with_initial(legacy, initial)?;
+        Self::load_preparation(legacy, replacement, gates, tables, initial, false)
+    }
+    pub(crate) fn from_fresh_source(
+        legacy: continuous::Admission,
+        replacement: ai_selection::ReadSet,
+        gates: Gates,
+        tables: Vec<role_scores::TableInput>,
+    ) -> Result<Self, String> {
+        Self::load_preparation(
+            legacy,
+            replacement,
+            gates,
+            tables,
+            Some(&Default::default()),
+            true,
+        )
+    }
+    fn load_preparation(
+        legacy: continuous::Admission,
+        replacement: ai_selection::ReadSet,
+        gates: Gates,
+        tables: Vec<role_scores::TableInput>,
+        initial: Option<&crate::role_scores::Cells>,
+        fresh: bool,
+    ) -> Result<Self, String> {
+        let mut inner = if fresh {
+            continuous::Session::from_fresh_source(legacy, initial.unwrap())?
+        } else {
+            continuous::Session::new_with_initial(legacy, initial)?
+        };
         let expected = inner
             .a
             .players
@@ -178,7 +207,11 @@ impl Session {
             scene: inner.a.substitution.context.side_offsets[0] + 1,
             side: 0,
         };
-        let mut cells = ai_selection::cells(&probe)?;
+        let mut cells = if fresh {
+            ai_selection::fresh_source_cells(&probe)?
+        } else {
+            ai_selection::cells(&probe)?
+        };
         for t in &tables {
             for (address, value) in role_scores::table_cells(t)? {
                 role_scores::insert(&mut cells, address, value)?;

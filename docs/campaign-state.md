@@ -190,3 +190,41 @@ patterns not established as reachable through the original UI. Packed availabili
 fields likewise are representation data. Neither those commands nor native JSON
 validation establish original-UI reachability or DOS-save-format compatibility;
 the desktop's bounded controls retain their separately verified transitions.
+
+
+## Fresh supplied-campaign preparation (T60)
+
+[confirmed] Archaeology T66, source record committed at dc9fa85 and independent
+repeat at daf061a, captures the actual supplied SAVE1 preparation through watched
+kickoff. `tools/replay_fresh_preparation.py` pins the unchanged original decoded
+leaf and incoming supplement; import also authenticates the independent repeat.
+The incoming projection uses source-owned scalar values and has no expected
+kickoff state. Its adapter quick-contest count is zero because that unrelated API
+parameter is unused by watched preparation; zero is not an observed chance count.
+
+[designed] `NativeFreshWatchedPreparation` admits precisely this authenticated
+incoming profile. It loads empty incoming scenes separately from the established
+completed-match constructor, then computes preparation into a tracked continuing
+image. Arbitrary edited XIs or changed source fields refuse. The legacy exhibition
+constructor keeps its existing checks. This bounded entry does not expose a
+campaign match button, full native PSG completion, result posting or week changes.
+
+[confirmed] Original96 `seg_0AB9_14.asm:86E9..86FA` assigns D0C0 to DCC0+23.
+T66 observes a different incoming mode byte before that assignment. Native loading
+therefore preserves the incoming view until the native initialization boundary,
+then selects the supplied configuration cell. Expected boundary outputs never
+supply either value. Run the source/input check and the full preparation comparison:
+
+```sh
+python3 tools/replay_fresh_preparation.py --check
+python3 tools/replay_fresh_preparation.py --replay
+```
+
+[confirmed] Original D5D6 chooses the displayed managed club by membership, while
+1B55:321F calls50EB with display column1 and bonus flag0. Selected-side identity
+and display column are distinct. Native editor preparation now derives that club
+before computing display ratings; the old exhibition's displayed side is retained.
+The public replay compares seeding/selectors at the two early career boundaries,
+then every named preparation projection from pre86E9 onward, every ordered draw
+and every watched first-entry field. Supplied career selection remains input;
+this is not a port of the whole management-screen workflow.

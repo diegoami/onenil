@@ -75,17 +75,27 @@ fn ids<I: Iterator<Item = u16>>(it: I) -> BTreeSet<u16> {
 }
 // [derived] Reconcile every redundant component and raw table before allocating one image.
 pub(crate) fn cells(s: &State) -> Result<Cells, String> {
+    load_cells(s, false)
+}
+pub(crate) fn fresh_source_cells(s: &State) -> Result<Cells, String> {
+    load_cells(s, true)
+}
+fn load_cells(s: &State, fresh: bool) -> Result<Cells, String> {
     let r = &s.core;
-    if !(1..=22).contains(&r.actor)
-        || r.secondary > 22
-        || r.assignment.index != 1
-        || r.assignment.selector != 1
-    {
-        return Err("unsupported164F actor/secondary or noncanonical assignment metadata".into());
+    if !fresh {
+        if !(1..=22).contains(&r.actor)
+            || r.secondary > 22
+            || r.assignment.index != 1
+            || r.assignment.selector != 1
+        {
+            return Err(
+                "unsupported164F actor/secondary or noncanonical assignment metadata".into(),
+            );
+        }
+        role_pairing::validate(&s.pairing)?;
+        scene_codes::validate(&s.codes)?;
+        terminal::validate(&s.terminal)?;
     }
-    role_pairing::validate(&s.pairing)?;
-    scene_codes::validate(&s.codes)?;
-    terminal::validate(&s.terminal)?;
     let mut c = scene_assignment::cells(&r.assignment)?;
     for (a, b) in player_cache::cells(&s.cache)? {
         insert(&mut c, a, b)?;

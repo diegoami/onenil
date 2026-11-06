@@ -15,6 +15,11 @@ pub struct Preparation {
     pub(crate) session: setup::Session,
 }
 impl Preparation {
+    pub fn new_fresh(input: Input) -> Result<Self, String> {
+        Ok(Self {
+            session: setup::Session::new_fresh_watched(input.setup, input.incoming)?,
+        })
+    }
     pub fn new(input: Input) -> Result<Self, String> {
         Ok(Self {
             session: setup::Session::new_watched(input.setup, input.incoming)?,
@@ -33,6 +38,79 @@ mod tests {
     use super::*;
     use serde_json::json;
     use std::path::Path;
+
+    #[test]
+    fn fresh_original_profile_reaches_the_exact_watched_entry() {
+        let value: Value = serde_json::from_str(include_str!(
+            "../tests/fixtures/fresh_preparation/admission.json"
+        ))
+        .unwrap();
+        let input: Input = serde_json::from_value(value["input"].clone()).unwrap();
+        assert!(Preparation::new(input.clone()).is_err());
+        let prepared = Preparation::new_fresh(input).unwrap();
+        let original: Value = serde_json::from_str(include_str!(
+            "../../records/T60/source-r0001/admission-r0001.json"
+        ))
+        .unwrap();
+        assert_eq!(
+            prepared.snapshot().unwrap(),
+            original["payload"]["first_entry"]
+        );
+        assert_eq!(
+            prepared.preparation()["draws"].as_array().unwrap().len(),
+            258
+        );
+        let trace = prepared.preparation();
+        assert_eq!(trace["points"][2]["caller"]["codes"]["mode"], json!(12));
+        assert_eq!(trace["points"][3]["caller"]["codes"]["mode"], json!(0));
+        assert_eq!(
+            trace["points"][6]["caller"]["ratings"],
+            original["payload"]["points"][6]["state"]["caller"]["ratings"]
+        );
+        let pointer = prepared.session.match_state.inner.e.image.as_ptr();
+        let before = prepared.session.match_state.inner.e.image.clone();
+        assert_eq!(prepared.snapshot().unwrap(), prepared.snapshot().unwrap());
+        assert_eq!(prepared.session.match_state.inner.e.image.as_ptr(), pointer);
+        assert_eq!(prepared.session.match_state.inner.e.image, before);
+    }
+
+    #[test]
+    fn fresh_source_refuses_fixture_side_roster_seed_and_output_alias_changes() {
+        let value: Value = serde_json::from_str(include_str!(
+            "../tests/fixtures/fresh_preparation/admission.json"
+        ))
+        .unwrap();
+        for field in ["fixture", "side", "roster", "seed", "clock", "quick"] {
+            let mut input: Input = serde_json::from_value(value["input"].clone()).unwrap();
+            match field {
+                "fixture" => input.setup.legacy.config[0] = 6,
+                "side" => input
+                    .setup
+                    .legacy
+                    .substitution
+                    .context
+                    .managed_clubs
+                    .swap(0, 1),
+                "roster" => input.setup.legacy.substitution.context.clubs[0]
+                    .roster
+                    .swap(0, 1),
+                "seed" => input.setup.legacy.contest.seed ^= 1,
+                "clock" => input.setup.legacy.clock.clock.kind = 45,
+                "quick" => input.setup.legacy.contest.k = 8,
+                _ => unreachable!(),
+            }
+            assert!(Preparation::new_fresh(input).is_err(), "{field}");
+        }
+        let mut bad = value["input"].clone();
+        bad["expected_first_entry"] = json!({});
+        assert!(serde_json::from_value::<Input>(bad).is_err());
+        let mut bad = value["input"].clone();
+        bad["setup"]
+            .as_object_mut()
+            .unwrap()
+            .remove("legacy_queue_zero");
+        assert!(serde_json::from_value::<Input>(bad).is_err());
+    }
 
     fn fixture() -> Value {
         let path = Path::new(env!("CARGO_MANIFEST_DIR"))

@@ -267,13 +267,27 @@ pub struct Session {
 }
 impl Session {
     pub fn new(data: Data) -> Result<Self, String> {
-        Self::new_mode(data, None, None, false)
+        Self::new_mode(data, None, None, false, false)
     }
     pub(crate) fn new_watched(data: Data, incoming: WatchedIncoming) -> Result<Self, String> {
         if incoming.scores != data.legacy.contest.goals {
             return Err("incoming watched scratch-score alias differs".into());
         }
-        Self::new_mode(data, Some(incoming), None, false)
+        Self::new_mode(data, Some(incoming), None, false, false)
+    }
+    pub(crate) fn new_fresh_watched(data: Data, incoming: WatchedIncoming) -> Result<Self, String> {
+        // [confirmed:archaeology T66] This first fresh profile admits only its
+        // authenticated incoming values, including unused zero scene scratch.
+        // Expected preparation/kickoff output never enters this fixture.
+        let reference: Value = serde_json::from_str(include_str!(
+            "../tests/fixtures/fresh_preparation/admission.json"
+        ))
+        .map_err(|error| error.to_string())?;
+        let value = json!({"setup": &data, "incoming": incoming});
+        if value != reference["input"] {
+            return Err("unsupported or conflicting fresh campaign incoming profile".into());
+        }
+        Self::new_mode(data, Some(incoming), None, false, true)
     }
     pub(crate) fn before_watched_call(
         data: Data,
@@ -283,15 +297,18 @@ impl Session {
         if incoming.scores != data.legacy.contest.goals {
             return Err("incoming watched scratch-score alias differs".into());
         }
-        Self::new_mode(data, Some(incoming), Some(initial), true)
+        Self::new_mode(data, Some(incoming), Some(initial), true, false)
     }
     fn new_mode(
         data: Data,
         incoming: Option<WatchedIncoming>,
         initial: Option<&crate::role_scores::Cells>,
         before_call: bool,
+        fresh: bool,
     ) -> Result<Self, String> {
-        Self::validate(&data)?;
+        if !fresh {
+            Self::validate(&data)?;
+        }
         let Data {
             legacy,
             replacement,
@@ -304,13 +321,17 @@ impl Session {
             income,
             supplement,
         } = data;
-        let m = match_session::Session::from_legacy_with_initial(
-            legacy,
-            replacement,
-            gates,
-            skill_tables,
-            initial,
-        )?;
+        let m = if fresh {
+            match_session::Session::from_fresh_source(legacy, replacement, gates, skill_tables)?
+        } else {
+            match_session::Session::from_legacy_with_initial(
+                legacy,
+                replacement,
+                gates,
+                skill_tables,
+                initial,
+            )?
+        };
         let mut out = Self {
             match_state: m,
             points: vec![],
@@ -336,7 +357,7 @@ impl Session {
         put(e, 0xA52B, legacy_queue_zero.first_player);
         put(e, 0xA52D, legacy_queue_zero.second_player);
         e.image[0xA52F] = legacy_queue_zero.side;
-        out.load_inputs(&setup_cells, &income, &supplement)?;
+        out.load_inputs(&setup_cells, &income, &supplement, fresh)?;
         if let Some(support) = initial {
             for (&address, &value) in support {
                 if out.match_state.inner.e.image[address] != value {
@@ -509,7 +530,13 @@ impl Session {
         }
         Ok(())
     }
-    fn load_inputs(&mut self, c: &Cells, incomes: &[Income], s: &Supplement) -> Result<(), String> {
+    fn load_inputs(
+        &mut self,
+        c: &Cells,
+        incomes: &[Income],
+        s: &Supplement,
+        fresh: bool,
+    ) -> Result<(), String> {
         let mut cells = crate::role_scores::Cells::new();
         for w in &c.numeric_weights {
             crate::role_scores::insert(&mut cells, 0x097A + usize::from(w.code), w.value)?;
@@ -520,7 +547,9 @@ impl Session {
             usize::from(0xD58u16.wrapping_add(index as u16)),
             c.reserve_cell.value,
         )?;
-        crate::role_scores::insert(&mut cells, layout::SCENE_MODE, c.scene_mode)?;
+        if !fresh {
+            crate::role_scores::insert(&mut cells, layout::SCENE_MODE, c.scene_mode)?;
+        }
         crate::role_scores::insert(&mut cells, layout::CONFIG + 0xF2, s.start_gate)?;
         for f in &c.club_fields {
             for (off, value) in [
@@ -688,7 +717,27 @@ impl Session {
     }
     fn editor(&mut self) -> Result<(), String> {
         self.match_state.rearrange()?;
-        let input = self.match_state.inner.rating(1);
+        // [confirmed:original D5D6:D5FB..D687;1B55:321F..322B] The
+        // displayed managed club is rated into column1 with bonus flag0.
+        // Its selected-club side can differ from that display column.
+        let e = &self.match_state.inner.e;
+        let home = word(e, 0xD6E6);
+        let displayed = if crate::cache_helpers::managed_image(e, home) != 0 {
+            home
+        } else {
+            word(e, 0xD6E4)
+        };
+        let index = self
+            .match_state
+            .inner
+            .a
+            .ratings
+            .iter()
+            .position(|row| row.club == displayed)
+            .ok_or("missing displayed club rating input")?;
+        let mut input = self.match_state.inner.rating(index);
+        input.side = 1;
+        input.flag = 0;
         self.match_state.inner.e.rate_side(&input)?;
         self.match_state.project_display_ratings();
         // [designed] No lineup edit after supplied starting squads;actual return key2.
@@ -787,6 +836,10 @@ impl Session {
             put(e, a, 0);
         }
         self.mark("0AB9:86E9");
+        // [confirmed:archaeology T66;seg_0AB9_14.asm86E9..86FA] The
+        // original now points D0C0 at DCC0+23. Before this store the fresh
+        // incoming pointer observes a different byte;retain that old view.
+        self.match_state.inner.e.image[layout::SCENE_MODE] = c.scene_mode;
         self.initialize_match(c.reserve_cell.value)?;
         self.mark("0AB9:E2D4");
         self.income_parent(incomes)?;
