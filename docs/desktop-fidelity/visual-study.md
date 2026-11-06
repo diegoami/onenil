@@ -143,6 +143,18 @@
 
 ## What the checks establish
 
+[designed] The [published-artifact verifier](mockups/check_render.py) needs only
+Python and this checkout, with no browser, font download or private game cache:
+
+```sh
+python3 docs/desktop-fidelity/mockups/check_render.py records/T51/render-r0003.json --negative-checks
+```
+
+[confirmed: verification-r0001] It verifies all30 PNG hashes/dimensions, all ten
+variants/three sizes, original producer commit/file identities and recorded
+unclipped geometry. Six negative controls reject missing/duplicate sheets,
+wrong PNG/font/producer identity and clipped layout.
+
 [confirmed] `build.py` checks the required ten variant identities, original record/PNG hashes, generated-page drift and the independent font hash. Five corruption cases are rejected (missing/duplicate variant, unknown departure, changed original record hash, changed original image hash). A separate [wrong-font run](../../records/T51/bad-font-r0001.json) is correctly refused. [Public font fetch](../../records/T51/font-fetch-r0002.json) verifies the official pack/member checksums; the [first fetch](../../records/T51/font-fetch-r0001.json) retained its403 failure before the client supplied its identifying User-Agent. Font binary and original game files stay outside git.
 
 [confirmed] Render-r0001 passed geometry but visual inspection found missing inverse filled-bar appearance. Render-r0002 corrected bars; render-r0003 adds continuous independent vector frames/block primitives. Earlier sheets/receipts are retained, not rewritten. Final PNGs are referenced above. Geometry/hash success is not owner visual acceptance or a product parity verdict.
