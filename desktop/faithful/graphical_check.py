@@ -67,7 +67,8 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   key('space');key('Return');key('Down');key('Return');key('Escape');key('F9');step('reloaded',lambda s:s.get('first',[])[:2]==[1,0] and 'restored' in s.get('message',''));assert save.read_bytes()==saved
   save.write_text('{');before=state()['first'];key('F9');step('malformed-load-preserves-editor',lambda s:'refused' in s.get('message','') and s.get('first')==before);save.write_bytes(saved)
   for w,h in [(960,640),(720,450),(1440,900)]:x.XResizeWindow(display,window,w,h);x.XFlush(display);time.sleep(.2);shot(f'resize-{w}x{h}')
-  key('Return');step('preparation',lambda s:s.get('screen')=='Preparation');key('space');step('remembered-view',lambda s:s.get('screen')=='Players' and s.get('panel')=='Details' and s.get('card')==1);key('Escape');step('caller-return',lambda s:s.get('screen')=='Preparation')
+  remembered=state()
+  key('Return');step('preparation',lambda s:s.get('screen')=='Preparation');key('space');step('remembered-view',lambda s:s.get('screen')=='Players' and s.get('panel')==remembered['panel'] and s.get('selected')==remembered['selected'] and s.get('card')==remembered['card']);key('Escape');step('caller-return',lambda s:s.get('screen')=='Preparation')
   key('Return');s=step('preparing',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'));pid=s['worker_pid'];worker_pids.append(pid);shot('preparing');key('Escape');step('cancel-preparation',lambda s:s.get('screen')=='Preparation' and not s.get('worker_pid'));assert not Path(f'/proc/{pid}').exists()
   key('Return');step('pitch',lambda s:s.get('screen')=='Pitch' and s.get('players')==22,180);shot('pitch')
   key('space');s=step('commentary-history',lambda s:s.get('screen')=='History' and s.get('events',0)>0);shot('history');key('Escape');key('Escape');step('bench',lambda s:s.get('screen')=='Bench');shot('bench');key('Return')
