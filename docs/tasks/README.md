@@ -69,3 +69,7 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T48 Browser and packaged desktop delivery comparison](T48.md)
 
 - [T49 Desktop-first original UI fidelity contract](T49.md)
+
+- [T50 Complete original-to-desktop screen map](T50.md)
+
+- [T51 Faithful first desktop screen mockups](T51.md)
