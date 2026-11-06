@@ -27,7 +27,7 @@ fn run() -> Result<(), String> {
     let font =
         argument("--font")?.unwrap_or_else(|| root.join(".cache/T51-font/PxPlus_IBM_VGA_8x16.ttf"));
     let save =
-        argument("--save")?.unwrap_or_else(|| root.join(".cache/desktop-experiment/squad.json"));
+        argument("--save")?.unwrap_or_else(|| root.join(".cache/desktop-campaign/SAVE1.json"));
     let load = args.iter().any(|s| s == "--load");
     #[cfg(feature = "egui")]
     if !cfg!(feature = "software") || args.iter().any(|s| s == "--egui") {

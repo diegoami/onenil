@@ -36,6 +36,7 @@ impl eframe::App for Candidate {
                     egui::Key::F10 => Some(Key::F10),
                     egui::Key::Y => Some(Key::Y),
                     egui::Key::N => Some(Key::N),
+                    egui::Key::E => Some(Key::Exhibition),
                     _ => None,
                 };
                 if let Some(key) = key {
@@ -128,7 +129,7 @@ pub fn run(
         ..Default::default()
     };
     eframe::run_native(
-        "One-Nil | native desktop feasibility",
+        "One-Nil | saved club prototype",
         options,
         Box::new(move |_| Ok(Box::new(candidate))),
     )

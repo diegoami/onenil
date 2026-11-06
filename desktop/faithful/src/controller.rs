@@ -33,6 +33,7 @@ pub enum Key {
     F10,
     Y,
     N,
+    Exhibition,
 }
 pub struct Controller {
     pub editor: Editor,
@@ -49,6 +50,7 @@ pub struct Controller {
     pub load_requested: bool,
     pub close_requested: bool,
     pub speed: u8,
+    pub exhibition: bool,
     remembered_first: usize,
 }
 impl Default for Controller {
@@ -68,6 +70,7 @@ impl Default for Controller {
             load_requested: false,
             close_requested: false,
             speed: 23,
+            exhibition: false,
             remembered_first: 0,
         }
     }
@@ -126,37 +129,55 @@ impl Controller {
                 Key::Up => self.menu = (self.menu + 16) % 17,
                 Key::Down => self.menu = (self.menu + 1) % 17,
                 Key::Space => self.players(),
-                Key::Enter if self.menu == 0 => self.screen = Screen::Preparation,
+                Key::Enter if self.menu == 0 => {
+                    self.exhibition = false;
+                    self.screen = Screen::Preparation;
+                }
+                Key::Exhibition => {
+                    self.exhibition = true;
+                    self.screen = Screen::Preparation;
+                    self.preparation_menu = 2;
+                }
                 Key::Enter if self.menu == 1 => self.players(),
                 Key::F7 => self.save_requested = true,
                 Key::F9 => {
                     self.load_requested = true;
-                    self.message = "F9 is an experiment reload shortcut.".into();
+                    self.message = "F9 reloads the native saved club.".into();
                 }
                 Key::F10 => self.screen = Screen::Quit,
                 _ => self.unsupported(),
             },
             Screen::Players => match key {
                 Key::Up | Key::Down => {
-                    if let Location::First(i) = self.editor.selected {
-                        let next = if key == Key::Down {
-                            (i + 1).min(17)
+                    let (i, reserve) = match self.editor.selected {
+                        Location::First(i) => (i, false),
+                        Location::Reserve(i) => (i, true),
+                    };
+                    let next = if key == Key::Down {
+                        (i + 1).min(19)
+                    } else {
+                        i.saturating_sub(1)
+                    };
+                    self.editor
+                        .select(if reserve {
+                            Location::Reserve(next)
                         } else {
-                            i.saturating_sub(1)
-                        };
-                        self.editor.select(Location::First(next)).unwrap();
+                            Location::First(next)
+                        })
+                        .unwrap();
+                    if !reserve {
                         self.remembered_first = next;
                     }
                 }
                 Key::Left | Key::Right => {
-                    let destination = match self.editor.selected {
+                    let at = match self.editor.selected {
                         Location::First(i) => {
                             self.remembered_first = i;
-                            Location::Reserve
+                            Location::Reserve(0)
                         }
-                        Location::Reserve => Location::First(self.remembered_first),
+                        Location::Reserve(_) => Location::First(self.remembered_first),
                     };
-                    self.editor.select(destination).unwrap();
+                    self.editor.select(at).unwrap();
                 }
                 Key::Insert => {
                     self.editor.panel = if self.editor.panel == Panel::Skills {
@@ -199,9 +220,19 @@ impl Controller {
             Screen::Preparation | Screen::Bench => match key {
                 Key::Up => self.preparation_menu = self.preparation_menu.saturating_sub(1),
                 Key::Down => self.preparation_menu = (self.preparation_menu + 1).min(3),
-                Key::Space if self.screen == Screen::Preparation => self.players(),
+                Key::Space if self.screen == Screen::Preparation && !self.exhibition => {
+                    self.players()
+                }
+                Key::Exhibition if self.screen == Screen::Preparation => {
+                    self.exhibition = true;
+                    self.preparation_menu = 2;
+                }
                 Key::Enter if self.preparation_menu == 2 => {
                     if self.screen == Screen::Preparation {
+                        if !self.exhibition {
+                            self.message="Campaign match admission is pending. E opens a separate exhibition.".into();
+                            return;
+                        }
                         self.job_id += 1;
                         self.prepare_requested = true;
                         self.screen = Screen::Preparing;
@@ -214,7 +245,10 @@ impl Controller {
                         self.screen = Screen::Pitch;
                     }
                 }
-                Key::Escape if self.screen == Screen::Preparation => self.screen = Screen::Main,
+                Key::Escape if self.screen == Screen::Preparation => {
+                    self.exhibition = false;
+                    self.screen = Screen::Main;
+                }
                 _ => self.unsupported(),
             },
             Screen::Preparing => {
@@ -244,6 +278,7 @@ impl Controller {
             }
             Screen::FullTime => {
                 self.screen = Screen::Main;
+                self.exhibition = false;
                 self.message = "Exhibition complete. No campaign result was posted.".into();
             }
             Screen::Quit => match key {

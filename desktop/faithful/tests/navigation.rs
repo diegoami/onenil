@@ -8,11 +8,11 @@ fn remembered_view_and_caller_and_stale_results() {
     c.key(Key::Insert);
     c.key(Key::Enter);
     c.key(Key::Down);
-    assert_eq!(c.editor.carried_player(), Some(0));
-    assert_eq!(c.editor.card(), Some(1));
+    assert_eq!(c.editor.carried_player(), Some(2581));
+    assert_eq!(c.editor.card(), Some(2582));
     c.key(Key::Escape);
     assert_eq!(c.screen, Screen::Players);
-    assert_eq!(c.editor.card(), Some(1));
+    assert_eq!(c.editor.card(), Some(2582));
     c.key(Key::Escape);
     assert_eq!(c.screen, Screen::Main);
     c.key(Key::Enter);
@@ -22,6 +22,7 @@ fn remembered_view_and_caller_and_stale_results() {
     assert_eq!(c.editor.selected, Location::First(1));
     c.key(Key::Escape);
     assert_eq!(c.screen, Screen::Preparation);
+    c.key(Key::Exhibition);
     c.key(Key::Enter);
     assert_eq!(c.screen, Screen::Preparing);
     assert!(c.prepare_requested);

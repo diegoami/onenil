@@ -24,7 +24,7 @@ pub fn run(
     let mut app = Application::new(root, save, load)?;
     let mut renderer = Renderer::new(&font)?;
     let mut window = Window::new(
-        "One-Nil | native desktop feasibility",
+        "One-Nil | saved club prototype",
         1440,
         900,
         WindowOptions {
@@ -56,6 +56,7 @@ pub fn run(
                 NativeKey::F10 => Some(Key::F10),
                 NativeKey::Y => Some(Key::Y),
                 NativeKey::N => Some(Key::N),
+                NativeKey::E => Some(Key::Exhibition),
                 _ => None,
             };
             if let Some(key) = mapped {

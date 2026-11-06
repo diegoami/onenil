@@ -18,7 +18,9 @@ impl Application {
     pub fn new(root: PathBuf, save_path: PathBuf, load: bool) -> Result<Self, String> {
         let mut controller = Controller::default();
         if load {
-            controller.editor.load(&save_path)?;
+            if let Err(e) = controller.editor.load(&save_path) {
+                controller.message = format!("Load refused: {e}");
+            }
         }
         Ok(Self {
             controller,
@@ -47,14 +49,20 @@ impl Application {
                 .map_err(|e| e.to_string())
                 .and_then(|_| self.controller.editor.save(&self.save_path))
             {
-                Ok(()) => "Experiment squad saved (F9 reloads).".into(),
+                Ok(outcome) => {
+                    if outcome.directory_synced {
+                        "Native campaign saved (F9 reloads).".into()
+                    } else {
+                        "Native campaign saved; directory durability not confirmed.".into()
+                    }
+                }
                 Err(e) => format!("Save refused: {e}"),
             };
         }
         if self.controller.load_requested {
             self.controller.load_requested = false;
             self.controller.message = match self.controller.editor.load(&self.save_path) {
-                Ok(()) => "Experiment squad restored.".into(),
+                Ok(()) => "Native campaign restored.".into(),
                 Err(e) => format!("Load refused: {e}"),
             };
         }
@@ -96,6 +104,6 @@ impl Application {
     /// [designed] Optional read-only diagnostic snapshot; never accepts state or commands.
     pub fn snapshot(&self) -> serde_json::Value {
         let c = &self.controller;
-        serde_json::json!({"menus":[c.menu,c.preparation_menu,c.option],"speed":c.speed,"close_requested":c.close_requested,"screen":format!("{:?}",c.screen),"panel":format!("{:?}",c.editor.panel),"selected":format!("{:?}",c.editor.selected),"card":c.editor.card(),"carried":c.editor.carried_player(),"first":c.editor.first,"reserve":c.editor.reserve,"job":c.job_id,"worker_pid":self.job.as_ref().map(|j|j.pid()),"phase":c.playback.as_ref().map(|p|format!("{:?}",p.phase)),"frames":c.playback.as_ref().map(|p|p.cursor),"events":c.playback.as_ref().map(|p|p.events.len()),"score":c.playback.as_ref().map(|p|p.view().score),"players":c.playback.as_ref().map(|p|p.view().players.len()),"message":c.message})
+        serde_json::json!({"menus":[c.menu,c.preparation_menu,c.option],"speed":c.speed,"close_requested":c.close_requested,"screen":format!("{:?}",c.screen),"panel":format!("{:?}",c.editor.panel),"selected":format!("{:?}",c.editor.selected),"card":c.editor.card(),"carried":c.editor.carried_player(),"first":c.editor.campaign.club.first_team,"reserve":c.editor.campaign.club.reserves,"campaign":c.editor.campaign,"exhibition":c.exhibition,"job":c.job_id,"worker_pid":self.job.as_ref().map(|j|j.pid()),"phase":c.playback.as_ref().map(|p|format!("{:?}",p.phase)),"frames":c.playback.as_ref().map(|p|p.cursor),"events":c.playback.as_ref().map(|p|p.events.len()),"score":c.playback.as_ref().map(|p|p.view().score),"players":c.playback.as_ref().map(|p|p.view().players.len()),"message":c.message})
     }
 }
