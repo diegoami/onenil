@@ -6,7 +6,22 @@ checked against the original through a Python harness. No byte of the original g
 repository; see [docs/artifacts.md](docs/artifacts.md). Rules: [CLAUDE.md](CLAUDE.md). Process:
 [docs/process.md](docs/process.md).
 
-The next product target is [one playable watched match](docs/first-playable.md),
+A native desktop feasibility prototype now reproduces the original-style main menu and
+Players interaction, with experiment save/load and a fixed Rust exhibition showing detailed
+player commentary, clock, score and pitch positions. It runs locally without a browser/server:
+
+```sh
+python3 desktop/faithful/fetch_font.py
+cargo run --manifest-path desktop/faithful/Cargo.toml --features software --locked
+```
+
+Space opens Players; Insert switches skills/details; Enter picks/places a player; Escape
+cancels/returns. F7 saves and F9 reloads the experiment squad. Main-menu Enter, then PLAY GAME,
+prepares the native exhibition. See [desktop launch, controls and limits](docs/desktop-feasibility.md).
+Captured example squad edits do not yet feed that fixed match. This is a tested Linux desktop
+candidate, with several UI/statistics/management gaps; no final toolkit or Windows package is claimed.
+
+The earlier technical watched preview remains available for engine evidence. The next product target is [one playable watched match](docs/first-playable.md),
 tracked in [issue35](https://github.com/diegoami/onenil/issues/35):choose a supported
 lineup/seed,kick off,follow a match clock and text commentary,and reach a final
 score through one continuing native state. Commentary is the minimum; a simple
