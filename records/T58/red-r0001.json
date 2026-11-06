@@ -1,0 +1,36 @@
+{
+  "schema": "native-player-controls-red/1",
+  "base": "0e2c032b001fb563b184d2f0673c7eb619446c87",
+  "commands": [
+    "cargo test --manifest-path campaign/Cargo.toml --test controls --locked",
+    "cargo test --manifest-path desktop/faithful/Cargo.toml --test controls --locked"
+  ],
+  "results": {
+    "core": {
+      "exit_status": 101,
+      "log_sha256": "13a44d3d21935cbf3d4397653bdda3356827cd4f356ef78e46d09a029b0bfcc5",
+      "errors": [
+        "error[E0599]: no method named `reposition` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `restore_club_position` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `reposition` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `reposition` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `restore_club_position` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `restore_club_position` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `restore_club_position` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `cycle_goalkeeper_positioning` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `cycle_goalkeeper_positioning` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `cycle_goalkeeper_positioning` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `reposition` found for struct `Campaign` in the current scope",
+        "error[E0599]: no method named `cycle_goalkeeper_positioning` found for struct `Campaign` in the current scope"
+      ]
+    },
+    "ui": {
+      "exit_status": 101,
+      "log_sha256": "b3726d923d03e03ffb90f1fd242b327d979882fbc083b42e43b2da4b85513d27",
+      "errors": [
+        "error[E0599]: no variant, associated function, or constant named `Instructions` found for enum `Screen` in the current scope",
+        "error[E0609]: no field `instruction` on type `Controller`"
+      ]
+    }
+  }
+}

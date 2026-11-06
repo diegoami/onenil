@@ -10,6 +10,7 @@ pub enum Screen {
     SavedGames,
     Players,
     Options,
+    Instructions,
     Preparation,
     Preparing,
     Pitch,
@@ -43,6 +44,7 @@ pub struct Controller {
     pub menu: usize,
     pub preparation_menu: usize,
     pub option: usize,
+    pub instruction: usize,
     pub message: String,
     pub prepare_requested: bool,
     pub job_id: u64,
@@ -66,6 +68,7 @@ impl Default for Controller {
             menu: 0,
             preparation_menu: 2,
             option: 0,
+            instruction: 0,
             message: String::new(),
             prepare_requested: false,
             job_id: 0,
@@ -89,6 +92,18 @@ impl Controller {
     }
     fn unsupported(&mut self) {
         self.message = "This action is outside the desktop feasibility slice.".into();
+    }
+    /// [designed] Supported prototype actions; original keeper/age guards preserved.
+    pub fn option_available(&self, option: usize) -> bool {
+        let Some(p) = self.editor.card().and_then(|id| self.editor.player(id)) else {
+            return false;
+        };
+        match option {
+            0 => p.club_position != 0,
+            1 => p.age >= 18,
+            4 | 7 => true,
+            _ => false,
+        }
     }
     pub fn accept_error(&mut self, id: u64, error: String) -> bool {
         if id != self.job_id || self.screen != Screen::Preparing {
@@ -228,15 +243,59 @@ impl Controller {
                 Key::Space
                     if self.editor.carried_player().is_none() && self.editor.card().is_some() =>
                 {
+                    self.editor.panel = Panel::Details;
                     self.screen = Screen::Options
                 }
                 _ => self.unsupported(),
             },
+            Screen::Instructions => match key {
+                Key::Up => self.instruction = self.instruction.saturating_sub(1),
+                Key::Down => self.instruction = (self.instruction + 1).min(3),
+                Key::Escape => self.screen = Screen::Options,
+                Key::Insert => {
+                    self.editor.panel = Panel::Skills;
+                    self.screen = Screen::Options;
+                }
+                Key::Enter if self.instruction == 0 => {
+                    if let Some(id) = self.editor.card() {
+                        if let Err(e) = self.editor.campaign.cycle_goalkeeper_positioning(id) {
+                            self.message = e;
+                        }
+                    }
+                }
+                _ => self.message = "This instruction action is unavailable in this slice.".into(),
+            },
             Screen::Options => match key {
+                Key::Insert => {
+                    self.editor.panel = if self.editor.panel == Panel::Details {
+                        Panel::Skills
+                    } else {
+                        Panel::Details
+                    }
+                }
                 Key::Up => self.option = self.option.saturating_sub(1),
                 Key::Down => self.option = (self.option + 1).min(7),
                 Key::Escape => self.screen = Screen::Players,
                 Key::Enter if self.option == 7 => self.screen = Screen::Players,
+                Key::Enter if self.option == 0 || self.option == 1 => {
+                    if let Some(id) = self.editor.card() {
+                        let result = if self.option == 0 {
+                            self.editor.campaign.reposition(id)
+                        } else {
+                            self.editor.campaign.restore_club_position(id)
+                        };
+                        if let Err(e) = result {
+                            self.message = e;
+                        }
+                    }
+                }
+                Key::Enter if self.option == 4 => {
+                    self.editor.panel = Panel::Details;
+                    self.screen = Screen::Instructions;
+                }
+                Key::Enter => {
+                    self.message = "This player action is unavailable in this slice.".into()
+                }
                 _ => self.unsupported(),
             },
             Screen::Preparation | Screen::Bench => match key {

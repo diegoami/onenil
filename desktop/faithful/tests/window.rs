@@ -48,3 +48,44 @@ fn chooser_preserves_decoded_border_and_unselected_background() {
         sheet[16 * 80 + 26][2].as_u64().unwrap() as u32
     );
 }
+
+#[cfg(feature = "raster")]
+#[test]
+fn instruction_labels_follow_owned_state_and_options_keep_original_border() {
+    use onenil_desktop::{
+        controller::{Controller, Key, Screen},
+        editor::Location,
+        render::Renderer,
+    };
+    let font = std::env::var_os("ONENIL_DESKTOP_FONT").unwrap();
+    let mut r = Renderer::new(std::path::Path::new(&font)).unwrap();
+    let mut c = Controller::default();
+    c.key(Key::Space);
+    c.editor.select(Location::First(17)).unwrap();
+    c.key(Key::Space);
+    assert_eq!(c.screen, Screen::Options);
+    r.draw(&c);
+    let cells: serde_json::Value =
+        serde_json::from_str(include_str!("../assets/cells.json")).unwrap();
+    assert_eq!(
+        r.pixels[(5 * 16 + 8) * 720 + 77 * 9 + 4],
+        cells["screens"]["player-options"][5 * 80 + 77][1]
+            .as_u64()
+            .unwrap() as u32
+    );
+    for text in [
+        "come out of box P",
+        "come out of box",
+        "stay in box P",
+        "come out of box P",
+    ] {
+        assert_eq!(
+            r.instruction_text(&c, c.editor.player(2598).unwrap(), 0),
+            text
+        );
+        c.editor
+            .campaign
+            .cycle_goalkeeper_positioning(2598)
+            .unwrap();
+    }
+}

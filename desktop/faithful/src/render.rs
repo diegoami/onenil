@@ -213,7 +213,7 @@ impl Renderer {
             self.cell(x + 15, row, role, TEXT, GROUND);
         }
     }
-    fn instruction_text(
+    pub fn instruction_text(
         &self,
         c: &Controller,
         player: &onenil_campaign::Player,
@@ -379,6 +379,10 @@ impl Renderer {
             );
         }
         if c.screen == Screen::Options {
+            self.control_region("player-options");
+            if let Some(player) = player {
+                self.text(59, 2, &player.name, TEXT, GROUND, 18);
+            }
             let options = [
                 "Reposition",
                 "Club position",
@@ -389,19 +393,52 @@ impl Renderer {
                 "Fire",
                 "Continue",
             ];
-            self.rect(180, 64, 270, 160, 0);
-            for (i, text) in options.iter().enumerate() {
+            for (i, label) in options.iter().enumerate() {
                 self.text(
-                    21,
-                    5 + i,
-                    text,
+                    58,
+                    5 + i * 2,
+                    &format!(" {label}"),
                     if i == c.option { GROUND } else { TEXT },
-                    if i == c.option { TEXT } else { 0 },
-                    26,
+                    if i == c.option { TEXT } else { GROUND },
+                    17,
                 );
+                self.cell(
+                    76,
+                    5 + i * 2,
+                    if c.option_available(i) { '√' } else { 'x' },
+                    0xffff55,
+                    GROUND,
+                );
+            }
+        } else if c.screen == Screen::Instructions {
+            self.control_region("player-instructions");
+            if let Some(player) = player {
+                for (i, label) in ["Positioning", "Possession", "Passing", "Tackling"]
+                    .iter()
+                    .enumerate()
+                {
+                    self.text(
+                        2,
+                        13 + i,
+                        &format!("{label:15} {}", self.instruction_text(c, player, i)),
+                        if c.instruction == i { GROUND } else { TEXT },
+                        if c.instruction == i { TEXT } else { GROUND },
+                        34,
+                    );
+                }
             }
         }
     }
+    /// [derived] Only the original right control grouping; the card is owned live state.
+    fn control_region(&mut self, name: &str) {
+        let cells = self.assets.screens[name].clone();
+        for (i, (ch, fg, bg)) in cells.into_iter().enumerate() {
+            if i % 80 >= 56 {
+                self.cell(i % 80, i / 80, ch, fg, bg);
+            }
+        }
+    }
+
     fn team_panel(&mut self, c: &Controller) {
         self.text(22, 0, &c.editor.campaign.club.name, TEXT, GROUND, 15);
         if c.editor.campaign.club.first_team != self.initial.club.first_team
@@ -594,7 +631,7 @@ impl Renderer {
                     80,
                 );
             }
-            Screen::Players | Screen::Options => self.players(c),
+            Screen::Players | Screen::Options | Screen::Instructions => self.players(c),
             Screen::Pitch | Screen::History | Screen::HalfTime | Screen::FullTime => {
                 self.match_view(c)
             }

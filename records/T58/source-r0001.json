@@ -1,0 +1,88 @@
+{
+  "schema": "original-player-controls-source/1",
+  "research_commit": "68cd3396ec3621d55df8c9377cd5c4b7b74c1314",
+  "sources": {
+    "static/1-0-exe/code/seg_0AB9_17.asm": {
+      "sha256": "202ecd9d1084b124ea22227892d1a43cb0d8deedabdb2b32ba0a0a4b041fc01c",
+      "listing_addresses": [
+        "AC00",
+        "AC07",
+        "AC27",
+        "AC3B",
+        "AC6A",
+        "AC71",
+        "AC75",
+        "B2EB",
+        "B34A",
+        "B365",
+        "B379",
+        "B391",
+        "B3A9",
+        "B3C2",
+        "B3FD"
+      ]
+    },
+    "static/1-0-exe/code/seg_0AB9_19.asm": {
+      "sha256": "2852856be5c8e85ecaa40340c66f342ace64011dc8f749c9ec88e07d8d7abc40",
+      "listing_addresses": [
+        "C4D1",
+        "C73C",
+        "C748",
+        "C774"
+      ]
+    },
+    "static/1-0-exe/code/seg_232A_01.asm": {
+      "sha256": "dc40af4154df75bc213cd40c381184d4dca28d2b3fb34ddba414407a6c9dfa6a",
+      "listing_addresses": [
+        "0098",
+        "00D5",
+        "00F8",
+        "011D"
+      ]
+    },
+    "static/1-0-exe/code/seg_232A_02.asm": {
+      "sha256": "38f660af1c2b31c6f445a3345ad00a9d74ab6650c31bca4762849020bd0e655a",
+      "listing_addresses": [
+        "0EC4"
+      ]
+    },
+    "static/1-0-exe/code/seg_24BC_01.asm": {
+      "sha256": "8415be6d44cce168c19ad565477130cfdc7557218a211f2f778ba745ed60e38f",
+      "listing_addresses": [
+        "042B",
+        "048C"
+      ]
+    },
+    "docs/manual/selection.md": {
+      "sha256": "cedf38416d05bfe227e18729b261a2b1ec4ecb05da6c25474e793f55ab348871",
+      "listing_addresses": []
+    }
+  },
+  "captures": [
+    {
+      "record": "runs/T46/session-r0001/step-0010.json",
+      "record_sha256": "b6b6436e7fe3a388d47123e5fa3aef5dbf43e05050db1d069a9ed4fcacd56b63",
+      "reference": "runs/T46/session-r0001/step-0010.png",
+      "reference_sha256": "f6d8f3ba6869ec12110d272cf6ecaefb6d9063dc4d27ede24c4da8ac7bafaf8a"
+    },
+    {
+      "record": "runs/T46/session-r0001/step-0015.json",
+      "record_sha256": "05738cca7dbe75edaf1c93760dbe77fec9230e0e1ed0302e8afbdc7732cc8d82",
+      "reference": "runs/T46/session-r0001/step-0015.png",
+      "reference_sha256": "e127d0810efef6060fc45cb3ec493ba9488fef91b63a70401f5107c51a853f7d"
+    }
+  ],
+  "confirmed": [
+    "Club-role zero disables Reposition; current role is independent",
+    "Current role wraps across14 codes via one-based helper",
+    "Club-position restore requires age18 or greater",
+    "Positioning inherited -> explicit zero -> explicit one -> inherited with lower choice copied from club",
+    "Only bits0 and4 change for Positioning",
+    "Options and instruction entry force details; instruction row is remembered; Escape returns to options"
+  ],
+  "designed_bounds": [
+    "Only goalkeeper Positioning is editable in the instruction slice",
+    "Other management actions and instruction rows diagnose unavailable",
+    "Supported prototype availability marks replace unsupported original ticks"
+  ]
+}

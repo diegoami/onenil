@@ -302,6 +302,61 @@ impl Campaign {
             Ok(())
         })
     }
+    /// [confirmed] Original96 0AB9:ABD9,232A:0EC4,24BC:042B; W016.
+    /// Eligibility is the original club role, not the mutable current role.
+    pub fn reposition(&mut self, player: u16) -> Result<(), String> {
+        self.transaction(|next| {
+            let p = next
+                .players
+                .iter_mut()
+                .find(|p| p.id == player)
+                .ok_or("unknown player")?;
+            if p.club_position == 0 {
+                return Err("Reposition unavailable for a club goalkeeper".into());
+            }
+            p.current_position = (p.current_position + 1) % 14;
+            Ok(())
+        })
+    }
+    /// [confirmed] Original96 0AB9:AC52/C4CD; W016. Under18s cannot restore.
+    pub fn restore_club_position(&mut self, player: u16) -> Result<(), String> {
+        self.transaction(|next| {
+            let p = next
+                .players
+                .iter_mut()
+                .find(|p| p.id == player)
+                .ok_or("unknown player")?;
+            if p.age < 18 {
+                return Err("Club position unavailable below age18".into());
+            }
+            p.current_position = p.club_position;
+            Ok(())
+        })
+    }
+    /// [confirmed] Original96 0AB9:B271,232A:00D5/00F8/011D; W015.
+    /// [designed] Only the exercised goalkeeper Positioning action is admitted here.
+    pub fn cycle_goalkeeper_positioning(&mut self, player: u16) -> Result<(), String> {
+        self.transaction(|next| {
+            let club_choice = next.club.team_instructions & 1;
+            let p = next
+                .players
+                .iter_mut()
+                .find(|p| p.id == player)
+                .ok_or("unknown player")?;
+            if p.current_position != 0 {
+                return Err("Positioning editor unavailable for this role in this slice".into());
+            }
+            let bits = p.individual_instructions;
+            p.individual_instructions = if bits & 0x10 == 0 {
+                (bits | 0x10) & !1
+            } else if bits & 1 == 0 {
+                bits | 1
+            } else {
+                (bits & !0x11) | club_choice
+            };
+            Ok(())
+        })
+    }
     pub fn source_projection(&self) -> Result<Value, String> {
         self.validate()?;
         let mut players = self.players.clone();
