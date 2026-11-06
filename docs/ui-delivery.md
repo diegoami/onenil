@@ -1,11 +1,13 @@
 # UI delivery comparison for owner decision
 
-[designed] **Decision pending — neither candidate is the selected game shell.**
-T48/#105 supplies two working, disposable candidates for #103. The recommended
-next step is local-browser HTML/CSS/JavaScript around the existing local Rust
-bridge for B1–B6, with desktop packaging deferred. The owner can instead select
-Electron, or request another desktop candidate before deciding. This proposal
-does not authorize campaign implementation or choose a framework on their behalf.
+[designed: owner clarification, 2026-11-06] **Desktop primary; browser secondary.**
+The owner rejected the browser-first recommendation and requested an original-led,
+faithful UI, following goal2's design method rather than its technology stack.
+The [desktop fidelity contract](desktop-fidelity/README.md) now governs #103.
+T48/#105 remains a technical comparison of two disposable candidates. Its synthetic
+editor is not an approved visual design and its Electron wrapper is not a selected
+desktop architecture. No toolkit has been chosen. Immutable measurements below
+remain valid within their stated scope; the recommendation is superseded.
 
 ## What actually runs
 
@@ -88,24 +90,22 @@ not original management fidelity.
 | Conditional availability/accounting, W023/W050/W054/W061/W067/W073 | Sample injury marker and cash are visible; refused file load gives status without mutation | Original first-XI refusal reasons and actual weekly/tribunal postings absent; reuse guard in B3, accounting in B5/B7 |
 | Normal save vs seasonal archive, W081–W083/G13 | Spike-only normal save purpose explicitly identified | No seasonal archive implementation; retain original .95 deeper-view unknown; production dual-purpose export remains design work |
 
-## Recommendation and next bounded work
+## Superseded recommendation and corrected next work
 
-[designed proposal] Keep the shared HTML/CSS/JavaScript interaction layer and
-local-browser delivery for the first persisted management week. It reuses the
-accepted match service and avoids bundling an extra browser engine while the
-campaign bridge is still absent. This recommendation prioritizes getting B1–B6
-working; it is not proof that browser delivery best meets a finished game's
-installation requirements. Electron is a demonstrated alternative if an installed
-desktop shell and native file dialogs take priority, with runtime/service
-packaging and Windows validation explicitly added before delivery.
+[designed: superseded T48 proposal] The earlier local-browser-first recommendation
+was based on reusing the current exhibition service and reducing packaging work.
+It did not satisfy the owner's desktop and original-UI priority and must not drive
+the game architecture or B1–B6. The measurements did not test faithful original
+screens or a desktop-owned Rust lifecycle, so they cannot settle that choice.
 
-[designed] Tauri/other native webviews were not built in this comparison. Their
-Rust integration or package size must not be treated as measured advantages here.
-If the owner wants that comparison before choosing, freeze a bounded third spike.
-After owner approval, record the selection and its tradeoffs in the architecture
-docs, then define B1: a versioned campaign state and real save/load, including
-rejection without replacing current state. Do not carry synthetic squad values
-or pretend match-result transitions into the real campaign.
+[designed: corrected sequence] First design One-Nil's screens from its own manual,
+with explicit original-to-desktop mappings and departures. Then test representative
+faithful screens and engine/save ownership in desktop candidates, choose a toolkit
+with the owner, and implement B1–B6. A usable desktop launch owns the application
+lifecycle; opening a browser or manually starting a web server is not its acceptance
+path. Direct Rust calls or a locally owned worker/IPC are candidates, not a selected
+implementation. Browser publication is a later track, not a reason to reshape the
+desktop game. Tauri/other native toolkits have not been measured by T48.
 
 ## Reproduce
 
