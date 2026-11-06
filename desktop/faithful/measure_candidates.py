@@ -14,6 +14,7 @@ for feature in ['software','egui']:
  tree=subprocess.check_output(['cargo','tree','--manifest-path','desktop/faithful/Cargo.toml','--features',feature,'--edges','normal','--prefix','none','--format','{p}'],cwd=ROOT,text=True)
  packages=sorted(set(line.removesuffix(' (*)') for line in tree.splitlines()))
  binary=target/'debug/onenil-desktop';raw=binary.read_bytes();binary_sha=hashlib.sha256(raw).hexdigest()
+ cache=ROOT/'.cache/desktop-candidates'/feature;cache.mkdir(parents=True,exist_ok=True);(cache/'onenil-desktop').write_bytes(raw);(cache/'onenil-desktop').chmod(0o700)
  with tempfile.TemporaryDirectory(prefix='onenil-measure-') as d:
   d=Path(d);local=d/'onenil-desktop';local.write_bytes(raw);local.chmod(0o700)
   state=d/'state.json';err=d/'stderr.txt'

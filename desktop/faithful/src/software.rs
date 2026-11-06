@@ -37,6 +37,9 @@ pub fn run(
     let input = Arc::new(Mutex::new(Vec::new()));
     window.set_input_callback(Box::new(Input(input.clone())));
     let mut last_observation = Vec::new();
+    let mut last_visual = Vec::new();
+    let mut scaled = Vec::new();
+    let mut last_size = (0, 0);
     while window.is_open() && !app.controller.close_requested {
         for key in std::mem::take(&mut *input.lock().unwrap()) {
             let mapped = match key {
@@ -60,7 +63,12 @@ pub fn run(
             }
         }
         app.update();
-        renderer.draw(&app.controller);
+        let visual = serde_json::to_vec(&app.snapshot()).map_err(|e| e.to_string())?;
+        let changed = visual != last_visual;
+        if changed {
+            renderer.draw(&app.controller);
+            last_visual = visual;
+        }
         if let Some(path) = &observe {
             let bytes = serde_json::to_vec(&app.snapshot()).map_err(|e| e.to_string())?;
             if bytes != last_observation {
@@ -75,8 +83,12 @@ pub fn run(
             window.update();
             continue;
         }
+        if changed || last_size != (w, h) {
+            scaled = renderer.scaled(w, h);
+            last_size = (w, h);
+        }
         window
-            .update_with_buffer(&renderer.scaled(w, h), w, h)
+            .update_with_buffer(&scaled, w, h)
             .map_err(|e| e.to_string())?;
     }
     Ok(())

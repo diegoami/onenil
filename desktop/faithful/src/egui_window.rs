@@ -12,6 +12,7 @@ struct Candidate {
     texture: Option<egui::TextureHandle>,
     observe: Option<PathBuf>,
     last_observation: Vec<u8>,
+    last_visual: Vec<u8>,
 }
 impl eframe::App for Candidate {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
@@ -43,7 +44,12 @@ impl eframe::App for Candidate {
             }
         }
         self.app.update();
-        self.renderer.draw(&self.app.controller);
+        let visual = serde_json::to_vec(&self.app.snapshot()).unwrap();
+        let changed = visual != self.last_visual;
+        if changed {
+            self.renderer.draw(&self.app.controller);
+            self.last_visual = visual;
+        }
         if let Some(path) = &self.observe {
             if let Ok(bytes) = serde_json::to_vec(&self.app.snapshot()) {
                 if bytes != self.last_observation {
@@ -57,21 +63,23 @@ impl eframe::App for Candidate {
                 }
             }
         }
-        let rgba: Vec<_> = self
-            .renderer
-            .pixels
-            .iter()
-            .flat_map(|p| [(p >> 16) as u8, (p >> 8) as u8, *p as u8, 255])
-            .collect();
-        let image = egui::ColorImage::from_rgba_unmultiplied([WIDTH, HEIGHT], &rgba);
-        match self.texture.as_mut() {
-            Some(texture) => texture.set(image, egui::TextureOptions::NEAREST),
-            None => {
-                self.texture = Some(ui.ctx().load_texture(
-                    "faithful-game-surface",
-                    image,
-                    egui::TextureOptions::NEAREST,
-                ))
+        if changed {
+            let rgba: Vec<_> = self
+                .renderer
+                .pixels
+                .iter()
+                .flat_map(|p| [(p >> 16) as u8, (p >> 8) as u8, *p as u8, 255])
+                .collect();
+            let image = egui::ColorImage::from_rgba_unmultiplied([WIDTH, HEIGHT], &rgba);
+            match self.texture.as_mut() {
+                Some(texture) => texture.set(image, egui::TextureOptions::NEAREST),
+                None => {
+                    self.texture = Some(ui.ctx().load_texture(
+                        "faithful-game-surface",
+                        image,
+                        egui::TextureOptions::NEAREST,
+                    ))
+                }
             }
         }
         let available = ui.max_rect();
@@ -91,7 +99,12 @@ impl eframe::App for Candidate {
         if self.app.controller.close_requested {
             ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
         }
-        ui.ctx().request_repaint_after(Duration::from_millis(16));
+        if matches!(
+            self.app.controller.screen,
+            crate::controller::Screen::Pitch | crate::controller::Screen::Preparing
+        ) {
+            ui.ctx().request_repaint_after(Duration::from_millis(16));
+        }
     }
 }
 pub fn run(
@@ -107,6 +120,7 @@ pub fn run(
         texture: None,
         observe,
         last_observation: Vec::new(),
+        last_visual: Vec::new(),
     };
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([1440.0, 900.0]),
