@@ -1,0 +1,279 @@
+{
+  "schema": "native-campaign-persistence-check/1",
+  "producer": "d0e05d4d077b9d36639403a7e2b9fe9bd711559b",
+  "binary_sha256": "6dee7e9c0d4471265e938e06cd0a53582b386be2a97b4ca80ab6f2528c130c8b",
+  "tests": {
+    "exit": 0,
+    "stdout": "\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 2 tests\ntest malformed_graphs_never_replace_live_state ... ok\ntest source_identity_and_observed_changes_are_preserved ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s\n\n\nrunning 1 test\ntest prepared_and_failed_replacements_preserve_the_committed_file ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+    "stderr": "   Compiling onenil-campaign v0.1.0 (/home/diego/projects/onenil-archaeology/.cache/onenil-native/campaign)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.42s\n     Running unittests src/lib.rs (campaign/target/debug/deps/onenil_campaign-d792b11641a0c22c)\n     Running unittests src/main.rs (campaign/target/debug/deps/onenil_campaign-b2725985807d2a1b)\n     Running tests/state.rs (campaign/target/debug/deps/state-2bb1dfe0058ce07b)\n     Running tests/storage.rs (campaign/target/debug/deps/storage-7484609d6e668e98)\n   Doc-tests onenil_campaign\n"
+  },
+  "fresh_process_cases": [
+    {
+      "command": [
+        "new",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "908a96b191d62169e47eac93a7ea74be31f55f118147b878966dd1017480a30f",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "project",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "850c87e647af906b8d13278e223816d6c0f243b5cbb779f300ff56ea0a6a2217",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "swap",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "first:0",
+        "first:17"
+      ],
+      "exit": 0,
+      "stdout_sha256": "908a96b191d62169e47eac93a7ea74be31f55f118147b878966dd1017480a30f",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "position",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "2582",
+        "1"
+      ],
+      "exit": 0,
+      "stdout_sha256": "908a96b191d62169e47eac93a7ea74be31f55f118147b878966dd1017480a30f",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "instruction",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "2598",
+        "16"
+      ],
+      "exit": 0,
+      "stdout_sha256": "908a96b191d62169e47eac93a7ea74be31f55f118147b878966dd1017480a30f",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "project",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "be48cf7295ad4d8715ffa75d7250717a7b96c4ef000c17c22e8f1dc31a28d570",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "new",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "new campaign target already exists\n"
+    },
+    {
+      "command": [
+        "load",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "/tmp/onenil-campaign-l044ee7g/malformed.json"
+      ],
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "EOF while parsing an object at line 1 column 1\n"
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "load",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "/tmp/onenil-campaign-l044ee7g/version.json"
+      ],
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "unsupported native campaign schema/version\n"
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "load",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "/tmp/onenil-campaign-l044ee7g/namespace.json"
+      ],
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "campaign source/league namespace differs\n"
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "load",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "/tmp/onenil-campaign-l044ee7g/duplicate.json"
+      ],
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "duplicate, missing or foreign roster identity\n"
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "load",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "/tmp/onenil-campaign-l044ee7g/foreign.json"
+      ],
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "duplicate, missing or foreign player record\n"
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "load",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "/tmp/onenil-campaign-l044ee7g/fixture.json"
+      ],
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "campaign context outside the supported saved club/fixture\n"
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "load",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "/tmp/onenil-campaign-l044ee7g/unknown.json"
+      ],
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "unknown field `future`, expected one of `schema`, `version`, `origin`, `revision`, `namespace`, `season`, `week_index`, `manager`, `club`, `cash`, `next_fixture`, `players` at line 1 column 4369\n"
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "load",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "/tmp/onenil-campaign-l044ee7g/oversized.json"
+      ],
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "campaign file exceeds native size limit\n"
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "load",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json",
+        "/tmp/onenil-campaign-l044ee7g/legacy-experiment.json"
+      ],
+      "exit": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": "unknown field `first`, expected one of `schema`, `version`, `origin`, `revision`, `namespace`, `season`, `week_index`, `manager`, `club`, `cash`, `next_fixture`, `players` at line 1 column 58\n"
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "inspect",
+        "/tmp/onenil-campaign-l044ee7g/campaign.json"
+      ],
+      "exit": 0,
+      "stdout_sha256": "4d2ae08f03fcf71647062d1628b41fe4c3b2bc49988f6a735d8519c6416ad0b7",
+      "stderr": ""
+    }
+  ],
+  "original_projection_comparison": "Every field of initial and observed T46 changed projections matches decoded original evidence.",
+  "committed_save_sha256": "b5eaef3e67be8a2f92ff9b02975f9afece9a10762dcb06de256523cfb0736d04",
+  "interruption": {
+    "stage": "synced-before-replace",
+    "child_exit": -9,
+    "old_file_unchanged": true,
+    "fresh_process_reload_equal": true
+  },
+  "scope": "Real saved-club state, fixed pending fixture/week only; no engine admission, match result or progression. Linux interruption/directory-sync proof; other platforms unmeasured."
+}

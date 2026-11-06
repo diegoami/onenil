@@ -1,0 +1,647 @@
+{
+  "schema": "campaign-seed-evidence/1",
+  "producer": "4189661b28cd4f903b1fbae7d84dbaa22d5a417c",
+  "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36",
+  "changed_save_sha256": "aecb2f9ac707937bd1f10d333ed79143a407747b6e478627d752cd536b9e2385",
+  "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+  "changed_archive_sha256": "0c18acd41b06d8f45facb616d0e4a5714346fe18601fd50235fa89c3eccef058",
+  "producer_files": {
+    "tools/data/campaign_seed.py": "7b19eff3bf2d2bf29ca9b8eb5d29c28c3f1b6e5f52667af60c260460d14f97c1",
+    "tools/data/save.py": "34f632699a6bf637a85c664d1595fca4b0d4a1e4c1405f8db331bae5fe367045",
+    "tools/data/league.py": "13155352f10b7d57215ccfe826ae11e2d6f99eb17ab0aca1356913a0003d45ab"
+  },
+  "listing_sha256": {
+    "static/1-0-exe/code/seg_0006_02.asm": "8206da068646c923fdfa83c1e167d3a293d367e4ce6e7542581cde3d9b2ba107",
+    "static/1-0-exe/code/seg_0006_03.asm": "b4f7cfa6428263f0b90fff74b90baed5fd260664399b2678c82e224c8bb1d3c1",
+    "static/1-0-exe/code/seg_1B55_02.asm": "f41d0aac5160ed005c06b2e9c65c77baec4389fa6153a810e9f80a9a1689dc10",
+    "static/1-0-exe/code/seg_1B55_05.asm": "07b8c6e8e27aa4fc17baece3bf7fc0058a2f2ec5667f2792ae1db973147412dc",
+    "static/1-0-exe/code/seg_1B55_07.asm": "d8833764fa016ce3218d8c7f8a2d3f2e65d28e54bbb966b7dbc2e0f602a6797a",
+    "static/1-0-exe/code/seg_0AB9_14.asm": "e4f9a622942f648e16f15ec1cca7e8df16b7c47b110ae6779b2b87c1ae500c88",
+    "static/1-0-exe/code/seg_0AB9_19.asm": "2852856be5c8e85ecaa40340c66f342ace64011dc8f749c9ec88e07d8d7abc40"
+  },
+  "initial": {
+    "schema": "original-club-seed/1",
+    "namespace": {
+      "edition": 96,
+      "league": "ENGL-95.DAT",
+      "league_year": 1995
+    },
+    "season": {
+      "counter": 1,
+      "start_year": 1994,
+      "end_year": 1995
+    },
+    "week_index": 0,
+    "manager": {
+      "slot": 1,
+      "name_id": 130,
+      "name": "Dalglish"
+    },
+    "club": {
+      "id": 130,
+      "name": "Blackburn R",
+      "first_team": [
+        2581,
+        2582,
+        2583,
+        2584,
+        2585,
+        2586,
+        2587,
+        2588,
+        2589,
+        2590,
+        2591,
+        2592,
+        2593,
+        2594,
+        2595,
+        2596,
+        2597,
+        2598,
+        0,
+        0
+      ],
+      "reserves": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "team_instructions": 75
+    },
+    "cash": 452000,
+    "next_fixture": {
+      "slot": 1,
+      "club": 130,
+      "opponent": 17,
+      "opponent_name": "P St Germain",
+      "competition_code": 1,
+      "flags": 1,
+      "venue_code": 1,
+      "opponent_flags": 0
+    },
+    "players": [
+      {
+        "id": 2581,
+        "name": "T Flowers",
+        "age": 27,
+        "current_position": 0,
+        "club_position": 0,
+        "individual_instructions": 17,
+        "availability": {
+          "condition_signed": 10,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2582,
+        "name": "I Pearce",
+        "age": 20,
+        "current_position": 2,
+        "club_position": 2,
+        "individual_instructions": 178,
+        "availability": {
+          "condition_signed": 31,
+          "status_bits": 0
+        }
+      },
+      {
+        "id": 2583,
+        "name": "C Hendry",
+        "age": 29,
+        "current_position": 2,
+        "club_position": 2,
+        "individual_instructions": 50,
+        "availability": {
+          "condition_signed": 20,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2584,
+        "name": "G Le Saux",
+        "age": 26,
+        "current_position": 3,
+        "club_position": 3,
+        "individual_instructions": 17,
+        "availability": {
+          "condition_signed": 9,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2585,
+        "name": "H Berg",
+        "age": 25,
+        "current_position": 4,
+        "club_position": 4,
+        "individual_instructions": 17,
+        "availability": {
+          "condition_signed": 30,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2586,
+        "name": "M Atkins",
+        "age": 26,
+        "current_position": 5,
+        "club_position": 5,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 19,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2587,
+        "name": "T Sherwood",
+        "age": 25,
+        "current_position": 6,
+        "club_position": 6,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 8,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2588,
+        "name": "J Wilcox",
+        "age": 23,
+        "current_position": 10,
+        "club_position": 10,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 29,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2589,
+        "name": "S Ripley",
+        "age": 27,
+        "current_position": 11,
+        "club_position": 11,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 18,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2590,
+        "name": "C Sutton",
+        "age": 21,
+        "current_position": 12,
+        "club_position": 12,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 30,
+          "status_bits": 0
+        }
+      },
+      {
+        "id": 2591,
+        "name": "A Shearer",
+        "age": 24,
+        "current_position": 13,
+        "club_position": 13,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 28,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2592,
+        "name": "T Gale",
+        "age": 35,
+        "current_position": 2,
+        "club_position": 2,
+        "individual_instructions": 50,
+        "availability": {
+          "condition_signed": 17,
+          "status_bits": 0
+        }
+      },
+      {
+        "id": 2593,
+        "name": "P Warhurst",
+        "age": 25,
+        "current_position": 12,
+        "club_position": 12,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 6,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2594,
+        "name": "R Slater",
+        "age": 30,
+        "current_position": 5,
+        "club_position": 5,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 11,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2595,
+        "name": "N Marker",
+        "age": 29,
+        "current_position": 2,
+        "club_position": 2,
+        "individual_instructions": 50,
+        "availability": {
+          "condition_signed": 26,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2596,
+        "name": "M Newell",
+        "age": 29,
+        "current_position": 13,
+        "club_position": 13,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 6,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2597,
+        "name": "A Wright",
+        "age": 23,
+        "current_position": 4,
+        "club_position": 4,
+        "individual_instructions": 145,
+        "availability": {
+          "condition_signed": 25,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2598,
+        "name": "B Mimms",
+        "age": 31,
+        "current_position": 0,
+        "club_position": 0,
+        "individual_instructions": 17,
+        "availability": {
+          "condition_signed": 14,
+          "status_bits": 1
+        }
+      }
+    ]
+  },
+  "changed": {
+    "schema": "original-club-seed/1",
+    "namespace": {
+      "edition": 96,
+      "league": "ENGL-95.DAT",
+      "league_year": 1995
+    },
+    "season": {
+      "counter": 1,
+      "start_year": 1994,
+      "end_year": 1995
+    },
+    "week_index": 0,
+    "manager": {
+      "slot": 1,
+      "name_id": 130,
+      "name": "Dalglish"
+    },
+    "club": {
+      "id": 130,
+      "name": "Blackburn R",
+      "first_team": [
+        2598,
+        2582,
+        2583,
+        2584,
+        2585,
+        2586,
+        2587,
+        2588,
+        2589,
+        2590,
+        2591,
+        2592,
+        2593,
+        2594,
+        2595,
+        2596,
+        2597,
+        2581,
+        0,
+        0
+      ],
+      "reserves": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "team_instructions": 75
+    },
+    "cash": 452000,
+    "next_fixture": {
+      "slot": 1,
+      "club": 130,
+      "opponent": 17,
+      "opponent_name": "P St Germain",
+      "competition_code": 1,
+      "flags": 1,
+      "venue_code": 1,
+      "opponent_flags": 0
+    },
+    "players": [
+      {
+        "id": 2581,
+        "name": "T Flowers",
+        "age": 27,
+        "current_position": 0,
+        "club_position": 0,
+        "individual_instructions": 17,
+        "availability": {
+          "condition_signed": 10,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2582,
+        "name": "I Pearce",
+        "age": 20,
+        "current_position": 1,
+        "club_position": 2,
+        "individual_instructions": 178,
+        "availability": {
+          "condition_signed": 31,
+          "status_bits": 0
+        }
+      },
+      {
+        "id": 2583,
+        "name": "C Hendry",
+        "age": 29,
+        "current_position": 2,
+        "club_position": 2,
+        "individual_instructions": 50,
+        "availability": {
+          "condition_signed": 20,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2584,
+        "name": "G Le Saux",
+        "age": 26,
+        "current_position": 3,
+        "club_position": 3,
+        "individual_instructions": 17,
+        "availability": {
+          "condition_signed": 9,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2585,
+        "name": "H Berg",
+        "age": 25,
+        "current_position": 4,
+        "club_position": 4,
+        "individual_instructions": 17,
+        "availability": {
+          "condition_signed": 30,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2586,
+        "name": "M Atkins",
+        "age": 26,
+        "current_position": 5,
+        "club_position": 5,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 19,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2587,
+        "name": "T Sherwood",
+        "age": 25,
+        "current_position": 6,
+        "club_position": 6,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 8,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2588,
+        "name": "J Wilcox",
+        "age": 23,
+        "current_position": 10,
+        "club_position": 10,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 29,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2589,
+        "name": "S Ripley",
+        "age": 27,
+        "current_position": 11,
+        "club_position": 11,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 18,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2590,
+        "name": "C Sutton",
+        "age": 21,
+        "current_position": 12,
+        "club_position": 12,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 30,
+          "status_bits": 0
+        }
+      },
+      {
+        "id": 2591,
+        "name": "A Shearer",
+        "age": 24,
+        "current_position": 13,
+        "club_position": 13,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 28,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2592,
+        "name": "T Gale",
+        "age": 35,
+        "current_position": 2,
+        "club_position": 2,
+        "individual_instructions": 50,
+        "availability": {
+          "condition_signed": 17,
+          "status_bits": 0
+        }
+      },
+      {
+        "id": 2593,
+        "name": "P Warhurst",
+        "age": 25,
+        "current_position": 12,
+        "club_position": 12,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 6,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2594,
+        "name": "R Slater",
+        "age": 30,
+        "current_position": 5,
+        "club_position": 5,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 11,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2595,
+        "name": "N Marker",
+        "age": 29,
+        "current_position": 2,
+        "club_position": 2,
+        "individual_instructions": 50,
+        "availability": {
+          "condition_signed": 26,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2596,
+        "name": "M Newell",
+        "age": 29,
+        "current_position": 13,
+        "club_position": 13,
+        "individual_instructions": 0,
+        "availability": {
+          "condition_signed": 6,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2597,
+        "name": "A Wright",
+        "age": 23,
+        "current_position": 4,
+        "club_position": 4,
+        "individual_instructions": 145,
+        "availability": {
+          "condition_signed": 25,
+          "status_bits": 1
+        }
+      },
+      {
+        "id": 2598,
+        "name": "B Mimms",
+        "age": 31,
+        "current_position": 0,
+        "club_position": 0,
+        "individual_instructions": 16,
+        "availability": {
+          "condition_signed": 14,
+          "status_bits": 1
+        }
+      }
+    ]
+  },
+  "capture_references": [
+    {
+      "path": "runs/T46/session-r0001/step-0001.json",
+      "sha256": "360a2c0084d84ebda4ee51ae45d5b2004868113af018e902224f2312555ff62d",
+      "screenshot_sha256": "fbca3798822c7fd5e69176c2019a81fc2e449d68e37e3a571095452a0ec54d43"
+    },
+    {
+      "path": "runs/T46/session-r0001/step-0002.json",
+      "sha256": "38e7fb71fcca2ffbfdd1b9b516a4da4836396404c3e5c535925eec29f2ffb3b6",
+      "screenshot_sha256": "fd898e89ad49408231c78a36807e202d7025470758a76a573d2b30d3a517e04c"
+    },
+    {
+      "path": "runs/T45/session-r0001/step-0004.json",
+      "sha256": "b4b155876093b9d68d959ef22f815ef0740af342d1d7637a093772fcb7e5212f",
+      "screenshot_sha256": "58b3f0ae92392db21d2733121ca16a80bfae40a6af004a3165eb989bc77657d1"
+    },
+    {
+      "path": "runs/T46/session-r0001/step-0053.json",
+      "sha256": "546ddd344f453b909463c0fa7680e969f9d1fba2d9d5cb39d165f1d483860e3f",
+      "screenshot_sha256": "7193050908d5c356a14a1675b739d62f23422102e3dc8c4d9506617dc1e6f9b3"
+    },
+    {
+      "path": "runs/T46/session-r0001/step-0054.json",
+      "sha256": "91dffb0ab2e7f09a9d7cb0655e6c36510df2dda0447985595d9a92245a0ba527",
+      "screenshot_sha256": "063dc35a15faf4981255c265678e1ca5f376fe24e1318ed8733fa1bf7de9ac22"
+    }
+  ],
+  "projection_sha256": {
+    "initial": "b0ad96927f6f76f3ec4bc27633b38997a26916a96520db10fad809d65663a0b6",
+    "changed": "deea583339e1483fe8e2efc963b495ed9b48cb4fbd1b255bf92be64d0375f61a"
+  }
+}

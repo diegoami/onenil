@@ -1,0 +1,6 @@
+{
+  "producer": "54b2a2a15bcb0dfaf8d7b2d50d514954b7eda93f",
+  "exit": 101,
+  "stdout": "",
+  "stderr": "   Compiling onenil-campaign v0.1.0 (/home/diego/projects/onenil-archaeology/.cache/onenil-native/campaign)\nerror[E0432]: unresolved import `onenil_campaign::storage::PendingSave`\n --> tests/storage.rs:1:23\n  |\n1 | use onenil_campaign::{storage::PendingSave,Campaign,Location};\n  |                       ^^^^^^^^^-----------\n  |                                |\n  |                                no `PendingSave` in `storage`\n\nFor more information about this error, try `rustc --explain E0432`.\nerror: could not compile `onenil-campaign` (test \"storage\") due to 1 previous error\n"
+}
