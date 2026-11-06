@@ -10,7 +10,7 @@ common=match.common
 ROOT=common.ROOT
 FIXTURES=ROOT/'engine/tests/fixtures/setup'
 
-def initial_data(points,inputs):
+def initial_data(points,inputs,*,incoming_fields=None,contest_k=None):
     old=copy.deepcopy(points[0]['state']);selected=points[2]['state']
     raw_selected=selected['caller']['pairing']['context']['rebuild']['outer']
     pool={p['id']:p for p in raw_selected['players']}
@@ -59,7 +59,8 @@ def initial_data(points,inputs):
                         'staff_ids':bonus['staff_ids'],'staff':bonus['staff'],'tables':a['ratings']['tables'],
                         'ratings':c['ratings'],'seed':c['seed']})
     # Only the pinned readonly chance witness is joined from the prior corpus.
-    chance=json.loads((half.FIXTURES/'admission.json').read_text())['contest']['k']
+    chance=(json.loads((half.FIXTURES/'admission.json').read_text())['contest']['k']
+            if contest_k is None else contest_k)
     legacy={'contest':{'k':chance,'seed':c['seed'],'ratings':c['ratings'],'goals':[0,0]},
             'ratings':ratings,'players':core['players'],'scenes':outer['scenes'],'goal':a['goals'],
             'extra':{'state':a['extra'],'opponent_d0b':a['threshold']},'event':a['events'],'reset':a['reset'],
@@ -72,11 +73,13 @@ def initial_data(points,inputs):
            'cache':match.cache.state(a['positions']['context'],extra),
            'terminal':match.terminal.state({'context':raw},a['positions']['positions'],a['proximity'])}
     g=outer['globals']
-    settings_path=ROOT/'records/T28/settings-r0002.json'
-    settings_pin=json.loads((FIXTURES/'settings-index.json').read_text())
-    if common.sha(settings_path.read_bytes())!=settings_pin['sha256']:raise ValueError('setup settings evidence digest differs')
-    settings=json.loads(settings_path.read_text())
-    return {'legacy_queue_zero':{'index':0,**settings['observed']['legacy_queue_zero']},'legacy_income_total':points[0]['income_total'],'managed_selection_mode':settings['observed']['managed_selection_mode'],'legacy':legacy,'replacement':{'match_state':state,'display_mode':g['mode'],'position_sentinel':g['position_sentinel'],'speaker_gate':g['speaker_gate']},
+    if incoming_fields is None:
+        settings_path=ROOT/'records/T28/settings-r0002.json'
+        settings_pin=json.loads((FIXTURES/'settings-index.json').read_text())
+        if common.sha(settings_path.read_bytes())!=settings_pin['sha256']:raise ValueError('setup settings evidence digest differs')
+        settings=json.loads(settings_path.read_text())['observed']
+        incoming_fields={'legacy_queue_zero':{'index':0,**settings['legacy_queue_zero']},'legacy_income_total':points[0]['income_total'],'managed_selection_mode':settings['managed_selection_mode']}
+    return {**copy.deepcopy(incoming_fields),'legacy':legacy,'replacement':{'match_state':state,'display_mode':g['mode'],'position_sentinel':g['position_sentinel'],'speaker_gate':g['speaker_gate']},
             'gates':c['gates'],'skill_tables':match.table_rows([s for s in a['skills'] if s['criterion'] in (6,14)]),
             'setup_cells':selected['setup_cells'],'income':[r['input'] for r in inputs['incomes']],
             'supplement':inputs['fields']}
