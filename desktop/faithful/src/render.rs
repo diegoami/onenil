@@ -194,10 +194,10 @@ impl Renderer {
                 bg,
                 14,
             );
-            let role = player
-                .map(|p| self.assets.screens["skills"][Self::roster_row(p as usize) * 80 + 73].0)
-                .unwrap_or(' ');
-            self.cell(x + 15, row, role, fg, bg);
+            let (role, role_fg, _) = player
+                .map(|p| self.assets.screens["skills"][Self::roster_row(p as usize) * 80 + 73])
+                .unwrap_or((' ', TEXT, GROUND));
+            self.cell(x + 15, row, role, role_fg, GROUND);
         }
     }
     fn players(&mut self, c: &Controller) {

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """[designed] Real native X11 key/window events; read-only app diagnostics and screenshots."""
-import argparse,ctypes as C,hashlib,json,os,subprocess,tempfile,time,traceback
+import argparse,ctypes as C,hashlib,json,os,subprocess,tempfile,time,traceback,shutil
 from pathlib import Path
 from PIL import Image
 ROOT=Path(__file__).resolve().parents[2]
@@ -24,7 +24,7 @@ window=None;steps=[];shots=[];worker_pids=[];process=None;error=None;start=time.
 producer=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 assert not subprocess.check_output(['git','status','--porcelain','--','desktop/faithful'],cwd=ROOT,text=True),'commit producer first'
 with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
- directory=Path(directory);statepath=directory/'state.json';save=directory/'squad.json';stderr=directory/'stderr.txt'
+ directory=Path(directory);binary=directory/'onenil-desktop';shutil.copy2(args.binary,binary);binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest();statepath=directory/'state.json';save=directory/'squad.json';stderr=directory/'stderr.txt'
  def state():
   if statepath.exists():return json.loads(statepath.read_text())
   return {}
@@ -40,8 +40,8 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   code=x.XKeysymToKeycode(display,x.XStringToKeysym(name.encode()));assert code
   for typ,mask in [(2,1),(3,2)]:
    event=Event();event.key=Key(typ,0,1,display,window,root,0,0,1,1,1,1,0,code,1);assert x.XSendEvent(display,window,0,mask,C.byref(event));x.XFlush(display);time.sleep(.06)
- def step(name,check):
-  s=wait(check);steps.append(dict(name=name,state=s));return s
+ def step(name,check,timeout=10):
+  s=wait(check,timeout);steps.append(dict(name=name,state=s));return s
  def shot(name):
   time.sleep(.12);r=U();xx=I();yy=I();w=C.c_uint();h=C.c_uint();border=C.c_uint();depth=C.c_uint()
   assert x.XGetGeometry(display,window,C.byref(r),C.byref(xx),C.byref(yy),C.byref(w),C.byref(h),C.byref(border),C.byref(depth))
@@ -52,7 +52,7 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
  def close_window():
   event=Event();event.client=Client(33,0,1,display,window,x.XInternAtom(display,b'WM_PROTOCOLS',0),32,(C.c_long*5)(x.XInternAtom(display,b'WM_DELETE_WINDOW',0),0,0,0,0));x.XSendEvent(display,window,0,0,C.byref(event));x.XFlush(display)
  try:
-  with stderr.open('w') as err:process=subprocess.Popen([str(args.binary.resolve()),'--root',str(ROOT),'--font',str(args.font.resolve()),'--save',str(save),'--observe',str(statepath)],stderr=err,stdout=subprocess.DEVNULL)
+  with stderr.open('w') as err:process=subprocess.Popen([str(binary),'--root',str(ROOT),'--font',str(args.font.resolve()),'--save',str(save),'--observe',str(statepath)],stderr=err,stdout=subprocess.DEVNULL)
   end=time.monotonic()+15
   while window is None and time.monotonic()<end:
    window=next((w for w in windows() if b'One-Nil | native desktop feasibility' in title(w)),None);time.sleep(.05)
@@ -83,7 +83,7 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
    if window:close_window()
    try:process.wait(timeout=3)
    except subprocess.TimeoutExpired:process.kill();process.wait()
-  record=dict(schema='native-window-check/1',producer=producer,binary_sha256=hashlib.sha256(args.binary.read_bytes()).hexdigest(),font_sha256=hashlib.sha256(args.font.read_bytes()).hexdigest(),display=os.environ.get('DISPLAY'),elapsed_seconds=time.monotonic()-start,steps=steps,screenshots=shots,worker_pids=worker_pids,status='failed' if error else 'passed',error=error,stderr=stderr.read_text() if stderr.exists() else '')
+  record=dict(schema='native-window-check/1',producer=producer,binary_sha256=binary_sha256,font_sha256=hashlib.sha256(args.font.read_bytes()).hexdigest(),display=os.environ.get('DISPLAY'),elapsed_seconds=time.monotonic()-start,steps=steps,screenshots=shots,worker_pids=worker_pids,status='failed' if error else 'passed',error=error,stderr=stderr.read_text() if stderr.exists() else '')
   with args.record.open('x') as f:json.dump(record,f,indent=2);f.write('\n')
   print(record['status'],len(steps),'native input steps',len(shots),'screenshots')
  if error:raise AssertionError(error)
