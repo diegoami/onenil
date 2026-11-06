@@ -19,9 +19,13 @@ pub fn run(
     font: PathBuf,
     save: PathBuf,
     load: bool,
+    choose: bool,
     observe: Option<PathBuf>,
 ) -> Result<(), String> {
     let mut app = Application::new(root, save, load)?;
+    if choose {
+        app.choose_save();
+    }
     let mut renderer = Renderer::new(&font)?;
     let mut window = Window::new(
         "One-Nil | saved club prototype",

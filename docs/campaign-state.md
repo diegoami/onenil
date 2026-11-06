@@ -68,8 +68,8 @@ campaign transitions requiring their own original evidence.
 
 [designed] The existing software-window prototype now owns T55 state directly.
 Its first/reserve lists contain20slots each and the actual original player IDs;
-there is no parallel synthetic roster. F7 saves the complete campaign; F9 reloads
-it. Default native path is `.cache/desktop-campaign/SAVE1.json`. Old experiment
+there is no parallel synthetic roster. F7 saves the complete campaign; F9 opens
+the native load route (T57 adds a chooser when multiple saves exist). Default native path is `.cache/desktop-campaign/SAVE1.json`. Old experiment
 saves remain separate and are refused by the campaign loader. `--save <path>` and
 `--load` select/reopen a native file. Startup load refusal shows the initial state
 with an explicit error; active F9 refusal preserves the complete active state.
@@ -103,3 +103,28 @@ Actual native-input/restart proof uses `desktop/faithful/campaign_window_check.p
 changed projections, invalid loads, distinct desktop process IDs, images and
 unchanged campaign through exhibition, rejecting four corrupted records. Earlier
 T52–T54 graphical records/checkers remain historical evidence for their producers.
+
+
+## T57 saved-game chooser
+
+[confirmed] Research W001/W006 at 68cd3396: the one-save case loads directly;
+multiple saves start at the first filename. Up/Down moves the highlight; Escape
+keeps the list and selected row; Enter loads. The decoded list/title layout comes
+from authenticated T43/session-r0003 step13 at the T51 source pin6aca98ca.
+
+[designed] F9 now discovers regular `.json` files beside the configured `--save`
+path. With multiple files it opens that original-led list. Enter validates the
+complete candidate before replacing the campaign, game name and F7 target together.
+Invalid files preserve all three and keep the list open. F9 again returns from
+this native shortcut; Escape follows the original observed self-loop. One file
+loads directly, no files reports a message. Native discovery sorts case-insensitive
+stems then paths, refuses more than1024 files, ignores symlinks, and scrolls nine
+visible rows; those filesystem choices are not claimed as DOS behaviour. The list
+shows18 filename characters and the original game-name box shows8; diagnostics
+retain the full native target. Use a dedicated directory for native campaign JSON.
+
+`--choose-save` explicitly enters this chooser on startup. `--load` still restores
+the exact configured file directly; combining both options is refused. The default
+prototype entry still opens the supplied saved-club seed. The original Y/N startup,
+N/new-game filename/league/manager/club setup, club creation and DOS-save loading
+remain B2 work. No final toolkit choice or campaign progression is implied.

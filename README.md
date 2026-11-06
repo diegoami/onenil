@@ -17,7 +17,7 @@ cargo run --manifest-path desktop/faithful/Cargo.toml --features software --lock
 ```
 
 Space opens Players; Insert switches skills/details; Enter picks/places a player; Escape
-cancels/returns. F7 saves and F9 reloads the complete native campaign. Main-menu Enter opens the actual PSG
+cancels/returns. F7 saves the complete campaign; F9 loads a native save, showing a chooser when several exist. Main-menu Enter opens the actual PSG
 fixture preparation; campaign match admission is still pending. Press E to open the separate
 native exhibition. See [saved-club state, launch and limits](docs/campaign-state.md).
 Campaign edits do not yet feed the exhibition or advance the fixture. This is a tested Linux desktop
@@ -1856,3 +1856,10 @@ against emulator speed. Native match time is displayed during paced playback;
 wall-clock playback speed is a prototype control. This is a four-choice
 exhibition,with season/management systems and broader replacement evidence
 still deferred. Milestone35 remains open for owner-run review and fixes.
+
+
+The faithful desktop prototype also accepts `--choose-save`: choose native campaign
+JSON files beside `--save`, using Up/Down and Enter. Escape keeps the original-style
+list open; F9 cancels this native invocation. F7 saves to the successfully loaded
+file. `--load` remains direct restore. See [campaign state](docs/campaign-state.md)
+for supported routes and the remaining original startup/new-game work.

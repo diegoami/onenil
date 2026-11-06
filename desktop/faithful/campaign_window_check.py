@@ -33,7 +33,7 @@ window=None;steps=[];shots=[];worker_pids=[];process_ids=[];native_edits=[];proc
 producer=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 assert not subprocess.check_output(['git','status','--porcelain','--','desktop/faithful'],cwd=ROOT,text=True),'commit producer first'
 with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
- directory=Path(directory);binary=directory/'onenil-desktop';shutil.copy2(args.binary,binary);binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest();statepath=directory/'state.json';save=directory/'squad.json';stderr=directory/'stderr.txt'
+ directory=Path(directory);binary=directory/'onenil-desktop';shutil.copy2(args.binary,binary);binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest();statepath=directory/'state.json';save=directory/'games'/'squad.json';stderr=directory/'stderr.txt'
  def state():
   if statepath.exists():return json.loads(statepath.read_text())
   return {}

@@ -113,10 +113,15 @@ pub fn run(
     font: PathBuf,
     save: PathBuf,
     load: bool,
+    choose: bool,
     observe: Option<PathBuf>,
 ) -> Result<(), String> {
+    let mut app = Application::new(root, save, load)?;
+    if choose {
+        app.choose_save();
+    }
     let candidate = Candidate {
-        app: Application::new(root, save, load)?,
+        app,
         renderer: Renderer::new(&font)?,
         texture: None,
         observe,

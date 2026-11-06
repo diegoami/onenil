@@ -21,3 +21,30 @@ fn resized_surface_preserves_edges_and_rejects_wrong_font() {
     assert!(Renderer::new(&wrong).is_err());
     std::fs::remove_file(wrong).unwrap();
 }
+
+#[cfg(feature = "raster")]
+#[test]
+fn chooser_preserves_decoded_border_and_unselected_background() {
+    use onenil_desktop::{
+        controller::{Controller, Screen},
+        render::Renderer,
+    };
+    let font = std::env::var_os("ONENIL_DESKTOP_FONT").unwrap();
+    let mut r = Renderer::new(std::path::Path::new(&font)).unwrap();
+    let mut c = Controller::default();
+    c.screen = Screen::SavedGames;
+    c.load_entries = vec!["MANUAL".into(), "SAVE1".into()];
+    r.draw(&c);
+    // T43 step13 decoded top border foreground and list background.
+    let cells: serde_json::Value =
+        serde_json::from_str(include_str!("../assets/cells.json")).unwrap();
+    let sheet = &cells["screens"]["saved-games"];
+    assert_eq!(
+        r.pixels[(13 * 16 + 8) * 720 + 26 * 9 + 4],
+        sheet[13 * 80 + 26][1].as_u64().unwrap() as u32
+    );
+    assert_eq!(
+        r.pixels[(16 * 16) * 720 + 26 * 9],
+        sheet[16 * 80 + 26][2].as_u64().unwrap() as u32
+    );
+}

@@ -29,19 +29,30 @@ fn run() -> Result<(), String> {
     let save =
         argument("--save")?.unwrap_or_else(|| root.join(".cache/desktop-campaign/SAVE1.json"));
     let load = args.iter().any(|s| s == "--load");
+    let choose = args.iter().any(|s| s == "--choose-save");
+    if load && choose {
+        return Err("choose either --load or --choose-save".into());
+    }
     #[cfg(feature = "egui")]
     if !cfg!(feature = "software") || args.iter().any(|s| s == "--egui") {
-        return onenil_desktop::egui_window::run(root, font, save, load, argument("--observe")?);
+        return onenil_desktop::egui_window::run(
+            root,
+            font,
+            save,
+            load,
+            choose,
+            argument("--observe")?,
+        );
     }
     #[cfg(feature = "software")]
     {
-        onenil_desktop::software::run(root, font, save, load, argument("--observe")?)
+        onenil_desktop::software::run(root, font, save, load, choose, argument("--observe")?)
     }
     #[cfg(all(feature = "egui", not(feature = "software")))]
     unreachable!();
     #[cfg(not(any(feature = "software", feature = "egui")))]
     {
-        let _ = (root, font, save, load);
+        let _ = (root, font, save, load, choose);
         Err("Build with --features software for the native window.".into())
     }
 }

@@ -7,6 +7,7 @@ use crate::{
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Screen {
     Main,
+    SavedGames,
     Players,
     Options,
     Preparation,
@@ -48,6 +49,9 @@ pub struct Controller {
     pub playback: Option<Playback>,
     pub save_requested: bool,
     pub load_requested: bool,
+    pub load_entries: Vec<String>,
+    pub load_index: usize,
+    pub game_name: String,
     pub close_requested: bool,
     pub speed: u8,
     pub exhibition: bool,
@@ -68,6 +72,9 @@ impl Default for Controller {
             playback: None,
             save_requested: false,
             load_requested: false,
+            load_entries: Vec::new(),
+            load_index: 0,
+            game_name: "SAVE1".into(),
             close_requested: false,
             speed: 23,
             exhibition: false,
@@ -125,6 +132,22 @@ impl Controller {
     pub fn key(&mut self, key: Key) {
         self.message.clear();
         match self.screen {
+            Screen::SavedGames => match key {
+                Key::Up => self.load_index = self.load_index.saturating_sub(1),
+                Key::Down => {
+                    self.load_index =
+                        (self.load_index + 1).min(self.load_entries.len().saturating_sub(1))
+                }
+                Key::Enter => self.load_requested = true,
+                // [confirmed] T43/r0003 step14: Escape keeps the selected save open.
+                Key::Escape => (),
+                // [designed] Native shortcut cancellation, not a DOS key claim.
+                Key::F9 => {
+                    self.screen = Screen::Main;
+                    self.load_entries.clear();
+                }
+                _ => (),
+            },
             Screen::Main => match key {
                 Key::Up => self.menu = (self.menu + 16) % 17,
                 Key::Down => self.menu = (self.menu + 1) % 17,
@@ -142,7 +165,6 @@ impl Controller {
                 Key::F7 => self.save_requested = true,
                 Key::F9 => {
                     self.load_requested = true;
-                    self.message = "F9 reloads the native saved club.".into();
                 }
                 Key::F10 => self.screen = Screen::Quit,
                 _ => self.unsupported(),
