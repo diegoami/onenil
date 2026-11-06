@@ -40,6 +40,16 @@ remote `onenildrive` ([docs/artifacts.md](docs/artifacts.md)). They never enter 
   owner explicitly chose fidelity over a newly designed native action simulation.
 - Speed is measured from the first runnable slice: a simulated week, a season, a matchday's results.
 
+[designed: owner clarification, 2026-11-06] **Desktop is the primary product; browser delivery is
+secondary**, potentially a later published version. Reproduce One-Nil's original UI and workflow
+as faithfully as possible: information, layout, colour/typography character, decisions, keys,
+defaults, navigation order and per-screen confirmation/cancellation semantics. Follow goal2's
+original-led screen design and evidence mapping method, not its implementation stack or its
+game-specific UI choices. Design the faithful screens before selecting the toolkit. T48's
+browser-first recommendation is superseded; its generic sample editor is a technical experiment,
+not an approved visual design. Desktop priority does not select Electron, Qt or another toolkit.
+See [the desktop fidelity contract](docs/desktop-fidelity/README.md). The Rust engine remains.
+
 ## Working rules
 
 1. [designed: owner, 2026-10-29] No model is fixed: the main session plans, implements, verifies
