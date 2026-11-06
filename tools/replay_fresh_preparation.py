@@ -4,6 +4,7 @@ import argparse
 import copy
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 import replay_match_setup as prior
@@ -31,10 +32,10 @@ def sha(data):
 def import_sources(research):
     """Import unchanged decoded leaves only after the archaeology public checks."""
     import subprocess
-    subprocess.run(['python3', str(research/'runtime/emul/campaign_admission.py'),
+    subprocess.run([sys.executable, str(research/'runtime/emul/campaign_admission.py'),
                     '--check', str(research/'runs/T66/admission-r0002.json'),
                     '--compare', str(research/'runs/T66/admission-r0001.json')], check=True)
-    subprocess.run(['python3', str(research/'runtime/emul/campaign_admission.py'),
+    subprocess.run([sys.executable, str(research/'runtime/emul/campaign_admission.py'),
                     '--check', str(research/'runs/T66/incoming-r0001.json')], check=True)
     values = {}
     for name, digest in PINS.items():
