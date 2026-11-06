@@ -21,10 +21,10 @@ pub const NAMES: [&str; 18] = [
     "A Shearer",
     "T Gale",
     "P Warhurst",
-    "S Slater",
+    "R Slater",
     "N Marker",
     "M Newell",
-    "S Wright",
+    "A Wright",
     "B Mimms",
 ];
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

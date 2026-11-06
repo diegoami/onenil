@@ -182,15 +182,18 @@ impl Controller {
                         self.screen = self.caller;
                     }
                 }
-                Key::Space if self.editor.carried_player().is_none() => {
+                Key::Space
+                    if self.editor.carried_player().is_none() && self.editor.card().is_some() =>
+                {
                     self.screen = Screen::Options
                 }
                 _ => self.unsupported(),
             },
             Screen::Options => match key {
                 Key::Up => self.option = self.option.saturating_sub(1),
-                Key::Down => self.option = (self.option + 1).min(6),
+                Key::Down => self.option = (self.option + 1).min(7),
                 Key::Escape => self.screen = Screen::Players,
+                Key::Enter if self.option == 7 => self.screen = Screen::Players,
                 _ => self.unsupported(),
             },
             Screen::Preparation | Screen::Bench => match key {
