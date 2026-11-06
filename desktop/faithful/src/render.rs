@@ -572,16 +572,16 @@ impl Renderer {
         match c.screen {
             Screen::SavedGames => {
                 self.sheet("saved-games");
-                self.rect(26 * 9, 13 * 16, 18 * 9, 9 * 16, 0);
+                self.rect(26 * 9, 14 * 16, 18 * 9, 9 * 16, 0x280082);
                 let start = c.load_index.saturating_sub(8);
                 for (row, name) in c.load_entries.iter().enumerate().skip(start).take(9) {
                     let selected = row == c.load_index;
                     self.text(
                         26,
-                        13 + row - start,
+                        14 + row - start,
                         name,
                         if selected { 0 } else { TEXT },
-                        if selected { TEXT } else { 0 },
+                        if selected { TEXT } else { 0x280082 },
                         18,
                     );
                 }
