@@ -1,0 +1,4683 @@
+{
+  "schema": "original-desktop-map/1",
+  "status": "proposed-design",
+  "research_commit": "6aca98caeebc1b9b5410852139fa305462224a05",
+  "catalog_sha256": "be0f0cf2a43dc254b4efa545412236f328be7d53620f107c218bd87fd6fb12b7",
+  "families": [
+    {
+      "id": "D01",
+      "name": "Weekly main menu",
+      "composition": "Original three-region club/opponent, information and ordered action-menu composition; game name and contextual footer remain visible.",
+      "variants": [
+        "team-information",
+        "club-information",
+        "staff-information",
+        "single-manager",
+        "two-manager-handover",
+        "no-managed-opponent"
+      ],
+      "input_return": "Arrows/Enter select the original menu; Space opens remembered Players; Insert cycles information; F7/F10 retain their own save/quit procedures. Default highlight is route-specific, not always reset.",
+      "state_boundary": "Browsing information is not a change of club, a match result or a posted week. Previous player activation remains unexercised.",
+      "gaps": [
+        "G01",
+        "G02",
+        "G03"
+      ]
+    },
+    {
+      "id": "D02",
+      "name": "Players and player options",
+      "composition": "Full original skill-bar/details panel beside FIRST TEAM/SUBS/lower first-team rows or separate RESERVES; role column, selection and contextual footer.",
+      "variants": [
+        "skills",
+        "details",
+        "empty-reserves",
+        "player-options",
+        "put-here",
+        "sub-request-active",
+        "halftime-replacement",
+        "injured-or-ineligible"
+      ],
+      "input_return": "Up/Down changes selection; Left/Right changes first-team/reserves; Insert changes panel; Space options; Enter follows current footer. Return context is main menu, preparation or live bench.",
+      "state_boundary": "Pre-match PUT HERE Escape cancels a pending move; Escape from live Players does not clear a substitution request. Actual replacement and its allowance are separate transactions.",
+      "gaps": [
+        "G04",
+        "G05",
+        "G06"
+      ]
+    },
+    {
+      "id": "D03",
+      "name": "Watched pitch, action history and match boards",
+      "composition": "Original top score/indicator and short-commentary areas, large pitch and bottom key line; full history and statistics are distinct views.",
+      "variants": [
+        "live-pitch",
+        "numbered-display",
+        "commentary-history",
+        "halftime-board",
+        "fulltime-board",
+        "pending-stop",
+        "result-exit"
+      ],
+      "input_return": "Display/speed/history/bench keys follow W024–W029. Space history has its own arrows/paging/Home/End and Escape return. Result and sound hints do not prove every branch.",
+      "state_boundary": "Rust supplies actions, clock and outcomes. Playback redraw and window navigation cannot advance a campaign or change RNG. The observed fulltime exit path differs from quick mode.",
+      "gaps": [
+        "G05",
+        "G10",
+        "G14"
+      ]
+    },
+    {
+      "id": "D04",
+      "name": "Startup and saved-game selection",
+      "composition": "Original startup load question followed by the observed save selector/name route; preserve highlighted save and prompt context.",
+      "variants": [
+        "startup-question",
+        "save-name-selection",
+        "fresh-process-load",
+        "missing-save-unknown"
+      ],
+      "input_return": "Y/N and the recorded selector/name keys follow W001/W006. Escape has the observed selector behavior rather than a universal application-back action.",
+      "state_boundary": "Load must replace state only after successful validation. Emulator RAM restoration is not game-save persistence; invalid-save original UI remains G01.",
+      "gaps": [
+        "G01",
+        "G02",
+        "G13"
+      ]
+    },
+    {
+      "id": "D05",
+      "name": "New-game setup and manager handover",
+      "composition": "Original filename/season/manager count, league/club and name/nationality sequence with browsable club information and squad.",
+      "variants": [
+        "filename",
+        "starting-season",
+        "manager-count",
+        "club-browser",
+        "name",
+        "nationality",
+        "duplicate-club-refusal",
+        "second-manager"
+      ],
+      "input_return": "Exact setup keys and defaults come from W002–W009. Escape at filename, season and club selection has different observed consequences.",
+      "state_boundary": "Keep browsing, club acceptance, identity editing and duplicate refusal distinct. No fabricated new-game defaults or full two-manager weekly lifecycle.",
+      "gaps": [
+        "G01",
+        "G02",
+        "G03"
+      ]
+    },
+    {
+      "id": "D06",
+      "name": "Game save and quit confirmation",
+      "composition": "Original management F7 save acknowledgement and F10 quit question, with identity and current committed state kept visible as observed.",
+      "variants": [
+        "normal-save",
+        "quit-no",
+        "fresh-reload-comparison",
+        "progressed-week-save",
+        "next-season-save"
+      ],
+      "input_return": "F7 and F10/N follow W005. F10/Y and save-error/overwrite routes remain unvisited; no OS-dialog replacement is assumed.",
+      "state_boundary": "Persist confirmed lineup/instructions/week state. Normal .1-0 save and seasonal .95 archive are different purposes; do not claim deeper archive reload.",
+      "gaps": [
+        "G01",
+        "G13"
+      ]
+    },
+    {
+      "id": "D07",
+      "name": "Game configuration",
+      "composition": "Original five-option panel and Continue, preserving check/x indicators and the entry highlight.",
+      "variants": [
+        "visible-five-options",
+        "watch-on",
+        "watch-off",
+        "continue"
+      ],
+      "input_return": "Navigate and toggle only as the original named option procedure establishes. Return to the calling management/preparation context.",
+      "state_boundary": "Only Watch-off completion is exercised. Four other toggles and persistence/effects are gaps; labels are not implementations.",
+      "gaps": [
+        "G03",
+        "G14"
+      ]
+    },
+    {
+      "id": "D08",
+      "name": "Match preparation and live bench",
+      "composition": "Original opponent/statistics/PLAY GAME/tactics menu, central team data and named squad, including remaining-substitutions display.",
+      "variants": [
+        "pre-match",
+        "opponent",
+        "match-stats",
+        "live-bench",
+        "halftime-bench",
+        "incomplete-refusal",
+        "ineligible-refusal",
+        "observer-match"
+      ],
+      "input_return": "PLAY GAME starts/resumes as the current phase allows; Space Players and Escape returns follow the exact procedure. Initial PLAY GAME highlight is evidenced for the supplied route.",
+      "state_boundary": "Admission refusal preserves edit/phase. Substitution requests, halftime swaps, injuries and observer continuation must not be conflated; displayed remaining counts do not define a universal budget.",
+      "gaps": [
+        "G03",
+        "G04",
+        "G05",
+        "G10"
+      ]
+    },
+    {
+      "id": "D09",
+      "name": "Opponent and other-club browser",
+      "composition": "Original club/division selector, information modes and selected-club squad; inspection does not replace active managed club.",
+      "variants": [
+        "next-opponent",
+        "other-teams",
+        "club-info",
+        "staff-info",
+        "squad-details"
+      ],
+      "input_return": "Arrows/division navigation, Insert and Space follow W018/W046; Escape returns to caller. No-fixture Next opponents refusal is not an exercised route.",
+      "state_boundary": "Browse identity is separate from campaign manager/club identity. Empty and unmanaged-club bounds stay explicit.",
+      "gaps": [
+        "G03",
+        "G12"
+      ]
+    },
+    {
+      "id": "D10",
+      "name": "Team and individual instructions",
+      "composition": "Original instruction rows and markers in the original card/overlay grouping; no invented numeric sliders or percentages.",
+      "variants": [
+        "team-eight-rows",
+        "personal-goalkeeper",
+        "personal-outfield",
+        "current-position",
+        "club-position"
+      ],
+      "input_return": "Arrows/Enter cycle the observed row values. Escape exits editors while retained changes may remain; it is not assumed rollback. Reposition and Club position remain distinct.",
+      "state_boundary": "Preserve team versus personal source markers and unknown P meaning. Displayed formation changes from actual current positions, not a free unverified formation dropdown.",
+      "gaps": [
+        "G04",
+        "G05"
+      ]
+    },
+    {
+      "id": "D11",
+      "name": "League tables and league results",
+      "composition": "Original populated/empty result and standings columns, competition/division context and page controls.",
+      "variants": [
+        "empty-after-friendly",
+        "early-league",
+        "midseason",
+        "final-table",
+        "new-season-zero-table",
+        "match-results"
+      ],
+      "input_return": "Navigate and acknowledge according to the current original page. Results/table ordering is phase-specific; return to weekly flow or caller.",
+      "state_boundary": "An observed two-points result is not authority for unknown tie-break or qualification algorithms. Persist only supported original-derived standings changes.",
+      "gaps": [
+        "G11",
+        "G12",
+        "G14"
+      ]
+    },
+    {
+      "id": "D12",
+      "name": "Cup results and fixture schedules",
+      "composition": "Original cup pairing/leg/aggregate pages, weekly fixtures and team fixture list; keep competition/club/date context.",
+      "variants": [
+        "cup-pairing",
+        "two-leg-result",
+        "group-table",
+        "draw",
+        "neutral-final",
+        "extra-time",
+        "weekly-fixtures",
+        "team-fixtures",
+        "new-season-schedule"
+      ],
+      "input_return": "Original paging/club/division and acknowledgement keys are page-specific. Chosen-viewer Enter-watch and print remain distinct from automatically reached observer finals.",
+      "state_boundary": "Future announcement/pairing is not a played fixture. Preserve actual leg/aggregate and extra-time displays without inventing tie-resolution or scheduling rules.",
+      "gaps": [
+        "G10",
+        "G11",
+        "G14"
+      ]
+    },
+    {
+      "id": "D13",
+      "name": "Transfer market, bids and incoming offers",
+      "composition": "Original player market/list and skill/details pane, bid editor, listing confirmation, incoming offer and departure displays.",
+      "variants": [
+        "domestic-market",
+        "foreign-market",
+        "bid-editor",
+        "refused-bid",
+        "accepted-bid",
+        "listing",
+        "unlist",
+        "incoming-offer",
+        "tribunal-departure"
+      ],
+      "input_return": "Market navigation/Insert and bid keys follow W036–W038; incoming Y/N and automatic tribunal displays use their own original prompts.",
+      "state_boundary": "Listing is not a completed sale. Cancelled bid, accepted fee, contract acceptance, departure and later cash posting are separate commits; no generalized price thresholds.",
+      "gaps": [
+        "G06",
+        "G07"
+      ]
+    },
+    {
+      "id": "D14",
+      "name": "Player contract, dismissal and youth trial",
+      "composition": "Original contract categories/offer action, confirmation/compensation dialogs, position selector and trial-period selector.",
+      "variants": [
+        "renewal",
+        "offer-refused",
+        "offer-accepted",
+        "fire-first-question",
+        "compensation-question",
+        "youth-position",
+        "youth-trial",
+        "expiry-warning",
+        "automatic-expiry"
+      ],
+      "input_return": "Use each original category/edit key and Y/N/Enter/Escape context. Selecting OFFER CONTRACT and submitting it are distinct; Escape behavior depends on the automatic/editor route.",
+      "state_boundary": "A cancelled expiry may leave a listed player; listed-zero status does not always prevent admission. Renewal does not prove retirement cancellation. Quote/dismissal/posting and trial creation/expiry remain separate.",
+      "gaps": [
+        "G06",
+        "G07",
+        "G13"
+      ]
+    },
+    {
+      "id": "D15",
+      "name": "Scout criteria and results",
+      "composition": "Original criteria categories, chosen values and results list/player card, preserving search context.",
+      "variants": [
+        "criteria",
+        "criteria-return",
+        "search-results",
+        "player-inspection",
+        "empty-result-unknown"
+      ],
+      "input_return": "Use the W039 criteria/edit/search/result and Escape controls; cancel returns to management, with observed selections retained.",
+      "state_boundary": "A search result is not an offer or purchase. Other criteria bounds and no-result outcomes remain unvisited.",
+      "gaps": [
+        "G06",
+        "G12"
+      ]
+    },
+    {
+      "id": "D16",
+      "name": "Staff, managerial offers and stadium order",
+      "composition": "Original candidate/category lists and detail/cost fields; separately observed hire/sack confirmations, stadium quote/order and club approach.",
+      "variants": [
+        "assistant",
+        "physio",
+        "scout",
+        "not-interested",
+        "hire-confirm",
+        "sack-no",
+        "stadium-quote",
+        "order-confirm",
+        "job-approach"
+      ],
+      "input_return": "Staff Insert/Delete category direction and Y/N prompts follow W049; stadium Escape abort returns to main menu. Manager approach Escape can defer rather than refuse.",
+      "state_boundary": "Hire and next-week charge are separate. Ordered stadium capacity is not completed capacity. Staff sack Y and job acceptance remain unknown, not designed into evidence.",
+      "gaps": [
+        "G07",
+        "G08",
+        "G09"
+      ]
+    },
+    {
+      "id": "D17",
+      "name": "Cash flow and weekly financial statement",
+      "composition": "Original income/outgoing categories, totals, club funds/overdraft and contextual continue/stadium action line.",
+      "variants": [
+        "initial-zero",
+        "weekly-posting",
+        "contract-charge",
+        "sale-posting",
+        "tribunal-posting",
+        "prize-money"
+      ],
+      "input_return": "Any-key continue and Insert quote action follow the actual statement context. The following page may be contract, transfer news or another conditional event.",
+      "state_boundary": "Displayed totals and known postings are observations, not general finance formulas. UI redraw cannot post a charge twice or treat a quote as payment.",
+      "gaps": [
+        "G07",
+        "G09"
+      ]
+    },
+    {
+      "id": "D18",
+      "name": "Statistics and player/team/season history",
+      "composition": "Original unavailable messages and populated category/list/summary views, retaining player/team/year context and complete available fields.",
+      "variants": [
+        "before-league-four",
+        "populated-statistics",
+        "transfer-history",
+        "team-history",
+        "no-season-history",
+        "season-summary",
+        "full-season-info-unverified"
+      ],
+      "input_return": "Acknowledge unavailable notices and navigate original history/category controls. Full seasonal-info deeper view and .95 load are not established by Enter intent.",
+      "state_boundary": "Empty, zero and unavailable are distinct. Save archive presence does not prove full seasonal view persistence; no invented statistics categories or meanings.",
+      "gaps": [
+        "G12",
+        "G13",
+        "G14"
+      ]
+    },
+    {
+      "id": "D19",
+      "name": "Weekly notices, interruptions and acknowledgement",
+      "composition": "Original transfer news, injury/international/suspension, ten-week warning, approach, arranged-friendly and award/celebration screens in their actual order.",
+      "variants": [
+        "transfer-news",
+        "availability",
+        "renewal-warning",
+        "approach-deferred",
+        "join-question",
+        "friendly-announcement",
+        "award",
+        "injury-opportunity"
+      ],
+      "input_return": "Keep each original any-key/Space/Escape/Y/N boundary. Escape acknowledges some announcements and defers some approaches; it does not cancel all events.",
+      "state_boundary": "These notices consume actual campaign events. No invented football news, hidden cancellation or blanket dismissal/expiry consequence; restore caller/weekly continuation after the supported response.",
+      "gaps": [
+        "G05",
+        "G06",
+        "G07",
+        "G08",
+        "G10"
+      ]
+    },
+    {
+      "id": "D20",
+      "name": "Season finish and new-season transition",
+      "composition": "Original End of season entry, accounts/news, archive question, promotion/relegation/retirement pages and advanced management state.",
+      "variants": [
+        "end-season",
+        "seasonal-info-yes",
+        "promoted",
+        "relegated",
+        "retired",
+        "next-season-main",
+        "reset-counters"
+      ],
+      "input_return": "Follow W080–W083 order and the actual Y/acknowledgement keys. Seasonal-info N is unvisited, not a safe inferred cancel path.",
+      "state_boundary": "Summary/retirement observations do not establish universal rules. Normal save reload is proven only for .1-0 visible state; full .95 archive/deeper-view and other outcomes remain gaps.",
+      "gaps": [
+        "G11",
+        "G13"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "id": "W001",
+      "title": "load the supplied SAVE1",
+      "chapter": "docs/manual/startup.md",
+      "chapter_sha256": "1bc8926c01aba2a6283c64cc8c128bd27d7711320cab181dd02b5e667da66ac0",
+      "evidence": [
+        {
+          "screenshot": "runs/T41/T41-r0002/S001.png",
+          "record": "runs/T41/T41-r0002/record.json",
+          "step": "S001",
+          "screenshot_sha256": "0dfc06b1371ab334e85754f5cc48155bd789b0f3de5f98aca29c87c781de96a9",
+          "session": "runs/T41/T41-r0002"
+        },
+        {
+          "screenshot": "runs/T41/T41-r0002/S002.png",
+          "record": "runs/T41/T41-r0002/record.json",
+          "step": "S002",
+          "screenshot_sha256": "fbca3798822c7fd5e69176c2019a81fc2e449d68e37e3a571095452a0ec54d43",
+          "session": "runs/T41/T41-r0002"
+        }
+      ],
+      "families": [
+        "D04",
+        "D01"
+      ],
+      "variants": [
+        "startup-question",
+        "loaded-main"
+      ],
+      "boundary_note": "Supplied-save startup, not a default new career; preserve arrival highlight and save identity."
+    },
+    {
+      "id": "W002",
+      "title": "filename, season and number of managers",
+      "chapter": "docs/manual/setup.md",
+      "chapter_sha256": "fa94f3936013f9261dc33e1b4767b730159cfcdb4dd60f969fdc0484746bf0bc",
+      "evidence": [
+        {
+          "screenshot": "runs/T42/session-r0003/step-0001.png",
+          "record": "runs/T42/session-r0003/step-0001.json",
+          "step": 1,
+          "screenshot_sha256": "c80d93c0e4d8bf9cced59cdb5b8216d8ebe5f986ea8d0b0a8d12bc703f1766c9",
+          "session": "runs/T42/session-r0003"
+        },
+        {
+          "screenshot": "runs/T42/session-r0003/step-0002.png",
+          "record": "runs/T42/session-r0003/step-0002.json",
+          "step": 2,
+          "screenshot_sha256": "96cac310c51587235dffa8af14341a4724a8ea2ef50f3ad5afe169f86ff24be2",
+          "session": "runs/T42/session-r0003"
+        },
+        {
+          "screenshot": "runs/T42/session-r0003/step-0003.png",
+          "record": "runs/T42/session-r0003/step-0003.json",
+          "step": 3,
+          "screenshot_sha256": "b7b72229d9bee88be8dd08e64adfc0996b01ff09d4e1c98a3ace1d346960bd12",
+          "session": "runs/T42/session-r0003"
+        }
+      ],
+      "families": [
+        "D05",
+        "D01"
+      ],
+      "variants": [
+        "filename",
+        "season",
+        "manager-count"
+      ],
+      "boundary_note": "Filename Escape, season Escape and club-browser Escape have different observed outcomes; do not merge them."
+    },
+    {
+      "id": "W003",
+      "title": "browse and choose a club",
+      "chapter": "docs/manual/setup.md",
+      "chapter_sha256": "fa94f3936013f9261dc33e1b4767b730159cfcdb4dd60f969fdc0484746bf0bc",
+      "evidence": [
+        {
+          "screenshot": "runs/T42/session-r0003/step-0004.png",
+          "record": "runs/T42/session-r0003/step-0004.json",
+          "step": 4,
+          "screenshot_sha256": "4c785cae81a9225dfb723053acc8b17e15c523ff843ecbdeaecfeb0c82df55f5",
+          "session": "runs/T42/session-r0003"
+        },
+        {
+          "screenshot": "runs/T42/session-r0002/step-0008.png",
+          "record": "runs/T42/session-r0002/step-0008.json",
+          "step": 8,
+          "screenshot_sha256": "ec2bfbc8939091805be05de416c89744335fedb5409bbf4c60c3fdacd5ebb160",
+          "session": "runs/T42/session-r0002"
+        },
+        {
+          "screenshot": "runs/T42/session-r0002/step-0009.png",
+          "record": "runs/T42/session-r0002/step-0009.json",
+          "step": 9,
+          "screenshot_sha256": "6a5370b88d2ef8b6851e508de044f1832fda1ba7439f2a66d4238af631020760",
+          "session": "runs/T42/session-r0002"
+        },
+        {
+          "screenshot": "runs/T42/session-r0003/step-0005.png",
+          "record": "runs/T42/session-r0003/step-0005.json",
+          "step": 5,
+          "screenshot_sha256": "1fa828418f435bbd80c98ee84d073f4b3eaa9ca5c86ec15cc650632e1075db8d",
+          "session": "runs/T42/session-r0003"
+        }
+      ],
+      "families": [
+        "D05",
+        "D09",
+        "D01"
+      ],
+      "variants": [
+        "club-browser",
+        "club-detail",
+        "accepted-club"
+      ],
+      "boundary_note": "Inspect clubs/squads without committing a manager identity until original acceptance."
+    },
+    {
+      "id": "W004",
+      "title": "manager name and nationality",
+      "chapter": "docs/manual/setup.md",
+      "chapter_sha256": "fa94f3936013f9261dc33e1b4767b730159cfcdb4dd60f969fdc0484746bf0bc",
+      "evidence": [
+        {
+          "screenshot": "runs/T42/session-r0003/step-0006.png",
+          "record": "runs/T42/session-r0003/step-0006.json",
+          "step": 6,
+          "screenshot_sha256": "1d9ee362b7006fd0c75c2d506c8fb8b08550172dd720511b1f5e9d9714868f08",
+          "session": "runs/T42/session-r0003"
+        },
+        {
+          "screenshot": "runs/T42/session-r0003/step-0007.png",
+          "record": "runs/T42/session-r0003/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "2eb69cc18b50bda350a23e570471f9f35f32e76b243fce0002a820e4668d43fe",
+          "session": "runs/T42/session-r0003"
+        },
+        {
+          "screenshot": "runs/T42/session-r0003/step-0008.png",
+          "record": "runs/T42/session-r0003/step-0008.json",
+          "step": 8,
+          "screenshot_sha256": "c4049d2e9646a3fbe8b18e82ce3a9184be102a49257360b2625f89da1e5034c1",
+          "session": "runs/T42/session-r0003"
+        },
+        {
+          "screenshot": "runs/T42/session-r0002/step-0002.png",
+          "record": "runs/T42/session-r0002/step-0002.json",
+          "step": 2,
+          "screenshot_sha256": "96cac310c51587235dffa8af14341a4724a8ea2ef50f3ad5afe169f86ff24be2",
+          "session": "runs/T42/session-r0002"
+        }
+      ],
+      "families": [
+        "D05",
+        "D01"
+      ],
+      "variants": [
+        "manager-name",
+        "nationality",
+        "main-arrival"
+      ],
+      "boundary_note": "Preserve name/nationality ordering and displayed scenario defaults; no invented nationality/identity rules."
+    },
+    {
+      "id": "W005",
+      "title": "save and cancel quitting",
+      "chapter": "docs/manual/saves.md",
+      "chapter_sha256": "23412b31fa1f31a629759bfa6541c81df7a200a11a3b9c5799c0196169877351",
+      "evidence": [
+        {
+          "screenshot": "runs/T43/session-r0003/step-0009.png",
+          "record": "runs/T43/session-r0003/step-0009.json",
+          "step": 9,
+          "screenshot_sha256": "7ec2395287ad3bd1a2c5282fab6d485e62915e98472f0eb86730457655e751c6",
+          "session": "runs/T43/session-r0003"
+        },
+        {
+          "screenshot": "runs/T43/session-r0003/step-0010.png",
+          "record": "runs/T43/session-r0003/step-0010.json",
+          "step": 10,
+          "screenshot_sha256": "91b8be76ba9928f22a5265080ec43b0b744639e3199423555b31ee74cbbe8cb6",
+          "session": "runs/T43/session-r0003"
+        },
+        {
+          "screenshot": "runs/T43/session-r0003/step-0011.png",
+          "record": "runs/T43/session-r0003/step-0011.json",
+          "step": 11,
+          "screenshot_sha256": "7ec2395287ad3bd1a2c5282fab6d485e62915e98472f0eb86730457655e751c6",
+          "session": "runs/T43/session-r0003"
+        }
+      ],
+      "families": [
+        "D06",
+        "D01"
+      ],
+      "variants": [
+        "F7-save",
+        "quit-question",
+        "quit-no"
+      ],
+      "boundary_note": "F7 normal save and F10/N are exercised; F10/Y and save errors remain G01."
+    },
+    {
+      "id": "W006",
+      "title": "choose and reload the saved game",
+      "chapter": "docs/manual/saves.md",
+      "chapter_sha256": "23412b31fa1f31a629759bfa6541c81df7a200a11a3b9c5799c0196169877351",
+      "evidence": [
+        {
+          "screenshot": "runs/T43/session-r0003/step-0002.png",
+          "record": "runs/T43/session-r0003/step-0002.json",
+          "step": 2,
+          "screenshot_sha256": "05841529a02d6486bea7210fa749a615afad739db14f7b9ebf06653a384da7d4",
+          "session": "runs/T43/session-r0003"
+        },
+        {
+          "screenshot": "runs/T43/session-r0003/step-0008.png",
+          "record": "runs/T43/session-r0003/step-0008.json",
+          "step": 8,
+          "screenshot_sha256": "7ec2395287ad3bd1a2c5282fab6d485e62915e98472f0eb86730457655e751c6",
+          "session": "runs/T43/session-r0003"
+        },
+        {
+          "screenshot": "runs/T43/session-r0003/step-0013.png",
+          "record": "runs/T43/session-r0003/step-0013.json",
+          "step": 13,
+          "screenshot_sha256": "013db813986d648f1e3420b254e4f5cdd1e0a0083cf4025c9f65e245d4410677",
+          "session": "runs/T43/session-r0003"
+        },
+        {
+          "screenshot": "runs/T43/session-r0003/step-0014.png",
+          "record": "runs/T43/session-r0003/step-0014.json",
+          "step": 14,
+          "screenshot_sha256": "182e84765956b65ddc06dd9c3911ff77b98ad94d5b3360da0a7150e3040ec79a",
+          "session": "runs/T43/session-r0003"
+        },
+        {
+          "screenshot": "runs/T43/session-r0003/step-0015.png",
+          "record": "runs/T43/session-r0003/step-0015.json",
+          "step": 15,
+          "screenshot_sha256": "182e84765956b65ddc06dd9c3911ff77b98ad94d5b3360da0a7150e3040ec79a",
+          "session": "runs/T43/session-r0003"
+        },
+        {
+          "screenshot": "runs/T43/session-r0003/step-0016.png",
+          "record": "runs/T43/session-r0003/step-0016.json",
+          "step": 16,
+          "screenshot_sha256": "7ec2395287ad3bd1a2c5282fab6d485e62915e98472f0eb86730457655e751c6",
+          "session": "runs/T43/session-r0003"
+        }
+      ],
+      "families": [
+        "D04",
+        "D06",
+        "D01"
+      ],
+      "variants": [
+        "save-selector",
+        "fresh-load",
+        "restored-main"
+      ],
+      "boundary_note": "Real fresh-process named save reload; Escape in the selector is not application-wide cancel."
+    },
+    {
+      "id": "W007",
+      "title": "two human managers and duplicate-club refusal",
+      "chapter": "docs/manual/setup.md",
+      "chapter_sha256": "fa94f3936013f9261dc33e1b4767b730159cfcdb4dd60f969fdc0484746bf0bc",
+      "evidence": [
+        {
+          "screenshot": "runs/T44/session-r0001/step-0007.png",
+          "record": "runs/T44/session-r0001/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "71b54d00980d4a99dab5e80a376ff9053bc881b9a24ac5af67de155780e6875f",
+          "session": "runs/T44/session-r0001"
+        },
+        {
+          "screenshot": "runs/T44/session-r0001/step-0008.png",
+          "record": "runs/T44/session-r0001/step-0008.json",
+          "step": 8,
+          "screenshot_sha256": "2dd666be704d0849e5247725961dfff0a7425069e16b0424a17c600ee6ce8a2a",
+          "session": "runs/T44/session-r0001"
+        },
+        {
+          "screenshot": "runs/T44/session-r0001/step-0010.png",
+          "record": "runs/T44/session-r0001/step-0010.json",
+          "step": 10,
+          "screenshot_sha256": "6c9166d782eb459d4060c0b9f7575f327030aa8cdce55f895317f23d43c275ee",
+          "session": "runs/T44/session-r0001"
+        },
+        {
+          "screenshot": "runs/T44/session-r0001/step-0012.png",
+          "record": "runs/T44/session-r0001/step-0012.json",
+          "step": 12,
+          "screenshot_sha256": "90b7fd1b27e8cbe63034999a330b4617a5036cd9d84add3bbbe76290832ba950",
+          "session": "runs/T44/session-r0001"
+        },
+        {
+          "screenshot": "runs/T44/session-r0001/step-0013.png",
+          "record": "runs/T44/session-r0001/step-0013.json",
+          "step": 13,
+          "screenshot_sha256": "15880124a0e26036877655285a01ed35f13e70e466eccaf13b2ad046600b5d37",
+          "session": "runs/T44/session-r0001"
+        }
+      ],
+      "families": [
+        "D05",
+        "D01"
+      ],
+      "variants": [
+        "first-manager",
+        "second-manager",
+        "duplicate-refusal",
+        "next-player"
+      ],
+      "boundary_note": "Duplicate club refusal and NEXT PLAYER are observed; Previous player and a complete alternating week are G02."
+    },
+    {
+      "id": "W008",
+      "title": "Italy 1993/94 setup",
+      "chapter": "docs/manual/setup.md",
+      "chapter_sha256": "fa94f3936013f9261dc33e1b4767b730159cfcdb4dd60f969fdc0484746bf0bc",
+      "evidence": [
+        {
+          "screenshot": "runs/T44/session-r0002/step-0004.png",
+          "record": "runs/T44/session-r0002/step-0004.json",
+          "step": 4,
+          "screenshot_sha256": "b97034bbf0b44766b33ae017b92433e0f18493f679b9b3da3b09acfc60f3dc42",
+          "session": "runs/T44/session-r0002"
+        },
+        {
+          "screenshot": "runs/T44/session-r0002/step-0007.png",
+          "record": "runs/T44/session-r0002/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "7f9476323434ab4c6e9fe03a80eac6e362553279a441ae1216f4747aa7156bd5",
+          "session": "runs/T44/session-r0002"
+        }
+      ],
+      "families": [
+        "D05",
+        "D01"
+      ],
+      "variants": [
+        "Italy-season",
+        "Italian-club",
+        "manager-entry"
+      ],
+      "boundary_note": "Italy1993/94 setup is an isolated observed route; preserve its club/season/manager context rather than generalizing England defaults."
+    },
+    {
+      "id": "W009",
+      "title": "Scotland 1993/94 setup and another nationality",
+      "chapter": "docs/manual/setup.md",
+      "chapter_sha256": "fa94f3936013f9261dc33e1b4767b730159cfcdb4dd60f969fdc0484746bf0bc",
+      "evidence": [
+        {
+          "screenshot": "runs/T44/session-r0003/step-0004.png",
+          "record": "runs/T44/session-r0003/step-0004.json",
+          "step": 4,
+          "screenshot_sha256": "8f299ea53a052f775b7dde7d762966297e56b44f6fb539ad4bdd86f9ce6581aa",
+          "session": "runs/T44/session-r0003"
+        },
+        {
+          "screenshot": "runs/T44/session-r0003/step-0005.png",
+          "record": "runs/T44/session-r0003/step-0005.json",
+          "step": 5,
+          "screenshot_sha256": "75b85f1824219e6e0c700838221b2df8fc4ff27889df3bcd4d7b864f2a46d453",
+          "session": "runs/T44/session-r0003"
+        },
+        {
+          "screenshot": "runs/T44/session-r0003/step-0007.png",
+          "record": "runs/T44/session-r0003/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "b54e0853266f349e0ba494b84419bbc7f02f6701d5b6c4308fa8ca105d276fea",
+          "session": "runs/T44/session-r0003"
+        },
+        {
+          "screenshot": "runs/T44/session-r0003/step-0008.png",
+          "record": "runs/T44/session-r0003/step-0008.json",
+          "step": 8,
+          "screenshot_sha256": "22b65c61a244674e6511ebb1e752c80d70e6670d1e4a557b00c1fce205fc656e",
+          "session": "runs/T44/session-r0003"
+        },
+        {
+          "screenshot": "runs/T44/session-r0003/step-0009.png",
+          "record": "runs/T44/session-r0003/step-0009.json",
+          "step": 9,
+          "screenshot_sha256": "35c19a0005d92e8720f7a24effab0e1c175e2b4f3fde219b096fa32a6a5d44cb",
+          "session": "runs/T44/session-r0003"
+        }
+      ],
+      "families": [
+        "D05",
+        "D01"
+      ],
+      "variants": [
+        "Scotland-season",
+        "Scottish-club",
+        "nationality"
+      ],
+      "boundary_note": "Scotland1993/94 and changed nationality are a separate original setup scenario, not proof of every country/season combination."
+    },
+    {
+      "id": "W010",
+      "title": "enter Players, compare players and return",
+      "chapter": "docs/manual/squad.md",
+      "chapter_sha256": "39c5d33cf34652aa1ee52f2ba5f564f522111e6645d8816709d57469347cb60e",
+      "evidence": [
+        {
+          "screenshot": "runs/T45/session-r0001/step-0003.png",
+          "record": "runs/T45/session-r0001/step-0003.json",
+          "step": 3,
+          "screenshot_sha256": "fd898e89ad49408231c78a36807e202d7025470758a76a573d2b30d3a517e04c",
+          "session": "runs/T45/session-r0001"
+        },
+        {
+          "screenshot": "runs/T45/session-r0001/step-0004.png",
+          "record": "runs/T45/session-r0001/step-0004.json",
+          "step": 4,
+          "screenshot_sha256": "58b3f0ae92392db21d2733121ca16a80bfae40a6af004a3165eb989bc77657d1",
+          "session": "runs/T45/session-r0001"
+        },
+        {
+          "screenshot": "runs/T45/session-r0001/step-0005.png",
+          "record": "runs/T45/session-r0001/step-0005.json",
+          "step": 5,
+          "screenshot_sha256": "18c506ea9e80dbf33547a1c92d63debadabe06bcb008b6f2ffcd9065500e516f",
+          "session": "runs/T45/session-r0001"
+        },
+        {
+          "screenshot": "runs/T45/session-r0001/step-0006.png",
+          "record": "runs/T45/session-r0001/step-0006.json",
+          "step": 6,
+          "screenshot_sha256": "fbe393dbda1b1004894a111cfc0ea26620249801c3e9108bf0e55ddac6a4206b",
+          "session": "runs/T45/session-r0001"
+        },
+        {
+          "screenshot": "runs/T45/session-r0001/step-0007.png",
+          "record": "runs/T45/session-r0001/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "bec8e3fbe9ea9f8e811637765ada0ab0301a82928e90a82917da638e6caeaada",
+          "session": "runs/T45/session-r0001"
+        },
+        {
+          "screenshot": "runs/T45/session-r0001/step-0008.png",
+          "record": "runs/T45/session-r0001/step-0008.json",
+          "step": 8,
+          "screenshot_sha256": "6065e1dc420377c84eeed83ccf09697e4ea97e2a7eee9b108f785ec76f163945",
+          "session": "runs/T45/session-r0001"
+        },
+        {
+          "screenshot": "runs/T45/session-r0001/step-0011.png",
+          "record": "runs/T45/session-r0001/step-0011.json",
+          "step": 11,
+          "screenshot_sha256": "c97c82c206a4ff3ccf74b816ff1417a7069b601be63031686bf89ffa06841f67",
+          "session": "runs/T45/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D01"
+      ],
+      "variants": [
+        "skills",
+        "details",
+        "first-team",
+        "empty-reserves",
+        "options",
+        "main-return"
+      ],
+      "boundary_note": "Insert preserves player identity; empty RESERVES clears card; Escape options and Escape Players are different returns."
+    },
+    {
+      "id": "W011",
+      "title": "the main-menu squad shortcut remembers the view",
+      "chapter": "docs/manual/squad.md",
+      "chapter_sha256": "39c5d33cf34652aa1ee52f2ba5f564f522111e6645d8816709d57469347cb60e",
+      "evidence": [
+        {
+          "screenshot": "runs/T45/session-r0001/step-0014.png",
+          "record": "runs/T45/session-r0001/step-0014.json",
+          "step": 14,
+          "screenshot_sha256": "18c506ea9e80dbf33547a1c92d63debadabe06bcb008b6f2ffcd9065500e516f",
+          "session": "runs/T45/session-r0001"
+        }
+      ],
+      "families": [
+        "D01",
+        "D02"
+      ],
+      "variants": [
+        "remembered-player",
+        "remembered-details"
+      ],
+      "boundary_note": "Space reopens remembered player and panel; it is not a new screen or reset selection."
+    },
+    {
+      "id": "W012",
+      "title": "cycle main-menu information",
+      "chapter": "docs/manual/squad.md",
+      "chapter_sha256": "39c5d33cf34652aa1ee52f2ba5f564f522111e6645d8816709d57469347cb60e",
+      "evidence": [
+        {
+          "screenshot": "runs/T45/session-r0001/step-0016.png",
+          "record": "runs/T45/session-r0001/step-0016.json",
+          "step": 16,
+          "screenshot_sha256": "40cc3461e4b9f43db961a8548481441bda7815dbb67d17009f6fde6ffd5ae403",
+          "session": "runs/T45/session-r0001"
+        },
+        {
+          "screenshot": "runs/T45/session-r0001/step-0017.png",
+          "record": "runs/T45/session-r0001/step-0017.json",
+          "step": 17,
+          "screenshot_sha256": "abecfac50be9a6421724b4d08adea5d6cb2edbda40e6b3a804bddd4b4c70875b",
+          "session": "runs/T45/session-r0001"
+        }
+      ],
+      "families": [
+        "D01"
+      ],
+      "variants": [
+        "team-info",
+        "club-info",
+        "staff-info"
+      ],
+      "boundary_note": "Insert cycles central team/club/staff information while main menu stays visible."
+    },
+    {
+      "id": "W013",
+      "title": "inspect a player outside the starting eleven",
+      "chapter": "docs/manual/squad.md",
+      "chapter_sha256": "39c5d33cf34652aa1ee52f2ba5f564f522111e6645d8816709d57469347cb60e",
+      "evidence": [
+        {
+          "screenshot": "runs/T45/session-r0001/step-0020.png",
+          "record": "runs/T45/session-r0001/step-0020.json",
+          "step": 20,
+          "screenshot_sha256": "91a3c44d087a5caa42c7458854789bd69cd91e665ef47da97a6db71fa1df4b1d",
+          "session": "runs/T45/session-r0001"
+        }
+      ],
+      "families": [
+        "D02"
+      ],
+      "variants": [
+        "lower-first-team-player",
+        "details"
+      ],
+      "boundary_note": "Lower first-team players below SUBS are not the separate RESERVES list."
+    },
+    {
+      "id": "W014",
+      "title": "cancel a move, then exchange goalkeepers",
+      "chapter": "docs/manual/selection.md",
+      "chapter_sha256": "dcb78fc2b3b5c39526b4b0c9ec3a5b2b36b99912c0e44acfc17fef2032e71fe3",
+      "evidence": [
+        {
+          "screenshot": "runs/T46/session-r0001/step-0002.png",
+          "record": "runs/T46/session-r0001/step-0002.json",
+          "step": 2,
+          "screenshot_sha256": "fd898e89ad49408231c78a36807e202d7025470758a76a573d2b30d3a517e04c",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0003.png",
+          "record": "runs/T46/session-r0001/step-0003.json",
+          "step": 3,
+          "screenshot_sha256": "066607a0ae9ebda9fcc61092e2dd531de7235a0e4e8b0ce403578955024e97ac",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0004.png",
+          "record": "runs/T46/session-r0001/step-0004.json",
+          "step": 4,
+          "screenshot_sha256": "fd898e89ad49408231c78a36807e202d7025470758a76a573d2b30d3a517e04c",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0006.png",
+          "record": "runs/T46/session-r0001/step-0006.json",
+          "step": 6,
+          "screenshot_sha256": "8b104998b99e3e94e02c9b47323347e414dca6f5ae8154e828e48540826c10ca",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0007.png",
+          "record": "runs/T46/session-r0001/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "f086812a0244cbcc788d75ace421782cb37166f6a4fb8a1738582f06b39be5c9",
+          "session": "runs/T46/session-r0001"
+        }
+      ],
+      "families": [
+        "D02"
+      ],
+      "variants": [
+        "carried-player",
+        "destination",
+        "cancel",
+        "confirmed-swap"
+      ],
+      "boundary_note": "Enter carries a player; destination highlight differs from carried card; Escape cancels, Enter swaps occupied rows."
+    },
+    {
+      "id": "W015",
+      "title": "change individual goalkeeper instructions",
+      "chapter": "docs/manual/selection.md",
+      "chapter_sha256": "dcb78fc2b3b5c39526b4b0c9ec3a5b2b36b99912c0e44acfc17fef2032e71fe3",
+      "evidence": [
+        {
+          "screenshot": "runs/T46/session-r0001/step-0011.png",
+          "record": "runs/T46/session-r0001/step-0011.json",
+          "step": 11,
+          "screenshot_sha256": "f6d8f3ba6869ec12110d272cf6ecaefb6d9063dc4d27ede24c4da8ac7bafaf8a",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0015.png",
+          "record": "runs/T46/session-r0001/step-0015.json",
+          "step": 15,
+          "screenshot_sha256": "e127d0810efef6060fc45cb3ec493ba9488fef91b63a70401f5107c51a853f7d",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0016.png",
+          "record": "runs/T46/session-r0001/step-0016.json",
+          "step": 16,
+          "screenshot_sha256": "a9a8c0b46ff6d46067cc4d79ba2e8b33e91212bf583d08b009db7e39639468ef",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0020.png",
+          "record": "runs/T46/session-r0001/step-0020.json",
+          "step": 20,
+          "screenshot_sha256": "3e39fc168ab292db31fddfaaabdc1e2d44ad26f2f3be0111509d066c36747224",
+          "session": "runs/T46/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D10"
+      ],
+      "variants": [
+        "personal-options",
+        "unavailable-reposition",
+        "instruction-cycle"
+      ],
+      "boundary_note": "Preserve personal instruction cycle and P marker without inventing its engine meaning."
+    },
+    {
+      "id": "W016",
+      "title": "Reposition cycles current position; Club position restores it",
+      "chapter": "docs/manual/selection.md",
+      "chapter_sha256": "dcb78fc2b3b5c39526b4b0c9ec3a5b2b36b99912c0e44acfc17fef2032e71fe3",
+      "evidence": [
+        {
+          "screenshot": "runs/T46/session-r0001/step-0028.png",
+          "record": "runs/T46/session-r0001/step-0028.json",
+          "step": 28,
+          "screenshot_sha256": "84f23087b9b7fd9c9cebbe4294eeefdb50a4380f4b2d078530d1ffdc553f6b41",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0032.png",
+          "record": "runs/T46/session-r0001/step-0032.json",
+          "step": 32,
+          "screenshot_sha256": "0188bc65d0bedd32df0a081d9aac8aa6a8e5e27d6a6cdf54fb1a69d5902bf7c8",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0045.png",
+          "record": "runs/T46/session-r0001/step-0045.json",
+          "step": 45,
+          "screenshot_sha256": "589d1433768e9191a5d70caeaa53595d67605c057d5f0c251a39c4740b1160f0",
+          "session": "runs/T46/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D10"
+      ],
+      "variants": [
+        "current-position",
+        "first-position",
+        "club-position-restore"
+      ],
+      "boundary_note": "Current Pos. and 1st pos remain distinct; Club position restores, Reposition cycles."
+    },
+    {
+      "id": "W017",
+      "title": "save and reload the changed selection",
+      "chapter": "docs/manual/selection.md",
+      "chapter_sha256": "dcb78fc2b3b5c39526b4b0c9ec3a5b2b36b99912c0e44acfc17fef2032e71fe3",
+      "evidence": [
+        {
+          "screenshot": "runs/T46/session-r0001/step-0052.png",
+          "record": "runs/T46/session-r0001/step-0052.json",
+          "step": 52,
+          "screenshot_sha256": "7d11e1199ac3df2e89b39d1be6c61e3b66322493157c7d5e06b737dd149a65a6",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0053.png",
+          "record": "runs/T46/session-r0001/step-0053.json",
+          "step": 53,
+          "screenshot_sha256": "7193050908d5c356a14a1675b739d62f23422102e3dc8c4d9506617dc1e6f9b3",
+          "session": "runs/T46/session-r0001"
+        },
+        {
+          "screenshot": "runs/T46/session-r0001/step-0054.png",
+          "record": "runs/T46/session-r0001/step-0054.json",
+          "step": 54,
+          "screenshot_sha256": "063dc35a15faf4981255c265678e1ca5f376fe24e1318ed8733fa1bf7de9ac22",
+          "session": "runs/T46/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D10",
+        "D06",
+        "D04",
+        "D01"
+      ],
+      "variants": [
+        "changed-lineup",
+        "changed-instructions",
+        "saved",
+        "fresh-reload"
+      ],
+      "boundary_note": "Changed lineup/instructions survive F7 and fresh-process reload; view alone is not persistence."
+    },
+    {
+      "id": "W018",
+      "title": "inspect the opponent and configuration",
+      "chapter": "docs/manual/match-preparation.md",
+      "chapter_sha256": "a5f12f6f4011cc417a0dc0b350ade752a6433cd64ea452735a26e1678de135d8",
+      "evidence": [
+        {
+          "screenshot": "runs/T47/session-r0001/step-0003.png",
+          "record": "runs/T47/session-r0001/step-0003.json",
+          "step": 3,
+          "screenshot_sha256": "941b278be88fbfaf3bb0c116f2971437fe08bc3ff7ee0e49dc54b6894008fd41",
+          "session": "runs/T47/session-r0001"
+        },
+        {
+          "screenshot": "runs/T47/session-r0001/step-0006.png",
+          "record": "runs/T47/session-r0001/step-0006.json",
+          "step": 6,
+          "screenshot_sha256": "503bae9de2e7d0611cb8d6e6648f4b7c3ae20398dadb5ceb99397c860e36752e",
+          "session": "runs/T47/session-r0001"
+        },
+        {
+          "screenshot": "runs/T47/session-r0001/step-0007.png",
+          "record": "runs/T47/session-r0001/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "34a1083ded1e3441d11b18e10b6cbe47ac723bbb07d5ed3ee089ecab85655f78",
+          "session": "runs/T47/session-r0001"
+        },
+        {
+          "screenshot": "runs/T47/session-r0001/step-0008.png",
+          "record": "runs/T47/session-r0001/step-0008.json",
+          "step": 8,
+          "screenshot_sha256": "503bae9de2e7d0611cb8d6e6648f4b7c3ae20398dadb5ceb99397c860e36752e",
+          "session": "runs/T47/session-r0001"
+        }
+      ],
+      "families": [
+        "D09",
+        "D07",
+        "D01"
+      ],
+      "variants": [
+        "opponent-info",
+        "configuration",
+        "five-visible-options"
+      ],
+      "boundary_note": "Opponent browsing and five visible configuration labels do not prove all toggle effects."
+    },
+    {
+      "id": "W019",
+      "title": "enter match preparation",
+      "chapter": "docs/manual/match-preparation.md",
+      "chapter_sha256": "a5f12f6f4011cc417a0dc0b350ade752a6433cd64ea452735a26e1678de135d8",
+      "evidence": [
+        {
+          "screenshot": "runs/T47/session-r0001/step-0011.png",
+          "record": "runs/T47/session-r0001/step-0011.json",
+          "step": 11,
+          "screenshot_sha256": "d70f0f38b23af5cd3bac5ca329b02dae7b7da7fc96dd849ddc17d2eb43776adf",
+          "session": "runs/T47/session-r0001"
+        }
+      ],
+      "families": [
+        "D08"
+      ],
+      "variants": [
+        "pre-match",
+        "PLAY-GAME-highlight",
+        "remaining-subs"
+      ],
+      "boundary_note": "Original supplied-route PLAY GAME default, named squad and Remaining subs display; no universal allowance."
+    },
+    {
+      "id": "W020",
+      "title": "edit team instructions",
+      "chapter": "docs/manual/match-preparation.md",
+      "chapter_sha256": "a5f12f6f4011cc417a0dc0b350ade752a6433cd64ea452735a26e1678de135d8",
+      "evidence": [
+        {
+          "screenshot": "runs/T47/session-r0001/step-0013.png",
+          "record": "runs/T47/session-r0001/step-0013.json",
+          "step": 13,
+          "screenshot_sha256": "437412e7baeab02ba40fca12a1640d8d58a53e047ced2d13f29bc015662c0d55",
+          "session": "runs/T47/session-r0001"
+        },
+        {
+          "screenshot": "runs/T47/session-r0001/step-0018.png",
+          "record": "runs/T47/session-r0001/step-0018.json",
+          "step": 18,
+          "screenshot_sha256": "51957dbb9467133a19be64b45b78056b4a85965fdaf2da6ac3b2375efb3cf500",
+          "session": "runs/T47/session-r0001"
+        },
+        {
+          "screenshot": "runs/T47/session-r0001/step-0037.png",
+          "record": "runs/T47/session-r0001/step-0037.json",
+          "step": 37,
+          "screenshot_sha256": "4794687fa78cf0c8a1c83f156634d5c43fc0a5d9bbac6c165b0f337a5da1b20f",
+          "session": "runs/T47/session-r0001"
+        }
+      ],
+      "families": [
+        "D10",
+        "D08"
+      ],
+      "variants": [
+        "team-instructions",
+        "row-cycle",
+        "retained-on-exit"
+      ],
+      "boundary_note": "Escape leaves retained team-instruction edits; it is not rollback."
+    },
+    {
+      "id": "W021",
+      "title": "change the displayed formation through player positions",
+      "chapter": "docs/manual/match-preparation.md",
+      "chapter_sha256": "a5f12f6f4011cc417a0dc0b350ade752a6433cd64ea452735a26e1678de135d8",
+      "evidence": [
+        {
+          "screenshot": "runs/T47/session-r0001/step-0050.png",
+          "record": "runs/T47/session-r0001/step-0050.json",
+          "step": 50,
+          "screenshot_sha256": "0262ec055f653b80d36603c4cde13a8df6a67c50295979848878ceba87d92cc6",
+          "session": "runs/T47/session-r0001"
+        },
+        {
+          "screenshot": "runs/T47/session-r0001/step-0052.png",
+          "record": "runs/T47/session-r0001/step-0052.json",
+          "step": 52,
+          "screenshot_sha256": "fc6aef981d4bdda259fe74b7fc9816e95108da46316292f014147303b1c664e9",
+          "session": "runs/T47/session-r0001"
+        },
+        {
+          "screenshot": "runs/T47/session-r0001/step-0056.png",
+          "record": "runs/T47/session-r0001/step-0056.json",
+          "step": 56,
+          "screenshot_sha256": "0188bc65d0bedd32df0a081d9aac8aa6a8e5e27d6a6cdf54fb1a69d5902bf7c8",
+          "session": "runs/T47/session-r0001"
+        },
+        {
+          "screenshot": "runs/T47/session-r0001/step-0058.png",
+          "record": "runs/T47/session-r0001/step-0058.json",
+          "step": 58,
+          "screenshot_sha256": "ad06bc831b3434f866e46b47f50ec2c423a09bff6decd1531d86e004e465b077",
+          "session": "runs/T47/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D10",
+        "D08"
+      ],
+      "variants": [
+        "repositioned-player",
+        "changed-formation"
+      ],
+      "boundary_note": "Formation display follows changed current positions; first-position identity is preserved."
+    },
+    {
+      "id": "W022",
+      "title": "view pre-match statistics and start the watched fixture",
+      "chapter": "docs/manual/match-preparation.md",
+      "chapter_sha256": "a5f12f6f4011cc417a0dc0b350ade752a6433cd64ea452735a26e1678de135d8",
+      "evidence": [
+        {
+          "screenshot": "runs/T47/session-r0001/step-0045.png",
+          "record": "runs/T47/session-r0001/step-0045.json",
+          "step": 45,
+          "screenshot_sha256": "a4978d63bcff98493b3a6592913f1c496533da78c6728ae24eaa901dc134895d",
+          "session": "runs/T47/session-r0001"
+        },
+        {
+          "screenshot": "runs/T47/session-r0001/step-0060.png",
+          "record": "runs/T47/session-r0001/step-0060.json",
+          "step": 60,
+          "screenshot_sha256": "c88f5e879df222fb32664068895a6ff533a5172c7e7839d8e88ff74f96c0c944",
+          "session": "runs/T47/session-r0001"
+        }
+      ],
+      "families": [
+        "D08",
+        "D03"
+      ],
+      "variants": [
+        "pre-match-statistics",
+        "return",
+        "watched-start"
+      ],
+      "boundary_note": "Statistics any-key return precedes PLAY GAME; displayed attendance/zeros are scenario facts."
+    },
+    {
+      "id": "W023",
+      "title": "an incomplete lineup is refused at PLAY GAME",
+      "chapter": "docs/manual/match-preparation.md",
+      "chapter_sha256": "a5f12f6f4011cc417a0dc0b350ade752a6433cd64ea452735a26e1678de135d8",
+      "evidence": [
+        {
+          "screenshot": "runs/T47/session-r0003/step-0009.png",
+          "record": "runs/T47/session-r0003/step-0009.json",
+          "step": 9,
+          "screenshot_sha256": "72383f782118dcae0fb620c74d3a9d749a364bc450b292d6f0db4e564b3e1119",
+          "session": "runs/T47/session-r0003"
+        },
+        {
+          "screenshot": "runs/T47/session-r0003/step-0013.png",
+          "record": "runs/T47/session-r0003/step-0013.json",
+          "step": 13,
+          "screenshot_sha256": "0b671d9ee2256e99cb79b61fa7bea6353c14862f8be25bbeae0d90d23266aa4f",
+          "session": "runs/T47/session-r0003"
+        },
+        {
+          "screenshot": "runs/T47/session-r0003/step-0014.png",
+          "record": "runs/T47/session-r0003/step-0014.json",
+          "step": 14,
+          "screenshot_sha256": "b2d31735ee89e3f9cda684635525dc5e8bcb4e7b652f2f57698b9fa7ee328b1d",
+          "session": "runs/T47/session-r0003"
+        },
+        {
+          "screenshot": "runs/T47/session-r0003/step-0015.png",
+          "record": "runs/T47/session-r0003/step-0015.json",
+          "step": 15,
+          "screenshot_sha256": "3631211ddfd9258cfa1b01476a2a50d0ca076cf2c0df9a663ee55fb0bf1a97e2",
+          "session": "runs/T47/session-r0003"
+        },
+        {
+          "screenshot": "runs/T47/session-r0003/step-0018.png",
+          "record": "runs/T47/session-r0003/step-0018.json",
+          "step": 18,
+          "screenshot_sha256": "66cee4ffb8b81c87cd9bb8836645c309e282793523b1b5209126be0ef2486560",
+          "session": "runs/T47/session-r0003"
+        },
+        {
+          "screenshot": "runs/T47/session-r0003/step-0019.png",
+          "record": "runs/T47/session-r0003/step-0019.json",
+          "step": 19,
+          "screenshot_sha256": "f07209d6f9d58c6b2f18bcdd828911af737b4882d655c03cde615f705a605981",
+          "session": "runs/T47/session-r0003"
+        },
+        {
+          "screenshot": "runs/T47/session-r0003/step-0020.png",
+          "record": "runs/T47/session-r0003/step-0020.json",
+          "step": 20,
+          "screenshot_sha256": "66cee4ffb8b81c87cd9bb8836645c309e282793523b1b5209126be0ef2486560",
+          "session": "runs/T47/session-r0003"
+        }
+      ],
+      "families": [
+        "D07",
+        "D02",
+        "D08"
+      ],
+      "variants": [
+        "auto-select-off",
+        "empty-XI-slot",
+        "insufficient-refusal"
+      ],
+      "boundary_note": "Insufficient-first-team refusal and disabled Auto player select are distinct from later ineligible-player refusal."
+    },
+    {
+      "id": "W024",
+      "title": "start, open the bench and resume",
+      "chapter": "docs/manual/watched-match.md",
+      "chapter_sha256": "de97f7b3c6e713a7bb675dcfe6d5ddfb21475211726fe015b72ce7cc3667f047",
+      "evidence": [
+        {
+          "screenshot": "runs/T48/session-r0001/step-0003.png",
+          "record": "runs/T48/session-r0001/step-0003.json",
+          "step": 3,
+          "screenshot_sha256": "c88f5e879df222fb32664068895a6ff533a5172c7e7839d8e88ff74f96c0c944",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0004.png",
+          "record": "runs/T48/session-r0001/step-0004.json",
+          "step": 4,
+          "screenshot_sha256": "11cd7fa11c096b41de298549d6755df39ad7e27706e2f95ee2bfe4606069ab24",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0005.png",
+          "record": "runs/T48/session-r0001/step-0005.json",
+          "step": 5,
+          "screenshot_sha256": "69f5147191ce52cfd379998b631e953a0b29a6a7f6050f738b5d692bc6b38405",
+          "session": "runs/T48/session-r0001"
+        }
+      ],
+      "families": [
+        "D03",
+        "D08",
+        "D02"
+      ],
+      "variants": [
+        "pitch",
+        "live-bench",
+        "players",
+        "resume"
+      ],
+      "boundary_note": "Pitch to bench to Players and back follows original menu/phase; not a second match instance."
+    },
+    {
+      "id": "W025",
+      "title": "request and cancel a substitution",
+      "chapter": "docs/manual/watched-match.md",
+      "chapter_sha256": "de97f7b3c6e713a7bb675dcfe6d5ddfb21475211726fe015b72ce7cc3667f047",
+      "evidence": [
+        {
+          "screenshot": "runs/T48/session-r0001/step-0007.png",
+          "record": "runs/T48/session-r0001/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "f7396450d7aad75e41eec35977ea2a3ebd40244e9754bb997b9947e993e0760d",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0012.png",
+          "record": "runs/T48/session-r0001/step-0012.json",
+          "step": 12,
+          "screenshot_sha256": "18b4f84ec753f0d51d2ce0ce266d582bd5a25fbc3a73571dd7192ebac45335ef",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0013.png",
+          "record": "runs/T48/session-r0001/step-0013.json",
+          "step": 13,
+          "screenshot_sha256": "69f5147191ce52cfd379998b631e953a0b29a6a7f6050f738b5d692bc6b38405",
+          "session": "runs/T48/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D03",
+        "D08"
+      ],
+      "variants": [
+        "request-active",
+        "bench-exit",
+        "request-retained",
+        "Enter-cancel"
+      ],
+      "boundary_note": "Enter requests/cancels per footer; Escape exits Players while the substitution request remains active."
+    },
+    {
+      "id": "W026",
+      "title": "display and speed controls",
+      "chapter": "docs/manual/watched-match.md",
+      "chapter_sha256": "de97f7b3c6e713a7bb675dcfe6d5ddfb21475211726fe015b72ce7cc3667f047",
+      "evidence": [
+        {
+          "screenshot": "runs/T48/session-r0001/step-0010.png",
+          "record": "runs/T48/session-r0001/step-0010.json",
+          "step": 10,
+          "screenshot_sha256": "f0a03e15bf441f2c34e226129aff18df433ce24f45b90643aab8c3643ad202be",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0018.png",
+          "record": "runs/T48/session-r0001/step-0018.json",
+          "step": 18,
+          "screenshot_sha256": "bbe179fd2e52f41461c55711f69f9f4dda3fa6ea9d619afe2dba0c6f13328eb7",
+          "session": "runs/T48/session-r0001"
+        }
+      ],
+      "families": [
+        "D03"
+      ],
+      "variants": [
+        "display-mode",
+        "speed23",
+        "speed24"
+      ],
+      "boundary_note": "Displayed speed23→24→23 and representation changes are observed; ranges/time formula and sound remain gaps."
+    },
+    {
+      "id": "W027",
+      "title": "read detailed commentary history",
+      "chapter": "docs/manual/watched-match.md",
+      "chapter_sha256": "de97f7b3c6e713a7bb675dcfe6d5ddfb21475211726fe015b72ce7cc3667f047",
+      "evidence": [
+        {
+          "screenshot": "runs/T48/session-r0001/step-0020.png",
+          "record": "runs/T48/session-r0001/step-0020.json",
+          "step": 20,
+          "screenshot_sha256": "506e982a4275235b121cd6c1dbd6ea7e224630d17d21e42a9c5a948f7ce0185e",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0021.png",
+          "record": "runs/T48/session-r0001/step-0021.json",
+          "step": 21,
+          "screenshot_sha256": "9c78d4ff5d8cbeec461d72522b92e7d2d739c698cdaa6410fb9f261a09bd78d4",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0023.png",
+          "record": "runs/T48/session-r0001/step-0023.json",
+          "step": 23,
+          "screenshot_sha256": "bb810e9ba909489fe40c4d19573f473362c721f0a18149fa56125202feccf13a",
+          "session": "runs/T48/session-r0001"
+        }
+      ],
+      "families": [
+        "D03"
+      ],
+      "variants": [
+        "full-history",
+        "Home",
+        "End",
+        "Page-Up",
+        "pitch-return"
+      ],
+      "boundary_note": "Full action history overlays short recent commentary; Home/End/Page Up and Escape have their own context."
+    },
+    {
+      "id": "W028",
+      "title": "halftime and a legal replacement",
+      "chapter": "docs/manual/watched-match.md",
+      "chapter_sha256": "de97f7b3c6e713a7bb675dcfe6d5ddfb21475211726fe015b72ce7cc3667f047",
+      "evidence": [
+        {
+          "screenshot": "runs/T48/session-r0001/step-0035.png",
+          "record": "runs/T48/session-r0001/step-0035.json",
+          "step": 35,
+          "screenshot_sha256": "b58cbebfa35d8d31a6896bc75d06fadca023dacf994346f39e541eab8754a324",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0037.png",
+          "record": "runs/T48/session-r0001/step-0037.json",
+          "step": 37,
+          "screenshot_sha256": "6a8cc58da39e46094387bda2907f3adf8324ac18e974d99714abbf6140f20d66",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0039.png",
+          "record": "runs/T48/session-r0001/step-0039.json",
+          "step": 39,
+          "screenshot_sha256": "f1a23edc192155558a50a1cdfcbf22096da13d02a244725c8b79b1c26f755865",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0040.png",
+          "record": "runs/T48/session-r0001/step-0040.json",
+          "step": 40,
+          "screenshot_sha256": "189d1b3853b57c24f55865257e68da971f316668d4bd2a4cf7479a6cf9660835",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0043.png",
+          "record": "runs/T48/session-r0001/step-0043.json",
+          "step": 43,
+          "screenshot_sha256": "242a700a5a5f6e9035e1ddf33d260b97f1e88ab7802ceb7b84c37a67f1c8e4ca",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0044.png",
+          "record": "runs/T48/session-r0001/step-0044.json",
+          "step": 44,
+          "screenshot_sha256": "3d95366c9c85b9abb58320573e8e5f9512c8734e8abdc94aa6bcc9468f7af7ca",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0045.png",
+          "record": "runs/T48/session-r0001/step-0045.json",
+          "step": 45,
+          "screenshot_sha256": "12b4561d0ae8aaf78ea211fc4804ecf217ebdabecfe8a70cdfea324e062a6660",
+          "session": "runs/T48/session-r0001"
+        }
+      ],
+      "families": [
+        "D03",
+        "D08",
+        "D02"
+      ],
+      "variants": [
+        "halftime-board",
+        "bench",
+        "replacement-active",
+        "replacement-cancel",
+        "replacement-commit"
+      ],
+      "boundary_note": "Halftime statistics precede bench; Escape cancels pending replacement; actual swap consumes the observed allowance."
+    },
+    {
+      "id": "W029",
+      "title": "fulltime, commentary and final statistics",
+      "chapter": "docs/manual/watched-match.md",
+      "chapter_sha256": "de97f7b3c6e713a7bb675dcfe6d5ddfb21475211726fe015b72ce7cc3667f047",
+      "evidence": [
+        {
+          "screenshot": "runs/T48/session-r0001/step-0051.png",
+          "record": "runs/T48/session-r0001/step-0051.json",
+          "step": 51,
+          "screenshot_sha256": "cdafca89d0c42cd947f7f959fbf80251fcac7d2d3b3c74c2426c470af93fef72",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0053.png",
+          "record": "runs/T48/session-r0001/step-0053.json",
+          "step": 53,
+          "screenshot_sha256": "7090962c662c798c17d3a7b3d2a1235f26c09d5684cca16deaf3a28d21e15eec",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0055.png",
+          "record": "runs/T48/session-r0001/step-0055.json",
+          "step": 55,
+          "screenshot_sha256": "7f2ba69d89d43ab32c2a93f67406af556ad73b339200fedcab867c506bcfc81a",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0057.png",
+          "record": "runs/T48/session-r0001/step-0057.json",
+          "step": 57,
+          "screenshot_sha256": "6f1c44a60f7d132c4f63eac9ee213b9e0714036f8d27faabc3db26af0cf7b88a",
+          "session": "runs/T48/session-r0001"
+        }
+      ],
+      "families": [
+        "D03",
+        "D08"
+      ],
+      "variants": [
+        "fulltime-pitch",
+        "history",
+        "final-statistics",
+        "man-of-match"
+      ],
+      "boundary_note": "Fulltime pitch/history/statistics and man-of-match are original views, not a fabricated summary."
+    },
+    {
+      "id": "W030",
+      "title": "return to the next management week",
+      "chapter": "docs/manual/watched-match.md",
+      "chapter_sha256": "de97f7b3c6e713a7bb675dcfe6d5ddfb21475211726fe015b72ce7cc3667f047",
+      "evidence": [
+        {
+          "screenshot": "runs/T48/session-r0001/step-0061.png",
+          "record": "runs/T48/session-r0001/step-0061.json",
+          "step": 61,
+          "screenshot_sha256": "5a77eb15c448bf796f84379681922bc136313992c726932ec3017b97252cdcd1",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0062.png",
+          "record": "runs/T48/session-r0001/step-0062.json",
+          "step": 62,
+          "screenshot_sha256": "04a83bcc67fa92dd13b3f50346bc8a544415c374d045188b5f5dcfd89a260d1f",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0064.png",
+          "record": "runs/T48/session-r0001/step-0064.json",
+          "step": 64,
+          "screenshot_sha256": "59406a89f3addae29f70c4544d83066e98a8de48313023e9f7e5e2605104b6f2",
+          "session": "runs/T48/session-r0001"
+        },
+        {
+          "screenshot": "runs/T48/session-r0001/step-0065.png",
+          "record": "runs/T48/session-r0001/step-0065.json",
+          "step": 65,
+          "screenshot_sha256": "b3578444db213deae4f4649026b1e4e5f226d436aa316c66bb62d42d213b114e",
+          "session": "runs/T48/session-r0001"
+        }
+      ],
+      "families": [
+        "D03",
+        "D17",
+        "D19",
+        "D01"
+      ],
+      "variants": [
+        "fulltime-exit",
+        "accounts",
+        "transfer-news",
+        "next-main"
+      ],
+      "boundary_note": "Observed completed-bench CONTINUE→pitch exit→stats→cash→news→next main sequence; friendly grants no evidenced league points."
+    },
+    {
+      "id": "W031",
+      "title": "Disable Watch match and complete a fixture",
+      "chapter": "docs/manual/quick-results.md",
+      "chapter_sha256": "8ad36e9e5b7dc72387d293513c3ea1633ed33ab1f97d1162af292525599f8f36",
+      "evidence": [
+        {
+          "screenshot": "runs/T49/session-r0002/step-0005.png",
+          "record": "runs/T49/session-r0002/step-0005.json",
+          "step": 5,
+          "screenshot_sha256": "34a1083ded1e3441d11b18e10b6cbe47ac723bbb07d5ed3ee089ecab85655f78",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0010.png",
+          "record": "runs/T49/session-r0002/step-0010.json",
+          "step": 10,
+          "screenshot_sha256": "e36fc5609781e347fda58ce6ecb6b9237ea89cbd5ab38fc2213270c771516b29",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0011.png",
+          "record": "runs/T49/session-r0002/step-0011.json",
+          "step": 11,
+          "screenshot_sha256": "7e19ba04af15a779c51275555407b86aaf365e1eefe4d747bbd33ba4f2f39247",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0012.png",
+          "record": "runs/T49/session-r0002/step-0012.json",
+          "step": 12,
+          "screenshot_sha256": "5d50b5c00f29a4c3524bacc7b895593778e9d36b1855427e674b8eaef4252fa4",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0013.png",
+          "record": "runs/T49/session-r0002/step-0013.json",
+          "step": 13,
+          "screenshot_sha256": "04a83bcc67fa92dd13b3f50346bc8a544415c374d045188b5f5dcfd89a260d1f",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0014.png",
+          "record": "runs/T49/session-r0002/step-0014.json",
+          "step": 14,
+          "screenshot_sha256": "49d57d1b10187f8b722e40b8f88ccc57422997f2d27c6f9525fa9ed3da8960c9",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0015.png",
+          "record": "runs/T49/session-r0002/step-0015.json",
+          "step": 15,
+          "screenshot_sha256": "e36ef48f239467a4748413d366faccc21c4ab0858a8f119fd2347ab3d3e775a6",
+          "session": "runs/T49/session-r0002"
+        }
+      ],
+      "families": [
+        "D07",
+        "D08",
+        "D03",
+        "D17",
+        "D19",
+        "D01"
+      ],
+      "variants": [
+        "Watch-off",
+        "quick-halftime",
+        "bench",
+        "quick-fulltime",
+        "next-week"
+      ],
+      "boundary_note": "Watch-off reaches halftime/bench then fulltime; it is not one immediate whole-fixture result."
+    },
+    {
+      "id": "W032",
+      "title": "Switch the watched pitch to R-result",
+      "chapter": "docs/manual/quick-results.md",
+      "chapter_sha256": "8ad36e9e5b7dc72387d293513c3ea1633ed33ab1f97d1162af292525599f8f36",
+      "evidence": [
+        {
+          "screenshot": "runs/T49/session-r0003/step-0003.png",
+          "record": "runs/T49/session-r0003/step-0003.json",
+          "step": 3,
+          "screenshot_sha256": "08cfd63a23438176151fe2a76d5ce495ab1968175a887f09999f5280078e4360",
+          "session": "runs/T49/session-r0003"
+        },
+        {
+          "screenshot": "runs/T49/session-r0003/step-0004.png",
+          "record": "runs/T49/session-r0003/step-0004.json",
+          "step": 4,
+          "screenshot_sha256": "922b7dca2ed973a94d345116f48d633191a2addd6f3ca294171cfc6b5a7d9d4c",
+          "session": "runs/T49/session-r0003"
+        },
+        {
+          "screenshot": "runs/T49/session-r0003/step-0006.png",
+          "record": "runs/T49/session-r0003/step-0006.json",
+          "step": 6,
+          "screenshot_sha256": "a24d16dd5fe7dc5d13b1b2334cbcb1fd1c0586e794c52dddb15b6d22936c03df",
+          "session": "runs/T49/session-r0003"
+        },
+        {
+          "screenshot": "runs/T49/session-r0003/step-0009.png",
+          "record": "runs/T49/session-r0003/step-0009.json",
+          "step": 9,
+          "screenshot_sha256": "65a0b01f51c7da28995aa18023b5dc1ea2b2b4e3f375b226979ca0cf91ee713f",
+          "session": "runs/T49/session-r0003"
+        }
+      ],
+      "families": [
+        "D03",
+        "D08",
+        "D17",
+        "D19",
+        "D01"
+      ],
+      "variants": [
+        "watched-start",
+        "R-result",
+        "quick-completion"
+      ],
+      "boundary_note": "R-result is a separate observed route; do not claim quick/watched outcomes are equivalent."
+    },
+    {
+      "id": "W033",
+      "title": "League tables and results after a friendly",
+      "chapter": "docs/manual/quick-results.md",
+      "chapter_sha256": "8ad36e9e5b7dc72387d293513c3ea1633ed33ab1f97d1162af292525599f8f36",
+      "evidence": [
+        {
+          "screenshot": "runs/T49/session-r0002/step-0023.png",
+          "record": "runs/T49/session-r0002/step-0023.json",
+          "step": 23,
+          "screenshot_sha256": "6edebf1df0e7a1a747309d403dec1b6e1193e9e1d143b0df05ed63b153f89aea",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0024.png",
+          "record": "runs/T49/session-r0002/step-0024.json",
+          "step": 24,
+          "screenshot_sha256": "f8d7d4cc286e096100b52488448af7476a06ceecd11a378d482ae24b79b0e5b7",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0028.png",
+          "record": "runs/T49/session-r0002/step-0028.json",
+          "step": 28,
+          "screenshot_sha256": "e131e37539759dbab4bc15fce9eea1247d6271285392d4417f56c9049cfd0cdc",
+          "session": "runs/T49/session-r0002"
+        }
+      ],
+      "families": [
+        "D11",
+        "D01"
+      ],
+      "variants": [
+        "initial-table",
+        "league-results"
+      ],
+      "boundary_note": "Friendly completion leaves early league/results views distinct from populated league state; no friendly points inferred."
+    },
+    {
+      "id": "W034",
+      "title": "Cup views and weekly fixtures",
+      "chapter": "docs/manual/quick-results.md",
+      "chapter_sha256": "8ad36e9e5b7dc72387d293513c3ea1633ed33ab1f97d1162af292525599f8f36",
+      "evidence": [
+        {
+          "screenshot": "runs/T49/session-r0002/step-0031.png",
+          "record": "runs/T49/session-r0002/step-0031.json",
+          "step": 31,
+          "screenshot_sha256": "673d5b06b70acccf9fb09301aa28f3e4bc45160a1b60e2bd0f91095c2b85595d",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0032.png",
+          "record": "runs/T49/session-r0002/step-0032.json",
+          "step": 32,
+          "screenshot_sha256": "8e98f087bdb623bd62a21be5770b9547412bf3ee495771c8eb61742b57d99c1a",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0036.png",
+          "record": "runs/T49/session-r0002/step-0036.json",
+          "step": 36,
+          "screenshot_sha256": "30bb31b0f9f014d1db7c48f4860acbb69361e9f2a81222f8e625a6ef93ed0e69",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0037.png",
+          "record": "runs/T49/session-r0002/step-0037.json",
+          "step": 37,
+          "screenshot_sha256": "62faf037a3a98da70edfbb659dc17d0b8b665f266676493bf1e72834d234a3fb",
+          "session": "runs/T49/session-r0002"
+        }
+      ],
+      "families": [
+        "D12",
+        "D01"
+      ],
+      "variants": [
+        "cup-pairings",
+        "weekly-fixtures"
+      ],
+      "boundary_note": "Cup pairings and browsed weekly fixtures are not played outcomes or chosen-viewer Enter-watch evidence."
+    },
+    {
+      "id": "W035",
+      "title": "Team fixture list",
+      "chapter": "docs/manual/quick-results.md",
+      "chapter_sha256": "8ad36e9e5b7dc72387d293513c3ea1633ed33ab1f97d1162af292525599f8f36",
+      "evidence": [
+        {
+          "screenshot": "runs/T49/session-r0002/step-0041.png",
+          "record": "runs/T49/session-r0002/step-0041.json",
+          "step": 41,
+          "screenshot_sha256": "07a1c775d15861b98f528eb6bc53165f38c74aa004271ca802d6cf79a033c384",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0042.png",
+          "record": "runs/T49/session-r0002/step-0042.json",
+          "step": 42,
+          "screenshot_sha256": "bedd1b02ed8ab60e67b69fbbccc3f7f9ddf19bcd4bdb0a7109eeb601e3422402",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0044.png",
+          "record": "runs/T49/session-r0002/step-0044.json",
+          "step": 44,
+          "screenshot_sha256": "a308f1757353cfb5c60d0f58ed585bb9ae82b81d5a140949a6b71f27bf98c040",
+          "session": "runs/T49/session-r0002"
+        },
+        {
+          "screenshot": "runs/T49/session-r0002/step-0045.png",
+          "record": "runs/T49/session-r0002/step-0045.json",
+          "step": 45,
+          "screenshot_sha256": "7f7ccaa3592acdc720618e99cbaf6110560a9760375ddb00822be605ecd7fca0",
+          "session": "runs/T49/session-r0002"
+        }
+      ],
+      "families": [
+        "D12",
+        "D01"
+      ],
+      "variants": [
+        "team-schedule",
+        "division-page"
+      ],
+      "boundary_note": "Keep team/division/page context and original fixture columns; Enter-watch/printing hints remain G10/G14."
+    },
+    {
+      "id": "W036",
+      "title": "Browse the market and cancel a bid",
+      "chapter": "docs/manual/transfers.md",
+      "chapter_sha256": "8273a51f0bc0b9fb4a7d017e533eea3c99192d7b7e33f48dcf0ebcbf667a8dac",
+      "evidence": [
+        {
+          "screenshot": "runs/T50/session-r0001/step-0005.png",
+          "record": "runs/T50/session-r0001/step-0005.json",
+          "step": 5,
+          "screenshot_sha256": "1ee9f6337982c7dfb56562562758e14aa4e67acb5cb84c4fd74734ac32f2dc4a",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0006.png",
+          "record": "runs/T50/session-r0001/step-0006.json",
+          "step": 6,
+          "screenshot_sha256": "2cc258ddc7cda0b9eab160e1904dede3a1f32226919e19a628d957735427cec0",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0007.png",
+          "record": "runs/T50/session-r0001/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "1c5863a45ad73c69929bdc9d50f30ad0f0e5eaa56689dac59e4fec7e85169ec9",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0009.png",
+          "record": "runs/T50/session-r0001/step-0009.json",
+          "step": 9,
+          "screenshot_sha256": "a1dbf6d543a069a7d2b6f6bb07494d8af312a48c75a8cae0bd6ba57eed33bdc8",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0010.png",
+          "record": "runs/T50/session-r0001/step-0010.json",
+          "step": 10,
+          "screenshot_sha256": "2cc258ddc7cda0b9eab160e1904dede3a1f32226919e19a628d957735427cec0",
+          "session": "runs/T50/session-r0001"
+        }
+      ],
+      "families": [
+        "D13",
+        "D01"
+      ],
+      "variants": [
+        "domestic-market",
+        "foreign-market",
+        "bid",
+        "cancel"
+      ],
+      "boundary_note": "Bid Escape and refused bid preserve distinct market/editor states; no fee threshold inferred."
+    },
+    {
+      "id": "W037",
+      "title": "Refused fee, accepted purchase contract and resulting squad",
+      "chapter": "docs/manual/transfers.md",
+      "chapter_sha256": "8273a51f0bc0b9fb4a7d017e533eea3c99192d7b7e33f48dcf0ebcbf667a8dac",
+      "evidence": [
+        {
+          "screenshot": "runs/T50/session-r0001/step-0012.png",
+          "record": "runs/T50/session-r0001/step-0012.json",
+          "step": 12,
+          "screenshot_sha256": "660078c4004deb9dc55c90413b863efc82f49e5fd1fcfcf2c00def2e857860eb",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0013.png",
+          "record": "runs/T50/session-r0001/step-0013.json",
+          "step": 13,
+          "screenshot_sha256": "3b852fb098fc7658c64d56dcae0cb8d6320273feaf05b01d549b1d905aff4d55",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0015.png",
+          "record": "runs/T50/session-r0001/step-0015.json",
+          "step": 15,
+          "screenshot_sha256": "d44cee8cdb66cfbb88a20227beabacbd22f22eda15dc0d52c983637643ae6c28",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0016.png",
+          "record": "runs/T50/session-r0001/step-0016.json",
+          "step": 16,
+          "screenshot_sha256": "beb3044a8f2133fb769ef9661e378d9fbd4aba8c5f72b1f03055572bc8cd2762",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0019.png",
+          "record": "runs/T50/session-r0001/step-0019.json",
+          "step": 19,
+          "screenshot_sha256": "7b286fd2af748168bd692db48420108d3887a58bf2b60de17c52b19d14a49f18",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0020.png",
+          "record": "runs/T50/session-r0001/step-0020.json",
+          "step": 20,
+          "screenshot_sha256": "e7b3a9b669443b95a1b3e827c0207b3b6387375a4fc5d4ba2e154f263e4cccd3",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0021.png",
+          "record": "runs/T50/session-r0001/step-0021.json",
+          "step": 21,
+          "screenshot_sha256": "c4c2951b12b9679dfdeffd763d7654abb3f430a3d61b186e2614ab0187da678a",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0026.png",
+          "record": "runs/T50/session-r0001/step-0026.json",
+          "step": 26,
+          "screenshot_sha256": "e049a26502926617b258c2f550391c310eebb1607eda3a89dd78a5ad43b77911",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0031.png",
+          "record": "runs/T50/session-r0001/step-0031.json",
+          "step": 31,
+          "screenshot_sha256": "cadf987eb69e4357c1b7ecee4fab48723c9c87341bd3ede6b2712a2d09645de3",
+          "session": "runs/T50/session-r0001"
+        }
+      ],
+      "families": [
+        "D13",
+        "D14",
+        "D02",
+        "D01"
+      ],
+      "variants": [
+        "bid-refused",
+        "fee-accepted",
+        "contract",
+        "accepted-purchase"
+      ],
+      "boundary_note": "Fee acceptance precedes contract acceptance and squad change; rejected offer remains its own state."
+    },
+    {
+      "id": "W038",
+      "title": "Sell confirmation, transfer listing and removal",
+      "chapter": "docs/manual/transfers.md",
+      "chapter_sha256": "8273a51f0bc0b9fb4a7d017e533eea3c99192d7b7e33f48dcf0ebcbf667a8dac",
+      "evidence": [
+        {
+          "screenshot": "runs/T50/session-r0001/step-0035.png",
+          "record": "runs/T50/session-r0001/step-0035.json",
+          "step": 35,
+          "screenshot_sha256": "75d969c9e33b3adcbca3fe0fcfcd1b62d10ff448f2b6b7c36527a2a7beb05efd",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0036.png",
+          "record": "runs/T50/session-r0001/step-0036.json",
+          "step": 36,
+          "screenshot_sha256": "2f66da425ecd9a88db880c4f6e3bb6d5c73217c13414cbe71218cdcd6bd23a09",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0038.png",
+          "record": "runs/T50/session-r0001/step-0038.json",
+          "step": 38,
+          "screenshot_sha256": "9557b854ae95cf727cbb22ee7fb03413867d4432b113af69efc1517748bc1558",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0041.png",
+          "record": "runs/T50/session-r0001/step-0041.json",
+          "step": 41,
+          "screenshot_sha256": "b3ef477570f5be074258d2f8569457e47026db74c016a700f5d8d8c2f042d14f",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0042.png",
+          "record": "runs/T50/session-r0001/step-0042.json",
+          "step": 42,
+          "screenshot_sha256": "b9553802e8c6d043a3e5738ecc088a884672dc642fbc7da61a9cef986743e86d",
+          "session": "runs/T50/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D13"
+      ],
+      "variants": [
+        "sell-no",
+        "sell-yes",
+        "listed",
+        "unlist"
+      ],
+      "boundary_note": "Y lists for sale; listing is not completed sale; N cancels; unlisting is a separate action."
+    },
+    {
+      "id": "W039",
+      "title": "Scout criteria, search results and cancellation",
+      "chapter": "docs/manual/transfers.md",
+      "chapter_sha256": "8273a51f0bc0b9fb4a7d017e533eea3c99192d7b7e33f48dcf0ebcbf667a8dac",
+      "evidence": [
+        {
+          "screenshot": "runs/T50/session-r0001/step-0048.png",
+          "record": "runs/T50/session-r0001/step-0048.json",
+          "step": 48,
+          "screenshot_sha256": "ea7395eba5e51a3b7f638622acf76b826ba22a946e80be183d4957576116476c",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0052.png",
+          "record": "runs/T50/session-r0001/step-0052.json",
+          "step": 52,
+          "screenshot_sha256": "6d9cea6ea1c5e31a331a5c2ee8b4416809b5448e3d4563820ec3ae7c0cbe4421",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0053.png",
+          "record": "runs/T50/session-r0001/step-0053.json",
+          "step": 53,
+          "screenshot_sha256": "ab314a58e51699a6872e63f457563c9fb9a2810560c66417e523df3907d3eaeb",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0054.png",
+          "record": "runs/T50/session-r0001/step-0054.json",
+          "step": 54,
+          "screenshot_sha256": "42e4972810b6102523d3d348fc28775691fac2bc81505a9884da4be640828dd3",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0058.png",
+          "record": "runs/T50/session-r0001/step-0058.json",
+          "step": 58,
+          "screenshot_sha256": "9dd4d2872433f942054fe1568c03429bedbdbe5c199a9185c24e8d7e0d73a4b2",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0062.png",
+          "record": "runs/T50/session-r0001/step-0062.json",
+          "step": 62,
+          "screenshot_sha256": "6d9cea6ea1c5e31a331a5c2ee8b4416809b5448e3d4563820ec3ae7c0cbe4421",
+          "session": "runs/T50/session-r0001"
+        },
+        {
+          "screenshot": "runs/T50/session-r0001/step-0065.png",
+          "record": "runs/T50/session-r0001/step-0065.json",
+          "step": 65,
+          "screenshot_sha256": "f4f8a717b391cb5d4754b18943d318c8bd60ff22c1d3b9115b03be69eff12e9f",
+          "session": "runs/T50/session-r0001"
+        }
+      ],
+      "families": [
+        "D15",
+        "D01"
+      ],
+      "variants": [
+        "criteria",
+        "cancel",
+        "criteria-restored",
+        "results"
+      ],
+      "boundary_note": "Criteria Escape cancels to main while selections remain; results do not buy a player."
+    },
+    {
+      "id": "W040",
+      "title": "Existing-player renewal, editing and cancellation",
+      "chapter": "docs/manual/contracts.md",
+      "chapter_sha256": "9b977d415ad37f7e1a046e3858812848f33d13e693efa23846d0584982d799f7",
+      "evidence": [
+        {
+          "screenshot": "runs/T51/session-r0001/step-0010.png",
+          "record": "runs/T51/session-r0001/step-0010.json",
+          "step": 10,
+          "screenshot_sha256": "7d43bd359aaaab380f02ecaff56d15e02e631439ab1cc59400934608cb5404bc",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0011.png",
+          "record": "runs/T51/session-r0001/step-0011.json",
+          "step": 11,
+          "screenshot_sha256": "93b167316ad4680bdafc29fdb683035baffd6aa57ebb51a98704c12602ae9fa2",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0013.png",
+          "record": "runs/T51/session-r0001/step-0013.json",
+          "step": 13,
+          "screenshot_sha256": "e6f1018d8a9f62b608c6b0d6fb083fc07d677ceb59c3a716b1a172fc78cd0b93",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0015.png",
+          "record": "runs/T51/session-r0001/step-0015.json",
+          "step": 15,
+          "screenshot_sha256": "04b8f693d6fd95232a85792195995771a4f17b50c814d1cec1ad0830ed6e1a95",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0022.png",
+          "record": "runs/T51/session-r0001/step-0022.json",
+          "step": 22,
+          "screenshot_sha256": "121202a567639ed2370903b0fb59b21936bbe158fd562ac945ca98373634be13",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0025.png",
+          "record": "runs/T51/session-r0001/step-0025.json",
+          "step": 25,
+          "screenshot_sha256": "232f9215fc8e041d8befdccb0dc890ce80a0ffd4fbe291a3859e2f8771da84aa",
+          "session": "runs/T51/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D14"
+      ],
+      "variants": [
+        "contract-edit",
+        "cancel",
+        "reopened-defaults"
+      ],
+      "boundary_note": "Enter advances contract categories before OFFER CONTRACT submission; editing/cancelling is not acceptance."
+    },
+    {
+      "id": "W041",
+      "title": "Fire confirmation, compensation and cancellation",
+      "chapter": "docs/manual/contracts.md",
+      "chapter_sha256": "9b977d415ad37f7e1a046e3858812848f33d13e693efa23846d0584982d799f7",
+      "evidence": [
+        {
+          "screenshot": "runs/T51/session-r0001/step-0029.png",
+          "record": "runs/T51/session-r0001/step-0029.json",
+          "step": 29,
+          "screenshot_sha256": "fb7059f9da60b31b4f6ba2473208d172727ac23f2eb3fdffd5f210403926b5dc",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0030.png",
+          "record": "runs/T51/session-r0001/step-0030.json",
+          "step": 30,
+          "screenshot_sha256": "58b3f0ae92392db21d2733121ca16a80bfae40a6af004a3165eb989bc77657d1",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0036.png",
+          "record": "runs/T51/session-r0001/step-0036.json",
+          "step": 36,
+          "screenshot_sha256": "b7940e62e93e9fde40b462179dea7c40ab4f8d88f824265886bcd0b01b001e03",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0037.png",
+          "record": "runs/T51/session-r0001/step-0037.json",
+          "step": 37,
+          "screenshot_sha256": "58b3f0ae92392db21d2733121ca16a80bfae40a6af004a3165eb989bc77657d1",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0041.png",
+          "record": "runs/T51/session-r0001/step-0041.json",
+          "step": 41,
+          "screenshot_sha256": "5818fd973fcbce008b39b1447d382d2616601068de9a93e2854bb963daab5de6",
+          "session": "runs/T51/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D14"
+      ],
+      "variants": [
+        "dismiss-question",
+        "compensation-question",
+        "cancel",
+        "confirmed-dismissal"
+      ],
+      "boundary_note": "First dismissal question and compensation confirmation are separate; N is not proof of a Y dismissal."
+    },
+    {
+      "id": "W042",
+      "title": "Hire a youth player on trial",
+      "chapter": "docs/manual/contracts.md",
+      "chapter_sha256": "9b977d415ad37f7e1a046e3858812848f33d13e693efa23846d0584982d799f7",
+      "evidence": [
+        {
+          "screenshot": "runs/T51/session-r0001/step-0042.png",
+          "record": "runs/T51/session-r0001/step-0042.json",
+          "step": 42,
+          "screenshot_sha256": "37e4df2b5809728943a4a7d949c3dc36d61920f73ea6d296b20b36fd9e2846be",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0045.png",
+          "record": "runs/T51/session-r0001/step-0045.json",
+          "step": 45,
+          "screenshot_sha256": "9c02527fe82cd284550fe147cbe31c5a947d5df29510611eaec83971630f6dce",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0047.png",
+          "record": "runs/T51/session-r0001/step-0047.json",
+          "step": 47,
+          "screenshot_sha256": "50a0d8a09216b4d53b4d2ce3a86e650e7387df6a79163f8303565a7b8c8d29d2",
+          "session": "runs/T51/session-r0001"
+        },
+        {
+          "screenshot": "runs/T51/session-r0001/step-0049.png",
+          "record": "runs/T51/session-r0001/step-0049.json",
+          "step": 49,
+          "screenshot_sha256": "40cc3461e4b9f43db961a8548481441bda7815dbb67d17009f6fde6ffd5ae403",
+          "session": "runs/T51/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D14"
+      ],
+      "variants": [
+        "youth-position",
+        "position-cancel",
+        "new-trial",
+        "trial-period"
+      ],
+      "boundary_note": "Youth position and trial period are separate; on-trial creation does not prove trial conversion/expiry."
+    },
+    {
+      "id": "W043",
+      "title": "Statistics availability",
+      "chapter": "docs/manual/history.md",
+      "chapter_sha256": "b6a657c5a2b9c8f99702e8215d821208340fbb0e664c4f153fb9e74d5232e750",
+      "evidence": [
+        {
+          "screenshot": "runs/T53/session-r0001/step-0013.png",
+          "record": "runs/T53/session-r0001/step-0013.json",
+          "step": 13,
+          "screenshot_sha256": "fb297c2ae39facf39afd3fc775fab83bc75282b7c3d55618e9b30141867fccd2",
+          "session": "runs/T53/session-r0001"
+        }
+      ],
+      "families": [
+        "D18",
+        "D01"
+      ],
+      "variants": [
+        "league-four-prerequisite-message"
+      ],
+      "boundary_note": "Unavailable-before-league-four message, not a populated statistics view."
+    },
+    {
+      "id": "W044",
+      "title": "Player transfer history and team history",
+      "chapter": "docs/manual/history.md",
+      "chapter_sha256": "b6a657c5a2b9c8f99702e8215d821208340fbb0e664c4f153fb9e74d5232e750",
+      "evidence": [
+        {
+          "screenshot": "runs/T53/session-r0001/step-0016.png",
+          "record": "runs/T53/session-r0001/step-0016.json",
+          "step": 16,
+          "screenshot_sha256": "a1c2e79048d02c082b4afb62481246517cf95b8e3adbd6849ca790d19b5cf623",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0018.png",
+          "record": "runs/T53/session-r0001/step-0018.json",
+          "step": 18,
+          "screenshot_sha256": "f1c743c0624f6ad2a56a95e78886e567febe78b1e415b91d5c558b194db65b45",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0019.png",
+          "record": "runs/T53/session-r0001/step-0019.json",
+          "step": 19,
+          "screenshot_sha256": "c3ab8f27a53d939f32d96bc8f4dce198a09ca575c0984cc107e1a0ae7fb0ca1f",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0020.png",
+          "record": "runs/T53/session-r0001/step-0020.json",
+          "step": 20,
+          "screenshot_sha256": "5cf277e3c20ca0e41c55fcd6b64f84a74329bd30725a51f776c0f1e80485486d",
+          "session": "runs/T53/session-r0001"
+        }
+      ],
+      "families": [
+        "D18",
+        "D01"
+      ],
+      "variants": [
+        "empty-transfer-history",
+        "team-history"
+      ],
+      "boundary_note": "Transfer history and team history are linked views; empty rows are not absent support."
+    },
+    {
+      "id": "W045",
+      "title": "Seasonal history availability",
+      "chapter": "docs/manual/history.md",
+      "chapter_sha256": "b6a657c5a2b9c8f99702e8215d821208340fbb0e664c4f153fb9e74d5232e750",
+      "evidence": [
+        {
+          "screenshot": "runs/T53/session-r0001/step-0023.png",
+          "record": "runs/T53/session-r0001/step-0023.json",
+          "step": 23,
+          "screenshot_sha256": "483a59b565591610cfd32727bb55b5ddc8f93019d6475f2e0e1f79f9fdb20f23",
+          "session": "runs/T53/session-r0001"
+        }
+      ],
+      "families": [
+        "D18",
+        "D01"
+      ],
+      "variants": [
+        "no-season-history-message"
+      ],
+      "boundary_note": "No completed season produces an unavailable notice; populated summary is W082."
+    },
+    {
+      "id": "W046",
+      "title": "Other-team information and squad details",
+      "chapter": "docs/manual/history.md",
+      "chapter_sha256": "b6a657c5a2b9c8f99702e8215d821208340fbb0e664c4f153fb9e74d5232e750",
+      "evidence": [
+        {
+          "screenshot": "runs/T53/session-r0001/step-0026.png",
+          "record": "runs/T53/session-r0001/step-0026.json",
+          "step": 26,
+          "screenshot_sha256": "5993e2b4e9f79f313de30a28cf1caab5353ce926a33b61bad90abd73572d4f38",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0027.png",
+          "record": "runs/T53/session-r0001/step-0027.json",
+          "step": 27,
+          "screenshot_sha256": "b3111fa88fa00307b69eb71f09e8ba649ed42437cd46175657f6fc68a1366ac5",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0028.png",
+          "record": "runs/T53/session-r0001/step-0028.json",
+          "step": 28,
+          "screenshot_sha256": "538853b71bb6a9b67fe8324fe61b9ebd5d546bba7546ed037bea0def8681a8f9",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0029.png",
+          "record": "runs/T53/session-r0001/step-0029.json",
+          "step": 29,
+          "screenshot_sha256": "61dde01b7b06dab7efc17fbef749a42fb9e364941e63074395103ef194520bee",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0030.png",
+          "record": "runs/T53/session-r0001/step-0030.json",
+          "step": 30,
+          "screenshot_sha256": "661c31bfd95e54567cc4fc6da10c1dc7e80f326d4e7537512763d6aff79e735b",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0031.png",
+          "record": "runs/T53/session-r0001/step-0031.json",
+          "step": 31,
+          "screenshot_sha256": "4deb54154b83c7b8cb9ec35be18615ca3740f59360db9993b0e55f0835e73b2a",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0032.png",
+          "record": "runs/T53/session-r0001/step-0032.json",
+          "step": 32,
+          "screenshot_sha256": "2208d66604215210deea3d5283efe7ecb519d2b2a9d53d7a2562f8d93d3cc4bc",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0033.png",
+          "record": "runs/T53/session-r0001/step-0033.json",
+          "step": 33,
+          "screenshot_sha256": "98cbdb3f8815b22d1778defe4756190ba45aa49a3e408210c16efedb6ff0bef2",
+          "session": "runs/T53/session-r0001"
+        },
+        {
+          "screenshot": "runs/T53/session-r0001/step-0035.png",
+          "record": "runs/T53/session-r0001/step-0035.json",
+          "step": 35,
+          "screenshot_sha256": "9802f47fb5cf6f53009dda21340208ecfa03f0a4032d949409a214790d3d6b02",
+          "session": "runs/T53/session-r0001"
+        }
+      ],
+      "families": [
+        "D09",
+        "D02",
+        "D01"
+      ],
+      "variants": [
+        "other-club",
+        "other-division",
+        "club-info",
+        "staff-info",
+        "squad"
+      ],
+      "boundary_note": "Browse another club without changing the active managed club or losing return context."
+    },
+    {
+      "id": "W047",
+      "title": "Read cash flow and club/staff information",
+      "chapter": "docs/manual/administration.md",
+      "chapter_sha256": "963b1db984777f95ff200aaf35f7b8236fca290b9125b2f02747f12d6368fa52",
+      "evidence": [
+        {
+          "screenshot": "runs/T52/session-r0001/step-0006.png",
+          "record": "runs/T52/session-r0001/step-0006.json",
+          "step": 6,
+          "screenshot_sha256": "00e9651868db7e5a9c6f10a3e6cfa60bc572c444bc8d4ee07ba4e52b19f32188",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0002.png",
+          "record": "runs/T52/session-r0001/step-0002.json",
+          "step": 2,
+          "screenshot_sha256": "33f0690b73d4807cb47e1d04a1f5177a2f7b2e1ca9f1b7f974944ce0b43ba690",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0003.png",
+          "record": "runs/T52/session-r0001/step-0003.json",
+          "step": 3,
+          "screenshot_sha256": "c8088f5fd990b4f200f77bee1e4d31966ad5c8c3ca39d5128cf0362aa70d62d5",
+          "session": "runs/T52/session-r0001"
+        }
+      ],
+      "families": [
+        "D17",
+        "D01"
+      ],
+      "variants": [
+        "zero-accounts",
+        "club-info",
+        "staff-info"
+      ],
+      "boundary_note": "Any-key returns from accounts; Insert changes main information only after leaving accounts."
+    },
+    {
+      "id": "W048",
+      "title": "Stadium quote, abort and scheduled improvements",
+      "chapter": "docs/manual/administration.md",
+      "chapter_sha256": "963b1db984777f95ff200aaf35f7b8236fca290b9125b2f02747f12d6368fa52",
+      "evidence": [
+        {
+          "screenshot": "runs/T52/session-r0001/step-0007.png",
+          "record": "runs/T52/session-r0001/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "5aa1b27d36b63447eb31ad7e9369cde5f0cb2b321009c5364bcc4a4a667cd3ae",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0008.png",
+          "record": "runs/T52/session-r0001/step-0008.json",
+          "step": 8,
+          "screenshot_sha256": "a8012f33a74faae045fe660c0cfc916c992eedb955ab68d3b1be5e96a93ab156",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0010.png",
+          "record": "runs/T52/session-r0001/step-0010.json",
+          "step": 10,
+          "screenshot_sha256": "bc39c37ee6970dc4e5b7f2389ddbd4170758054891a24c57cab667fdd94e571c",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0002/step-0005.png",
+          "record": "runs/T52/session-r0002/step-0005.json",
+          "step": 5,
+          "screenshot_sha256": "14e915a6e4e8b192b826e6fce4a6bffcd216751abd74500fa193e1769e075c27",
+          "session": "runs/T52/session-r0002"
+        },
+        {
+          "screenshot": "runs/T52/session-r0002/step-0007.png",
+          "record": "runs/T52/session-r0002/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "de28d6472a160b5b93c58b2cf8e5ea606e642b83343205acf585809e5c745f4d",
+          "session": "runs/T52/session-r0002"
+        }
+      ],
+      "families": [
+        "D17",
+        "D16",
+        "D01"
+      ],
+      "variants": [
+        "stadium-quote",
+        "quote-abort",
+        "order-confirm",
+        "scheduled-improvement"
+      ],
+      "boundary_note": "Stadium quote Escape returns directly to main; ordered expansion is not completed capacity."
+    },
+    {
+      "id": "W049",
+      "title": "Staff browser, refusals and a successful hire",
+      "chapter": "docs/manual/administration.md",
+      "chapter_sha256": "963b1db984777f95ff200aaf35f7b8236fca290b9125b2f02747f12d6368fa52",
+      "evidence": [
+        {
+          "screenshot": "runs/T52/session-r0001/step-0021.png",
+          "record": "runs/T52/session-r0001/step-0021.json",
+          "step": 21,
+          "screenshot_sha256": "fa787085cb36bccd3a9b12b369d63af3815f63c1023477df550ed61f75fc0f76",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0024.png",
+          "record": "runs/T52/session-r0001/step-0024.json",
+          "step": 24,
+          "screenshot_sha256": "00b32d7f73b02a388d9b398f59a41ae83c0005aafc68aa232af1a0645e009353",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0026.png",
+          "record": "runs/T52/session-r0001/step-0026.json",
+          "step": 26,
+          "screenshot_sha256": "4be0c13bc8a56423d3e77d9c6582ed8a68bc56dece0e949329cbb87a8ca7c56d",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0028.png",
+          "record": "runs/T52/session-r0001/step-0028.json",
+          "step": 28,
+          "screenshot_sha256": "065afd1ee5020222e1e4ce920acf19aa1d38f2043bf9ba913958ccd7e86838b9",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0037.png",
+          "record": "runs/T52/session-r0001/step-0037.json",
+          "step": 37,
+          "screenshot_sha256": "bc9599535a4f8b258831aec497d7b9f5f78b2cd1358536ddc260367dc225d7ee",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0038.png",
+          "record": "runs/T52/session-r0001/step-0038.json",
+          "step": 38,
+          "screenshot_sha256": "f35119350a5947d0f9a106d2247a0be9de39d8413f976e44e18ff956f251844b",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0040.png",
+          "record": "runs/T52/session-r0001/step-0040.json",
+          "step": 40,
+          "screenshot_sha256": "c9510b585765c85aa6ab0ad97de080d37de2e32dd87cb54ecee274fe945f6caf",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0041.png",
+          "record": "runs/T52/session-r0001/step-0041.json",
+          "step": 41,
+          "screenshot_sha256": "4aa2418374e5f0451adc9608706ce2fbcbe64898a0b13e46eee788b07372544b",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0046.png",
+          "record": "runs/T52/session-r0001/step-0046.json",
+          "step": 46,
+          "screenshot_sha256": "754858be3391f7e70b6cb70e81e221bd48693e553581f4611b55b7bb23f0dc7b",
+          "session": "runs/T52/session-r0001"
+        }
+      ],
+      "families": [
+        "D16",
+        "D01"
+      ],
+      "variants": [
+        "staff-categories",
+        "refusal",
+        "hire-no",
+        "hire-yes",
+        "sack-no"
+      ],
+      "boundary_note": "Staff category Insert/Delete directions and hire/sack N/Y prompts remain distinct; staff sack Y is unvisited."
+    },
+    {
+      "id": "W050",
+      "title": "Weekly account posting after the hire",
+      "chapter": "docs/manual/administration.md",
+      "chapter_sha256": "963b1db984777f95ff200aaf35f7b8236fca290b9125b2f02747f12d6368fa52",
+      "evidence": [
+        {
+          "screenshot": "runs/T52/session-r0001/step-0066.png",
+          "record": "runs/T52/session-r0001/step-0066.json",
+          "step": 66,
+          "screenshot_sha256": "1abc982fafec0380aa562bd0404891511e2e665e1f40564370fc32d03a530213",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0068.png",
+          "record": "runs/T52/session-r0001/step-0068.json",
+          "step": 68,
+          "screenshot_sha256": "0f8f0ec25ba582bbe767c03ca04235b6f5302d7c0711364544fe537bee1bb75c",
+          "session": "runs/T52/session-r0001"
+        },
+        {
+          "screenshot": "runs/T52/session-r0001/step-0069.png",
+          "record": "runs/T52/session-r0001/step-0069.json",
+          "step": 69,
+          "screenshot_sha256": "7d8737dd9ec2fde1e6dd391f8e85418e808e2a2a41936bb406d6f617b7a53492",
+          "session": "runs/T52/session-r0001"
+        }
+      ],
+      "families": [
+        "D07",
+        "D08",
+        "D03",
+        "D17",
+        "D19",
+        "D01"
+      ],
+      "variants": [
+        "quick-fixture",
+        "posted-accounts",
+        "transfer-news"
+      ],
+      "boundary_note": "Known first-week cash totals reconcile the hire bonus; no universal posting formula inferred."
+    },
+    {
+      "id": "W051",
+      "title": "Successive weeks and the first league match",
+      "chapter": "docs/manual/league-start.md",
+      "chapter_sha256": "21632805a32cd3af80431d7fce0d8b8aa0d9f69e55e5819834f87ffdcd23ebcd",
+      "evidence": [
+        {
+          "screenshot": "runs/T54/session-r0001/step-0036.png",
+          "record": "runs/T54/session-r0001/step-0036.json",
+          "step": 36,
+          "screenshot_sha256": "d7468c5680168bab7ea50738244d3f8b59564f0dc1a756e6dfa305bb909aef7e",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0041.png",
+          "record": "runs/T54/session-r0001/step-0041.json",
+          "step": 41,
+          "screenshot_sha256": "d597d4fa7f5d1e7a1b08dce8ccd63faf10fe4351db7b7bc442894a40de0ef1e5",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0042.png",
+          "record": "runs/T54/session-r0001/step-0042.json",
+          "step": 42,
+          "screenshot_sha256": "9d052832b7b8ffba4dad82c33ddc812642d7af19f7b54769f3baeec05700b08d",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0043.png",
+          "record": "runs/T54/session-r0001/step-0043.json",
+          "step": 43,
+          "screenshot_sha256": "c11fde011a1fb5e900be5a45b9922b63c8140244384afb2d69248446f6457033",
+          "session": "runs/T54/session-r0001"
+        }
+      ],
+      "families": [
+        "D01",
+        "D08",
+        "D03",
+        "D19",
+        "D17",
+        "D11"
+      ],
+      "variants": [
+        "successive-friendlies",
+        "league-one",
+        "results",
+        "table",
+        "next-main"
+      ],
+      "boundary_note": "Actual successive friendly/league flow changes next opponent; preserve observed two-points-for-win evidence and unknown tie-breaks."
+    },
+    {
+      "id": "W052",
+      "title": "Expiring contract interrupts weekly processing",
+      "chapter": "docs/manual/league-start.md",
+      "chapter_sha256": "21632805a32cd3af80431d7fce0d8b8aa0d9f69e55e5819834f87ffdcd23ebcd",
+      "evidence": [
+        {
+          "screenshot": "runs/T54/session-r0001/step-0045.png",
+          "record": "runs/T54/session-r0001/step-0045.json",
+          "step": 45,
+          "screenshot_sha256": "17e6cebf59433394ce059959756cac97131ad9bf48b3720158dd06c1b43612ea",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0052.png",
+          "record": "runs/T54/session-r0001/step-0052.json",
+          "step": 52,
+          "screenshot_sha256": "982ba31c489d2df480eb324adcbefeecfbf65260cd1b25cafa4a58ec590c519c",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0053.png",
+          "record": "runs/T54/session-r0001/step-0053.json",
+          "step": 53,
+          "screenshot_sha256": "303d115c362ae39f2ee003bbf0047b3d897052a2a02b97d58378f74c8fdf2e97",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0055.png",
+          "record": "runs/T54/session-r0001/step-0055.json",
+          "step": 55,
+          "screenshot_sha256": "17c8bf96b3bf70be301d836f6b04da8b5c9e6503feb12d24e3cfe3cde4c79dec",
+          "session": "runs/T54/session-r0001"
+        }
+      ],
+      "families": [
+        "D14",
+        "D19"
+      ],
+      "variants": [
+        "automatic-expiry",
+        "contract-editor",
+        "weekly-continuation"
+      ],
+      "boundary_note": "Automatic expired-player editor interrupts weekly processing; unrelated F7/Space are not successful save/exit."
+    },
+    {
+      "id": "W053",
+      "title": "Incoming offer and completed sale during the week",
+      "chapter": "docs/manual/league-start.md",
+      "chapter_sha256": "21632805a32cd3af80431d7fce0d8b8aa0d9f69e55e5819834f87ffdcd23ebcd",
+      "evidence": [
+        {
+          "screenshot": "runs/T54/session-r0001/step-0064.png",
+          "record": "runs/T54/session-r0001/step-0064.json",
+          "step": 64,
+          "screenshot_sha256": "ee9ea9982d03547c07fb7cbd9cf719fcca49e4b445f9d4e33f93f48b0f488da1",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0065.png",
+          "record": "runs/T54/session-r0001/step-0065.json",
+          "step": 65,
+          "screenshot_sha256": "bb29bd83528509b63545e95a02d1c62e1ba74e951b036a642b0774a6300c0b7a",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0091.png",
+          "record": "runs/T54/session-r0001/step-0091.json",
+          "step": 91,
+          "screenshot_sha256": "ff5cbbc97b9f663fc5c075f45ebfec9ba3d3c0068379c7878d361c5fbfc79ee4",
+          "session": "runs/T54/session-r0001"
+        }
+      ],
+      "families": [
+        "D13",
+        "D14",
+        "D19",
+        "D17"
+      ],
+      "variants": [
+        "incoming-offer",
+        "accepted-sale",
+        "squad-change",
+        "later-posting"
+      ],
+      "boundary_note": "Incoming offer acceptance, leaving squad and later sale posting are separate original states."
+    },
+    {
+      "id": "W054",
+      "title": "International duty, suspension and an incomplete lineup",
+      "chapter": "docs/manual/league-start.md",
+      "chapter_sha256": "21632805a32cd3af80431d7fce0d8b8aa0d9f69e55e5819834f87ffdcd23ebcd",
+      "evidence": [
+        {
+          "screenshot": "runs/T54/session-r0001/step-0068.png",
+          "record": "runs/T54/session-r0001/step-0068.json",
+          "step": 68,
+          "screenshot_sha256": "277e0da4f26e30aa896104dd1dc4a258cd7d68902e932acdc4a753f699437bff",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0071.png",
+          "record": "runs/T54/session-r0001/step-0071.json",
+          "step": 71,
+          "screenshot_sha256": "869fbec59c1d45a39dd0c3b212e19fb2a1a22930a243efc5ac064ae08f7f1fca",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0072.png",
+          "record": "runs/T54/session-r0001/step-0072.json",
+          "step": 72,
+          "screenshot_sha256": "ffa7de2b7744439d0fc702c1ff3f941681be61cda9211ad383617502ae33b184",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0081.png",
+          "record": "runs/T54/session-r0001/step-0081.json",
+          "step": 81,
+          "screenshot_sha256": "70528c41c126fb3aa08b4a8cb6750c640bdd20931aa7b3284ddc5072914f7bae",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0083.png",
+          "record": "runs/T54/session-r0001/step-0083.json",
+          "step": 83,
+          "screenshot_sha256": "b6569804e8ebdb57a3a9dd9859a24e78f094ec4c0c5605cb4066ec20976a5646",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0085.png",
+          "record": "runs/T54/session-r0001/step-0085.json",
+          "step": 85,
+          "screenshot_sha256": "9dba8fea46b92e84c4fec78b734afd9e8f23474c3cf44fa243bf89cf0a513f30",
+          "session": "runs/T54/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D08",
+        "D19"
+      ],
+      "variants": [
+        "international",
+        "suspension",
+        "incomplete-refusal",
+        "edited-XI"
+      ],
+      "boundary_note": "Availability flags and admission refusal must show actual reason; blank fixture/observer context is separate."
+    },
+    {
+      "id": "W055",
+      "title": "Cup injury interruption, replacement and next-round draw",
+      "chapter": "docs/manual/league-start.md",
+      "chapter_sha256": "21632805a32cd3af80431d7fce0d8b8aa0d9f69e55e5819834f87ffdcd23ebcd",
+      "evidence": [
+        {
+          "screenshot": "runs/T54/session-r0001/step-0095.png",
+          "record": "runs/T54/session-r0001/step-0095.json",
+          "step": 95,
+          "screenshot_sha256": "d86d6765139d563c459165376e58679cc6ceff7ecf7eaf86fd3e65d2dccdb5b1",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0100.png",
+          "record": "runs/T54/session-r0001/step-0100.json",
+          "step": 100,
+          "screenshot_sha256": "3bc4d823076a34c38e47dc611bed37f15a5358c317114f25f7453429b1bd5731",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0102.png",
+          "record": "runs/T54/session-r0001/step-0102.json",
+          "step": 102,
+          "screenshot_sha256": "e52e2d70be62f1b55e37b313bd446150c2f4a9972e9a1aa77bcb92ec0e254fb2",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0104.png",
+          "record": "runs/T54/session-r0001/step-0104.json",
+          "step": 104,
+          "screenshot_sha256": "0b85ff669137d44e35469b1baa658f9dac1e51e8a232ba2d245577da96e29209",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0105.png",
+          "record": "runs/T54/session-r0001/step-0105.json",
+          "step": 105,
+          "screenshot_sha256": "f29afd8f3afbff1db6c4abc1c304c474a69b5600964b6c587521314d05d9f9c1",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0107.png",
+          "record": "runs/T54/session-r0001/step-0107.json",
+          "step": 107,
+          "screenshot_sha256": "b30bc58820f61a6b73d8c0a0d5a10d17bb9ac332a80b2a1e1a8327b4fd3758e5",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0108.png",
+          "record": "runs/T54/session-r0001/step-0108.json",
+          "step": 108,
+          "screenshot_sha256": "ca51deec088b0821c9e1ed675450b9f310f3af51c5b375ac3a6cdea4db3c9929",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0109.png",
+          "record": "runs/T54/session-r0001/step-0109.json",
+          "step": 109,
+          "screenshot_sha256": "0d5d15c9e6404e7c3a9b562d17782c51df0e503e372add715da412fbdf854b9a",
+          "session": "runs/T54/session-r0001"
+        }
+      ],
+      "families": [
+        "D03",
+        "D02",
+        "D08",
+        "D12",
+        "D19"
+      ],
+      "variants": [
+        "cup-injury",
+        "replacement",
+        "result",
+        "next-draw"
+      ],
+      "boundary_note": "Injury opportunity and replacement precede cup continuation/draw; no invented substitution-budget rule."
+    },
+    {
+      "id": "W056",
+      "title": "Statistics after league fixture four",
+      "chapter": "docs/manual/league-start.md",
+      "chapter_sha256": "21632805a32cd3af80431d7fce0d8b8aa0d9f69e55e5819834f87ffdcd23ebcd",
+      "evidence": [
+        {
+          "screenshot": "runs/T54/session-r0001/step-0124.png",
+          "record": "runs/T54/session-r0001/step-0124.json",
+          "step": 124,
+          "screenshot_sha256": "97c88c9247b8d354c411c3f33e961d04882af15b8d07aa792209abde23eb40d8",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0125.png",
+          "record": "runs/T54/session-r0001/step-0125.json",
+          "step": 125,
+          "screenshot_sha256": "34319be0b8087a5a433201280a426506d420a53f5270c04b077c091cd37733a8",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0128.png",
+          "record": "runs/T54/session-r0001/step-0128.json",
+          "step": 128,
+          "screenshot_sha256": "97c88c9247b8d354c411c3f33e961d04882af15b8d07aa792209abde23eb40d8",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0118.png",
+          "record": "runs/T54/session-r0001/step-0118.json",
+          "step": 118,
+          "screenshot_sha256": "0ba19c4e73fcd8e05765ccde6767e2952a3c0abc588d48ddf7a3725213c3db86",
+          "session": "runs/T54/session-r0001"
+        }
+      ],
+      "families": [
+        "D18",
+        "D11",
+        "D01"
+      ],
+      "variants": [
+        "league-four-statistics",
+        "populated-categories"
+      ],
+      "boundary_note": "Populated statistics after league four is distinct from the earlier unavailable message; category/sort/print breadth remains G12/G14."
+    },
+    {
+      "id": "W057",
+      "title": "Save and reload the progressed week in a fresh process",
+      "chapter": "docs/manual/league-start.md",
+      "chapter_sha256": "21632805a32cd3af80431d7fce0d8b8aa0d9f69e55e5819834f87ffdcd23ebcd",
+      "evidence": [
+        {
+          "screenshot": "runs/T54/session-r0001/step-0130.png",
+          "record": "runs/T54/session-r0001/step-0130.json",
+          "step": 130,
+          "screenshot_sha256": "c40789816986c0b5bac9388aa014e94afb1f2cab9f31177ca60009bb47c43196",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0131.png",
+          "record": "runs/T54/session-r0001/step-0131.json",
+          "step": 131,
+          "screenshot_sha256": "0dfc06b1371ab334e85754f5cc48155bd789b0f3de5f98aca29c87c781de96a9",
+          "session": "runs/T54/session-r0001"
+        },
+        {
+          "screenshot": "runs/T54/session-r0001/step-0132.png",
+          "record": "runs/T54/session-r0001/step-0132.json",
+          "step": 132,
+          "screenshot_sha256": "2a5fb38658dbed64cd5327e51d2dab105fdb0cd5a2b1e4aa37823c8d93c9e2ad",
+          "session": "runs/T54/session-r0001"
+        }
+      ],
+      "families": [
+        "D06",
+        "D04",
+        "D01"
+      ],
+      "variants": [
+        "progressed-main",
+        "F7",
+        "fresh-process",
+        "matching-load"
+      ],
+      "boundary_note": "Fresh process reload reproduces actual progressed week; game-save copy is not emulator RAM restore."
+    },
+    {
+      "id": "W058",
+      "title": "Restore and inspect availability",
+      "chapter": "docs/manual/autumn.md",
+      "chapter_sha256": "bdbc3ede0590ffab9c0703fa90b72eded1c6bdf88832d7eb4b85e504601e011f",
+      "evidence": [
+        {
+          "screenshot": "runs/T56/session-r0001/step-0002.png",
+          "record": "runs/T56/session-r0001/step-0002.json",
+          "step": 2,
+          "screenshot_sha256": "2a5fb38658dbed64cd5327e51d2dab105fdb0cd5a2b1e4aa37823c8d93c9e2ad",
+          "session": "runs/T56/session-r0001"
+        }
+      ],
+      "families": [
+        "D04",
+        "D02",
+        "D01"
+      ],
+      "variants": [
+        "restored-save",
+        "availability-details"
+      ],
+      "boundary_note": "Restore the identified actual save and inspect current availability; flags are scenario observations, not invented eligibility formulas."
+    },
+    {
+      "id": "W059",
+      "title": "Complete a European two-leg tie",
+      "chapter": "docs/manual/autumn.md",
+      "chapter_sha256": "bdbc3ede0590ffab9c0703fa90b72eded1c6bdf88832d7eb4b85e504601e011f",
+      "evidence": [
+        {
+          "screenshot": "runs/T56/session-r0001/step-0019.png",
+          "record": "runs/T56/session-r0001/step-0019.json",
+          "step": 19,
+          "screenshot_sha256": "3552f19defc989d4fad7b33918514f9eb17901bb8a6d510c9bc12074a0451435",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0045.png",
+          "record": "runs/T56/session-r0001/step-0045.json",
+          "step": 45,
+          "screenshot_sha256": "d0353f5907b917b88e2dad8aa3e60bb0c9103380a52b7b823abe851ba133c1fe",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0060.png",
+          "record": "runs/T56/session-r0001/step-0060.json",
+          "step": 60,
+          "screenshot_sha256": "e1e453a63d1628e9b77393db41e48bbba4517ccdbb74d823640336c868ef28c8",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0061.png",
+          "record": "runs/T56/session-r0001/step-0061.json",
+          "step": 61,
+          "screenshot_sha256": "eef21e91faf64da7ddfdeea0bd7b3fa554e64e33e6597d3d55629258b6d438a2",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0064.png",
+          "record": "runs/T56/session-r0001/step-0064.json",
+          "step": 64,
+          "screenshot_sha256": "edc234148dfc4f9bfb016875fad171ef8298d3b3b03aa30946f5a47e21171558",
+          "session": "runs/T56/session-r0001"
+        }
+      ],
+      "families": [
+        "D12",
+        "D08",
+        "D03",
+        "D19",
+        "D01"
+      ],
+      "variants": [
+        "first-leg",
+        "second-leg",
+        "aggregate",
+        "observer-week"
+      ],
+      "boundary_note": "Two actual legs/aggregate display; no managed tied-aggregate/penalty rule established."
+    },
+    {
+      "id": "W060",
+      "title": "Injury replacement and recovery",
+      "chapter": "docs/manual/autumn.md",
+      "chapter_sha256": "bdbc3ede0590ffab9c0703fa90b72eded1c6bdf88832d7eb4b85e504601e011f",
+      "evidence": [
+        {
+          "screenshot": "runs/T56/session-r0001/step-0052.png",
+          "record": "runs/T56/session-r0001/step-0052.json",
+          "step": 52,
+          "screenshot_sha256": "f276126d5e6990f69d3bf28761aee078ee3776b63dad3cab8c7890bf473bd817",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0055.png",
+          "record": "runs/T56/session-r0001/step-0055.json",
+          "step": 55,
+          "screenshot_sha256": "bcb8352045662fba83def1cef6da10b156c55735e9f628e82150c096956e603c",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0058.png",
+          "record": "runs/T56/session-r0001/step-0058.json",
+          "step": 58,
+          "screenshot_sha256": "0898e82b0007e98787741961958c25f855f8b37cef2b88c75f8bb5931428420f",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0059.png",
+          "record": "runs/T56/session-r0001/step-0059.json",
+          "step": 59,
+          "screenshot_sha256": "19de9ece1c28f9036aca6b322a9c9f05c569d97d71a7f59e0d60de5db929aef8",
+          "session": "runs/T56/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D08",
+        "D19"
+      ],
+      "variants": [
+        "injury-opportunity",
+        "replacement",
+        "recovered-player"
+      ],
+      "boundary_note": "Preserve the named original page/context and its recorded keys, state effects and limits; do not infer unvisited variants."
+    },
+    {
+      "id": "W061",
+      "title": "Ineligible-player refusal and extra time",
+      "chapter": "docs/manual/autumn.md",
+      "chapter_sha256": "bdbc3ede0590ffab9c0703fa90b72eded1c6bdf88832d7eb4b85e504601e011f",
+      "evidence": [
+        {
+          "screenshot": "runs/T56/session-r0001/step-0093.png",
+          "record": "runs/T56/session-r0001/step-0093.json",
+          "step": 93,
+          "screenshot_sha256": "4c29ea9a33d9859561e41844fd99247c75d48b8fba0a433561ea74db0ed3be26",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0096.png",
+          "record": "runs/T56/session-r0001/step-0096.json",
+          "step": 96,
+          "screenshot_sha256": "09989a8df6a29d47c4ab431aa86a4b828cc9f490c7fc2d86bb62e2a49b498354",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0104.png",
+          "record": "runs/T56/session-r0001/step-0104.json",
+          "step": 104,
+          "screenshot_sha256": "20fbecf051eb2551f4e4f84fa44bb8f53da1d1e2dd3210a56afaf69d5da3e5ee",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0105.png",
+          "record": "runs/T56/session-r0001/step-0105.json",
+          "step": 105,
+          "screenshot_sha256": "40fe35aec79fbb72fbc82b5777a55872fc3751d82ca3bdc38fa6724bb450fff6",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0161.png",
+          "record": "runs/T56/session-r0001/step-0161.json",
+          "step": 161,
+          "screenshot_sha256": "28065d11b039100b5e374aea76ead2b2b5eff28a6cc6b548d11246f2d115ebe6",
+          "session": "runs/T56/session-r0001"
+        }
+      ],
+      "families": [
+        "D08",
+        "D02",
+        "D03",
+        "D12",
+        "D19"
+      ],
+      "variants": [
+        "ineligible-refusal",
+        "eligible-swap",
+        "extra-time"
+      ],
+      "boundary_note": "Ineligible-player refusal differs from insufficient players; extra time is conditional, not every draw."
+    },
+    {
+      "id": "W062",
+      "title": "Ten-week contract warnings",
+      "chapter": "docs/manual/autumn.md",
+      "chapter_sha256": "bdbc3ede0590ffab9c0703fa90b72eded1c6bdf88832d7eb4b85e504601e011f",
+      "evidence": [
+        {
+          "screenshot": "runs/T56/session-r0001/step-0118.png",
+          "record": "runs/T56/session-r0001/step-0118.json",
+          "step": 118,
+          "screenshot_sha256": "ca4fbf460619ede26c299288cbc8d076f2b5000d0433ad026bc1c6510602bda4",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0152.png",
+          "record": "runs/T56/session-r0001/step-0152.json",
+          "step": 152,
+          "screenshot_sha256": "ac24420630d480e84a85ec2c7ec346114add0f03c32b7d1a5ae7596beb0e7fd3",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0153.png",
+          "record": "runs/T56/session-r0001/step-0153.json",
+          "step": 153,
+          "screenshot_sha256": "121e099c2017772777cf5d58ed34dfefcfb05ee669a543c10b392b224a6c2695",
+          "session": "runs/T56/session-r0001"
+        }
+      ],
+      "families": [
+        "D14",
+        "D19"
+      ],
+      "variants": [
+        "ten-week-warning",
+        "renewal-no",
+        "renewal-yes",
+        "editor-cancel"
+      ],
+      "boundary_note": "Ten-week N continues news; Y opens renewal despite retiring flag; Escape is not retirement cancellation."
+    },
+    {
+      "id": "W063",
+      "title": "Managerial approach, deferred decision and refusal",
+      "chapter": "docs/manual/autumn.md",
+      "chapter_sha256": "bdbc3ede0590ffab9c0703fa90b72eded1c6bdf88832d7eb4b85e504601e011f",
+      "evidence": [
+        {
+          "screenshot": "runs/T56/session-r0001/step-0120.png",
+          "record": "runs/T56/session-r0001/step-0120.json",
+          "step": 120,
+          "screenshot_sha256": "15aad995c5d732ff691e8aa2717216457318f68044871b02e73a491217897555",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0142.png",
+          "record": "runs/T56/session-r0001/step-0142.json",
+          "step": 142,
+          "screenshot_sha256": "8e8d66a38f5381bed22684de30e3422b8d25282bee4125d58d1c98edee4cd2a7",
+          "session": "runs/T56/session-r0001"
+        }
+      ],
+      "families": [
+        "D19",
+        "D16",
+        "D01"
+      ],
+      "variants": [
+        "job-approach",
+        "Escape-defer",
+        "later-join-question",
+        "N-refusal"
+      ],
+      "boundary_note": "Approach Escape defers; later N explicitly refuses; preserve both contexts."
+    },
+    {
+      "id": "W064",
+      "title": "Scenario changes and league-ten checkpoint",
+      "chapter": "docs/manual/autumn.md",
+      "chapter_sha256": "bdbc3ede0590ffab9c0703fa90b72eded1c6bdf88832d7eb4b85e504601e011f",
+      "evidence": [
+        {
+          "screenshot": "runs/T56/session-r0001/step-0124.png",
+          "record": "runs/T56/session-r0001/step-0124.json",
+          "step": 124,
+          "screenshot_sha256": "ba9236327edfbd89af0db775ff6cb36fffb51544d6e3f586e953ada1f2197ddf",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0133.png",
+          "record": "runs/T56/session-r0001/step-0133.json",
+          "step": 133,
+          "screenshot_sha256": "ebdab1253f312b792f4f4d6591bfd5d40e97cf997e97e16cad3e814ab1f09223",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0171.png",
+          "record": "runs/T56/session-r0001/step-0171.json",
+          "step": 171,
+          "screenshot_sha256": "3b00cf2161b527a9d974d8e0ee7aa673c8cc1a5596f55c55bb0c299750d061b4",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0172.png",
+          "record": "runs/T56/session-r0001/step-0172.json",
+          "step": 172,
+          "screenshot_sha256": "57ee99b61e2e9dfb86042e3fc234b7e7b5d3c6badc2699fad2b731e80837f5b6",
+          "session": "runs/T56/session-r0001"
+        },
+        {
+          "screenshot": "runs/T56/session-r0001/step-0175.png",
+          "record": "runs/T56/session-r0001/step-0175.json",
+          "step": 175,
+          "screenshot_sha256": "dba74d89d157b653aff82fb48f0667a785ab505d150f58a9cb44f29066e5dc4f",
+          "session": "runs/T56/session-r0001"
+        }
+      ],
+      "families": [
+        "D01",
+        "D02",
+        "D10",
+        "D06",
+        "D19"
+      ],
+      "variants": [
+        "tactics-change",
+        "availability-swap",
+        "league-ten-save"
+      ],
+      "boundary_note": "Deliberate instruction/lineup scenario changes are not causal injury-probability findings."
+    },
+    {
+      "id": "W065",
+      "title": "Resume the saved season and progress through league sixteen",
+      "chapter": "docs/manual/midseason.md",
+      "chapter_sha256": "d7e38eb52e19d20b5f99a66bc031449d4256b03fa282f56fe9977d942c0fe550",
+      "evidence": [
+        {
+          "screenshot": "runs/T59/session-r0001/step-0002.png",
+          "record": "runs/T59/session-r0001/step-0002.json",
+          "step": 2,
+          "screenshot_sha256": "dba74d89d157b653aff82fb48f0667a785ab505d150f58a9cb44f29066e5dc4f",
+          "session": "runs/T59/session-r0001"
+        }
+      ],
+      "families": [
+        "D04",
+        "D01",
+        "D19"
+      ],
+      "variants": [
+        "league-ten-restore",
+        "league-sixteen-progression"
+      ],
+      "boundary_note": "Identified prior save is restored before real progression; not generated campaign state."
+    },
+    {
+      "id": "W066",
+      "title": "European elimination and the following group stage",
+      "chapter": "docs/manual/midseason.md",
+      "chapter_sha256": "d7e38eb52e19d20b5f99a66bc031449d4256b03fa282f56fe9977d942c0fe550",
+      "evidence": [
+        {
+          "screenshot": "runs/T59/session-r0001/step-0006.png",
+          "record": "runs/T59/session-r0001/step-0006.json",
+          "step": 6,
+          "screenshot_sha256": "81e10c305c950b330aa770a24ab880161537041434d0ed1bba49137fc5a32818",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0025.png",
+          "record": "runs/T59/session-r0001/step-0025.json",
+          "step": 25,
+          "screenshot_sha256": "becd7315e9a1d17c693c375c094422942fb829c8ce7b5acf581d0a7999cbe62a",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0092.png",
+          "record": "runs/T59/session-r0001/step-0092.json",
+          "step": 92,
+          "screenshot_sha256": "4dffb9c926e0cf24f336d2a79b0b7b75dfc7d8467b652ec5968e2cc85b39a0e4",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0093.png",
+          "record": "runs/T59/session-r0001/step-0093.json",
+          "step": 93,
+          "screenshot_sha256": "701fe93a44a8778b2aff7ddd5cb277523703a99d9842269492b4deb4b2f7fe34",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0094.png",
+          "record": "runs/T59/session-r0001/step-0094.json",
+          "step": 94,
+          "screenshot_sha256": "583b283f6eba48b69951d6b3e5b3d573b7b063a4fbeb95bb51749ebecf8167c2",
+          "session": "runs/T59/session-r0001"
+        }
+      ],
+      "families": [
+        "D12",
+        "D19",
+        "D01"
+      ],
+      "variants": [
+        "first-leg",
+        "return-leg",
+        "aggregate-defeat",
+        "group-results"
+      ],
+      "boundary_note": "Played aggregate elimination then observer group/results flow; displayed draw is not a managed fixture."
+    },
+    {
+      "id": "W067",
+      "title": "Injury replacement, recovery and international absence",
+      "chapter": "docs/manual/midseason.md",
+      "chapter_sha256": "d7e38eb52e19d20b5f99a66bc031449d4256b03fa282f56fe9977d942c0fe550",
+      "evidence": [
+        {
+          "screenshot": "runs/T59/session-r0001/step-0045.png",
+          "record": "runs/T59/session-r0001/step-0045.json",
+          "step": 45,
+          "screenshot_sha256": "a8082344bf2b4bc346e17dc3aebbd3d9201a66e1ca497be0d8e7cbd1be7414aa",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0050.png",
+          "record": "runs/T59/session-r0001/step-0050.json",
+          "step": 50,
+          "screenshot_sha256": "b3c2098e116895dbce4d772096da2a58f6d4457bbb4b8c455a6dd62aa3eb935d",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0052.png",
+          "record": "runs/T59/session-r0001/step-0052.json",
+          "step": 52,
+          "screenshot_sha256": "98e74c1147fae2635309848921726390bb94d7836d2eeeabe8dd5306c958aa36",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0061.png",
+          "record": "runs/T59/session-r0001/step-0061.json",
+          "step": 61,
+          "screenshot_sha256": "30160c07500eaa1742b1e8dc53bd872a1aa2dd0527213f9ebf3aee92698bf86c",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0065.png",
+          "record": "runs/T59/session-r0001/step-0065.json",
+          "step": 65,
+          "screenshot_sha256": "23c5a16a6a744841c1f6e72e9157b8cc1f58250f0afe99a83a54f5dacda8564a",
+          "session": "runs/T59/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D08",
+        "D19"
+      ],
+      "variants": [
+        "injured-player",
+        "replacement",
+        "international-absence",
+        "recovery"
+      ],
+      "boundary_note": "Actual highlighted player controls replacement; intent labels or navigation bursts do not prove selected identity."
+    },
+    {
+      "id": "W068",
+      "title": "Expiry cancellation leaves a listed squad member",
+      "chapter": "docs/manual/midseason.md",
+      "chapter_sha256": "d7e38eb52e19d20b5f99a66bc031449d4256b03fa282f56fe9977d942c0fe550",
+      "evidence": [
+        {
+          "screenshot": "runs/T59/session-r0001/step-0076.png",
+          "record": "runs/T59/session-r0001/step-0076.json",
+          "step": 76,
+          "screenshot_sha256": "bb047f7cfa127710b113972932318f75734669cefe2f1e65bc0a199f986cd086",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0081.png",
+          "record": "runs/T59/session-r0001/step-0081.json",
+          "step": 81,
+          "screenshot_sha256": "9f4d602168c5566c2abb08a734eebac58b75ef4cd92c55a5c6bd9a33e5deea58",
+          "session": "runs/T59/session-r0001"
+        }
+      ],
+      "families": [
+        "D14",
+        "D02",
+        "D19"
+      ],
+      "variants": [
+        "automatic-expiry",
+        "Escape-cancel",
+        "listed-member"
+      ],
+      "boundary_note": "Expiry Escape leaves listed squad member; it is not immediate dismissal."
+    },
+    {
+      "id": "W069",
+      "title": "Renew a player still marked as retiring",
+      "chapter": "docs/manual/midseason.md",
+      "chapter_sha256": "d7e38eb52e19d20b5f99a66bc031449d4256b03fa282f56fe9977d942c0fe550",
+      "evidence": [
+        {
+          "screenshot": "runs/T59/session-r0001/step-0098.png",
+          "record": "runs/T59/session-r0001/step-0098.json",
+          "step": 98,
+          "screenshot_sha256": "4587f3a8c7e3d57e016b73e17c435c6e13a658d5acf77a127389d663d6cfe4b6",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0101.png",
+          "record": "runs/T59/session-r0001/step-0101.json",
+          "step": 101,
+          "screenshot_sha256": "4b905002f16919089327c34a80c70273ec7874b5e1ef074d89d01ac162f277ae",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0111.png",
+          "record": "runs/T59/session-r0001/step-0111.json",
+          "step": 111,
+          "screenshot_sha256": "5bdcbf174bb4a2704400fcbd08c12189fa97dafa8aeb92b0013c61eb03cfdc92",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0114.png",
+          "record": "runs/T59/session-r0001/step-0114.json",
+          "step": 114,
+          "screenshot_sha256": "7694f8781071701c9e276414619bdeb063e74bef9481f26eee229fc0f567f756",
+          "session": "runs/T59/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D14"
+      ],
+      "variants": [
+        "retiring-player",
+        "offer-submit",
+        "accepted-contract",
+        "retiring-flag-retained"
+      ],
+      "boundary_note": "Contract acceptance and updated terms coexist with Retiring this year; do not erase that flag."
+    },
+    {
+      "id": "W070",
+      "title": "Domestic cups, extra time and neutral semi-final",
+      "chapter": "docs/manual/midseason.md",
+      "chapter_sha256": "d7e38eb52e19d20b5f99a66bc031449d4256b03fa282f56fe9977d942c0fe550",
+      "evidence": [
+        {
+          "screenshot": "runs/T59/session-r0001/step-0129.png",
+          "record": "runs/T59/session-r0001/step-0129.json",
+          "step": 129,
+          "screenshot_sha256": "1f25172019b6c04522857a2c5a4802d83fe8a335ff7d173bc12e8ae3e3b05efd",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0145.png",
+          "record": "runs/T59/session-r0001/step-0145.json",
+          "step": 145,
+          "screenshot_sha256": "4c6d4f8c0593a6b76c086812ffcaf46319346b3623ad426a7c42435c722b8c75",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0161.png",
+          "record": "runs/T59/session-r0001/step-0161.json",
+          "step": 161,
+          "screenshot_sha256": "c0c20cb1229c2d20aa0d36a47f9055da71b5256e2cee88f44cde9a34f6533ef6",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0163.png",
+          "record": "runs/T59/session-r0001/step-0163.json",
+          "step": 163,
+          "screenshot_sha256": "ed3c4cb14f0b630c44f4bf486e0074b1cc4102e07b531d8a1d19ac73aeb36d60",
+          "session": "runs/T59/session-r0001"
+        }
+      ],
+      "families": [
+        "D08",
+        "D03",
+        "D12",
+        "D19"
+      ],
+      "variants": [
+        "domestic-rounds",
+        "extra-time",
+        "neutral-semi-final"
+      ],
+      "boundary_note": "Original cup/extra-time/neutral venue states; no new modern competition rule."
+    },
+    {
+      "id": "W071",
+      "title": "Inspect actual selection and cancel before committing a move",
+      "chapter": "docs/manual/midseason.md",
+      "chapter_sha256": "d7e38eb52e19d20b5f99a66bc031449d4256b03fa282f56fe9977d942c0fe550",
+      "evidence": [
+        {
+          "screenshot": "runs/T59/session-r0001/step-0153.png",
+          "record": "runs/T59/session-r0001/step-0153.json",
+          "step": 153,
+          "screenshot_sha256": "d5cd47fbd0b7c3c28b5bc4e09300c73d11e537f9ad5efb4f1df9817792ed1209",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0155.png",
+          "record": "runs/T59/session-r0001/step-0155.json",
+          "step": 155,
+          "screenshot_sha256": "e96e66c4c33c552ec99ab1218507bca8e3b7365ec233abe1bd6620ba14fa03af",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0158.png",
+          "record": "runs/T59/session-r0001/step-0158.json",
+          "step": 158,
+          "screenshot_sha256": "52b7ce398a273a5192e7ef1d72ac733ef6d95c7fee522dc4a866efd1c6d6d006",
+          "session": "runs/T59/session-r0001"
+        }
+      ],
+      "families": [
+        "D02",
+        "D08"
+      ],
+      "variants": [
+        "actual-selected-player",
+        "carried-player",
+        "destination",
+        "cancel"
+      ],
+      "boundary_note": "Carried-player/destination identities stay separate; Escape cancels uncommitted replacement."
+    },
+    {
+      "id": "W072",
+      "title": "Weekly announcements and saved continuation",
+      "chapter": "docs/manual/midseason.md",
+      "chapter_sha256": "d7e38eb52e19d20b5f99a66bc031449d4256b03fa282f56fe9977d942c0fe550",
+      "evidence": [
+        {
+          "screenshot": "runs/T59/session-r0001/step-0132.png",
+          "record": "runs/T59/session-r0001/step-0132.json",
+          "step": 132,
+          "screenshot_sha256": "1651da9af1dcf7650708de499167bb3d20084f34eb456159fc5a490429a6d50f",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0144.png",
+          "record": "runs/T59/session-r0001/step-0144.json",
+          "step": 144,
+          "screenshot_sha256": "92ae6e86d1cd976fbe531eeedacdcfc2e76d920cef2e04b442bc1aba9291ec93",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0165.png",
+          "record": "runs/T59/session-r0001/step-0165.json",
+          "step": 165,
+          "screenshot_sha256": "d918a6ad605188afad5ed5b39958c76fac8b22c19a2c6bf2871d9b7a51594800",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0172.png",
+          "record": "runs/T59/session-r0001/step-0172.json",
+          "step": 172,
+          "screenshot_sha256": "c7846633df705a193e86a01527efdb618a226a4797e258740df4e1a7729fb9a9",
+          "session": "runs/T59/session-r0001"
+        },
+        {
+          "screenshot": "runs/T59/session-r0001/step-0176.png",
+          "record": "runs/T59/session-r0001/step-0176.json",
+          "step": 176,
+          "screenshot_sha256": "76b331f2bd5d11ba77f9a30192184b19d248612b7201482b223bf746232a5ec9",
+          "session": "runs/T59/session-r0001"
+        }
+      ],
+      "families": [
+        "D19",
+        "D06",
+        "D01"
+      ],
+      "variants": [
+        "friendly-announcement",
+        "approach-deferred",
+        "later-refusal",
+        "save"
+      ],
+      "boundary_note": "Announcement Escape acknowledges, not friendly cancellation; approach deferral/refusal stay separate."
+    },
+    {
+      "id": "W073",
+      "title": "Expired player leaves at a tribunal-set fee",
+      "chapter": "docs/manual/later-season.md",
+      "chapter_sha256": "a825840dfcadc4f51c2b8cbb0fd5cd70a62fac00a1aad8f15ea7da212cf6264d",
+      "evidence": [
+        {
+          "screenshot": "runs/T60/session-r0001/step-0010.png",
+          "record": "runs/T60/session-r0001/step-0010.json",
+          "step": 10,
+          "screenshot_sha256": "fc2420ea248f6a5f576308f4a4102853a9be0e5483bd0a67b75d170d6d568a7c",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0011.png",
+          "record": "runs/T60/session-r0001/step-0011.json",
+          "step": 11,
+          "screenshot_sha256": "b76c5ef3b86e46134e7487a4ddb709dd5906fe80f37efe93f399ec45bcfcfda2",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0012.png",
+          "record": "runs/T60/session-r0001/step-0012.json",
+          "step": 12,
+          "screenshot_sha256": "4d4878fcf0dedf57564e6ac6c3c0cef6d312da72bac51a35436255754cb71ec0",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0014.png",
+          "record": "runs/T60/session-r0001/step-0014.json",
+          "step": 14,
+          "screenshot_sha256": "14059ea414b67c41bec3705c95ccadf6fdbf8900f524190d3ab522c2c3b9cc99",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0022.png",
+          "record": "runs/T60/session-r0001/step-0022.json",
+          "step": 22,
+          "screenshot_sha256": "25ec9b1a32d81cca7ef7f29a4242e8b7d7f4db9d79320680a22a9159709d5624",
+          "session": "runs/T60/session-r0001"
+        }
+      ],
+      "families": [
+        "D13",
+        "D14",
+        "D17",
+        "D19",
+        "D02"
+      ],
+      "variants": [
+        "expired-player",
+        "tribunal-announcement",
+        "departure",
+        "later-payment"
+      ],
+      "boundary_note": "Automatic tribunal departure has no Y/N offer question; later cash posting is separate."
+    },
+    {
+      "id": "W074",
+      "title": "Announced friendlies become actual fixtures",
+      "chapter": "docs/manual/later-season.md",
+      "chapter_sha256": "a825840dfcadc4f51c2b8cbb0fd5cd70a62fac00a1aad8f15ea7da212cf6264d",
+      "evidence": [
+        {
+          "screenshot": "runs/T60/session-r0001/step-0024.png",
+          "record": "runs/T60/session-r0001/step-0024.json",
+          "step": 24,
+          "screenshot_sha256": "9a7bcbebd15ce9ad7b5906de1ce2a47d3f0d8aa689e978053729b1dd853b9458",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0028.png",
+          "record": "runs/T60/session-r0001/step-0028.json",
+          "step": 28,
+          "screenshot_sha256": "a25b10587d394cd6432fef6242254689fd12901101624d0c6b76494e089bb9d0",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0031.png",
+          "record": "runs/T60/session-r0001/step-0031.json",
+          "step": 31,
+          "screenshot_sha256": "85af227d99e9e8fcba90b90d43bd505424c31f2afc82126638354dde80055348",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0093.png",
+          "record": "runs/T60/session-r0001/step-0093.json",
+          "step": 93,
+          "screenshot_sha256": "3bede34b682e36e7fccf051c0dfd23b5a7c959fc63e11994d39ba32708bbd30f",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0097.png",
+          "record": "runs/T60/session-r0001/step-0097.json",
+          "step": 97,
+          "screenshot_sha256": "daa0d8a41213b1660f0260d8763173fee0c6b4ad62349fd265201a57649067c4",
+          "session": "runs/T60/session-r0001"
+        }
+      ],
+      "families": [
+        "D12",
+        "D08",
+        "D03",
+        "D19",
+        "D01"
+      ],
+      "variants": [
+        "announced-friendly",
+        "actual-friendly",
+        "following-results"
+      ],
+      "boundary_note": "Announced friendlies are subsequently played; announcement Escape did not cancel them."
+    },
+    {
+      "id": "W075",
+      "title": "Neutral final, injury replacement and winner celebration",
+      "chapter": "docs/manual/later-season.md",
+      "chapter_sha256": "a825840dfcadc4f51c2b8cbb0fd5cd70a62fac00a1aad8f15ea7da212cf6264d",
+      "evidence": [
+        {
+          "screenshot": "runs/T60/session-r0001/step-0044.png",
+          "record": "runs/T60/session-r0001/step-0044.json",
+          "step": 44,
+          "screenshot_sha256": "dd10e0f2dbf28a6ee482af9b5d5194d854eaf581379d6373155525a8a2a21ca5",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0049.png",
+          "record": "runs/T60/session-r0001/step-0049.json",
+          "step": 49,
+          "screenshot_sha256": "e4f3cbc7652211aac89215e6758be289bc14a5d5fe385ed24c1e7150d67de447",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0055.png",
+          "record": "runs/T60/session-r0001/step-0055.json",
+          "step": 55,
+          "screenshot_sha256": "956d604ec0f5f59599a704abe16f6228729f938be04fa484f0adf97607972742",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0061.png",
+          "record": "runs/T60/session-r0001/step-0061.json",
+          "step": 61,
+          "screenshot_sha256": "155b6c926a2b2bc3d6afa812d0c7c0de4df052d059249d9cb53fc5291707fc80",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0063.png",
+          "record": "runs/T60/session-r0001/step-0063.json",
+          "step": 63,
+          "screenshot_sha256": "8cfd50efdf54435f038abb1d0f38f76d6b78dd9011a1c2f2b024d3e1aba99eca",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0064.png",
+          "record": "runs/T60/session-r0001/step-0064.json",
+          "step": 64,
+          "screenshot_sha256": "144bf77ac364a1e0250681cdb0a2bc6be8ea60c9c4255b5f10e39bb94ff7aaa9",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0065.png",
+          "record": "runs/T60/session-r0001/step-0065.json",
+          "step": 65,
+          "screenshot_sha256": "f244d7dc96e67272567fd38578d176dae79cc39d97fc6da24758b687a8180907",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0066.png",
+          "record": "runs/T60/session-r0001/step-0066.json",
+          "step": 66,
+          "screenshot_sha256": "dd20c086fc4f50b9f0dcf65cb0d47e8a8d222c50f000f22270a6d4f520fdce4c",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0067.png",
+          "record": "runs/T60/session-r0001/step-0067.json",
+          "step": 67,
+          "screenshot_sha256": "d57533fda66cd2ba316b951f2fe35c7089bc8c28a66e30b8f1f24cd0d6185a59",
+          "session": "runs/T60/session-r0001"
+        }
+      ],
+      "families": [
+        "D08",
+        "D03",
+        "D12",
+        "D02",
+        "D19",
+        "D17"
+      ],
+      "variants": [
+        "neutral-final",
+        "injury-replacement",
+        "winner",
+        "prize"
+      ],
+      "boundary_note": "Neutral final, actual injury replacement and winner/prize display are distinct commits."
+    },
+    {
+      "id": "W076",
+      "title": "Listed expiry and actual eligibility are separate observations",
+      "chapter": "docs/manual/later-season.md",
+      "chapter_sha256": "a825840dfcadc4f51c2b8cbb0fd5cd70a62fac00a1aad8f15ea7da212cf6264d",
+      "evidence": [
+        {
+          "screenshot": "runs/T60/session-r0001/step-0137.png",
+          "record": "runs/T60/session-r0001/step-0137.json",
+          "step": 137,
+          "screenshot_sha256": "818446b17dcffc71b7660de960bb05c5ce0debec3a5178e6d2502621ce359460",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0146.png",
+          "record": "runs/T60/session-r0001/step-0146.json",
+          "step": 146,
+          "screenshot_sha256": "60b2cceb240429dbefbcc5f356b14f74541ecaa21cb14995d2fc6dae355c0f4c",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0147.png",
+          "record": "runs/T60/session-r0001/step-0147.json",
+          "step": 147,
+          "screenshot_sha256": "35414a1611fc0aa5c8e0f894dd53dc1743f1cf3127444a1b5219efaeecff361f",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0153.png",
+          "record": "runs/T60/session-r0001/step-0153.json",
+          "step": 153,
+          "screenshot_sha256": "ffe506f50d79b07e02396d700d9dd25f9e4af634f36e8a115c75eedd99ee8194",
+          "session": "runs/T60/session-r0001"
+        }
+      ],
+      "families": [
+        "D14",
+        "D02",
+        "D08",
+        "D19"
+      ],
+      "variants": [
+        "ten-week-warning",
+        "expired-listed-player",
+        "actual-admission"
+      ],
+      "boundary_note": "Listed zero-games/retiring status does not alone prove ineligibility; preserve actual admission outcome."
+    },
+    {
+      "id": "W077",
+      "title": "Later weekly flow and league progression",
+      "chapter": "docs/manual/later-season.md",
+      "chapter_sha256": "a825840dfcadc4f51c2b8cbb0fd5cd70a62fac00a1aad8f15ea7da212cf6264d",
+      "evidence": [
+        {
+          "screenshot": "runs/T60/session-r0001/step-0139.png",
+          "record": "runs/T60/session-r0001/step-0139.json",
+          "step": 139,
+          "screenshot_sha256": "8b5bba58950b0a0398a5d2f861533c91e131b98768ab7d598ecdf267f50d9c52",
+          "session": "runs/T60/session-r0001"
+        }
+      ],
+      "families": [
+        "D01",
+        "D11",
+        "D08",
+        "D03",
+        "D17",
+        "D19"
+      ],
+      "variants": [
+        "league-progression",
+        "accounts",
+        "next-opponent"
+      ],
+      "boundary_note": "Later actual results/account postings advance the identified scenario; do not infer all scheduling/points/finance rules from its totals."
+    },
+    {
+      "id": "W078",
+      "title": "Save the league-twenty-four endpoint",
+      "chapter": "docs/manual/later-season.md",
+      "chapter_sha256": "a825840dfcadc4f51c2b8cbb0fd5cd70a62fac00a1aad8f15ea7da212cf6264d",
+      "evidence": [
+        {
+          "screenshot": "runs/T60/session-r0001/step-0158.png",
+          "record": "runs/T60/session-r0001/step-0158.json",
+          "step": 158,
+          "screenshot_sha256": "d13397d4cf2a8e28653537efbf556bb83dc9fbde17614ade05044e7d9a088ad8",
+          "session": "runs/T60/session-r0001"
+        },
+        {
+          "screenshot": "runs/T60/session-r0001/step-0162.png",
+          "record": "runs/T60/session-r0001/step-0162.json",
+          "step": 162,
+          "screenshot_sha256": "e2b7ad685d75c5a55f99f36f8fa72edd1bf11547448d718ddb020c3b4381f429",
+          "session": "runs/T60/session-r0001"
+        }
+      ],
+      "families": [
+        "D06",
+        "D01"
+      ],
+      "variants": [
+        "league24-results",
+        "table",
+        "accounts",
+        "main",
+        "F7"
+      ],
+      "boundary_note": "Save only at identified management endpoint, not from an assumed confirmation screen."
+    },
+    {
+      "id": "W079",
+      "title": "Finish fixtures and handle unavailable players",
+      "chapter": "docs/manual/season-rollover.md",
+      "chapter_sha256": "3216d75cd3a9b5db2a8f2acecaef8bda4b9770619faba30a06f6c5ac3f4a6a94",
+      "evidence": [
+        {
+          "screenshot": "runs/T61/session-r0001/step-0011.png",
+          "record": "runs/T61/session-r0001/step-0011.json",
+          "step": 11,
+          "screenshot_sha256": "701888a10428786d3a6759aa58f8adb6736ef4b3d63052b7c995f9c9465200f0",
+          "session": "runs/T61/session-r0001"
+        },
+        {
+          "screenshot": "runs/T61/session-r0001/step-0014.png",
+          "record": "runs/T61/session-r0001/step-0014.json",
+          "step": 14,
+          "screenshot_sha256": "07755424874e692d528c7ae598dafc42527cec2bfd524cf96a911479dd1fcffd",
+          "session": "runs/T61/session-r0001"
+        },
+        {
+          "screenshot": "runs/T61/session-r0001/step-0024.png",
+          "record": "runs/T61/session-r0001/step-0024.json",
+          "step": 24,
+          "screenshot_sha256": "96d925c31d0edd6b30f198a462a275289b31dd81df515a3f8d090fc99f525012",
+          "session": "runs/T61/session-r0001"
+        },
+        {
+          "screenshot": "runs/T61/session-r0001/step-0044.png",
+          "record": "runs/T61/session-r0001/step-0044.json",
+          "step": 44,
+          "screenshot_sha256": "d2d9254375788ef5ab90415b74e0d8328725e7f5b12e7a527f54dacd786f6ae2",
+          "session": "runs/T61/session-r0001"
+        },
+        {
+          "screenshot": "runs/T61/session-r0001/step-0074.png",
+          "record": "runs/T61/session-r0001/step-0074.json",
+          "step": 74,
+          "screenshot_sha256": "a0f8430c2e429dfd209d108165ffaf5400ca0c8675d8ae7e8d0cdf949b72b905",
+          "session": "runs/T61/session-r0001"
+        },
+        {
+          "screenshot": "runs/T61/session-r0002/step-0039.png",
+          "record": "runs/T61/session-r0002/step-0039.json",
+          "step": 39,
+          "screenshot_sha256": "d4cebd966fbfb45267e3a9557e91daf3585d6a5f8be35f652a42ab7dd731ee64",
+          "session": "runs/T61/session-r0002"
+        },
+        {
+          "screenshot": "runs/T61/session-r0005/step-0004.png",
+          "record": "runs/T61/session-r0005/step-0004.json",
+          "step": 4,
+          "screenshot_sha256": "9d323b0f09fbfebe89369be0eb9312b876992988ee52af79badaf697a7052fcc",
+          "session": "runs/T61/session-r0005"
+        },
+        {
+          "screenshot": "runs/T61/session-r0005/step-0007.png",
+          "record": "runs/T61/session-r0005/step-0007.json",
+          "step": 7,
+          "screenshot_sha256": "3d0b4cd41d2761f1e971c00bbc9c017c2f4f8e332acf15bb0c69c9d895b153f7",
+          "session": "runs/T61/session-r0005"
+        }
+      ],
+      "families": [
+        "D02",
+        "D08",
+        "D03",
+        "D11",
+        "D19"
+      ],
+      "variants": [
+        "ineligible-refusal",
+        "availability-swap",
+        "injury-opportunities",
+        "league30-results",
+        "final-table"
+      ],
+      "boundary_note": "Retain aborted prefixes and completed final-result recovery; repeated injury opportunities do not fabricate a replacement."
+    },
+    {
+      "id": "W080",
+      "title": "European final and the actual End of season entry",
+      "chapter": "docs/manual/season-rollover.md",
+      "chapter_sha256": "3216d75cd3a9b5db2a8f2acecaef8bda4b9770619faba30a06f6c5ac3f4a6a94",
+      "evidence": [
+        {
+          "screenshot": "runs/T61/session-r0004/step-0006.png",
+          "record": "runs/T61/session-r0004/step-0006.json",
+          "step": 6,
+          "screenshot_sha256": "083bcaf97555dc9ef987b6e63af11774c88dd77544d998051fb6b43ced3af726",
+          "session": "runs/T61/session-r0004"
+        },
+        {
+          "screenshot": "runs/T61/session-r0004/step-0011.png",
+          "record": "runs/T61/session-r0004/step-0011.json",
+          "step": 11,
+          "screenshot_sha256": "4d744c7a350b3dc09f3c6477eeca1eec11518ff77434d081fa60ada54a8be2a2",
+          "session": "runs/T61/session-r0004"
+        }
+      ],
+      "families": [
+        "D08",
+        "D03",
+        "D12",
+        "D19",
+        "D20"
+      ],
+      "variants": [
+        "observer-final",
+        "extra-time",
+        "End-of-season"
+      ],
+      "boundary_note": "Observer European final/extra time precedes actual End of season; no managed fixture invented."
+    },
+    {
+      "id": "W081",
+      "title": "Save seasonal information, promotion and retirement",
+      "chapter": "docs/manual/season-rollover.md",
+      "chapter_sha256": "3216d75cd3a9b5db2a8f2acecaef8bda4b9770619faba30a06f6c5ac3f4a6a94",
+      "evidence": [
+        {
+          "screenshot": "runs/T61/session-r0004/step-0014.png",
+          "record": "runs/T61/session-r0004/step-0014.json",
+          "step": 14,
+          "screenshot_sha256": "94e4406fbd7025ec446694c16c50e6e20a00b9c595a81ee275d0c49370e73d36",
+          "session": "runs/T61/session-r0004"
+        },
+        {
+          "screenshot": "runs/T61/session-r0004/step-0015.png",
+          "record": "runs/T61/session-r0004/step-0015.json",
+          "step": 15,
+          "screenshot_sha256": "b5bda312643dada32e569c7e2b0f9573eaac838ad24fff5fa7caff66b267bfa9",
+          "session": "runs/T61/session-r0004"
+        },
+        {
+          "screenshot": "runs/T61/session-r0004/step-0016.png",
+          "record": "runs/T61/session-r0004/step-0016.json",
+          "step": 16,
+          "screenshot_sha256": "d8f7b4cf88ceeee1b2517ca5c281412232dab7899c5129704c5745e9a50d23aa",
+          "session": "runs/T61/session-r0004"
+        },
+        {
+          "screenshot": "runs/T61/session-r0004/step-0017.png",
+          "record": "runs/T61/session-r0004/step-0017.json",
+          "step": 17,
+          "screenshot_sha256": "74968882bb32b3df3e2075cc7590cdd93bb222646cb6d0851a6f4126fba6db6f",
+          "session": "runs/T61/session-r0004"
+        },
+        {
+          "screenshot": "runs/T61/session-r0004/step-0018.png",
+          "record": "runs/T61/session-r0004/step-0018.json",
+          "step": 18,
+          "screenshot_sha256": "6a2eb21d0246376b7c8e007a7b6cdc7cff5eeccd2b46fa3394f9d014a80d9fc1",
+          "session": "runs/T61/session-r0004"
+        }
+      ],
+      "families": [
+        "D20",
+        "D17",
+        "D19",
+        "D18"
+      ],
+      "variants": [
+        "final-accounts",
+        "seasonal-info-Y",
+        "promotion",
+        "relegation",
+        "retirement"
+      ],
+      "boundary_note": "Seasonal-info Y writes separate archive; N unvisited; renewed Gale still retires in this scenario."
+    },
+    {
+      "id": "W082",
+      "title": "Inspect populated history and the new-season state",
+      "chapter": "docs/manual/season-rollover.md",
+      "chapter_sha256": "3216d75cd3a9b5db2a8f2acecaef8bda4b9770619faba30a06f6c5ac3f4a6a94",
+      "evidence": [
+        {
+          "screenshot": "runs/T61/session-r0004/step-0020.png",
+          "record": "runs/T61/session-r0004/step-0020.json",
+          "step": 20,
+          "screenshot_sha256": "4318b9da83a32974d7166338e50c5953b5ab2ad76f3abdbf41062bcff72dbd26",
+          "session": "runs/T61/session-r0004"
+        },
+        {
+          "screenshot": "runs/T61/session-r0004/step-0024.png",
+          "record": "runs/T61/session-r0004/step-0024.json",
+          "step": 24,
+          "screenshot_sha256": "6ccdb8288ae99fb0ed0bc113baede29962e9491d964245fadd8b5f1359b35500",
+          "session": "runs/T61/session-r0004"
+        },
+        {
+          "screenshot": "runs/T61/session-r0004/step-0027.png",
+          "record": "runs/T61/session-r0004/step-0027.json",
+          "step": 27,
+          "screenshot_sha256": "50a6765ce22abe8dc767baf5ceb233c1c03839382f3703fb85bde0e3cc551bec",
+          "session": "runs/T61/session-r0004"
+        },
+        {
+          "screenshot": "runs/T61/session-r0004/step-0030.png",
+          "record": "runs/T61/session-r0004/step-0030.json",
+          "step": 30,
+          "screenshot_sha256": "a1f5c613fb1069f22d6ac9612f29c37357f7f0ca2cf1d905f65da60fe9de2ab6",
+          "session": "runs/T61/session-r0004"
+        }
+      ],
+      "families": [
+        "D20",
+        "D18",
+        "D11",
+        "D12",
+        "D02",
+        "D01"
+      ],
+      "variants": [
+        "new-season-main",
+        "squad-reset",
+        "populated-season-summary",
+        "new-fixtures",
+        "zero-table"
+      ],
+      "boundary_note": "Summary/reset table/fixtures and changed squad are observed; deeper .95 history view is unverified."
+    },
+    {
+      "id": "W083",
+      "title": "Verify next-season persistence with a fresh process",
+      "chapter": "docs/manual/season-rollover.md",
+      "chapter_sha256": "3216d75cd3a9b5db2a8f2acecaef8bda4b9770619faba30a06f6c5ac3f4a6a94",
+      "evidence": [
+        {
+          "screenshot": "runs/T61/session-r0004/step-0034.png",
+          "record": "runs/T61/session-r0004/step-0034.json",
+          "step": 34,
+          "screenshot_sha256": "6a2eb21d0246376b7c8e007a7b6cdc7cff5eeccd2b46fa3394f9d014a80d9fc1",
+          "session": "runs/T61/session-r0004"
+        },
+        {
+          "screenshot": "runs/T61/session-r0004/step-0036.png",
+          "record": "runs/T61/session-r0004/step-0036.json",
+          "step": 36,
+          "screenshot_sha256": "6a2eb21d0246376b7c8e007a7b6cdc7cff5eeccd2b46fa3394f9d014a80d9fc1",
+          "session": "runs/T61/session-r0004"
+        }
+      ],
+      "families": [
+        "D06",
+        "D04",
+        "D01",
+        "D20"
+      ],
+      "variants": [
+        "next-season-F7",
+        "fresh-process",
+        "matching-main-load"
+      ],
+      "boundary_note": "Fresh .1-0 reload reproduces visible next-season main state; it does not establish .95 deeper-view reload."
+    }
+  ],
+  "menus": [
+    {
+      "slot": 1,
+      "action": "PLAY NEXT GAME / NEXT PLAYER",
+      "evidence": "W007 two-manager handover; W019/W024/W030/W031 preparation and next week; W051–W083 season progression",
+      "boundary": "Single-manager play and first-to-second manager handover observed. Full two-manager match/week progression remains G02.",
+      "families": [
+        "D08",
+        "D19",
+        "D01"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 2,
+      "action": "Previous player",
+      "evidence": "W007 shows the conditional second-manager label; static dispatch decrements manager",
+      "boundary": "Visible/static only; actual activation is unvisited,G02.",
+      "families": [
+        "D01"
+      ],
+      "observation": "visible-static-only"
+    },
+    {
+      "slot": 3,
+      "action": "Players",
+      "evidence": "W010–W017 browse/details/move/cancel/instructions/save; W054/W067/W071 availability and substitutions",
+      "boundary": "Observed. Full squads, further role limits and untested option variants remain G04/G05.",
+      "families": [
+        "D02"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 4,
+      "action": "Next opponents",
+      "evidence": "W018 opens opponent information/configuration and returns",
+      "boundary": "Observed when a fixture exists. Blank/no-fixture or unmanaged-club boundary is static, not an exercised refusal,G03.",
+      "families": [
+        "D09"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 5,
+      "action": "Transfer market",
+      "evidence": "W036/W037 browse, bid cancel/refusal, accepted purchase and changed squad",
+      "boundary": "Observed limited purchase route; negotiation extremes and financial/full-squad cases remain G06.",
+      "families": [
+        "D13"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 6,
+      "action": "Use scout",
+      "evidence": "W039 criteria, successful search, results and cancel",
+      "boundary": "Observed. Empty results, combinations and all criteria bounds remain G06.",
+      "families": [
+        "D15"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 7,
+      "action": "New staff",
+      "evidence": "W049 role lists, refusals, hire N/Y and changed scout; W050 weekly posting",
+      "boundary": "Observed for one role; actual sack Y and other roles remain G08.",
+      "families": [
+        "D16"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 8,
+      "action": "League tables",
+      "evidence": "W033 empty-season/division browsing; W051/W056 populated league; W079 final; W082 reset",
+      "boundary": "Observed before/during/after season. Tie-break and other promotion scenarios remain G11.",
+      "families": [
+        "D11"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 9,
+      "action": "League results",
+      "evidence": "W033 initial empty results; W051 league progression; W079 completed match30 in completed recovery",
+      "boundary": "Observed. All league/year navigation combinations are not exhausted,G11.",
+      "families": [
+        "D11"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 10,
+      "action": "Cup results",
+      "evidence": "W034 initial pairings; W055/W059/W066/W070/W075/W080 played rounds, legs, elimination, neutral finals and win",
+      "boundary": "Observed. Managed tied aggregate/penalties and other seeding rules remain G10.",
+      "families": [
+        "D12"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 11,
+      "action": "Weekly fixtures",
+      "evidence": "W034 scrolling/exit; W035 related team schedule",
+      "boundary": "Observed browsing. Activating a chosen other club's fixture from this viewer remains G10; automatic observer finals are a separate route.",
+      "families": [
+        "D12"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 12,
+      "action": "Fixture list",
+      "evidence": "W035 paging/club/division/exit; W074 arranged friendlies; W082 next-year schedule",
+      "boundary": "Observed. Enter-watch from this viewer and printing remain G10/G14.",
+      "families": [
+        "D12"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 13,
+      "action": "Statistics",
+      "evidence": "W043 unavailable message; W056 populated statistics after league4",
+      "boundary": "Both empty/populated variants observed. Every category, sort boundary and print path remains G12/G14.",
+      "families": [
+        "D18"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 14,
+      "action": "Player/team history",
+      "evidence": "W044 transfer/team history, W079 Slater departure context; T61/session-r0002 step76 records three actual sales",
+      "boundary": "Observed. Long-history paging and all historic categories remain G12.",
+      "families": [
+        "D18"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 15,
+      "action": "Seasonal history",
+      "evidence": "W045 early unavailable message; W082 populated1994/95 summary",
+      "boundary": "Summary observed. Full seasonal info capture failed; .95 reload and prompt N remain G13.",
+      "families": [
+        "D18"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 16,
+      "action": "Other teams",
+      "evidence": "W046 club/division/panels/squad and exit",
+      "boundary": "Observed. Every club and unmanaged/empty edge is not exhausted,G12.",
+      "families": [
+        "D09"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 17,
+      "action": "Game configuration",
+      "evidence": "W018 displayed five options; W031 Watch off; static five stored bytes plus Continue",
+      "boundary": "Only Watch toggle/Continue effects exercised. Other toggles/default combinations/downstream effects remain G03.",
+      "families": [
+        "D07"
+      ],
+      "observation": "observed-with-limits"
+    },
+    {
+      "slot": 18,
+      "action": "Cashflow",
+      "evidence": "W047/W050 initial and posted weekly accounts; W053 sale; W069 renewal; W073 tribunal payment; W075/W081 prizes",
+      "boundary": "Observed named periods. General financial rules, board/overdraft outcomes and other postings remain G07.",
+      "families": [
+        "D17"
+      ],
+      "observation": "observed-with-limits"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "G01",
+      "title": "Saves and input errors",
+      "observed": "W001–W009 startup/setup, four starting-season routes, blank manager, duplicate club, filename editing, save selector Escape; W017/W057/W083 persistence",
+      "unvisited": "Invalid/empty filename, malformed/unreadable/no-save errors, new-game collision semantics, F10/Y",
+      "next_scenario": "Isolate a scratch folder; capture no-save/invalid-save UI and F10/Y with preserved originals. Treat overwrite as a distinct scenario."
+    },
+    {
+      "id": "G02",
+      "title": "Two managers",
+      "observed": "W007 two clubs, duplicate refusal, name/nationality prompts and NEXT PLAYER",
+      "unvisited": "Previous player activation; full alternating match/week/persistence",
+      "next_scenario": "Restore two-manager setup, activate Previous player, then one handover/save/reload; no full extra season needed."
+    },
+    {
+      "id": "G03",
+      "title": "Configuration and absent fixture",
+      "observed": "W018 five visible options and Continue; W031 Watch off; W080 blank-opponent observer week",
+      "unvisited": "Four other option toggles/effects; no-fixture Next opponents boundary",
+      "next_scenario": "Toggle one option per isolated save, record value/persistence and the immediate affected transition. Do not infer Auto save from its label."
+    },
+    {
+      "id": "G04",
+      "title": "Squad/instructions",
+      "observed": "W010–W023 panels, move cancel/swap, current/club position, individual and eight team instruction cycles; W054/W067 availability",
+      "unvisited": "Every role/position overflow, full reserve/squad boundary, all player overrides",
+      "next_scenario": "Capture one role-cap refusal and one per-player override interaction with pre/post state."
+    },
+    {
+      "id": "G05",
+      "title": "Managed match changes",
+      "observed": "W025 cancel, W028 legal halftime replacement; W055/W060/W067/W071 injury/recovery and cancel/actual substitution; W079 repeated opportunities",
+      "unvisited": "All substitution limits/invalid requests, different competition allowances, managed red-card permutations",
+      "next_scenario": "Restore before one invalid substitution and capture refusal/cancel without losing the accepted match checkpoint."
+    },
+    {
+      "id": "G06",
+      "title": "Market/scout/contract/youth",
+      "observed": "W036–W042 bid cancel/refusal/purchase, listing, dismissal, renewal controls/refusal, two-game goalkeeper trial; W052/W068/W069 expiry/accepted renewal; W073 tribunal",
+      "unvisited": "Financial/full-squad purchase refusals, counteroffer/price bounds, empty scout results, other youth positions and trial conversion/expiry",
+      "next_scenario": "Follow the preserved youth-trial scenario to its actual expiry, then isolate one financial refusal. Broader economy formulas need static/run tasks."
+    },
+    {
+      "id": "G07",
+      "title": "Financial posting",
+      "observed": "W050 hiring charge, W053 sale, W069 renewal, W073 delayed tribunal payment, W075/W081 prizes",
+      "unvisited": "Player-dismissal compensation posting, other income/expenses, debt/board outcomes, universal timing",
+      "next_scenario": "Continue the isolated player-dismissal save through one accounts period and reconcile the quoted compensation."
+    },
+    {
+      "id": "G08",
+      "title": "Staff/job changes",
+      "observed": "W049 refusal/hire N/Y/sack N; W050 posting; W063 approach deferred then N",
+      "unvisited": "Staff sack Y/cost, other staff roles, accepting a managerial job and club change",
+      "next_scenario": "Use isolated staff-hire save for sack Y and a week; keep a job-acceptance scenario separate."
+    },
+    {
+      "id": "G09",
+      "title": "Stadium",
+      "observed": "W048 quote adjustment/abort/order; W050 cancelled-order scenario explicitly unchanged",
+      "unvisited": "Completion month/capacity/final charge and limits; administration-change fresh reload",
+      "next_scenario": "Restore the actual ordered-stadium save, advance only the required period and compare completed capacity/charge. Do not use T61 as that save's continuation."
+    },
+    {
+      "id": "G10",
+      "title": "Cup and observer variants",
+      "observed": "W059 completed two legs, W066 elimination/group week, W070 extra time/neutral semi-final, W075 cup win, W080 observer final extra time",
+      "unvisited": "Managed tied-aggregate/penalty decision, chosen-other-fixture watch, remaining tie/draw algorithms",
+      "next_scenario": "Target one pre-tie checkpoint and capture resolution; separate viewer Enter-watch from automatic observer finals."
+    },
+    {
+      "id": "G11",
+      "title": "League/competition rules",
+      "observed": "W051 league progression/points, W056 populated statistics, W079 final table, W081 promotion/relegation lists, W082 new league makeup",
+      "unvisited": "Tie-break formula, other promoted/relegated managed clubs, full selection/qualification rules",
+      "next_scenario": "Static-first tie-break/qualification task, then a deliberately chosen original tie/checkpoint; do not substitute modern rules."
+    },
+    {
+      "id": "G12",
+      "title": "Statistics/history browsing",
+      "observed": "W043/W045 empty messages; W044/W046 histories/other clubs; W056 populated statistics; W082 seasonal summary",
+      "unvisited": "All categories/sort/page bounds, long history, unavailable other-club variants",
+      "next_scenario": "Navigate one populated statistics/history category at a time with explicit entry/exit and limits."
+    },
+    {
+      "id": "G13",
+      "title": "Season archive/rollover variants",
+      "observed": "W081 seasonal-info Y, promotion/relegation summaries, Gale retires despite renewal; W082 summary, reset table/fixtures; W083 reload",
+      "unvisited": "Seasonal-info N, separate .95 fresh-load/deeper history, other retirement/promotion outcomes, annual awards not shown",
+      "next_scenario": "Investigate the retained DOSBox-X capture crash before retrying full seasonal info; preserve both .95 and .1-0 files. N is a separate save branch."
+    },
+    {
+      "id": "G14",
+      "title": "External output and presentation",
+      "observed": "W026 speed/display controls, W027 detailed history, W029 final stats",
+      "unvisited": "Print/F5/P paths, sound behavior, every speed/display boundary",
+      "next_scenario": "Isolate one print-to-file path if supported; document actual destination/failure rather than assuming a printer workflow."
+    }
+  ]
+}

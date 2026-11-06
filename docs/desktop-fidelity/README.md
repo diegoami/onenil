@@ -52,6 +52,16 @@ they are not shipped product assets or an implementation.
 
 ## Corrected roadmap
 
+[designed] The [complete screen map](screen-map.md) assigns all83 documented
+workflows and18 executable menu slots to proposed desktop compositions/variants.
+Its [manifest](screen-map.json) preserves original references and G01–G14;
+[check_map.py](check_map.py) verifies coverage against the pinned public research
+tree, including missing/duplicate mappings and static-only boundaries.
+
+```sh
+python3 docs/desktop-fidelity/check_map.py --research-root ../onenil-archaeology --negative-checks
+```
+
 1. [designed] Complete an original-to-desktop screen map and faithful visual
    mockups from the accepted manual. Start with the weekly main menu, Players
    skills/details/move, preparation and watched pitch/bench/result flow. Extend
