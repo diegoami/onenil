@@ -21,6 +21,10 @@ const record = {schema: 'ui-delivery-spike/1', source: git('rev-parse', 'HEAD'),
   started: new Date().toISOString(), status: 'running', cases: [], screenshots: {},
   playwright: require('playwright/package.json').version, runtime: process.version,
   designed_data: true, campaign_engine_integration: false};
+record.sources = Object.fromEntries(git('ls-files', 'web/spike', 'desktop/spike', 'tools/smoke_ui_spike.mjs')
+  .split('\n').filter(Boolean).map(name => [name, sha(fs.readFileSync(path.join(root, name)))]));
+record.desktop_test_flags = ['--no-sandbox'];
+record.native_dialogs = 'file paths supplied by main-process test doubles; native dialog appearance untested';
 let browser, desktop;
 async function image(page, name) {
   const target = path.join(out, `${stem}-${name}.png`);
@@ -43,6 +47,7 @@ async function scenario(page, mode) {
   await page.getByRole('button', {name: 'Move player'}).click();
   await page.locator('#destination').selectOption('17');
   await page.keyboard.press('Escape');
+  await page.locator('#move-dialog').waitFor({state: 'hidden'});
   assert.equal(await page.evaluate(() => JSON.stringify(window.spikeState())), before);
   await page.getByRole('button', {name: 'Move player'}).click();
   await page.locator('#destination').selectOption('17');
@@ -54,6 +59,7 @@ async function scenario(page, mode) {
   await page.getByRole('button', {name: 'Move player'}).click();
   assert(await page.locator('#move-dialog').isVisible());
   await page.getByRole('button', {name: 'Cancel move'}).click();
+  await page.locator('#instructions').selectOption('Attacking');
   await image(page, `${mode}-squad`);
   const saved = path.join(root, '.cache', `${stem}-${mode}-save.json`);
   if (mode === 'browser') {
@@ -98,10 +104,35 @@ async function scenario(page, mode) {
   await page.getByRole('status').filter({hasText: 'Loaded'}).waitFor();
   assert.deepEqual(await page.evaluate(() => window.spikeState()), state);
   record.cases.push(`${mode}: keyboard/detail identity, cancel, swap, file round-trip`);
+  await page.getByRole('button', {name: 'Fixtures', exact: true}).click();
+  await page.locator('#fixture-page').selectOption('2');
+  assert.match(await page.locator('#fixtures li').first().textContent(), /Week 17/);
+  await page.getByRole('button', {name: 'Squad', exact: true}).click();
+  assert.equal(await page.locator('#player-name').textContent(), 'Alex Morgan');
+  record.cases.push(`${mode}: paged fixture navigation preserves selected player`);
   assert.equal(await page.locator('iframe').count(), 0);
   assert.match(await page.locator('#exhibition-boundary').textContent(), /does not use this edited squad/);
   assert.deepEqual(failures, []);
   return {saved, state, load};
+}
+async function exhibition(page, mode) {
+  const before = await page.evaluate(() => window.spikeState());
+  await page.getByRole('button', {name: 'Watched exhibition', exact: true}).click();
+  await page.getByRole('button', {name: 'Open local exhibition', exact: true}).click();
+  const frame = page.frameLocator('iframe');
+  await frame.getByRole('button', {name: 'Restart', exact: true}).click({timeout: 60000});
+  await frame.getByRole('button', {name: 'Kick off', exact: true}).waitFor({timeout: 60000});
+  await frame.getByRole('button', {name: 'Kick off', exact: true}).click();
+  await frame.locator('.event.pass').first().waitFor({timeout: 30000});
+  await frame.getByRole('button', {name: 'Pause', exact: true}).click();
+  await frame.getByRole('button', {name: 'Resume', exact: true}).waitFor();
+  assert.equal(await frame.locator('#players circle').count(), 22);
+  assert(!((await frame.locator('#commentary').textContent()).includes('Play continues')));
+  assert.deepEqual(await page.evaluate(() => window.spikeState()), before);
+  await image(page, `${mode}-native-exhibition`);
+  await page.getByRole('button', {name: 'Squad', exact: true}).click();
+  assert.deepEqual(await page.evaluate(() => window.spikeState()), before);
+  record.cases.push(`${mode}: live Rust exhibition pitch/named pass, pause and return without sample-state mutation`);
 }
 try {
   assert.equal(git('status', '--porcelain', '--', 'web/spike', 'desktop/spike', 'tools/smoke_ui_spike.mjs'), '',
@@ -123,6 +154,9 @@ try {
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await image(page, 'browser-mobile-offline-reopened');
   record.cases.push('browser: new offline context loads real exported file; mobile page has no viewport overflow');
+  await context.setOffline(false);
+  await page.setViewportSize({width: 1440, height: 1000});
+  await exhibition(page, 'browser');
   await browser.close();browser = undefined;
 
   const executable = path.join(root, '.cache/T48-packages/OneNilUISpike-linux-x64/OneNilUISpike');
@@ -130,6 +164,7 @@ try {
   record.electron = await desktop.evaluate(() => process.versions);
   page = await desktop.firstWindow();
   const desktopResult = await scenario(page, 'desktop');
+  await exhibition(page, 'desktop');
   assert.equal(await page.evaluate(() => typeof window.require), 'undefined');
   const packaged = await desktop.evaluate(({app}) => app.isPackaged);
   assert.equal(packaged, true);
@@ -145,6 +180,20 @@ try {
   record.cases.push('desktop: fresh packaged process loads saved file');
   record.package_binary_sha256 = sha(fs.readFileSync(executable));
   record.package_asar_sha256 = sha(fs.readFileSync(path.join(path.dirname(executable), 'resources/app.asar')));
+  const {extractFile} = require('@electron/asar');
+  for (const name of ['index.html', 'style.css', 'app.js']) {
+    assert.equal(sha(extractFile(path.join(path.dirname(executable), 'resources/app.asar'), `ui/${name}`)),
+      record.sources[`web/spike/${name}`]);
+  }
+  for (const name of ['main.cjs','preload.cjs']) {
+    assert.equal(sha(extractFile(path.join(path.dirname(executable), 'resources/app.asar'), name)),
+      record.sources[`desktop/spike/${name}`]);
+  }
+  function bytes(directory) {return fs.readdirSync(directory,{withFileTypes:true}).reduce((total,e)=>{
+    const name=path.join(directory,e.name);return total+(e.isDirectory()?bytes(name):fs.lstatSync(name).size);
+  },0);}
+  record.package_bytes = bytes(path.dirname(executable));
+  record.shared_ui_bytes = bytes(path.join(root,'web/spike'));
   record.status = 'passed';
 } catch (error) {
   record.status = 'failed';record.error = String(error.stack || error);process.exitCode = 1;
