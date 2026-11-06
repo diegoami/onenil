@@ -8,7 +8,7 @@ app.whenReady().then(() => {
     backgroundColor:'#0b1420',autoHideMenuBar:true,
     webPreferences:{preload:path.join(__dirname,'preload.cjs'),nodeIntegration:false,
       contextIsolation:true,sandbox:true}});
-  const ui=path.join(__dirname,'ui/index.html');
+  const ui=app.isPackaged?path.join(__dirname,'ui/index.html'):path.join(__dirname,'../../web/spike/index.html');
   window.loadFile(ui);
   window.webContents.setWindowOpenHandler(()=>({action:'deny'}));
   window.webContents.on('will-navigate',event=>event.preventDefault());

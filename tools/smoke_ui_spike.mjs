@@ -47,6 +47,7 @@ async function scenario(page, mode) {
   await page.getByRole('button', {name: 'Move player'}).click();
   await page.locator('#destination').selectOption('17');
   await page.getByRole('button', {name: 'Confirm move'}).click();
+  await page.locator('#player-position').filter({hasText: 'Reserve 2'}).waitFor();
   assert.equal(await page.locator('#player-name').textContent(), 'Alex Morgan');
   assert.match(await page.locator('#player-position').textContent(), /Reserve 2/);
   // A pending transaction cannot be discarded by file operations.
