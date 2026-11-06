@@ -310,8 +310,4 @@ impl Campaign {
             serde_json::json!({"schema":"original-club-seed/1","namespace":self.namespace,"season":self.season,"week_index":self.week_index,"manager":self.manager,"club":{"id":self.club.id,"name":self.club.name,"first_team":self.club.first_team.map(|p|p.unwrap_or(0)),"reserves":self.club.reserves.map(|p|p.unwrap_or(0)),"team_instructions":self.club.team_instructions},"cash":self.cash,"next_fixture":self.next_fixture,"players":players}),
         )
     }
-    /// [designed] Test witness only; runtime initialization reads only the original initial projection.
-    pub fn observed_changed_projection() -> Result<Value, String> {
-        Ok(source_record()?["changed"].clone())
-    }
 }

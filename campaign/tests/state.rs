@@ -13,7 +13,8 @@ fn source_identity_and_observed_changes_are_preserved() {
     c.set_instructions(2598, 16).unwrap();
     assert_eq!(
         c.source_projection().unwrap(),
-        Campaign::observed_changed_projection().unwrap()
+        serde_json::from_str::<serde_json::Value>(include_str!("../fixtures/research-seed.json"))
+            .unwrap()["changed"]
     );
     assert_eq!(c.revision, 3);
     let bytes = c.encode().unwrap();
