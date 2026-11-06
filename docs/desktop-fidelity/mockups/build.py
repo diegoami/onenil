@@ -98,7 +98,7 @@ def svg_for(row, research):
              '<desc id="desc">Static original-led composition; independent font, provisional role glyphs and schematic pitch figures. Not an implemented game.</desc>',
              f'<rect width="720" height="400" fill="{ground_css}"/>',
              '<g font-family="OneNilStudy" font-size="16" dominant-baseline="text-before-edge">']
-    counts = dict(text_cells=0, bar_cells=0, figure_cells=0, provisional_role_cells=0)
+    counts = dict(text_cells=0, bar_cells=0, filled_bar_cells=0, figure_cells=0, provisional_role_cells=0)
     for y, line in enumerate(lines):
         separators = [i for i, ch in enumerate(line) if ch == '║']
         role = separators[-1]-1 if len(separators)>1 and separators[-1]-separators[-2]==2 else -1
@@ -108,7 +108,7 @@ def svg_for(row, research):
             # [derived] Read displayed colours, never original palette/font bytes.
             # Most pixels supply a normal text-cell background; block/figure
             # primitives instead use the screen ground and their visible colour.
-            primitive = ch == '■' or (row['pitch_layer'] and 5 <= y < 24 and ch in 'ôÆ£¥öò•')
+            primitive = row['pitch_layer'] and 5 <= y < 24 and ch in 'ôÆ£¥öò•'
             if primitive:
                 background = ground
                 candidates = [item for item in colors.most_common() if item[0] != ground]
@@ -123,8 +123,14 @@ def svg_for(row, research):
                 continue
             fill = colour(foreground)
             if ch == '■':
-                parts.append(f'<rect data-kind="bar" x="{px+3}" y="{py+4}" width="4" height="7" fill="{fill}"/>')
+                # [derived] Filled original bars invert the cell: light band
+                # around a dark slot. Empty cells have dark ground/olive slot.
+                # Preserve that displayed state rather than turning both into
+                # coloured foreground squares. These are new rectangle primitives.
+                filled = background != ground
+                parts.append(f'<rect data-kind="bar" data-filled="{str(filled).lower()}" x="{px+2}" y="{py+4}" width="5" height="7" fill="{fill}"/>')
                 counts['bar_cells'] += 1
+                counts['filled_bar_cells'] += int(filled)
             elif primitive:
                 if ch == '•':
                     parts.append(f'<circle data-kind="ball" cx="{px+4.5}" cy="{py+8}" r="1.7" fill="{fill}"/>')
