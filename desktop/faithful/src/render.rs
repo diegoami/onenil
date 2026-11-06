@@ -160,10 +160,10 @@ impl Renderer {
         self.text(
             x,
             0,
-            if reserve { "RESERVES" } else { "FIRST TEAM" },
+            &format!(" {}", if reserve { "RESERVES" } else { "FIRST TEAM" }),
             CYAN,
             GROUND,
-            13,
+            14,
         );
         for i in 0..18 {
             let row = Self::roster_row(i);
@@ -189,15 +189,15 @@ impl Renderer {
             self.text(
                 x,
                 row,
-                player.map(|p| NAMES[p as usize]).unwrap_or(""),
+                &format!(" {}", player.map(|p| NAMES[p as usize]).unwrap_or("")),
                 fg,
                 bg,
-                13,
+                14,
             );
             let role = player
-                .map(|p| self.assets.screens["skills"][Self::roster_row(p as usize) * 80 + 72].0)
+                .map(|p| self.assets.screens["skills"][Self::roster_row(p as usize) * 80 + 73].0)
                 .unwrap_or(' ');
-            self.cell(x + 14, row, role, fg, bg);
+            self.cell(x + 15, row, role, fg, bg);
         }
     }
     fn players(&mut self, c: &Controller) {

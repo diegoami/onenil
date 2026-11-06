@@ -1,7 +1,19 @@
 //! [designed] Experimental native framebuffer adapter; no browser or network runtime.
 use crate::{application::Application, controller::Key, render::Renderer};
-use minifb::{Key as NativeKey, KeyRepeat, Window, WindowOptions};
-use std::path::PathBuf;
+use minifb::{InputCallback, Key as NativeKey, Window, WindowOptions};
+use std::{
+    path::PathBuf,
+    sync::{Arc, Mutex},
+};
+struct Input(Arc<Mutex<Vec<NativeKey>>>);
+impl InputCallback for Input {
+    fn add_char(&mut self, _: u32) {}
+    fn set_key_state(&mut self, key: NativeKey, pressed: bool) {
+        if pressed {
+            self.0.lock().unwrap().push(key);
+        }
+    }
+}
 pub fn run(
     root: PathBuf,
     font: PathBuf,
@@ -22,9 +34,11 @@ pub fn run(
     )
     .map_err(|e| e.to_string())?;
     window.set_target_fps(60);
+    let input = Arc::new(Mutex::new(Vec::new()));
+    window.set_input_callback(Box::new(Input(input.clone())));
     let mut last_observation = Vec::new();
     while window.is_open() && !app.controller.close_requested {
-        for key in window.get_keys_pressed(KeyRepeat::Yes) {
+        for key in std::mem::take(&mut *input.lock().unwrap()) {
             let mapped = match key {
                 NativeKey::Up => Some(Key::Up),
                 NativeKey::Down => Some(Key::Down),
