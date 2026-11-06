@@ -35,3 +35,37 @@ comparison using `python3 desktop/faithful/verify.py --record records/T52/<new-n
 T53 adds the actual software window; T54 adds the second native candidate and cost comparison.
 Hosted existing engine CI does not currently include this standalone experimental crate;
 its local acceptance is retained separately. No workflow policy change is implied.
+
+T53 candidate: native software window (minifb0.29.0/X11 on this machine), fontdue0.9.5,
+shared Rust controller and direct local child. The cell export contains13 authenticated
+public decoded text/style sheets; bitmap screenshots are acceptance evidence only and are
+never loaded as UI backgrounds. Runtime rows, card selection, move state, menus, saved state,
+clock, score,22 players and detailed commentary follow owned state. Only Flowers/Pearce cards
+and Mimms details have captured data; other cards show an explicit unavailable statement.
+The independent VGA font remains an ignored local dependency with T51's attribution/licence.
+
+Build: `cargo build --manifest-path desktop/faithful/Cargo.toml --features software --locked`.
+Run the resulting `desktop/faithful/target/debug/onenil-desktop --font <verified-T51-ttf>`.
+Use `--root <native-repository>` when launching from another directory, `--save <path>` for
+an experiment save, and `--load` to restore it on startup. F7 saves from the main menu;
+F9 reloads as a visibly labelled experiment shortcut. Space opens Players, Insert changes
+skills/details, arrows select, Enter picks/places, Escape cancels a move or returns to caller.
+Main-menu Enter enters preparation; PLAY GAME computes the fixed exhibition. Escape cancels
+preparation. In the match, Space opens commentary history and Escape/Enter opens the bench;
+PLAY GAME resumes. At half-time any key opens the bench; at full-time any key returns to main
+without posting a result. F10 then Y quits. Unsupported options diagnose their limited scope.
+
+[designed] Match pitch uses a new schematic field and figures with the accepted adapter's
+coordinate projection, scaled into the original composition. Team colors are schematic;
+custom font/clock, pitch figures and letterboxing remain proposed differences requiring owner
+inspection. Native half/full-time boards currently display actual score/events and explicitly
+unavailable statistics; they do not borrow the captured PSG match's figures. Bench is a bounded
+resume view, not an implemented original team-management panel. These are comparison gaps,
+not claims of completed B1–B6 fidelity. Keyboard only; no screen-reader semantics, IME or
+Windows packaging demonstrated. Linux X11 at tested sizes does not establish those platforms.
+
+The optional `--observe <path>` emits a read-only diagnostic snapshot for graphical acceptance;
+it accepts no commands or state. `graphical_check.py` sends actual X11 key/resize/WM-close events,
+records source/binary/font identity and native screenshots, and checks worker PID reaping.
+The first run exposed lost short taps in sampled-key handling; the adapter now queues native
+key edges through InputCallback. It does not rely on stretching test key duration.

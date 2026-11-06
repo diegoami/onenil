@@ -1,0 +1,112 @@
+{
+  "schema": "native-window-check/1",
+  "producer": "3c3f6871381636cab578d4592c0b904ab3039a3c",
+  "binary_sha256": "ca4745b18a74d56ec747a028eb28502da3704c9b28c4f7e72224dced9504c1f0",
+  "font_sha256": "c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f",
+  "display": ":154",
+  "elapsed_seconds": 10.865673618001892,
+  "steps": [
+    {
+      "name": "main",
+      "state": {
+        "card": 0,
+        "carried": null,
+        "events": null,
+        "first": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "frames": null,
+        "job": 0,
+        "message": "",
+        "panel": "Skills",
+        "phase": null,
+        "players": null,
+        "reserve": null,
+        "score": null,
+        "screen": "Main",
+        "selected": "First(0)",
+        "worker_pid": null
+      }
+    },
+    {
+      "name": "players",
+      "state": {
+        "card": 0,
+        "carried": null,
+        "events": null,
+        "first": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "frames": null,
+        "job": 0,
+        "message": "",
+        "panel": "Skills",
+        "phase": null,
+        "players": null,
+        "reserve": null,
+        "score": null,
+        "screen": "Players",
+        "selected": "First(0)",
+        "worker_pid": null
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "main",
+      "path": "window-r0001-main.png",
+      "size": [
+        1440,
+        900
+      ],
+      "sha256": "fbb03d746ed15ecdde3eabfb0546cd7e4f4a24f4d0cda4d7ab985cd901bce468"
+    },
+    {
+      "name": "skills",
+      "path": "window-r0001-skills.png",
+      "size": [
+        1440,
+        900
+      ],
+      "sha256": "b5c4d5c0fcdb9a16da69c927673e4aa229e52857edbc61b546a360bf1007b1dd"
+    }
+  ],
+  "worker_pids": [],
+  "status": "failed",
+  "error": "Traceback (most recent call last):\n  File \"/home/diego/projects/onenil-archaeology/.cache/T53-desktop-window/desktop/faithful/graphical_check.py\", line 62, in <module>\n    key('Insert');step('details',lambda s:s.get('panel')=='Details');key('Return');key('Down')\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/diego/projects/onenil-archaeology/.cache/T53-desktop-window/desktop/faithful/graphical_check.py\", line 44, in step\n    s=wait(check);steps.append(dict(name=name,state=s));return s\n      ^^^^^^^^^^^\n  File \"/home/diego/projects/onenil-archaeology/.cache/T53-desktop-window/desktop/faithful/graphical_check.py\", line 38, in wait\n    raise AssertionError('condition timeout: '+str(state()))\nAssertionError: condition timeout: {'card': 0, 'carried': None, 'events': None, 'first': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 'frames': None, 'job': 0, 'message': '', 'panel': 'Skills', 'phase': None, 'players': None, 'reserve': None, 'score': None, 'screen': 'Players', 'selected': 'First(0)', 'worker_pid': None}\n",
+  "stderr": ""
+}
