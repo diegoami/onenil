@@ -1,0 +1,16 @@
+{
+  "name": "onenil-ui-delivery-spike",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Disposable browser/desktop comparison, not the selected game shell",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "package:linux": "electron-packager . OneNilUISpike --platform=linux --arch=x64 --out=../../.cache/T48-packages --overwrite --ignore=node_modules --ignore=package-lock.json"
+  },
+  "devDependencies": {
+    "@electron/packager": "20.3.0",
+    "electron": "45.2.3",
+    "playwright": "1.65.0"
+  }
+}
