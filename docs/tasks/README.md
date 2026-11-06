@@ -87,3 +87,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T57 Original-style saved-game chooser and atomic load target](T57.md)
 
 - [T58 Observed player position and goalkeeper instruction controls](T58.md)
+
+- [T59 Milestone126 review: visible Mark row and bounded behaviour evidence](T59.md)
