@@ -17,7 +17,7 @@ cargo run --manifest-path desktop/faithful/Cargo.toml --features software --lock
 ```
 
 Space opens Players; Insert switches skills/details; Enter picks/places a player; Escape
-cancels/returns. F7 saves and F9 reloads the complete native campaign. Main-menu Enter opens the actual PSG
+cancels/returns. F7 saves the complete campaign; F9 loads a native save, showing a chooser when several exist. Main-menu Enter opens the actual PSG
 fixture preparation; campaign match admission is still pending. Press E to open the separate
 native exhibition. See [saved-club state, launch and limits](docs/campaign-state.md).
 Campaign edits do not yet feed the exhibition or advance the fixture. This is a tested Linux desktop

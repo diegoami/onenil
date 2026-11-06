@@ -68,8 +68,8 @@ campaign transitions requiring their own original evidence.
 
 [designed] The existing software-window prototype now owns T55 state directly.
 Its first/reserve lists contain20slots each and the actual original player IDs;
-there is no parallel synthetic roster. F7 saves the complete campaign; F9 reloads
-it. Default native path is `.cache/desktop-campaign/SAVE1.json`. Old experiment
+there is no parallel synthetic roster. F7 saves the complete campaign; F9 opens
+the native load route (T57 adds a chooser when multiple saves exist). Default native path is `.cache/desktop-campaign/SAVE1.json`. Old experiment
 saves remain separate and are refused by the campaign loader. `--save <path>` and
 `--load` select/reopen a native file. Startup load refusal shows the initial state
 with an explicit error; active F9 refusal preserves the complete active state.
