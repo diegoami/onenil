@@ -7,7 +7,8 @@ repository; see [docs/artifacts.md](docs/artifacts.md). Rules: [CLAUDE.md](CLAUD
 [docs/process.md](docs/process.md).
 
 A native desktop feasibility prototype now reproduces the original-style main menu and
-Players interaction, with experiment save/load and a fixed Rust exhibition showing detailed
+Players interaction, backed by the original saved Blackburn club and complete native save/load.
+A separate fixed Rust exhibition shows detailed
 player commentary, clock, score and pitch positions. It runs locally without a browser/server:
 
 ```sh
@@ -16,9 +17,10 @@ cargo run --manifest-path desktop/faithful/Cargo.toml --features software --lock
 ```
 
 Space opens Players; Insert switches skills/details; Enter picks/places a player; Escape
-cancels/returns. F7 saves and F9 reloads the experiment squad. Main-menu Enter, then PLAY GAME,
-prepares the native exhibition. See [desktop launch, controls and limits](docs/desktop-feasibility.md).
-Captured example squad edits do not yet feed that fixed match. This is a tested Linux desktop
+cancels/returns. F7 saves and F9 reloads the complete native campaign. Main-menu Enter opens the actual PSG
+fixture preparation; campaign match admission is still pending. Press E to open the separate
+native exhibition. See [saved-club state, launch and limits](docs/campaign-state.md).
+Campaign edits do not yet feed the exhibition or advance the fixture. This is a tested Linux desktop
 candidate, with several UI/statistics/management gaps; no final toolkit or Windows package is claimed.
 
 The earlier technical watched preview remains available for engine evidence. The next product target is [one playable watched match](docs/first-playable.md),

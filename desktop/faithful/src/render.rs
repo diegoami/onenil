@@ -765,3 +765,26 @@ fn wrapped(text: &str, width: usize) -> Vec<String> {
     }
     lines
 }
+
+#[cfg(test)]
+mod campaign_labels_tests {
+    use super::*;
+    #[test]
+    fn saved_instruction_labels_follow_original_bits() {
+        let font = std::env::var_os("ONENIL_DESKTOP_FONT").expect("set verified replacement font");
+        let renderer = Renderer::new(Path::new(&font)).unwrap();
+        let mut c = Controller::default();
+        let keeper = c.editor.player(2598).unwrap();
+        assert_eq!(
+            renderer.instruction_text(&c, keeper, 0),
+            "come out of box P"
+        );
+        c.editor.campaign.set_instructions(2598, 16).unwrap();
+        let keeper = c.editor.player(2598).unwrap();
+        assert_eq!(renderer.instruction_text(&c, keeper, 0), "stay in box P");
+        assert_eq!(renderer.labels.positions[1], "sweeper");
+        let pearce = c.editor.player(2582).unwrap();
+        assert_eq!(renderer.instruction_text(&c, pearce, 0), "stay back P");
+        assert_eq!(renderer.instruction_text(&c, pearce, 2), "short passes");
+    }
+}

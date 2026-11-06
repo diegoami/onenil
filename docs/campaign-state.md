@@ -63,3 +63,43 @@ T55 does not yet change the displayed desktop editor, admit an edited campaign X
 play the PSG fixture, update finances/week/table, migrate old files or provide DOS
 save compatibility. T56's bounded UI bridge comes next; B4/B5 remain engine and
 campaign transitions requiring their own original evidence.
+
+## T56 desktop bridge
+
+[designed] The existing software-window prototype now owns T55 state directly.
+Its first/reserve lists contain20slots each and the actual original player IDs;
+there is no parallel synthetic roster. F7 saves the complete campaign; F9 reloads
+it. Default native path is `.cache/desktop-campaign/SAVE1.json`. Old experiment
+saves remain separate and are refused by the campaign loader. `--save <path>` and
+`--load` select/reopen a native file. Startup load refusal shows the initial state
+with an explicit error; active F9 refusal preserves the complete active state.
+
+[confirmed UI read map: research static004fb87b] Position strings at8724+19×role,
+role glyph table8716, instruction alternatives85E8+32×row+16×choice and goalkeeper
+alternatives0B70/0B90 supply bounded decoded labels. The lower instruction bits
+and upper override markers follow0AB9:8B0B. Their public listing hashes and pinned
+listing comparison are retained in assets/campaign-labels.json. Independent font
+and custom role appearance remain proposed departures. No original font/template
+buffers are embedded.
+
+Cards follow the highlighted real ID. Captured extra detail/skill values are shown
+only for the same source player/state; changed or unobserved cards show owned
+name/age/current and club position/instructions and explicitly unavailable remaining
+data. Changes invalidate captured team averages rather than displaying stale ones.
+The application still lacks complete player models and management calculations.
+
+PLAY NEXT GAME now opens the saved PSG preparation. PLAY GAME there reports that
+campaign engine admission is pending and does not launch the Sheffield match.
+The additional prototype key **E** opens a clearly separate reference64 exhibition;
+it leaves every campaign field unchanged, including after full-time. This is a
+working saved-club editor plus the accepted exhibition, not a played campaign week.
+Original contextual move/cancel/card/return controls stay in place. The tactics
+and reposition editors remain subsequent B3 work; the graphical proof explicitly
+uses headless native commands to establish the recorded instruction/position values
+before reopening the desktop, rather than claiming those UI editors exist.
+
+Actual native-input/restart proof uses `desktop/faithful/campaign_window_check.py`;
+`check_campaign_records.py <record>` verifies real IDs, complete original initial/
+changed projections, invalid loads, distinct desktop process IDs, images and
+unchanged campaign through exhibition, rejecting four corrupted records. Earlier
+T52–T54 graphical records/checkers remain historical evidence for their producers.
