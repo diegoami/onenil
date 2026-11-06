@@ -118,3 +118,44 @@ fn changed_card_retains_original_detail_panel_dividers() {
         );
     }
 }
+
+#[cfg(feature = "raster")]
+#[test]
+fn cached_glyphs_and_repeated_redraws_produce_identical_owned_card() {
+    use onenil_desktop::{
+        controller::{Controller, Key},
+        editor::Location,
+        render::Renderer,
+    };
+    let font = std::env::var_os("ONENIL_DESKTOP_FONT").unwrap();
+    let mut r = Renderer::new(std::path::Path::new(&font)).unwrap();
+    let mut c = Controller::default();
+    r.draw(&c);
+    c.key(Key::Space);
+    r.draw(&c);
+    c.editor.select(Location::First(17)).unwrap();
+    c.key(Key::Space);
+    r.draw(&c);
+    for _ in 0..4 {
+        c.key(Key::Down);
+    }
+    c.key(Key::Enter);
+    r.draw(&c);
+    c.key(Key::Enter);
+    r.draw(&c);
+    c.key(Key::Enter);
+    r.draw(&c);
+    c.key(Key::Escape);
+    c.key(Key::Escape);
+    c.editor.select(Location::First(1)).unwrap();
+    c.editor.campaign.set_position(2582, 1).unwrap();
+    c.key(Key::Space);
+    r.draw(&c);
+    let mut fresh = Renderer::new(std::path::Path::new(&font)).unwrap();
+    fresh.draw(&c);
+    assert_eq!(r.pixels, fresh.pixels);
+    assert_eq!(
+        r.observed(serde_json::json!({}))["raster_sha256"],
+        fresh.observed(serde_json::json!({}))["raster_sha256"]
+    );
+}

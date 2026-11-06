@@ -796,6 +796,16 @@ impl Renderer {
             self.text(0, 24, &c.message, 0xffff55, 0, 80);
         }
     }
+    /// [designed] Read-only diagnostic binds a state observation to its rendered RGB pixels.
+    pub fn observed(&self, mut state: serde_json::Value) -> serde_json::Value {
+        let rgb: Vec<u8> = self
+            .pixels
+            .iter()
+            .flat_map(|p| [(p >> 16) as u8, (p >> 8) as u8, *p as u8])
+            .collect();
+        state["raster_sha256"] = format!("{:x}", Sha256::digest(rgb)).into();
+        state
+    }
     pub fn scaled(&self, width: usize, height: usize) -> Vec<u32> {
         let mut out = vec![0x111111; width * height];
         let scale = (width as f64 / WIDTH as f64).min(height as f64 / HEIGHT as f64);

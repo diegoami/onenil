@@ -52,12 +52,18 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
  def step(name,check,timeout=10):
   s=wait(check,timeout);steps.append(dict(name=name,state=s));return s
  def shot(name):
-  time.sleep(.12);r=U();xx=I();yy=I();w=C.c_uint();h=C.c_uint();border=C.c_uint();depth=C.c_uint()
-  assert x.XGetGeometry(display,window,C.byref(r),C.byref(xx),C.byref(yy),C.byref(w),C.byref(h),C.byref(border),C.byref(depth))
-  image=x.XGetImage(display,window,0,0,w,h,U(-1),2);assert image;meta=C.cast(image,C.POINTER(XImage)).contents;assert meta.bits_per_pixel==32
-  data=C.string_at(meta.data,meta.bytes_per_line*h.value);out=args.record.with_name(args.record.stem+'-'+name+'.png');assert not out.exists()
-  Image.frombytes('RGB',(w.value,h.value),data,'raw','BGRX',meta.bytes_per_line,1).save(out);x.XDestroyImage(image)
-  shots.append(dict(name=name,path=out.name,size=[w.value,h.value],sha256=hashlib.sha256(out.read_bytes()).hexdigest()))
+  end=time.monotonic()+8
+  while time.monotonic()<end:
+   time.sleep(.12);observed=state();r=U();xx=I();yy=I();w=C.c_uint();h=C.c_uint();border=C.c_uint();depth=C.c_uint()
+   assert x.XGetGeometry(display,window,C.byref(r),C.byref(xx),C.byref(yy),C.byref(w),C.byref(h),C.byref(border),C.byref(depth))
+   image=x.XGetImage(display,window,0,0,w,h,U(-1),2);assert image;meta=C.cast(image,C.POINTER(XImage)).contents;assert meta.bits_per_pixel==32
+   data=C.string_at(meta.data,meta.bytes_per_line*h.value);picture=Image.frombytes('RGB',(w.value,h.value),data,'raw','BGRX',meta.bytes_per_line,1);x.XDestroyImage(image)
+   assert (w.value,h.value)==(1440,900)
+   pixels=picture.crop((0,50,1440,850)).resize((720,400),Image.Resampling.NEAREST)
+   if hashlib.sha256(pixels.tobytes()).hexdigest()==observed.get('raster_sha256'):break
+  else:raise AssertionError('native image did not match observed renderer pixels: '+name)
+  out=args.record.with_name(args.record.stem+'-'+name+'.png');assert not out.exists();picture.save(out)
+  shots.append(dict(name=name,path=out.name,size=[w.value,h.value],sha256=hashlib.sha256(out.read_bytes()).hexdigest(),raster_sha256=observed['raster_sha256']))
  def close_window():
   event=Event();event.client=Client(33,0,1,display,window,x.XInternAtom(display,b'WM_PROTOCOLS',0),32,(C.c_long*5)(x.XInternAtom(display,b'WM_DELETE_WINDOW',0),0,0,0,0));x.XSendEvent(display,window,0,0,C.byref(event));x.XFlush(display)
  def launch(load=False,choose=False):

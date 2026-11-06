@@ -41,6 +41,9 @@ def verify(path):
  for shot in r['screenshots']:
   assert Path(shot['path']).name==shot['path'] and shot['path'] not in seen;seen.add(shot['path']);image=path.parent/shot['path']
   assert hashlib.sha256(image.read_bytes()).hexdigest()==shot['sha256'] and list(Image.open(image).size)==shot['size']
+  if 'raster_sha256' in shot:
+   pixels=Image.open(image).convert('RGB').crop((0,50,1440,850)).resize((720,400),Image.Resampling.NEAREST)
+   assert hashlib.sha256(pixels.tobytes()).hexdigest()==shot['raster_sha256']
  assert len(seen)==15
  for kind in ['disabled-change','unrelated-bit','role-cycle','club-role','remembered-row','fresh-state']:
   bad=copy.deepcopy(r);s={v['name']:v['state'] for v in bad['steps']}

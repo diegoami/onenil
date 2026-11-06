@@ -51,8 +51,12 @@ impl eframe::App for Candidate {
             self.renderer.draw(&self.app.controller);
             self.last_visual = visual;
         }
-        if let Some(path) = &self.observe {
-            if let Ok(bytes) = serde_json::to_vec(&self.app.snapshot()) {
+        if let Some(path) = self
+            .observe
+            .as_ref()
+            .filter(|_| changed || self.last_observation.is_empty())
+        {
+            if let Ok(bytes) = serde_json::to_vec(&self.renderer.observed(self.app.snapshot())) {
                 if bytes != self.last_observation {
                     let temporary = path.with_extension("tmp");
                     if let Err(e) = std::fs::write(&temporary, &bytes)
