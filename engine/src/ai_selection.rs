@@ -114,6 +114,13 @@ fn limit_address(allowance: u8) -> usize {
     usize::from(0xD58u16.wrapping_add(i16::from(allowance as i8) as u16))
 }
 pub(crate) fn cells(s: &State) -> Result<Cells, String> {
+    load_cells(s, false)
+}
+/// [designed] Only setup's exact authenticated fresh profile may have slot0.
+pub(crate) fn fresh_source_cells(s: &State) -> Result<Cells, String> {
+    load_cells(s, true)
+}
+fn load_cells(s: &State, fresh: bool) -> Result<Cells, String> {
     let x = &s.context;
     if s.side > 1
         || !(1..=22).contains(&s.scene)
@@ -131,7 +138,7 @@ pub(crate) fn cells(s: &State) -> Result<Cells, String> {
         || x.scenes
             .iter()
             .enumerate()
-            .any(|(i, r)| usize::from(r.index) != i + 1 || !(1..=22).contains(&r.slot))
+            .any(|(i, r)| usize::from(r.index) != i + 1 || (!fresh && !(1..=22).contains(&r.slot)))
     {
         return Err("unordered/unsupported selection scenes".into());
     }
@@ -152,7 +159,11 @@ pub(crate) fn cells(s: &State) -> Result<Cells, String> {
         return Err("unsupported reserve limit/candidate slot".into());
     }
     let mut c = if let Some(r) = &s.replacement {
-        let mut c = rearrangement::cells(&r.match_state)?;
+        let mut c = if fresh {
+            rearrangement::fresh_source_cells(&r.match_state)?
+        } else {
+            rearrangement::cells(&r.match_state)?
+        };
         insert(&mut c, 0xD074, r.display_mode)?;
         cw(&mut c, 0xD2E, r.position_sentinel)?;
         insert(&mut c, 0xA2EC, r.speaker_gate)?;

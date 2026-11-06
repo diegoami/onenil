@@ -85,79 +85,96 @@ impl Session {
         a: Admission,
         initial: Option<&crate::role_scores::Cells>,
     ) -> Result<Self, String> {
-        for (side, r) in a.ratings.iter().enumerate() {
-            ratings::validate(r)?;
-            if usize::from(r.side) != side {
-                return Err("admission rating side order differs".into());
+        Self::load_initial(a, initial, false)
+    }
+    /// [designed] Called only after setup authenticates the complete bounded
+    /// fresh incoming profile. It has no previously completed physical scenes.
+    pub(crate) fn from_fresh_source(
+        a: Admission,
+        initial: &crate::role_scores::Cells,
+    ) -> Result<Self, String> {
+        Self::load_initial(a, Some(initial), true)
+    }
+    fn load_initial(
+        a: Admission,
+        initial: Option<&crate::role_scores::Cells>,
+        fresh: bool,
+    ) -> Result<Self, String> {
+        if !fresh {
+            for (side, r) in a.ratings.iter().enumerate() {
+                ratings::validate(r)?;
+                if usize::from(r.side) != side {
+                    return Err("admission rating side order differs".into());
+                }
             }
-        }
-        extra_event::validate(&a.extra)?;
-        event_effects::validate_storage(&a.event)?;
-        quick_reset::validate(&a.reset)?;
-        step_tail::validate_clock(&a.clock)?;
-        if a.goal.clubs.iter().any(|id| !(1..=176).contains(id))
-            || a.goal
-                .players
+            extra_event::validate(&a.extra)?;
+            event_effects::validate_storage(&a.event)?;
+            quick_reset::validate(&a.reset)?;
+            step_tail::validate_clock(&a.clock)?;
+            if a.goal.clubs.iter().any(|id| !(1..=176).contains(id))
+                || a.goal
+                    .players
+                    .iter()
+                    .any(|p| p.id > 3920 || p.p8_position > 13)
+                || a.goal.queue.head > 1700
+                || a.goal.queue.rows.iter().any(|r| r.index > 1700)
+                || a.goal.log_counts.iter().any(|n| *n > 11)
+            {
+                return Err("invalid goal admission domain".into());
+            }
+            if a.selectors.len() != 255
+                || a.config[0] != a.history.selector
+                || a.config[2] != a.neutral.speed
+                || a.contest.k != 8
+                || a.reset.kind != 45
+                || a.substitution.replacement.is_some()
+            {
+                return Err("unsupported/incomplete first-half admission".into());
+            }
+            let ids = a.players.iter().map(|p| p.id).collect::<BTreeSet<_>>();
+            if ids.len() != a.players.len()
+                || ids.iter().any(|i| *i > 3920)
+                || a.scenes.len() != 22
+                || a.scenes
+                    .iter()
+                    .enumerate()
+                    .any(|(i, s)| usize::from(s.index) != i + 1 || !ids.contains(&s.word14))
+            {
+                return Err("incomplete/ambiguous admission players/scenes".into());
+            }
+            let goal_ids = a.goal.players.iter().map(|p| p.id).collect::<BTreeSet<_>>();
+            let required_goal_ids = a
+                .goal
+                .rosters
                 .iter()
-                .any(|p| p.id > 3920 || p.p8_position > 13)
-            || a.goal.queue.head > 1700
-            || a.goal.queue.rows.iter().any(|r| r.index > 1700)
-            || a.goal.log_counts.iter().any(|n| *n > 11)
-        {
-            return Err("invalid goal admission domain".into());
-        }
-        if a.selectors.len() != 255
-            || a.config[0] != a.history.selector
-            || a.config[2] != a.neutral.speed
-            || a.contest.k != 8
-            || a.reset.kind != 45
-            || a.substitution.replacement.is_some()
-        {
-            return Err("unsupported/incomplete first-half admission".into());
-        }
-        let ids = a.players.iter().map(|p| p.id).collect::<BTreeSet<_>>();
-        if ids.len() != a.players.len()
-            || ids.iter().any(|i| *i > 3920)
-            || a.scenes.len() != 22
-            || a.scenes
-                .iter()
-                .enumerate()
-                .any(|(i, s)| usize::from(s.index) != i + 1 || !ids.contains(&s.word14))
-        {
-            return Err("incomplete/ambiguous admission players/scenes".into());
-        }
-        let goal_ids = a.goal.players.iter().map(|p| p.id).collect::<BTreeSet<_>>();
-        let required_goal_ids = a
-            .goal
-            .rosters
-            .iter()
-            .flatten()
-            .copied()
-            .chain(a.goal.scenes.iter().map(|s| s.player))
-            .collect::<BTreeSet<_>>();
-        let head = a.goal.queue.head;
-        let next = if head == 1700 { 1 } else { head + 1 };
-        let after = if next == 1700 { 1 } else { next + 1 };
-        if a.goal.scenes.len() != 22
-            || a.goal
-                .scenes
-                .iter()
-                .enumerate()
-                .any(|(i, s)| usize::from(s.index) != i + 1 || !(1..=22).contains(&s.slot))
-            || goal_ids.len() != a.goal.players.len()
-            || goal_ids != required_goal_ids
-            || !ids.is_superset(&goal_ids)
-            || a.goal
-                .queue
-                .rows
-                .iter()
-                .map(|r| r.index)
-                .collect::<Vec<_>>()
-                != [head, next, after]
-            || a.history.club != a.goal.clubs[0]
-            || a.scorer_slots.iter().any(|s| !(1..=11).contains(s))
-        {
-            return Err("incomplete/contradictory goal,history or scorer admission".into());
+                .flatten()
+                .copied()
+                .chain(a.goal.scenes.iter().map(|s| s.player))
+                .collect::<BTreeSet<_>>();
+            let head = a.goal.queue.head;
+            let next = if head == 1700 { 1 } else { head + 1 };
+            let after = if next == 1700 { 1 } else { next + 1 };
+            if a.goal.scenes.len() != 22
+                || a.goal
+                    .scenes
+                    .iter()
+                    .enumerate()
+                    .any(|(i, s)| usize::from(s.index) != i + 1 || !(1..=22).contains(&s.slot))
+                || goal_ids.len() != a.goal.players.len()
+                || goal_ids != required_goal_ids
+                || !ids.is_superset(&goal_ids)
+                || a.goal
+                    .queue
+                    .rows
+                    .iter()
+                    .map(|r| r.index)
+                    .collect::<Vec<_>>()
+                    != [head, next, after]
+                || a.history.club != a.goal.clubs[0]
+                || a.scorer_slots.iter().any(|s| !(1..=11).contains(s))
+            {
+                return Err("incomplete/contradictory goal,history or scorer admission".into());
+            }
         }
         let mut e = if let Some(initial) = initial {
             Engine::new_tracked(&a.contest, initial)?
@@ -188,7 +205,12 @@ impl Session {
             side: 0,
             scene: a.substitution.context.side_offsets[0] + 1,
         };
-        for (address, value) in ai_selection::cells(&ai)? {
+        let selection_cells = if fresh {
+            ai_selection::fresh_source_cells(&ai)?
+        } else {
+            ai_selection::cells(&ai)?
+        };
+        for (address, value) in selection_cells {
             e.image[address] = value;
         }
         for r in &a.ratings {
