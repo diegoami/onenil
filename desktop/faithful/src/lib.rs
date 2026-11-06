@@ -9,5 +9,5 @@ pub mod software;
 pub mod timeline;
 pub mod worker;
 
-#[cfg(feature="egui")]
+#[cfg(feature = "egui")]
 pub mod egui_window;
