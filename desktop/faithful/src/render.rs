@@ -1,7 +1,7 @@
 //! [derived] T51 cell compositions, replacement font and independent vector primitives.
 use crate::{
     controller::{Controller, Screen},
-    editor::{Location, Panel, NAMES},
+    editor::{Location, Panel},
 };
 use fontdue::{Font, FontSettings};
 use serde::Deserialize;
@@ -14,6 +14,14 @@ const TEXT: u32 = 0xaaaaaa;
 const CYAN: u32 = 0x55ffff;
 type Cell = (char, u32, u32);
 #[derive(Deserialize)]
+struct Labels {
+    positions: Vec<String>,
+    role_glyphs: Vec<String>,
+    instructions: Vec<Vec<String>>,
+    goalkeeper_position: Vec<String>,
+    goalkeeper_passing: Vec<String>,
+}
+#[derive(Deserialize)]
 struct Assets {
     screens: HashMap<String, Vec<Cell>>,
 }
@@ -22,6 +30,8 @@ pub struct Renderer {
     font: Font,
     glyphs: HashMap<char, (fontdue::Metrics, Vec<u8>)>,
     assets: Assets,
+    labels: Labels,
+    initial: onenil_campaign::Campaign,
 }
 impl Renderer {
     pub fn new(font: &Path) -> Result<Self, String> {
@@ -37,6 +47,9 @@ impl Renderer {
             font: Font::from_bytes(bytes, FontSettings::default()).map_err(|e| e.to_string())?,
             assets: serde_json::from_str(include_str!("../assets/cells.json"))
                 .map_err(|e| e.to_string())?,
+            labels: serde_json::from_str(include_str!("../assets/campaign-labels.json"))
+                .map_err(|e| e.to_string())?,
+            initial: onenil_campaign::Campaign::initial()?,
         })
     }
     fn pixel(&mut self, x: i32, y: i32, color: u32) {
@@ -156,64 +169,102 @@ impl Renderer {
         i + 1 + usize::from(i >= 11) + usize::from(i >= 14)
     }
     fn roster(&mut self, c: &Controller, x: usize) {
-        let reserve = c.editor.selected == Location::Reserve;
+        let reserve = matches!(c.editor.selected, Location::Reserve(_));
         self.text(
             x,
             0,
-            &format!(" {}", if reserve { "RESERVES" } else { "FIRST TEAM" }),
+            if reserve { " RESERVES" } else { " FIRST TEAM" },
             CYAN,
             GROUND,
             14,
         );
-        for i in 0..18 {
-            let row = Self::roster_row(i);
-            let player = if reserve {
-                if i == 0 {
-                    c.editor.reserve
+        for i in 0..20 {
+            let row = if reserve { i + 1 } else { Self::roster_row(i) };
+            let id = if reserve {
+                c.editor.campaign.club.reserves[i]
+            } else {
+                c.editor.campaign.club.first_team[i]
+            };
+            let selected = c.editor.selected
+                == if reserve {
+                    Location::Reserve(i)
                 } else {
-                    None
-                }
-            } else {
-                c.editor.first[i]
-            };
-            let selected = if reserve {
-                i == 0
-            } else {
-                c.editor.selected == Location::First(i)
-            };
+                    Location::First(i)
+                };
             let (fg, bg) = if selected {
                 (GROUND, TEXT)
             } else {
                 (TEXT, GROUND)
             };
-            self.text(
-                x,
-                row,
-                &format!(" {}", player.map(|p| NAMES[p as usize]).unwrap_or("")),
-                fg,
-                bg,
-                14,
-            );
-            let (role, role_fg, _) = player
-                .map(|p| self.assets.screens["skills"][Self::roster_row(p as usize) * 80 + 73])
-                .unwrap_or((' ', TEXT, GROUND));
-            self.cell(x + 15, row, role, role_fg, GROUND);
+            let name = id
+                .and_then(|id| c.editor.player(id))
+                .map(|p| p.name.as_str())
+                .unwrap_or("");
+            self.text(x, row, &format!(" {name}"), fg, bg, 14);
+            let role = id
+                .and_then(|id| c.editor.player(id))
+                .map(|p| {
+                    self.labels.role_glyphs[p.current_position as usize]
+                        .chars()
+                        .next()
+                        .unwrap_or('?')
+                })
+                .unwrap_or(' ');
+            self.cell(x + 15, row, role, TEXT, GROUND);
         }
     }
+    fn instruction_text(
+        &self,
+        c: &Controller,
+        player: &onenil_campaign::Player,
+        row: usize,
+    ) -> String {
+        let explicit = player.individual_instructions & (1 << (row + 4)) != 0;
+        let bits = if explicit {
+            player.individual_instructions
+        } else {
+            c.editor.campaign.club.team_instructions
+        };
+        let choice = usize::from(bits & (1 << row) != 0);
+        let table = if player.current_position == 0 && row == 0 {
+            &self.labels.goalkeeper_position
+        } else if player.current_position == 0 && row == 2 {
+            &self.labels.goalkeeper_passing
+        } else {
+            &self.labels.instructions[row]
+        };
+        format!("{}{}", table[choice], if explicit { " P" } else { "" })
+    }
     fn players(&mut self, c: &Controller) {
-        let name = match (c.editor.card(), c.editor.panel) {
-            (Some(0), Panel::Skills) => Some("skills"),
-            (Some(0), Panel::Details) => Some("details"),
-            (Some(1), Panel::Skills) => Some("pearce-skills"),
-            (Some(1), Panel::Details) => Some("pearce-details"),
-            (Some(17), Panel::Details) => Some("mimms-details"),
-            _ => None,
+        let player = c.editor.card().and_then(|id| c.editor.player(id));
+        let unchanged = player
+            .is_some_and(|p| self.initial.players.iter().any(|original| p == original))
+            && c.editor.campaign.club.team_instructions == self.initial.club.team_instructions;
+        let name = if unchanged {
+            match (c.editor.card(), c.editor.panel) {
+                (Some(2581), Panel::Skills) => Some("skills"),
+                (Some(2581), Panel::Details) => Some("details"),
+                (Some(2582), Panel::Skills) => Some("pearce-skills"),
+                (Some(2582), Panel::Details) => Some("pearce-details"),
+                (Some(2598), Panel::Details) => Some("mimms-details"),
+                _ => None,
+            }
+        } else {
+            None
         };
         self.sheet(name.unwrap_or("skills"));
         if name.is_none() {
-            self.rect(0, 0, 480, 376, GROUND);
+            self.rect(0, 0, 495, 376, GROUND);
+            for (x, y, ex, ey) in [
+                (0, 8, 494, 8),
+                (0, 375, 494, 375),
+                (0, 8, 0, 375),
+                (494, 8, 494, 375),
+            ] {
+                self.line(x, y, ex, ey, TEXT);
+            }
             self.text(
-                1,
+                2,
                 0,
                 if c.editor.panel == Panel::Skills {
                     "PLAYER SKILLS"
@@ -222,18 +273,98 @@ impl Renderer {
                 },
                 CYAN,
                 GROUND,
-                51,
+                25,
             );
-            if let Some(id) = c.editor.card() {
-                self.text(1, 2, NAMES[id as usize], TEXT, GROUND, 51);
+            if let Some(player) = player {
                 self.text(
-                    1,
-                    4,
-                    "Card not captured in this bounded study.",
+                    2,
+                    2,
+                    &format!("{}   Age {}", player.name, player.age),
                     TEXT,
                     GROUND,
                     51,
                 );
+                self.text(
+                    2,
+                    3,
+                    &format!(
+                        "Pos. {}",
+                        self.labels.positions[player.current_position as usize]
+                    ),
+                    TEXT,
+                    GROUND,
+                    51,
+                );
+                self.text(
+                    2,
+                    4,
+                    &format!(
+                        "1st pos {}",
+                        self.labels.positions[player.club_position as usize]
+                    ),
+                    TEXT,
+                    GROUND,
+                    51,
+                );
+                if c.editor.panel == Panel::Details {
+                    self.text(
+                        2,
+                        6,
+                        &format!("Team {}", c.editor.campaign.club.name),
+                        TEXT,
+                        GROUND,
+                        51,
+                    );
+                    self.text(2, 9, "Remaining details not yet decoded", TEXT, GROUND, 51);
+                    for (i, label) in ["Positioning", "Possession", "Passing", "Tackling"]
+                        .iter()
+                        .enumerate()
+                    {
+                        self.text(
+                            2,
+                            13 + i,
+                            &format!("{label:15} {}", self.instruction_text(c, player, i)),
+                            TEXT,
+                            GROUND,
+                            51,
+                        );
+                    }
+                } else {
+                    self.text(
+                        2,
+                        8,
+                        "Skills for this state are not yet decoded",
+                        TEXT,
+                        GROUND,
+                        51,
+                    );
+                }
+            }
+            self.text(
+                2,
+                23,
+                if c.editor.panel == Panel::Skills {
+                    "INS-Details"
+                } else {
+                    "INS-Player skills"
+                },
+                0xffff55,
+                GROUND,
+                25,
+            );
+        }
+        if matches!(c.editor.selected, Location::Reserve(_)) {
+            // Reserve rows have no first-XI/substitute dividers. New vector rules preserve the
+            // original list grouping without carrying stale FIRST TEAM section labels.
+            self.rect(513, 0, 162, 376, GROUND);
+            for (x, y, ex, ey) in [
+                (513, 8, 666, 8),
+                (513, 375, 666, 375),
+                (513, 8, 513, 375),
+                (666, 8, 666, 375),
+                (648, 8, 648, 375),
+            ] {
+                self.line(x, y, ex, ey, TEXT);
             }
         }
         self.roster(c, 58);
@@ -259,16 +390,33 @@ impl Renderer {
                 "Continue",
             ];
             self.rect(180, 64, 270, 160, 0);
-            for (i, s) in options.iter().enumerate() {
+            for (i, text) in options.iter().enumerate() {
                 self.text(
                     21,
                     5 + i,
-                    s,
+                    text,
                     if i == c.option { GROUND } else { TEXT },
                     if i == c.option { TEXT } else { 0 },
                     26,
                 );
             }
+        }
+    }
+    fn team_panel(&mut self, c: &Controller) {
+        self.text(22, 0, &c.editor.campaign.club.name, TEXT, GROUND, 15);
+        if c.editor.campaign.club.first_team != self.initial.club.first_team
+            || c.editor.campaign.players != self.initial.players
+            || c.editor.campaign.club.team_instructions != self.initial.club.team_instructions
+        {
+            self.rect(21 * 9, 16, 33 * 9, 14 * 16, GROUND);
+            self.text(22, 3, "Team averages pending", TEXT, GROUND, 30);
+            self.text(22, 5, "for this selection", TEXT, GROUND, 30);
+        }
+        for i in 0..8 {
+            let choice = usize::from(c.editor.campaign.club.team_instructions & (1 << i) != 0);
+            let label = self.labels.instructions[i][choice].clone();
+            let start = 53 - label.len();
+            self.text(start, 15 + i, &label, TEXT, GROUND, label.len());
         }
     }
     fn match_header(&mut self, c: &Controller) {
@@ -427,23 +575,54 @@ impl Renderer {
                 self.match_view(c)
             }
             Screen::Preparation | Screen::Preparing => {
-                self.sheet("preparation");
-                self.roster(c, 57);
-                self.text(0, 0, "NATIVE EXHIBITION", CYAN, GROUND, 19);
-                self.text(2, 4, "Blackburn R", TEXT, GROUND, 16);
-                self.text(2, 6, "Sheffield Wed", TEXT, GROUND, 16);
-                self.text(
-                    0,
-                    24,
-                    "Reference64 exhibition; captured squad edits do not set its lineup.",
-                    CYAN,
-                    GROUND,
-                    80,
-                );
+                if c.exhibition {
+                    self.pixels.fill(GROUND);
+                    self.text(2, 1, "SEPARATE EXHIBITION", CYAN, GROUND, 60);
+                    self.text(2, 3, "Blackburn R v Sheffield Wed", TEXT, GROUND, 60);
+                    self.text(2, 5, "Fixed reference64 lineup", TEXT, GROUND, 60);
+                    self.text(2, 9, "PLAY GAME", GROUND, TEXT, 20);
+                    self.text(
+                        1,
+                        24,
+                        "Enter-prepare  Esc-return  Campaign squad is separate",
+                        TEXT,
+                        GROUND,
+                        78,
+                    );
+                } else {
+                    self.sheet("preparation");
+                    self.roster(c, 57);
+                    self.team_panel(c);
+                    self.text(2, 4, &c.editor.campaign.club.name, TEXT, GROUND, 16);
+                    self.text(
+                        2,
+                        6,
+                        &c.editor.campaign.next_fixture.opponent_name,
+                        TEXT,
+                        GROUND,
+                        16,
+                    );
+                    self.text(1, 9, "Admission pending", TEXT, GROUND, 17);
+                    self.text(
+                        0,
+                        24,
+                        "SPACEBAR-Squad  E-separate exhibition  Esc-return",
+                        CYAN,
+                        GROUND,
+                        80,
+                    );
+                }
                 if c.screen == Screen::Preparing {
                     self.rect(90, 112, 540, 96, 0);
-                    self.text(12, 8, "Preparing actual Rust match...", CYAN, 0, 56);
-                    self.text(12, 10, "Esc-cancel; window remains responsive", TEXT, 0, 56);
+                    self.text(12, 8, "Preparing actual Rust exhibition...", CYAN, 0, 56);
+                    self.text(
+                        12,
+                        10,
+                        "Esc-cancel; saved campaign is unchanged",
+                        TEXT,
+                        0,
+                        56,
+                    );
                 }
             }
             Screen::Bench => {
@@ -463,6 +642,54 @@ impl Renderer {
             }
             Screen::Main | Screen::Quit => {
                 self.sheet("main");
+                self.team_panel(c);
+                self.text(2, 2, &c.editor.campaign.club.name, TEXT, GROUND, 16);
+                self.text(2, 4, &c.editor.campaign.manager.name, TEXT, GROUND, 16);
+                let digits = c.editor.campaign.cash.to_string();
+                let grouped = digits
+                    .chars()
+                    .rev()
+                    .enumerate()
+                    .flat_map(|(i, ch)| {
+                        if i > 0 && i % 3 == 0 && ch != '-' {
+                            vec![',', ch]
+                        } else {
+                            vec![ch]
+                        }
+                    })
+                    .collect::<String>()
+                    .chars()
+                    .rev()
+                    .collect::<String>();
+                self.text(2, 6, &grouped, TEXT, GROUND, 16);
+                self.text(
+                    9,
+                    8,
+                    &format!(
+                        "{}/{:02}",
+                        c.editor.campaign.season.start_year,
+                        c.editor.campaign.season.end_year % 100
+                    ),
+                    TEXT,
+                    GROUND,
+                    9,
+                );
+                self.text(
+                    2,
+                    12,
+                    &c.editor.campaign.next_fixture.opponent_name,
+                    TEXT,
+                    GROUND,
+                    16,
+                );
+                self.text(
+                    0,
+                    24,
+                    "INS-Information  SPACEBAR-Squad  E-separate exhibition",
+                    TEXT,
+                    GROUND,
+                    80,
+                );
                 let items = [
                     "PLAY NEXT GAME",
                     "Players",
@@ -537,4 +764,27 @@ fn wrapped(text: &str, width: usize) -> Vec<String> {
         }
     }
     lines
+}
+
+#[cfg(test)]
+mod campaign_labels_tests {
+    use super::*;
+    #[test]
+    fn saved_instruction_labels_follow_original_bits() {
+        let font = std::env::var_os("ONENIL_DESKTOP_FONT").expect("set verified replacement font");
+        let renderer = Renderer::new(Path::new(&font)).unwrap();
+        let mut c = Controller::default();
+        let keeper = c.editor.player(2598).unwrap();
+        assert_eq!(
+            renderer.instruction_text(&c, keeper, 0),
+            "come out of box P"
+        );
+        c.editor.campaign.set_instructions(2598, 16).unwrap();
+        let keeper = c.editor.player(2598).unwrap();
+        assert_eq!(renderer.instruction_text(&c, keeper, 0), "stay in box P");
+        assert_eq!(renderer.labels.positions[1], "sweeper");
+        let pearce = c.editor.player(2582).unwrap();
+        assert_eq!(renderer.instruction_text(&c, pearce, 0), "stay back P");
+        assert_eq!(renderer.instruction_text(&c, pearce, 2), "short passes");
+    }
 }
