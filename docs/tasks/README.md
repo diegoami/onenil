@@ -73,3 +73,9 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T50 Complete original-to-desktop screen map](T50.md)
 
 - [T51 Faithful first desktop screen mockups](T51.md)
+
+- [T52 Shared Rust desktop state and owned match worker](T52.md)
+
+- [T53 Faithful Rust software-window desktop prototype](T53.md)
+
+- [T54 Second Rust desktop candidate and measured toolkit comparison](T54.md)
