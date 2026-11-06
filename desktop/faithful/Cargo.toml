@@ -12,7 +12,9 @@ sha2 = "=0.10.9"
 
 [features]
 default = []
-software = ["dep:minifb", "dep:fontdue"]
+raster = ["dep:fontdue"]
+software = ["dep:minifb", "raster"]
+egui = ["dep:eframe", "raster"]
 
 [dependencies.minifb]
 version = "=0.29.0"
@@ -23,3 +25,9 @@ features = ["x11"]
 [dependencies.fontdue]
 version = "=0.9.5"
 optional = true
+
+[dependencies.eframe]
+version = "=0.37.0"
+optional = true
+default-features = false
+features = ["glow", "x11"]
