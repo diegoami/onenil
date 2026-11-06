@@ -2,6 +2,7 @@
 """[designed] Static desktop compositions from public references, not a game UI."""
 import argparse
 import base64
+import copy
 from collections import Counter
 from datetime import datetime, timezone
 from functools import lru_cache
@@ -52,8 +53,7 @@ def font_bytes(path, fetch=False):
     return data
 
 
-def plan():
-    value = json.loads((HERE/'design.json').read_text())
+def validate_plan(value):
     assert value['schema'] == 'faithful-desktop-study/1'
     assert value['research_commit'] == PIN
     assert value['status'] == 'proposed-static-design'
@@ -64,6 +64,10 @@ def plan():
     for row in value['screens']:
         assert row['departures'] and set(row['departures']) <= departures
     return value
+
+
+def plan():
+    return validate_plan(json.loads((HERE/'design.json').read_text()))
 
 
 def input_screen(row, research):
@@ -152,6 +156,25 @@ def generated(data, research, write=False):
     return result
 
 
+def negative_checks(data, research):
+    result = []
+    for name, mutate in [
+        ('missing required variant', lambda d: d['screens'].pop()),
+        ('duplicate variant', lambda d: d['screens'].__setitem__(1, copy.deepcopy(d['screens'][0]))),
+        ('unknown departure', lambda d: d['screens'][0]['departures'].append('P99')),
+    ]:
+        changed=copy.deepcopy(data);mutate(changed)
+        try: validate_plan(changed)
+        except AssertionError: result.append(name)
+        else: raise AssertionError(f'negative control accepted: {name}')
+    for field in ('record_sha256', 'reference_sha256'):
+        changed=copy.deepcopy(data['screens'][0]);changed[field]='0'*64
+        try: input_screen(changed, research)
+        except AssertionError: result.append('changed '+field)
+        else: raise AssertionError(f'negative control accepted: {field}')
+    return result
+
+
 def render(data, pages, font, out, stem):
     from playwright.sync_api import sync_playwright
     import importlib.metadata
@@ -201,6 +224,7 @@ def main():
     parser.add_argument('--fetch-font', action='store_true')
     parser.add_argument('--build', action='store_true')
     parser.add_argument('--render', action='store_true')
+    parser.add_argument('--negative-checks', action='store_true')
     parser.add_argument('--out', type=Path, default=ROOT/'records/T51')
     parser.add_argument('--record', type=Path)
     args = parser.parse_args()
@@ -212,6 +236,8 @@ def main():
         data = plan()
         pages = generated(data, args.research_root, args.build)
         result['pages'] = pages
+        if args.negative_checks:
+            result['rejected_negative_controls'] = negative_checks(data, args.research_root)
         font = font_bytes(args.font, args.fetch_font)
         result['replacement_font_sha256'] = sha(font)
         import PIL
