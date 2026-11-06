@@ -29,11 +29,17 @@ fn run() -> Result<(), String> {
     let save =
         argument("--save")?.unwrap_or_else(|| root.join(".cache/desktop-experiment/squad.json"));
     let load = args.iter().any(|s| s == "--load");
+    #[cfg(feature = "egui")]
+    if !cfg!(feature = "software") || args.iter().any(|s| s == "--egui") {
+        return onenil_desktop::egui_window::run(root, font, save, load, argument("--observe")?);
+    }
     #[cfg(feature = "software")]
     {
         onenil_desktop::software::run(root, font, save, load, argument("--observe")?)
     }
-    #[cfg(not(feature = "software"))]
+    #[cfg(all(feature = "egui", not(feature = "software")))]
+    unreachable!();
+    #[cfg(not(any(feature = "software", feature = "egui")))]
     {
         let _ = (root, font, save, load);
         Err("Build with --features software for the native window.".into())

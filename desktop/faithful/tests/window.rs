@@ -1,4 +1,4 @@
-#[cfg(feature = "software")]
+#[cfg(feature = "raster")]
 #[test]
 fn resized_surface_preserves_edges_and_rejects_wrong_font() {
     use onenil_desktop::{controller::Controller, render::Renderer};

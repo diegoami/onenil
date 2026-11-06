@@ -96,6 +96,6 @@ impl Application {
     /// [designed] Optional read-only diagnostic snapshot; never accepts state or commands.
     pub fn snapshot(&self) -> serde_json::Value {
         let c = &self.controller;
-        serde_json::json!({"screen":format!("{:?}",c.screen),"panel":format!("{:?}",c.editor.panel),"selected":format!("{:?}",c.editor.selected),"card":c.editor.card(),"carried":c.editor.carried_player(),"first":c.editor.first,"reserve":c.editor.reserve,"job":c.job_id,"worker_pid":self.job.as_ref().map(|j|j.pid()),"phase":c.playback.as_ref().map(|p|format!("{:?}",p.phase)),"frames":c.playback.as_ref().map(|p|p.cursor),"events":c.playback.as_ref().map(|p|p.events.len()),"score":c.playback.as_ref().map(|p|p.view().score),"players":c.playback.as_ref().map(|p|p.view().players.len()),"message":c.message})
+        serde_json::json!({"menus":[c.menu,c.preparation_menu,c.option],"speed":c.speed,"close_requested":c.close_requested,"screen":format!("{:?}",c.screen),"panel":format!("{:?}",c.editor.panel),"selected":format!("{:?}",c.editor.selected),"card":c.editor.card(),"carried":c.editor.carried_player(),"first":c.editor.first,"reserve":c.editor.reserve,"job":c.job_id,"worker_pid":self.job.as_ref().map(|j|j.pid()),"phase":c.playback.as_ref().map(|p|format!("{:?}",p.phase)),"frames":c.playback.as_ref().map(|p|p.cursor),"events":c.playback.as_ref().map(|p|p.events.len()),"score":c.playback.as_ref().map(|p|p.view().score),"players":c.playback.as_ref().map(|p|p.view().players.len()),"message":c.message})
     }
 }

@@ -1,0 +1,14 @@
+{
+  "schema": "native-window-check/1",
+  "producer": "c3ebd68b790cf6886a61488b923f5d8573a02eab",
+  "binary_sha256": "ec9f0b163705ca2ba2ab9ea2f01c34edd4f9f5528b1e77ed01db5e4661ba38d7",
+  "font_sha256": "c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f",
+  "display": ":154",
+  "elapsed_seconds": 15.434415014002298,
+  "steps": [],
+  "screenshots": [],
+  "worker_pids": [],
+  "status": "failed",
+  "error": "Traceback (most recent call last):\n  File \"/home/diego/projects/onenil-archaeology/.cache/T54-egui-window/desktop/faithful/graphical_check.py\", line 59, in <module>\n    assert window,'native window missing';x.XSetInputFocus(display,window,1,0);x.XFlush(display)\n           ^^^^^^\nAssertionError: native window missing\n",
+  "stderr": "\nthread 'main' (99858) panicked at /home/diego/projects/onenil-archaeology/.cache/native-toolchain/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/xkbcommon-dl-0.4.2/src/x11.rs:59:28:\nLibrary libxkbcommon-x11.so could not be loaded.\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+}
