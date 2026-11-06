@@ -67,6 +67,17 @@ async function scenario(page, mode) {
     await page.getByRole('button', {name: 'Save file'}).click();
     await (await download).saveAs(saved);
   } else {
+    const live = await page.evaluate(() => window.spikeState());
+    await desktop.evaluate(({dialog}) => {
+      dialog.showSaveDialog = async () => ({canceled: true});
+      dialog.showOpenDialog = async () => ({canceled: true, filePaths: []});
+    });
+    await page.getByRole('button', {name: 'Save file'}).click();
+    await page.getByRole('status').filter({hasText: 'Save cancelled'}).waitFor();
+    await page.getByRole('button', {name: 'Load file'}).click();
+    await page.getByRole('status').filter({hasText: 'Load cancelled'}).waitFor();
+    assert.deepEqual(await page.evaluate(() => window.spikeState()), live);
+    record.cases.push('desktop: native file-dialog cancellation keeps live state');
     await desktop.evaluate(({dialog}, target) => {
       dialog.showSaveDialog = async () => ({canceled: false, filePath: target});
     }, saved);
@@ -161,9 +172,11 @@ try {
 
   const executable = path.join(root, '.cache/T48-packages/OneNilUISpike-linux-x64/OneNilUISpike');
   desktop = await electron.launch({executablePath: executable, args: ['--no-sandbox', `--user-data-dir=${path.join(root, '.cache', stem+'-desktop-profile')}`]});
+  await desktop.evaluate(({session}) => session.defaultSession.enableNetworkEmulation({offline: true}));
   record.electron = await desktop.evaluate(() => process.versions);
   page = await desktop.firstWindow();
   const desktopResult = await scenario(page, 'desktop');
+  await desktop.evaluate(({session}) => session.defaultSession.enableNetworkEmulation({offline: false}));
   await exhibition(page, 'desktop');
   assert.equal(await page.evaluate(() => typeof window.require), 'undefined');
   const packaged = await desktop.evaluate(({app}) => app.isPackaged);
@@ -171,13 +184,14 @@ try {
   record.cases.push('desktop: packaged application; renderer has no Node require');
   await desktop.close();desktop = undefined;
   desktop = await electron.launch({executablePath: executable, args: ['--no-sandbox', `--user-data-dir=${path.join(root, '.cache', stem+'-desktop-profile')}`]});
+  await desktop.evaluate(({session}) => session.defaultSession.enableNetworkEmulation({offline: true}));
   page = await desktop.firstWindow();
   await desktop.evaluate(({dialog}, file) => {dialog.showOpenDialog = async () => ({canceled: false, filePaths: [file]});}, desktopResult.saved);
   await page.getByRole('button', {name: 'Load file'}).click();
   await page.getByRole('status').filter({hasText: 'Loaded'}).waitFor();
   assert.deepEqual(await page.evaluate(() => window.spikeState()), desktopResult.state);
   await image(page, 'desktop-reopened');
-  record.cases.push('desktop: fresh packaged process loads saved file');
+  record.cases.push('desktop: fresh packaged process loads saved file with network emulation offline');
   record.package_binary_sha256 = sha(fs.readFileSync(executable));
   record.package_asar_sha256 = sha(fs.readFileSync(path.join(path.dirname(executable), 'resources/app.asar')));
   const {extractFile} = require('@electron/asar');
