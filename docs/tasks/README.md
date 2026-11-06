@@ -79,3 +79,7 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T53 Faithful Rust software-window desktop prototype](T53.md)
 
 - [T54 Second Rust desktop candidate and measured toolkit comparison](T54.md)
+
+- [T55 Source-backed campaign state and atomic persistence](T55.md)
+
+- [T56 Real saved-club state in the faithful desktop prototype](T56.md)
