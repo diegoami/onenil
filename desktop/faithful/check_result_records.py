@@ -7,7 +7,7 @@ import struct
 from pathlib import Path
 from check_match_records import ROOT, digest
 from check_refusal_records import native_rgb
-RECORD_SHA = 'PENDING_CAPTURE'
+RECORD_SHA = '25c5ecdc7e116e84d888cb985045ffddbc2ab37304b45598dfa24f6fb7f886ab'
 REFUSAL = 'This fixture already has a result. Week progression is not available yet.'
 
 

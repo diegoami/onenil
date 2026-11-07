@@ -24,7 +24,9 @@ See [saved-club state, launch and limits](docs/campaign-state.md).
 Player options now implement Reposition, Club position and the observed goalkeeper
 Positioning cycle under Change tactics. Save/reload retains those edits. Other
 instruction rows and management actions remain unavailable.
-The displayed match result is not yet saved to the campaign or used to advance its fixture.
+Acknowledge full time to record the computed fixture result, then use F7 to save it.
+Reload retains the recorded score and blocks replay of that completed fixture.
+Week progression is not available yet.
 Campaign edits do not yet have match admission. This is a tested Linux desktop
 candidate, with several UI/statistics/management gaps; no final toolkit or Windows package is claimed.
 
