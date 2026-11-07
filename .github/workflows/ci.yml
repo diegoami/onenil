@@ -8,8 +8,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -34,4 +32,5 @@ jobs:
           python3 tools/test_fresh_watched_reference.py
       - run: python3 tools/check_originals.py
       - run: python3 desktop/faithful/export_match_names.py --check
+      - run: python3 desktop/faithful/check_match_records.py records/T62/window-r0003.json
       - run: cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked

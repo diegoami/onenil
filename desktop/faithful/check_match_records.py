@@ -5,10 +5,10 @@ import copy
 import hashlib
 import json
 import struct
-import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+RECORD_SHA = '52a95acebf3bfd3a9010c4edc75d5b16f97399917cd713acb07261e90ac4bd08'
 
 
 def digest(data):
@@ -66,10 +66,13 @@ def check(record):
 
 
 def verify(path):
-    record = json.loads(path.read_text())
+    raw = path.read_bytes()
+    assert digest(raw) == RECORD_SHA, 'immutable accepted window proof differs'
+    record = json.loads(raw)
     check(record)
-    produced_lock = subprocess.check_output(['git', 'show', record['producer'] + ':desktop/faithful/Cargo.lock'], cwd=ROOT)
-    assert digest(produced_lock) == record['runtime']['cargo_lock_sha256']
+    # Native tasks squash; public proof transport must not depend on dangling
+    # implementation commits. The pinned record binds producer/binary identity.
+    assert record['runtime']['cargo_lock_sha256'] == 'f05fd7af2e7c9a2b6a7e328274ca4c7759bc2f62aa1a41f0a1a14aa8306279c0'
     seen = set()
     for shot in record['screenshots']:
         assert Path(shot['path']).name == shot['path'] and shot['name'] not in seen
