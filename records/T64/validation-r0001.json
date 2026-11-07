@@ -1,0 +1,26 @@
+{
+  "schema": "native-result-contract-validation/1",
+  "producer": "16e0b54eb71d63ee7c4112f12f340e2ef20e14ea",
+  "regression_commit": "7f693cf",
+  "before": "release result test refuses compilation: missing match_ticket/record_match/played_fixture API",
+  "after": {
+    "campaign": {
+      "passed": 5,
+      "status": "passed"
+    },
+    "desktop": {
+      "passed": 27,
+      "status": "passed",
+      "fresh_process_child_included": true
+    }
+  },
+  "scope": "designed native fixture receipt; desktop completion integration remains separate",
+  "checks": [
+    "one terminal receipt tied to exact validated request",
+    "duplicate/stale/foreign/nonterminal and revision-overflow atomicity",
+    "fixture/season/week/hash/revision/return/unknown-field decoding guards",
+    "absent-field native save compatibility",
+    "failed staged replacement preserves committed result",
+    "fresh test-runner process loads score and refuses duplicate posting"
+  ]
+}
