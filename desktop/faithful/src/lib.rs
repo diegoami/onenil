@@ -1,5 +1,6 @@
 //! [designed] Desktop feasibility controller; original evidence in docs/desktop-feasibility.md.
 pub mod application;
+pub mod campaign_match;
 pub mod controller;
 pub mod editor;
 #[cfg(feature = "raster")]

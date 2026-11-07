@@ -13,6 +13,7 @@ FIXTURE = ROOT / 'engine/tests/fixtures/fresh_preparation/admission.json'
 OUTPUT = ROOT / 'desktop/faithful/assets/campaign-match-names.json'
 SAVE_SHA = '6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36'
 LEAGUE_SHA = 'fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352'
+OUTPUT_SHA = 'a9100aabe62c67162a717864392fd8a7c30dd40b4032d5c2665a1253bd6f1d6c'
 
 
 def sha(data):
@@ -79,8 +80,26 @@ def export(research):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--research-root', type=Path, required=True)
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--research-root', type=Path)
+    group.add_argument('--check', action='store_true')
     args = parser.parse_args()
+    if args.check:
+        if sha(OUTPUT.read_bytes()) != OUTPUT_SHA:
+            raise ValueError('frozen match display names differ')
+        value = json.loads(OUTPUT.read_text())
+        seed = json.loads((ROOT / 'campaign/fixtures/research-seed.json').read_text())
+        if (value['sources']['save_sha256'] != seed['save_sha256']
+                or value['sources']['league_sha256'] != seed['league_sha256']
+                or value['sources']['preparation_sha256'] != sha(FIXTURE.read_bytes())
+                or value['sources']['decoders'] != seed['producer_files']
+                or value['sources']['decoder_producer'] != seed['producer']):
+            raise ValueError('campaign match names source aliases differ')
+        for player in seed['initial']['players']:
+            if value['players'].get(str(player['id'])) != player['name']:
+                raise ValueError('owned player display identity differs')
+        print('PASS exact original display names and T65/T66 namespace joins')
+        return
     if subprocess.check_output(['git', 'status', '--porcelain', '--', 'desktop/faithful/export_match_names.py'], cwd=ROOT):
         raise ValueError('commit display-name exporter before measuring')
     value = export(args.research_root.resolve())

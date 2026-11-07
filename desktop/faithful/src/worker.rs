@@ -2,7 +2,7 @@
 use crate::timeline::{self, Timeline};
 use serde::{Deserialize, Serialize};
 use std::{
-    io::Read,
+    io::{Read, Write},
     path::Path,
     process::{Child, Command, Stdio},
     sync::mpsc::{self, Receiver, TryRecvError},
@@ -28,15 +28,54 @@ pub struct Job {
 }
 impl Job {
     pub fn spawn(executable: &Path, root: &Path, id: u64) -> Result<Self, String> {
+        Self::spawn_request(executable, root, id, None)
+    }
+    pub fn spawn_campaign(
+        executable: &Path,
+        root: &Path,
+        id: u64,
+        campaign: &onenil_campaign::Campaign,
+    ) -> Result<Self, String> {
+        crate::campaign_match::validate(campaign)?;
+        let data = campaign.encode()?;
+        Self::spawn_request(executable, root, id, Some(data))
+    }
+    fn spawn_request(
+        executable: &Path,
+        root: &Path,
+        id: u64,
+        request: Option<Vec<u8>>,
+    ) -> Result<Self, String> {
         let mut child = Command::new(executable)
-            .arg("--worker")
+            .arg(if request.is_some() {
+                "--campaign-worker"
+            } else {
+                "--worker"
+            })
             .arg(root)
             .arg(id.to_string())
-            .stdin(Stdio::null())
+            .stdin(if request.is_some() {
+                Stdio::piped()
+            } else {
+                Stdio::null()
+            })
             .stdout(Stdio::piped())
             .stderr(Stdio::null())
             .spawn()
             .map_err(|e| e.to_string())?;
+        if let Some(data) = request {
+            let sent = child
+                .stdin
+                .take()
+                .ok_or("missing campaign worker input")
+                .map_err(str::to_owned)
+                .and_then(|mut input| input.write_all(&data).map_err(|error| error.to_string()));
+            if let Err(error) = sent {
+                let _ = child.kill();
+                let _ = child.wait();
+                return Err(error);
+            }
+        }
         let stdout = child.stdout.take().ok_or("missing worker pipe")?;
         let (sender, receiver) = mpsc::channel();
         let reader = thread::spawn(move || {
@@ -130,4 +169,17 @@ pub fn run(root: &Path, id: u64) -> Result<(), String> {
         result: timeline::compute(root),
     };
     serde_json::to_writer(std::io::stdout().lock(), &packet).map_err(|e| e.to_string())
+}
+pub fn run_campaign(id: u64) -> Result<(), String> {
+    let result = (|| {
+        let mut input = Vec::new();
+        std::io::stdin()
+            .take(1024 * 1024 + 1)
+            .read_to_end(&mut input)
+            .map_err(|error| error.to_string())?;
+        let campaign = onenil_campaign::Campaign::decode(&input)?;
+        timeline::compute_campaign(&campaign)
+    })();
+    serde_json::to_writer(std::io::stdout().lock(), &Packet { id, result })
+        .map_err(|error| error.to_string())
 }

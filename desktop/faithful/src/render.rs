@@ -466,8 +466,22 @@ impl Renderer {
     fn match_header(&mut self, c: &Controller) {
         self.rect(0, 0, 720, 80, GROUND);
         if let Some(p) = &c.playback {
-            self.text(1, 0, "BLACKBURN R", TEXT, GROUND, 16);
-            self.text(1, 2, "SHEFFIELD WED", TEXT, GROUND, 16);
+            self.text(
+                1,
+                0,
+                &p.timeline.club_names[0].to_uppercase(),
+                TEXT,
+                GROUND,
+                16,
+            );
+            self.text(
+                1,
+                2,
+                &p.timeline.club_names[1].to_uppercase(),
+                TEXT,
+                GROUND,
+                16,
+            );
             self.text(17, 0, &p.view().score[0].to_string(), CYAN, GROUND, 2);
             self.text(17, 2, &p.view().score[1].to_string(), CYAN, GROUND, 2);
             self.text(
@@ -670,7 +684,7 @@ impl Renderer {
                         GROUND,
                         16,
                     );
-                    self.text(1, 9, "Admission pending", TEXT, GROUND, 17);
+                    self.text(1, 9, "PLAY GAME", TEXT, GROUND, 17);
                     self.text(
                         0,
                         24,
@@ -682,7 +696,18 @@ impl Renderer {
                 }
                 if c.screen == Screen::Preparing {
                     self.rect(90, 112, 540, 96, 0);
-                    self.text(12, 8, "Preparing actual Rust exhibition...", CYAN, 0, 56);
+                    self.text(
+                        12,
+                        8,
+                        if c.exhibition {
+                            "Preparing exhibition..."
+                        } else {
+                            "Preparing campaign match..."
+                        },
+                        CYAN,
+                        0,
+                        56,
+                    );
                     self.text(
                         12,
                         10,

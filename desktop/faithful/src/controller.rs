@@ -313,8 +313,17 @@ impl Controller {
                 Key::Enter if self.preparation_menu == 2 => {
                     if self.screen == Screen::Preparation {
                         if !self.exhibition {
-                            self.message="Campaign match admission is pending. E opens a separate exhibition.".into();
-                            return;
+                            if self.editor.carried_player().is_some() {
+                                self.message =
+                                    "Finish or cancel the pending player move first.".into();
+                                return;
+                            }
+                            if let Err(error) =
+                                crate::campaign_match::validate(&self.editor.campaign)
+                            {
+                                self.message = error;
+                                return;
+                            }
                         }
                         self.job_id += 1;
                         self.prepare_requested = true;
@@ -361,8 +370,12 @@ impl Controller {
             }
             Screen::FullTime => {
                 self.screen = Screen::Main;
+                self.message = if self.exhibition {
+                    "Exhibition complete. No campaign result was posted.".into()
+                } else {
+                    "Match complete. The result has not been saved to the campaign.".into()
+                };
                 self.exhibition = false;
-                self.message = "Exhibition complete. No campaign result was posted.".into();
             }
             Screen::Quit => match key {
                 Key::Y => self.close_requested = true,

@@ -31,3 +31,5 @@ jobs:
           python3 tools/test_fresh_watched_inputs.py
           python3 tools/test_fresh_watched_reference.py
       - run: python3 tools/check_originals.py
+      - run: python3 desktop/faithful/export_match_names.py --check
+      - run: cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked
