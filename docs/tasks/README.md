@@ -97,3 +97,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T62 Actual supplied-campaign match in the faithful desktop prototype](T62.md)
 
 - [T63 Milestone139 review: complete refusal recovery instruction](T63.md)
+
+- [T64 Owned-fixture result transaction and native save compatibility](T64.md)
