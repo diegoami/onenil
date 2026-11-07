@@ -75,14 +75,25 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
     }
     Ok(cells)
 }
+#[derive(Clone, Copy, PartialEq)]
+enum Profile {
+    Exhibition,
+    Fresh,
+    Edited,
+}
 impl Session {
     pub fn new(input: Input) -> Result<Self, String> {
-        Self::new_profile(input, false)
+        Self::new_profile(input, Profile::Exhibition)
     }
     pub fn new_fresh(input: Input) -> Result<Self, String> {
-        Self::new_profile(input, true)
+        Self::new_profile(input, Profile::Fresh)
     }
-    fn new_profile(input: Input, fresh: bool) -> Result<Self, String> {
+    pub fn new_edited(input: Input) -> Result<Self, String> {
+        Self::new_profile(input, Profile::Edited)
+    }
+    fn new_profile(input: Input, profile: Profile) -> Result<Self, String> {
+        let fresh = profile != Profile::Exhibition;
+        let edited = profile == Profile::Edited;
         if !input.no_pending_key {
             return Err("prepared watched session requires no pending key".into());
         }
@@ -109,13 +120,15 @@ impl Session {
             }
         }
         if fresh {
-            // [confirmed:T68 support-r0005..0014] Only unchanged original
+            // [confirmed:research T68/T72] Only unchanged original
             // incoming facts may enter this exact fresh profile. A subset is
             // allowed so unknown reads still fail at their actual consumer.
             // No watched tick, action, score or other expected output is loaded.
-            let witness: Value = serde_json::from_str(include_str!(
-                "../../tests/fixtures/fresh_watched/incoming.json"
-            ))
+            let witness: Value = serde_json::from_str(if edited {
+                include_str!("../../tests/fixtures/edited_watched/incoming.json")
+            } else {
+                include_str!("../../tests/fixtures/fresh_watched/incoming.json")
+            })
             .map_err(|_| "invalid fresh incoming witness")?;
             let facts: Vec<ByteFact> = serde_json::from_value(witness["support"].clone())
                 .map_err(|_| "invalid fresh incoming facts")?;
@@ -127,7 +140,13 @@ impl Session {
                 return Err("fresh incoming support differs from original witnesses".into());
             }
         }
-        let mut prepared = if fresh {
+        let mut prepared = if edited {
+            setup::Session::before_edited_watched_call(
+                input.preparation.setup,
+                input.preparation.incoming,
+                &support,
+            )?
+        } else if fresh {
             setup::Session::before_fresh_watched_call(
                 input.preparation.setup,
                 input.preparation.incoming,
@@ -474,6 +493,56 @@ impl Session {
 #[cfg(test)]
 mod tests {
     use super::*;
+    fn edited_input() -> Input {
+        let fixture: Value = serde_json::from_str(include_str!(
+            "../../tests/fixtures/edited_preparation/admission.json"
+        ))
+        .unwrap();
+        let witness: Value = serde_json::from_str(include_str!(
+            "../../tests/fixtures/edited_watched/incoming.json"
+        ))
+        .unwrap();
+        Input {
+            preparation: serde_json::from_value(fixture["input"].clone()).unwrap(),
+            support: serde_json::from_value(witness["support"].clone()).unwrap(),
+            no_pending_key: true,
+        }
+    }
+    #[test]
+    fn edited_caller_owns_preparation_and_keeps_original_profiles_strict() {
+        assert!(Session::new_fresh(edited_input()).is_err());
+        assert!(Session::new(edited_input()).is_err());
+        let mut edited = Session::new_edited(edited_input()).unwrap();
+        let expected = crate::watched_setup::Preparation::new_edited(edited_input().preparation)
+            .unwrap()
+            .snapshot()
+            .unwrap();
+        assert_eq!(edited.snapshot().unwrap(), expected);
+        edited.advance().unwrap();
+    }
+    #[test]
+    fn edited_caller_refuses_foreign_owned_and_missing_inputs() {
+        for damage in ["profile", "key", "support", "owned"] {
+            let mut input = edited_input();
+            match damage {
+                "profile" => input.preparation.setup.legacy.contest.seed ^= 1,
+                "key" => input.no_pending_key = false,
+                "support" => input.support[0].value ^= 1,
+                "owned" => input.support.push(ByteFact {
+                    area: Area::Ds,
+                    offset: 0xA51C,
+                    value: 0,
+                }),
+                _ => unreachable!(),
+            }
+            assert!(Session::new_edited(input).is_err(), "{damage}");
+        }
+        let mut input = edited_input();
+        input.support.clear();
+        let mut session = Session::new_edited(input).unwrap();
+        assert!(session.advance().is_err());
+        assert!(session.advance().is_err());
+    }
     #[test]
     fn edited_preparation_profile_cannot_enter_the_continuing_fresh_caller() {
         let fixture: Value = serde_json::from_str(include_str!(

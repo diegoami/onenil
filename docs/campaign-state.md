@@ -347,3 +347,10 @@ Public checks: `python3 tools/test_edited_preparation.py` and
 `python3 tools/replay_edited_preparation.py --replay` (release PyO3 build). Original re-import uses
 `python3 tools/replay_edited_preparation.py --import-from <accepted-archaeology-checkout>` under
 an environment with the research dependencies; existing source/fixture paths refuse overwrite.
+
+[designed: T68 draft] A separate edited continuing-caller constructor is being validated from
+T66's exact preparation and the edited route's own T72 support projection. It preserves the old
+fresh/exhibition constructors and rejects foreign profiles, owned support and missing reached
+reads. The candidate comparison tool reads an original trace only as expected observations;
+its results are explicitly provisional. Accepted original full-stream/repeat import and complete
+native parity remain required before this task merges. Desktop edited admission stays refused.
