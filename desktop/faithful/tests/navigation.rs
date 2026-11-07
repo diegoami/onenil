@@ -85,6 +85,7 @@ fn remembered_view_and_caller_and_stale_results() {
     assert_eq!(c.editor.card(), Some(2582));
     c.key(Key::Escape);
     assert_eq!(c.screen, Screen::Main);
+    c.key(Key::Up);
     c.key(Key::Enter);
     assert_eq!(c.screen, Screen::Preparation);
     c.key(Key::Space);

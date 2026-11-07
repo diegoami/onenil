@@ -92,3 +92,10 @@ fidelity to the original. The local-browser recommendation is superseded, and
 the earlier asynchronous delivery-choice question is obsolete. Electron is not
 automatically selected by the desktop priority. No new toolkit choice or campaign
 implementation is made by this contract.
+
+[confirmed: T69 UI witnesses retained in records/T66/source-r0001/admission-r0002.json,
+native d8c57a7] Space on the weekly main menu opens Players and selects that main-menu item.
+Escape returns with Players selected; Enter opens Players again. Up then selects PLAY NEXT
+GAME. T67 replays all eight original UI stages and checks visible selected-player, carry,
+first-team roster, screen and main selection against the pinned source record. Preparation's
+Players caller, remembered player and carried-player cancellation keep their existing semantics.
