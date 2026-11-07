@@ -95,3 +95,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T61 Continuing fresh-campaign watched caller and full-match parity](T61.md)
 
 - [T62 Actual supplied-campaign match in the faithful desktop prototype](T62.md)
+
+- [T63 Milestone139 review: complete refusal recovery instruction](T63.md)
