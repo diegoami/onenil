@@ -5,6 +5,7 @@ import hashlib
 import importlib.util
 import json
 import subprocess
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -25,20 +26,29 @@ def export(research):
         raise ValueError('accepted T65 name-source identity differs')
     seed = json.loads(seed_raw)
     decoders = ('tools/data/campaign_seed.py', 'tools/data/save.py', 'tools/data/league.py')
+    historical = {}
     for name in decoders:
-        if sha((research / name).read_bytes()) != seed['producer_files'][name]:
+        data = subprocess.check_output(['git', 'show', seed['producer'] + ':' + name], cwd=research)
+        if sha(data) != seed['producer_files'][name]:
             raise ValueError('accepted original name decoder differs: ' + name)
-    sys.path.insert(0, str(research / 'tools/data'))
-    spec = importlib.util.spec_from_file_location('source_campaign_seed', research / 'tools/data/campaign_seed.py')
-    source = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(source)
+        historical[Path(name).name] = data
     data = (research / '.cache/One-Nil96/SAVE1.1-0').read_bytes()
     league = (research / '.cache/One-Nil96/ENGL-95.DAT').read_bytes()
     if sha(data) != SAVE_SHA or sha(league) != LEAGUE_SHA:
         raise ValueError('foreign campaign display-name namespace')
-    tables = source.names(league)
-    blocks = source.blocks(data)
-    initial = source.project(data, tables)
+    # Execute precisely the accepted decoder versions, irrespective of later
+    # archaeology tooling edits. Only public Python source goes in this temp dir.
+    with tempfile.TemporaryDirectory(prefix='T62-decoders-') as temporary:
+        directory = Path(temporary)
+        for name, content in historical.items():
+            (directory / name).write_bytes(content)
+        sys.path.insert(0, str(directory))
+        spec = importlib.util.spec_from_file_location('source_campaign_seed', directory / 'campaign_seed.py')
+        source = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(source)
+        tables = source.names(league)
+        blocks = source.blocks(data)
+        initial = source.project(data, tables)
     legacy = json.loads(FIXTURE.read_text())['input']['setup']['legacy']
     clubs = [row['id'] for row in legacy['substitution']['context']['clubs']]
     if sorted(clubs) != sorted([initial['club']['id'], initial['next_fixture']['opponent']]):
@@ -61,6 +71,7 @@ def export(research):
                 sources=dict(save_sha256=SAVE_SHA, league_sha256=LEAGUE_SHA,
                              preparation_sha256=sha(FIXTURE.read_bytes()),
                              research_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=research, text=True).strip(),
+                             decoder_producer=seed['producer'],
                              decoders={name: seed['producer_files'][name] for name in decoders}),
                 clubs={str(club): tables['clubs'][club - 1] for club in clubs},
                 players=players, player_clubs=memberships)
