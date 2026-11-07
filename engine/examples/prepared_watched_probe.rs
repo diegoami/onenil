@@ -11,6 +11,12 @@ fn main() {
                 Session::new(input)?
             };
             let first = s.snapshot()?;
+            if request["finish"].as_bool().unwrap_or(false) {
+                let complete = s.finish().map_err(|error| {
+                    format!("{};missing={:?}", error.fault.message, error.fault.missing)
+                })?;
+                return Ok(serde_json::json!({"first_entry": first, "finished": complete}));
+            }
             let mut clocks = vec![];
             for _ in 0..request["steps"].as_u64().unwrap_or(0) {
                 clocks.push(s.advance()?);
