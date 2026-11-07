@@ -35,3 +35,6 @@ jobs:
       - run: python3 desktop/faithful/export_match_names.py --check
       - run: python3 desktop/faithful/check_match_records.py records/T62/window-r0003.json
       - run: cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked
+      - run: python3 desktop/faithful/fetch_font.py
+      - run: ONENIL_DESKTOP_FONT="$PWD/.cache/T51-font/PxPlus_IBM_VGA_8x16.ttf" cargo test --manifest-path desktop/faithful/Cargo.toml --features raster --release --locked refused_campaign_renders_complete_recovery_instruction
+      - run: python3 desktop/faithful/check_refusal_records.py records/T63/window-r0001.json
