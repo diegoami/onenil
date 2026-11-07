@@ -93,3 +93,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T60 Fresh saved-campaign preparation through watched kickoff](T60.md)
 
 - [T61 Continuing fresh-campaign watched caller and full-match parity](T61.md)
+
+- [T62 Actual supplied-campaign match in the faithful desktop prototype](T62.md)
