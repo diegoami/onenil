@@ -91,3 +91,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T59 Milestone126 review: visible Mark row and bounded behaviour evidence](T59.md)
 
 - [T60 Fresh saved-campaign preparation through watched kickoff](T60.md)
+
+- [T61 Continuing fresh-campaign watched caller and full-match parity](T61.md)
