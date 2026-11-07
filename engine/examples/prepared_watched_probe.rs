@@ -5,13 +5,27 @@ fn main() {
         let request: serde_json::Value = serde_json::from_str(&line.unwrap()).unwrap();
         let input: Input = serde_json::from_value(request["input"].clone()).unwrap();
         let result = (|| {
-            let mut s = Session::new(input)?;
+            let mut s = if request["fresh"].as_bool().unwrap_or(false) {
+                Session::new_fresh(input)?
+            } else {
+                Session::new(input)?
+            };
             let first = s.snapshot()?;
+            if request["finish"].as_bool().unwrap_or(false) {
+                let complete = s.finish().map_err(|error| {
+                    serde_json::json!({
+                        "error": format!("{};missing={:?}", error.fault.message, error.fault.missing),
+                        "missing": error.fault.missing,
+                        "partial": s.observation(),
+                    })
+                })?;
+                return Ok(serde_json::json!({"first_entry": first, "finished": complete}));
+            }
             let mut clocks = vec![];
             for _ in 0..request["steps"].as_u64().unwrap_or(0) {
                 clocks.push(s.advance()?);
             }
-            Ok::<_, String>(
+            Ok::<_, serde_json::Value>(
                 serde_json::json!({"first_entry":first,"observation":s.observation(),"clocks":clocks}),
             )
         })();
@@ -19,6 +33,7 @@ fn main() {
             "{}",
             match result {
                 Ok(out) => serde_json::json!({"ok":out}),
+                Err(e) if e.is_object() => e,
                 Err(e) => serde_json::json!({"error":e}),
             }
         );

@@ -164,13 +164,15 @@ impl Session {
         replacement: ai_selection::ReadSet,
         gates: Gates,
         tables: Vec<role_scores::TableInput>,
+        initial: Option<&crate::role_scores::Cells>,
     ) -> Result<Self, String> {
+        let empty = crate::role_scores::Cells::new();
         Self::load_preparation(
             legacy,
             replacement,
             gates,
             tables,
-            Some(&Default::default()),
+            Some(initial.unwrap_or(&empty)),
             true,
         )
     }
