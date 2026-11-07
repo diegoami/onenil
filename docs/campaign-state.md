@@ -228,3 +228,42 @@ The public replay compares seeding/selectors at the two early career boundaries,
 then every named preparation projection from pre86E9 onward, every ordered draw
 and every watched first-entry field. Supplied career selection remains input;
 this is not a port of the whole management-screen workflow.
+
+## Continuing fresh watched caller (T61)
+
+[designed] `NativePreparedWatchedSession.fresh(input_json)` retains the exact
+T60 preparation profile and moves its tracked image into the compiled caller.
+It admits only support matching the unchanged incoming witnesses retained in
+`records/T61/incoming-r0001`; a missing subset still refuses at its first unknown
+read. `tools/fresh_watched_inputs.py` pins ten original T68 leaves, authenticates
+each independent pair, reconciles overlapping requests and derives the incoming
+fixture. No expected tick, action, score or final state seeds native memory.
+
+[confirmed: T66 income inputs; original1998:0299] Current fixture kind is a
+typed incoming field separate from raw fixture flags. The continuing image loads
+both from preparation inputs and rejects conflicting support. [derived: original
+1B55:142B..153F] The exact fresh week1/stage1 title path uses the existing
+output-only string helpers; week<23 excludes its special1334 branch. The
+presentation projection admits this case with the same caller, stack and output
+address guards as the independently measured week6/stage0 case.
+
+[designed] `tools/replay_fresh_watched.py` imports T67 only after archaeology's
+full public checker accepts the independently repeated original return. Its
+public reference checker pins the complete indexed stream, both observer starts,
+the repeated completion and every chunk receipt. The replay compares all named
+ticks (including phase/clock fields), ordered RNG draws, numeric player actions,
+final state and actual return. Python API replay also checks that observations
+do not mutate state and that finished sessions reject further execution.
+
+```sh
+python3 tools/fresh_watched_inputs.py --check
+python3 tools/test_fresh_watched_inputs.py
+python3 tools/test_fresh_watched_reference.py
+# After the complete original repeat is available and imported:
+python3 tools/replay_fresh_watched.py --check
+python3 tools/replay_fresh_watched.py --replay --python
+```
+
+These checks establish the bounded caller contract. Campaign result persistence,
+week advancement, arbitrary edited lineups and desktop campaign-match wiring
+remain separate work.

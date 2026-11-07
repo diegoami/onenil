@@ -11,7 +11,18 @@ ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / 'records/T61/incoming-r0001'
 FIXTURE = ROOT / 'engine/tests/fixtures/fresh_watched/incoming.json'
 # Exact immutable original leaves; independent pairs cover requests3..7.
-PINS = {'support-r0005.json': '5a1d9959102eeac9bc7e0eafd59f4f9c5748745df6db572fa83c87950b8ebacc', 'support-r0006.json': '5a1d9959102eeac9bc7e0eafd59f4f9c5748745df6db572fa83c87950b8ebacc', 'support-r0007.json': '56303640871b045934c05123c990ac2ba7d6a4246ee75b05645bdd8e32ec15b6', 'support-r0008.json': '56303640871b045934c05123c990ac2ba7d6a4246ee75b05645bdd8e32ec15b6', 'support-r0009.json': 'd04076b19e96e135006db4112d26c1e74e58d25724eeec93cdb4037c8aa7e50a', 'support-r0010.json': 'd04076b19e96e135006db4112d26c1e74e58d25724eeec93cdb4037c8aa7e50a', 'support-r0011.json': 'e38b815830cc6f0878e2ff1bb1b071f91fb9cd79e36ff64ca38876e46657f11f', 'support-r0012.json': 'e38b815830cc6f0878e2ff1bb1b071f91fb9cd79e36ff64ca38876e46657f11f', 'support-r0013.json': '5ebf2a13a989a28bfa93fc8537b39559e203b5437fee488a771b7f3867a933ad', 'support-r0014.json': '5ebf2a13a989a28bfa93fc8537b39559e203b5437fee488a771b7f3867a933ad'}
+PINS = {
+    "support-r0005.json": "5a1d9959102eeac9bc7e0eafd59f4f9c5748745df6db572fa83c87950b8ebacc",
+    "support-r0006.json": "5a1d9959102eeac9bc7e0eafd59f4f9c5748745df6db572fa83c87950b8ebacc",
+    "support-r0007.json": "56303640871b045934c05123c990ac2ba7d6a4246ee75b05645bdd8e32ec15b6",
+    "support-r0008.json": "56303640871b045934c05123c990ac2ba7d6a4246ee75b05645bdd8e32ec15b6",
+    "support-r0009.json": "d04076b19e96e135006db4112d26c1e74e58d25724eeec93cdb4037c8aa7e50a",
+    "support-r0010.json": "d04076b19e96e135006db4112d26c1e74e58d25724eeec93cdb4037c8aa7e50a",
+    "support-r0011.json": "e38b815830cc6f0878e2ff1bb1b071f91fb9cd79e36ff64ca38876e46657f11f",
+    "support-r0012.json": "e38b815830cc6f0878e2ff1bb1b071f91fb9cd79e36ff64ca38876e46657f11f",
+    "support-r0013.json": "5ebf2a13a989a28bfa93fc8537b39559e203b5437fee488a771b7f3867a933ad",
+    "support-r0014.json": "5ebf2a13a989a28bfa93fc8537b39559e203b5437fee488a771b7f3867a933ad"
+}
 BASE_SHA = '9639833b657ed2cf0c5684e7338843534f0d552e8323b55dd12e947a5b6e6331'
 
 
