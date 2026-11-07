@@ -96,7 +96,11 @@ fn load_cells(s: &State, fresh: bool) -> Result<Cells, String> {
         scene_codes::validate(&s.codes)?;
         terminal::validate(&s.terminal)?;
     }
-    let mut c = scene_assignment::cells(&r.assignment)?;
+    let mut c = if fresh {
+        scene_assignment::fresh_source_cells(&r.assignment)?
+    } else {
+        scene_assignment::cells(&r.assignment)?
+    };
     for (a, b) in player_cache::cells(&s.cache)? {
         insert(&mut c, a, b)?;
     }

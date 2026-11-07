@@ -173,7 +173,14 @@ fn load_cells(s: &State, fresh: bool) -> Result<Cells, String> {
     };
     let mut ids = BTreeSet::new();
     for p in &x.players {
-        if p.id > 3920 || p.position > 13 || p.style > 13 || !ids.insert(p.id) {
+        // [confirmed:T69/T72@f646ac2] The edited pre-selection placeholder
+        // already has role14. Only exact authenticated fresh setup reaches here.
+        let source_zero_role = fresh && p.id == 0 && p.position == 14;
+        if p.id > 3920
+            || (p.position > 13 && !source_zero_role)
+            || p.style > 13
+            || !ids.insert(p.id)
+        {
             return Err("ambiguous selection player/role/style".into());
         }
         for (a, v) in [

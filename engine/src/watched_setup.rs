@@ -108,6 +108,44 @@ mod tests {
     }
 
     #[test]
+    fn source_zero_role_exception_keeps_ordinary_and_nonzero_roles_strict() {
+        let input = edited_input();
+        let assignment = input.setup.replacement.match_state.core.assignment.clone();
+        assert!(crate::scene_assignment::cells(&assignment).is_err());
+        assert!(crate::scene_assignment::fresh_source_cells(&assignment).is_ok());
+        for zero in [true, false] {
+            let mut bad = assignment.clone();
+            let row = bad
+                .players
+                .iter_mut()
+                .find(|p| (p.id == 0) == zero)
+                .unwrap();
+            row.role = if zero { 15 } else { 14 };
+            assert!(crate::scene_assignment::fresh_source_cells(&bad).is_err());
+        }
+        let context = input.setup.legacy.substitution.context;
+        let state = crate::ai_selection::State {
+            scene: context.side_offsets[0] + 1,
+            side: 0,
+            mode: 0,
+            context,
+            replacement: None,
+        };
+        assert!(crate::ai_selection::fresh_source_cells(&state).is_ok());
+        for zero in [true, false] {
+            let mut bad = state.clone();
+            let row = bad
+                .context
+                .players
+                .iter_mut()
+                .find(|p| (p.id == 0) == zero)
+                .unwrap();
+            row.position = if zero { 15 } else { 14 };
+            assert!(crate::ai_selection::fresh_source_cells(&bad).is_err());
+        }
+    }
+
+    #[test]
     fn fresh_original_profile_reaches_the_exact_watched_entry() {
         let value: Value = serde_json::from_str(include_str!(
             "../tests/fixtures/fresh_preparation/admission.json"
