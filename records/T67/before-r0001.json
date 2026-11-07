@@ -1,0 +1,12 @@
+{
+  "schema": "players-return-before/1",
+  "base": "d5c91ce",
+  "source": "records/T66/source-r0001/admission-r0002.json",
+  "source_sha256": "45ca77eda64349d90700eb3983f6c725b5308e0dcf87c8a788bb081fde3ab627",
+  "test": "original_t69_keyboard_trace_matches_visible_ui_states",
+  "test_sha256": "1be2ea373e30041681db1372e6c5aeb7e08fcb2badcc63c17a0a63403e6c54b9",
+  "command": "cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --test navigation original_t69_keyboard_trace_matches_visible_ui_states",
+  "exit_code": 101,
+  "failure": "main-return menu: actual0, original1",
+  "log_sha256": "6829160b67612be8e1ce1430435665b0dfefc812733a6b088e6a1b32066e97fb"
+}

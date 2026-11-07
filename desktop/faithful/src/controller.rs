@@ -227,7 +227,12 @@ impl Controller {
             Screen::Main => match key {
                 Key::Up => self.menu = (self.menu + 16) % 17,
                 Key::Down => self.menu = (self.menu + 1) % 17,
-                Key::Space => self.players(),
+                Key::Space => {
+                    // [confirmed:T69 UI main-return, retained by T66] The
+                    // shortcut selects Players; Escape keeps that main item.
+                    self.menu = 1;
+                    self.players();
+                }
                 Key::Enter if self.menu == 0 => {
                     self.exhibition = false;
                     self.screen = Screen::Preparation;

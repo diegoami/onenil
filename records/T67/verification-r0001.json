@@ -1,0 +1,22 @@
+{
+  "schema": "players-return-verification/1",
+  "producer": "72e4c145629d7e283526da57326623b5d892b47a",
+  "source": "records/T66/source-r0001/admission-r0002.json",
+  "source_sha256": "45ca77eda64349d90700eb3983f6c725b5308e0dcf87c8a788bb081fde3ab627",
+  "original_ui_stages": 8,
+  "compared_fields": [
+    "screen",
+    "menu",
+    "selected_player",
+    "put_here",
+    "roster"
+  ],
+  "test_sha256": "b466f2ecfc6b644c83180c50110408812e1b4fe3dcc0e4fee622ccfc788b7bbd",
+  "controller_sha256": "894c990a556ff1544ca1b00fcf7e31191b736185e0f25d3db6a119ab21820b0b",
+  "command": "ONENIL_DESKTOP_FONT=<verified replacement font> cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --features software",
+  "test_log_sha256": "8de9310c1b583bfce8504aaa23230b36a890c790258d663034213933d3742356",
+  "passed_including_child": 33,
+  "result": "PASS original eight-stage UI trace,Players reopen,preparation caller,cancellation and saved-campaign/result regressions;edited match admission still refuses",
+  "preservation": "engine and all earlier records unchanged",
+  "scope": "Menu selection/navigation only;original screen hashes are source identifiers,not a pixel-parity claim"
+}

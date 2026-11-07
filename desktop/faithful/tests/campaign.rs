@@ -23,6 +23,7 @@ fn real_campaign_identity_and_exhibition_boundary() {
     );
     assert_eq!(c.editor.campaign.revision, 1);
     c.key(Key::Escape);
+    c.key(Key::Up);
     c.key(Key::Enter);
     c.key(Key::Enter);
     assert_eq!(c.screen, Screen::Preparation);
