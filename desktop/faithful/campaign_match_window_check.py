@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """[designed] Real native X11 key/window events; read-only app diagnostics and screenshots."""
-import argparse,ctypes as C,hashlib,json,os,subprocess,tempfile,time,traceback,shutil
+import argparse,ctypes as C,hashlib,json,os,subprocess,tempfile,time,traceback,shutil,sys
 from pathlib import Path
 from PIL import Image
 ROOT=Path(__file__).resolve().parents[2]
@@ -111,7 +111,7 @@ with tempfile.TemporaryDirectory(prefix='T62-window-') as directory:
    if window:close_window()
    try:process.wait(timeout=3)
    except subprocess.TimeoutExpired:process.kill();process.wait()
-  record=dict(schema='native-campaign-match-window/1',producer=producer,binary_sha256=binary_sha256,font_sha256=hashlib.sha256(args.font.read_bytes()).hexdigest(),names_sha256=hashlib.sha256((ROOT/'desktop/faithful/assets/campaign-match-names.json').read_bytes()).hexdigest(),elapsed_seconds=time.monotonic()-start,steps=steps,screenshots=shots,cancelled_and_closed_workers_reaped=all(not Path(f'/proc/{pid}').exists() for pid in worker_pids),status='failed' if error or xerrors else 'passed',x11_errors=xerrors,error=error)
+  record=dict(schema='native-campaign-match-window/1',producer=producer,runtime=dict(window_backend='software/minifb',python=sys.version.split()[0],cargo_lock_sha256=hashlib.sha256((ROOT/'desktop/faithful/Cargo.lock').read_bytes()).hexdigest()),binary_sha256=binary_sha256,font_sha256=hashlib.sha256(args.font.read_bytes()).hexdigest(),names_sha256=hashlib.sha256((ROOT/'desktop/faithful/assets/campaign-match-names.json').read_bytes()).hexdigest(),elapsed_seconds=time.monotonic()-start,steps=steps,screenshots=shots,cancelled_and_closed_workers_reaped=all(not Path(f'/proc/{pid}').exists() for pid in worker_pids),status='failed' if error or xerrors else 'passed',x11_errors=xerrors,error=error)
   with args.record.open('x') as f:json.dump(record,f,indent=2);f.write('\n')
   print(record['status'],len(steps),'native keyboard steps',len(shots),'screenshots',flush=True)
  if error or xerrors:raise AssertionError(error or xerrors)

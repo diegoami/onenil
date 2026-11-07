@@ -610,7 +610,13 @@ impl Renderer {
             self.text(
                 4,
                 10,
-                "Score and actions are computed by the native engine.",
+                if c.screen == Screen::HalfTime {
+                    "Match paused. Press any key to review the bench."
+                } else if c.exhibition {
+                    "Exhibition complete."
+                } else {
+                    "Match complete. This result is not saved to the campaign."
+                },
                 TEXT,
                 GROUND,
                 72,
@@ -618,7 +624,7 @@ impl Renderer {
             self.text(
                 4,
                 12,
-                "Unmapped statistics remain unavailable in this experiment.",
+                "Detailed match statistics are not available yet.",
                 TEXT,
                 GROUND,
                 72,

@@ -9,7 +9,7 @@ pub fn validate(campaign: &Campaign) -> Result<(), String> {
     campaign.validate()?;
     let initial = Campaign::initial()?;
     if campaign != &initial {
-        return Err("This match currently supports the supplied initial squad and instructions. Reload the initial campaign to play.".into());
+        return Err("This match currently supports only the unchanged initial campaign. Reload that campaign to play.".into());
     }
     Ok(())
 }

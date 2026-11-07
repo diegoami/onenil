@@ -33,8 +33,9 @@ Run shared core checks with `cargo test --manifest-path desktop/faithful/Cargo.t
 With the existing Python engine extension installed, retain full independent presentation
 comparison using `python3 desktop/faithful/verify.py --record records/T52/<new-name>.json`.
 T53 adds the actual software window; T54 adds the second native candidate and cost comparison.
-Hosted existing engine CI does not currently include this standalone experimental crate;
-its local acceptance is retained separately. No workflow policy change is implied.
+Hosted CI checks the standalone desktop crate in release mode, including the
+owned campaign worker and its detailed timeline. Actual graphical acceptance
+remains separately retained with source/binary/font identities and screenshots.
 
 T53 candidate: native software window (minifb0.29.0/X11 on this machine), fontdue0.9.5,
 shared Rust controller and direct local child. The cell export contains13 authenticated
@@ -44,13 +45,15 @@ clock, score,22 players and detailed commentary follow owned state. Only Flowers
 and Mimms details have captured data; other cards show an explicit unavailable statement.
 The independent VGA font remains an ignored local dependency with T51's attribution/licence.
 
-Build: `cargo build --manifest-path desktop/faithful/Cargo.toml --features software --locked`.
-Run the resulting `desktop/faithful/target/debug/onenil-desktop --font <verified-T51-ttf>`.
+Build: `cargo build --release --manifest-path desktop/faithful/Cargo.toml --features software --locked`.
+Run the resulting `desktop/faithful/target/release/onenil-desktop --font <verified-T51-ttf>`.
 Use `--root <native-repository>` when launching from another directory, `--save <path>` for
 an experiment save, and `--load` to restore it on startup. F7 saves from the main menu;
 F9 reloads as a visibly labelled experiment shortcut. Space opens Players, Insert changes
 skills/details, arrows select, Enter picks/places, Escape cancels a move or returns to caller.
-Main-menu Enter enters preparation; PLAY GAME computes the fixed exhibition. Escape cancels
+Main-menu Enter enters the supplied campaign's preparation; PLAY GAME computes its
+fresh PSG match only for the unchanged supported profile. E selects the separate
+fixed exhibition. Escape cancels
 preparation. In the match, Space opens commentary history and Escape/Enter opens the bench;
 PLAY GAME resumes. At half-time any key opens the bench; at full-time any key returns to main
 without posting a result. F10 then Y quits. Unsupported options diagnose their limited scope.
