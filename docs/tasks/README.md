@@ -105,3 +105,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T66 Exact edited-campaign preparation through watched kickoff](T66.md)
 
 - [T67 Original Players shortcut return selection](T67.md)
+
+- [T68 Exact edited-campaign continuing watched parity](T68.md)
