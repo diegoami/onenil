@@ -231,6 +231,13 @@ this is not a port of the whole management-screen workflow.
 
 ## Continuing fresh watched caller (T61)
 
+[confirmed] Accepted archaeology T67 at430e99223341082d550ade2246f050b33affe120
+retains two independent original executions through all 3,825 ticks, 158,992
+ordered draws, 748 player actions and actual 0AB9:EBE2 return. T68 at9a74b4f
+authenticates the incoming support separately. The native reference under
+`records/T61/reference-r0001` transports unchanged decoded leaves and all 60
+independent chunk receipts; its checker needs no private bytes or game runtime.
+
 [designed] `NativePreparedWatchedSession.fresh(input_json)` retains the exact
 T60 preparation profile and moves its tracked image into the compiled caller.
 It admits only support matching the unchanged incoming witnesses retained in
@@ -259,7 +266,6 @@ do not mutate state and that finished sessions reject further execution.
 python3 tools/fresh_watched_inputs.py --check
 python3 tools/test_fresh_watched_inputs.py
 python3 tools/test_fresh_watched_reference.py
-# After the complete original repeat is available and imported:
 python3 tools/replay_fresh_watched.py --check
 python3 tools/replay_fresh_watched.py --replay --python
 ```
