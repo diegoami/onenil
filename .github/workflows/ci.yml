@@ -30,4 +30,5 @@ jobs:
           python3 tools/fresh_watched_inputs.py --check
           python3 tools/test_fresh_watched_inputs.py
           python3 tools/test_fresh_watched_reference.py
+          python3 tools/replay_fresh_watched.py --replay --python
       - run: python3 tools/check_originals.py
