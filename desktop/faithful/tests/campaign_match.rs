@@ -1,6 +1,23 @@
 use onenil_desktop::controller::{Controller, Key, Screen};
 
 #[test]
+fn exact_preparation_only_edit_still_refuses_desktop_match_admission() {
+    let mut campaign = onenil_campaign::Campaign::initial().unwrap();
+    campaign
+        .exchange(
+            onenil_campaign::Location::First(1),
+            onenil_campaign::Location::First(2),
+        )
+        .unwrap();
+    let before = campaign.clone();
+    let error = onenil_desktop::campaign_match::admission(&campaign)
+        .err()
+        .unwrap();
+    assert!(error.contains("unchanged initial campaign"));
+    assert_eq!(campaign, before);
+}
+
+#[test]
 fn actual_supported_campaign_starts_and_cancels_without_becoming_exhibition() {
     let mut controller = Controller::default();
     let before = controller.editor.campaign.clone();
