@@ -1,10 +1,12 @@
 //! [confirmed] Research T65 at39e289a: coherent96 SAVE1/ENGL-95 club130, week0.
-//! [designed] Native owned state schema; no engine formulas, progression or result posting.
+//! [designed] Native owned state schema; no engine formulas or week progression.
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, path::Path};
+mod result;
 pub mod storage;
+pub use result::{MatchTicket, PlayedFixture};
 const SOURCE_SHA: &str = "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483";
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -86,6 +88,8 @@ pub struct Campaign {
     pub manager: Manager,
     pub club: Club,
     pub cash: i32,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub played_fixture: Option<PlayedFixture>,
     pub next_fixture: Fixture,
     pub players: Vec<Player>,
 }
@@ -161,6 +165,7 @@ impl Campaign {
             },
             cash: s.cash,
             next_fixture: s.next_fixture,
+            played_fixture: None,
             players: s.players,
         };
         c.validate()?;
@@ -182,6 +187,9 @@ impl Campaign {
             || self.next_fixture != source.next_fixture
         {
             return Err("campaign context outside the supported saved club/fixture".into());
+        }
+        if let Some(result) = &self.played_fixture {
+            result.validate(self)?;
         }
         let expected: BTreeSet<_> = source.players.iter().map(|p| p.id).collect();
         let roster: Vec<_> = self

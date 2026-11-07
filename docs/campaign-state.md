@@ -303,3 +303,18 @@ returning to the main menu and saving preserve the pending fixture and week.
 Result persistence, weekly progression and additional match admissions remain
 open. Both desktop candidates retain their shared controller/renderer; this
 does not select the production toolkit.
+
+## Native result transaction API
+
+[designed: T64] `Campaign::match_ticket` captures a validated campaign request. A terminal
+native result can be recorded with `record_match(ticket, score, "0AB9:EBE2")` only while the
+live campaign exactly matches that request and the fixture has no result. The score is ordered
+managed club first, as in T61/T62's accepted native presentation. Recording increments the
+revision once and retains fixture/season/week identity, request revision/digest, score and actual
+return in `played_fixture`. Duplicate/stale/foreign/unfinished completions refuse atomically.
+The optional field is omitted for unplayed campaigns, preserving earlier native saves.
+Existing atomic storage preserves this receipt across reload, including in a fresh process.
+
+This API stores native output; it does not implement original save-format writeback or original
+post-match/week effects. Cash, players, fixture scheduling and week remain unchanged. Desktop
+completion integration is a separate task; the current desktop still displays its result only.
