@@ -9,7 +9,7 @@ from pathlib import Path
 from check_match_records import check, digest
 
 MESSAGE = 'Only the unchanged initial campaign can play. Reload the original save.'
-RECORD_SHA = 'PENDING_CAPTURE'
+RECORD_SHA = '103187a5a60e9c31d87d59dbe739b5be12f1d7dac698247e4dd37bd049eec0b9'
 
 
 def native_rgb(data):
@@ -67,6 +67,10 @@ def check_refusal(record):
     return state
 
 
+def check_raster(rgb, state):
+    assert digest(rgb) == state['raster_sha256'], 'actual screenshot differs from refused controller raster'
+
+
 def verify(path):
     raw = path.read_bytes()
     assert digest(raw) == RECORD_SHA, 'immutable T63 capture differs'
@@ -81,10 +85,12 @@ def verify(path):
         assert list(struct.unpack('>II', data[16:24])) == shot['size'] == [1440, 900]
         if shot['name'] == 'refused-edit':
             rgb = native_rgb(data)
-            assert digest(rgb) == state['raster_sha256'], 'actual screenshot differs from refused controller raster'
+            check_raster(rgb, state)
             damaged = bytearray(rgb)
             damaged[-1] ^= 1
-            assert digest(damaged) != state['raster_sha256']
+            try: check_raster(damaged, state)
+            except AssertionError: pass
+            else: raise AssertionError('altered screenshot raster accepted')
     assert seen == {'main', 'preparation', 'pitch-actions', 'commentary', 'bench', 'half-time', 'full-time', 'refused-edit'}
     for damage in ('truncated', 'altered', 'worker', 'campaign'):
         bad = copy.deepcopy(record)
