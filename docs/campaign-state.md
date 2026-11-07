@@ -273,3 +273,33 @@ python3 tools/replay_fresh_watched.py --replay --python
 These checks establish the bounded caller contract. Campaign result persistence,
 week advancement, arbitrary edited lineups and desktop campaign-match wiring
 remain separate work.
+
+## Actual campaign match in the desktop candidate (T62)
+
+[designed] The desktop candidate now sends the active supplied campaign to a
+separate owned worker. PLAY GAME admits only the unchanged initial campaign;
+edits, pending moves and foreign fixtures refuse before execution. Its request
+projects owned roster/player/fixture fields into T61's exact fresh preparation
+input and retains the authenticated supplement. This is the supplied original
+match stream, not general seed or edited-XI support. Existing exhibition controls
+remain separate. Cancellation kills and reaps the worker; generation checks
+discard stale completion. No campaign save is changed by a match or refusal.
+
+[confirmed: T65 accepted decoders; T62 display-name export] The campaign match
+uses 36 narrowly decoded player names from the supplied SAVE1 and ENGL-95 data,
+authenticated against the exact historical T65 decoder versions. The older
+exhibition metadata belongs to another league file and cannot identify PSG.
+`desktop/faithful/export_match_names.py --check` authenticates the public catalog
+and joins managed player names to the owned campaign without private bytes.
+
+[derived: T67 numeric goal events] Preparation order does not identify the live
+score columns. The display maps computed native event club/side identities to
+the managed-club-first header; per-goal tests verify score changes against their
+scorers. Native snapshots, draws, actions and final state remain unchanged.
+
+The prototype presents pitch positions, detailed named actions, commentary
+history, bench pause, halftime and full time. The result is displayed only:
+returning to the main menu and saving preserve the pending fixture and week.
+Result persistence, weekly progression and additional match admissions remain
+open. Both desktop candidates retain their shared controller/renderer; this
+does not select the production toolkit.

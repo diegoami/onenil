@@ -8,22 +8,24 @@ repository; see [docs/artifacts.md](docs/artifacts.md). Rules: [CLAUDE.md](CLAUD
 
 A native desktop feasibility prototype now reproduces the original-style main menu and
 Players interaction, backed by the original saved Blackburn club and complete native save/load.
-A separate fixed Rust exhibition shows detailed
+The unchanged supplied campaign can now play its PSG friendly with detailed
 player commentary, clock, score and pitch positions. It runs locally without a browser/server:
 
 ```sh
 python3 desktop/faithful/fetch_font.py
-cargo run --manifest-path desktop/faithful/Cargo.toml --features software --locked
+cargo run --release --manifest-path desktop/faithful/Cargo.toml --features software --locked
 ```
 
 Space opens Players; Insert switches skills/details; Enter picks/places a player; Escape
 cancels/returns. F7 saves the complete campaign; F9 loads a native save, showing a chooser when several exist. Main-menu Enter opens the actual PSG
-fixture preparation; campaign match admission is still pending. Press E to open the separate
-native exhibition. See [saved-club state, launch and limits](docs/campaign-state.md).
+fixture preparation; Enter on PLAY GAME computes that supported fresh match. Changed
+campaigns refuse explicitly. Press E to open the separate fixed native exhibition.
+See [saved-club state, launch and limits](docs/campaign-state.md).
 Player options now implement Reposition, Club position and the observed goalkeeper
 Positioning cycle under Change tactics. Save/reload retains those edits. Other
 instruction rows and management actions remain unavailable.
-Campaign edits do not yet feed the exhibition or advance the fixture. This is a tested Linux desktop
+The displayed match result is not yet saved to the campaign or used to advance its fixture.
+Campaign edits do not yet have match admission. This is a tested Linux desktop
 candidate, with several UI/statistics/management gaps; no final toolkit or Windows package is claimed.
 
 The earlier technical watched preview remains available for engine evidence. The next product target is [one playable watched match](docs/first-playable.md),

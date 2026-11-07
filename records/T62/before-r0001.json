@@ -1,0 +1,12 @@
+{
+  "schema": "native-campaign-launch-before/1",
+  "producer": "2240fcec814cb01722aa01d027257be0bd2d5729",
+  "test": "desktop/faithful/tests/campaign_match.rs",
+  "test_sha256": "151277e288f168d3d420810b3f264440aa49bda9198e8dd34e19257a5d12247f",
+  "case": "actual_supported_campaign_starts_and_cancels_without_becoming_exhibition",
+  "expected_screen": "Preparing",
+  "actual_screen": "Preparation",
+  "exit_code": 101,
+  "status": "expected-failure",
+  "scope": "Committed baseline controller refuses the actual supplied campaign; no original bytes or engine outputs supplied as inputs."
+}

@@ -148,8 +148,13 @@ impl Application {
             let id = self.controller.job_id;
             match std::env::current_exe()
                 .map_err(|e| e.to_string())
-                .and_then(|exe| Job::spawn(&exe, &self.root, id))
-            {
+                .and_then(|exe| {
+                    if self.controller.exhibition {
+                        Job::spawn(&exe, &self.root, id)
+                    } else {
+                        Job::spawn_campaign(&exe, &self.root, id, &self.controller.editor.campaign)
+                    }
+                }) {
                 Ok(job) => self.job = Some(job),
                 Err(e) => {
                     self.controller.accept_error(id, e);
@@ -180,7 +185,7 @@ impl Application {
     /// [designed] Optional read-only diagnostic snapshot; never accepts state or commands.
     pub fn snapshot(&self) -> serde_json::Value {
         let c = &self.controller;
-        serde_json::json!({"instruction":c.instruction,"option_available":(0..8).map(|i|c.option_available(i)).collect::<Vec<_>>(),"save_path":self.save_path,"game_name":c.game_name,"load_entries":c.load_entries,"load_index":c.load_index,"menus":[c.menu,c.preparation_menu,c.option],"speed":c.speed,"close_requested":c.close_requested,"screen":format!("{:?}",c.screen),"panel":format!("{:?}",c.editor.panel),"selected":format!("{:?}",c.editor.selected),"card":c.editor.card(),"carried":c.editor.carried_player(),"first":c.editor.campaign.club.first_team,"reserve":c.editor.campaign.club.reserves,"campaign":c.editor.campaign,"exhibition":c.exhibition,"job":c.job_id,"worker_pid":self.job.as_ref().map(|j|j.pid()),"phase":c.playback.as_ref().map(|p|format!("{:?}",p.phase)),"frames":c.playback.as_ref().map(|p|p.cursor),"events":c.playback.as_ref().map(|p|p.events.len()),"score":c.playback.as_ref().map(|p|p.view().score),"players":c.playback.as_ref().map(|p|p.view().players.len()),"message":c.message})
+        serde_json::json!({"match_clubs":c.playback.as_ref().map(|p|&p.timeline.club_names),"recent_actions":c.playback.as_ref().map(|p|p.events.iter().rev().take(8).rev().map(|e|serde_json::json!({"text":e.text,"native":e.native})).collect::<Vec<_>>()),"instruction":c.instruction,"option_available":(0..8).map(|i|c.option_available(i)).collect::<Vec<_>>(),"save_path":self.save_path,"game_name":c.game_name,"load_entries":c.load_entries,"load_index":c.load_index,"menus":[c.menu,c.preparation_menu,c.option],"speed":c.speed,"close_requested":c.close_requested,"screen":format!("{:?}",c.screen),"panel":format!("{:?}",c.editor.panel),"selected":format!("{:?}",c.editor.selected),"card":c.editor.card(),"carried":c.editor.carried_player(),"first":c.editor.campaign.club.first_team,"reserve":c.editor.campaign.club.reserves,"campaign":c.editor.campaign,"exhibition":c.exhibition,"job":c.job_id,"worker_pid":self.job.as_ref().map(|j|j.pid()),"phase":c.playback.as_ref().map(|p|format!("{:?}",p.phase)),"frames":c.playback.as_ref().map(|p|p.cursor),"events":c.playback.as_ref().map(|p|p.events.len()),"score":c.playback.as_ref().map(|p|p.view().score),"players":c.playback.as_ref().map(|p|p.view().players.len()),"message":c.message})
     }
 }
 

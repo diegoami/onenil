@@ -37,6 +37,7 @@ pub struct Frame {
 }
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Timeline {
+    pub club_names: [String; 2],
     pub initial: View,
     pub frames: Vec<Frame>,
     pub setup_events: Vec<Event>,
@@ -136,7 +137,44 @@ pub fn compute(root: &Path) -> Result<Timeline, String> {
         return Err("prepared fixture digest differs".into());
     }
     let fixture: Value = serde_json::from_slice(&raw).map_err(|e| e.to_string())?;
-    let input = fixture["input"].clone();
+    let metadata: Value = serde_json::from_slice(
+        &std::fs::read(root.join("demo/metadata.json")).map_err(|e| e.to_string())?,
+    )
+    .map_err(|e| e.to_string())?;
+    compute_input(
+        fixture["input"].clone(),
+        &metadata["players"],
+        false,
+        [130, 134],
+        ["Blackburn R".into(), "Sheffield Wed".into()],
+    )
+}
+pub fn compute_campaign(campaign: &onenil_campaign::Campaign) -> Result<Timeline, String> {
+    let input = crate::campaign_match::admission(campaign)?;
+    let metadata = crate::campaign_match::metadata()?;
+    let display_clubs = [campaign.club.id, campaign.next_fixture.opponent];
+    let club_names = display_clubs.map(|id| {
+        metadata["clubs"][id.to_string()]
+            .as_str()
+            .map(str::to_owned)
+            .ok_or_else(|| "missing campaign club name".to_owned())
+    });
+    let [first, second] = club_names;
+    compute_input(
+        serde_json::to_value(input).map_err(|error| error.to_string())?,
+        &metadata["players"],
+        true,
+        display_clubs.map(u64::from),
+        [first?, second?],
+    )
+}
+fn compute_input(
+    input: Value,
+    names: &Value,
+    fresh: bool,
+    display_clubs: [u64; 2],
+    club_names: [String; 2],
+) -> Result<Timeline, String> {
     let setup = &input["preparation"]["setup"]["legacy"];
     let clubs = a(&setup["substitution"]["context"]["clubs"])?
         .iter()
@@ -146,21 +184,19 @@ pub fn compute(root: &Path) -> Result<Timeline, String> {
         .iter()
         .map(|p| Ok((n(&p["id"])?, n(&p["p8"][0])?)))
         .collect::<Result<BTreeMap<_, _>, String>>()?;
-    let metadata: Value = serde_json::from_slice(
-        &std::fs::read(root.join("demo/metadata.json")).map_err(|e| e.to_string())?,
-    )
-    .map_err(|e| e.to_string())?;
-    let names = &metadata["players"];
     let messages: Vec<(String, String)> =
         serde_json::from_str(include_str!("../messages.json")).map_err(|e| e.to_string())?;
-    let mut session = onenil_engine::watched_compiled::prepared::Session::new(
-        serde_json::from_value(input).map_err(|e| e.to_string())?,
-    )?;
+    let input = serde_json::from_value(input).map_err(|e| e.to_string())?;
+    let mut session = if fresh {
+        onenil_engine::watched_compiled::prepared::Session::new_fresh(input)?
+    } else {
+        onenil_engine::watched_compiled::prepared::Session::new(input)?
+    };
     let initial = session.snapshot()?;
     let observation = session.observation();
     let setup_draws = a(&observation["draws"])?;
     let seed = n(&setup_draws.first().ok_or("missing setup draw")?["seed_before"])?;
-    if seed != 64 || !a(&initial["scenes"])?.iter().any(|s| s["word14"] == 2590) {
+    if !fresh && (seed != 64 || !a(&initial["scenes"])?.iter().any(|s| s["word14"] == 2590)) {
         return Err("native selection differs".into());
     }
     let output = session.finish().map_err(|e| {
@@ -169,6 +205,35 @@ pub fn compute(root: &Path) -> Result<Timeline, String> {
     if output["return"] != "0AB9:EBE2" || !a(&output["draws"])?.starts_with(setup_draws) {
         return Err("native return/draw prefix differs".into());
     }
+    // [confirmed:T67 original actions] Queue side0 is PSG in this fresh
+    // fixture,whereas it is Blackburn in the older exhibition. Use the
+    // computed native club/side identities;preparation array order is not ABI.
+    let mut native_clubs = [None; 2];
+    for event in a(&output["setup_events"])?
+        .iter()
+        .chain(a(&output["events"])?)
+    {
+        let side = usize::try_from(n(&event["side"])?).map_err(|_| "invalid event side")?;
+        let slot = native_clubs.get_mut(side).ok_or("invalid event side")?;
+        let club = n(&event["club"])?;
+        if !display_clubs.contains(&club) || slot.is_some_and(|prior| prior != club) {
+            return Err("native score-side club identity differs".into());
+        }
+        *slot = Some(club);
+    }
+    let [first, second] = display_clubs.map(|club| {
+        native_clubs
+            .iter()
+            .position(|value| *value == Some(club))
+            .ok_or("missing native scoring club")
+    });
+    let order = [first?, second?];
+    let score = |value: &Value| -> Result<Value, String> {
+        Ok(serde_json::json!([
+            n(&value[order[0]])?,
+            n(&value[order[1]])?
+        ]))
+    };
     let setup_events = a(&output["setup_events"])?
         .iter()
         .enumerate()
@@ -206,20 +271,24 @@ pub fn compute(root: &Path) -> Result<Timeline, String> {
             return Err("event newer than observed clock".into());
         }
         frames.push(Frame {
-            view: view(&t["after"], g, clock, names, &player_clubs, &clubs)?,
+            view: view(&t["after"], &score(g)?, clock, names, &player_clubs, &clubs)?,
             events: actions,
         });
     }
     if !events.is_empty()
         || frames.last().unwrap().view.score
-            != [n(&output["live_goals"][0])?, n(&output["live_goals"][1])?]
+            != [
+                n(&output["live_goals"][order[0]])?,
+                n(&output["live_goals"][order[1]])?,
+            ]
     {
         return Err("incomplete native timeline".into());
     }
     Ok(Timeline {
+        club_names,
         initial: view(
             &initial,
-            &initial["scores"],
+            &score(&initial["scores"])?,
             n(&initial["elapsed"])?,
             names,
             &player_clubs,
