@@ -57,6 +57,7 @@ pub struct Controller {
     pub close_requested: bool,
     pub speed: u8,
     pub exhibition: bool,
+    match_ticket: Option<onenil_campaign::MatchTicket>,
     remembered_first: usize,
 }
 impl Default for Controller {
@@ -81,6 +82,7 @@ impl Default for Controller {
             close_requested: false,
             speed: 23,
             exhibition: false,
+            match_ticket: None,
             remembered_first: 0,
         }
     }
@@ -109,6 +111,7 @@ impl Controller {
         if id != self.job_id || self.screen != Screen::Preparing {
             return false;
         }
+        self.match_ticket = None;
         self.message = error;
         self.screen = Screen::Preparation;
         self.prepare_requested = false;
@@ -118,6 +121,28 @@ impl Controller {
         if id != self.job_id || self.screen != Screen::Preparing {
             return false;
         }
+        if !self.exhibition
+            && (self.match_ticket.is_none()
+                || timeline.native_return != "0AB9:EBE2"
+                || timeline.frames.is_empty()
+                || timeline.clubs.len() != 2
+                || !timeline
+                    .clubs
+                    .contains(&u64::from(self.editor.campaign.club.id))
+                || !timeline
+                    .clubs
+                    .contains(&u64::from(self.editor.campaign.next_fixture.opponent))
+                || timeline.club_names
+                    != [
+                        self.editor.campaign.club.name.clone(),
+                        self.editor.campaign.next_fixture.opponent_name.clone(),
+                    ])
+        {
+            return self.accept_error(
+                id,
+                "Match output refused: fixture or completion differs.".into(),
+            );
+        }
         let mut playback = Playback::new(timeline);
         if let Err(e) = playback.start_or_continue() {
             return self.accept_error(id, e);
@@ -126,6 +151,41 @@ impl Controller {
         self.prepare_requested = false;
         self.screen = Screen::Pitch;
         true
+    }
+    /// [designed:T65] Keep the computed receipt visible without claiming week progression.
+    pub fn recorded_result_text(&self) -> Option<String> {
+        self.editor.campaign.played_fixture.as_ref().map(|result| {
+            format!(
+                "Result recorded: {} {}-{} {}. F7 saves.",
+                self.editor.campaign.club.name,
+                result.score[0],
+                result.score[1],
+                result.fixture.opponent_name
+            )
+        })
+    }
+    fn record_completion(&mut self) -> Result<(), String> {
+        let ticket = self.match_ticket.take().ok_or("missing match request")?;
+        let playback = self.playback.as_ref().ok_or("missing match playback")?;
+        if playback.phase != Phase::FullTime || playback.cursor != playback.timeline.frames.len() {
+            return Err("match has not completed".into());
+        }
+        let score = playback.view().score.map(u16::try_from);
+        let [first, second] = score;
+        self.editor.campaign.record_match(
+            &ticket,
+            [
+                first.map_err(|_| "score outside native storage")?,
+                second.map_err(|_| "score outside native storage")?,
+            ],
+            &playback.timeline.native_return,
+        )
+    }
+    pub(crate) fn clear_match(&mut self) {
+        self.match_ticket = None;
+        self.playback = None;
+        self.prepare_requested = false;
+        self.exhibition = false;
     }
     pub fn tick(&mut self) {
         if self.screen != Screen::Pitch {
@@ -325,6 +385,18 @@ impl Controller {
                                 return;
                             }
                         }
+                        self.match_ticket = if self.exhibition {
+                            None
+                        } else {
+                            match self.editor.campaign.match_ticket() {
+                                Ok(ticket) => Some(ticket),
+                                Err(error) => {
+                                    self.message = error;
+                                    return;
+                                }
+                            }
+                        };
+                        self.playback = None;
                         self.job_id += 1;
                         self.prepare_requested = true;
                         self.screen = Screen::Preparing;
@@ -346,6 +418,7 @@ impl Controller {
             Screen::Preparing => {
                 if key == Key::Escape {
                     self.job_id += 1;
+                    self.match_ticket = None;
                     self.prepare_requested = false;
                     self.screen = Screen::Preparation;
                 }
@@ -373,7 +446,13 @@ impl Controller {
                 self.message = if self.exhibition {
                     "Exhibition complete. No campaign result was posted.".into()
                 } else {
-                    "Match complete. The result has not been saved to the campaign.".into()
+                    match self.record_completion() {
+                        Ok(()) => self.recorded_result_text().unwrap(),
+                        Err(_) => {
+                            "Result not recorded: missing, changed or unfinished match request."
+                                .into()
+                        }
+                    }
                 };
                 self.exhibition = false;
             }

@@ -615,7 +615,7 @@ impl Renderer {
                 } else if c.exhibition {
                     "Exhibition complete."
                 } else {
-                    "Match complete. This result is not saved to the campaign."
+                    "Match complete. Press a key to record the result."
                 },
                 TEXT,
                 GROUND,
@@ -785,7 +785,9 @@ impl Renderer {
                 self.text(
                     0,
                     24,
-                    "INS-Information  SPACEBAR-Squad  E-separate exhibition",
+                    &c.recorded_result_text().unwrap_or_else(|| {
+                        "INS-Information  SPACEBAR-Squad  E-separate exhibition".into()
+                    }),
                     TEXT,
                     GROUND,
                     80,

@@ -283,7 +283,8 @@ projects owned roster/player/fixture fields into T61's exact fresh preparation
 input and retains the authenticated supplement. This is the supplied original
 match stream, not general seed or edited-XI support. Existing exhibition controls
 remain separate. Cancellation kills and reaps the worker; generation checks
-discard stale completion. No campaign save is changed by a match or refusal.
+discard stale completion. A refusal or cancelled preparation does not change the campaign or its save.
+[designed: T65] Full-time acknowledgement records the computed result in memory; F7 saves it.
 
 [confirmed: T65 accepted decoders; T62 display-name export] The campaign match
 uses 36 narrowly decoded player names from the supplied SAVE1 and ENGL-95 data,
@@ -298,10 +299,10 @@ the managed-club-first header; per-goal tests verify score changes against their
 scorers. Native snapshots, draws, actions and final state remain unchanged.
 
 The prototype presents pitch positions, detailed named actions, commentary
-history, bench pause, halftime and full time. The result is displayed only:
-returning to the main menu and saving preserve the pending fixture and week.
-Result persistence, weekly progression and additional match admissions remain
-open. Both desktop candidates retain their shared controller/renderer; this
+history, bench pause, halftime and full time. [designed: T65] Full-time acknowledgement records the actual managed-club-first score
+against the exact pre-match campaign request. The main status line shows the recorded result.
+F7 saves it, and a fresh-process native reload retains it. The completed fixture refuses a
+second launch. Weekly progression and additional match admissions remain open. Both desktop candidates retain their shared controller/renderer; this
 does not select the production toolkit.
 
 ## Native result transaction API
@@ -316,5 +317,13 @@ The optional field is omitted for unplayed campaigns, preserving earlier native 
 Existing atomic storage preserves this receipt across reload, including in a fresh process.
 
 This API stores native output; it does not implement original save-format writeback or original
-post-match/week effects. Cash, players, fixture scheduling and week remain unchanged. Desktop
-completion integration is a separate task; the current desktop still displays its result only.
+post-match/week effects. Cash, players, fixture scheduling and week remain unchanged.
+
+[designed: T65] The desktop captures the ticket before spawning its campaign worker.
+Foreign clubs, incomplete output and stale generations refuse. Cancellation discards the
+ticket; exhibition has none. Only completed native playback acknowledgement can post a result,
+and the live campaign must still equal the request. Returning to the menu records the score;
+F7 persists it through the existing atomic native save. The full-time screen distinguishes
+this acknowledgement from saving, and the main status line retains the recorded score after
+a fresh-process reload. Loading clears old playback/request state. Recorded fixtures refuse
+replay with a complete bounded message; advancing to a new fixture awaits week progression.

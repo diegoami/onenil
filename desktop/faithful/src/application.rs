@@ -137,7 +137,7 @@ impl Application {
                 self.controller.screen = Screen::Main;
                 self.controller.load_entries.clear();
                 self.save_candidates.clear();
-                self.controller.exhibition = false;
+                self.controller.clear_match();
                 self.controller.message = "Native campaign restored.".into();
             }
             Err(e) => self.controller.message = format!("Load refused: {e}"),

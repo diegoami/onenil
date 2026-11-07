@@ -1,0 +1,28 @@
+{
+  "schema": "desktop-result-validation/1",
+  "producer": "15f9b463394d4aaf854bf2f27c12c8e28b6c5539",
+  "regression_commit": "e29588a",
+  "before": {
+    "actual_native_tests": "2 failed,1 passed",
+    "command": "cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --test result_workflow"
+  },
+  "after": {
+    "command": "ONENIL_DESKTOP_FONT=.cache/T51-font/PxPlus_IBM_VGA_8x16.ttf cargo test --manifest-path desktop/faithful/Cargo.toml --features software --release --locked",
+    "tests_including_fresh_child": 30,
+    "status": "passed"
+  },
+  "graphical": {
+    "steps": 17,
+    "screenshots": 10,
+    "native_saves": 2,
+    "application_processes": 2,
+    "stable_raster_bindings": 3,
+    "negative_controls": 6
+  },
+  "limits": [
+    "week,cash,players and fixture schedule unchanged",
+    "arbitrary edited XI not admitted",
+    "no original save-format writeback",
+    "no production toolkit/Windows claim"
+  ]
+}
