@@ -107,3 +107,5 @@ if __name__ == '__main__':
     # T63 extends this existing CI entrypoint with the refusal readability proof.
     from check_refusal_records import verify as verify_refusal
     verify_refusal(ROOT / 'records/T63/window-r0001.json')
+    from check_result_records import verify as verify_result
+    verify_result(ROOT / 'records/T65/window-r0001.json')

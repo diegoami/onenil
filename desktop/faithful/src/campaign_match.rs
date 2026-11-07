@@ -7,6 +7,11 @@ use sha2::{Digest, Sha256};
 
 pub fn validate(campaign: &Campaign) -> Result<(), String> {
     campaign.validate()?;
+    if campaign.played_fixture.is_some() {
+        return Err(
+            "This fixture already has a result. Week progression is not available yet.".into(),
+        );
+    }
     let initial = Campaign::initial()?;
     if campaign != &initial {
         return Err(
