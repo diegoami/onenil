@@ -1,0 +1,10 @@
+{
+  "schema": "native-window-visual-audit/1",
+  "producer": "834a201a0d4accb919005e5d92d2065561a06297",
+  "window_record": "window-r0001.json",
+  "window_record_sha256": "3ccd217b3102eb8c66af957fc95d1062f83548f1fb50ec4d387cd570e91cfe98",
+  "inspected_screenshot": "window-r0001-commentary.png",
+  "verdict": "failed",
+  "finding": "At minute12 the commentary goal belongs to club17 (V Guerin), while the header credits Blackburn130. Preparation array order does not identify the native live-score columns.",
+  "correction": "Map score columns to the computed native events club/side identities and display the managed club first; preserve native outputs unchanged."
+}

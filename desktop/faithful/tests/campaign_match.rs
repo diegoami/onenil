@@ -136,7 +136,25 @@ fn real_campaign_worker_returns_fresh_players_actions_and_phase_controls() {
             .unwrap()
     );
     assert_eq!((timeline.frames.len(), timeline.draws), (3825, 158992));
-    assert_eq!(timeline.frames.last().unwrap().view.score, [4, 1]);
+    assert_eq!(timeline.frames.last().unwrap().view.score, [1, 4]);
+    let mut scored = [0, 0];
+    for frame in &timeline.frames {
+        for event in &frame.events {
+            if event.native["code"] == 38 {
+                let side = if event.native["club"] == 130 {
+                    0
+                } else {
+                    assert_eq!(event.native["club"], 17);
+                    1
+                };
+                scored[side] += 1;
+            }
+        }
+        assert_eq!(
+            frame.view.score, scored,
+            "score must identify the scoring player's club"
+        );
+    }
     assert_eq!(
         timeline
             .frames

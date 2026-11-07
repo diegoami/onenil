@@ -93,7 +93,7 @@ with tempfile.TemporaryDirectory(prefix='T62-window-') as directory:
   key('Escape');key('Escape');step('bench',lambda s:s.get('screen')=='Bench');shot('bench');key('Return')
   step('half-time',lambda s:s.get('screen')=='HalfTime' and s.get('campaign')==initial,90);shot('half-time')
   key('Return');step('half-time-bench',lambda s:s.get('screen')=='Bench');key('Return')
-  step('full-time',lambda s:s.get('screen')=='FullTime' and s.get('score')==[4,1] and s.get('frames')==3825 and s.get('events')==749 and s.get('campaign')==initial,90);shot('full-time')
+  step('full-time',lambda s:s.get('screen')=='FullTime' and s.get('score')==[1,4] and s.get('frames')==3825 and s.get('events')==749 and s.get('campaign')==initial,90);shot('full-time')
   key('Return');step('result-not-posted',lambda s:s.get('screen')=='Main' and 'not been saved' in s.get('message','') and s.get('campaign')==initial)
   key('F7');step('completed-save',lambda s:'saved' in s.get('message',''));assert save.read_bytes()==saved
   key('space');step('squad',lambda s:s.get('screen')=='Players');key('Return');key('Down');key('Return')
