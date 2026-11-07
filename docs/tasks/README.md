@@ -101,3 +101,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T64 Owned-fixture result transaction and native save compatibility](T64.md)
 
 - [T65 Computed desktop result into the owned fixture and native save](T65.md)
+
+- [T66 Exact edited-campaign preparation through watched kickoff](T66.md)
