@@ -93,6 +93,12 @@ fn domains(index: u8, selector: u8) -> Result<(), String> {
 }
 // [derived] Admit all canonical identities and raw aliases before image allocation.
 pub(crate) fn cells(s: &State) -> Result<Cells, String> {
+    load_cells(s, false)
+}
+pub(crate) fn fresh_source_cells(s: &State) -> Result<Cells, String> {
+    load_cells(s, true)
+}
+fn load_cells(s: &State, fresh: bool) -> Result<Cells, String> {
     domains(s.index, s.selector)?;
     if s.clubs[0].id == s.clubs[1].id || s.clubs.iter().any(|c| !(1..=176).contains(&c.id)) {
         return Err("unsupported header clubs".into());
@@ -111,7 +117,8 @@ pub(crate) fn cells(s: &State) -> Result<Cells, String> {
     for p in &s.players {
         if p.id > 3920
             || !ids.insert(p.id)
-            || p.role > 13
+            // [confirmed:T69/T72@f646ac2] Source placeholder;never an ordinary role.
+            || (p.role > 13 && !(fresh && p.id == 0 && p.role == 14))
             || p.style > 13
             || (p.id != 0 && !(1..=176).contains(&p.club))
             || (p.id == 0 && p.club != 0)

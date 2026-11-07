@@ -474,6 +474,26 @@ impl Session {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn edited_preparation_profile_cannot_enter_the_continuing_fresh_caller() {
+        let fixture: Value = serde_json::from_str(include_str!(
+            "../../tests/fixtures/edited_preparation/admission.json"
+        ))
+        .unwrap();
+        let witness: Value = serde_json::from_str(include_str!(
+            "../../tests/fixtures/fresh_watched/incoming.json"
+        ))
+        .unwrap();
+        let input = Input {
+            preparation: serde_json::from_value(fixture["input"].clone()).unwrap(),
+            support: serde_json::from_value(witness["support"].clone()).unwrap(),
+            no_pending_key: true,
+        };
+        assert!(Session::new_fresh(input)
+            .err()
+            .unwrap()
+            .contains("fresh campaign incoming profile"));
+    }
     fn fresh_input() -> Input {
         let fixture: Value = serde_json::from_str(include_str!(
             "../../tests/fixtures/fresh_preparation/admission.json"

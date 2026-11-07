@@ -327,3 +327,23 @@ F7 persists it through the existing atomic native save. The full-time screen dis
 this acknowledgement from saving, and the main status line retains the recorded score after
 a fresh-process reload. Loading clears old playback/request state. Recorded fixtures refuse
 replay with a complete bounded message; advancing to a new fixture awaits week progression.
+
+[confirmed: archaeology T69/T72@f646ac2; native T66] The exact original keyboard exchange of
+Pearce/Hendry has a separate pinned preparation API, `NativeEditedWatchedPreparation`.
+Its importer authenticates both original preparation captures and both repeated incoming-witness
+groups before retaining the decoded evidence. Public byte pins and the catalog manifest preserve
+that proof. Only the three eligible before values enter preparation; later computed income is
+an assertion. The existing supplied career-data boundary remains supplied data, not a newly
+implemented career selector. Native preparation compares all eleven original boundaries, all258
+ordered RNG draws and every first watched-entry field in one computed image.
+
+[designed] This API has no step/run/full-match method. The unchanged/exhibition constructors,
+continuing fresh caller and desktop campaign admission retain their existing guards. The exact
+edited case is explicitly tested to refuse continuing caller and desktop admission. Full original
+completion, independent repeat and native full-match parity are separate gates; this task does not
+enable edited lineups in the desktop or advance a week.
+
+Public checks: `python3 tools/test_edited_preparation.py` and
+`python3 tools/replay_edited_preparation.py --replay` (release PyO3 build). Original re-import uses
+`python3 tools/replay_edited_preparation.py --import-from <accepted-archaeology-checkout>` under
+an environment with the research dependencies; existing source/fixture paths refuse overwrite.

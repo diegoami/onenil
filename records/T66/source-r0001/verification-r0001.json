@@ -1,0 +1,48 @@
+{
+  "schema": "edited-support-verification/1",
+  "producer": "c43f943f1d5f83a181eacfd1ab4bebd7bd38ef29",
+  "observer_sha256": "713a80b0daa9271bea09f83f2b2e021cf2d01b4168aa5a01b107241c6c1f81fd",
+  "files": [
+    {
+      "path": "runs/T72/support-r0001.json",
+      "size": 171905,
+      "sha256": "f5c1bf9e4d22c327b36cfaf7b38151f5dc58cbee06db33382cb7f938652dddd6"
+    },
+    {
+      "path": "runs/T72/support-r0002.json",
+      "size": 171905,
+      "sha256": "78186b820c55909b2b181a614bfb4e639494882522f1ffa1c9f8fe96f4081abd"
+    },
+    {
+      "path": "runs/T72/support-r0003.json",
+      "size": 170137,
+      "sha256": "75fd970f22015e7ea5b98fa35a947fd9cdf642460ce96700965456d9796e90f6"
+    },
+    {
+      "path": "runs/T72/support-r0004.json",
+      "size": 170137,
+      "sha256": "75fd970f22015e7ea5b98fa35a947fd9cdf642460ce96700965456d9796e90f6"
+    }
+  ],
+  "canonical_catalog_sha256": "132e7acc92626b9b71bd51aafa1c996aa0a4050a0e50a15bfffcd3d5826c9307",
+  "preparation_inputs": {
+    "managed_selection_mode": 1,
+    "legacy_income_total": 0,
+    "legacy_queue_zero": {
+      "index": 0,
+      "code": 2,
+      "first_player": 512,
+      "second_player": 3328,
+      "side": 10
+    }
+  },
+  "incoming_support_bytes": 2032,
+  "source": "accepted T69 exact UI/preparation pair",
+  "tests": {
+    "passed": 78,
+    "command": "python3 -m pytest -q tests/emul/test_edited_support.py tests/emul/test_fresh_support.py tests/emul/test_edited_admission.py"
+  },
+  "first_capture_audit": "Serialized original r0001 verifies unchanged. Its post-write self-check saw tuple/list representation mismatch; corrected serialization before independent repeat; no measured values altered.",
+  "private_recovery": "existing T66 original start reused; no new private asset",
+  "scope": "input witnesses only; no full edited match or native admission claim"
+}

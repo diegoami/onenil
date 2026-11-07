@@ -15,6 +15,11 @@ pub struct Preparation {
     pub(crate) session: setup::Session,
 }
 impl Preparation {
+    pub fn new_edited(input: Input) -> Result<Self, String> {
+        Ok(Self {
+            session: setup::Session::new_edited_watched(input.setup, input.incoming)?,
+        })
+    }
     pub fn new_fresh(input: Input) -> Result<Self, String> {
         Ok(Self {
             session: setup::Session::new_fresh_watched(input.setup, input.incoming)?,
@@ -38,6 +43,107 @@ mod tests {
     use super::*;
     use serde_json::json;
     use std::path::Path;
+
+    fn edited_input() -> Input {
+        let value: Value = serde_json::from_str(include_str!(
+            "../tests/fixtures/edited_preparation/admission.json"
+        ))
+        .unwrap();
+        serde_json::from_value(value["input"].clone()).unwrap()
+    }
+
+    #[test]
+    fn edited_original_profile_computes_exact_entry_without_widening_fresh() {
+        let input = edited_input();
+        assert!(Preparation::new_fresh(input.clone()).is_err());
+        assert!(Preparation::new(input.clone()).is_err());
+        let prepared = Preparation::new_edited(input).unwrap();
+        let original: Value = serde_json::from_str(include_str!(
+            "../../records/T66/source-r0001/admission-r0002.json"
+        ))
+        .unwrap();
+        assert_eq!(
+            prepared.snapshot().unwrap(),
+            original["payload"]["first_entry"]
+        );
+        assert_eq!(
+            prepared.preparation()["draws"].as_array().unwrap().len(),
+            258
+        );
+        let before = prepared.session.match_state.inner.e.image.clone();
+        let trace = prepared.preparation();
+        assert_eq!(prepared.snapshot().unwrap(), prepared.snapshot().unwrap());
+        assert_eq!(trace, prepared.preparation());
+        assert_eq!(before, prepared.session.match_state.inner.e.image);
+    }
+
+    #[test]
+    fn edited_profile_refuses_changed_inputs_and_computed_output_injection() {
+        for field in ["fixture", "roster", "role", "seed", "income", "incoming"] {
+            let mut input = edited_input();
+            match field {
+                "fixture" => input.setup.legacy.config[0] ^= 1,
+                "roster" => input.setup.legacy.substitution.context.clubs[0]
+                    .roster
+                    .swap(3, 4),
+                "role" => input.setup.legacy.players[0].p8[6] ^= 1,
+                "seed" => input.setup.legacy.contest.seed ^= 1,
+                "income" => input.setup.legacy_income_total = 25841,
+                "incoming" => input.incoming.ball_word7 ^= 1,
+                _ => unreachable!(),
+            }
+            assert!(Preparation::new_edited(input).is_err(), "{field}");
+        }
+        let mut value = serde_json::to_value(edited_input()).unwrap();
+        value["expected_first_entry"] = json!({});
+        assert!(serde_json::from_value::<Input>(value).is_err());
+        let unchanged: Value = serde_json::from_str(include_str!(
+            "../tests/fixtures/fresh_preparation/admission.json"
+        ))
+        .unwrap();
+        assert!(Preparation::new_edited(
+            serde_json::from_value(unchanged["input"].clone()).unwrap()
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn source_zero_role_exception_keeps_ordinary_and_nonzero_roles_strict() {
+        let input = edited_input();
+        let assignment = input.setup.replacement.match_state.core.assignment.clone();
+        assert!(crate::scene_assignment::cells(&assignment).is_err());
+        assert!(crate::scene_assignment::fresh_source_cells(&assignment).is_ok());
+        for zero in [true, false] {
+            let mut bad = assignment.clone();
+            let row = bad
+                .players
+                .iter_mut()
+                .find(|p| (p.id == 0) == zero)
+                .unwrap();
+            row.role = if zero { 15 } else { 14 };
+            assert!(crate::scene_assignment::fresh_source_cells(&bad).is_err());
+        }
+        let context = input.setup.legacy.substitution.context;
+        let state = crate::ai_selection::State {
+            scene: context.side_offsets[0] + 1,
+            side: 0,
+            mode: 0,
+            context,
+            replacement: None,
+        };
+        assert!(crate::ai_selection::fresh_source_cells(&state).is_ok());
+        for zero in [true, false] {
+            let mut bad = state.clone();
+            let row = bad
+                .context
+                .players
+                .iter_mut()
+                .find(|p| (p.id == 0) == zero)
+                .unwrap();
+            row.position = if zero { 15 } else { 14 };
+            assert!(crate::ai_selection::fresh_source_cells(&bad).is_err());
+        }
+    }
 
     #[test]
     fn fresh_original_profile_reaches_the_exact_watched_entry() {

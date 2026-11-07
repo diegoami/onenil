@@ -279,6 +279,21 @@ impl Session {
         Self::validate_fresh(&data, incoming)?;
         Self::new_mode(data, Some(incoming), None, false, true)
     }
+    pub(crate) fn new_edited_watched(
+        data: Data,
+        incoming: WatchedIncoming,
+    ) -> Result<Self, String> {
+        // [confirmed: archaeology T69/T72@f646ac2] Exact supplied edited input.
+        // [designed] Preparation only; the continuing caller retains validate_fresh.
+        let reference: Value = serde_json::from_str(include_str!(
+            "../tests/fixtures/edited_preparation/admission.json"
+        ))
+        .map_err(|error| error.to_string())?;
+        if json!({"setup": data, "incoming": incoming}) != reference["input"] {
+            return Err("unsupported or conflicting edited campaign incoming profile".into());
+        }
+        Self::new_mode(data, Some(incoming), None, false, true)
+    }
     fn validate_fresh(data: &Data, incoming: WatchedIncoming) -> Result<(), String> {
         // [confirmed:archaeology T66] This first fresh profile admits only its
         // authenticated incoming values, including unused zero scene scratch.
