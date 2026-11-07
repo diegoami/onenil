@@ -276,6 +276,10 @@ impl Session {
         Self::new_mode(data, Some(incoming), None, false, false)
     }
     pub(crate) fn new_fresh_watched(data: Data, incoming: WatchedIncoming) -> Result<Self, String> {
+        Self::validate_fresh(&data, incoming)?;
+        Self::new_mode(data, Some(incoming), None, false, true)
+    }
+    fn validate_fresh(data: &Data, incoming: WatchedIncoming) -> Result<(), String> {
         // [confirmed:archaeology T66] This first fresh profile admits only its
         // authenticated incoming values, including unused zero scene scratch.
         // Expected preparation/kickoff output never enters this fixture.
@@ -283,11 +287,19 @@ impl Session {
             "../tests/fixtures/fresh_preparation/admission.json"
         ))
         .map_err(|error| error.to_string())?;
-        let value = json!({"setup": &data, "incoming": incoming});
+        let value = json!({"setup": data, "incoming": incoming});
         if value != reference["input"] {
             return Err("unsupported or conflicting fresh campaign incoming profile".into());
         }
-        Self::new_mode(data, Some(incoming), None, false, true)
+        Ok(())
+    }
+    pub(crate) fn before_fresh_watched_call(
+        data: Data,
+        incoming: WatchedIncoming,
+        initial: &crate::role_scores::Cells,
+    ) -> Result<Self, String> {
+        Self::validate_fresh(&data, incoming)?;
+        Self::new_mode(data, Some(incoming), Some(initial), true, true)
     }
     pub(crate) fn before_watched_call(
         data: Data,
@@ -322,7 +334,13 @@ impl Session {
             supplement,
         } = data;
         let m = if fresh {
-            match_session::Session::from_fresh_source(legacy, replacement, gates, skill_tables)?
+            match_session::Session::from_fresh_source(
+                legacy,
+                replacement,
+                gates,
+                skill_tables,
+                initial,
+            )?
         } else {
             match_session::Session::from_legacy_with_initial(
                 legacy,

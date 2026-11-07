@@ -77,6 +77,12 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
 }
 impl Session {
     pub fn new(input: Input) -> Result<Self, String> {
+        Self::new_profile(input, false)
+    }
+    pub fn new_fresh(input: Input) -> Result<Self, String> {
+        Self::new_profile(input, true)
+    }
+    fn new_profile(input: Input, fresh: bool) -> Result<Self, String> {
         if !input.no_pending_key {
             return Err("prepared watched session requires no pending key".into());
         }
@@ -84,14 +90,15 @@ impl Session {
             return Err("unsupported prepared results base offset".into());
         }
         let caller_club = input.preparation.setup.legacy.history.club;
-        let fixture_flags = input
+        let current_fixture = input
             .preparation
             .setup
             .income
             .iter()
             .find(|row| row.club == caller_club)
-            .ok_or("missing current caller fixture flags")?
-            .fixture_flags;
+            .ok_or("missing current caller fixture flags")?;
+        let fixture_flags = current_fixture.fixture_flags;
+        let fixture_kind = current_fixture.fixture;
         let support = support_cells(&input.support)?;
         for (index, expected) in ROLE_LOOKUP.iter().enumerate() {
             if support
@@ -101,11 +108,38 @@ impl Session {
                 return Err("source role lookup alias differs".into());
             }
         }
-        let mut prepared = setup::Session::before_watched_call(
-            input.preparation.setup,
-            input.preparation.incoming,
-            &support,
-        )?;
+        if fresh {
+            // [confirmed:T68 support-r0005..0014] Only unchanged original
+            // incoming facts may enter this exact fresh profile. A subset is
+            // allowed so unknown reads still fail at their actual consumer.
+            // No watched tick, action, score or other expected output is loaded.
+            let witness: Value = serde_json::from_str(include_str!(
+                "../../tests/fixtures/fresh_watched/incoming.json"
+            ))
+            .map_err(|_| "invalid fresh incoming witness")?;
+            let facts: Vec<ByteFact> = serde_json::from_value(witness["support"].clone())
+                .map_err(|_| "invalid fresh incoming facts")?;
+            let allowed = support_cells(&facts)?;
+            if support
+                .iter()
+                .any(|(at, value)| allowed.get(at) != Some(value))
+            {
+                return Err("fresh incoming support differs from original witnesses".into());
+            }
+        }
+        let mut prepared = if fresh {
+            setup::Session::before_fresh_watched_call(
+                input.preparation.setup,
+                input.preparation.incoming,
+                &support,
+            )?
+        } else {
+            setup::Session::before_watched_call(
+                input.preparation.setup,
+                input.preparation.incoming,
+                &support,
+            )?
+        };
         let preparation = prepared.preparation();
         let e = &mut prepared.match_state.inner.e;
         e.image[0x8708..0x8716].copy_from_slice(&ROLE_LOOKUP);
@@ -124,6 +158,17 @@ impl Session {
             return Err("current raw fixture flags alias differs".into());
         }
         e.image[address] = fixture_flags;
+        // [confirmed:T66 income_input;1998:0299] The current raw fixture
+        // kind is already an incoming typed field, distinct from its flags.
+        let kind_offset = flag_offset.wrapping_sub(2);
+        let kind_address = 0x80000 + usize::from(kind_offset);
+        if support
+            .get(&kind_address)
+            .is_some_and(|value| *value != fixture_kind)
+        {
+            return Err("current raw fixture kind alias differs".into());
+        }
+        e.image[kind_address] = fixture_kind;
         // [confirmed] E239/E249 decode the initial fixture byte before19CA.
         // Derive D2A from the supplied raw flags;never admit a captured marker.
         e.image[0xD2A] = u8::from((fixture_flags >> 4) == 1);
@@ -429,6 +474,97 @@ impl Session {
 #[cfg(test)]
 mod tests {
     use super::*;
+    fn fresh_input() -> Input {
+        let fixture: Value = serde_json::from_str(include_str!(
+            "../../tests/fixtures/fresh_preparation/admission.json"
+        ))
+        .unwrap();
+        Input {
+            preparation: serde_json::from_value(fixture["input"].clone()).unwrap(),
+            support: vec![],
+            no_pending_key: true,
+        }
+    }
+    #[test]
+    fn fresh_caller_keeps_legacy_guard_and_refuses_missing_initial_reads() {
+        let old = Session::new(fresh_input()).err().unwrap();
+        assert!(old.contains("unsupported selected-squad preparation profile"));
+        let mut session = Session::new_fresh(fresh_input()).unwrap();
+        let original_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../records/T60/source-r0001/admission-r0001.json");
+        let original: Value =
+            serde_json::from_slice(&std::fs::read(original_path).unwrap()).unwrap();
+        assert_eq!(
+            session.snapshot().unwrap(),
+            original["payload"]["first_entry"]
+        );
+        let error = session.advance().err().unwrap();
+        assert!(error.contains("Missing"), "{error}");
+        assert!(error.contains("writing: false"), "{error}");
+    }
+    #[test]
+    fn fresh_caller_rejects_changed_source_profile_and_unsafe_support() {
+        let mut value = fresh_input();
+        value.preparation.setup.legacy.config[0] = 6;
+        assert!(Session::new_fresh(value)
+            .err()
+            .unwrap()
+            .contains("fresh campaign incoming profile"));
+        let mut value = fresh_input();
+        value.no_pending_key = false;
+        assert!(Session::new_fresh(value)
+            .err()
+            .unwrap()
+            .contains("no pending key"));
+        let mut value = fresh_input();
+        value.support.push(ByteFact {
+            area: Area::Ds,
+            offset: 0xA51C,
+            value: 0,
+        });
+        assert!(Session::new_fresh(value)
+            .err()
+            .unwrap()
+            .contains("unsupported initial support"));
+        let mut value = fresh_input();
+        value.support.push(ByteFact {
+            area: Area::Ds,
+            offset: 0x8708,
+            value: 0,
+        });
+        assert!(Session::new_fresh(value)
+            .err()
+            .unwrap()
+            .contains("role lookup alias"));
+        let mut value = fresh_input();
+        let fixture_kind = value
+            .preparation
+            .setup
+            .income
+            .iter()
+            .find(|row| row.club == 130)
+            .unwrap()
+            .fixture;
+        value.support.push(ByteFact {
+            area: Area::Fixtures,
+            offset: 174 * 130 + 3 - 177,
+            value: fixture_kind ^ 1,
+        });
+        assert!(Session::new_fresh(value)
+            .err()
+            .unwrap()
+            .contains("fresh incoming support"));
+        let mut value = fresh_input();
+        value.support.push(ByteFact {
+            area: Area::Ds,
+            offset: 0x949F,
+            value: 255,
+        });
+        assert!(Session::new_fresh(value)
+            .err()
+            .unwrap()
+            .contains("fresh incoming support"));
+    }
     fn input() -> Input {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/watched_setup/admission.json");

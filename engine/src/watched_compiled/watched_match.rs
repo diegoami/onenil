@@ -568,6 +568,10 @@ mod tests {
         let state: State = serde_json::from_value(fixture["initial"].clone()).unwrap();
         for (week, stage, ret, valid) in [
             (6, 0, 0xD75D, true),
+            (1, 1, 0xD75D, true),
+            (1, 0, 0xD75D, false),
+            (1, 2, 0xD75D, false),
+            (1, 1, 0x1234, false),
             (7, 0, 0xD75D, false),
             (6, 1, 0xD75D, false),
             (6, 0, 0x1234, false),

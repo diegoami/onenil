@@ -27,4 +27,7 @@ jobs:
           python3 tools/replay_ratings.py --check
           python3 tools/replay_step_tail.py --check
           python3 tools/replay_fresh_preparation.py --replay
+          python3 tools/fresh_watched_inputs.py --check
+          python3 tools/test_fresh_watched_inputs.py
+          python3 tools/test_fresh_watched_reference.py
       - run: python3 tools/check_originals.py
