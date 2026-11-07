@@ -77,6 +77,12 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
 }
 impl Session {
     pub fn new(input: Input) -> Result<Self, String> {
+        Self::new_profile(input, false)
+    }
+    pub fn new_fresh(input: Input) -> Result<Self, String> {
+        Self::new_profile(input, true)
+    }
+    fn new_profile(input: Input, fresh: bool) -> Result<Self, String> {
         if !input.no_pending_key {
             return Err("prepared watched session requires no pending key".into());
         }
@@ -101,11 +107,19 @@ impl Session {
                 return Err("source role lookup alias differs".into());
             }
         }
-        let mut prepared = setup::Session::before_watched_call(
-            input.preparation.setup,
-            input.preparation.incoming,
-            &support,
-        )?;
+        let mut prepared = if fresh {
+            setup::Session::before_fresh_watched_call(
+                input.preparation.setup,
+                input.preparation.incoming,
+                &support,
+            )?
+        } else {
+            setup::Session::before_watched_call(
+                input.preparation.setup,
+                input.preparation.incoming,
+                &support,
+            )?
+        };
         let preparation = prepared.preparation();
         let e = &mut prepared.match_state.inner.e;
         e.image[0x8708..0x8716].copy_from_slice(&ROLE_LOOKUP);
@@ -429,6 +443,69 @@ impl Session {
 #[cfg(test)]
 mod tests {
     use super::*;
+    fn fresh_input() -> Input {
+        let fixture: Value = serde_json::from_str(include_str!(
+            "../../tests/fixtures/fresh_preparation/admission.json"
+        ))
+        .unwrap();
+        Input {
+            preparation: serde_json::from_value(fixture["input"].clone()).unwrap(),
+            support: vec![],
+            no_pending_key: true,
+        }
+    }
+    #[test]
+    fn fresh_caller_keeps_legacy_guard_and_refuses_missing_initial_reads() {
+        let old = Session::new(fresh_input()).err().unwrap();
+        assert!(old.contains("unsupported selected-squad preparation profile"));
+        let mut session = Session::new_fresh(fresh_input()).unwrap();
+        let original_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../records/T60/source-r0001/admission-r0001.json");
+        let original: Value =
+            serde_json::from_slice(&std::fs::read(original_path).unwrap()).unwrap();
+        assert_eq!(
+            session.snapshot().unwrap(),
+            original["payload"]["first_entry"]
+        );
+        let error = session.advance().err().unwrap();
+        assert!(error.contains("Missing"), "{error}");
+        assert!(error.contains("writing: false"), "{error}");
+    }
+    #[test]
+    fn fresh_caller_rejects_changed_source_profile_and_unsafe_support() {
+        let mut value = fresh_input();
+        value.preparation.setup.legacy.config[0] = 6;
+        assert!(Session::new_fresh(value)
+            .err()
+            .unwrap()
+            .contains("fresh campaign incoming profile"));
+        let mut value = fresh_input();
+        value.no_pending_key = false;
+        assert!(Session::new_fresh(value)
+            .err()
+            .unwrap()
+            .contains("no pending key"));
+        let mut value = fresh_input();
+        value.support.push(ByteFact {
+            area: Area::Ds,
+            offset: 0xA51C,
+            value: 0,
+        });
+        assert!(Session::new_fresh(value)
+            .err()
+            .unwrap()
+            .contains("unsupported initial support"));
+        let mut value = fresh_input();
+        value.support.push(ByteFact {
+            area: Area::Ds,
+            offset: 0x8708,
+            value: 0,
+        });
+        assert!(Session::new_fresh(value)
+            .err()
+            .unwrap()
+            .contains("role lookup alias"));
+    }
     fn input() -> Input {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("tests/fixtures/watched_setup/admission.json");

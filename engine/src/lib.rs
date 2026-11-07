@@ -284,6 +284,16 @@ mod python {
     }
     #[pymethods]
     impl NativePreparedWatchedSession {
+        #[staticmethod]
+        fn fresh(input_json: &str) -> PyResult<Self> {
+            let input: watched_compiled::prepared::Input = serde_json::from_str(input_json)
+                .map_err(|e| PyValueError::new_err(e.to_string()))?;
+            let session = watched_compiled::prepared::Session::new_fresh(input)
+                .map_err(PyValueError::new_err)?;
+            Ok(Self {
+                session: std::sync::Mutex::new(session),
+            })
+        }
         fn finish(&self, py: Python<'_>) -> PyResult<String> {
             // Computation owns only Rust state;let the server answer preparation
             // polls while its worker retains this one native session.

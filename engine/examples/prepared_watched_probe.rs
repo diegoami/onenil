@@ -5,7 +5,11 @@ fn main() {
         let request: serde_json::Value = serde_json::from_str(&line.unwrap()).unwrap();
         let input: Input = serde_json::from_value(request["input"].clone()).unwrap();
         let result = (|| {
-            let mut s = Session::new(input)?;
+            let mut s = if request["fresh"].as_bool().unwrap_or(false) {
+                Session::new_fresh(input)?
+            } else {
+                Session::new(input)?
+            };
             let first = s.snapshot()?;
             let mut clocks = vec![];
             for _ in 0..request["steps"].as_u64().unwrap_or(0) {
