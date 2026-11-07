@@ -50,7 +50,9 @@ with tempfile.TemporaryDirectory(prefix='T62-window-') as directory:
   for typ,mask in [(2,1),(3,2)]:
    event=Event();event.key=Key(typ,0,1,display,window,root,0,0,1,1,1,1,0,code,1);assert x.XSendEvent(display,window,0,mask,C.byref(event));x.XFlush(display);time.sleep(.06)
  def step(name,check,timeout=10):
-  s=wait(check,timeout);steps.append(dict(name=name,state={k:v for k,v in s.items() if k not in ('worker_pid','save_path')}));return s
+  s=wait(check,timeout)
+  if name=='edited-admission-refuses':s['refused_worker_absent']=not s.get('worker_pid')
+  steps.append(dict(name=name,state={k:v for k,v in s.items() if k not in ('worker_pid','save_path')}));return s
  def shot(name):
   time.sleep(.12);r=U();xx=I();yy=I();w=C.c_uint();h=C.c_uint();border=C.c_uint();depth=C.c_uint()
   assert x.XGetGeometry(display,window,C.byref(r),C.byref(xx),C.byref(yy),C.byref(w),C.byref(h),C.byref(border),C.byref(depth))
@@ -99,7 +101,7 @@ with tempfile.TemporaryDirectory(prefix='T62-window-') as directory:
   key('space');step('squad',lambda s:s.get('screen')=='Players');key('Return');key('Down');key('Return')
   edited=step('changed-xi',lambda s:s.get('first',[None])[:2]==[2582,2581])['campaign']
   key('Escape');step('edited-main',lambda s:s.get('screen')=='Main');key('Return');key('Return')
-  step('edited-admission-refuses',lambda s:s.get('screen')=='Preparation' and bool(s.get('message')) and not s.get('worker_pid') and s.get('campaign')==edited);shot('refused-edit');assert save.read_bytes()==saved
+  step('edited-admission-refuses',lambda s:s.get('screen')=='Preparation' and s.get('message')=='Only the unchanged initial campaign can play. Reload the original save.' and not s.get('worker_pid') and s.get('campaign')==edited);shot('refused-edit');assert save.read_bytes()==saved
   key('Escape');key('F9');step('reload-initial',lambda s:s.get('screen')=='Main' and s.get('campaign')==initial)
   key('Return');key('Return');s=step('close-during-campaign-preparation',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'));worker_pids.append(s['worker_pid'])
   close_window();assert process.wait(timeout=3)==0

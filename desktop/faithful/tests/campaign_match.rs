@@ -36,7 +36,9 @@ fn changed_campaign_and_pending_move_refuse_without_mutation() {
     controller.key(Key::Enter);
     assert_eq!(controller.screen, Screen::Preparation);
     assert!(!controller.prepare_requested);
-    assert!(!controller.message.is_empty());
+    assert!(controller.message.is_ascii() && controller.message.len() <= 80);
+    assert!(controller.message.contains("unchanged initial campaign"));
+    assert!(controller.message.ends_with("Reload the original save."));
     assert_eq!(controller.editor.campaign, before);
     let mut controller = Controller::default();
     controller.editor.select(Location::First(0)).unwrap();

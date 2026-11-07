@@ -1,0 +1,24 @@
+{
+  "schema": "review-fix-validation/1",
+  "finding": "milestone139 F1 / issue140",
+  "regression_commit": "33dfcb6",
+  "capture_producer": "acb980fe6a314762db6b180b668f144da9d02f03",
+  "before": {
+    "controller": "failed at 80-cell width assertion",
+    "raster": "failed comparing actual refused footer with complete recovery instruction"
+  },
+  "after": {
+    "command": "ONENIL_DESKTOP_FONT=.cache/T51-font/PxPlus_IBM_VGA_8x16.ttf cargo test --manifest-path desktop/faithful/Cargo.toml --features software --release --locked",
+    "tests": 22,
+    "status": "passed"
+  },
+  "scan": {
+    "changed_leaves": 15,
+    "original_sources": 37,
+    "raw_hex64": "passed",
+    "historical_records": "identical git trees at 066bd3d and producer acb980f"
+  },
+  "message": "Only the unchanged initial campaign can play. Reload the original save.",
+  "message_cells": 71,
+  "window_sha256": "103187a5a60e9c31d87d59dbe739b5be12f1d7dac698247e4dd37bd049eec0b9"
+}
