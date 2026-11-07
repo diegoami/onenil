@@ -898,3 +898,45 @@ mod campaign_labels_tests {
         assert_eq!(renderer.instruction_text(&c, pearce, 2), "short passes");
     }
 }
+
+#[cfg(test)]
+mod refusal_tests {
+    use super::*;
+    use crate::controller::Key;
+
+    #[test]
+    fn refused_campaign_renders_complete_recovery_instruction() {
+        let font = std::env::var_os("ONENIL_DESKTOP_FONT").expect("set verified replacement font");
+        let mut controller = Controller::default();
+        controller
+            .editor
+            .campaign
+            .exchange(
+                onenil_campaign::Location::First(0),
+                onenil_campaign::Location::First(1),
+            )
+            .unwrap();
+        controller.key(Key::Enter);
+        controller.key(Key::Enter);
+        assert_eq!(controller.screen, Screen::Preparation);
+        assert!(!controller.prepare_requested);
+        let expected = "Only the unchanged initial campaign can play. Reload the original save.";
+        assert!(expected.len() <= 80);
+        let mut actual = Renderer::new(Path::new(&font)).unwrap();
+        actual.draw(&controller);
+        let mut reference = Renderer::new(Path::new(&font)).unwrap();
+        reference.text(0, 24, expected, 0xffff55, 0, 80);
+        assert_eq!(
+            &actual.pixels[384 * WIDTH..],
+            &reference.pixels[384 * WIDTH..]
+        );
+        // Recovery words have visible ink, including the final period.
+        for cell in 45..expected.len() {
+            if expected.as_bytes()[cell] != b' ' {
+                assert!((384..400)
+                    .any(|y| (cell * 9..cell * 9 + 9)
+                        .any(|x| actual.pixels[y * WIDTH + x] == 0xffff55)));
+            }
+        }
+    }
+}
