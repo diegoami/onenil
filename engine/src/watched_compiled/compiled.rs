@@ -36,6 +36,8 @@ pub(super) struct Cpu {
     pub watch_tick: usize,
     pub watch_entry_yield: bool,
     pub watch_entry_yielded: bool,
+    pub watch_interval_yield: bool,
+    pub watch_interval_yielded: bool,
     pub watch_live_goals: Vec<[u16; 2]>,
     pub watch_clocks: Option<Vec<serde_json::Value>>,
     pub last_return: Option<(u16, u16)>,
@@ -73,6 +75,8 @@ impl Cpu {
             watch_tick: 0,
             watch_entry_yield: false,
             watch_entry_yielded: false,
+            watch_interval_yield: false,
+            watch_interval_yielded: false,
             watch_live_goals: vec![],
             watch_clocks: None,
             last_return: None,
@@ -434,6 +438,20 @@ impl Cpu {
             if self.pc == (0x0AB9, 0x7C67) && self.watch_entry_yield {
                 self.watch_entry_yielded = true;
                 return Err("native watched entry yield".into());
+            }
+            // [confirmed:011a341,7DD3/7E4A] Statistics have returned and
+            // the original bench call has not yet pushed its argument.
+            if self.pc == (0x0AB9, 0x7E4A) && self.watch_interval_yield {
+                if self.watch_pending.is_some()
+                    || self.watch_tick == 0
+                    || self.call_chain() != [(0x0AB9, 0xE435), (0x0AB9, 0xE064)]
+                    || self.read(self.r[11], 0xD0BA, 8)? != 1
+                    || self.read(self.r[11], 0xD0AE, 16)? == 0
+                {
+                    return Err("native interval yield outside owned halftime caller".into());
+                }
+                self.watch_interval_yielded = true;
+                return Err("native halftime yield".into());
             }
             if self.pc == (0x0AB9, 0x7A02) {
                 if self.watch_pending.is_some() || self.watch_tick >= 10000 {
