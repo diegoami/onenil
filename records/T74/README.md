@@ -37,3 +37,13 @@ parity in addition to the existing engine/source/desktop gates.
 timeline before playback. No substitution controls or new lineup/mutation
 admissions are enabled here. Worker streaming/ownership and the source-witnessed
 replacement transaction require separately bounded follow-on tasks.
+
+[confirmed: parity-r0001.json/validation-r0001.json,producerf0f3a59]
+All544 Rust results pass. The two focused interval tests pass. Direct comparison
+with the accepted independently repeated originals matches unchanged3825ticks,
+158992ordered draws and748actions, and edited3970ticks/170212draws/869actions,
+including every final field and actual0AB9:EBE2 return. The owned interval occurs
+after1765ticks in the unchanged case; its snapshot is inspection output only.
+The compact immutable receipt pins the release probe, producer, cargo lock,
+original indexes and canonical output hashes. Desktop checks remain a separate
+final gate; no replacement UI is claimed.
