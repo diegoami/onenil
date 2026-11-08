@@ -121,3 +121,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T74 Retain and resume the live halftime image](T74.md)
 
 - [T75 Execute the witnessed managed halftime replacement](T75.md)
+
+- [T76 Retain the desktop worker across genuine halftime](T76.md)
