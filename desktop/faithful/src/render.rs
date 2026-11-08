@@ -1080,3 +1080,50 @@ mod readability_tests {
         assert!(c.prepare_requested);
     }
 }
+
+#[cfg(test)]
+mod numbered_pitch_tests {
+    use super::*;
+    #[test]
+    fn numbered_pitch_uses_original_digit_not_an_invented_figure() {
+        // [designed] Synthetic raster probe, not a simulated match. Physical
+        // scene1 deliberately carries selector2 to protect their distinction.
+        let players: Vec<_>=(0..22).map(|i| serde_json::json!({
+            "scene":i+1,"player":2581+i,"club":if i<11 {130} else {17},
+            "focus":false,"position":if i==0 {serde_json::json!({"x":-4,"y":-15})} else {serde_json::json!({"x":7,"y":36})}
+        })).collect();
+        let view =
+            serde_json::json!({"clock":0,"score":[0,0],"ball":{"x":7,"y":-36},"players":players});
+        let row: Vec<_> = (0..22)
+            .map(|i| [if i == 0 { 2 } else { i + 1 }, if i < 11 { 11 } else { 9 }])
+            .collect();
+        let timeline = serde_json::from_value(serde_json::json!({
+            "club_names":["Blackburn R","P St Germain"],"initial":view,
+            "frames":[{"view":view,"events":[]}],"setup_events":[],"native_return":"0AB9:EBE2",
+            "draws":0,"clock_rows":0,"seed":0,"clubs":[130,17],"marker_rows":[row,row]
+        }))
+        .unwrap();
+        let mut c = Controller::default();
+        c.screen = Screen::Pitch;
+        c.playback = Some(crate::timeline::Playback::new(timeline));
+        let font = std::env::var_os("ONENIL_DESKTOP_FONT").expect("verified font");
+        let mut actual = Renderer::new(Path::new(&font)).unwrap();
+        actual.draw(&c);
+        let mut expected = Renderer::new(Path::new(&font)).unwrap();
+        expected.cell(0, 0, '0', 0x55ffff, 0x004000);
+        let region: Vec<_> = (166..182)
+            .flat_map(|y| {
+                actual.pixels[y * WIDTH + 233..y * WIDTH + 242]
+                    .iter()
+                    .copied()
+            })
+            .collect();
+        let mask: Vec<_> = (0..16)
+            .flat_map(|y| expected.pixels[y * WIDTH..y * WIDTH + 9].iter().copied())
+            .collect();
+        assert_eq!(
+            region, mask,
+            "source selector2 must draw the original numbered digit0"
+        );
+    }
+}
