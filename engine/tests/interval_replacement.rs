@@ -13,7 +13,17 @@ fn input(edited: bool) -> Input {
         &std::fs::read(root.join(format!("{profile}_watched/incoming.json"))).unwrap(),
     )
     .unwrap();
-    serde_json::from_value(serde_json::json!({"preparation":prep["input"],"support":facts["support"],"no_pending_key":true})).unwrap()
+    let mut packet = serde_json::json!({"preparation":prep["input"],"support":facts["support"],"no_pending_key":true});
+    if !edited {
+        let editor: Value =
+            serde_json::from_str(include_str!("fixtures/halftime_replacement/incoming.json"))
+                .unwrap();
+        packet["support"]
+            .as_array_mut()
+            .unwrap()
+            .extend(editor["support"].as_array().unwrap().iter().cloned());
+    }
+    serde_json::from_value(packet).unwrap()
 }
 fn session(edited: bool) -> Session {
     if edited {

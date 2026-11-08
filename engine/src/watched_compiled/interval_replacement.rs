@@ -101,7 +101,7 @@ pub(super) fn key(c: &mut Cpu, bench: bool, players: bool) -> Result<Option<u16>
         // At 0C17 entry,099B's saved BP belongs to CBF0 (direct call C E38).
         let bp = c.read(c.r[10], c.r[5], 16)?;
         (
-            Some(c.read(c.r[10], bp.wrapping_sub(9), 8)?),
+            Some(c.read(c.r[11], 0x037E, 8)?),
             Some(c.read(c.r[10], bp.wrapping_sub(10), 8)?),
         )
     } else {

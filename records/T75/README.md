@@ -13,3 +13,12 @@ remaining phase tests, full regressions and final CI are pending. The desktop
 still precomputes its timeline and has no replacement controls. No substituted
 full-match parity is claimed. All previous fixtures and generated gameplay
 procedures are unchanged.
+
+Further development: authenticated research T75 inputs add selected-team1,
+player-cursor1 and player-panel-selector1 only when explicitly supplied to a
+fresh constructor; edited/old no-decision admissions stay unchanged. Attempts
+r0002–r0006/r0008 retain later baseline/presentation/name-only stops. Original
+template and false-warning text boundaries are guarded by exact source callers,
+arguments, owned interval and false predicates. All generated procedures remain
+unchanged. The complete native replacement regression is still pending; no
+success is claimed by these intermediate commits.

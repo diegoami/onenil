@@ -56,7 +56,7 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
                     || (0x8708..0x8716).contains(&o)
                     || (0x935B..0xA51C).contains(&o)
                     || (0xD886..0xD936).contains(&o)
-                    || [0xD084, 0xD09E, 0xD0B6, 0xD0BD, 0xD1C9, 0xE5DD, 0xCF5A, 0xCF5B].contains(&o) =>
+                    || [0x037E, 0xD084, 0xD09E, 0xD0B6, 0xD0BD, 0xD1C9, 0xE5DD, 0xCF5A, 0xCF5B].contains(&o) =>
             {
                 0
             }
@@ -134,7 +134,23 @@ impl Session {
             .map_err(|_| "invalid fresh incoming witness")?;
             let facts: Vec<ByteFact> = serde_json::from_value(witness["support"].clone())
                 .map_err(|_| "invalid fresh incoming facts")?;
-            let allowed = support_cells(&facts)?;
+            let mut allowed = support_cells(&facts)?;
+            if !edited {
+                // [confirmed:research T75/110665e; acceptance pending] Only
+                // explicitly supplied, authenticated editor input facts enter.
+                // Old no-decision callers supply none and remain unchanged.
+                let editor: Value = serde_json::from_str(include_str!(
+                    "../../tests/fixtures/halftime_replacement/incoming.json"
+                ))
+                .map_err(|_| "invalid fresh editor incoming witness")?;
+                let extra: Vec<ByteFact> = serde_json::from_value(editor["support"].clone())
+                    .map_err(|_| "invalid fresh editor input facts")?;
+                for (at, value) in support_cells(&extra)? {
+                    if allowed.insert(at, value).is_some() {
+                        return Err("duplicate fresh editor input fact".into());
+                    }
+                }
+            }
             if support
                 .iter()
                 .any(|(at, value)| allowed.get(at) != Some(value))

@@ -548,7 +548,15 @@ impl Cpu {
         } else {
             None
         };
-        f(self)?;
+        if (cs, ip) == (0x232A, 0x0098) && self.replacement.is_some() {
+            super::projections::replacement_guard_message(self)?;
+        } else if (cs, ip) == (0x1B55, 0x44DC) && self.replacement.is_some() {
+            super::projections::replacement_warning_name(self)?;
+        } else if (cs, ip) == (0x26C9, 0x0BD2) && self.replacement.is_some() {
+            super::projections::replacement_warning_suffix(self)?;
+        } else {
+            f(self)?;
+        }
         if let Some(mut event) = commentary {
             let head = self.read(self.r[11], 0x380, 16)?;
             if event["head_before"].as_u64() != Some(u64::from(head)) {
