@@ -125,3 +125,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T76 Retain the desktop worker across genuine halftime](T76.md)
 
 - [T77 Connect live workers to desktop halftime flow](T77.md)
+
+- [T79 Refresh launch guidance and historical worker limits](T79.md)
