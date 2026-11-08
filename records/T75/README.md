@@ -51,13 +51,14 @@ both source fixtures and every derived incoming byte against that tree. It also
 compares every computed first-half tick/draw/action with the accepted full
 original stream, rather than only comparing two native executions.
 
-**Limits:** fresh Pearce/Gale case only; keeper/exhausted/unavailable-player
-warning dialogs and broader lineup admission remain separate. The substituted
-second half is computed native output, not an original full-match parity claim.
-The desktop still precomputes its complete timeline; this engine API does not
-enable substitution controls there. Worker streaming, interactive choices,
-post-match campaign roster persistence and exactly-once save integration remain
-separate work. Owner demo windows and unsaved state are preserved.
+**Scope at T75 acceptance:** fresh Pearce/Gale case only; keeper/exhausted/
+unavailable-player warning dialogs and broader lineup admission were outside
+this proof. The substituted second half is computed native output, not an
+original full-match parity claim. The desktop then precomputed its complete
+timeline. Later [T76 transport](../T76/README.md) and
+[T77 desktop integration](../T77/README.md) delivered the live halftime flow.
+This engine record does not establish player-selection UI or saved-roster
+persistence. Owner demo windows and unsaved state were preserved.
 
 [designed:owner,2026-11-08] Source backup identifiers were redacted with the
 owner's explicit authorization. The source pin above selects the redacted tree.
