@@ -6,7 +6,7 @@ import edited_watched_inputs as subject
 
 class EditedWatchedInputTests(unittest.TestCase):
     def test_own_case_has_complete_before_support_and_preparation(self):
-        value=subject.request();self.assertEqual(len(value['support']),2032)
+        value=subject.request();self.assertEqual(len(value['support']),2059)
         self.assertEqual(value['preparation']['setup']['legacy_income_total'],0)
         self.assertTrue(value['no_pending_key'])
     def test_changed_or_output_injected_fixture_refuses(self):

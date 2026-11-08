@@ -16,7 +16,12 @@ def admission(freeze=False):
             key=row['area'],row['offset']
             if key in facts and facts[key]!=row['before']:raise ValueError('edited support conflict')
             facts[key]=row['before']
-    value=dict(schema='edited-watched-incoming/1',sources={k:v[1] for k,v in preparation.PINS.items()},support=[dict(area=a,offset=o,value=v) for (a,o),v in sorted(facts.items())])
+    import edited_lookup_inputs as lookup
+    for row in lookup.sources():
+        key=row['area'],row['offset']
+        if key in facts and facts[key]!=row['value']:raise ValueError('T72/T73 input overlap differs')
+        facts[key]=row['value']
+    value=dict(lookup_sources=lookup.PINS,schema='edited-watched-incoming/1',sources={k:v[1] for k,v in preparation.PINS.items()},support=[dict(area=a,offset=o,value=v) for (a,o),v in sorted(facts.items())])
     if freeze:
         FIXTURE.parent.mkdir(parents=True,exist_ok=True)
         with FIXTURE.open('x') as f:json.dump(value,f,indent=2);f.write('\n')
