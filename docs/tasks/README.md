@@ -113,3 +113,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T70 Clear desktop text and discoverable match start](T70.md)
 
 - [T71 Correct the reviewed desktop launch documentation](T71.md)
+
+- [T72 Original numbered on-pitch player display](T72.md)
