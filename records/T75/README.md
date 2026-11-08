@@ -1,6 +1,6 @@
 # T75 — original managed halftime replacement
 
-[confirmed:research1187bce, originalT74/T75] Two independent original sessions
+[confirmed:research5d91e39, originalT74/T75] Two independent original sessions
 own the fresh Pearce2582→Gale2592 transaction and the editor's incoming fields.
 Native `Session::finish_with_interval_replacement(cancel_first)` requires an
 owned `pause_at_interval()` image and that exact fresh roster pair. It drives
@@ -45,8 +45,8 @@ python3 tools/check_interval_replacement.py --research-root PATH_TO_PINNED_RESEA
 # A clean producer may retain a new immutable receipt with --record NEW_PATH.
 ```
 
-The checked source commit is1187bce05efbfca38bdbe7c2d697ddabcc224371,
-treeb32570e2855277e5646f03ebf20f1a06cc9ccbaa. The public checker authenticates
+The checked source commit is5d91e39543e5747cf9f84356512ac1b56228505b,
+tree92aef92a23623bcfd35107790bd8ce14df0eee91. The public checker authenticates
 both source fixtures and every derived incoming byte against that tree. It also
 compares every computed first-half tick/draw/action with the accepted full
 original stream, rather than only comparing two native executions.
@@ -58,3 +58,9 @@ The desktop still precomputes its complete timeline; this engine API does not
 enable substitution controls there. Worker streaming, interactive choices,
 post-match campaign roster persistence and exactly-once save integration remain
 separate work. Owner demo windows and unsaved state are preserved.
+
+[designed:owner,2026-11-08] Source backup identifiers were redacted with the
+owner's explicit authorization. The source pin above selects the redacted tree.
+All game observations and incoming queries are byte-identical to the previous
+checked source. Existing parity/validation receipts remain immutable; the new
+parity receipt binds this redacted source tree without changing runtime inputs.

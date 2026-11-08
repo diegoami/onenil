@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: diegoami/onenil-archaeology
-          ref: 1187bce05efbfca38bdbe7c2d697ddabcc224371
+          ref: 5d91e39543e5747cf9f84356512ac1b56228505b
           path: .cache/interval-source
           persist-credentials: false
       - run: python3 tools/generate_interval.py --research-root .cache/interval-source --check

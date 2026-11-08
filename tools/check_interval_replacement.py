@@ -9,8 +9,8 @@ from pathlib import Path
 import replay_fresh_watched as fresh
 import watched_oracle
 ROOT=Path(__file__).resolve().parents[1]
-SOURCE_COMMIT='1187bce05efbfca38bdbe7c2d697ddabcc224371'
-SOURCE_TREE='b32570e2855277e5646f03ebf20f1a06cc9ccbaa'
+SOURCE_COMMIT='5d91e39543e5747cf9f84356512ac1b56228505b'
+SOURCE_TREE='92aef92a23623bcfd35107790bd8ce14df0eee91'
 FIXTURES=ROOT/'engine/tests/fixtures/halftime_replacement'
 encoded=fresh.reference.encoded
 sha=lambda b:hashlib.sha256(b).hexdigest()
