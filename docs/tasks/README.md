@@ -117,3 +117,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T72 Original numbered on-pitch player display](T72.md)
 
 - [T73 Original commentary history navigation](T73.md)
+
+- [T74 Retain and resume the live halftime image](T74.md)
