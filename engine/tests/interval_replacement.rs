@@ -28,7 +28,8 @@ fn witnessed_replacement_resumes_original_owned_match() {
     let mut native = session(false);
     assert!(native.finish_with_interval_replacement(true).is_err());
     native.pause_at_interval().unwrap();
-    let result = native.finish_with_interval_replacement(true)
+    let result = native
+        .finish_with_interval_replacement(true)
         .unwrap_or_else(|e| panic!("{e}"));
     assert_eq!(result["match"]["return"], "0AB9:EBE2");
     assert!(!result["transaction"].as_array().unwrap().is_empty());

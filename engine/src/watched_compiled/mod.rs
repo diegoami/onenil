@@ -509,3 +509,5 @@ mod tests {
         assert!(serde_json::from_value::<SelectionState>(helper).is_err());
     }
 }
+
+mod interval_replacement;

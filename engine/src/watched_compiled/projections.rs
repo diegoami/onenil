@@ -379,11 +379,14 @@ pub(super) fn menu_fixture_title(c: &mut Cpu) -> Result<(), String> {
 pub(super) fn continue_menu_key(c: &mut Cpu) -> Result<(), String> {
     let chain = c.call_chain();
     let halftime = chain.ends_with(&[(0x0AB9, 0xD81C), (0x232A, 0x0FA6), (0x232A, 0x09A3)]);
+    let players = chain.ends_with(&[(0x0AB9, 0xCE3D), (0x232A, 0x09A3)]);
     let final_screen = chain.ends_with(&[(0x0AB9, 0xE1C4), (0x232A, 0x09A3)])
         && c.watch_tick > 0
         && c.watch_pending.is_none()
         && c.read(c.r[11], 0xD0AE, 16)? == 0;
-    if c.watch_trace.is_none() || !(halftime || final_screen) {
+    if c.watch_trace.is_none()
+        || !(halftime || final_screen || (players && c.replacement.is_some()))
+    {
         return Err("external menu input outside proven halftime/final controller".into());
     }
     let ss = c.r[10];
@@ -392,7 +395,14 @@ pub(super) fn continue_menu_key(c: &mut Cpu) -> Result<(), String> {
     if c.read(ds, 0xDE8E, 16)? != 0 || c.read(ds, 0xDE8C, 16)? != 0 {
         return Err("external menu input requires empty original key queues".into());
     }
-    let (key, current, intent) = if final_screen {
+    let replacement_key = if c.replacement.is_some() {
+        super::interval_replacement::key(c, halftime, players)?
+    } else {
+        None
+    };
+    let (key, current, intent) = if let Some(key) = replacement_key {
+        (key, None, "interval_replacement")
+    } else if final_screen {
         // [confirmed:T41/final-footer-r0001] Original Week.play presses n;
         // E1C8 uppercases it and E1EA exits the finished match screen.
         (110, None, "finish_match")
