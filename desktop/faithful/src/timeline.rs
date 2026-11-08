@@ -265,6 +265,11 @@ impl IntervalTimeline {
     }
     pub fn is_prefix_of(&self, finished: &Timeline) -> bool {
         finished.native_return == "0AB9:EBE2"
+            && finished
+                .frames
+                .iter()
+                .flat_map(|f| &f.events)
+                .any(|e| e.kind == "full-time")
             && finished.frames.len() > self.frames.len()
             && self.club_names == finished.club_names
             && self.initial == finished.initial

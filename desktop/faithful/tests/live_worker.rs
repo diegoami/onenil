@@ -85,6 +85,11 @@ fn original_and_edited_intervals_arrive_alive_then_continue_without_changing_res
         assert!(matches!(job.poll(), Poll::Pending));
         assert!(job.decide(Decision::Continue).is_err());
         assert_eq!(before, campaign.encode().unwrap());
+        let mut missing_whistle = result.timeline.clone();
+        for frame in &mut missing_whistle.frames {
+            frame.events.retain(|e| e.kind != "full-time");
+        }
+        assert!(!prefix.is_prefix_of(&missing_whistle));
         let mut foreign = result.timeline;
         foreign.initial.clock += 1;
         assert!(!prefix.is_prefix_of(&foreign));

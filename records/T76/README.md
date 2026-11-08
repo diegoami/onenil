@@ -15,8 +15,8 @@ Packets use a bounded length-prefixed JSON protocol, version, job identity,
 canonical campaign digest and ordered phase. Parent validation binds the fixture,
 markers and complete first-half prefix. Extra/truncated/oversized/unknown frames,
 foreign identities, early/duplicate decisions and an incomplete completed result
-refuse. A completed packet is delivered only after EOF verification and child
-reaping. Cancellation/drop also reaps an interval-waiting child and joins the
+refuse. A completed packet requires the full-time whistle and is delivered only after
+EOF verification and child reaping. Cancellation/drop also reaps an interval-waiting child and joins the
 reader. The bounded reader cannot deadlock on a full sender queue.
 
 Original timeline arithmetic and narration remain shared with the old complete
