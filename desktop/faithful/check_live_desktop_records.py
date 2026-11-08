@@ -8,7 +8,7 @@ PINS={'window-r0001.json': {'sha256': 'b0db2571e839bc992fecb6e1a5e62f22f7509f2e3
 FONT='c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f'
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def check(r,directory,images=True):
- assert r['schema']=='native-live-desktop-window/1' and r['case'] in ('original','edited')
+ assert r['schema'] in ('native-live-desktop-window/1','native-live-desktop-window/2') and r['case'] in ('original','edited')
  assert r['status']=='passed' and not r['error'] and not r['x11_errors']
  assert r['owned_windows_closed'] and r['cancelled_and_closed_workers_reaped'] and r['fresh_process_count']==3
  assert r['font_sha256']==FONT and r['runtime']['window_backend']=='software/minifb'
@@ -18,14 +18,17 @@ def check(r,directory,images=True):
  assert set(r['producer_files'])==deps and all(re.fullmatch('[0-9a-f]{64}',v) for v in r['producer_files'].values())
  steps={s['name']:s['state'] for s in r['steps']};assert len(steps)==len(r['steps'])
  expected=['main']+(['players','edited-team','edited-main'] if r['case']=='edited' else [])+['initial-save','preparation','preparing-worker','cancelled-start','first-half','history','history-Home','history-Down','history-End','first-half-bench','first-half-resume','half-time','interval-bench','resuming','second-half','second-half-history','full-time','recorded','saved-result','fresh-reload','duplicate-refused','close-incomplete']
+ if r['schema'].endswith('/2'):expected.insert(expected.index('history'),'slow-pitch')
  assert list(steps)==expected
  initial=steps['initial-save']['campaign'];original=steps['main']['campaign'];want=copy.deepcopy(original)
  if r['case']=='edited':want['club']['first_team'][1:3]=[2583,2582];want['revision']+=1
  assert initial==want
  before=['initial-save','preparation','preparing-worker','cancelled-start','first-half','history','history-Home','history-Down','history-End','first-half-bench','first-half-resume','half-time','interval-bench','resuming','second-half','second-half-history','full-time']
+ if r['schema'].endswith('/2'):before.append('slow-pitch')
  assert all(steps[k]['campaign']==initial for k in before)
  assert not steps['cancelled-start']['worker_present'] and steps['cancelled-start']['screen']=='Preparation'
  held=['history','history-Home','history-Down','history-End','first-half-bench','first-half-resume','half-time','interval-bench','resuming']
+ if r['schema'].endswith('/2'):held.append('slow-pitch')
  assert all(steps[k]['worker_present'] and steps[k]['worker_same'] and steps[k]['live_worker'] and steps[k]['match_stage']=='incomplete' for k in held)
  history=steps['history']
  for key in ['history-Home','history-Down','history-End']:
@@ -59,6 +62,7 @@ def check(r,directory,images=True):
     if marker in text:text=text.replace(marker,names[str(event[field])])
    assert action['text']==text and 'Play continues' not in text and event['minute']<=row['clock']
  expected_shots={'history-default','history-resized','half-time-default','half-time-resized','second-half-default','second-half-resized','full-time'}
+ if r['schema'].endswith('/2'):expected_shots.update({'pitch-default','pitch-resized'})
  assert {s['name'] for s in r['screenshots']}==expected_shots
  for shot in r['screenshots']:
   assert Path(shot['path']).name==shot['path'];s=shot['state'];assert s['players']==22 and len(s['pitch_markers'])==22
@@ -84,6 +88,6 @@ def verify(path):
   try:check(bad,path.parent,images=damage==6)
   except (AssertionError,KeyError):pass
   else:raise AssertionError('corrupted live desktop proof accepted: '+str(damage))
- print('PASS live desktop',r['case'],len(r['steps']),'steps,7 raster bindings,10 corruption controls;real continuation and saved result')
+ print('PASS live desktop',r['case'],len(r['steps']),'steps',len(r['screenshots']),'raster bindings,10 corruption controls;real continuation and saved result')
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('record',type=Path);a=p.parse_args();verify(a.record)
