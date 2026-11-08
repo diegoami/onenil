@@ -126,4 +126,6 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 
 - [T77 Connect live workers to desktop halftime flow](T77.md)
 
+- [T78 Managed halftime player selection with source-authenticated persistence](T78.md)
+
 - [T79 Refresh launch guidance and historical worker limits](T79.md)
