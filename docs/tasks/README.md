@@ -107,3 +107,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T67 Original Players shortcut return selection](T67.md)
 
 - [T68 Exact edited-campaign continuing watched parity](T68.md)
+
+- [T69 Verified edited campaign in the faithful desktop](T69.md)
