@@ -1,0 +1,7048 @@
+{
+  "source_research": "011a341464dfbf4f419cd0eefad8553a37002dca",
+  "marker_contract_sha256": "91dbf5818c07398ee4e76cf7560ef658b66730271b77b9f2c18f17b5f3e04799",
+  "schema": "native-numbered-pitch-window/1",
+  "producer": "1874e627e1d77e37522f98308b25fe7c219240d5",
+  "runtime": {
+    "window_backend": "software/minifb",
+    "python": "3.12.3",
+    "cargo_lock_sha256": "f05fd7af2e7c9a2b6a7e328274ca4c7759bc2f62aa1a41f0a1a14aa8306279c0"
+  },
+  "binary_sha256": "cb77a7af16d0c1f7a98f0ea4d6c1db73734234ce9b7dc72cdd9536318e0cfba0",
+  "font_sha256": "c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f",
+  "names_sha256": "a9100aabe62c67162a717864392fd8a7c30dd40b4032d5c2665a1253bd6f1d6c",
+  "elapsed_seconds": 18.76970820099814,
+  "steps": [
+    {
+      "name": "main",
+      "state": {
+        "campaign": {
+          "cash": 452000,
+          "club": {
+            "first_team": [
+              2581,
+              2582,
+              2583,
+              2584,
+              2585,
+              2586,
+              2587,
+              2588,
+              2589,
+              2590,
+              2591,
+              2592,
+              2593,
+              2594,
+              2595,
+              2596,
+              2597,
+              2598,
+              null,
+              null
+            ],
+            "id": 130,
+            "name": "Blackburn R",
+            "reserves": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "team_instructions": 75
+          },
+          "manager": {
+            "name": "Dalglish",
+            "name_id": 130,
+            "slot": 1
+          },
+          "namespace": {
+            "edition": 96,
+            "league": "ENGL-95.DAT",
+            "league_year": 1995
+          },
+          "next_fixture": {
+            "club": 130,
+            "competition_code": 1,
+            "flags": 1,
+            "opponent": 17,
+            "opponent_flags": 0,
+            "opponent_name": "P St Germain",
+            "slot": 1,
+            "venue_code": 1
+          },
+          "origin": {
+            "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+            "record_sha256": "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483",
+            "research_commit": "39e289a393d12ce562ee8b9fba16b413fa17647e",
+            "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36"
+          },
+          "players": [
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 10,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2581,
+              "individual_instructions": 17,
+              "name": "T Flowers"
+            },
+            {
+              "age": 20,
+              "availability": {
+                "condition_signed": 31,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2582,
+              "individual_instructions": 178,
+              "name": "I Pearce"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 20,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2583,
+              "individual_instructions": 50,
+              "name": "C Hendry"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 9,
+                "status_bits": 1
+              },
+              "club_position": 3,
+              "current_position": 3,
+              "id": 2584,
+              "individual_instructions": 17,
+              "name": "G Le Saux"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2585,
+              "individual_instructions": 17,
+              "name": "H Berg"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 19,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2586,
+              "individual_instructions": 0,
+              "name": "M Atkins"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 8,
+                "status_bits": 1
+              },
+              "club_position": 6,
+              "current_position": 6,
+              "id": 2587,
+              "individual_instructions": 0,
+              "name": "T Sherwood"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 29,
+                "status_bits": 1
+              },
+              "club_position": 10,
+              "current_position": 10,
+              "id": 2588,
+              "individual_instructions": 0,
+              "name": "J Wilcox"
+            },
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 18,
+                "status_bits": 1
+              },
+              "club_position": 11,
+              "current_position": 11,
+              "id": 2589,
+              "individual_instructions": 0,
+              "name": "S Ripley"
+            },
+            {
+              "age": 21,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 0
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2590,
+              "individual_instructions": 0,
+              "name": "C Sutton"
+            },
+            {
+              "age": 24,
+              "availability": {
+                "condition_signed": 28,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2591,
+              "individual_instructions": 0,
+              "name": "A Shearer"
+            },
+            {
+              "age": 35,
+              "availability": {
+                "condition_signed": 17,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2592,
+              "individual_instructions": 50,
+              "name": "T Gale"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2593,
+              "individual_instructions": 0,
+              "name": "P Warhurst"
+            },
+            {
+              "age": 30,
+              "availability": {
+                "condition_signed": 11,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2594,
+              "individual_instructions": 0,
+              "name": "R Slater"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 26,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2595,
+              "individual_instructions": 50,
+              "name": "N Marker"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2596,
+              "individual_instructions": 0,
+              "name": "M Newell"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 25,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2597,
+              "individual_instructions": 145,
+              "name": "A Wright"
+            },
+            {
+              "age": 31,
+              "availability": {
+                "condition_signed": 14,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2598,
+              "individual_instructions": 17,
+              "name": "B Mimms"
+            }
+          ],
+          "revision": 0,
+          "schema": "onenil-campaign",
+          "season": {
+            "counter": 1,
+            "end_year": 1995,
+            "start_year": 1994
+          },
+          "version": 1,
+          "week_index": 0
+        },
+        "card": 2581,
+        "carried": null,
+        "close_requested": false,
+        "events": null,
+        "exhibition": false,
+        "first": [
+          2581,
+          2582,
+          2583,
+          2584,
+          2585,
+          2586,
+          2587,
+          2588,
+          2589,
+          2590,
+          2591,
+          2592,
+          2593,
+          2594,
+          2595,
+          2596,
+          2597,
+          2598,
+          null,
+          null
+        ],
+        "frames": null,
+        "game_name": "squad",
+        "instruction": 0,
+        "job": 0,
+        "load_entries": [],
+        "load_index": 0,
+        "match_clubs": null,
+        "menus": [
+          0,
+          2,
+          0
+        ],
+        "message": "",
+        "option_available": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "panel": "Skills",
+        "phase": null,
+        "pitch_markers": null,
+        "players": null,
+        "raster_sha256": "3c8c70e664cff4a4584ceb19b05514e397f5a685f17c2f5d64dde819efe10809",
+        "recent_actions": null,
+        "reserve": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "score": null,
+        "screen": "Main",
+        "selected": "First(0)",
+        "speed": 23,
+        "worker_absent": true
+      }
+    },
+    {
+      "name": "preparation",
+      "state": {
+        "campaign": {
+          "cash": 452000,
+          "club": {
+            "first_team": [
+              2581,
+              2582,
+              2583,
+              2584,
+              2585,
+              2586,
+              2587,
+              2588,
+              2589,
+              2590,
+              2591,
+              2592,
+              2593,
+              2594,
+              2595,
+              2596,
+              2597,
+              2598,
+              null,
+              null
+            ],
+            "id": 130,
+            "name": "Blackburn R",
+            "reserves": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "team_instructions": 75
+          },
+          "manager": {
+            "name": "Dalglish",
+            "name_id": 130,
+            "slot": 1
+          },
+          "namespace": {
+            "edition": 96,
+            "league": "ENGL-95.DAT",
+            "league_year": 1995
+          },
+          "next_fixture": {
+            "club": 130,
+            "competition_code": 1,
+            "flags": 1,
+            "opponent": 17,
+            "opponent_flags": 0,
+            "opponent_name": "P St Germain",
+            "slot": 1,
+            "venue_code": 1
+          },
+          "origin": {
+            "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+            "record_sha256": "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483",
+            "research_commit": "39e289a393d12ce562ee8b9fba16b413fa17647e",
+            "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36"
+          },
+          "players": [
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 10,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2581,
+              "individual_instructions": 17,
+              "name": "T Flowers"
+            },
+            {
+              "age": 20,
+              "availability": {
+                "condition_signed": 31,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2582,
+              "individual_instructions": 178,
+              "name": "I Pearce"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 20,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2583,
+              "individual_instructions": 50,
+              "name": "C Hendry"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 9,
+                "status_bits": 1
+              },
+              "club_position": 3,
+              "current_position": 3,
+              "id": 2584,
+              "individual_instructions": 17,
+              "name": "G Le Saux"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2585,
+              "individual_instructions": 17,
+              "name": "H Berg"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 19,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2586,
+              "individual_instructions": 0,
+              "name": "M Atkins"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 8,
+                "status_bits": 1
+              },
+              "club_position": 6,
+              "current_position": 6,
+              "id": 2587,
+              "individual_instructions": 0,
+              "name": "T Sherwood"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 29,
+                "status_bits": 1
+              },
+              "club_position": 10,
+              "current_position": 10,
+              "id": 2588,
+              "individual_instructions": 0,
+              "name": "J Wilcox"
+            },
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 18,
+                "status_bits": 1
+              },
+              "club_position": 11,
+              "current_position": 11,
+              "id": 2589,
+              "individual_instructions": 0,
+              "name": "S Ripley"
+            },
+            {
+              "age": 21,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 0
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2590,
+              "individual_instructions": 0,
+              "name": "C Sutton"
+            },
+            {
+              "age": 24,
+              "availability": {
+                "condition_signed": 28,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2591,
+              "individual_instructions": 0,
+              "name": "A Shearer"
+            },
+            {
+              "age": 35,
+              "availability": {
+                "condition_signed": 17,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2592,
+              "individual_instructions": 50,
+              "name": "T Gale"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2593,
+              "individual_instructions": 0,
+              "name": "P Warhurst"
+            },
+            {
+              "age": 30,
+              "availability": {
+                "condition_signed": 11,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2594,
+              "individual_instructions": 0,
+              "name": "R Slater"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 26,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2595,
+              "individual_instructions": 50,
+              "name": "N Marker"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2596,
+              "individual_instructions": 0,
+              "name": "M Newell"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 25,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2597,
+              "individual_instructions": 145,
+              "name": "A Wright"
+            },
+            {
+              "age": 31,
+              "availability": {
+                "condition_signed": 14,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2598,
+              "individual_instructions": 17,
+              "name": "B Mimms"
+            }
+          ],
+          "revision": 0,
+          "schema": "onenil-campaign",
+          "season": {
+            "counter": 1,
+            "end_year": 1995,
+            "start_year": 1994
+          },
+          "version": 1,
+          "week_index": 0
+        },
+        "card": 2581,
+        "carried": null,
+        "close_requested": false,
+        "events": null,
+        "exhibition": false,
+        "first": [
+          2581,
+          2582,
+          2583,
+          2584,
+          2585,
+          2586,
+          2587,
+          2588,
+          2589,
+          2590,
+          2591,
+          2592,
+          2593,
+          2594,
+          2595,
+          2596,
+          2597,
+          2598,
+          null,
+          null
+        ],
+        "frames": null,
+        "game_name": "squad",
+        "instruction": 0,
+        "job": 0,
+        "load_entries": [],
+        "load_index": 0,
+        "match_clubs": null,
+        "menus": [
+          0,
+          2,
+          0
+        ],
+        "message": "",
+        "option_available": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "panel": "Skills",
+        "phase": null,
+        "pitch_markers": null,
+        "players": null,
+        "raster_sha256": "013a1d4a42705abddc0e8ad5669601fa896fda2d0ad0f150ac5d8cb26cde267e",
+        "recent_actions": null,
+        "reserve": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "score": null,
+        "screen": "Preparation",
+        "selected": "First(0)",
+        "speed": 23,
+        "worker_absent": true
+      }
+    },
+    {
+      "name": "worker",
+      "state": {
+        "campaign": {
+          "cash": 452000,
+          "club": {
+            "first_team": [
+              2581,
+              2582,
+              2583,
+              2584,
+              2585,
+              2586,
+              2587,
+              2588,
+              2589,
+              2590,
+              2591,
+              2592,
+              2593,
+              2594,
+              2595,
+              2596,
+              2597,
+              2598,
+              null,
+              null
+            ],
+            "id": 130,
+            "name": "Blackburn R",
+            "reserves": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "team_instructions": 75
+          },
+          "manager": {
+            "name": "Dalglish",
+            "name_id": 130,
+            "slot": 1
+          },
+          "namespace": {
+            "edition": 96,
+            "league": "ENGL-95.DAT",
+            "league_year": 1995
+          },
+          "next_fixture": {
+            "club": 130,
+            "competition_code": 1,
+            "flags": 1,
+            "opponent": 17,
+            "opponent_flags": 0,
+            "opponent_name": "P St Germain",
+            "slot": 1,
+            "venue_code": 1
+          },
+          "origin": {
+            "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+            "record_sha256": "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483",
+            "research_commit": "39e289a393d12ce562ee8b9fba16b413fa17647e",
+            "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36"
+          },
+          "players": [
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 10,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2581,
+              "individual_instructions": 17,
+              "name": "T Flowers"
+            },
+            {
+              "age": 20,
+              "availability": {
+                "condition_signed": 31,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2582,
+              "individual_instructions": 178,
+              "name": "I Pearce"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 20,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2583,
+              "individual_instructions": 50,
+              "name": "C Hendry"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 9,
+                "status_bits": 1
+              },
+              "club_position": 3,
+              "current_position": 3,
+              "id": 2584,
+              "individual_instructions": 17,
+              "name": "G Le Saux"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2585,
+              "individual_instructions": 17,
+              "name": "H Berg"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 19,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2586,
+              "individual_instructions": 0,
+              "name": "M Atkins"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 8,
+                "status_bits": 1
+              },
+              "club_position": 6,
+              "current_position": 6,
+              "id": 2587,
+              "individual_instructions": 0,
+              "name": "T Sherwood"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 29,
+                "status_bits": 1
+              },
+              "club_position": 10,
+              "current_position": 10,
+              "id": 2588,
+              "individual_instructions": 0,
+              "name": "J Wilcox"
+            },
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 18,
+                "status_bits": 1
+              },
+              "club_position": 11,
+              "current_position": 11,
+              "id": 2589,
+              "individual_instructions": 0,
+              "name": "S Ripley"
+            },
+            {
+              "age": 21,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 0
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2590,
+              "individual_instructions": 0,
+              "name": "C Sutton"
+            },
+            {
+              "age": 24,
+              "availability": {
+                "condition_signed": 28,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2591,
+              "individual_instructions": 0,
+              "name": "A Shearer"
+            },
+            {
+              "age": 35,
+              "availability": {
+                "condition_signed": 17,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2592,
+              "individual_instructions": 50,
+              "name": "T Gale"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2593,
+              "individual_instructions": 0,
+              "name": "P Warhurst"
+            },
+            {
+              "age": 30,
+              "availability": {
+                "condition_signed": 11,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2594,
+              "individual_instructions": 0,
+              "name": "R Slater"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 26,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2595,
+              "individual_instructions": 50,
+              "name": "N Marker"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2596,
+              "individual_instructions": 0,
+              "name": "M Newell"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 25,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2597,
+              "individual_instructions": 145,
+              "name": "A Wright"
+            },
+            {
+              "age": 31,
+              "availability": {
+                "condition_signed": 14,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2598,
+              "individual_instructions": 17,
+              "name": "B Mimms"
+            }
+          ],
+          "revision": 0,
+          "schema": "onenil-campaign",
+          "season": {
+            "counter": 1,
+            "end_year": 1995,
+            "start_year": 1994
+          },
+          "version": 1,
+          "week_index": 0
+        },
+        "card": 2581,
+        "carried": null,
+        "close_requested": false,
+        "events": null,
+        "exhibition": false,
+        "first": [
+          2581,
+          2582,
+          2583,
+          2584,
+          2585,
+          2586,
+          2587,
+          2588,
+          2589,
+          2590,
+          2591,
+          2592,
+          2593,
+          2594,
+          2595,
+          2596,
+          2597,
+          2598,
+          null,
+          null
+        ],
+        "frames": null,
+        "game_name": "squad",
+        "instruction": 0,
+        "job": 1,
+        "load_entries": [],
+        "load_index": 0,
+        "match_clubs": null,
+        "menus": [
+          0,
+          2,
+          0
+        ],
+        "message": "",
+        "option_available": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "panel": "Skills",
+        "phase": null,
+        "pitch_markers": null,
+        "players": null,
+        "raster_sha256": "18dbb818cf1942f1c4f904376d116ae097dcdad492d2945be3128472af1dd8f8",
+        "recent_actions": null,
+        "reserve": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "score": null,
+        "screen": "Preparing",
+        "selected": "First(0)",
+        "speed": 23,
+        "worker_absent": false
+      }
+    },
+    {
+      "name": "pitch",
+      "state": {
+        "campaign": {
+          "cash": 452000,
+          "club": {
+            "first_team": [
+              2581,
+              2582,
+              2583,
+              2584,
+              2585,
+              2586,
+              2587,
+              2588,
+              2589,
+              2590,
+              2591,
+              2592,
+              2593,
+              2594,
+              2595,
+              2596,
+              2597,
+              2598,
+              null,
+              null
+            ],
+            "id": 130,
+            "name": "Blackburn R",
+            "reserves": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "team_instructions": 75
+          },
+          "manager": {
+            "name": "Dalglish",
+            "name_id": 130,
+            "slot": 1
+          },
+          "namespace": {
+            "edition": 96,
+            "league": "ENGL-95.DAT",
+            "league_year": 1995
+          },
+          "next_fixture": {
+            "club": 130,
+            "competition_code": 1,
+            "flags": 1,
+            "opponent": 17,
+            "opponent_flags": 0,
+            "opponent_name": "P St Germain",
+            "slot": 1,
+            "venue_code": 1
+          },
+          "origin": {
+            "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+            "record_sha256": "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483",
+            "research_commit": "39e289a393d12ce562ee8b9fba16b413fa17647e",
+            "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36"
+          },
+          "players": [
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 10,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2581,
+              "individual_instructions": 17,
+              "name": "T Flowers"
+            },
+            {
+              "age": 20,
+              "availability": {
+                "condition_signed": 31,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2582,
+              "individual_instructions": 178,
+              "name": "I Pearce"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 20,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2583,
+              "individual_instructions": 50,
+              "name": "C Hendry"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 9,
+                "status_bits": 1
+              },
+              "club_position": 3,
+              "current_position": 3,
+              "id": 2584,
+              "individual_instructions": 17,
+              "name": "G Le Saux"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2585,
+              "individual_instructions": 17,
+              "name": "H Berg"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 19,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2586,
+              "individual_instructions": 0,
+              "name": "M Atkins"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 8,
+                "status_bits": 1
+              },
+              "club_position": 6,
+              "current_position": 6,
+              "id": 2587,
+              "individual_instructions": 0,
+              "name": "T Sherwood"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 29,
+                "status_bits": 1
+              },
+              "club_position": 10,
+              "current_position": 10,
+              "id": 2588,
+              "individual_instructions": 0,
+              "name": "J Wilcox"
+            },
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 18,
+                "status_bits": 1
+              },
+              "club_position": 11,
+              "current_position": 11,
+              "id": 2589,
+              "individual_instructions": 0,
+              "name": "S Ripley"
+            },
+            {
+              "age": 21,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 0
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2590,
+              "individual_instructions": 0,
+              "name": "C Sutton"
+            },
+            {
+              "age": 24,
+              "availability": {
+                "condition_signed": 28,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2591,
+              "individual_instructions": 0,
+              "name": "A Shearer"
+            },
+            {
+              "age": 35,
+              "availability": {
+                "condition_signed": 17,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2592,
+              "individual_instructions": 50,
+              "name": "T Gale"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2593,
+              "individual_instructions": 0,
+              "name": "P Warhurst"
+            },
+            {
+              "age": 30,
+              "availability": {
+                "condition_signed": 11,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2594,
+              "individual_instructions": 0,
+              "name": "R Slater"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 26,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2595,
+              "individual_instructions": 50,
+              "name": "N Marker"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2596,
+              "individual_instructions": 0,
+              "name": "M Newell"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 25,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2597,
+              "individual_instructions": 145,
+              "name": "A Wright"
+            },
+            {
+              "age": 31,
+              "availability": {
+                "condition_signed": 14,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2598,
+              "individual_instructions": 17,
+              "name": "B Mimms"
+            }
+          ],
+          "revision": 0,
+          "schema": "onenil-campaign",
+          "season": {
+            "counter": 1,
+            "end_year": 1995,
+            "start_year": 1994
+          },
+          "version": 1,
+          "week_index": 0
+        },
+        "card": 2581,
+        "carried": null,
+        "close_requested": false,
+        "events": 1,
+        "exhibition": false,
+        "first": [
+          2581,
+          2582,
+          2583,
+          2584,
+          2585,
+          2586,
+          2587,
+          2588,
+          2589,
+          2590,
+          2591,
+          2592,
+          2593,
+          2594,
+          2595,
+          2596,
+          2597,
+          2598,
+          null,
+          null
+        ],
+        "frames": 3,
+        "game_name": "squad",
+        "instruction": 0,
+        "job": 1,
+        "load_entries": [],
+        "load_index": 0,
+        "match_clubs": [
+          "Blackburn R",
+          "P St Germain"
+        ],
+        "menus": [
+          0,
+          2,
+          0
+        ],
+        "message": "",
+        "option_available": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "panel": "Skills",
+        "phase": "FirstHalf",
+        "pitch_markers": [
+          {
+            "attribute": 10,
+            "label": "G",
+            "player": 2581,
+            "position": {
+              "x": -6,
+              "y": 0
+            },
+            "scene": 1,
+            "selector": 1
+          },
+          {
+            "attribute": 9,
+            "label": "0",
+            "player": 2582,
+            "position": {
+              "x": -7,
+              "y": 1
+            },
+            "scene": 2,
+            "selector": 2
+          },
+          {
+            "attribute": 9,
+            "label": "1",
+            "player": 2583,
+            "position": {
+              "x": -8,
+              "y": 2
+            },
+            "scene": 3,
+            "selector": 3
+          },
+          {
+            "attribute": 9,
+            "label": "2",
+            "player": 2584,
+            "position": {
+              "x": -6,
+              "y": 0
+            },
+            "scene": 4,
+            "selector": 4
+          },
+          {
+            "attribute": 9,
+            "label": "3",
+            "player": 2585,
+            "position": {
+              "x": -7,
+              "y": 1
+            },
+            "scene": 5,
+            "selector": 5
+          },
+          {
+            "attribute": 9,
+            "label": "4",
+            "player": 2586,
+            "position": {
+              "x": -6,
+              "y": 0
+            },
+            "scene": 6,
+            "selector": 6
+          },
+          {
+            "attribute": 9,
+            "label": "5",
+            "player": 2587,
+            "position": {
+              "x": -7,
+              "y": 1
+            },
+            "scene": 7,
+            "selector": 7
+          },
+          {
+            "attribute": 9,
+            "label": "6",
+            "player": 2588,
+            "position": {
+              "x": -7,
+              "y": 0
+            },
+            "scene": 8,
+            "selector": 8
+          },
+          {
+            "attribute": 9,
+            "label": "7",
+            "player": 2589,
+            "position": {
+              "x": -8,
+              "y": 1
+            },
+            "scene": 9,
+            "selector": 9
+          },
+          {
+            "attribute": 9,
+            "label": "8",
+            "player": 2590,
+            "position": {
+              "x": -7,
+              "y": 1
+            },
+            "scene": 10,
+            "selector": 10
+          },
+          {
+            "attribute": 9,
+            "label": "9",
+            "player": 2591,
+            "position": {
+              "x": -7,
+              "y": 1
+            },
+            "scene": 11,
+            "selector": 11
+          },
+          {
+            "attribute": 15,
+            "label": "G",
+            "player": 321,
+            "position": {
+              "x": -6,
+              "y": 0
+            },
+            "scene": 12,
+            "selector": 12
+          },
+          {
+            "attribute": 11,
+            "label": "0",
+            "player": 322,
+            "position": {
+              "x": -9,
+              "y": 0
+            },
+            "scene": 13,
+            "selector": 13
+          },
+          {
+            "attribute": 11,
+            "label": "1",
+            "player": 323,
+            "position": {
+              "x": -9,
+              "y": 0
+            },
+            "scene": 14,
+            "selector": 14
+          },
+          {
+            "attribute": 11,
+            "label": "2",
+            "player": 324,
+            "position": {
+              "x": -8,
+              "y": -1
+            },
+            "scene": 15,
+            "selector": 15
+          },
+          {
+            "attribute": 11,
+            "label": "3",
+            "player": 325,
+            "position": {
+              "x": -7,
+              "y": -1
+            },
+            "scene": 16,
+            "selector": 16
+          },
+          {
+            "attribute": 11,
+            "label": "4",
+            "player": 326,
+            "position": {
+              "x": -7,
+              "y": -1
+            },
+            "scene": 17,
+            "selector": 17
+          },
+          {
+            "attribute": 11,
+            "label": "5",
+            "player": 327,
+            "position": {
+              "x": -7,
+              "y": -1
+            },
+            "scene": 18,
+            "selector": 18
+          },
+          {
+            "attribute": 11,
+            "label": "6",
+            "player": 333,
+            "position": {
+              "x": -7,
+              "y": 0
+            },
+            "scene": 19,
+            "selector": 19
+          },
+          {
+            "attribute": 11,
+            "label": "7",
+            "player": 329,
+            "position": {
+              "x": -8,
+              "y": -2
+            },
+            "scene": 20,
+            "selector": 20
+          },
+          {
+            "attribute": 11,
+            "label": "8",
+            "player": 330,
+            "position": {
+              "x": -8,
+              "y": -1
+            },
+            "scene": 21,
+            "selector": 21
+          },
+          {
+            "attribute": 11,
+            "label": "9",
+            "player": 331,
+            "position": {
+              "x": -7,
+              "y": 0
+            },
+            "scene": 22,
+            "selector": 22
+          }
+        ],
+        "players": 22,
+        "raster_sha256": "75bbe10c0109b20a8914e1d80ec4e27856bfbbe99ff04a55b5bfe9ccd075033d",
+        "recent_actions": [
+          {
+            "native": {
+              "actor_slot": 10,
+              "caller": "0AB9:7DC8",
+              "club": 130,
+              "code": 59,
+              "draw_end": 258,
+              "draw_start": 258,
+              "head_before": 0,
+              "minute": 0,
+              "player": 2590,
+              "queue": {
+                "code": 59,
+                "index": 1,
+                "player": 2590,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 49333,
+              "seed_before": 49333,
+              "side": 1,
+              "tick": 0
+            },
+            "text": "C Sutton wins the coin toss."
+          }
+        ],
+        "reserve": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "score": [
+          0,
+          0
+        ],
+        "screen": "Pitch",
+        "selected": "First(0)",
+        "speed": 23,
+        "worker_absent": true
+      }
+    },
+    {
+      "name": "slow-numbered-pitch",
+      "state": {
+        "campaign": {
+          "cash": 452000,
+          "club": {
+            "first_team": [
+              2581,
+              2582,
+              2583,
+              2584,
+              2585,
+              2586,
+              2587,
+              2588,
+              2589,
+              2590,
+              2591,
+              2592,
+              2593,
+              2594,
+              2595,
+              2596,
+              2597,
+              2598,
+              null,
+              null
+            ],
+            "id": 130,
+            "name": "Blackburn R",
+            "reserves": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "team_instructions": 75
+          },
+          "manager": {
+            "name": "Dalglish",
+            "name_id": 130,
+            "slot": 1
+          },
+          "namespace": {
+            "edition": 96,
+            "league": "ENGL-95.DAT",
+            "league_year": 1995
+          },
+          "next_fixture": {
+            "club": 130,
+            "competition_code": 1,
+            "flags": 1,
+            "opponent": 17,
+            "opponent_flags": 0,
+            "opponent_name": "P St Germain",
+            "slot": 1,
+            "venue_code": 1
+          },
+          "origin": {
+            "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+            "record_sha256": "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483",
+            "research_commit": "39e289a393d12ce562ee8b9fba16b413fa17647e",
+            "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36"
+          },
+          "players": [
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 10,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2581,
+              "individual_instructions": 17,
+              "name": "T Flowers"
+            },
+            {
+              "age": 20,
+              "availability": {
+                "condition_signed": 31,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2582,
+              "individual_instructions": 178,
+              "name": "I Pearce"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 20,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2583,
+              "individual_instructions": 50,
+              "name": "C Hendry"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 9,
+                "status_bits": 1
+              },
+              "club_position": 3,
+              "current_position": 3,
+              "id": 2584,
+              "individual_instructions": 17,
+              "name": "G Le Saux"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2585,
+              "individual_instructions": 17,
+              "name": "H Berg"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 19,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2586,
+              "individual_instructions": 0,
+              "name": "M Atkins"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 8,
+                "status_bits": 1
+              },
+              "club_position": 6,
+              "current_position": 6,
+              "id": 2587,
+              "individual_instructions": 0,
+              "name": "T Sherwood"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 29,
+                "status_bits": 1
+              },
+              "club_position": 10,
+              "current_position": 10,
+              "id": 2588,
+              "individual_instructions": 0,
+              "name": "J Wilcox"
+            },
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 18,
+                "status_bits": 1
+              },
+              "club_position": 11,
+              "current_position": 11,
+              "id": 2589,
+              "individual_instructions": 0,
+              "name": "S Ripley"
+            },
+            {
+              "age": 21,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 0
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2590,
+              "individual_instructions": 0,
+              "name": "C Sutton"
+            },
+            {
+              "age": 24,
+              "availability": {
+                "condition_signed": 28,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2591,
+              "individual_instructions": 0,
+              "name": "A Shearer"
+            },
+            {
+              "age": 35,
+              "availability": {
+                "condition_signed": 17,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2592,
+              "individual_instructions": 50,
+              "name": "T Gale"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2593,
+              "individual_instructions": 0,
+              "name": "P Warhurst"
+            },
+            {
+              "age": 30,
+              "availability": {
+                "condition_signed": 11,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2594,
+              "individual_instructions": 0,
+              "name": "R Slater"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 26,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2595,
+              "individual_instructions": 50,
+              "name": "N Marker"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2596,
+              "individual_instructions": 0,
+              "name": "M Newell"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 25,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2597,
+              "individual_instructions": 145,
+              "name": "A Wright"
+            },
+            {
+              "age": 31,
+              "availability": {
+                "condition_signed": 14,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2598,
+              "individual_instructions": 17,
+              "name": "B Mimms"
+            }
+          ],
+          "revision": 0,
+          "schema": "onenil-campaign",
+          "season": {
+            "counter": 1,
+            "end_year": 1995,
+            "start_year": 1994
+          },
+          "version": 1,
+          "week_index": 0
+        },
+        "card": 2581,
+        "carried": null,
+        "close_requested": false,
+        "events": 113,
+        "exhibition": false,
+        "first": [
+          2581,
+          2582,
+          2583,
+          2584,
+          2585,
+          2586,
+          2587,
+          2588,
+          2589,
+          2590,
+          2591,
+          2592,
+          2593,
+          2594,
+          2595,
+          2596,
+          2597,
+          2598,
+          null,
+          null
+        ],
+        "frames": 505,
+        "game_name": "squad",
+        "instruction": 0,
+        "job": 1,
+        "load_entries": [],
+        "load_index": 0,
+        "match_clubs": [
+          "Blackburn R",
+          "P St Germain"
+        ],
+        "menus": [
+          0,
+          2,
+          0
+        ],
+        "message": "",
+        "option_available": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "panel": "Skills",
+        "phase": "FirstHalf",
+        "pitch_markers": [
+          {
+            "attribute": 10,
+            "label": "G",
+            "player": 2581,
+            "position": {
+              "x": 0,
+              "y": 30
+            },
+            "scene": 1,
+            "selector": 1
+          },
+          {
+            "attribute": 9,
+            "label": "0",
+            "player": 2582,
+            "position": {
+              "x": 3,
+              "y": 17
+            },
+            "scene": 2,
+            "selector": 2
+          },
+          {
+            "attribute": 9,
+            "label": "1",
+            "player": 2583,
+            "position": {
+              "x": -3,
+              "y": 27
+            },
+            "scene": 3,
+            "selector": 3
+          },
+          {
+            "attribute": 9,
+            "label": "2",
+            "player": 2584,
+            "position": {
+              "x": 6,
+              "y": 23
+            },
+            "scene": 4,
+            "selector": 4
+          },
+          {
+            "attribute": 9,
+            "label": "3",
+            "player": 2585,
+            "position": {
+              "x": -6,
+              "y": 15
+            },
+            "scene": 5,
+            "selector": 5
+          },
+          {
+            "attribute": 9,
+            "label": "4",
+            "player": 2586,
+            "position": {
+              "x": 0,
+              "y": 12
+            },
+            "scene": 6,
+            "selector": 6
+          },
+          {
+            "attribute": 9,
+            "label": "5",
+            "player": 2587,
+            "position": {
+              "x": 0,
+              "y": 6
+            },
+            "scene": 7,
+            "selector": 7
+          },
+          {
+            "attribute": 9,
+            "label": "6",
+            "player": 2588,
+            "position": {
+              "x": 7,
+              "y": -5
+            },
+            "scene": 8,
+            "selector": 8
+          },
+          {
+            "attribute": 9,
+            "label": "7",
+            "player": 2589,
+            "position": {
+              "x": -7,
+              "y": 2
+            },
+            "scene": 9,
+            "selector": 9
+          },
+          {
+            "attribute": 9,
+            "label": "8",
+            "player": 2590,
+            "position": {
+              "x": 0,
+              "y": -9
+            },
+            "scene": 10,
+            "selector": 10
+          },
+          {
+            "attribute": 9,
+            "label": "9",
+            "player": 2591,
+            "position": {
+              "x": 2,
+              "y": -7
+            },
+            "scene": 11,
+            "selector": 11
+          },
+          {
+            "attribute": 15,
+            "label": "G",
+            "player": 321,
+            "position": {
+              "x": 0,
+              "y": -37
+            },
+            "scene": 12,
+            "selector": 12
+          },
+          {
+            "attribute": 11,
+            "label": "0",
+            "player": 322,
+            "position": {
+              "x": 0,
+              "y": -1
+            },
+            "scene": 13,
+            "selector": 13
+          },
+          {
+            "attribute": 11,
+            "label": "1",
+            "player": 323,
+            "position": {
+              "x": 0,
+              "y": 1
+            },
+            "scene": 14,
+            "selector": 14
+          },
+          {
+            "attribute": 11,
+            "label": "2",
+            "player": 324,
+            "position": {
+              "x": -6,
+              "y": -1
+            },
+            "scene": 15,
+            "selector": 15
+          },
+          {
+            "attribute": 11,
+            "label": "3",
+            "player": 325,
+            "position": {
+              "x": 4,
+              "y": 0
+            },
+            "scene": 16,
+            "selector": 16
+          },
+          {
+            "attribute": 11,
+            "label": "4",
+            "player": 326,
+            "position": {
+              "x": 0,
+              "y": -3
+            },
+            "scene": 17,
+            "selector": 17
+          },
+          {
+            "attribute": 11,
+            "label": "5",
+            "player": 327,
+            "position": {
+              "x": -5,
+              "y": 5
+            },
+            "scene": 18,
+            "selector": 18
+          },
+          {
+            "attribute": 11,
+            "label": "6",
+            "player": 333,
+            "position": {
+              "x": 0,
+              "y": -3
+            },
+            "scene": 19,
+            "selector": 19
+          },
+          {
+            "attribute": 11,
+            "label": "7",
+            "player": 329,
+            "position": {
+              "x": 1,
+              "y": 2
+            },
+            "scene": 20,
+            "selector": 20
+          },
+          {
+            "attribute": 11,
+            "label": "8",
+            "player": 330,
+            "position": {
+              "x": 0,
+              "y": -2
+            },
+            "scene": 21,
+            "selector": 21
+          },
+          {
+            "attribute": 11,
+            "label": "9",
+            "player": 331,
+            "position": {
+              "x": 0,
+              "y": 4
+            },
+            "scene": 22,
+            "selector": 22
+          }
+        ],
+        "players": 22,
+        "raster_sha256": "85f266db9609ee2a74a537a3b853688f8cb6df6e7feb8f8873533bb2d0322c38",
+        "recent_actions": [
+          {
+            "native": {
+              "actor_slot": 2,
+              "caller": "0AB9:1DDE",
+              "club": 130,
+              "code": 14,
+              "draw_end": 17983,
+              "draw_start": 17983,
+              "head_before": 105,
+              "minute": 11,
+              "player": 2582,
+              "queue": {
+                "code": 14,
+                "index": 106,
+                "player": 2582,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 20444,
+              "seed_before": 20444,
+              "side": 1,
+              "tick": 408
+            },
+            "text": "I Pearce takes possession."
+          },
+          {
+            "native": {
+              "actor_slot": 2,
+              "caller": "0AB9:1DDE",
+              "club": 130,
+              "code": 33,
+              "draw_end": 17983,
+              "draw_start": 17983,
+              "head_before": 106,
+              "minute": 11,
+              "player": 2582,
+              "queue": {
+                "code": 33,
+                "index": 107,
+                "player": 2582,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 20444,
+              "seed_before": 20444,
+              "side": 1,
+              "tick": 408
+            },
+            "text": "I Pearce nudges the ball on."
+          },
+          {
+            "native": {
+              "actor_slot": 9,
+              "caller": "0AB9:1E4A",
+              "club": 17,
+              "code": 34,
+              "draw_end": 18417,
+              "draw_start": 18417,
+              "head_before": 107,
+              "minute": 11,
+              "player": 329,
+              "queue": {
+                "code": 34,
+                "index": 108,
+                "player": 329,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 78,
+              "seed_before": 78,
+              "side": 0,
+              "tick": 416
+            },
+            "text": "V Guerin cuts out the ball."
+          },
+          {
+            "native": {
+              "actor_slot": 1,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 11,
+              "draw_end": 19471,
+              "draw_start": 19471,
+              "head_before": 108,
+              "minute": 12,
+              "player": 2581,
+              "queue": {
+                "code": 11,
+                "index": 109,
+                "player": 2581,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 43116,
+              "seed_before": 43116,
+              "side": 1,
+              "tick": 441
+            },
+            "text": "T Flowers goes in for a tackle."
+          },
+          {
+            "native": {
+              "actor_slot": 9,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 12,
+              "draw_end": 19474,
+              "draw_start": 19474,
+              "head_before": 109,
+              "minute": 12,
+              "player": 329,
+              "queue": {
+                "code": 12,
+                "index": 110,
+                "player": 329,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 42693,
+              "seed_before": 42693,
+              "side": 0,
+              "tick": 441
+            },
+            "text": "V Guerin gets away from the challenge."
+          },
+          {
+            "native": {
+              "actor_slot": 9,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 17,
+              "draw_end": 19500,
+              "draw_start": 19500,
+              "head_before": 110,
+              "minute": 12,
+              "player": 329,
+              "queue": {
+                "code": 17,
+                "index": 111,
+                "player": 329,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 9319,
+              "seed_before": 9319,
+              "side": 0,
+              "tick": 441
+            },
+            "text": "V Guerin shoots at goal."
+          },
+          {
+            "native": {
+              "actor_slot": 1,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 37,
+              "draw_end": 19595,
+              "draw_start": 19595,
+              "head_before": 111,
+              "minute": 12,
+              "player": 2581,
+              "queue": {
+                "code": 37,
+                "index": 112,
+                "player": 2581,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 59672,
+              "seed_before": 59672,
+              "side": 1,
+              "tick": 444
+            },
+            "text": "T Flowers cannot reach it."
+          },
+          {
+            "native": {
+              "actor_slot": 9,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 38,
+              "draw_end": 19595,
+              "draw_start": 19595,
+              "head_before": 112,
+              "minute": 12,
+              "player": 329,
+              "queue": {
+                "code": 38,
+                "index": 113,
+                "player": 329,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 59672,
+              "seed_before": 59672,
+              "side": 0,
+              "tick": 444
+            },
+            "text": "Goal! V Guerin scores."
+          }
+        ],
+        "reserve": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "score": [
+          0,
+          1
+        ],
+        "screen": "Pitch",
+        "selected": "First(0)",
+        "speed": 1,
+        "worker_absent": true
+      }
+    },
+    {
+      "name": "commentary",
+      "state": {
+        "campaign": {
+          "cash": 452000,
+          "club": {
+            "first_team": [
+              2581,
+              2582,
+              2583,
+              2584,
+              2585,
+              2586,
+              2587,
+              2588,
+              2589,
+              2590,
+              2591,
+              2592,
+              2593,
+              2594,
+              2595,
+              2596,
+              2597,
+              2598,
+              null,
+              null
+            ],
+            "id": 130,
+            "name": "Blackburn R",
+            "reserves": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "team_instructions": 75
+          },
+          "manager": {
+            "name": "Dalglish",
+            "name_id": 130,
+            "slot": 1
+          },
+          "namespace": {
+            "edition": 96,
+            "league": "ENGL-95.DAT",
+            "league_year": 1995
+          },
+          "next_fixture": {
+            "club": 130,
+            "competition_code": 1,
+            "flags": 1,
+            "opponent": 17,
+            "opponent_flags": 0,
+            "opponent_name": "P St Germain",
+            "slot": 1,
+            "venue_code": 1
+          },
+          "origin": {
+            "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+            "record_sha256": "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483",
+            "research_commit": "39e289a393d12ce562ee8b9fba16b413fa17647e",
+            "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36"
+          },
+          "players": [
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 10,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2581,
+              "individual_instructions": 17,
+              "name": "T Flowers"
+            },
+            {
+              "age": 20,
+              "availability": {
+                "condition_signed": 31,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2582,
+              "individual_instructions": 178,
+              "name": "I Pearce"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 20,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2583,
+              "individual_instructions": 50,
+              "name": "C Hendry"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 9,
+                "status_bits": 1
+              },
+              "club_position": 3,
+              "current_position": 3,
+              "id": 2584,
+              "individual_instructions": 17,
+              "name": "G Le Saux"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2585,
+              "individual_instructions": 17,
+              "name": "H Berg"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 19,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2586,
+              "individual_instructions": 0,
+              "name": "M Atkins"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 8,
+                "status_bits": 1
+              },
+              "club_position": 6,
+              "current_position": 6,
+              "id": 2587,
+              "individual_instructions": 0,
+              "name": "T Sherwood"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 29,
+                "status_bits": 1
+              },
+              "club_position": 10,
+              "current_position": 10,
+              "id": 2588,
+              "individual_instructions": 0,
+              "name": "J Wilcox"
+            },
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 18,
+                "status_bits": 1
+              },
+              "club_position": 11,
+              "current_position": 11,
+              "id": 2589,
+              "individual_instructions": 0,
+              "name": "S Ripley"
+            },
+            {
+              "age": 21,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 0
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2590,
+              "individual_instructions": 0,
+              "name": "C Sutton"
+            },
+            {
+              "age": 24,
+              "availability": {
+                "condition_signed": 28,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2591,
+              "individual_instructions": 0,
+              "name": "A Shearer"
+            },
+            {
+              "age": 35,
+              "availability": {
+                "condition_signed": 17,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2592,
+              "individual_instructions": 50,
+              "name": "T Gale"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2593,
+              "individual_instructions": 0,
+              "name": "P Warhurst"
+            },
+            {
+              "age": 30,
+              "availability": {
+                "condition_signed": 11,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2594,
+              "individual_instructions": 0,
+              "name": "R Slater"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 26,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2595,
+              "individual_instructions": 50,
+              "name": "N Marker"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2596,
+              "individual_instructions": 0,
+              "name": "M Newell"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 25,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2597,
+              "individual_instructions": 145,
+              "name": "A Wright"
+            },
+            {
+              "age": 31,
+              "availability": {
+                "condition_signed": 14,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2598,
+              "individual_instructions": 17,
+              "name": "B Mimms"
+            }
+          ],
+          "revision": 0,
+          "schema": "onenil-campaign",
+          "season": {
+            "counter": 1,
+            "end_year": 1995,
+            "start_year": 1994
+          },
+          "version": 1,
+          "week_index": 0
+        },
+        "card": 2581,
+        "carried": null,
+        "close_requested": false,
+        "events": 166,
+        "exhibition": false,
+        "first": [
+          2581,
+          2582,
+          2583,
+          2584,
+          2585,
+          2586,
+          2587,
+          2588,
+          2589,
+          2590,
+          2591,
+          2592,
+          2593,
+          2594,
+          2595,
+          2596,
+          2597,
+          2598,
+          null,
+          null
+        ],
+        "frames": 688,
+        "game_name": "squad",
+        "instruction": 0,
+        "job": 1,
+        "load_entries": [],
+        "load_index": 0,
+        "match_clubs": [
+          "Blackburn R",
+          "P St Germain"
+        ],
+        "menus": [
+          0,
+          2,
+          0
+        ],
+        "message": "",
+        "option_available": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "panel": "Skills",
+        "phase": "FirstHalf",
+        "pitch_markers": [
+          {
+            "attribute": 10,
+            "label": "G",
+            "player": 2581,
+            "position": {
+              "x": -3,
+              "y": 29
+            },
+            "scene": 1,
+            "selector": 1
+          },
+          {
+            "attribute": 9,
+            "label": "0",
+            "player": 2582,
+            "position": {
+              "x": -6,
+              "y": 22
+            },
+            "scene": 2,
+            "selector": 2
+          },
+          {
+            "attribute": 9,
+            "label": "1",
+            "player": 2583,
+            "position": {
+              "x": -2,
+              "y": 21
+            },
+            "scene": 3,
+            "selector": 3
+          },
+          {
+            "attribute": 9,
+            "label": "2",
+            "player": 2584,
+            "position": {
+              "x": 5,
+              "y": 21
+            },
+            "scene": 4,
+            "selector": 4
+          },
+          {
+            "attribute": 9,
+            "label": "3",
+            "player": 2585,
+            "position": {
+              "x": 3,
+              "y": 22
+            },
+            "scene": 5,
+            "selector": 5
+          },
+          {
+            "attribute": 9,
+            "label": "4",
+            "player": 2586,
+            "position": {
+              "x": -3,
+              "y": 19
+            },
+            "scene": 6,
+            "selector": 6
+          },
+          {
+            "attribute": 9,
+            "label": "5",
+            "player": 2587,
+            "position": {
+              "x": 1,
+              "y": 11
+            },
+            "scene": 7,
+            "selector": 7
+          },
+          {
+            "attribute": 9,
+            "label": "6",
+            "player": 2588,
+            "position": {
+              "x": -3,
+              "y": 14
+            },
+            "scene": 8,
+            "selector": 8
+          },
+          {
+            "attribute": 9,
+            "label": "7",
+            "player": 2589,
+            "position": {
+              "x": 0,
+              "y": 5
+            },
+            "scene": 9,
+            "selector": 9
+          },
+          {
+            "attribute": 9,
+            "label": "8",
+            "player": 2590,
+            "position": {
+              "x": 0,
+              "y": 1
+            },
+            "scene": 10,
+            "selector": 10
+          },
+          {
+            "attribute": 9,
+            "label": "9",
+            "player": 2591,
+            "position": {
+              "x": -1,
+              "y": 1
+            },
+            "scene": 11,
+            "selector": 11
+          },
+          {
+            "attribute": 15,
+            "label": "G",
+            "player": 321,
+            "position": {
+              "x": 0,
+              "y": -37
+            },
+            "scene": 12,
+            "selector": 12
+          },
+          {
+            "attribute": 11,
+            "label": "0",
+            "player": 322,
+            "position": {
+              "x": -6,
+              "y": 0
+            },
+            "scene": 13,
+            "selector": 13
+          },
+          {
+            "attribute": 11,
+            "label": "1",
+            "player": 323,
+            "position": {
+              "x": 1,
+              "y": 2
+            },
+            "scene": 14,
+            "selector": 14
+          },
+          {
+            "attribute": 11,
+            "label": "2",
+            "player": 324,
+            "position": {
+              "x": 0,
+              "y": 18
+            },
+            "scene": 15,
+            "selector": 15
+          },
+          {
+            "attribute": 11,
+            "label": "3",
+            "player": 325,
+            "position": {
+              "x": 3,
+              "y": 16
+            },
+            "scene": 16,
+            "selector": 16
+          },
+          {
+            "attribute": 11,
+            "label": "4",
+            "player": 326,
+            "position": {
+              "x": 0,
+              "y": 21
+            },
+            "scene": 17,
+            "selector": 17
+          },
+          {
+            "attribute": 11,
+            "label": "5",
+            "player": 327,
+            "position": {
+              "x": -1,
+              "y": 17
+            },
+            "scene": 18,
+            "selector": 18
+          },
+          {
+            "attribute": 11,
+            "label": "6",
+            "player": 333,
+            "position": {
+              "x": 2,
+              "y": 20
+            },
+            "scene": 19,
+            "selector": 19
+          },
+          {
+            "attribute": 11,
+            "label": "7",
+            "player": 329,
+            "position": {
+              "x": 7,
+              "y": 21
+            },
+            "scene": 20,
+            "selector": 20
+          },
+          {
+            "attribute": 11,
+            "label": "8",
+            "player": 330,
+            "position": {
+              "x": 2,
+              "y": 21
+            },
+            "scene": 21,
+            "selector": 21
+          },
+          {
+            "attribute": 11,
+            "label": "9",
+            "player": 331,
+            "position": {
+              "x": -3,
+              "y": 24
+            },
+            "scene": 22,
+            "selector": 22
+          }
+        ],
+        "players": 22,
+        "raster_sha256": "5b21aecae702e0790355abc15b7cb5e86dfe351acadba315758550f4dc323c53",
+        "recent_actions": [
+          {
+            "native": {
+              "actor_slot": 7,
+              "caller": "0AB9:1E4A",
+              "club": 17,
+              "code": 35,
+              "draw_end": 26107,
+              "draw_start": 26107,
+              "head_before": 158,
+              "minute": 17,
+              "player": 327,
+              "queue": {
+                "code": 35,
+                "index": 159,
+                "player": 327,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 11208,
+              "seed_before": 11208,
+              "side": 0,
+              "tick": 660
+            },
+            "text": "P Le Guen gathers the ball."
+          },
+          {
+            "native": {
+              "actor_slot": 7,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 10,
+              "draw_end": 26154,
+              "draw_start": 26154,
+              "head_before": 159,
+              "minute": 17,
+              "player": 327,
+              "queue": {
+                "code": 10,
+                "index": 160,
+                "player": 327,
+                "secondary": 331,
+                "side": 0
+              },
+              "secondary": 331,
+              "secondary_slot": 11,
+              "seed_after": 23261,
+              "seed_before": 23261,
+              "side": 0,
+              "tick": 661
+            },
+            "text": "A high ball is sent towards D Ginola."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1E10",
+              "club": 17,
+              "code": 25,
+              "draw_end": 26917,
+              "draw_start": 26917,
+              "head_before": 160,
+              "minute": 18,
+              "player": 331,
+              "queue": {
+                "code": 25,
+                "index": 161,
+                "player": 331,
+                "secondary": 327,
+                "side": 0
+              },
+              "secondary": 327,
+              "secondary_slot": 7,
+              "seed_after": 6642,
+              "seed_before": 6642,
+              "side": 0,
+              "tick": 675
+            },
+            "text": "D Ginola has possession."
+          },
+          {
+            "native": {
+              "actor_slot": 2,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 11,
+              "draw_end": 26928,
+              "draw_start": 26928,
+              "head_before": 161,
+              "minute": 18,
+              "player": 2582,
+              "queue": {
+                "code": 11,
+                "index": 162,
+                "player": 2582,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 26859,
+              "seed_before": 26859,
+              "side": 1,
+              "tick": 675
+            },
+            "text": "I Pearce goes in for a tackle."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 12,
+              "draw_end": 26931,
+              "draw_start": 26931,
+              "head_before": 162,
+              "minute": 18,
+              "player": 331,
+              "queue": {
+                "code": 12,
+                "index": 163,
+                "player": 331,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 38688,
+              "seed_before": 38688,
+              "side": 0,
+              "tick": 675
+            },
+            "text": "D Ginola gets away from the challenge."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 1,
+              "draw_end": 26992,
+              "draw_start": 26992,
+              "head_before": 163,
+              "minute": 18,
+              "player": 331,
+              "queue": {
+                "code": 1,
+                "index": 164,
+                "player": 331,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 19243,
+              "seed_before": 19243,
+              "side": 0,
+              "tick": 676
+            },
+            "text": "D Ginola sends a pass."
+          },
+          {
+            "native": {
+              "actor_slot": 6,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 34,
+              "draw_end": 27619,
+              "draw_start": 27619,
+              "head_before": 164,
+              "minute": 18,
+              "player": 2586,
+              "queue": {
+                "code": 34,
+                "index": 165,
+                "player": 2586,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 43024,
+              "seed_before": 43024,
+              "side": 1,
+              "tick": 685
+            },
+            "text": "M Atkins cuts out the ball."
+          },
+          {
+            "native": {
+              "actor_slot": 6,
+              "caller": "0AB9:1DDE",
+              "club": 130,
+              "code": 2,
+              "draw_end": 27669,
+              "draw_start": 27669,
+              "head_before": 165,
+              "minute": 18,
+              "player": 2586,
+              "queue": {
+                "code": 2,
+                "index": 166,
+                "player": 2586,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 39842,
+              "seed_before": 39842,
+              "side": 1,
+              "tick": 686
+            },
+            "text": "M Atkins plays a pass."
+          }
+        ],
+        "reserve": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "score": [
+          0,
+          1
+        ],
+        "screen": "History",
+        "selected": "First(0)",
+        "speed": 1,
+        "worker_absent": true
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "pitch-default",
+      "path": "window-r0002-pitch-default.png",
+      "size": [
+        1440,
+        900
+      ],
+      "sha256": "5a202b6c186eee25f3bf87588aac64e30f67871733b5aef5509b2798c1d65b1b",
+      "state": {
+        "campaign": {
+          "cash": 452000,
+          "club": {
+            "first_team": [
+              2581,
+              2582,
+              2583,
+              2584,
+              2585,
+              2586,
+              2587,
+              2588,
+              2589,
+              2590,
+              2591,
+              2592,
+              2593,
+              2594,
+              2595,
+              2596,
+              2597,
+              2598,
+              null,
+              null
+            ],
+            "id": 130,
+            "name": "Blackburn R",
+            "reserves": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "team_instructions": 75
+          },
+          "manager": {
+            "name": "Dalglish",
+            "name_id": 130,
+            "slot": 1
+          },
+          "namespace": {
+            "edition": 96,
+            "league": "ENGL-95.DAT",
+            "league_year": 1995
+          },
+          "next_fixture": {
+            "club": 130,
+            "competition_code": 1,
+            "flags": 1,
+            "opponent": 17,
+            "opponent_flags": 0,
+            "opponent_name": "P St Germain",
+            "slot": 1,
+            "venue_code": 1
+          },
+          "origin": {
+            "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+            "record_sha256": "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483",
+            "research_commit": "39e289a393d12ce562ee8b9fba16b413fa17647e",
+            "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36"
+          },
+          "players": [
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 10,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2581,
+              "individual_instructions": 17,
+              "name": "T Flowers"
+            },
+            {
+              "age": 20,
+              "availability": {
+                "condition_signed": 31,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2582,
+              "individual_instructions": 178,
+              "name": "I Pearce"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 20,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2583,
+              "individual_instructions": 50,
+              "name": "C Hendry"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 9,
+                "status_bits": 1
+              },
+              "club_position": 3,
+              "current_position": 3,
+              "id": 2584,
+              "individual_instructions": 17,
+              "name": "G Le Saux"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2585,
+              "individual_instructions": 17,
+              "name": "H Berg"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 19,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2586,
+              "individual_instructions": 0,
+              "name": "M Atkins"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 8,
+                "status_bits": 1
+              },
+              "club_position": 6,
+              "current_position": 6,
+              "id": 2587,
+              "individual_instructions": 0,
+              "name": "T Sherwood"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 29,
+                "status_bits": 1
+              },
+              "club_position": 10,
+              "current_position": 10,
+              "id": 2588,
+              "individual_instructions": 0,
+              "name": "J Wilcox"
+            },
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 18,
+                "status_bits": 1
+              },
+              "club_position": 11,
+              "current_position": 11,
+              "id": 2589,
+              "individual_instructions": 0,
+              "name": "S Ripley"
+            },
+            {
+              "age": 21,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 0
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2590,
+              "individual_instructions": 0,
+              "name": "C Sutton"
+            },
+            {
+              "age": 24,
+              "availability": {
+                "condition_signed": 28,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2591,
+              "individual_instructions": 0,
+              "name": "A Shearer"
+            },
+            {
+              "age": 35,
+              "availability": {
+                "condition_signed": 17,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2592,
+              "individual_instructions": 50,
+              "name": "T Gale"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2593,
+              "individual_instructions": 0,
+              "name": "P Warhurst"
+            },
+            {
+              "age": 30,
+              "availability": {
+                "condition_signed": 11,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2594,
+              "individual_instructions": 0,
+              "name": "R Slater"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 26,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2595,
+              "individual_instructions": 50,
+              "name": "N Marker"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2596,
+              "individual_instructions": 0,
+              "name": "M Newell"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 25,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2597,
+              "individual_instructions": 145,
+              "name": "A Wright"
+            },
+            {
+              "age": 31,
+              "availability": {
+                "condition_signed": 14,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2598,
+              "individual_instructions": 17,
+              "name": "B Mimms"
+            }
+          ],
+          "revision": 0,
+          "schema": "onenil-campaign",
+          "season": {
+            "counter": 1,
+            "end_year": 1995,
+            "start_year": 1994
+          },
+          "version": 1,
+          "week_index": 0
+        },
+        "card": 2581,
+        "carried": null,
+        "close_requested": false,
+        "events": 113,
+        "exhibition": false,
+        "first": [
+          2581,
+          2582,
+          2583,
+          2584,
+          2585,
+          2586,
+          2587,
+          2588,
+          2589,
+          2590,
+          2591,
+          2592,
+          2593,
+          2594,
+          2595,
+          2596,
+          2597,
+          2598,
+          null,
+          null
+        ],
+        "frames": 506,
+        "game_name": "squad",
+        "instruction": 0,
+        "job": 1,
+        "load_entries": [],
+        "load_index": 0,
+        "match_clubs": [
+          "Blackburn R",
+          "P St Germain"
+        ],
+        "menus": [
+          0,
+          2,
+          0
+        ],
+        "message": "",
+        "option_available": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "panel": "Skills",
+        "phase": "FirstHalf",
+        "pitch_markers": [
+          {
+            "attribute": 10,
+            "label": "G",
+            "player": 2581,
+            "position": {
+              "x": 0,
+              "y": 31
+            },
+            "scene": 1,
+            "selector": 1
+          },
+          {
+            "attribute": 9,
+            "label": "0",
+            "player": 2582,
+            "position": {
+              "x": 3,
+              "y": 18
+            },
+            "scene": 2,
+            "selector": 2
+          },
+          {
+            "attribute": 9,
+            "label": "1",
+            "player": 2583,
+            "position": {
+              "x": -3,
+              "y": 28
+            },
+            "scene": 3,
+            "selector": 3
+          },
+          {
+            "attribute": 9,
+            "label": "2",
+            "player": 2584,
+            "position": {
+              "x": 6,
+              "y": 23
+            },
+            "scene": 4,
+            "selector": 4
+          },
+          {
+            "attribute": 9,
+            "label": "3",
+            "player": 2585,
+            "position": {
+              "x": -6,
+              "y": 16
+            },
+            "scene": 5,
+            "selector": 5
+          },
+          {
+            "attribute": 9,
+            "label": "4",
+            "player": 2586,
+            "position": {
+              "x": 0,
+              "y": 13
+            },
+            "scene": 6,
+            "selector": 6
+          },
+          {
+            "attribute": 9,
+            "label": "5",
+            "player": 2587,
+            "position": {
+              "x": 0,
+              "y": 7
+            },
+            "scene": 7,
+            "selector": 7
+          },
+          {
+            "attribute": 9,
+            "label": "6",
+            "player": 2588,
+            "position": {
+              "x": 7,
+              "y": -4
+            },
+            "scene": 8,
+            "selector": 8
+          },
+          {
+            "attribute": 9,
+            "label": "7",
+            "player": 2589,
+            "position": {
+              "x": -7,
+              "y": 3
+            },
+            "scene": 9,
+            "selector": 9
+          },
+          {
+            "attribute": 9,
+            "label": "8",
+            "player": 2590,
+            "position": {
+              "x": 0,
+              "y": -8
+            },
+            "scene": 10,
+            "selector": 10
+          },
+          {
+            "attribute": 9,
+            "label": "9",
+            "player": 2591,
+            "position": {
+              "x": 2,
+              "y": -6
+            },
+            "scene": 11,
+            "selector": 11
+          },
+          {
+            "attribute": 15,
+            "label": "G",
+            "player": 321,
+            "position": {
+              "x": 0,
+              "y": -37
+            },
+            "scene": 12,
+            "selector": 12
+          },
+          {
+            "attribute": 11,
+            "label": "0",
+            "player": 322,
+            "position": {
+              "x": 0,
+              "y": -2
+            },
+            "scene": 13,
+            "selector": 13
+          },
+          {
+            "attribute": 11,
+            "label": "1",
+            "player": 323,
+            "position": {
+              "x": 0,
+              "y": 0
+            },
+            "scene": 14,
+            "selector": 14
+          },
+          {
+            "attribute": 11,
+            "label": "2",
+            "player": 324,
+            "position": {
+              "x": -6,
+              "y": -2
+            },
+            "scene": 15,
+            "selector": 15
+          },
+          {
+            "attribute": 11,
+            "label": "3",
+            "player": 325,
+            "position": {
+              "x": 4,
+              "y": -1
+            },
+            "scene": 16,
+            "selector": 16
+          },
+          {
+            "attribute": 11,
+            "label": "4",
+            "player": 326,
+            "position": {
+              "x": 0,
+              "y": -4
+            },
+            "scene": 17,
+            "selector": 17
+          },
+          {
+            "attribute": 11,
+            "label": "5",
+            "player": 327,
+            "position": {
+              "x": -5,
+              "y": 4
+            },
+            "scene": 18,
+            "selector": 18
+          },
+          {
+            "attribute": 11,
+            "label": "6",
+            "player": 333,
+            "position": {
+              "x": 0,
+              "y": -4
+            },
+            "scene": 19,
+            "selector": 19
+          },
+          {
+            "attribute": 11,
+            "label": "7",
+            "player": 329,
+            "position": {
+              "x": 2,
+              "y": 2
+            },
+            "scene": 20,
+            "selector": 20
+          },
+          {
+            "attribute": 11,
+            "label": "8",
+            "player": 330,
+            "position": {
+              "x": 0,
+              "y": -2
+            },
+            "scene": 21,
+            "selector": 21
+          },
+          {
+            "attribute": 11,
+            "label": "9",
+            "player": 331,
+            "position": {
+              "x": 0,
+              "y": 3
+            },
+            "scene": 22,
+            "selector": 22
+          }
+        ],
+        "players": 22,
+        "raster_sha256": "f4c278fef6dc5ee9fe9c05f666fcc7f7b037c6cb18017e4543edff0efb5d0c1c",
+        "recent_actions": [
+          {
+            "native": {
+              "actor_slot": 2,
+              "caller": "0AB9:1DDE",
+              "club": 130,
+              "code": 14,
+              "draw_end": 17983,
+              "draw_start": 17983,
+              "head_before": 105,
+              "minute": 11,
+              "player": 2582,
+              "queue": {
+                "code": 14,
+                "index": 106,
+                "player": 2582,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 20444,
+              "seed_before": 20444,
+              "side": 1,
+              "tick": 408
+            },
+            "text": "I Pearce takes possession."
+          },
+          {
+            "native": {
+              "actor_slot": 2,
+              "caller": "0AB9:1DDE",
+              "club": 130,
+              "code": 33,
+              "draw_end": 17983,
+              "draw_start": 17983,
+              "head_before": 106,
+              "minute": 11,
+              "player": 2582,
+              "queue": {
+                "code": 33,
+                "index": 107,
+                "player": 2582,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 20444,
+              "seed_before": 20444,
+              "side": 1,
+              "tick": 408
+            },
+            "text": "I Pearce nudges the ball on."
+          },
+          {
+            "native": {
+              "actor_slot": 9,
+              "caller": "0AB9:1E4A",
+              "club": 17,
+              "code": 34,
+              "draw_end": 18417,
+              "draw_start": 18417,
+              "head_before": 107,
+              "minute": 11,
+              "player": 329,
+              "queue": {
+                "code": 34,
+                "index": 108,
+                "player": 329,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 78,
+              "seed_before": 78,
+              "side": 0,
+              "tick": 416
+            },
+            "text": "V Guerin cuts out the ball."
+          },
+          {
+            "native": {
+              "actor_slot": 1,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 11,
+              "draw_end": 19471,
+              "draw_start": 19471,
+              "head_before": 108,
+              "minute": 12,
+              "player": 2581,
+              "queue": {
+                "code": 11,
+                "index": 109,
+                "player": 2581,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 43116,
+              "seed_before": 43116,
+              "side": 1,
+              "tick": 441
+            },
+            "text": "T Flowers goes in for a tackle."
+          },
+          {
+            "native": {
+              "actor_slot": 9,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 12,
+              "draw_end": 19474,
+              "draw_start": 19474,
+              "head_before": 109,
+              "minute": 12,
+              "player": 329,
+              "queue": {
+                "code": 12,
+                "index": 110,
+                "player": 329,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 42693,
+              "seed_before": 42693,
+              "side": 0,
+              "tick": 441
+            },
+            "text": "V Guerin gets away from the challenge."
+          },
+          {
+            "native": {
+              "actor_slot": 9,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 17,
+              "draw_end": 19500,
+              "draw_start": 19500,
+              "head_before": 110,
+              "minute": 12,
+              "player": 329,
+              "queue": {
+                "code": 17,
+                "index": 111,
+                "player": 329,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 9319,
+              "seed_before": 9319,
+              "side": 0,
+              "tick": 441
+            },
+            "text": "V Guerin shoots at goal."
+          },
+          {
+            "native": {
+              "actor_slot": 1,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 37,
+              "draw_end": 19595,
+              "draw_start": 19595,
+              "head_before": 111,
+              "minute": 12,
+              "player": 2581,
+              "queue": {
+                "code": 37,
+                "index": 112,
+                "player": 2581,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 59672,
+              "seed_before": 59672,
+              "side": 1,
+              "tick": 444
+            },
+            "text": "T Flowers cannot reach it."
+          },
+          {
+            "native": {
+              "actor_slot": 9,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 38,
+              "draw_end": 19595,
+              "draw_start": 19595,
+              "head_before": 112,
+              "minute": 12,
+              "player": 329,
+              "queue": {
+                "code": 38,
+                "index": 113,
+                "player": 329,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 59672,
+              "seed_before": 59672,
+              "side": 0,
+              "tick": 444
+            },
+            "text": "Goal! V Guerin scores."
+          }
+        ],
+        "reserve": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "score": [
+          0,
+          1
+        ],
+        "screen": "Pitch",
+        "selected": "First(0)",
+        "speed": 1
+      }
+    },
+    {
+      "name": "pitch-resized",
+      "path": "window-r0002-pitch-resized.png",
+      "size": [
+        1280,
+        800
+      ],
+      "sha256": "a8cea4cdf9fb70db4b67021adc4622dc0c61253216ec8a92e38d672d247c7d32",
+      "state": {
+        "campaign": {
+          "cash": 452000,
+          "club": {
+            "first_team": [
+              2581,
+              2582,
+              2583,
+              2584,
+              2585,
+              2586,
+              2587,
+              2588,
+              2589,
+              2590,
+              2591,
+              2592,
+              2593,
+              2594,
+              2595,
+              2596,
+              2597,
+              2598,
+              null,
+              null
+            ],
+            "id": 130,
+            "name": "Blackburn R",
+            "reserves": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "team_instructions": 75
+          },
+          "manager": {
+            "name": "Dalglish",
+            "name_id": 130,
+            "slot": 1
+          },
+          "namespace": {
+            "edition": 96,
+            "league": "ENGL-95.DAT",
+            "league_year": 1995
+          },
+          "next_fixture": {
+            "club": 130,
+            "competition_code": 1,
+            "flags": 1,
+            "opponent": 17,
+            "opponent_flags": 0,
+            "opponent_name": "P St Germain",
+            "slot": 1,
+            "venue_code": 1
+          },
+          "origin": {
+            "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+            "record_sha256": "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483",
+            "research_commit": "39e289a393d12ce562ee8b9fba16b413fa17647e",
+            "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36"
+          },
+          "players": [
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 10,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2581,
+              "individual_instructions": 17,
+              "name": "T Flowers"
+            },
+            {
+              "age": 20,
+              "availability": {
+                "condition_signed": 31,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2582,
+              "individual_instructions": 178,
+              "name": "I Pearce"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 20,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2583,
+              "individual_instructions": 50,
+              "name": "C Hendry"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 9,
+                "status_bits": 1
+              },
+              "club_position": 3,
+              "current_position": 3,
+              "id": 2584,
+              "individual_instructions": 17,
+              "name": "G Le Saux"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2585,
+              "individual_instructions": 17,
+              "name": "H Berg"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 19,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2586,
+              "individual_instructions": 0,
+              "name": "M Atkins"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 8,
+                "status_bits": 1
+              },
+              "club_position": 6,
+              "current_position": 6,
+              "id": 2587,
+              "individual_instructions": 0,
+              "name": "T Sherwood"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 29,
+                "status_bits": 1
+              },
+              "club_position": 10,
+              "current_position": 10,
+              "id": 2588,
+              "individual_instructions": 0,
+              "name": "J Wilcox"
+            },
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 18,
+                "status_bits": 1
+              },
+              "club_position": 11,
+              "current_position": 11,
+              "id": 2589,
+              "individual_instructions": 0,
+              "name": "S Ripley"
+            },
+            {
+              "age": 21,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 0
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2590,
+              "individual_instructions": 0,
+              "name": "C Sutton"
+            },
+            {
+              "age": 24,
+              "availability": {
+                "condition_signed": 28,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2591,
+              "individual_instructions": 0,
+              "name": "A Shearer"
+            },
+            {
+              "age": 35,
+              "availability": {
+                "condition_signed": 17,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2592,
+              "individual_instructions": 50,
+              "name": "T Gale"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2593,
+              "individual_instructions": 0,
+              "name": "P Warhurst"
+            },
+            {
+              "age": 30,
+              "availability": {
+                "condition_signed": 11,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2594,
+              "individual_instructions": 0,
+              "name": "R Slater"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 26,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2595,
+              "individual_instructions": 50,
+              "name": "N Marker"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2596,
+              "individual_instructions": 0,
+              "name": "M Newell"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 25,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2597,
+              "individual_instructions": 145,
+              "name": "A Wright"
+            },
+            {
+              "age": 31,
+              "availability": {
+                "condition_signed": 14,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2598,
+              "individual_instructions": 17,
+              "name": "B Mimms"
+            }
+          ],
+          "revision": 0,
+          "schema": "onenil-campaign",
+          "season": {
+            "counter": 1,
+            "end_year": 1995,
+            "start_year": 1994
+          },
+          "version": 1,
+          "week_index": 0
+        },
+        "card": 2581,
+        "carried": null,
+        "close_requested": false,
+        "events": 135,
+        "exhibition": false,
+        "first": [
+          2581,
+          2582,
+          2583,
+          2584,
+          2585,
+          2586,
+          2587,
+          2588,
+          2589,
+          2590,
+          2591,
+          2592,
+          2593,
+          2594,
+          2595,
+          2596,
+          2597,
+          2598,
+          null,
+          null
+        ],
+        "frames": 601,
+        "game_name": "squad",
+        "instruction": 0,
+        "job": 1,
+        "load_entries": [],
+        "load_index": 0,
+        "match_clubs": [
+          "Blackburn R",
+          "P St Germain"
+        ],
+        "menus": [
+          0,
+          2,
+          0
+        ],
+        "message": "",
+        "option_available": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "panel": "Skills",
+        "phase": "FirstHalf",
+        "pitch_markers": [
+          {
+            "attribute": 10,
+            "label": "G",
+            "player": 2581,
+            "position": {
+              "x": 0,
+              "y": 37
+            },
+            "scene": 1,
+            "selector": 1
+          },
+          {
+            "attribute": 9,
+            "label": "0",
+            "player": 2582,
+            "position": {
+              "x": 1,
+              "y": 21
+            },
+            "scene": 2,
+            "selector": 2
+          },
+          {
+            "attribute": 9,
+            "label": "1",
+            "player": 2583,
+            "position": {
+              "x": -2,
+              "y": 5
+            },
+            "scene": 3,
+            "selector": 3
+          },
+          {
+            "attribute": 9,
+            "label": "2",
+            "player": 2584,
+            "position": {
+              "x": 8,
+              "y": -1
+            },
+            "scene": 4,
+            "selector": 4
+          },
+          {
+            "attribute": 9,
+            "label": "3",
+            "player": 2585,
+            "position": {
+              "x": -5,
+              "y": 7
+            },
+            "scene": 5,
+            "selector": 5
+          },
+          {
+            "attribute": 9,
+            "label": "4",
+            "player": 2586,
+            "position": {
+              "x": -3,
+              "y": 10
+            },
+            "scene": 6,
+            "selector": 6
+          },
+          {
+            "attribute": 9,
+            "label": "5",
+            "player": 2587,
+            "position": {
+              "x": 0,
+              "y": 7
+            },
+            "scene": 7,
+            "selector": 7
+          },
+          {
+            "attribute": 9,
+            "label": "6",
+            "player": 2588,
+            "position": {
+              "x": -1,
+              "y": -5
+            },
+            "scene": 8,
+            "selector": 8
+          },
+          {
+            "attribute": 9,
+            "label": "7",
+            "player": 2589,
+            "position": {
+              "x": 4,
+              "y": 10
+            },
+            "scene": 9,
+            "selector": 9
+          },
+          {
+            "attribute": 9,
+            "label": "8",
+            "player": 2590,
+            "position": {
+              "x": -2,
+              "y": -5
+            },
+            "scene": 10,
+            "selector": 10
+          },
+          {
+            "attribute": 9,
+            "label": "9",
+            "player": 2591,
+            "position": {
+              "x": -1,
+              "y": 0
+            },
+            "scene": 11,
+            "selector": 11
+          },
+          {
+            "attribute": 15,
+            "label": "G",
+            "player": 321,
+            "position": {
+              "x": 0,
+              "y": -37
+            },
+            "scene": 12,
+            "selector": 12
+          },
+          {
+            "attribute": 11,
+            "label": "0",
+            "player": 322,
+            "position": {
+              "x": 1,
+              "y": -33
+            },
+            "scene": 13,
+            "selector": 13
+          },
+          {
+            "attribute": 11,
+            "label": "1",
+            "player": 323,
+            "position": {
+              "x": 0,
+              "y": -9
+            },
+            "scene": 14,
+            "selector": 14
+          },
+          {
+            "attribute": 11,
+            "label": "2",
+            "player": 324,
+            "position": {
+              "x": -6,
+              "y": -14
+            },
+            "scene": 15,
+            "selector": 15
+          },
+          {
+            "attribute": 11,
+            "label": "3",
+            "player": 325,
+            "position": {
+              "x": -3,
+              "y": -12
+            },
+            "scene": 16,
+            "selector": 16
+          },
+          {
+            "attribute": 11,
+            "label": "4",
+            "player": 326,
+            "position": {
+              "x": 0,
+              "y": 4
+            },
+            "scene": 17,
+            "selector": 17
+          },
+          {
+            "attribute": 11,
+            "label": "5",
+            "player": 327,
+            "position": {
+              "x": 2,
+              "y": -2
+            },
+            "scene": 18,
+            "selector": 18
+          },
+          {
+            "attribute": 11,
+            "label": "6",
+            "player": 333,
+            "position": {
+              "x": 1,
+              "y": 10
+            },
+            "scene": 19,
+            "selector": 19
+          },
+          {
+            "attribute": 11,
+            "label": "7",
+            "player": 329,
+            "position": {
+              "x": 5,
+              "y": 11
+            },
+            "scene": 20,
+            "selector": 20
+          },
+          {
+            "attribute": 11,
+            "label": "8",
+            "player": 330,
+            "position": {
+              "x": 0,
+              "y": 11
+            },
+            "scene": 21,
+            "selector": 21
+          },
+          {
+            "attribute": 11,
+            "label": "9",
+            "player": 331,
+            "position": {
+              "x": -4,
+              "y": 9
+            },
+            "scene": 22,
+            "selector": 22
+          }
+        ],
+        "players": 22,
+        "raster_sha256": "01404a1921f75d9d4ac4b63497de5130be91437ce1f26b0228a8abcce97cec57",
+        "recent_actions": [
+          {
+            "native": {
+              "actor_slot": 6,
+              "caller": "0AB9:1DDE",
+              "club": 130,
+              "code": 1,
+              "draw_end": 22057,
+              "draw_start": 22057,
+              "head_before": 127,
+              "minute": 15,
+              "player": 2586,
+              "queue": {
+                "code": 1,
+                "index": 128,
+                "player": 2586,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 13030,
+              "seed_before": 13030,
+              "side": 1,
+              "tick": 570
+            },
+            "text": "M Atkins sends a pass."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 35,
+              "draw_end": 22229,
+              "draw_start": 22229,
+              "head_before": 128,
+              "minute": 15,
+              "player": 2591,
+              "queue": {
+                "code": 35,
+                "index": 129,
+                "player": 2591,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 62818,
+              "seed_before": 62818,
+              "side": 1,
+              "tick": 574
+            },
+            "text": "A Shearer gathers the ball."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1DDE",
+              "club": 130,
+              "code": 6,
+              "draw_end": 22277,
+              "draw_start": 22277,
+              "head_before": 129,
+              "minute": 15,
+              "player": 2591,
+              "queue": {
+                "code": 6,
+                "index": 130,
+                "player": 2591,
+                "secondary": 2591,
+                "side": 1
+              },
+              "secondary": 2591,
+              "secondary_slot": 11,
+              "seed_after": 59730,
+              "seed_before": 59730,
+              "side": 1,
+              "tick": 575
+            },
+            "text": "A Shearer carries the ball forward."
+          },
+          {
+            "native": {
+              "actor_slot": 3,
+              "caller": "0AB9:1E4A",
+              "club": 17,
+              "code": 11,
+              "draw_end": 22583,
+              "draw_start": 22583,
+              "head_before": 130,
+              "minute": 15,
+              "player": 323,
+              "queue": {
+                "code": 11,
+                "index": 131,
+                "player": 323,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 41588,
+              "seed_before": 41588,
+              "side": 0,
+              "tick": 581
+            },
+            "text": "P Colleter goes in for a tackle."
+          },
+          {
+            "native": {
+              "actor_slot": 3,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 14,
+              "draw_end": 22591,
+              "draw_start": 22591,
+              "head_before": 131,
+              "minute": 15,
+              "player": 323,
+              "queue": {
+                "code": 14,
+                "index": 132,
+                "player": 323,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 6620,
+              "seed_before": 6620,
+              "side": 0,
+              "tick": 581
+            },
+            "text": "P Colleter takes possession."
+          },
+          {
+            "native": {
+              "actor_slot": 3,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 33,
+              "draw_end": 22591,
+              "draw_start": 22591,
+              "head_before": 132,
+              "minute": 15,
+              "player": 323,
+              "queue": {
+                "code": 33,
+                "index": 133,
+                "player": 323,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 6620,
+              "seed_before": 6620,
+              "side": 0,
+              "tick": 581
+            },
+            "text": "P Colleter nudges the ball on."
+          },
+          {
+            "native": {
+              "actor_slot": 4,
+              "caller": "0AB9:1E4A",
+              "club": 17,
+              "code": 35,
+              "draw_end": 22793,
+              "draw_start": 22793,
+              "head_before": 133,
+              "minute": 15,
+              "player": 324,
+              "queue": {
+                "code": 35,
+                "index": 134,
+                "player": 324,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 22854,
+              "seed_before": 22854,
+              "side": 0,
+              "tick": 586
+            },
+            "text": "A Roche gathers the ball."
+          },
+          {
+            "native": {
+              "actor_slot": 4,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 10,
+              "draw_end": 22999,
+              "draw_start": 22999,
+              "head_before": 134,
+              "minute": 15,
+              "player": 324,
+              "queue": {
+                "code": 10,
+                "index": 135,
+                "player": 324,
+                "secondary": 331,
+                "side": 0
+              },
+              "secondary": 331,
+              "secondary_slot": 11,
+              "seed_after": 8596,
+              "seed_before": 8596,
+              "side": 0,
+              "tick": 591
+            },
+            "text": "A high ball is sent towards D Ginola."
+          }
+        ],
+        "reserve": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "score": [
+          0,
+          1
+        ],
+        "screen": "Pitch",
+        "selected": "First(0)",
+        "speed": 1
+      }
+    },
+    {
+      "name": "commentary-default",
+      "path": "window-r0002-commentary-default.png",
+      "size": [
+        1440,
+        900
+      ],
+      "sha256": "ec487a1796329136061c8ad94bdfc2c09ec3d4c160ebfd165ef1a243b83c3ab3",
+      "state": {
+        "campaign": {
+          "cash": 452000,
+          "club": {
+            "first_team": [
+              2581,
+              2582,
+              2583,
+              2584,
+              2585,
+              2586,
+              2587,
+              2588,
+              2589,
+              2590,
+              2591,
+              2592,
+              2593,
+              2594,
+              2595,
+              2596,
+              2597,
+              2598,
+              null,
+              null
+            ],
+            "id": 130,
+            "name": "Blackburn R",
+            "reserves": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "team_instructions": 75
+          },
+          "manager": {
+            "name": "Dalglish",
+            "name_id": 130,
+            "slot": 1
+          },
+          "namespace": {
+            "edition": 96,
+            "league": "ENGL-95.DAT",
+            "league_year": 1995
+          },
+          "next_fixture": {
+            "club": 130,
+            "competition_code": 1,
+            "flags": 1,
+            "opponent": 17,
+            "opponent_flags": 0,
+            "opponent_name": "P St Germain",
+            "slot": 1,
+            "venue_code": 1
+          },
+          "origin": {
+            "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+            "record_sha256": "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483",
+            "research_commit": "39e289a393d12ce562ee8b9fba16b413fa17647e",
+            "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36"
+          },
+          "players": [
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 10,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2581,
+              "individual_instructions": 17,
+              "name": "T Flowers"
+            },
+            {
+              "age": 20,
+              "availability": {
+                "condition_signed": 31,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2582,
+              "individual_instructions": 178,
+              "name": "I Pearce"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 20,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2583,
+              "individual_instructions": 50,
+              "name": "C Hendry"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 9,
+                "status_bits": 1
+              },
+              "club_position": 3,
+              "current_position": 3,
+              "id": 2584,
+              "individual_instructions": 17,
+              "name": "G Le Saux"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2585,
+              "individual_instructions": 17,
+              "name": "H Berg"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 19,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2586,
+              "individual_instructions": 0,
+              "name": "M Atkins"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 8,
+                "status_bits": 1
+              },
+              "club_position": 6,
+              "current_position": 6,
+              "id": 2587,
+              "individual_instructions": 0,
+              "name": "T Sherwood"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 29,
+                "status_bits": 1
+              },
+              "club_position": 10,
+              "current_position": 10,
+              "id": 2588,
+              "individual_instructions": 0,
+              "name": "J Wilcox"
+            },
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 18,
+                "status_bits": 1
+              },
+              "club_position": 11,
+              "current_position": 11,
+              "id": 2589,
+              "individual_instructions": 0,
+              "name": "S Ripley"
+            },
+            {
+              "age": 21,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 0
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2590,
+              "individual_instructions": 0,
+              "name": "C Sutton"
+            },
+            {
+              "age": 24,
+              "availability": {
+                "condition_signed": 28,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2591,
+              "individual_instructions": 0,
+              "name": "A Shearer"
+            },
+            {
+              "age": 35,
+              "availability": {
+                "condition_signed": 17,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2592,
+              "individual_instructions": 50,
+              "name": "T Gale"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2593,
+              "individual_instructions": 0,
+              "name": "P Warhurst"
+            },
+            {
+              "age": 30,
+              "availability": {
+                "condition_signed": 11,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2594,
+              "individual_instructions": 0,
+              "name": "R Slater"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 26,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2595,
+              "individual_instructions": 50,
+              "name": "N Marker"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2596,
+              "individual_instructions": 0,
+              "name": "M Newell"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 25,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2597,
+              "individual_instructions": 145,
+              "name": "A Wright"
+            },
+            {
+              "age": 31,
+              "availability": {
+                "condition_signed": 14,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2598,
+              "individual_instructions": 17,
+              "name": "B Mimms"
+            }
+          ],
+          "revision": 0,
+          "schema": "onenil-campaign",
+          "season": {
+            "counter": 1,
+            "end_year": 1995,
+            "start_year": 1994
+          },
+          "version": 1,
+          "week_index": 0
+        },
+        "card": 2581,
+        "carried": null,
+        "close_requested": false,
+        "events": 166,
+        "exhibition": false,
+        "first": [
+          2581,
+          2582,
+          2583,
+          2584,
+          2585,
+          2586,
+          2587,
+          2588,
+          2589,
+          2590,
+          2591,
+          2592,
+          2593,
+          2594,
+          2595,
+          2596,
+          2597,
+          2598,
+          null,
+          null
+        ],
+        "frames": 688,
+        "game_name": "squad",
+        "instruction": 0,
+        "job": 1,
+        "load_entries": [],
+        "load_index": 0,
+        "match_clubs": [
+          "Blackburn R",
+          "P St Germain"
+        ],
+        "menus": [
+          0,
+          2,
+          0
+        ],
+        "message": "",
+        "option_available": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "panel": "Skills",
+        "phase": "FirstHalf",
+        "pitch_markers": [
+          {
+            "attribute": 10,
+            "label": "G",
+            "player": 2581,
+            "position": {
+              "x": -3,
+              "y": 29
+            },
+            "scene": 1,
+            "selector": 1
+          },
+          {
+            "attribute": 9,
+            "label": "0",
+            "player": 2582,
+            "position": {
+              "x": -6,
+              "y": 22
+            },
+            "scene": 2,
+            "selector": 2
+          },
+          {
+            "attribute": 9,
+            "label": "1",
+            "player": 2583,
+            "position": {
+              "x": -2,
+              "y": 21
+            },
+            "scene": 3,
+            "selector": 3
+          },
+          {
+            "attribute": 9,
+            "label": "2",
+            "player": 2584,
+            "position": {
+              "x": 5,
+              "y": 21
+            },
+            "scene": 4,
+            "selector": 4
+          },
+          {
+            "attribute": 9,
+            "label": "3",
+            "player": 2585,
+            "position": {
+              "x": 3,
+              "y": 22
+            },
+            "scene": 5,
+            "selector": 5
+          },
+          {
+            "attribute": 9,
+            "label": "4",
+            "player": 2586,
+            "position": {
+              "x": -3,
+              "y": 19
+            },
+            "scene": 6,
+            "selector": 6
+          },
+          {
+            "attribute": 9,
+            "label": "5",
+            "player": 2587,
+            "position": {
+              "x": 1,
+              "y": 11
+            },
+            "scene": 7,
+            "selector": 7
+          },
+          {
+            "attribute": 9,
+            "label": "6",
+            "player": 2588,
+            "position": {
+              "x": -3,
+              "y": 14
+            },
+            "scene": 8,
+            "selector": 8
+          },
+          {
+            "attribute": 9,
+            "label": "7",
+            "player": 2589,
+            "position": {
+              "x": 0,
+              "y": 5
+            },
+            "scene": 9,
+            "selector": 9
+          },
+          {
+            "attribute": 9,
+            "label": "8",
+            "player": 2590,
+            "position": {
+              "x": 0,
+              "y": 1
+            },
+            "scene": 10,
+            "selector": 10
+          },
+          {
+            "attribute": 9,
+            "label": "9",
+            "player": 2591,
+            "position": {
+              "x": -1,
+              "y": 1
+            },
+            "scene": 11,
+            "selector": 11
+          },
+          {
+            "attribute": 15,
+            "label": "G",
+            "player": 321,
+            "position": {
+              "x": 0,
+              "y": -37
+            },
+            "scene": 12,
+            "selector": 12
+          },
+          {
+            "attribute": 11,
+            "label": "0",
+            "player": 322,
+            "position": {
+              "x": -6,
+              "y": 0
+            },
+            "scene": 13,
+            "selector": 13
+          },
+          {
+            "attribute": 11,
+            "label": "1",
+            "player": 323,
+            "position": {
+              "x": 1,
+              "y": 2
+            },
+            "scene": 14,
+            "selector": 14
+          },
+          {
+            "attribute": 11,
+            "label": "2",
+            "player": 324,
+            "position": {
+              "x": 0,
+              "y": 18
+            },
+            "scene": 15,
+            "selector": 15
+          },
+          {
+            "attribute": 11,
+            "label": "3",
+            "player": 325,
+            "position": {
+              "x": 3,
+              "y": 16
+            },
+            "scene": 16,
+            "selector": 16
+          },
+          {
+            "attribute": 11,
+            "label": "4",
+            "player": 326,
+            "position": {
+              "x": 0,
+              "y": 21
+            },
+            "scene": 17,
+            "selector": 17
+          },
+          {
+            "attribute": 11,
+            "label": "5",
+            "player": 327,
+            "position": {
+              "x": -1,
+              "y": 17
+            },
+            "scene": 18,
+            "selector": 18
+          },
+          {
+            "attribute": 11,
+            "label": "6",
+            "player": 333,
+            "position": {
+              "x": 2,
+              "y": 20
+            },
+            "scene": 19,
+            "selector": 19
+          },
+          {
+            "attribute": 11,
+            "label": "7",
+            "player": 329,
+            "position": {
+              "x": 7,
+              "y": 21
+            },
+            "scene": 20,
+            "selector": 20
+          },
+          {
+            "attribute": 11,
+            "label": "8",
+            "player": 330,
+            "position": {
+              "x": 2,
+              "y": 21
+            },
+            "scene": 21,
+            "selector": 21
+          },
+          {
+            "attribute": 11,
+            "label": "9",
+            "player": 331,
+            "position": {
+              "x": -3,
+              "y": 24
+            },
+            "scene": 22,
+            "selector": 22
+          }
+        ],
+        "players": 22,
+        "raster_sha256": "5b21aecae702e0790355abc15b7cb5e86dfe351acadba315758550f4dc323c53",
+        "recent_actions": [
+          {
+            "native": {
+              "actor_slot": 7,
+              "caller": "0AB9:1E4A",
+              "club": 17,
+              "code": 35,
+              "draw_end": 26107,
+              "draw_start": 26107,
+              "head_before": 158,
+              "minute": 17,
+              "player": 327,
+              "queue": {
+                "code": 35,
+                "index": 159,
+                "player": 327,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 11208,
+              "seed_before": 11208,
+              "side": 0,
+              "tick": 660
+            },
+            "text": "P Le Guen gathers the ball."
+          },
+          {
+            "native": {
+              "actor_slot": 7,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 10,
+              "draw_end": 26154,
+              "draw_start": 26154,
+              "head_before": 159,
+              "minute": 17,
+              "player": 327,
+              "queue": {
+                "code": 10,
+                "index": 160,
+                "player": 327,
+                "secondary": 331,
+                "side": 0
+              },
+              "secondary": 331,
+              "secondary_slot": 11,
+              "seed_after": 23261,
+              "seed_before": 23261,
+              "side": 0,
+              "tick": 661
+            },
+            "text": "A high ball is sent towards D Ginola."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1E10",
+              "club": 17,
+              "code": 25,
+              "draw_end": 26917,
+              "draw_start": 26917,
+              "head_before": 160,
+              "minute": 18,
+              "player": 331,
+              "queue": {
+                "code": 25,
+                "index": 161,
+                "player": 331,
+                "secondary": 327,
+                "side": 0
+              },
+              "secondary": 327,
+              "secondary_slot": 7,
+              "seed_after": 6642,
+              "seed_before": 6642,
+              "side": 0,
+              "tick": 675
+            },
+            "text": "D Ginola has possession."
+          },
+          {
+            "native": {
+              "actor_slot": 2,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 11,
+              "draw_end": 26928,
+              "draw_start": 26928,
+              "head_before": 161,
+              "minute": 18,
+              "player": 2582,
+              "queue": {
+                "code": 11,
+                "index": 162,
+                "player": 2582,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 26859,
+              "seed_before": 26859,
+              "side": 1,
+              "tick": 675
+            },
+            "text": "I Pearce goes in for a tackle."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 12,
+              "draw_end": 26931,
+              "draw_start": 26931,
+              "head_before": 162,
+              "minute": 18,
+              "player": 331,
+              "queue": {
+                "code": 12,
+                "index": 163,
+                "player": 331,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 38688,
+              "seed_before": 38688,
+              "side": 0,
+              "tick": 675
+            },
+            "text": "D Ginola gets away from the challenge."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 1,
+              "draw_end": 26992,
+              "draw_start": 26992,
+              "head_before": 163,
+              "minute": 18,
+              "player": 331,
+              "queue": {
+                "code": 1,
+                "index": 164,
+                "player": 331,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 19243,
+              "seed_before": 19243,
+              "side": 0,
+              "tick": 676
+            },
+            "text": "D Ginola sends a pass."
+          },
+          {
+            "native": {
+              "actor_slot": 6,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 34,
+              "draw_end": 27619,
+              "draw_start": 27619,
+              "head_before": 164,
+              "minute": 18,
+              "player": 2586,
+              "queue": {
+                "code": 34,
+                "index": 165,
+                "player": 2586,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 43024,
+              "seed_before": 43024,
+              "side": 1,
+              "tick": 685
+            },
+            "text": "M Atkins cuts out the ball."
+          },
+          {
+            "native": {
+              "actor_slot": 6,
+              "caller": "0AB9:1DDE",
+              "club": 130,
+              "code": 2,
+              "draw_end": 27669,
+              "draw_start": 27669,
+              "head_before": 165,
+              "minute": 18,
+              "player": 2586,
+              "queue": {
+                "code": 2,
+                "index": 166,
+                "player": 2586,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 39842,
+              "seed_before": 39842,
+              "side": 1,
+              "tick": 686
+            },
+            "text": "M Atkins plays a pass."
+          }
+        ],
+        "reserve": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "score": [
+          0,
+          1
+        ],
+        "screen": "History",
+        "selected": "First(0)",
+        "speed": 1
+      }
+    },
+    {
+      "name": "commentary-resized",
+      "path": "window-r0002-commentary-resized.png",
+      "size": [
+        1280,
+        800
+      ],
+      "sha256": "b563106c70681eb7a00bf3c0256b0f7105d4f8bd8d0690a1fdfeb3801d3c20aa",
+      "state": {
+        "campaign": {
+          "cash": 452000,
+          "club": {
+            "first_team": [
+              2581,
+              2582,
+              2583,
+              2584,
+              2585,
+              2586,
+              2587,
+              2588,
+              2589,
+              2590,
+              2591,
+              2592,
+              2593,
+              2594,
+              2595,
+              2596,
+              2597,
+              2598,
+              null,
+              null
+            ],
+            "id": 130,
+            "name": "Blackburn R",
+            "reserves": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ],
+            "team_instructions": 75
+          },
+          "manager": {
+            "name": "Dalglish",
+            "name_id": 130,
+            "slot": 1
+          },
+          "namespace": {
+            "edition": 96,
+            "league": "ENGL-95.DAT",
+            "league_year": 1995
+          },
+          "next_fixture": {
+            "club": 130,
+            "competition_code": 1,
+            "flags": 1,
+            "opponent": 17,
+            "opponent_flags": 0,
+            "opponent_name": "P St Germain",
+            "slot": 1,
+            "venue_code": 1
+          },
+          "origin": {
+            "league_sha256": "fc4bfa045b71ddede9692f40d6a4c0e3b29cc7334c1ec6e910c275f63f714352",
+            "record_sha256": "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483",
+            "research_commit": "39e289a393d12ce562ee8b9fba16b413fa17647e",
+            "save_sha256": "6ef61bcf78af17a78cbbdc50b68839be169552464b4f2ee9eec5ea9b3740bc36"
+          },
+          "players": [
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 10,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2581,
+              "individual_instructions": 17,
+              "name": "T Flowers"
+            },
+            {
+              "age": 20,
+              "availability": {
+                "condition_signed": 31,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2582,
+              "individual_instructions": 178,
+              "name": "I Pearce"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 20,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2583,
+              "individual_instructions": 50,
+              "name": "C Hendry"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 9,
+                "status_bits": 1
+              },
+              "club_position": 3,
+              "current_position": 3,
+              "id": 2584,
+              "individual_instructions": 17,
+              "name": "G Le Saux"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2585,
+              "individual_instructions": 17,
+              "name": "H Berg"
+            },
+            {
+              "age": 26,
+              "availability": {
+                "condition_signed": 19,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2586,
+              "individual_instructions": 0,
+              "name": "M Atkins"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 8,
+                "status_bits": 1
+              },
+              "club_position": 6,
+              "current_position": 6,
+              "id": 2587,
+              "individual_instructions": 0,
+              "name": "T Sherwood"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 29,
+                "status_bits": 1
+              },
+              "club_position": 10,
+              "current_position": 10,
+              "id": 2588,
+              "individual_instructions": 0,
+              "name": "J Wilcox"
+            },
+            {
+              "age": 27,
+              "availability": {
+                "condition_signed": 18,
+                "status_bits": 1
+              },
+              "club_position": 11,
+              "current_position": 11,
+              "id": 2589,
+              "individual_instructions": 0,
+              "name": "S Ripley"
+            },
+            {
+              "age": 21,
+              "availability": {
+                "condition_signed": 30,
+                "status_bits": 0
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2590,
+              "individual_instructions": 0,
+              "name": "C Sutton"
+            },
+            {
+              "age": 24,
+              "availability": {
+                "condition_signed": 28,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2591,
+              "individual_instructions": 0,
+              "name": "A Shearer"
+            },
+            {
+              "age": 35,
+              "availability": {
+                "condition_signed": 17,
+                "status_bits": 0
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2592,
+              "individual_instructions": 50,
+              "name": "T Gale"
+            },
+            {
+              "age": 25,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 12,
+              "current_position": 12,
+              "id": 2593,
+              "individual_instructions": 0,
+              "name": "P Warhurst"
+            },
+            {
+              "age": 30,
+              "availability": {
+                "condition_signed": 11,
+                "status_bits": 1
+              },
+              "club_position": 5,
+              "current_position": 5,
+              "id": 2594,
+              "individual_instructions": 0,
+              "name": "R Slater"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 26,
+                "status_bits": 1
+              },
+              "club_position": 2,
+              "current_position": 2,
+              "id": 2595,
+              "individual_instructions": 50,
+              "name": "N Marker"
+            },
+            {
+              "age": 29,
+              "availability": {
+                "condition_signed": 6,
+                "status_bits": 1
+              },
+              "club_position": 13,
+              "current_position": 13,
+              "id": 2596,
+              "individual_instructions": 0,
+              "name": "M Newell"
+            },
+            {
+              "age": 23,
+              "availability": {
+                "condition_signed": 25,
+                "status_bits": 1
+              },
+              "club_position": 4,
+              "current_position": 4,
+              "id": 2597,
+              "individual_instructions": 145,
+              "name": "A Wright"
+            },
+            {
+              "age": 31,
+              "availability": {
+                "condition_signed": 14,
+                "status_bits": 1
+              },
+              "club_position": 0,
+              "current_position": 0,
+              "id": 2598,
+              "individual_instructions": 17,
+              "name": "B Mimms"
+            }
+          ],
+          "revision": 0,
+          "schema": "onenil-campaign",
+          "season": {
+            "counter": 1,
+            "end_year": 1995,
+            "start_year": 1994
+          },
+          "version": 1,
+          "week_index": 0
+        },
+        "card": 2581,
+        "carried": null,
+        "close_requested": false,
+        "events": 166,
+        "exhibition": false,
+        "first": [
+          2581,
+          2582,
+          2583,
+          2584,
+          2585,
+          2586,
+          2587,
+          2588,
+          2589,
+          2590,
+          2591,
+          2592,
+          2593,
+          2594,
+          2595,
+          2596,
+          2597,
+          2598,
+          null,
+          null
+        ],
+        "frames": 688,
+        "game_name": "squad",
+        "instruction": 0,
+        "job": 1,
+        "load_entries": [],
+        "load_index": 0,
+        "match_clubs": [
+          "Blackburn R",
+          "P St Germain"
+        ],
+        "menus": [
+          0,
+          2,
+          0
+        ],
+        "message": "",
+        "option_available": [
+          false,
+          true,
+          false,
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        "panel": "Skills",
+        "phase": "FirstHalf",
+        "pitch_markers": [
+          {
+            "attribute": 10,
+            "label": "G",
+            "player": 2581,
+            "position": {
+              "x": -3,
+              "y": 29
+            },
+            "scene": 1,
+            "selector": 1
+          },
+          {
+            "attribute": 9,
+            "label": "0",
+            "player": 2582,
+            "position": {
+              "x": -6,
+              "y": 22
+            },
+            "scene": 2,
+            "selector": 2
+          },
+          {
+            "attribute": 9,
+            "label": "1",
+            "player": 2583,
+            "position": {
+              "x": -2,
+              "y": 21
+            },
+            "scene": 3,
+            "selector": 3
+          },
+          {
+            "attribute": 9,
+            "label": "2",
+            "player": 2584,
+            "position": {
+              "x": 5,
+              "y": 21
+            },
+            "scene": 4,
+            "selector": 4
+          },
+          {
+            "attribute": 9,
+            "label": "3",
+            "player": 2585,
+            "position": {
+              "x": 3,
+              "y": 22
+            },
+            "scene": 5,
+            "selector": 5
+          },
+          {
+            "attribute": 9,
+            "label": "4",
+            "player": 2586,
+            "position": {
+              "x": -3,
+              "y": 19
+            },
+            "scene": 6,
+            "selector": 6
+          },
+          {
+            "attribute": 9,
+            "label": "5",
+            "player": 2587,
+            "position": {
+              "x": 1,
+              "y": 11
+            },
+            "scene": 7,
+            "selector": 7
+          },
+          {
+            "attribute": 9,
+            "label": "6",
+            "player": 2588,
+            "position": {
+              "x": -3,
+              "y": 14
+            },
+            "scene": 8,
+            "selector": 8
+          },
+          {
+            "attribute": 9,
+            "label": "7",
+            "player": 2589,
+            "position": {
+              "x": 0,
+              "y": 5
+            },
+            "scene": 9,
+            "selector": 9
+          },
+          {
+            "attribute": 9,
+            "label": "8",
+            "player": 2590,
+            "position": {
+              "x": 0,
+              "y": 1
+            },
+            "scene": 10,
+            "selector": 10
+          },
+          {
+            "attribute": 9,
+            "label": "9",
+            "player": 2591,
+            "position": {
+              "x": -1,
+              "y": 1
+            },
+            "scene": 11,
+            "selector": 11
+          },
+          {
+            "attribute": 15,
+            "label": "G",
+            "player": 321,
+            "position": {
+              "x": 0,
+              "y": -37
+            },
+            "scene": 12,
+            "selector": 12
+          },
+          {
+            "attribute": 11,
+            "label": "0",
+            "player": 322,
+            "position": {
+              "x": -6,
+              "y": 0
+            },
+            "scene": 13,
+            "selector": 13
+          },
+          {
+            "attribute": 11,
+            "label": "1",
+            "player": 323,
+            "position": {
+              "x": 1,
+              "y": 2
+            },
+            "scene": 14,
+            "selector": 14
+          },
+          {
+            "attribute": 11,
+            "label": "2",
+            "player": 324,
+            "position": {
+              "x": 0,
+              "y": 18
+            },
+            "scene": 15,
+            "selector": 15
+          },
+          {
+            "attribute": 11,
+            "label": "3",
+            "player": 325,
+            "position": {
+              "x": 3,
+              "y": 16
+            },
+            "scene": 16,
+            "selector": 16
+          },
+          {
+            "attribute": 11,
+            "label": "4",
+            "player": 326,
+            "position": {
+              "x": 0,
+              "y": 21
+            },
+            "scene": 17,
+            "selector": 17
+          },
+          {
+            "attribute": 11,
+            "label": "5",
+            "player": 327,
+            "position": {
+              "x": -1,
+              "y": 17
+            },
+            "scene": 18,
+            "selector": 18
+          },
+          {
+            "attribute": 11,
+            "label": "6",
+            "player": 333,
+            "position": {
+              "x": 2,
+              "y": 20
+            },
+            "scene": 19,
+            "selector": 19
+          },
+          {
+            "attribute": 11,
+            "label": "7",
+            "player": 329,
+            "position": {
+              "x": 7,
+              "y": 21
+            },
+            "scene": 20,
+            "selector": 20
+          },
+          {
+            "attribute": 11,
+            "label": "8",
+            "player": 330,
+            "position": {
+              "x": 2,
+              "y": 21
+            },
+            "scene": 21,
+            "selector": 21
+          },
+          {
+            "attribute": 11,
+            "label": "9",
+            "player": 331,
+            "position": {
+              "x": -3,
+              "y": 24
+            },
+            "scene": 22,
+            "selector": 22
+          }
+        ],
+        "players": 22,
+        "raster_sha256": "5b21aecae702e0790355abc15b7cb5e86dfe351acadba315758550f4dc323c53",
+        "recent_actions": [
+          {
+            "native": {
+              "actor_slot": 7,
+              "caller": "0AB9:1E4A",
+              "club": 17,
+              "code": 35,
+              "draw_end": 26107,
+              "draw_start": 26107,
+              "head_before": 158,
+              "minute": 17,
+              "player": 327,
+              "queue": {
+                "code": 35,
+                "index": 159,
+                "player": 327,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 11208,
+              "seed_before": 11208,
+              "side": 0,
+              "tick": 660
+            },
+            "text": "P Le Guen gathers the ball."
+          },
+          {
+            "native": {
+              "actor_slot": 7,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 10,
+              "draw_end": 26154,
+              "draw_start": 26154,
+              "head_before": 159,
+              "minute": 17,
+              "player": 327,
+              "queue": {
+                "code": 10,
+                "index": 160,
+                "player": 327,
+                "secondary": 331,
+                "side": 0
+              },
+              "secondary": 331,
+              "secondary_slot": 11,
+              "seed_after": 23261,
+              "seed_before": 23261,
+              "side": 0,
+              "tick": 661
+            },
+            "text": "A high ball is sent towards D Ginola."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1E10",
+              "club": 17,
+              "code": 25,
+              "draw_end": 26917,
+              "draw_start": 26917,
+              "head_before": 160,
+              "minute": 18,
+              "player": 331,
+              "queue": {
+                "code": 25,
+                "index": 161,
+                "player": 331,
+                "secondary": 327,
+                "side": 0
+              },
+              "secondary": 327,
+              "secondary_slot": 7,
+              "seed_after": 6642,
+              "seed_before": 6642,
+              "side": 0,
+              "tick": 675
+            },
+            "text": "D Ginola has possession."
+          },
+          {
+            "native": {
+              "actor_slot": 2,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 11,
+              "draw_end": 26928,
+              "draw_start": 26928,
+              "head_before": 161,
+              "minute": 18,
+              "player": 2582,
+              "queue": {
+                "code": 11,
+                "index": 162,
+                "player": 2582,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 26859,
+              "seed_before": 26859,
+              "side": 1,
+              "tick": 675
+            },
+            "text": "I Pearce goes in for a tackle."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 12,
+              "draw_end": 26931,
+              "draw_start": 26931,
+              "head_before": 162,
+              "minute": 18,
+              "player": 331,
+              "queue": {
+                "code": 12,
+                "index": 163,
+                "player": 331,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 38688,
+              "seed_before": 38688,
+              "side": 0,
+              "tick": 675
+            },
+            "text": "D Ginola gets away from the challenge."
+          },
+          {
+            "native": {
+              "actor_slot": 11,
+              "caller": "0AB9:1DDE",
+              "club": 17,
+              "code": 1,
+              "draw_end": 26992,
+              "draw_start": 26992,
+              "head_before": 163,
+              "minute": 18,
+              "player": 331,
+              "queue": {
+                "code": 1,
+                "index": 164,
+                "player": 331,
+                "secondary": 0,
+                "side": 0
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 19243,
+              "seed_before": 19243,
+              "side": 0,
+              "tick": 676
+            },
+            "text": "D Ginola sends a pass."
+          },
+          {
+            "native": {
+              "actor_slot": 6,
+              "caller": "0AB9:1E4A",
+              "club": 130,
+              "code": 34,
+              "draw_end": 27619,
+              "draw_start": 27619,
+              "head_before": 164,
+              "minute": 18,
+              "player": 2586,
+              "queue": {
+                "code": 34,
+                "index": 165,
+                "player": 2586,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 43024,
+              "seed_before": 43024,
+              "side": 1,
+              "tick": 685
+            },
+            "text": "M Atkins cuts out the ball."
+          },
+          {
+            "native": {
+              "actor_slot": 6,
+              "caller": "0AB9:1DDE",
+              "club": 130,
+              "code": 2,
+              "draw_end": 27669,
+              "draw_start": 27669,
+              "head_before": 165,
+              "minute": 18,
+              "player": 2586,
+              "queue": {
+                "code": 2,
+                "index": 166,
+                "player": 2586,
+                "secondary": 0,
+                "side": 1
+              },
+              "secondary": 0,
+              "secondary_slot": 0,
+              "seed_after": 39842,
+              "seed_before": 39842,
+              "side": 1,
+              "tick": 686
+            },
+            "text": "M Atkins plays a pass."
+          }
+        ],
+        "reserve": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "score": [
+          0,
+          1
+        ],
+        "screen": "History",
+        "selected": "First(0)",
+        "speed": 1
+      }
+    }
+  ],
+  "save_proofs": [],
+  "fresh_process_count": 1,
+  "cancelled_and_closed_workers_reaped": true,
+  "status": "passed",
+  "x11_errors": [],
+  "error": null
+}

@@ -7,9 +7,7 @@ import struct
 import zlib
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
-RECORD_SHA='cde91e4c33dfb0ce488a4adfc2850573cc4fa7d7fc592d3cd39f9adc47dd1702'
-PRODUCER='46115a6cad8c452a39a67c5f93af4fdb833da92b'
-BINARY_SHA='cb77a7af16d0c1f7a98f0ea4d6c1db73734234ce9b7dc72cdd9536318e0cfba0'
+RECORDS={'window-r0001.json': {'sha256': 'cde91e4c33dfb0ce488a4adfc2850573cc4fa7d7fc592d3cd39f9adc47dd1702', 'producer': '46115a6cad8c452a39a67c5f93af4fdb833da92b', 'binary': 'cb77a7af16d0c1f7a98f0ea4d6c1db73734234ce9b7dc72cdd9536318e0cfba0'}, 'window-r0002.json': {'sha256': '4040e45ea89c89ec2c87a06c2d129ea50c8986cdd1e1433b9f067eb3c51d9df0', 'producer': '1874e627e1d77e37522f98308b25fe7c219240d5', 'binary': 'cb77a7af16d0c1f7a98f0ea4d6c1db73734234ce9b7dc72cdd9536318e0cfba0'}}
 FONT_SHA='c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f'
 def digest(raw): return hashlib.sha256(raw).hexdigest()
 
@@ -68,11 +66,12 @@ def native_rgb(data):
 
 
 def verify(path):
-    raw=path.read_bytes();assert digest(raw)==RECORD_SHA
+    pin=RECORDS[path.name]
+    raw=path.read_bytes();assert digest(raw)==pin['sha256']
     r=json.loads(raw)
     assert r['schema']=='native-numbered-pitch-window/1'
     assert r['status']=='passed' and r['error'] is None and not r['x11_errors']
-    assert r['producer']==PRODUCER and r['binary_sha256']==BINARY_SHA and r['font_sha256']==FONT_SHA
+    assert r['producer']==pin['producer'] and r['binary_sha256']==pin['binary'] and r['font_sha256']==FONT_SHA
     assert r['source_research']=='011a341464dfbf4f419cd0eefad8553a37002dca'
     assert r['marker_contract_sha256']==digest((ROOT/'engine/tests/fixtures/scene_codes/provenance.json').read_bytes())
     assert r['runtime']['window_backend']=='software/minifb'
