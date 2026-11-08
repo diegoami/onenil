@@ -107,10 +107,12 @@ pub(super) fn key(c: &mut Cpu, bench: bool, players: bool) -> Result<Option<u16>
     } else {
         (None, None)
     };
+    let (club_base, club_segment) = c.far(c.r[11], 0xD7C2)?;
+    let club_roster_count = c.read(club_segment, club_base.wrapping_add(8048), 8)?;
     let intent = c.replacement.as_mut().unwrap();
     let key = intent.keys.pop_front();
     intent.samples.push(
-        json!({"key":key,"state":state,"selected_slot":selected,"picked":picked,"bench":bench}),
+        json!({"key":key,"state":state,"selected_slot":selected,"picked":picked,"bench":bench,"club_roster_count":club_roster_count}),
     );
     intent.opened = true;
     if key.is_none() {

@@ -61,6 +61,7 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
                 0
             }
             Area::Config if o < 256 && ![0, 1, 2, 0xF2, 0xF6].contains(&o) => layout::CONFIG,
+            Area::Club if o == 8048 => layout::CLUB, // [confirmed:T75] original D14C roster-count baseline
             Area::Counts if o < 4004 => layout::CLUB_COUNTS,
             Area::Results if o < 58 * 176 => layout::HISTORY,
             Area::Fixtures if o < 174 * 176 => 0x80000,
@@ -136,7 +137,7 @@ impl Session {
                 .map_err(|_| "invalid fresh incoming facts")?;
             let mut allowed = support_cells(&facts)?;
             if !edited {
-                // [confirmed:research T75/110665e; acceptance pending] Only
+                // [confirmed:research T75/1187bce; acceptance required] Only
                 // explicitly supplied, authenticated editor input facts enter.
                 // Old no-decision callers supply none and remain unchanged.
                 let editor: Value = serde_json::from_str(include_str!(

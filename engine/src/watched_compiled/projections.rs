@@ -130,11 +130,7 @@ pub(super) fn menu_template(c: &mut Cpu) -> Result<(), String> {
             (template, call),
             (0x22AC, Some((0x0AB9, 0xACA3)))
                 | (0x4924, Some((0x0AB9, 0xACE3)))
-                | (0x1CC0, Some((0x0AB9, 0xCD79)))
-                | (0x1D0E, Some((0x0AB9, 0xCD95)))
-                | (0x1648, Some((0x0AB9, 0xCDA6)))
                 | (0x498C, Some((0x0AB9, 0xCDBB)))
-                | (0x1D24, Some((0x0AB9, 0xCE24)))
                 | (0x1D5E, Some((0x1B55, 0x479F)))
         );
     // [confirmed:T41/final-footer-r0001] E1BF is after all watched ticks.
@@ -577,4 +573,59 @@ pub(super) fn replacement_warning_suffix(c: &mut Cpu) -> Result<(), String> {
     }
     c.df = false;
     c.ret(true, 4)
+}
+
+#[cfg(test)]
+mod replacement_tests {
+    use super::*;
+    fn warning_parent(c: &mut Cpu) -> Result<(), String> {
+        c.push(c.read(0, 0x1000, 8)?)?;
+        c.push(c.r[9])?;
+        c.push(c.read(0, 0x1002, 16)?)?;
+        let ret = c.read(0, 0x1004, 16)?;
+        c.invoke(
+            super::super::action_graph::p_232a_0098,
+            true,
+            0x232A,
+            0x0098,
+            ret,
+        )?;
+        c.ret(false, 0)
+    }
+    #[test]
+    fn false_warning_projects_only_the_exact_non_dialog_source_case() {
+        for (predicate, text, ret, root, success) in [
+            (0, 0xC7CB, 0xC899, 0xD1FC, true),
+            (1, 0xC7CB, 0xC899, 0xD1FC, false),
+            (0, 0xC7E3, 0xC899, 0xD1FC, false),
+            (0, 0xC7CB, 0xC8E3, 0xD1FC, false),
+            (0, 0xC7CB, 0xC899, 0xD1FD, false),
+        ] {
+            let mut c = Cpu::new(crate::role_scores::image(Default::default()));
+            c.r[9] = 0x0AB9;
+            c.r[11] = 0;
+            c.replacement = Some(super::super::interval_replacement::Intent::new(false));
+            for (at, width, value) in [
+                (0xD0BA, 8, 1),
+                (0x1000, 8, predicate),
+                (0x1002, 16, text),
+                (0x1004, 16, ret),
+            ] {
+                c.write(0, at, width, value).unwrap();
+            }
+            let image = c.e.image.clone();
+            let sp = c.r[4];
+            let result = c.invoke(warning_parent, false, 0x0AB9, 0xD1DD, root);
+            assert_eq!(result.is_ok(), success, "{result:?}");
+            assert_eq!(
+                c.e.image, image,
+                "warning projection modified gameplay memory"
+            );
+            if success {
+                assert_eq!(c.r[0] & 255, 0);
+                assert_eq!(c.r[4], sp);
+                assert_eq!(c.r[9], 0x0AB9);
+            }
+        }
+    }
 }
