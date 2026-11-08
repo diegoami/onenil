@@ -743,6 +743,120 @@ impl Playback {
     }
 }
 
+/// [designed:T77] Borrowed rendering contract shared by incomplete and complete playback.
+#[derive(Clone, Copy)]
+pub struct PlaybackView<'a> {
+    pub phase: Phase,
+    pub cursor: usize,
+    pub events: &'a [Event],
+    pub club_names: &'a [String; 2],
+    pub loaded_frames: usize,
+    frame: &'a View,
+    markers: &'a [[u16; 2]],
+}
+impl<'a> PlaybackView<'a> {
+    pub fn view(&self) -> &'a View {
+        self.frame
+    }
+    pub fn markers(&self) -> &'a [[u16; 2]] {
+        self.markers
+    }
+}
+impl Playback {
+    pub fn view_ref(&self) -> PlaybackView<'_> {
+        PlaybackView {
+            phase: self.phase,
+            cursor: self.cursor,
+            events: &self.events,
+            club_names: &self.timeline.club_names,
+            loaded_frames: self.timeline.frames.len(),
+            frame: self.view(),
+            markers: self.markers(),
+        }
+    }
+}
+/// [derived:T76] Only reached frames exist here; the whistle tail is consumed
+/// before exposing the genuine owned interval. No completed result is fabricated.
+pub struct IntervalPlayback {
+    pub timeline: IntervalTimeline,
+    pub phase: Phase,
+    pub cursor: usize,
+    pub events: Vec<Event>,
+}
+impl IntervalPlayback {
+    pub fn new(timeline: IntervalTimeline) -> Result<Self, String> {
+        timeline.validate()?;
+        let events = timeline.setup_events.clone();
+        Ok(Self {
+            timeline,
+            phase: Phase::FirstHalf,
+            cursor: 0,
+            events,
+        })
+    }
+    pub fn view_ref(&self) -> PlaybackView<'_> {
+        PlaybackView {
+            phase: self.phase,
+            cursor: self.cursor,
+            events: &self.events,
+            club_names: &self.timeline.club_names,
+            loaded_frames: self.timeline.frames.len(),
+            frame: if self.cursor == 0 {
+                &self.timeline.initial
+            } else {
+                &self.timeline.frames[self.cursor - 1].view
+            },
+            markers: &self.timeline.marker_rows[self.cursor],
+        }
+    }
+    pub fn step(&mut self, count: usize) -> Result<(), String> {
+        if self.phase != Phase::FirstHalf {
+            return Err("interval playback is paused".into());
+        }
+        for _ in 0..count {
+            let frame = self
+                .timeline
+                .frames
+                .get(self.cursor)
+                .ok_or("incomplete playback ended outside interval")?;
+            self.events.extend(frame.events.clone());
+            self.cursor += 1;
+            if self.cursor == self.timeline.frames.len() {
+                self.phase = Phase::HalfTime;
+                break;
+            }
+        }
+        Ok(())
+    }
+    pub fn attach(self, timeline: Timeline) -> Result<Playback, String> {
+        if self.phase != Phase::HalfTime
+            || self.cursor != self.timeline.frames.len()
+            || !self.timeline.is_prefix_of(&timeline)
+        {
+            return Err("continuation differs from reached interval".into());
+        }
+        let reached = timeline
+            .setup_events
+            .iter()
+            .chain(
+                timeline.frames[..self.cursor]
+                    .iter()
+                    .flat_map(|f| &f.events),
+            )
+            .collect::<Vec<_>>();
+        if self.events.iter().collect::<Vec<_>>() != reached {
+            return Err("reached commentary changed before continuation".into());
+        }
+        Ok(Playback {
+            timeline,
+            phase: Phase::SecondHalf,
+            cursor: self.cursor,
+            events: self.events,
+            full_whistle_seen: false,
+        })
+    }
+}
+
 #[cfg(test)]
 mod marker_tests {
     use super::*;

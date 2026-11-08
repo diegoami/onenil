@@ -2,7 +2,9 @@
 //! [designed] Unsupported actions are diagnosed; they do not invent campaign behavior.
 use crate::{
     editor::{Editor, Location, Panel},
-    timeline::{Phase, Playback, Timeline},
+    timeline::{
+        Completion, IntervalPlayback, IntervalTimeline, Phase, Playback, PlaybackView, Timeline,
+    },
 };
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Screen {
@@ -53,6 +55,10 @@ pub struct Controller {
     pub prepare_requested: bool,
     pub job_id: u64,
     pub playback: Option<Playback>,
+    pub interval_playback: Option<IntervalPlayback>,
+    pub resume_requested: bool,
+    awaiting_continuation: bool,
+    request_campaign: Option<onenil_campaign::Campaign>,
     pub save_requested: bool,
     pub load_requested: bool,
     pub load_entries: Vec<String>,
@@ -79,6 +85,10 @@ impl Default for Controller {
             prepare_requested: false,
             job_id: 0,
             playback: None,
+            interval_playback: None,
+            resume_requested: false,
+            awaiting_continuation: false,
+            request_campaign: None,
             save_requested: false,
             load_requested: false,
             load_entries: Vec::new(),
@@ -94,11 +104,110 @@ impl Default for Controller {
     }
 }
 impl Controller {
+    pub fn match_view(&self) -> Option<PlaybackView<'_>> {
+        self.interval_playback
+            .as_ref()
+            .map(IntervalPlayback::view_ref)
+            .or_else(|| self.playback.as_ref().map(Playback::view_ref))
+    }
+    pub fn is_resuming(&self) -> bool {
+        self.awaiting_continuation
+    }
+    pub fn owns_live_request(&self, id: u64) -> bool {
+        id == self.job_id
+            && !self.exhibition
+            && self.match_ticket.is_some()
+            && self.request_campaign.is_some()
+            && matches!(
+                self.screen,
+                Screen::Preparing
+                    | Screen::Pitch
+                    | Screen::History
+                    | Screen::Bench
+                    | Screen::HalfTime
+            )
+    }
+    fn request_unchanged(&self) -> bool {
+        self.request_campaign.as_ref() == Some(&self.editor.campaign)
+    }
+    fn fixture_matches(&self, clubs: &[u64], names: &[String; 2]) -> bool {
+        clubs.len() == 2
+            && clubs.contains(&u64::from(self.editor.campaign.club.id))
+            && clubs.contains(&u64::from(self.editor.campaign.next_fixture.opponent))
+            && *names
+                == [
+                    self.editor.campaign.club.name.clone(),
+                    self.editor.campaign.next_fixture.opponent_name.clone(),
+                ]
+    }
+    pub fn accept_interval(&mut self, id: u64, prefix: IntervalTimeline) -> bool {
+        if !self.owns_live_request(id)
+            || self.screen != Screen::Preparing
+            || self.awaiting_continuation
+            || self.interval_playback.is_some()
+            || self.playback.is_some()
+        {
+            return false;
+        }
+        if !self.request_unchanged() || !self.fixture_matches(&prefix.clubs, &prefix.club_names) {
+            return self.accept_live_error(id, "interval request/fixture differs".into());
+        }
+        match IntervalPlayback::new(prefix) {
+            Ok(playback) => {
+                self.interval_playback = Some(playback);
+                self.prepare_requested = false;
+                self.screen = Screen::Pitch;
+                true
+            }
+            Err(error) => self.accept_live_error(id, error),
+        }
+    }
+    pub fn accept_continuation(&mut self, id: u64, completion: Completion) -> bool {
+        if !self.owns_live_request(id)
+            || self.screen != Screen::Preparing
+            || !self.awaiting_continuation
+        {
+            return false;
+        }
+        if !self.request_unchanged()
+            || !self.fixture_matches(&completion.timeline.clubs, &completion.timeline.club_names)
+            || completion.timeline.validate_markers().is_err()
+            || completion.native_sha256.len() != 64
+            || !completion
+                .native_sha256
+                .bytes()
+                .all(|b| b.is_ascii_hexdigit())
+        {
+            return self.accept_live_error(id, "completed request/fixture differs".into());
+        }
+        let Some(prefix) = self.interval_playback.take() else {
+            return self.accept_live_error(id, "missing owned interval".into());
+        };
+        match prefix.attach(completion.timeline) {
+            Ok(playback) => {
+                self.playback = Some(playback);
+                self.awaiting_continuation = false;
+                self.resume_requested = false;
+                self.screen = Screen::Pitch;
+                true
+            }
+            Err(error) => self.accept_live_error(id, error),
+        }
+    }
+    pub fn accept_live_error(&mut self, id: u64, error: String) -> bool {
+        if !self.owns_live_request(id) {
+            return false;
+        }
+        eprintln!("live match stopped: {error}");
+        self.clear_match();
+        self.screen = Screen::Preparation;
+        self.message = "Match stopped. Campaign unchanged; retry PLAY GAME.".into();
+        true
+    }
     /// [confirmed:W027,archaeology011a341] History contains only reached actions.
     pub fn history_lines(&self) -> Vec<String> {
-        self.playback
-            .as_ref()
-            .map(|p| crate::history::lines(&p.events))
+        self.match_view()
+            .map(|p| crate::history::lines(p.events))
             .unwrap_or_default()
     }
     pub fn visible_history(&self) -> Vec<String> {
@@ -132,7 +241,11 @@ impl Controller {
         }
     }
     pub fn accept_error(&mut self, id: u64, error: String) -> bool {
-        if id != self.job_id || self.screen != Screen::Preparing {
+        if id != self.job_id
+            || self.screen != Screen::Preparing
+            || self.interval_playback.is_some()
+            || self.awaiting_continuation
+        {
             return false;
         }
         self.match_ticket = None;
@@ -142,7 +255,11 @@ impl Controller {
         true
     }
     pub fn accept_timeline(&mut self, id: u64, timeline: Timeline) -> bool {
-        if id != self.job_id || self.screen != Screen::Preparing {
+        if id != self.job_id
+            || self.screen != Screen::Preparing
+            || self.interval_playback.is_some()
+            || self.awaiting_continuation
+        {
             return false;
         }
         if let Err(error) = timeline.validate_markers() {
@@ -211,6 +328,10 @@ impl Controller {
     pub(crate) fn clear_match(&mut self) {
         self.match_ticket = None;
         self.playback = None;
+        self.interval_playback = None;
+        self.resume_requested = false;
+        self.awaiting_continuation = false;
+        self.request_campaign = None;
         self.prepare_requested = false;
         self.exhibition = false;
     }
@@ -218,17 +339,23 @@ impl Controller {
         if self.screen != Screen::Pitch {
             return;
         }
-        if let Some(p) = self.playback.as_mut() {
-            if let Err(e) = p.step(usize::from(self.speed.saturating_sub(20)).max(1)) {
-                self.message = e;
+        let phase = if let Some(p) = self.interval_playback.as_mut() {
+            p.step(usize::from(self.speed.saturating_sub(20)).max(1))
+                .map(|_| p.phase)
+        } else if let Some(p) = self.playback.as_mut() {
+            p.step(usize::from(self.speed.saturating_sub(20)).max(1))
+                .map(|_| p.phase)
+        } else {
+            return;
+        };
+        match phase {
+            Err(error) => {
+                self.message = error;
                 self.screen = Screen::Bench;
-                return;
             }
-            match p.phase {
-                Phase::HalfTime => self.screen = Screen::HalfTime,
-                Phase::FullTime => self.screen = Screen::FullTime,
-                _ => (),
-            }
+            Ok(Phase::HalfTime) => self.screen = Screen::HalfTime,
+            Ok(Phase::FullTime) => self.screen = Screen::FullTime,
+            _ => (),
         }
     }
     pub fn key(&mut self, key: Key) {
@@ -429,10 +556,28 @@ impl Controller {
                             }
                         };
                         self.playback = None;
+                        self.interval_playback = None;
+                        self.resume_requested = false;
+                        self.awaiting_continuation = false;
+                        self.request_campaign = if self.exhibition {
+                            None
+                        } else {
+                            Some(self.editor.campaign.clone())
+                        };
                         self.job_id += 1;
                         self.prepare_requested = true;
                         self.screen = Screen::Preparing;
                     } else {
+                        if self
+                            .interval_playback
+                            .as_ref()
+                            .is_some_and(|p| p.phase == Phase::HalfTime)
+                        {
+                            self.resume_requested = true;
+                            self.awaiting_continuation = true;
+                            self.screen = Screen::Preparing;
+                            return;
+                        }
                         if let Some(p) = self.playback.as_mut() {
                             if p.phase == Phase::HalfTime {
                                 let _ = p.start_or_continue();
@@ -451,6 +596,11 @@ impl Controller {
                 if key == Key::Escape {
                     self.job_id += 1;
                     self.match_ticket = None;
+                    self.request_campaign = None;
+                    self.interval_playback = None;
+                    self.playback = None;
+                    self.resume_requested = false;
+                    self.awaiting_continuation = false;
                     self.prepare_requested = false;
                     self.screen = Screen::Preparation;
                 }
