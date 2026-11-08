@@ -120,6 +120,19 @@ pub(super) fn menu_template(c: &mut Cpu) -> Result<(), String> {
             | (0x3B82, Some((0x1B55, 0x334F)))
             | (0x3D72, Some((0x0AB9, 0x9FE3)))
     );
+    // [derived:archaeology1d6b5b9,CBF0;232A:052F..0545]
+    // These editor callers use the same proven destination-page-only copy.
+    // Admit them only under the owned fresh replacement controller.
+    let editor_template = c.replacement.is_some()
+        && c.read(c.r[11], 0xD0BA, 8)? == 1
+        && c.call_chain().contains(&(0x0AB9, 0xD1FC))
+        && matches!(
+            (template, call),
+            (0x22AC, Some((0x0AB9, 0xACA3)))
+                | (0x4924, Some((0x0AB9, 0xACE3)))
+                | (0x498C, Some((0x0AB9, 0xCDBB)))
+                | (0x1D5E, Some((0x1B55, 0x479F)))
+        );
     // [confirmed:T41/final-footer-r0001] E1BF is after all watched ticks.
     let footer = template == 0x4B12
         && call == Some((0x0AB9, 0xE1BF))
@@ -128,11 +141,11 @@ pub(super) fn menu_template(c: &mut Cpu) -> Result<(), String> {
         && c.watch_pending.is_none()
         && c.read(c.r[11], 0xD0AE, 16)? == 0;
     if c.watch_trace.is_none()
-        || !((supported && header == 0xDD5C) || footer)
+        || !(((supported || editor_template) && header == 0xDD5C) || footer)
         || header_segment != c.r[11]
         || template_segment != c.r[11]
     {
-        return Err("menu template outside proven presentation caller/page".into());
+        return Err(format!("menu template outside proven presentation caller/page: template={template:04X} header={header:04X} call={call:?} chain={:?}",c.call_chain()));
     }
     c.far(header_segment, header)?; // Requires the admitted typed presentation pointer.
     c.presentation
@@ -379,11 +392,14 @@ pub(super) fn menu_fixture_title(c: &mut Cpu) -> Result<(), String> {
 pub(super) fn continue_menu_key(c: &mut Cpu) -> Result<(), String> {
     let chain = c.call_chain();
     let halftime = chain.ends_with(&[(0x0AB9, 0xD81C), (0x232A, 0x0FA6), (0x232A, 0x09A3)]);
+    let players = chain.ends_with(&[(0x0AB9, 0xCE3D), (0x232A, 0x09A3)]);
     let final_screen = chain.ends_with(&[(0x0AB9, 0xE1C4), (0x232A, 0x09A3)])
         && c.watch_tick > 0
         && c.watch_pending.is_none()
         && c.read(c.r[11], 0xD0AE, 16)? == 0;
-    if c.watch_trace.is_none() || !(halftime || final_screen) {
+    if c.watch_trace.is_none()
+        || !(halftime || final_screen || (players && c.replacement.is_some()))
+    {
         return Err("external menu input outside proven halftime/final controller".into());
     }
     let ss = c.r[10];
@@ -392,7 +408,14 @@ pub(super) fn continue_menu_key(c: &mut Cpu) -> Result<(), String> {
     if c.read(ds, 0xDE8E, 16)? != 0 || c.read(ds, 0xDE8C, 16)? != 0 {
         return Err("external menu input requires empty original key queues".into());
     }
-    let (key, current, intent) = if final_screen {
+    let replacement_key = if c.replacement.is_some() {
+        super::interval_replacement::key(c, halftime, players)?
+    } else {
+        None
+    };
+    let (key, current, intent) = if let Some(key) = replacement_key {
+        (key, None, "interval_replacement")
+    } else if final_screen {
         // [confirmed:T41/final-footer-r0001] Original Week.play presses n;
         // E1C8 uppercases it and E1EA exits the finished match screen.
         (110, None, "finish_match")
@@ -474,4 +497,135 @@ pub(super) fn replacement_announcement(c: &mut Cpu) -> Result<(), String> {
     c.r[4] = c.r[5];
     c.r[5] = c.pop()?;
     c.ret(false, 4)
+}
+
+// [derived:archaeology1d6b5b9,C866;232A:0098..00D2] The original helper
+// copies a warning string even for a false predicate, then returns that same
+// predicate byte. For false only, no dialog is called and all writes are local
+// scratch. The caller immediately tests AL. Never admit a true/unproven dialog.
+pub(super) fn replacement_guard_message(c: &mut Cpu) -> Result<(), String> {
+    c.pc = (0x232A, 0x0098);
+    let sp = c.r[4];
+    let ss = c.r[10];
+    let (text, segment) = c.far(ss, sp.wrapping_add(4))?;
+    let predicate = c.read(ss, sp.wrapping_add(8), 8)?;
+    let call = c.call_chain().last().copied();
+    let local_warning =
+        text == c.r[5].wrapping_sub(0x108) && segment == ss && call == Some((0x0AB9, 0xCA58));
+    let literal_warning = segment == c.code_base.wrapping_add(0x0AB9)
+        && matches!(
+            (text, call),
+            (0xC7CB, Some((0x0AB9, 0xC899)))
+                | (0xC7E3, Some((0x0AB9, 0xC8E3)))
+                | (0xC80E, Some((0x0AB9, 0xC92C)))
+                | (0xC823, Some((0x0AB9, 0xCA07)))
+                | (0xC85D, Some((0x0AB9, 0xCA8E)))
+        );
+    if c.replacement.is_none()
+        || !c.call_chain().contains(&(0x0AB9, 0xD1FC))
+        || c.read(c.r[11], 0xD0BA, 8)? != 1
+        || predicate != 0
+        || !(local_warning || literal_warning)
+    {
+        return Err(format!("replacement warning outside false witnessed guard: text={text:04X} predicate={predicate} call={call:?}"));
+    }
+    c.df = false;
+    c.r[0] &= 0xFF00;
+    c.presentation.push(serde_json::json!({"site":"232A:0098","kind":"false_replacement_guard","text_address":text,"predicate":predicate}));
+    c.ret(true, 6)
+}
+
+// [derived:1d6b5b9,CA2B..CA58;1B55:44DC;26C9:0BD2] With the already
+// computed predicate zero, the local name/suffix string feeds only the false
+// warning above. Retain original stack cleanup; no string output is consumed.
+// Refuse every other caller, buffer or predicate instead of inventing text.
+pub(super) fn replacement_warning_name(c: &mut Cpu) -> Result<(), String> {
+    let ss = c.r[10];
+    let sp = c.r[4];
+    let call = c.call_chain().last().copied();
+    let player = c.read(ss, sp.wrapping_add(4), 16)?;
+    let out = c.far(ss, sp.wrapping_add(6))?;
+    if c.replacement.is_none()
+        || call != Some((0x0AB9, 0xCA49))
+        || !c.call_chain().contains(&(0x0AB9, 0xD1FC))
+        || out != (c.r[5].wrapping_sub(0x108), ss)
+        || player != 2592
+        || c.read(ss, sp.wrapping_add(10), 8)? != 0
+    {
+        return Err("replacement name outside false witnessed warning".into());
+    }
+    c.presentation
+        .push(serde_json::json!({"site":"1B55:44DC","kind":"false_warning_name","player":player}));
+    c.ret(true, 2)
+}
+pub(super) fn replacement_warning_suffix(c: &mut Cpu) -> Result<(), String> {
+    let ss = c.r[10];
+    let sp = c.r[4];
+    let call = c.call_chain().last().copied();
+    if c.replacement.is_none()
+        || call != Some((0x0AB9, 0xCA53))
+        || !c.call_chain().contains(&(0x0AB9, 0xD1FC))
+        || c.far(ss, sp.wrapping_add(4))? != (0xC850, c.code_base.wrapping_add(0x0AB9))
+        || c.far(ss, sp.wrapping_add(8))? != (c.r[5].wrapping_sub(0x108), ss)
+        || c.read(ss, sp.wrapping_add(12), 8)? != 0
+    {
+        return Err("replacement suffix outside false witnessed warning".into());
+    }
+    c.df = false;
+    c.ret(true, 4)
+}
+
+#[cfg(test)]
+mod replacement_tests {
+    use super::*;
+    fn warning_parent(c: &mut Cpu) -> Result<(), String> {
+        c.push(c.read(0, 0x1000, 8)?)?;
+        c.push(c.r[9])?;
+        c.push(c.read(0, 0x1002, 16)?)?;
+        let ret = c.read(0, 0x1004, 16)?;
+        c.invoke(
+            super::super::action_graph::p_232a_0098,
+            true,
+            0x232A,
+            0x0098,
+            ret,
+        )?;
+        c.ret(false, 0)
+    }
+    #[test]
+    fn false_warning_projects_only_the_exact_non_dialog_source_case() {
+        for (predicate, text, ret, root, success) in [
+            (0, 0xC7CB, 0xC899, 0xD1FC, true),
+            (1, 0xC7CB, 0xC899, 0xD1FC, false),
+            (0, 0xC7E3, 0xC899, 0xD1FC, false),
+            (0, 0xC7CB, 0xC8E3, 0xD1FC, false),
+            (0, 0xC7CB, 0xC899, 0xD1FD, false),
+        ] {
+            let mut c = Cpu::new(crate::role_scores::image(Default::default()));
+            c.r[9] = 0x0AB9;
+            c.r[11] = 0;
+            c.replacement = Some(super::super::interval_replacement::Intent::new(false));
+            for (at, width, value) in [
+                (0xD0BA, 8, 1),
+                (0x1000, 8, predicate),
+                (0x1002, 16, text),
+                (0x1004, 16, ret),
+            ] {
+                c.write(0, at, width, value).unwrap();
+            }
+            let image = c.e.image.clone();
+            let sp = c.r[4];
+            let result = c.invoke(warning_parent, false, 0x0AB9, 0xD1DD, root);
+            assert_eq!(result.is_ok(), success, "{result:?}");
+            assert_eq!(
+                c.e.image, image,
+                "warning projection modified gameplay memory"
+            );
+            if success {
+                assert_eq!(c.r[0] & 255, 0);
+                assert_eq!(c.r[4], sp);
+                assert_eq!(c.r[9], 0x0AB9);
+            }
+        }
+    }
 }

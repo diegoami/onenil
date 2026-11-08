@@ -36,6 +36,7 @@ pub(super) struct Cpu {
     pub watch_tick: usize,
     pub watch_entry_yield: bool,
     pub watch_entry_yielded: bool,
+    pub replacement: Option<super::interval_replacement::Intent>,
     pub watch_interval_yield: bool,
     pub watch_interval_yielded: bool,
     pub watch_live_goals: Vec<[u16; 2]>,
@@ -75,6 +76,7 @@ impl Cpu {
             watch_tick: 0,
             watch_entry_yield: false,
             watch_entry_yielded: false,
+            replacement: None,
             watch_interval_yield: false,
             watch_interval_yielded: false,
             watch_live_goals: vec![],
@@ -546,7 +548,15 @@ impl Cpu {
         } else {
             None
         };
-        f(self)?;
+        if (cs, ip) == (0x232A, 0x0098) && self.replacement.is_some() {
+            super::projections::replacement_guard_message(self)?;
+        } else if (cs, ip) == (0x1B55, 0x44DC) && self.replacement.is_some() {
+            super::projections::replacement_warning_name(self)?;
+        } else if (cs, ip) == (0x26C9, 0x0BD2) && self.replacement.is_some() {
+            super::projections::replacement_warning_suffix(self)?;
+        } else {
+            f(self)?;
+        }
         if let Some(mut event) = commentary {
             let head = self.read(self.r[11], 0x380, 16)?;
             if event["head_before"].as_u64() != Some(u64::from(head)) {

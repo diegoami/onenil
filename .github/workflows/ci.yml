@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: diegoami/onenil-archaeology
-          ref: 011a341464dfbf4f419cd0eefad8553a37002dca
+          ref: 5d91e39543e5747cf9f84356512ac1b56228505b
           path: .cache/interval-source
           persist-credentials: false
       - run: python3 tools/generate_interval.py --research-root .cache/interval-source --check
@@ -28,6 +28,10 @@ jobs:
         run: |
           cargo build --manifest-path engine/Cargo.toml --release --locked --example interval_probe
           python3 tools/check_interval.py --probe engine/target/release/examples/interval_probe
+      - name: Verify the original halftime replacement transaction
+        run: |
+          cargo build --manifest-path engine/Cargo.toml --release --locked --example replacement_probe
+          python3 tools/check_interval_replacement.py --research-root .cache/interval-source --probe engine/target/release/examples/replacement_probe
       - run: |
           python3 -m venv .venv
           .venv/bin/python -m pip install maturin==1.16.0

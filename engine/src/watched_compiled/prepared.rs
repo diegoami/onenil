@@ -26,6 +26,7 @@ pub struct Session {
     failed: bool,
     finished: bool,
     interval: bool,
+    profile: Profile,
 }
 fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
     let mut cells = Cells::new();
@@ -55,11 +56,12 @@ fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
                     || (0x8708..0x8716).contains(&o)
                     || (0x935B..0xA51C).contains(&o)
                     || (0xD886..0xD936).contains(&o)
-                    || [0xD084, 0xD09E, 0xD0B6, 0xD0BD, 0xD1C9, 0xE5DD, 0xCF5A, 0xCF5B].contains(&o) =>
+                    || [0x037E, 0xD084, 0xD09E, 0xD0B6, 0xD0BD, 0xD1C9, 0xE5DD, 0xCF5A, 0xCF5B].contains(&o) =>
             {
                 0
             }
             Area::Config if o < 256 && ![0, 1, 2, 0xF2, 0xF6].contains(&o) => layout::CONFIG,
+            Area::Club if o == 8048 => layout::CLUB, // [confirmed:T75] original D14C roster-count baseline
             Area::Counts if o < 4004 => layout::CLUB_COUNTS,
             Area::Results if o < 58 * 176 => layout::HISTORY,
             Area::Fixtures if o < 174 * 176 => 0x80000,
@@ -133,7 +135,23 @@ impl Session {
             .map_err(|_| "invalid fresh incoming witness")?;
             let facts: Vec<ByteFact> = serde_json::from_value(witness["support"].clone())
                 .map_err(|_| "invalid fresh incoming facts")?;
-            let allowed = support_cells(&facts)?;
+            let mut allowed = support_cells(&facts)?;
+            if !edited {
+                // [confirmed:research T75/1187bce; acceptance required] Only
+                // explicitly supplied, authenticated editor input facts enter.
+                // Old no-decision callers supply none and remain unchanged.
+                let editor: Value = serde_json::from_str(include_str!(
+                    "../../tests/fixtures/halftime_replacement/incoming.json"
+                ))
+                .map_err(|_| "invalid fresh editor incoming witness")?;
+                let extra: Vec<ByteFact> = serde_json::from_value(editor["support"].clone())
+                    .map_err(|_| "invalid fresh editor input facts")?;
+                for (at, value) in support_cells(&extra)? {
+                    if allowed.insert(at, value).is_some() {
+                        return Err("duplicate fresh editor input fact".into());
+                    }
+                }
+            }
             if support
                 .iter()
                 .any(|(at, value)| allowed.get(at) != Some(value))
@@ -313,6 +331,7 @@ impl Session {
             failed: false,
             finished: false,
             interval: false,
+            profile,
         };
         out.validate_abi()?;
         Ok(out)
@@ -428,6 +447,37 @@ impl Session {
             "state":self.snapshot()?,"clock":c.watched_clock()?,"regs":c.r,
             "call_chain":c.call_chain(),"ticks":c.watch_tick,"draws":c.draws.len(),"events":c.events.len()}),
         )
+    }
+    /// [confirmed:archaeology1d6b5b9,T74] Only the witnessed fresh Pearce/Gale
+    /// decision is admitted. Original source procedures own every game mutation.
+    pub fn finish_with_interval_replacement(
+        &mut self,
+        cancel_first: bool,
+    ) -> Result<Value, String> {
+        self.interval_observation()?;
+        if self.profile != Profile::Fresh || self.cpu.replacement.is_some() {
+            return Err("replacement requires the witnessed fresh interval".into());
+        }
+        let before = super::interval_replacement::projection(&self.cpu)?;
+        if before["clubs"][1]["id"] != 130
+            || before["clubs"][1]["roster"][1] != 2582
+            || before["clubs"][1]["roster"][11] != 2592
+        {
+            return Err("replacement roster is outside witnessed admission".into());
+        }
+        self.cpu.replacement = Some(super::interval_replacement::Intent::new(cancel_first));
+        let got = self.finish().map_err(|fault| {
+            format!(
+                "{};missing={:?}",
+                fault.fault.message,
+                self.cpu.missing.get()
+            )
+        })?;
+        let intent = self.cpu.replacement.as_ref().unwrap();
+        if !intent.closed || !intent.keys.is_empty() {
+            return Err("original replacement input sequence did not complete".into());
+        }
+        Ok(json!({"match":got,"transaction":intent.samples}))
     }
     /// Continue the already owned source frames through the actual outer return.
     pub fn finish(&mut self) -> Result<Value, watched_match::MatchFault> {

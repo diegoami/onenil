@@ -1,0 +1,45 @@
+{
+  "schema": "native-original-halftime-replacement/1",
+  "producer": "041098c068414a69fc78a8d126e824aee4fffd37",
+  "research_checked_commit": "5d91e39543e5747cf9f84356512ac1b56228505b",
+  "research_tree": "92aef92a23623bcfd35107790bd8ce14df0eee91",
+  "probe_sha256": "77a92edbbc87cab21fbc055f36b5ee45a5627ed0f5ce8694dcdbb32ab541d7d3",
+  "incoming_sha256": "7c2b1f6854f639f26f793ab90548f2be111846bd36e49f4f632eb025ac44dda4",
+  "witness_sha256": "045107d3894c1d449c52207c67c94fced318b9579b4a2b2e41f4bab484bbe7aa",
+  "results": [
+    {
+      "cancel_first": false,
+      "original_first_half": {
+        "ticks": 1765,
+        "draws": 73615,
+        "actions": 388
+      },
+      "ticks": 3672,
+      "draws": 156115,
+      "actions": 743,
+      "actual_return": "0AB9:EBE2",
+      "match_sha256": "175c8ba701636899038a24e5742011c4c43bb6b79a2ff9eb2aecd367e8c6eeba",
+      "transaction_sha256": "46170b71f3d3ebbdba73fcddb884731a8e1985f418d8c301802bf8e6249324ff",
+      "final_sha256": "cdc75c12eb49c03ffb96cab816f82299a27bfd25a0b371d56c761c5abece170a",
+      "elapsed_seconds": 16.526846295000723
+    },
+    {
+      "cancel_first": true,
+      "original_first_half": {
+        "ticks": 1765,
+        "draws": 73615,
+        "actions": 388
+      },
+      "ticks": 3672,
+      "draws": 156115,
+      "actions": 743,
+      "actual_return": "0AB9:EBE2",
+      "match_sha256": "175c8ba701636899038a24e5742011c4c43bb6b79a2ff9eb2aecd367e8c6eeba",
+      "transaction_sha256": "0249b8b4f971a80e091869a8ab7034ab22140ecf02bab79ee70f31762e96695e",
+      "final_sha256": "cdc75c12eb49c03ffb96cab816f82299a27bfd25a0b371d56c761c5abece170a",
+      "elapsed_seconds": 13.208543922999525
+    }
+  ],
+  "status": "passed",
+  "scope": "Original transaction and first-half stream parity; substituted second-half output is native-only, not original full-match parity"
+}
