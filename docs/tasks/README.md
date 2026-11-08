@@ -115,3 +115,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T71 Correct the reviewed desktop launch documentation](T71.md)
 
 - [T72 Original numbered on-pitch player display](T72.md)
+
+- [T73 Original commentary history navigation](T73.md)
