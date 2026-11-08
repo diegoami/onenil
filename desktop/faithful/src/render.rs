@@ -136,20 +136,18 @@ impl Renderer {
             .round() as i32;
         for gy in 0..m.height {
             for gx in 0..m.width {
-                let alpha = bitmap[gy * m.width + gx] as u32;
-                let blend = |shift: u32| -> u32 {
-                    let f = (fg >> shift) & 255;
-                    let b = (bg >> shift) & 255;
-                    (f * alpha + b * (255 - alpha)) / 255
-                };
-                let color = blend(16) << 16 | blend(8) << 8 | blend(0);
-                let tx =
-                    ((gx as i32 + m.xmin) as f32 * 9.0 / m.advance_width.max(1.0)).round() as i32;
-                self.pixel(
-                    px + tx,
-                    py + ascent - m.height as i32 - m.ymin + gy as i32,
-                    color,
-                );
+                // [designed:T70] Keep the font's native columns. Stretching eight
+                // source columns onto nine left gaps and split vertical strokes.
+                let tx = gx as i32 + m.xmin;
+                let ty = ascent - m.height as i32 - m.ymin + gy as i32;
+                if (0..9).contains(&tx) && (0..16).contains(&ty) {
+                    let color = if bitmap[gy * m.width + gx] >= 128 {
+                        fg
+                    } else {
+                        bg
+                    };
+                    self.pixel(px + tx, py + ty, color);
+                }
             }
         }
     }
@@ -679,7 +677,8 @@ impl Renderer {
                     );
                 } else {
                     self.sheet("preparation");
-                    self.roster(c, 57);
+                    self.text(0, 0, "MATCH PREPARATION", CYAN, GROUND, 20);
+                    self.roster(c, 58);
                     self.team_panel(c);
                     self.text(2, 4, &c.editor.campaign.club.name, TEXT, GROUND, 16);
                     self.text(
@@ -690,12 +689,36 @@ impl Renderer {
                         GROUND,
                         16,
                     );
-                    self.text(1, 9, "PLAY GAME", TEXT, GROUND, 17);
+                    // [designed:T70] Replace the actual menu labels, not the
+                    // substitution counter. Static mockup values never select actions.
+                    for (i, label) in [
+                        c.editor.campaign.next_fixture.opponent_name.as_str(),
+                        "Match stats",
+                        "PLAY GAME",
+                        "Change tactics",
+                    ]
+                    .iter()
+                    .enumerate()
+                    {
+                        let selected = i == c.preparation_menu;
+                        self.text(
+                            2,
+                            12 + i * 2,
+                            label,
+                            if selected { GROUND } else { TEXT },
+                            if selected { TEXT } else { GROUND },
+                            16,
+                        );
+                    }
                     self.text(
                         0,
                         24,
-                        "SPACEBAR-Squad  E-separate exhibition  Esc-return",
-                        CYAN,
+                        if c.preparation_menu == 2 {
+                            "Enter: play match   Up/Down: select   Space: squad   Esc: back   E: exhibition"
+                        } else {
+                            "Up/Down: select PLAY GAME   Enter: choose   Space: squad   Esc: back"
+                        },
+                        TEXT,
                         GROUND,
                         80,
                     );
@@ -786,7 +809,12 @@ impl Renderer {
                     0,
                     24,
                     &c.recorded_result_text().unwrap_or_else(|| {
-                        "INS-Information  SPACEBAR-Squad  E-separate exhibition".into()
+                        if c.menu == 0 {
+                            "Enter: start match   Up/Down: select   Space: squad   F7: save"
+                        } else {
+                            "Enter: open selected item   Up/Down: select   Space: squad   F7: save"
+                        }
+                        .into()
                     }),
                     TEXT,
                     GROUND,
