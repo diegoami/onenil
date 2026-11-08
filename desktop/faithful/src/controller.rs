@@ -26,6 +26,10 @@ pub enum Key {
     Down,
     Left,
     Right,
+    PageUp,
+    PageDown,
+    Home,
+    End,
     Enter,
     Escape,
     Space,
@@ -56,6 +60,7 @@ pub struct Controller {
     pub game_name: String,
     pub close_requested: bool,
     pub speed: u8,
+    pub history_top: usize,
     pub exhibition: bool,
     match_ticket: Option<onenil_campaign::MatchTicket>,
     remembered_first: usize,
@@ -81,6 +86,7 @@ impl Default for Controller {
             game_name: "SAVE1".into(),
             close_requested: false,
             speed: 23,
+            history_top: 0,
             exhibition: false,
             match_ticket: None,
             remembered_first: 0,
@@ -88,6 +94,24 @@ impl Default for Controller {
     }
 }
 impl Controller {
+    /// [confirmed:W027,archaeology011a341] History contains only reached actions.
+    pub fn history_lines(&self) -> Vec<String> {
+        self.playback
+            .as_ref()
+            .map(|p| crate::history::lines(&p.events))
+            .unwrap_or_default()
+    }
+    pub fn visible_history(&self) -> Vec<String> {
+        let lines = self.history_lines();
+        let top = self
+            .history_top
+            .min(lines.len().saturating_sub(crate::history::PAGE_LINES));
+        lines
+            .into_iter()
+            .skip(top)
+            .take(crate::history::PAGE_LINES)
+            .collect()
+    }
     fn players(&mut self) {
         self.caller = self.screen;
         self.screen = Screen::Players;
@@ -432,7 +456,13 @@ impl Controller {
                 }
             }
             Screen::Pitch => match key {
-                Key::Space => self.screen = Screen::History,
+                Key::Space => {
+                    self.history_top = self
+                        .history_lines()
+                        .len()
+                        .saturating_sub(crate::history::PAGE_LINES);
+                    self.screen = Screen::History;
+                }
                 Key::Escape | Key::Enter => {
                     self.preparation_menu = 2;
                     self.screen = Screen::Bench;
@@ -441,10 +471,31 @@ impl Controller {
                 Key::Left => self.speed = self.speed.saturating_sub(1).max(1),
                 _ => self.unsupported(),
             },
-            Screen::History => match key {
-                Key::Space | Key::Escape => self.screen = Screen::Pitch,
-                _ => self.unsupported(),
-            },
+            Screen::History => {
+                let end = self
+                    .history_lines()
+                    .len()
+                    .saturating_sub(crate::history::PAGE_LINES);
+                self.history_top = self.history_top.min(end);
+                match key {
+                    Key::Up => self.history_top = self.history_top.saturating_sub(1),
+                    Key::Down => self.history_top = self.history_top.saturating_add(1).min(end),
+                    Key::PageUp => {
+                        self.history_top =
+                            self.history_top.saturating_sub(crate::history::PAGE_LINES)
+                    }
+                    Key::PageDown => {
+                        self.history_top = self
+                            .history_top
+                            .saturating_add(crate::history::PAGE_LINES)
+                            .min(end)
+                    }
+                    Key::Home => self.history_top = 0,
+                    Key::End => self.history_top = end,
+                    Key::Space | Key::Escape => self.screen = Screen::Pitch,
+                    _ => self.unsupported(),
+                }
+            }
             Screen::HalfTime => {
                 self.preparation_menu = 2;
                 self.screen = Screen::Bench;

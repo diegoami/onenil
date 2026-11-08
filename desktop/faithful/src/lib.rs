@@ -3,6 +3,7 @@ pub mod application;
 pub mod campaign_match;
 pub mod controller;
 pub mod editor;
+pub mod history;
 #[cfg(feature = "raster")]
 pub mod render;
 #[cfg(feature = "software")]

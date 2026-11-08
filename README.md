@@ -1561,6 +1561,12 @@ tar -xzf .cache/T37/T37-oracle-r0001.tar.gz -C .cache/T37
 .cache/venv/bin/python tools/replay_watched_action.py --check-private
 ```
 
+During the match, **Space** opens detailed commentary. Use **Up/Down** to scroll a line,
+**Page Up/Page Down** for a page, and **Home/End** for opening/latest actions.
+**Esc** or **Space** returns to the same paused pitch; reopening shows the latest reached
+commentary. The desktop uses18 wrapped lines per page with clamped edges; these viewport
+sizes are presentation choices. It never reveals actions ahead of playback.
+
 ## Native watched actor dispatch
 
 [confirmed: T38 original-parent corpus and margin-r0001] All50 isolated72BB
