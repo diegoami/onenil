@@ -31,7 +31,7 @@ def compare(got,directory):
     if got['final']!=finish['final'] or got['return']!=finish['boundary']:raise ValueError('edited final state/actual return differs')
     return dict(ticks=tick,draws=draw,actions=action,actual_return=got['return'])
 
-def candidate(directory):
+def execute(directory):
     import onenil_engine as native
     session=native.NativePreparedWatchedSession.edited(json.dumps(incoming.request()))
     first=session.snapshot(),session.observation()
@@ -52,12 +52,66 @@ def candidate(directory):
     try:session.step()
     except ValueError:pass
     else:raise ValueError('ended edited session accepted another step')
-    return dict(status='provisional-first-pass-parity',independent_source_acceptance=False,**result)
+    return result
+
+
+def require_acceptance():
+    import edited_watched_reference as reference
+    import edited_lookup_inputs as lookup
+    if reference.RESEARCH_ACCEPTANCE is None or lookup.RESEARCH_ACCEPTANCE is None:
+        raise ValueError('accepted T71 and T73 research merges required for official verification')
+    return reference,lookup
+
+
+def accepted_replay(record=None):
+    reference,lookup=require_acceptance()
+    reference.sources()
+    incoming.request()
+    producer=None
+    if record:
+        import subprocess
+        if subprocess.check_output(['git','status','--porcelain'],cwd=incoming.ROOT,text=True).strip():
+            raise ValueError('commit accepted native producer before retaining official verification')
+        producer=subprocess.check_output(['git','rev-parse','HEAD'],cwd=incoming.ROOT,text=True).strip()
+        record.mkdir(parents=True,exist_ok=False)
+        start=dict(schema='edited-watched-native-verification/1',producer=producer,
+                   original_research=reference.RESEARCH_ACCEPTANCE,lookup_research=lookup.RESEARCH_ACCEPTANCE,
+                   original_index_sha256=reference.PINS['index.json'],
+                   incoming_sha256=incoming.preparation.sha(incoming.FIXTURE.read_bytes()))
+        with (record/'start.json').open('x') as f:json.dump(start,f,indent=2);f.write('\n')
+    try:
+        result=dict(status='passed',independent_source_acceptance=True,**execute(reference.DIRECTORY))
+    except (Exception,KeyboardInterrupt) as error:
+        if record:
+            with (record/'result.json').open('x') as f:json.dump(dict(status='failed',error=f'{type(error).__name__}: {error}'),f,indent=2);f.write('\n')
+        raise
+    if record:
+        with (record/'result.json').open('x') as f:json.dump(result,f,indent=2);f.write('\n')
+        with (record/'manifest.json').open('x') as f:json.dump(dict(files={name:incoming.preparation.sha((record/name).read_bytes()) for name in ('start.json','result.json')}),f,indent=2);f.write('\n')
+    return result
+
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--candidate-directory',type=Path,required=True);p.add_argument('--local-record',type=Path);a=p.parse_args()
-    # This diagnostic deliberately has no accepted-proof/merge claim.
-    result=candidate(a.candidate_directory.resolve())
-    if a.local_record:
-        with a.local_record.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
-    print('PROVISIONAL first-pass comparison only:',json.dumps(result))
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--candidate-directory',type=Path)
+    p.add_argument('--local-record',type=Path)
+    p.add_argument('--import-from',type=Path)
+    p.add_argument('--check',action='store_true')
+    p.add_argument('--replay',action='store_true')
+    p.add_argument('--record',type=Path)
+    a=p.parse_args()
+    if a.candidate_directory:
+        if a.check or a.replay or a.record or a.import_from:p.error('candidate comparison is separate from official verification')
+        result=dict(status='provisional-first-pass-parity',independent_source_acceptance=False,**execute(a.candidate_directory.resolve()))
+        if a.local_record:
+            with a.local_record.open('x') as f:json.dump(result,f,indent=2);f.write('\n')
+        print('PROVISIONAL first-pass comparison only:',json.dumps(result))
+    else:
+        reference,_=require_acceptance()
+        if a.local_record:p.error('--local-record requires candidate mode')
+        if a.record and not a.replay:p.error('--record requires --replay')
+        if a.import_from:reference.import_sources(a.import_from.resolve())
+        if a.check or a.replay:
+            reference.sources();incoming.request()
+            print('PASS accepted complete original/repeat reference and exact input projection')
+        if a.replay:print('PASS accepted edited native full parity:',json.dumps(accepted_replay(a.record)))
