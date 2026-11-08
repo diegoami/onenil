@@ -14,8 +14,20 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt
+      - name: Fetch accepted interval listing
+        uses: actions/checkout@v4
+        with:
+          repository: diegoami/onenil-archaeology
+          ref: 011a341464dfbf4f419cd0eefad8553a37002dca
+          path: .cache/interval-source
+          persist-credentials: false
+      - run: python3 tools/generate_interval.py --research-root .cache/interval-source --check
       - run: cargo fmt --manifest-path engine/Cargo.toml -- --check
       - run: cargo test --manifest-path engine/Cargo.toml --locked
+      - name: Replay the owned interval against both original streams
+        run: |
+          cargo build --manifest-path engine/Cargo.toml --release --locked --example interval_probe
+          python3 tools/check_interval.py --probe engine/target/release/examples/interval_probe
       - run: |
           python3 -m venv .venv
           .venv/bin/python -m pip install maturin==1.16.0

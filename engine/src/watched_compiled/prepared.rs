@@ -25,6 +25,7 @@ pub struct Session {
     cpu: Cpu,
     failed: bool,
     finished: bool,
+    interval: bool,
 }
 fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
     let mut cells = Cells::new();
@@ -311,6 +312,7 @@ impl Session {
             cpu: c,
             failed: false,
             finished: false,
+            interval: false,
         };
         out.validate_abi()?;
         Ok(out)
@@ -369,6 +371,64 @@ impl Session {
     pub fn observation(&self) -> Value {
         json!({"ticks":self.cpu.watch_trace,"draws":self.cpu.draws,"events":self.cpu.events,"regs":self.cpu.r})
     }
+    /// [derived:T74] Retain the original halftime image before bench input.
+    /// No observation or expected state is accepted as a continuation input.
+    pub fn pause_at_interval(&mut self) -> Result<Value, String> {
+        if self.failed || self.finished || self.interval {
+            return Err("prepared session cannot pause in its current phase".into());
+        }
+        let result = (|| {
+            self.validate_abi()?;
+            let c = &mut self.cpu;
+            c.resume_frame(super::match_graph::p_0ab9_7c67, 0x0AB9, 0x7DCB)?;
+            c.resume_frame(super::match_graph::p_0ab9_7dcb, 0x0AB9, 0xE05E)?;
+            c.watch_interval_yield = true;
+            c.watch_interval_yielded = false;
+            let yielded = c.resume_frame(super::match_graph::p_0ab9_e05e, 0x0AB9, 0xE435);
+            if yielded.as_ref().err().map(String::as_str) != Some("native halftime yield")
+                || !c.watch_interval_yielded
+                || c.missing.get().is_some()
+            {
+                return Err(format!(
+                    "prepared interval did not yield: {yielded:?};pc={:?};missing={:?}",
+                    c.pc,
+                    c.missing.get()
+                ));
+            }
+            Ok(())
+        })();
+        self.cpu.watch_interval_yield = false;
+        if let Err(error) = result {
+            self.failed = true;
+            return Err(error);
+        }
+        self.interval = true;
+        let observed = self.interval_observation();
+        if observed.is_err() {
+            self.failed = true;
+        }
+        observed
+    }
+    /// Read only; the caller owns no guest memory or frame setters.
+    pub fn interval_observation(&self) -> Result<Value, String> {
+        let c = &self.cpu;
+        if self.failed
+            || self.finished
+            || !self.interval
+            || c.pc != (0x0AB9, 0x7E4A)
+            || c.call_chain() != [(0x0AB9, 0xE435), (0x0AB9, 0xE064)]
+            || c.r[10] != 0xB000
+            || c.r[11] != 0
+            || c.read(c.r[10], c.r[5].wrapping_add(2), 16)? != 0xE064
+        {
+            return Err("prepared session has no owned interval observation".into());
+        }
+        Ok(
+            json!({"site":"0AB9:7E4A","control":c.read(c.r[11],0xD0BA,8)?,
+            "state":self.snapshot()?,"clock":c.watched_clock()?,"regs":c.r,
+            "call_chain":c.call_chain(),"ticks":c.watch_tick,"draws":c.draws.len(),"events":c.events.len()}),
+        )
+    }
     /// Continue the already owned source frames through the actual outer return.
     pub fn finish(&mut self) -> Result<Value, watched_match::MatchFault> {
         let failure = |message: String| {
@@ -383,11 +443,20 @@ impl Session {
             ));
         }
         let result = (|| -> Result<Value, String> {
-            self.validate_abi()?;
+            if self.interval {
+                self.interval_observation()?;
+            } else {
+                self.validate_abi()?;
+            }
             let c = &mut self.cpu;
-            c.resume_frame(super::match_graph::p_0ab9_7c67, 0x0AB9, 0x7DCB)?;
-            c.resume_frame(super::match_graph::p_0ab9_7dcb, 0x0AB9, 0xE05E)?;
-            c.resume_frame(super::match_graph::p_0ab9_e05e, 0x0AB9, 0xE435)?;
+            if self.interval {
+                c.resume_frame(super::interval_graph::p_0ab9_7e4a, 0x0AB9, 0xE064)?;
+                c.resume_frame(super::interval_graph::p_0ab9_e064, 0x0AB9, 0xE435)?;
+            } else {
+                c.resume_frame(super::match_graph::p_0ab9_7c67, 0x0AB9, 0x7DCB)?;
+                c.resume_frame(super::match_graph::p_0ab9_7dcb, 0x0AB9, 0xE05E)?;
+                c.resume_frame(super::match_graph::p_0ab9_e05e, 0x0AB9, 0xE435)?;
+            }
             if !c.call_chain().is_empty() {
                 return Err("prepared outer continuation retained nested frames".into());
             }
@@ -456,6 +525,9 @@ impl Session {
         }
     }
     pub fn advance(&mut self) -> Result<Value, String> {
+        if self.interval {
+            return Err("prepared caller is paused at its owned interval".into());
+        }
         if self.failed {
             return Err("prepared caller previously failed".into());
         }
