@@ -114,3 +114,11 @@ The edited case computes Blackburn 0–2 PSG with the shared pitch, named action
 history and explicit full-time result/F7 persistence flow. See the
 [T69 window and save proof](../../records/T69/README.md). This adds a second bounded
 playable case; week progression and the final toolkit remain separate work.
+
+[designed: owner,2026-11-08; confirmed:F30/W026 at archaeology011a341]
+On-pitch players should use the original letter/number character, rather than
+invented prototype stick figures. T72 implements the original numbered variant
+using actual stored selectors and display attributes, with an independent G
+keeper-glyph replacement. Sharp typography is retained. See the
+[numbered pitch comparison and declared limits](../../records/T72/README.md).
+Other display variants and original private custom glyph shapes remain separate.

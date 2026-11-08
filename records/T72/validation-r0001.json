@@ -1,0 +1,43 @@
+{
+  "schema": "numbered-pitch-validation/1",
+  "producer": "1874e627e1d77e37522f98308b25fe7c219240d5",
+  "binary_sha256": "cb77a7af16d0c1f7a98f0ea4d6c1db73734234ce9b7dc72cdd9536318e0cfba0",
+  "software_results": 42,
+  "software_log_sha256": "89fc3e5866bdc1ac9acb1b3c64487ff60934a3755b4def15e57d70a8dfb0580a",
+  "before_failed": 1,
+  "malformed_metadata_controls": 3,
+  "native_F30_rule": "keeper/stored-selector/unsigned-wrap cases agree;zero RNG draws",
+  "frame_compatibility": {
+    "frames": 4199,
+    "fields": "Every initial/frame player,coordinate,focus,ball,clock,score and all setup/native events unchanged",
+    "driver_comparison_sha256": "f49834bd3c6be83e1d9a83b25b3bd8e359a9ee3b561517ef15577b0f303082ec",
+    "accepted_python_adapter_sha256": "b09bf018c701ee7235a9f7785724474966c6b10d3d5bd600998babcabb395a93",
+    "log_sha256": "ab7019f104370c5c797c1f2c610632f1c58f76f1c0d4d31bfe9351d7bd80b090"
+  },
+  "windows": [
+    {
+      "record": "window-r0001.json",
+      "sha256": "cde91e4c33dfb0ce488a4adfc2850573cc4fa7d7fc592d3cd39f9adc47dd1702",
+      "screenshots": 4,
+      "native_raster_bindings": 4
+    },
+    {
+      "record": "window-r0002.json",
+      "sha256": "4040e45ea89c89ec2c87a06c2d129ea50c8986cdd1e1433b9f067eb3c51d9df0",
+      "screenshots": 4,
+      "native_raster_bindings": 4
+    }
+  ],
+  "preserved": [
+    "engine",
+    "campaign",
+    "records/T61",
+    "records/T62",
+    "records/T63",
+    "records/T65",
+    "records/T66",
+    "records/T68",
+    "records/T69",
+    "records/T70"
+  ]
+}

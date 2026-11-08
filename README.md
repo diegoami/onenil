@@ -33,6 +33,9 @@ instruction rows and management actions remain unavailable.
 Acknowledge full time to record the computed fixture result, then use F7 to save it.
 Reload retains the recorded score and blocks replay of that completed fixture.
 Week progression is not available yet.
+The pitch uses the original numbered variant (outfield0–9), with an independent
+G keeper-glyph replacement and computed team colours. See the
+[numbered-player proof and limited display-mode scope](records/T72/README.md).
 Arbitrary edited XIs and instruction combinations remain unsupported. This is a tested Linux desktop
 candidate, with several UI/statistics/management gaps; no final toolkit or Windows package is claimed.
 
