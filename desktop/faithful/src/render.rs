@@ -595,27 +595,17 @@ impl Renderer {
                 78,
             );
         } else if c.screen == Screen::History {
-            if let Some(p) = &c.playback {
-                let lines = wrapped(
-                    &p.events
-                        .iter()
-                        .map(|e| format!("{} {}", e.native["minute"], e.text))
-                        .collect::<Vec<_>>()
-                        .join("\n"),
-                    77,
-                );
-                for (i, s) in lines
-                    .iter()
-                    .rev()
-                    .take(18)
-                    .collect::<Vec<_>>()
-                    .into_iter()
-                    .rev()
-                    .enumerate()
-                {
-                    self.text(1, 5 + i, s, TEXT, GROUND, 78);
-                }
+            for (i, line) in c.visible_history().iter().enumerate() {
+                self.text(1, 5 + i, line, TEXT, GROUND, 78);
             }
+            self.text(
+                1,
+                23,
+                "Up/Down: line   PgUp/PgDn: page   Home/End: first/latest",
+                TEXT,
+                GROUND,
+                78,
+            );
             self.text(1, 24, "Space or Esc-return to pitch", TEXT, GROUND, 78);
         } else {
             self.text(
