@@ -13,3 +13,5 @@ pub mod worker;
 
 #[cfg(feature = "egui")]
 pub mod egui_window;
+
+pub mod live_worker;

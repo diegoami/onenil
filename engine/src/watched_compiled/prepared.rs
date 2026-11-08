@@ -448,6 +448,28 @@ impl Session {
             "call_chain":c.call_chain(),"ticks":c.watch_tick,"draws":c.draws.len(),"events":c.events.len()}),
         )
     }
+    /// [derived:T74/T75] Export reached history from the retained real interval.
+    /// This is not a completed match and contains no claimed outer return.
+    pub fn interval_history(&self) -> Result<Value, String> {
+        self.interval_observation()?;
+        let c = &self.cpu;
+        let setup_events = c
+            .events
+            .iter()
+            .filter(|e| e["tick"] == 0)
+            .collect::<Vec<_>>();
+        let events = c
+            .events
+            .iter()
+            .filter(|e| e["tick"] != 0)
+            .collect::<Vec<_>>();
+        Ok(
+            json!({"boundary":"0AB9:7E4A","control":c.read(c.r[11],0xD0BA,8)?,
+            "ticks":c.watch_trace,"draws":c.draws,"events":events,"setup_events":setup_events,
+            "tick_live_goals":c.watch_live_goals,"caller_clocks":c.watch_clocks,
+            "live_goals":[c.read(c.r[11],0xD0C4,8)?,c.read(c.r[11],0xD0C5,8)?]}),
+        )
+    }
     /// [confirmed:archaeology1d6b5b9,T74] Only the witnessed fresh Pearce/Gale
     /// decision is admitted. Original source procedures own every game mutation.
     pub fn finish_with_interval_replacement(
