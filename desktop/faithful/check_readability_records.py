@@ -6,9 +6,9 @@ import json
 import struct
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
-RECORD_SHA = 'PENDING'
-PRODUCER = 'PENDING'
-BINARY_SHA = 'PENDING'
+RECORD_SHA = 'f4cc1385c57f7529c12f56fddb0021374734d69614089b045b9e2c3a02d60182'
+PRODUCER = '5a7091c97a550d49167143b0a5a42a9cc75c0596'
+BINARY_SHA = 'c7d95eee06f939dc4bb294fd26a2a472946fe7f799c283d9a8c3658060c6e431'
 FONT_SHA = 'c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f'
 def digest(raw):
     return hashlib.sha256(raw).hexdigest()
