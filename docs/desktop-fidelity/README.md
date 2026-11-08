@@ -6,6 +6,12 @@ with the UI kept as similar as possible. A generic management dashboard, local
 browser launcher or reskinned synthetic squad is not the destination. The engine
 remains Rust. This direction selects neither a GUI toolkit nor Electron.
 
+[designed: owner clarification, 2026-11-08] Treat the original screens as mockups
+and design references. Visual departures are allowed for clearer, sharper and more
+polished presentation. The older appearance requirements below are subordinate to
+this clarification; preserve information and gameplay semantics rather than
+duplicated glyphs, soft text or obscure start controls.
+
 ## The method to take from goal2
 
 [reference] Inspected goal2 at

@@ -87,3 +87,9 @@ See [the desktop fidelity contract](docs/desktop-fidelity/README.md). The Rust e
 14. **Nothing of the original game in git.** No executable, data, palette, font, save or savestate
     byte, and nothing that embeds them, in this repository or its releases
     (`tools/check_originals.py`).
+
+[designed: owner clarification, 2026-11-08] Original screens are design references
+and mockups, not a directive for total visual conversion. Preserve the recognisable
+look and gameplay/workflow semantics, while allowing visual departures that improve
+readability, sharp typography and polish. Do not reproduce rendering glitches or
+obscure basic actions in pursuit of pixel similarity. Make starting a game clear.
