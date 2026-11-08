@@ -942,3 +942,113 @@ mod refusal_tests {
         }
     }
 }
+
+#[cfg(test)]
+mod readability_tests {
+    use super::*;
+    use crate::controller::Key;
+    fn renderer() -> Renderer {
+        Renderer::new(Path::new(
+            &std::env::var_os("ONENIL_DESKTOP_FONT").expect("verified font"),
+        ))
+        .unwrap()
+    }
+    fn region(r: &Renderer, x: usize, y: usize, w: usize, h: usize) -> Vec<u32> {
+        (y..y + h)
+            .flat_map(|yy| r.pixels[yy * WIDTH + x..yy * WIDTH + x + w].iter().copied())
+            .collect()
+    }
+    #[test]
+    fn readability_glyphs_keep_native_columns_and_stay_in_their_cell() {
+        let mut r = renderer();
+        for ch in ['M', 'W', 'm', '0', '1', 'g', 'Á'] {
+            r.pixels.fill(0x123456);
+            r.cell(4, 3, ch, 0xffffff, 0);
+            let (m, bitmap) = r.font.rasterize(ch, 16.0);
+            let ascent = r.font.horizontal_line_metrics(16.0).unwrap().ascent.round() as i32;
+            let mut expected = vec![0; 9 * 16];
+            for gy in 0..m.height {
+                for gx in 0..m.width {
+                    let x = gx as i32 + m.xmin;
+                    let y = ascent - m.height as i32 - m.ymin + gy as i32;
+                    if (0..9).contains(&x)
+                        && (0..16).contains(&y)
+                        && bitmap[gy * m.width + gx] >= 128
+                    {
+                        expected[y as usize * 9 + x as usize] = 0xffffff;
+                    }
+                }
+            }
+            assert_eq!(region(&r, 36, 48, 9, 16), expected, "native glyph {ch}");
+            for y in 0..HEIGHT {
+                for x in 0..WIDTH {
+                    if !(36..45).contains(&x) || !(48..64).contains(&y) {
+                        assert_eq!(r.pixels[y * WIDTH + x], 0x123456, "glyph escapes {ch}");
+                    }
+                }
+            }
+            for (w, h) in [(1440, 900), (1280, 800)] {
+                assert!(r
+                    .scaled(w, h)
+                    .iter()
+                    .all(|p| [0, 0xffffff, 0x123456, 0x111111].contains(p)));
+            }
+        }
+    }
+    #[test]
+    fn readability_preparation_has_one_play_action_and_aligned_roster() {
+        let mut c = Controller::default();
+        c.key(Key::Enter);
+        let mut actual = renderer();
+        actual.draw(&c);
+        let mut template = renderer();
+        template.sheet("preparation");
+        assert_eq!(
+            region(&actual, 9, 9 * 16, 17 * 9, 16),
+            region(&template, 9, 9 * 16, 17 * 9, 16),
+            "substitution count must not become a duplicate PLAY GAME"
+        );
+        template.text(2, 16, "PLAY GAME", GROUND, TEXT, 16);
+        assert_eq!(
+            region(&actual, 18, 16 * 16, 16 * 9, 16),
+            region(&template, 18, 16 * 16, 16 * 9, 16),
+            "highlight the real selected action"
+        );
+        let mut players = Controller::default();
+        players.key(Key::Space);
+        let mut player_raster = renderer();
+        player_raster.draw(&players);
+        assert_eq!(
+            region(&actual, 57 * 9, 0, 18 * 9, 23 * 16),
+            region(&player_raster, 57 * 9, 0, 18 * 9, 23 * 16),
+            "one roster column layout on both screens"
+        );
+    }
+    #[test]
+    fn readability_start_hints_match_actual_enter_routes() {
+        let mut c = Controller::default();
+        let mut actual = renderer();
+        let mut expected = renderer();
+        for (screen, hint) in [
+            (
+                Screen::Main,
+                "Enter: start match   Up/Down: select   Space: squad   F7: save",
+            ),
+            (
+                Screen::Preparation,
+                "Enter: play match   Up/Down: select   Space: squad   Esc: back   E: exhibition",
+            ),
+        ] {
+            assert_eq!(c.screen, screen);
+            actual.draw(&c);
+            expected.text(0, 24, hint, TEXT, GROUND, 80);
+            assert_eq!(
+                region(&actual, 0, 384, WIDTH, 16),
+                region(&expected, 0, 384, WIDTH, 16)
+            );
+            c.key(Key::Enter);
+        }
+        assert_eq!(c.screen, Screen::Preparing);
+        assert!(c.prepare_requested);
+    }
+}

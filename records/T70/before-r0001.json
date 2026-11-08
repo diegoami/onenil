@@ -1,0 +1,14 @@
+{
+  "schema": "desktop-readability-before/1",
+  "base": "177473be9e442dc10610dcb9d54f1e679f50b11a",
+  "command": "cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --features software --lib readability_tests",
+  "failed": [
+    "native glyph columns and cell bounds",
+    "preparation duplicate play action and roster alignment",
+    "visible start hints"
+  ],
+  "passed": 0,
+  "failed_count": 3,
+  "log_sha256": "4a4efe10f4d365796d355e912cc7b8472720fa997aed1286bad9e448cf215d3f",
+  "test_source_sha256": "b4f2cdab11eb8d83cd2906444216356935f99631da8c66274115c2019ca5dc12"
+}
