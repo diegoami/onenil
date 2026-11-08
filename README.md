@@ -8,7 +8,8 @@ repository; see [docs/artifacts.md](docs/artifacts.md). Rules: [CLAUDE.md](CLAUD
 
 A native desktop feasibility prototype now reproduces the original-style main menu and
 Players interaction, backed by the original saved Blackburn club and complete native save/load.
-The unchanged supplied campaign can now play its PSG friendly with detailed
+The unchanged supplied campaign and exactly its witnessed first-team Pearce/Hendry
+exchange can play the PSG friendly with detailed
 player commentary, clock, score and pitch positions. It runs locally without a browser/server:
 
 ```sh
@@ -18,8 +19,13 @@ cargo run --release --manifest-path desktop/faithful/Cargo.toml --features softw
 
 Space opens Players; Insert switches skills/details; Enter picks/places a player; Escape
 cancels/returns. F7 saves the complete campaign; F9 loads a native save, showing a chooser when several exist. Main-menu Enter opens the actual PSG
-fixture preparation; Enter on PLAY GAME computes that supported fresh match. Changed
-campaigns refuse explicitly. Press E to open the separate fixed native exhibition.
+fixture preparation; Enter on the highlighted PLAY GAME computes the supported match.
+Both the unchanged initial campaign and exactly one first-team Pearce/Hendry exchange
+are admitted, including native save/reload of that state. Every other campaign edit
+refuses before worker launch. To perform the supported exchange from the initial
+main menu, press **Space, Down, Enter, Down, Enter, Esc, Up**; then **Enter twice**
+starts its match. The two Enter presses also start the unchanged case from the
+initial main menu. Press E on preparation for the separate fixed native exhibition.
 See [saved-club state, launch and limits](docs/campaign-state.md).
 Player options now implement Reposition, Club position and the observed goalkeeper
 Positioning cycle under Change tactics. Save/reload retains those edits. Other
@@ -27,8 +33,18 @@ instruction rows and management actions remain unavailable.
 Acknowledge full time to record the computed fixture result, then use F7 to save it.
 Reload retains the recorded score and blocks replay of that completed fixture.
 Week progression is not available yet.
-Campaign edits do not yet have match admission. This is a tested Linux desktop
+Arbitrary edited XIs and instruction combinations remain unsupported. This is a tested Linux desktop
 candidate, with several UI/statistics/management gaps; no final toolkit or Windows package is claimed.
+
+From Windows PowerShell with WSLg, launch the already-built demo with:
+
+```powershell
+wsl --cd /home/diego/projects/onenil-archaeology/.cache/onenil-native --exec ./desktop/faithful/target/release/onenil-desktop --save /tmp/onenil-demo.json
+```
+
+Use your own native checkout path if it differs. The local build/font must exist;
+this launches the Linux desktop through WSLg. See the [current demo controls and
+readability proof](records/T70/README.md).
 
 The earlier technical watched preview remains available for engine evidence. The next product target is [one playable watched match](docs/first-playable.md),
 tracked in [issue35](https://github.com/diegoami/onenil/issues/35):choose a supported
