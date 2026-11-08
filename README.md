@@ -19,7 +19,7 @@ cargo run --release --manifest-path desktop/faithful/Cargo.toml --features softw
 
 Space opens Players; Insert switches skills/details; Enter picks/places a player; Escape
 cancels/returns. F7 saves the complete campaign; F9 loads a native save, showing a chooser when several exist. Main-menu Enter opens the actual PSG
-fixture preparation; Enter on the highlighted PLAY GAME computes the supported match.
+fixture preparation; Enter on the highlighted PLAY GAME starts the supported match.
 Both the unchanged initial campaign and exactly one first-team Pearce/Hendry exchange
 are admitted, including native save/reload of that state. Every other campaign edit
 refuses before worker launch. To perform the supported exchange from the initial
@@ -33,6 +33,14 @@ instruction rows and management actions remain unavailable.
 Acknowledge full time to record the computed fixture result, then use F7 to save it.
 Reload retains the recorded score and blocks replay of that completed fixture.
 Week progression is not available yet.
+
+Campaign play now uses the live halftime flow. Space opens reached commentary;
+Esc or Enter opens the bench. At HALF TIME, press a key to review the bench,
+then Enter on PLAY GAME to continue the same match into its second half.
+Reached commentary and pitch state are preserved across Continue. Player
+changes during a watched match are not enabled yet. See the
+[live desktop flow and real-window checks](records/T77/README.md).
+
 The pitch uses the original numbered variant (outfield0–9), with an independent
 G keeper-glyph replacement and computed team colours. See the
 [numbered-player proof and limited display-mode scope](records/T72/README.md).

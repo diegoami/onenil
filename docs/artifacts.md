@@ -34,3 +34,14 @@ shared with (it sees nothing else), never the owner's own token.
 
 rclone's shared Google Drive client_id is being retired during 2026: give the remote its own
 client_id (`client_id`/`client_secret`, https://rclone.org/drive/#making-your-own-client-id) before then.
+
+
+## Private recovery and public checkpoints
+
+[designed:T79, following the owner's T75 redaction] Keep private backup transport
+identifiers and their metadata in ignored local recovery notes. Public
+checkpoints summarize status and link published PRs; they do not copy those
+private handles. Scientific record digests remain part of source authentication.
+The owner-authorized T75 metadata redaction applied to current files while
+preserving history; it is not a general exception to immutable scientific run
+records. See [the T75 boundary](../records/T75/README.md).

@@ -41,12 +41,12 @@ python3 tools/check_live_worker.py --probe desktop/faithful/target/release/examp
 # A clean producer can retain a fresh receipt with --record NEW_PATH.
 ```
 
-**Limits:** backend transport only. The application/controller still use the old
-complete worker; no desktop substitution controls or saved roster changes are
-enabled. Subsequent integration must retain the child across pitch/bench/history,
-consume the reached tail between halftime whistle and actual interval, and keep
-existing exactly-once score tickets. Original post-match roster persistence needs
-source authentication before saved substitutions are enabled. No original
-substituted full-match parity or Windows-specific runtime proof is claimed.
-Owner demo windows and unsaved state are preserved. No original capture or
-private artifact upload is needed by this task.
+**Scope at T76 acceptance:** backend transport only. The application/controller
+then used the old complete worker; [T77](../T77/README.md) subsequently connected
+the live worker to desktop pitch, bench, history and halftime Continue. This
+transport proof does not establish managed player selection or saved-roster
+mutation. Original post-match roster persistence requires source authentication
+before saved substitutions are enabled. No original substituted full-match
+parity or Windows-specific runtime proof is claimed. Owner demo windows and
+unsaved state were preserved. No original capture or private artifact upload was
+needed by this task.
