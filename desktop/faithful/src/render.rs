@@ -922,7 +922,7 @@ mod refusal_tests {
         controller.key(Key::Enter);
         assert_eq!(controller.screen, Screen::Preparation);
         assert!(!controller.prepare_requested);
-        let expected = "Only the unchanged initial campaign can play. Reload the original save.";
+        let expected = crate::campaign_match::REFUSAL;
         assert!(expected.len() <= 80);
         let mut actual = Renderer::new(Path::new(&font)).unwrap();
         actual.draw(&controller);

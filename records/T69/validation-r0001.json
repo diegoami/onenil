@@ -1,0 +1,47 @@
+{
+  "schema": "edited-desktop-validation/1",
+  "implementation": "969f499076fd97fdb735249c4b8accb8746077ce",
+  "capture_sha256": "dc7238c5f11edba68be573327b887118d79cd9d77a8c7fafb6ceeacea07d730c",
+  "source_verification_sha256": "8c6cea86100e1062c0478a3f437cf4185e25209a900ef55755e4c16788caaea4",
+  "software": {
+    "command": "ONENIL_DESKTOP_FONT=<verified replacement font> cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --features software",
+    "passed": 35,
+    "log_sha256": "4a5b89995d88729f862ca656affe2c560652a8e2bad707ee8e5f949b0585152c"
+  },
+  "public_proof": {
+    "passed": true,
+    "steps": 26,
+    "screenshots": 12,
+    "saves": 3,
+    "fresh_processes": 3,
+    "raster_bindings": 5,
+    "corruption_controls": 9
+  },
+  "original_scan": {
+    "original_sources": 37,
+    "files": 26,
+    "bytes": 652923,
+    "status": "passed"
+  },
+  "preservation": {
+    "unchanged": [
+      "engine",
+      "records/T61",
+      "records/T62",
+      "records/T63",
+      "records/T65",
+      "records/T66",
+      "records/T68"
+    ]
+  },
+  "score": {
+    "managed_club": 130,
+    "opponent": 17,
+    "displayed": [
+      0,
+      2
+    ],
+    "goal_event_club": 17,
+    "expected_score_injected": false
+  }
+}

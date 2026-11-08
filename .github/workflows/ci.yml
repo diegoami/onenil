@@ -40,4 +40,5 @@ jobs:
       - run: python3 tools/check_originals.py
       - run: python3 desktop/faithful/export_match_names.py --check
       - run: python3 desktop/faithful/check_match_records.py records/T62/window-r0003.json
+      - run: python3 desktop/faithful/check_edited_result_records.py records/T69/window-r0001.json
       - run: cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked

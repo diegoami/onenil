@@ -144,7 +144,7 @@ pub fn compute(root: &Path) -> Result<Timeline, String> {
     compute_input(
         fixture["input"].clone(),
         &metadata["players"],
-        false,
+        None,
         [130, 134],
         ["Blackburn R".into(), "Sheffield Wed".into()],
     )
@@ -163,7 +163,7 @@ pub fn compute_campaign(campaign: &onenil_campaign::Campaign) -> Result<Timeline
     compute_input(
         serde_json::to_value(input).map_err(|error| error.to_string())?,
         &metadata["players"],
-        true,
+        Some(crate::campaign_match::profile(campaign)?),
         display_clubs.map(u64::from),
         [first?, second?],
     )
@@ -171,7 +171,7 @@ pub fn compute_campaign(campaign: &onenil_campaign::Campaign) -> Result<Timeline
 fn compute_input(
     input: Value,
     names: &Value,
-    fresh: bool,
+    profile: Option<crate::campaign_match::Profile>,
     display_clubs: [u64; 2],
     club_names: [String; 2],
 ) -> Result<Timeline, String> {
@@ -187,10 +187,15 @@ fn compute_input(
     let messages: Vec<(String, String)> =
         serde_json::from_str(include_str!("../messages.json")).map_err(|e| e.to_string())?;
     let input = serde_json::from_value(input).map_err(|e| e.to_string())?;
-    let mut session = if fresh {
-        onenil_engine::watched_compiled::prepared::Session::new_fresh(input)?
-    } else {
-        onenil_engine::watched_compiled::prepared::Session::new(input)?
+    let fresh = profile.is_some();
+    let mut session = match profile {
+        Some(crate::campaign_match::Profile::Original) => {
+            onenil_engine::watched_compiled::prepared::Session::new_fresh(input)?
+        }
+        Some(crate::campaign_match::Profile::Edited) => {
+            onenil_engine::watched_compiled::prepared::Session::new_edited(input)?
+        }
+        None => onenil_engine::watched_compiled::prepared::Session::new(input)?,
     };
     let initial = session.snapshot()?;
     let observation = session.observation();
