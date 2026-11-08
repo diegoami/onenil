@@ -42,7 +42,9 @@ python3 desktop/faithful/check_live_desktop_records.py records/T77/window-r0003.
 python3 desktop/faithful/check_live_desktop_records.py records/T77/window-r0004.json
 ```
 
-Both software and egui adapters compile. Current owner windows and unsaved state
+Both software and egui adapters compile. The egui adapter also polls while it
+owns a worker on paused screens, allowing failure/reaping without advancing
+playback. Current owner windows and unsaved state
 are preserved; isolated capture windows/displays are closed. No original game
 capture or private upload is needed. Full exact-head CI and checked-tree equality
 remain mandatory before squash.
