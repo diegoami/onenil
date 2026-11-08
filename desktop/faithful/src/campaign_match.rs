@@ -1,24 +1,42 @@
 //! [derived:T65/T66/T68] The exact supplied campaign owns this fresh match request.
-//! [designed] Unsupported edits refuse before a worker starts; no result transaction.
+//! [designed] Supported profile chosen from owned campaign; foreign edits refuse before a worker.
 use onenil_campaign::Campaign;
 use onenil_engine::watched_compiled::prepared::Input;
 use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 
-pub fn validate(campaign: &Campaign) -> Result<(), String> {
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Profile {
+    Original,
+    Edited,
+}
+
+pub const REFUSAL: &str = "Use original team or swap Pearce and Hendry. Reload the original save.";
+
+pub fn profile(campaign: &Campaign) -> Result<Profile, String> {
     campaign.validate()?;
     if campaign.played_fixture.is_some() {
         return Err(
             "This fixture already has a result. Week progression is not available yet.".into(),
         );
     }
-    let initial = Campaign::initial()?;
-    if campaign != &initial {
-        return Err(
-            "Only the unchanged initial campaign can play. Reload the original save.".into(),
-        );
+    let mut initial = Campaign::initial()?;
+    if campaign == &initial {
+        return Ok(Profile::Original);
     }
-    Ok(())
+    // [confirmed:T69 original keys;T68 full parity] One exact owned edit.
+    initial.exchange(
+        onenil_campaign::Location::First(1),
+        onenil_campaign::Location::First(2),
+    )?;
+    if campaign == &initial {
+        return Ok(Profile::Edited);
+    }
+    Err(REFUSAL.into())
+}
+
+pub fn validate(campaign: &Campaign) -> Result<(), String> {
+    profile(campaign).map(|_| ())
 }
 
 pub fn metadata() -> Result<Value, String> {
@@ -32,15 +50,19 @@ pub fn metadata() -> Result<Value, String> {
 }
 
 pub fn admission(campaign: &Campaign) -> Result<Input, String> {
-    validate(campaign)?;
-    let source: Value = serde_json::from_str(include_str!(
-        "../../../engine/tests/fixtures/fresh_preparation/admission.json"
-    ))
-    .map_err(|error| error.to_string())?;
-    let support: Value = serde_json::from_str(include_str!(
-        "../../../engine/tests/fixtures/fresh_watched/incoming.json"
-    ))
-    .map_err(|error| error.to_string())?;
+    let profile = profile(campaign)?;
+    let (source_raw, support_raw) = match profile {
+        Profile::Original => (
+            include_str!("../../../engine/tests/fixtures/fresh_preparation/admission.json"),
+            include_str!("../../../engine/tests/fixtures/fresh_watched/incoming.json"),
+        ),
+        Profile::Edited => (
+            include_str!("../../../engine/tests/fixtures/edited_preparation/admission.json"),
+            include_str!("../../../engine/tests/fixtures/edited_watched/incoming.json"),
+        ),
+    };
+    let source: Value = serde_json::from_str(source_raw).map_err(|e| e.to_string())?;
+    let support: Value = serde_json::from_str(support_raw).map_err(|e| e.to_string())?;
     let mut input: Input = serde_json::from_value(json!({
         "preparation":source["input"], "support":support["support"], "no_pending_key":true
     }))
