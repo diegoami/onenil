@@ -99,3 +99,12 @@ Escape returns with Players selected; Enter opens Players again. Up then selects
 GAME. T67 replays all eight original UI stages and checks visible selected-player, carry,
 first-team roster, screen and main selection against the pinned source record. Preparation's
 Players caller, remembered player and carried-player cancellation keep their existing semantics.
+
+[confirmed: native T68 at 38273d2, archaeology T71 at 011a341; designed:T69]
+The desktop now admits the initial campaign and exactly the witnessed Pearce/Hendry
+exchange, including native save/reload. It selects each case's pinned preparation,
+support and Rust caller. Arbitrary further edits still refuse before worker launch.
+The edited case computes Blackburn 0–2 PSG with the shared pitch, named action
+history and explicit full-time result/F7 persistence flow. See the
+[T69 window and save proof](../../records/T69/README.md). This adds a second bounded
+playable case; week progression and the final toolkit remain separate work.

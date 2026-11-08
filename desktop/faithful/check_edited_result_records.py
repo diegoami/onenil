@@ -4,17 +4,27 @@ import argparse
 import copy
 import json
 import struct
+from functools import lru_cache
 from pathlib import Path
 from check_match_records import ROOT, digest
 from check_refusal_records import native_rgb
-RECORD_SHA = 'PENDING'
-PRODUCER = 'PENDING'
+RECORD_SHA = 'dc7238c5f11edba68be573327b887118d79cd9d77a8c7fafb6ceeacea07d730c'
+PRODUCER = '969f499076fd97fdb735249c4b8accb8746077ce'
+BINARY_SHA = '2103092e5925ee25fb51d95ef3d610baedef862e65396b61634050a0f2c468bf'
 REFUSAL = 'This fixture already has a result. Week progression is not available yet.'
+
+
+
+@lru_cache(maxsize=1)
+def original_ui():
+    raw = (ROOT/'records/T66/source-r0001/admission-r0002.json').read_bytes()
+    assert digest(raw)=='45ca77eda64349d90700eb3983f6c725b5308e0dcf87c8a788bb081fde3ab627'
+    return json.loads(raw)['payload']['ui']
 
 
 def check(record, initial_raw, edited_raw, completed_raw):
     assert record['producer'] == PRODUCER
-    assert len(record['binary_sha256'])==64 and all(c in '0123456789abcdef' for c in record['binary_sha256'])
+    assert record['binary_sha256'] == BINARY_SHA
     assert record['schema'] == 'native-edited-campaign-result-window/1'
     assert record['status'] == 'passed' and not record['error'] and not record['x11_errors']
     assert record['fresh_process_count'] == 3
@@ -47,10 +57,19 @@ def check(record, initial_raw, edited_raw, completed_raw):
     for name in original_steps: assert steps[name]['campaign'] == initial, name
     for name in edit_steps: assert steps[name]['campaign'] == edited, name
     assert steps['original-players']['screen']=='Players' and steps['original-players']['selected']=='First(0)'
-    for name,selected,carried in [('select-pearce','First(1)',None),('carry-pearce','First(1)',2582),('select-hendry','First(2)',2582),('exchange-players','First(1)',None)]:
+    for name,selected,carried in [('select-pearce','First(1)',None),('carry-pearce','First(1)',2582),('select-hendry','First(2)',2582),('exchange-players','First(2)',None)]:
         assert steps[name]['selected']==selected and steps[name]['carried']==carried
     assert steps['players-return']['menus'][0]==1 and steps['play-next-selected']['menus'][0]==0
     assert steps['edited-process-reload']['worker_absent'] is True and steps['edited-process-reload']['frames'] is None
+    ui_steps = ['initial-campaign','original-players','select-pearce','carry-pearce','select-hendry','exchange-players','players-return','play-next-selected']
+    for source, name in zip(original_ui(), ui_steps, strict=True):
+        state = steps[name]
+        assert [p or 0 for p in state['first']] == source['roster']
+        assert (state['carried'] is not None) == source['put_here']
+        if source['menu'] is not None:
+            assert state['screen']=='Main' and state['menus'][0]=={'PLAY NEXT GAME':0,'Players':1}[source['menu']]
+        else:
+            assert state['screen']=='Players' and state['card']==source['selected_player']
     final = steps['full-time']
     assert (final['screen'],final['phase'],final['frames'],final['events'],final['score']) == ('FullTime','FullTime',3970,870,[0,2])
     expected = copy.deepcopy(edited)
