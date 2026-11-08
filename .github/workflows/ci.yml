@@ -54,3 +54,4 @@ jobs:
           ONENIL_DESKTOP_FONT="$PWD/.cache/T51-font/PxPlus_IBM_VGA_8x16.ttf" cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --features raster --lib --test history
       - run: python3 desktop/faithful/check_numbered_pitch_records.py records/T72/window-r0001.json
       - run: python3 desktop/faithful/check_numbered_pitch_records.py records/T72/window-r0002.json
+      - run: python3 desktop/faithful/check_history_records.py records/T73/window-r0001.json
