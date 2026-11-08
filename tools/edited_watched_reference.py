@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / 'records/T68/reference-r0001'
-RESEARCH_ACCEPTANCE = None  # Set only after the pinned T71 research merge.
+RESEARCH_ACCEPTANCE = '011a341464dfbf4f419cd0eefad8553a37002dca'  # Accepted T71.
 PINS = {
     'index.json':'2a5a3d84b9c5e8c8419db23dfd8dbaa1c335a3e3318c01abb426e60b1216fba9',
     'start.json':'124fe90298175e0f29c369580ecd5b663fec5cc0830c9da540db98beca627258',

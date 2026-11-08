@@ -70,6 +70,9 @@ def accepted_replay(record=None):
     producer=None
     if record:
         import subprocess
+        from onenil_engine import onenil_engine as core
+        if core.__debug_assertions__:
+            raise ValueError('release extension required for retained official verification')
         if subprocess.check_output(['git','status','--porcelain'],cwd=incoming.ROOT,text=True).strip():
             raise ValueError('commit accepted native producer before retaining official verification')
         producer=subprocess.check_output(['git','rev-parse','HEAD'],cwd=incoming.ROOT,text=True).strip()
@@ -77,6 +80,8 @@ def accepted_replay(record=None):
         start=dict(schema='edited-watched-native-verification/1',producer=producer,
                    original_research=reference.RESEARCH_ACCEPTANCE,lookup_research=lookup.RESEARCH_ACCEPTANCE,
                    original_index_sha256=reference.PINS['index.json'],
+                   extension_sha256=incoming.preparation.sha(Path(core.__file__).read_bytes()),
+                   cargo_lock_sha256=incoming.preparation.sha((incoming.ROOT/'engine/Cargo.lock').read_bytes()),
                    incoming_sha256=incoming.preparation.sha(incoming.FIXTURE.read_bytes()))
         with (record/'start.json').open('x') as f:json.dump(start,f,indent=2);f.write('\n')
     try:
