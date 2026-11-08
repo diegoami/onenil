@@ -109,6 +109,7 @@ with tempfile.TemporaryDirectory(prefix='T72-window-') as directory:
   key('Return');step('preparation',lambda s:s.get('screen')=='Preparation')
   key('Return');s=step('worker',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'));worker_pids.append(s['worker_pid'])
   step('pitch',lambda s:s.get('screen')=='Pitch' and s.get('players')==22,180)
+  wait(lambda s:s.get('screen')=='Pitch' and s.get('frames',0)>=500,30)
   for _ in range(23):key('Left',0)
   step('slow-numbered-pitch',lambda s:s.get('screen')=='Pitch' and s.get('speed')==1 and len(s.get('pitch_markers',[]))==22)
   paired_shots('pitch')

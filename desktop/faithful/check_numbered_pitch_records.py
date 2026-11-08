@@ -7,9 +7,9 @@ import struct
 import zlib
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
-RECORD_SHA='PENDING'
-PRODUCER='PENDING'
-BINARY_SHA='PENDING'
+RECORD_SHA='cde91e4c33dfb0ce488a4adfc2850573cc4fa7d7fc592d3cd39f9adc47dd1702'
+PRODUCER='46115a6cad8c452a39a67c5f93af4fdb833da92b'
+BINARY_SHA='cb77a7af16d0c1f7a98f0ea4d6c1db73734234ce9b7dc72cdd9536318e0cfba0'
 FONT_SHA='c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f'
 def digest(raw): return hashlib.sha256(raw).hexdigest()
 
