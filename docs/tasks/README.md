@@ -111,3 +111,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T69 Verified edited campaign in the faithful desktop](T69.md)
 
 - [T70 Clear desktop text and discoverable match start](T70.md)
+
+- [T71 Correct the reviewed desktop launch documentation](T71.md)

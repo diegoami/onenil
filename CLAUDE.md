@@ -93,3 +93,9 @@ and mockups, not a directive for total visual conversion. Preserve the recognisa
 look and gameplay/workflow semantics, while allowing visual departures that improve
 readability, sharp typography and polish. Do not reproduce rendering glitches or
 obscure basic actions in pursuit of pixel similarity. Make starting a game clear.
+
+[designed: owner clarification, 2026-11-08] Preserve the original game's look and
+feel when polishing it. In particular, the owner wants original-style letters and
+numbers for on-pitch players, rather than the prototype's stick figures. Verify
+the original marker assignment and colours from the captured game; sharper text
+and clearer controls remain allowed.
