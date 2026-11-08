@@ -46,6 +46,51 @@ pub struct Timeline {
     pub clock_rows: usize,
     pub seed: u64,
     pub clubs: Vec<u64>,
+    /// [derived:F30] Initial, then one row per computed frame. Each pair is
+    /// stored selector and original display attribute, in view-player order.
+    pub marker_rows: Vec<Vec<[u16; 2]>>,
+}
+impl Timeline {
+    pub fn validate_markers(&self) -> Result<(), String> {
+        if self.marker_rows.len() != self.frames.len() + 1 {
+            return Err("Match display data is incomplete.".into());
+        }
+        for (row, view) in self
+            .marker_rows
+            .iter()
+            .zip(std::iter::once(&self.initial).chain(self.frames.iter().map(|f| &f.view)))
+        {
+            if row.len() != view.players.len()
+                || row.len() != 22
+                || row.iter().flatten().any(|v| *v > 255)
+            {
+                return Err("Match display data is invalid.".into());
+            }
+        }
+        Ok(())
+    }
+}
+/// [derived:F30,archaeology011a341,0AB9:0207/02D7] Mode4 numbers.
+/// [designed:T72] G replaces the private custom keeper glyph1 independently.
+pub fn numbered_marker(selector: u16) -> char {
+    if matches!(selector, 1 | 12) {
+        'G'
+    } else {
+        char::from((selector.wrapping_sub(1) % 11 + 47) as u8)
+    }
+}
+fn marker_row(snapshot: &Value) -> Result<Vec<[u16; 2]>, String> {
+    a(&snapshot["scenes"])?
+        .iter()
+        .map(|scene| {
+            let selector = n(&scene["byte7"])?;
+            let word = n(&scene["word4"])?;
+            if selector > 255 || word > 65535 {
+                return Err("Invalid computed marker fields.".into());
+            }
+            Ok([selector as u16, (word >> 8) as u16])
+        })
+        .collect()
 }
 fn n(v: &Value) -> Result<u64, String> {
     v.as_u64()
@@ -263,6 +308,7 @@ fn compute_input(
         return Err("incomplete native score observations".into());
     }
     let mut frames = Vec::new();
+    let mut marker_rows = vec![marker_row(&initial)?];
     for (t, g) in ticks.iter().zip(goals) {
         let clock = clocks
             .get(&n(&t["tick"])?)
@@ -275,6 +321,7 @@ fn compute_input(
         {
             return Err("event newer than observed clock".into());
         }
+        marker_rows.push(marker_row(&t["after"])?);
         frames.push(Frame {
             view: view(&t["after"], &score(g)?, clock, names, &player_clubs, &clubs)?,
             events: actions,
@@ -306,6 +353,7 @@ fn compute_input(
         clock_rows: clocks.len(),
         seed,
         clubs,
+        marker_rows,
     })
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -332,6 +380,13 @@ impl Playback {
             cursor: 0,
             events: Vec::new(),
         }
+    }
+    pub fn markers(&self) -> &[[u16; 2]] {
+        self.timeline
+            .marker_rows
+            .get(self.cursor)
+            .map(Vec::as_slice)
+            .unwrap_or(&[])
     }
     pub fn view(&self) -> &View {
         if self.cursor == 0 {
@@ -385,5 +440,41 @@ impl Playback {
         self.events.clear();
         self.full_whistle_seen = false;
         self.phase = Phase::Ready;
+    }
+}
+
+#[cfg(test)]
+mod marker_tests {
+    use super::*;
+    #[test]
+    fn marker_projection_reads_stored_selector_and_computed_attribute() {
+        let source = serde_json::json!({"scenes":[{"index":1,"byte7":20,"word4":0x0941}]});
+        assert_eq!(marker_row(&source).unwrap(), vec![[20, 9]]);
+        assert!(marker_row(&serde_json::json!({"scenes":[{"byte7":256,"word4":1}]})).is_err());
+        assert!(marker_row(&serde_json::json!({"scenes":[{"byte7":1,"word4":65536}]})).is_err());
+    }
+    #[test]
+    fn numbered_labels_agree_with_existing_original_native_rule() {
+        let source = include_str!("../../../engine/tests/fixtures/scene_codes/cases.jsonl");
+        let original: Value = source
+            .lines()
+            .map(|s| serde_json::from_str::<Value>(s).unwrap())
+            .find(|v| v["stream"] == "parents")
+            .unwrap();
+        let mut input: onenil_engine::scene_codes::State =
+            serde_json::from_value(original["input"].clone()).unwrap();
+        input.mode = 4;
+        for selector in [0, 1, 2, 3, 11, 12, 13, 22, 255] {
+            input.scenes[2].byte7 = selector;
+            let result = onenil_engine::scene_codes::refresh(&input).unwrap();
+            assert!(result.draws.is_empty());
+            let code = result.output.scenes[2].byte4;
+            let expected = if code == 1 { 'G' } else { char::from(code) };
+            assert_eq!(
+                numbered_marker(u16::from(selector)),
+                expected,
+                "stored selector{selector}"
+            );
+        }
     }
 }

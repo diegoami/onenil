@@ -151,6 +151,35 @@ impl Renderer {
             }
         }
     }
+    fn pitch_glyph(&mut self, px: i32, py: i32, ch: char, color: u32) {
+        let (m, bitmap) = self
+            .glyphs
+            .entry(ch)
+            .or_insert_with(|| self.font.rasterize(ch, 16.0))
+            .clone();
+        let ascent = self
+            .font
+            .horizontal_line_metrics(16.0)
+            .map_or(12.0, |m| m.ascent)
+            .round() as i32;
+        for gy in 0..m.height {
+            for gx in 0..m.width {
+                let x = gx as i32 + m.xmin;
+                let y = ascent - m.height as i32 - m.ymin + gy as i32;
+                if (0..9).contains(&x) && (0..16).contains(&y) && bitmap[gy * m.width + gx] >= 128 {
+                    self.pixel(px + x, py + y, color);
+                }
+            }
+        }
+    }
+    /// [designed] Independent standard text colours; no game palette asset.
+    fn marker_color(attribute: u16) -> u32 {
+        const COLORS: [u32; 16] = [
+            0x000000, 0x0000aa, 0x00aa00, 0x00aaaa, 0xaa0000, 0xaa00aa, 0xaa5500, 0xaaaaaa,
+            0x555555, 0x5555ff, 0x55ff55, 0x55ffff, 0xff5555, 0xff55ff, 0xffff55, 0xffffff,
+        ];
+        COLORS[usize::from(attribute & 15)]
+    }
     fn text(&mut self, x: usize, y: usize, text: &str, fg: u32, bg: u32, width: usize) {
         let chars: Vec<_> = text.chars().collect();
         for i in 0..width.min(80 - x) {
@@ -542,18 +571,14 @@ impl Renderer {
                         (229 + (x as i32) * 288 * 29 / 600).clamp(85, 373),
                     )
                 };
-                for player in &p.view().players {
+                for (player, marker) in p.view().players.iter().zip(p.markers()) {
                     let (x, y) = point(player.position.x, player.position.y);
-                    let color = if player.club == 130 {
-                        0x55ffff
-                    } else {
-                        0xffff55
-                    };
-                    self.rect(x - 2, y - 6, 4, 4, color);
-                    self.line(x, y - 2, x, y + 3, color);
-                    self.line(x - 3, y, x + 3, y, color);
-                    self.line(x, y + 3, x - 3, y + 6, color);
-                    self.line(x, y + 3, x + 3, y + 6, color);
+                    self.pitch_glyph(
+                        x - 4,
+                        y - 8,
+                        crate::timeline::numbered_marker(marker[0]),
+                        Self::marker_color(marker[1]),
+                    );
                 }
                 let (x, y) = point(p.view().ball.x, p.view().ball.y);
                 self.rect(x - 1, y - 1, 3, 3, 0xffffff);
@@ -562,7 +587,7 @@ impl Renderer {
                 1,
                 24,
                 &format!(
-                    "Space-commentary  Esc,Enter-bench   Left/Right-speed {}",
+                    "Players: numbers   Space: commentary   Esc/Enter: bench   Left/Right: speed {}",
                     c.speed
                 ),
                 TEXT,

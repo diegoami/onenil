@@ -121,6 +121,9 @@ impl Controller {
         if id != self.job_id || self.screen != Screen::Preparing {
             return false;
         }
+        if let Err(error) = timeline.validate_markers() {
+            return self.accept_error(id, error);
+        }
         if !self.exhibition
             && (self.match_ticket.is_none()
                 || timeline.native_return != "0AB9:EBE2"
