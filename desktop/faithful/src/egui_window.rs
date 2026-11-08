@@ -111,7 +111,9 @@ impl eframe::App for Candidate {
         if matches!(
             self.app.controller.screen,
             crate::controller::Screen::Pitch | crate::controller::Screen::Preparing
-        ) {
+        ) || self.app.live_job.is_some()
+            || self.app.job.is_some()
+        {
             ui.ctx().request_repaint_after(Duration::from_millis(16));
         }
     }

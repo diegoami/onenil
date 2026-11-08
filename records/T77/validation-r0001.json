@@ -1,0 +1,46 @@
+{
+  "schema": "live-desktop-validation/1",
+  "producer": "2e2957a4a783402e55df9bc56869a2cd4f44ab0c",
+  "desktop": {
+    "passed": 56,
+    "features": "raster",
+    "log_sha256": "6f092bb09e875fe625411997d1ea40f82d251ffa4f4e1171f7d3c23e22794a7a"
+  },
+  "adapters": {
+    "software_build_log_sha256": "0d30353283fee87b1847c96b3a891ae3c5c91974dfef3ab9d3397a17f28fb125",
+    "egui_build_log_sha256": "02c34d5f3b0c22546a1417ef996158f3da28e0c0e47494ca54dbd2a843b5a983",
+    "egui_paused_worker_polling": true
+  },
+  "window_records": [
+    {
+      "path": "window-r0001.json",
+      "sha256": "b0db2571e839bc992fecb6e1a5e62f22f7509f2e3e1ab6a4a5e8d85a9e4d69dd"
+    },
+    {
+      "path": "window-r0002.json",
+      "sha256": "b9991f8d45fd66aa9240695f5bcf75f85b2ded7c72e649e7864242164f0e8710"
+    },
+    {
+      "path": "window-r0003.json",
+      "sha256": "5b9e60bf2e262f64c4242ad012d5ec52216abdc7e8452074c4fe5f105459805f"
+    },
+    {
+      "path": "window-r0004.json",
+      "sha256": "21f8f0d6f6cee15049c2ece02bc35a203bb4a569f65b64777a1a58ef51ff58f1"
+    }
+  ],
+  "final_capture_contract": "schema2 original/edited:24/27 stages,9 actual raster bindings each,two sizes,three fresh windows each",
+  "public_corruption_controls": 10,
+  "generation_log_sha256": "5e5da0514e69408408bf6e698a3e7056634cd618007cf761561b345379b71dd3",
+  "old_artifact_checks": "names/T62/T69/T70/T72-both/T73:passed",
+  "preservation": "engine,campaign,source fixtures,assets,messages,locks,task,prior records unchanged",
+  "originals_fmt_diff": "passed",
+  "raw_hex_scan": {
+    "files": 55,
+    "bytes": 3219391,
+    "original_sources": 37,
+    "status": "passed"
+  },
+  "scope": "live Continue desktop flow; no saved substitution mutation",
+  "status": "all local gates passed; exact-head CI required before merge"
+}

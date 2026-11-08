@@ -492,23 +492,9 @@ impl Renderer {
     }
     fn match_header(&mut self, c: &Controller) {
         self.rect(0, 0, 720, 80, GROUND);
-        if let Some(p) = &c.playback {
-            self.text(
-                1,
-                0,
-                &p.timeline.club_names[0].to_uppercase(),
-                TEXT,
-                GROUND,
-                16,
-            );
-            self.text(
-                1,
-                2,
-                &p.timeline.club_names[1].to_uppercase(),
-                TEXT,
-                GROUND,
-                16,
-            );
+        if let Some(p) = c.match_view() {
+            self.text(1, 0, &p.club_names[0].to_uppercase(), TEXT, GROUND, 16);
+            self.text(1, 2, &p.club_names[1].to_uppercase(), TEXT, GROUND, 16);
             self.text(17, 0, &p.view().score[0].to_string(), CYAN, GROUND, 2);
             self.text(17, 2, &p.view().score[1].to_string(), CYAN, GROUND, 2);
             self.text(
@@ -563,7 +549,7 @@ impl Renderer {
             ] {
                 self.line(x, y, ex, ey, TEXT);
             }
-            if let Some(p) = &c.playback {
+            if let Some(p) = c.match_view() {
                 // [designed] Proportional accepted adapter projection: x=500+guest.y*12, y=300+guest.x*29 on1000x600.
                 let point = |x: i16, y: i16| {
                     (
@@ -611,7 +597,7 @@ impl Renderer {
             self.text(
                 25,
                 7,
-                if c.screen == Screen::HalfTime {
+                if c.screen == Screen::HalfTime || c.is_resuming() {
                     "HALF TIME"
                 } else {
                     "FULL TIME"
@@ -623,8 +609,12 @@ impl Renderer {
             self.text(
                 4,
                 10,
-                if c.screen == Screen::HalfTime {
-                    "Match paused. Press any key to review the bench."
+                if c.screen == Screen::HalfTime || c.is_resuming() {
+                    if c.is_resuming() {
+                        "Preparing second half..."
+                    } else {
+                        "Match paused. Press any key to review the bench."
+                    }
                 } else if c.exhibition {
                     "Exhibition complete."
                 } else {
@@ -637,12 +627,27 @@ impl Renderer {
             self.text(
                 4,
                 12,
-                "Detailed match statistics are not available yet.",
+                if c.is_resuming() {
+                    "Esc-cancel this match; campaign is unchanged."
+                } else {
+                    "Detailed match statistics are not available yet."
+                },
                 TEXT,
                 GROUND,
                 72,
             );
-            self.text(20, 24, "press any key", TEXT, GROUND, 40);
+            self.text(
+                20,
+                24,
+                if c.is_resuming() {
+                    "Please wait"
+                } else {
+                    "press any key"
+                },
+                TEXT,
+                GROUND,
+                40,
+            );
         }
     }
     pub fn draw(&mut self, c: &Controller) {
@@ -672,6 +677,7 @@ impl Renderer {
                 );
             }
             Screen::Players | Screen::Options | Screen::Instructions => self.players(c),
+            Screen::Preparing if c.is_resuming() => self.match_view(c),
             Screen::Pitch | Screen::History | Screen::HalfTime | Screen::FullTime => {
                 self.match_view(c)
             }
@@ -770,12 +776,12 @@ impl Renderer {
                 self.text(
                     2,
                     13,
-                    "Managed substitutions are not implemented in this experiment.",
+                    "Player changes are not available in this build yet.",
                     TEXT,
                     GROUND,
                     76,
                 );
-                self.text(2, 24, "Enter-resume computed match", TEXT, GROUND, 76);
+                self.text(2, 24, "Enter: PLAY GAME / continue match", TEXT, GROUND, 76);
             }
             Screen::Main | Screen::Quit => {
                 self.sheet("main");
