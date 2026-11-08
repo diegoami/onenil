@@ -2,6 +2,7 @@
 import argparse,json,subprocess,sys
 from pathlib import Path
 import replay_edited_preparation as preparation
+RESEARCH_ACCEPTANCE = '230f8f196c19f7b6d6ecb0b975e87fea567334f8'  # Accepted T73.
 DIRECTORY=preparation.ROOT/'records/T68/lookup-source-r0001'
 PINS={f'lookup-r{i:04d}.json':'55b9a3e238732b99a810a8837d1a74714f5578cf2c50ac38c098847c3984689b' for i in (1,2)}
 
