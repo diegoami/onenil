@@ -4,7 +4,7 @@ import argparse,copy,hashlib,json,re
 from pathlib import Path
 from check_numbered_pitch_records import native_rgb
 ROOT=Path(__file__).resolve().parents[2]
-PINS={'window-r0001.json': {'sha256': 'b0db2571e839bc992fecb6e1a5e62f22f7509f2e3e1ab6a4a5e8d85a9e4d69dd', 'producer': 'ce25fca073f14f16915ce8be00638e84c29889fb', 'binary': 'afd5e2e710e8af6258d11bbfa6da1616397705b7fd1d53f9662a2db8d70cbfe0'}, 'window-r0002.json': {'sha256': 'b9991f8d45fd66aa9240695f5bcf75f85b2ded7c72e649e7864242164f0e8710', 'producer': 'ce25fca073f14f16915ce8be00638e84c29889fb', 'binary': 'afd5e2e710e8af6258d11bbfa6da1616397705b7fd1d53f9662a2db8d70cbfe0'}}
+PINS={'window-r0001.json': {'sha256': 'b0db2571e839bc992fecb6e1a5e62f22f7509f2e3e1ab6a4a5e8d85a9e4d69dd', 'producer': 'ce25fca073f14f16915ce8be00638e84c29889fb', 'binary': 'afd5e2e710e8af6258d11bbfa6da1616397705b7fd1d53f9662a2db8d70cbfe0'}, 'window-r0002.json': {'sha256': 'b9991f8d45fd66aa9240695f5bcf75f85b2ded7c72e649e7864242164f0e8710', 'producer': 'ce25fca073f14f16915ce8be00638e84c29889fb', 'binary': 'afd5e2e710e8af6258d11bbfa6da1616397705b7fd1d53f9662a2db8d70cbfe0'}, 'window-r0003.json': {'sha256': '5b9e60bf2e262f64c4242ad012d5ec52216abdc7e8452074c4fe5f105459805f', 'producer': '3011233760bd6191c837897fc2df6c5788edabe9', 'binary': 'afd5e2e710e8af6258d11bbfa6da1616397705b7fd1d53f9662a2db8d70cbfe0'}, 'window-r0004.json': {'sha256': '21f8f0d6f6cee15049c2ece02bc35a203bb4a569f65b64777a1a58ef51ff58f1', 'producer': '3011233760bd6191c837897fc2df6c5788edabe9', 'binary': 'afd5e2e710e8af6258d11bbfa6da1616397705b7fd1d53f9662a2db8d70cbfe0'}}
 FONT='c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f'
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def check(r,directory,images=True):
@@ -66,6 +66,10 @@ def check(r,directory,images=True):
  assert {s['name'] for s in r['screenshots']}==expected_shots
  for shot in r['screenshots']:
   assert Path(shot['path']).name==shot['path'];s=shot['state'];assert s['players']==22 and len(s['pitch_markers'])==22
+  assert {m['selector'] for m in s['pitch_markers']}==set(range(1,23))
+  assert sorted(m['label'] for m in s['pitch_markers'] if m['label']!='G')==sorted('0123456789'*2)
+  assert sum(m['label']=='G' for m in s['pitch_markers'])==2
+  if shot['name'].startswith('pitch-'):assert s['screen']=='Pitch' and s['match_stage']=='incomplete' and s['worker_same'] and s['speed']==1
   for marker in s['pitch_markers']:
    selector=marker['selector'];assert marker['label']==('G' if selector in (1,12) else chr(((selector-1)&65535)%11+47)) and 0<=marker['attribute']<=255
   if images:

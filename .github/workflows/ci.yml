@@ -75,3 +75,7 @@ jobs:
       - run: python3 desktop/faithful/check_numbered_pitch_records.py records/T72/window-r0001.json
       - run: python3 desktop/faithful/check_numbered_pitch_records.py records/T72/window-r0002.json
       - run: python3 desktop/faithful/check_history_records.py records/T73/window-r0001.json
+      - name: Verify live desktop interval and saved continuation evidence
+        run: |
+          python3 desktop/faithful/check_live_desktop_records.py records/T77/window-r0003.json
+          python3 desktop/faithful/check_live_desktop_records.py records/T77/window-r0004.json
