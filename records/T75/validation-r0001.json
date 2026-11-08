@@ -1,0 +1,42 @@
+{
+  "schema": "native-halftime-replacement-validation/1",
+  "producer": "37595136c5e8e32eb937f8b9ba292cf10f75da78",
+  "engine": {
+    "command": "cargo test --manifest-path engine/Cargo.toml --release --locked",
+    "passed": 548,
+    "log_sha256": "86c4609e0ae9da2b8119c74e6ca81433ff182ec275f42cb8af41474a59393173"
+  },
+  "desktop": {
+    "command": "ONENIL_DESKTOP_FONT=... cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --features raster",
+    "passed": 46,
+    "log_sha256": "bbb10f50e63ad8f6af52c20e045105164801d58e7e56e06328be71e28311546a"
+  },
+  "source_proof": {
+    "path": "parity-r0001.json",
+    "sha256": "e8a209b8d545c10de560366b1951453e329c1b7017d9b2292263c37f1f195ac7",
+    "log_sha256": "607a84e741adc947acc00395f70229d5739502515ac65f1866bf04c18b2b7eee"
+  },
+  "generation": {
+    "status": "passed",
+    "log_sha256": "5e5da0514e69408408bf6e698a3e7056634cd618007cf761561b345379b71dd3"
+  },
+  "artifact_checks": [
+    "original names/namespace join",
+    "T62 match window",
+    "T69 edited result/ownership",
+    "T70 readability",
+    "T72 numbered pitch r0001/r0002",
+    "T73 commentary history"
+  ],
+  "original_check": "passed",
+  "fmt_diff": "passed",
+  "preservation": "campaign,desktop,old fixtures,old records,generated procedures,task unchanged",
+  "scan": {
+    "files": 22,
+    "bytes": 202554,
+    "mode": "raw+hex",
+    "original_sources": 37,
+    "status": "passed"
+  },
+  "status": "all local gates passed; source acceptance and exact-head CI still required"
+}
