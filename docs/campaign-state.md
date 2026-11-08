@@ -347,3 +347,23 @@ Public checks: `python3 tools/test_edited_preparation.py` and
 `python3 tools/replay_edited_preparation.py --replay` (release PyO3 build). Original re-import uses
 `python3 tools/replay_edited_preparation.py --import-from <accepted-archaeology-checkout>` under
 an environment with the research dependencies; existing source/fixture paths refuse overwrite.
+
+[confirmed: archaeology T71@011a341,T73@230f8f1; native T68 verification-r0001]
+The separate `NativePreparedWatchedSession.edited` now continues the exact edited preparation
+through the complete original match:3,970 ticks,170,212 ordered draws,869 actions,all final
+fields and actual return0AB9:EBE2 match the independently reproduced source. The133 selected
+decoded reference leaves retain byte pins and all63 independent chunk receipts. Accepted source
+merge identities are required before official import/verification; candidate mode stays explicitly
+provisional. Engine observations remain assertions,never imported state.
+
+[designed] This bounded profile uses2,059 independently witnessed before bytes,including the
+complete declared32-byte character-classification bitmap. Five overlaps match T72;27 additional
+T73 bytes close the reached lookup gap. Owned state domains and unknown-read refusal stay
+strict. The old fresh/exhibition constructors retain their exact guards. Ended/failed sessions
+refuse further execution;read-only inspection preserves state. Desktop edited admission and
+week/cash/table progression remain separate tasks. T66's preparation-only API remains available.
+
+Public checks: `python3 tools/test_edited_watched_reference.py` and
+`python3 tools/replay_edited_watched.py --check`; replay uses the release PyO3 build with
+`python3 tools/replay_edited_watched.py --replay`. Neither needs original game assets. Official
+immutable verification requires a clean committed producer and a new `--record` directory.

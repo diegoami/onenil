@@ -33,6 +33,10 @@ jobs:
           python3 tools/test_fresh_watched_inputs.py
           python3 tools/test_fresh_watched_reference.py
           python3 tools/replay_fresh_watched.py --replay --python
+          python3 tools/test_edited_watched_inputs.py
+          python3 tools/test_edited_lookup_inputs.py
+          python3 tools/test_edited_watched_reference.py
+          python3 tools/replay_edited_watched.py --replay
       - run: python3 tools/check_originals.py
       - run: python3 desktop/faithful/export_match_names.py --check
       - run: python3 desktop/faithful/check_match_records.py records/T62/window-r0003.json
