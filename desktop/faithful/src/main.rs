@@ -1,6 +1,12 @@
 use std::path::{Path, PathBuf};
 fn run() -> Result<(), String> {
     let args: Vec<_> = std::env::args().collect();
+    if args.len() == 3 && args[1] == "--live-campaign-worker" {
+        return args[2]
+            .parse()
+            .map_err(|e| format!("invalid live job identity: {e}"))
+            .and_then(onenil_desktop::live_worker::run);
+    }
     if args.len() == 4 && args[1] == "--campaign-worker" {
         return args[3]
             .parse()

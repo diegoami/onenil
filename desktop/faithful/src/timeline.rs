@@ -213,13 +213,164 @@ pub fn compute_campaign(campaign: &onenil_campaign::Campaign) -> Result<Timeline
         [first?, second?],
     )
 }
-fn compute_input(
+/// [designed:T76] Incomplete reached views. This type has no completed-return field.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct IntervalTimeline {
+    pub boundary: String,
+    pub control: u8,
+    pub club_names: [String; 2],
+    pub initial: View,
+    pub frames: Vec<Frame>,
+    pub setup_events: Vec<Event>,
+    pub draws: usize,
+    pub clock_rows: usize,
+    pub seed: u64,
+    pub clubs: Vec<u64>,
+    pub marker_rows: Vec<Vec<[u16; 2]>>,
+}
+impl IntervalTimeline {
+    pub fn validate(&self) -> Result<(), String> {
+        if self.boundary != "0AB9:7E4A"
+            || self.control != 1
+            || self.frames.is_empty()
+            || self.frames.last().unwrap().view.clock < 45
+            || self.marker_rows.len() != self.frames.len() + 1
+            || !self
+                .frames
+                .iter()
+                .flat_map(|f| &f.events)
+                .any(|e| e.kind == "half-time")
+            || self
+                .frames
+                .iter()
+                .flat_map(|f| &f.events)
+                .any(|e| e.kind == "full-time")
+        {
+            return Err("invalid incomplete interval boundary".into());
+        }
+        for (row, view) in self
+            .marker_rows
+            .iter()
+            .zip(std::iter::once(&self.initial).chain(self.frames.iter().map(|f| &f.view)))
+        {
+            if row.len() != 22
+                || row.len() != view.players.len()
+                || row.iter().flatten().any(|v| *v > 255)
+            {
+                return Err("invalid interval markers".into());
+            }
+        }
+        Ok(())
+    }
+    pub fn is_prefix_of(&self, finished: &Timeline) -> bool {
+        finished.native_return == "0AB9:EBE2"
+            && finished.frames.len() > self.frames.len()
+            && self.club_names == finished.club_names
+            && self.initial == finished.initial
+            && self.setup_events == finished.setup_events
+            && self.seed == finished.seed
+            && self.clubs == finished.clubs
+            && finished.draws >= self.draws
+            && finished.clock_rows >= self.clock_rows
+            && finished.frames.starts_with(&self.frames)
+            && finished.marker_rows.starts_with(&self.marker_rows)
+    }
+}
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct Completion {
+    pub timeline: Timeline,
+    pub native_sha256: String,
+}
+struct TimelineContext {
+    initial: Value,
+    setup_draws: Vec<Value>,
+    seed: u64,
+    names: Value,
+    messages: Vec<(String, String)>,
+    clubs: Vec<u64>,
+    player_clubs: BTreeMap<u64, u64>,
+    display_clubs: [u64; 2],
+    club_names: [String; 2],
+}
+struct ViewData {
+    club_names: [String; 2],
+    initial: View,
+    frames: Vec<Frame>,
+    setup_events: Vec<Event>,
+    draws: usize,
+    clock_rows: usize,
+    seed: u64,
+    clubs: Vec<u64>,
+    marker_rows: Vec<Vec<[u16; 2]>>,
+}
+impl ViewData {
+    fn complete(self) -> Timeline {
+        let Self {
+            club_names,
+            initial,
+            frames,
+            setup_events,
+            draws,
+            clock_rows,
+            seed,
+            clubs,
+            marker_rows,
+        } = self;
+        Timeline {
+            club_names,
+            initial,
+            frames,
+            setup_events,
+            draws,
+            clock_rows,
+            seed,
+            clubs,
+            marker_rows,
+            native_return: "0AB9:EBE2".into(),
+        }
+    }
+    fn interval(self) -> IntervalTimeline {
+        let Self {
+            club_names,
+            initial,
+            frames,
+            setup_events,
+            draws,
+            clock_rows,
+            seed,
+            clubs,
+            marker_rows,
+        } = self;
+        IntervalTimeline {
+            club_names,
+            initial,
+            frames,
+            setup_events,
+            draws,
+            clock_rows,
+            seed,
+            clubs,
+            marker_rows,
+            boundary: "0AB9:7E4A".into(),
+            control: 1,
+        }
+    }
+}
+fn prepare_input(
     input: Value,
     names: &Value,
     profile: Option<crate::campaign_match::Profile>,
     display_clubs: [u64; 2],
     club_names: [String; 2],
-) -> Result<Timeline, String> {
+) -> Result<
+    (
+        onenil_engine::watched_compiled::prepared::Session,
+        TimelineContext,
+    ),
+    String,
+> {
     let setup = &input["preparation"]["setup"]["legacy"];
     let clubs = a(&setup["substitution"]["context"]["clubs"])?
         .iter()
@@ -233,7 +384,7 @@ fn compute_input(
         serde_json::from_str(include_str!("../messages.json")).map_err(|e| e.to_string())?;
     let input = serde_json::from_value(input).map_err(|e| e.to_string())?;
     let fresh = profile.is_some();
-    let mut session = match profile {
+    let session = match profile {
         Some(crate::campaign_match::Profile::Original) => {
             onenil_engine::watched_compiled::prepared::Session::new_fresh(input)?
         }
@@ -244,117 +395,261 @@ fn compute_input(
     };
     let initial = session.snapshot()?;
     let observation = session.observation();
-    let setup_draws = a(&observation["draws"])?;
+    let setup_draws = a(&observation["draws"])?.clone();
     let seed = n(&setup_draws.first().ok_or("missing setup draw")?["seed_before"])?;
     if !fresh && (seed != 64 || !a(&initial["scenes"])?.iter().any(|s| s["word14"] == 2590)) {
         return Err("native selection differs".into());
     }
+    Ok((
+        session,
+        TimelineContext {
+            initial,
+            setup_draws,
+            seed,
+            names: names.clone(),
+            messages,
+            clubs,
+            player_clubs,
+            display_clubs,
+            club_names,
+        },
+    ))
+}
+fn compute_input(
+    input: Value,
+    names: &Value,
+    profile: Option<crate::campaign_match::Profile>,
+    display_clubs: [u64; 2],
+    club_names: [String; 2],
+) -> Result<Timeline, String> {
+    let (mut session, context) = prepare_input(input, names, profile, display_clubs, club_names)?;
     let output = session.finish().map_err(|e| {
         serde_json::to_string(&e).unwrap_or_else(|_| "native preparation failed".into())
     })?;
-    if output["return"] != "0AB9:EBE2" || !a(&output["draws"])?.starts_with(setup_draws) {
-        return Err("native return/draw prefix differs".into());
-    }
-    // [confirmed:T67 original actions] Queue side0 is PSG in this fresh
-    // fixture,whereas it is Blackburn in the older exhibition. Use the
-    // computed native club/side identities;preparation array order is not ABI.
-    let mut native_clubs = [None; 2];
-    for event in a(&output["setup_events"])?
-        .iter()
-        .chain(a(&output["events"])?)
-    {
-        let side = usize::try_from(n(&event["side"])?).map_err(|_| "invalid event side")?;
-        let slot = native_clubs.get_mut(side).ok_or("invalid event side")?;
-        let club = n(&event["club"])?;
-        if !display_clubs.contains(&club) || slot.is_some_and(|prior| prior != club) {
-            return Err("native score-side club identity differs".into());
+    context.complete(&output)
+}
+impl TimelineContext {
+    fn complete(&self, output: &Value) -> Result<Timeline, String> {
+        if output["return"] != "0AB9:EBE2" || !a(&output["draws"])?.starts_with(&self.setup_draws) {
+            return Err("native return/draw prefix differs".into());
         }
-        *slot = Some(club);
+        Ok(self.adapt(output)?.complete())
     }
-    let [first, second] = display_clubs.map(|club| {
-        native_clubs
-            .iter()
-            .position(|value| *value == Some(club))
-            .ok_or("missing native scoring club")
-    });
-    let order = [first?, second?];
-    let score = |value: &Value| -> Result<Value, String> {
-        Ok(serde_json::json!([
-            n(&value[order[0]])?,
-            n(&value[order[1]])?
-        ]))
-    };
-    let setup_events = a(&output["setup_events"])?
-        .iter()
-        .enumerate()
-        .map(|(i, e)| describe(e, i, names, &messages))
-        .collect::<Result<Vec<_>, _>>()?;
-    let mut events: BTreeMap<u64, Vec<Event>> = BTreeMap::new();
-    for (i, e) in a(&output["events"])?.iter().enumerate() {
-        events.entry(n(&e["tick"])?).or_default().push(describe(
-            e,
-            i + setup_events.len(),
-            names,
-            &messages,
-        )?);
-    }
-    let mut clocks = BTreeMap::new();
-    for c in a(&output["caller_clocks"])? {
-        clocks.insert(n(&c["tick"])?, n(&c["clock"]["elapsed"])?);
-    }
-    let ticks = a(&output["ticks"])?;
-    let goals = a(&output["tick_live_goals"])?;
-    if ticks.len() != goals.len() || ticks.is_empty() {
-        return Err("incomplete native score observations".into());
-    }
-    let mut frames = Vec::new();
-    let mut marker_rows = vec![marker_row(&initial)?];
-    for (t, g) in ticks.iter().zip(goals) {
-        let clock = clocks
-            .get(&n(&t["tick"])?)
-            .copied()
-            .unwrap_or(n(&t["after"]["elapsed"])?);
-        let actions = events.remove(&n(&t["tick"])?).unwrap_or_default();
-        if actions
-            .iter()
-            .any(|e| e.native["minute"].as_u64().is_none_or(|m| m > clock))
+    fn interval(&self, output: &Value) -> Result<IntervalTimeline, String> {
+        if output["boundary"] != "0AB9:7E4A"
+            || output["control"] != 1
+            || output.get("return").is_some()
+            || !a(&output["draws"])?.starts_with(&self.setup_draws)
         {
-            return Err("event newer than observed clock".into());
+            return Err("native interval/draw prefix differs".into());
         }
-        marker_rows.push(marker_row(&t["after"])?);
-        frames.push(Frame {
-            view: view(&t["after"], &score(g)?, clock, names, &player_clubs, &clubs)?,
-            events: actions,
+        let interval = self.adapt(output)?.interval();
+        interval.validate()?;
+        Ok(interval)
+    }
+    fn adapt(&self, output: &Value) -> Result<ViewData, String> {
+        let names = &self.names;
+        let messages = &self.messages;
+        let initial = &self.initial;
+        let player_clubs = &self.player_clubs;
+        let clubs = self.clubs.clone();
+        let seed = self.seed;
+        let display_clubs = self.display_clubs;
+        let club_names = self.club_names.clone();
+        // [confirmed:T67 original actions] Queue side0 is PSG in this fresh
+        // fixture,whereas it is Blackburn in the older exhibition. Use the
+        // computed native club/side identities;preparation array order is not ABI.
+        let mut native_clubs = [None; 2];
+        for event in a(&output["setup_events"])?
+            .iter()
+            .chain(a(&output["events"])?)
+        {
+            let side = usize::try_from(n(&event["side"])?).map_err(|_| "invalid event side")?;
+            let slot = native_clubs.get_mut(side).ok_or("invalid event side")?;
+            let club = n(&event["club"])?;
+            if !display_clubs.contains(&club) || slot.is_some_and(|prior| prior != club) {
+                return Err("native score-side club identity differs".into());
+            }
+            *slot = Some(club);
+        }
+        let [first, second] = display_clubs.map(|club| {
+            native_clubs
+                .iter()
+                .position(|value| *value == Some(club))
+                .ok_or("missing native scoring club")
         });
+        let order = [first?, second?];
+        let score = |value: &Value| -> Result<Value, String> {
+            Ok(serde_json::json!([
+                n(&value[order[0]])?,
+                n(&value[order[1]])?
+            ]))
+        };
+        let setup_events = a(&output["setup_events"])?
+            .iter()
+            .enumerate()
+            .map(|(i, e)| describe(e, i, names, &messages))
+            .collect::<Result<Vec<_>, _>>()?;
+        let mut events: BTreeMap<u64, Vec<Event>> = BTreeMap::new();
+        for (i, e) in a(&output["events"])?.iter().enumerate() {
+            events.entry(n(&e["tick"])?).or_default().push(describe(
+                e,
+                i + setup_events.len(),
+                names,
+                &messages,
+            )?);
+        }
+        let mut clocks = BTreeMap::new();
+        for c in a(&output["caller_clocks"])? {
+            clocks.insert(n(&c["tick"])?, n(&c["clock"]["elapsed"])?);
+        }
+        let ticks = a(&output["ticks"])?;
+        let goals = a(&output["tick_live_goals"])?;
+        if ticks.len() != goals.len() || ticks.is_empty() {
+            return Err("incomplete native score observations".into());
+        }
+        let mut frames = Vec::new();
+        let mut marker_rows = vec![marker_row(&initial)?];
+        for (t, g) in ticks.iter().zip(goals) {
+            let clock = clocks
+                .get(&n(&t["tick"])?)
+                .copied()
+                .unwrap_or(n(&t["after"]["elapsed"])?);
+            let actions = events.remove(&n(&t["tick"])?).unwrap_or_default();
+            if actions
+                .iter()
+                .any(|e| e.native["minute"].as_u64().is_none_or(|m| m > clock))
+            {
+                return Err("event newer than observed clock".into());
+            }
+            marker_rows.push(marker_row(&t["after"])?);
+            frames.push(Frame {
+                view: view(&t["after"], &score(g)?, clock, names, &player_clubs, &clubs)?,
+                events: actions,
+            });
+        }
+        if !events.is_empty()
+            || frames.last().unwrap().view.score
+                != [
+                    n(&output["live_goals"][order[0]])?,
+                    n(&output["live_goals"][order[1]])?,
+                ]
+        {
+            return Err("incomplete native timeline".into());
+        }
+        Ok(ViewData {
+            club_names,
+            initial: view(
+                &initial,
+                &score(&initial["scores"])?,
+                n(&initial["elapsed"])?,
+                names,
+                &player_clubs,
+                &clubs,
+            )?,
+            frames,
+            setup_events,
+            draws: a(&output["draws"])?.len(),
+            clock_rows: clocks.len(),
+            seed,
+            clubs,
+            marker_rows,
+        })
     }
-    if !events.is_empty()
-        || frames.last().unwrap().view.score
-            != [
-                n(&output["live_goals"][order[0]])?,
-                n(&output["live_goals"][order[1]])?,
-            ]
-    {
-        return Err("incomplete native timeline".into());
+}
+
+/// [designed:T76] One owned engine image; UI/IPC cannot set guest state.
+pub struct LiveCampaign {
+    session: onenil_engine::watched_compiled::prepared::Session,
+    context: TimelineContext,
+    at_interval: bool,
+    ended: bool,
+    replacement_allowed: bool,
+}
+impl LiveCampaign {
+    pub fn new(campaign: &onenil_campaign::Campaign) -> Result<Self, String> {
+        let profile = crate::campaign_match::profile(campaign)?;
+        let mut input = crate::campaign_match::admission(campaign)?;
+        let replacement_allowed = profile == crate::campaign_match::Profile::Original;
+        if replacement_allowed {
+            // [confirmed:T75] Explicit incoming facts; no expected output witness.
+            let facts: Value = serde_json::from_str(include_str!(
+                "../../../engine/tests/fixtures/halftime_replacement/incoming.json"
+            ))
+            .map_err(|e| e.to_string())?;
+            input.support.extend(
+                serde_json::from_value::<Vec<onenil_engine::watched_compiled::action::ByteFact>>(
+                    facts["support"].clone(),
+                )
+                .map_err(|e| e.to_string())?,
+            );
+        }
+        let metadata = crate::campaign_match::metadata()?;
+        let clubs = [campaign.club.id, campaign.next_fixture.opponent];
+        let names = clubs.map(|id| {
+            metadata["clubs"][id.to_string()]
+                .as_str()
+                .map(str::to_owned)
+                .ok_or("missing campaign club name")
+        });
+        let [first, second] = names;
+        let (session, context) = prepare_input(
+            serde_json::to_value(input).map_err(|e| e.to_string())?,
+            &metadata["players"],
+            Some(profile),
+            clubs.map(u64::from),
+            [first?.into(), second?.into()],
+        )?;
+        Ok(Self {
+            session,
+            context,
+            at_interval: false,
+            ended: false,
+            replacement_allowed,
+        })
     }
-    Ok(Timeline {
-        club_names,
-        initial: view(
-            &initial,
-            &score(&initial["scores"])?,
-            n(&initial["elapsed"])?,
-            names,
-            &player_clubs,
-            &clubs,
-        )?,
-        frames,
-        setup_events,
-        native_return: "0AB9:EBE2".into(),
-        draws: a(&output["draws"])?.len(),
-        clock_rows: clocks.len(),
-        seed,
-        clubs,
-        marker_rows,
-    })
+    pub fn pause(&mut self) -> Result<IntervalTimeline, String> {
+        if self.at_interval || self.ended {
+            return Err("live session cannot pause in this phase".into());
+        }
+        let result = (|| {
+            self.session.pause_at_interval()?;
+            self.context.interval(&self.session.interval_history()?)
+        })();
+        match result {
+            Ok(prefix) => {
+                self.at_interval = true;
+                Ok(prefix)
+            }
+            Err(error) => {
+                self.ended = true;
+                Err(error)
+            }
+        }
+    }
+    pub fn finish(&mut self, replace: bool) -> Result<Completion, String> {
+        if !self.at_interval || self.ended {
+            return Err("live session has no pending interval decision".into());
+        }
+        if replace && !self.replacement_allowed {
+            return Err("replacement is supported only in the verified original campaign".into());
+        }
+        self.ended = true;
+        let output = if replace {
+            let mut result = self.session.finish_with_interval_replacement(false)?;
+            result["match"].take()
+        } else {
+            self.session.finish().map_err(|e| e.fault.message)?
+        };
+        let native_sha256 = format!(
+            "{:x}",
+            Sha256::digest(serde_json::to_vec(&output).map_err(|e| e.to_string())?)
+        );
+        Ok(Completion {
+            timeline: self.context.complete(&output)?,
+            native_sha256,
+        })
+    }
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Phase {

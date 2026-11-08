@@ -58,6 +58,10 @@ jobs:
       - run: python3 desktop/faithful/check_match_records.py records/T62/window-r0003.json
       - run: python3 desktop/faithful/check_edited_result_records.py records/T69/window-r0001.json
       - run: cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked
+      - name: Verify live halftime child ownership
+        run: |
+          cargo build --manifest-path desktop/faithful/Cargo.toml --release --locked --example live_worker_probe --bin onenil-desktop
+          python3 tools/check_live_worker.py --probe desktop/faithful/target/release/examples/live_worker_probe --worker desktop/faithful/target/release/onenil-desktop
       - run: python3 desktop/faithful/check_readability_records.py records/T70/window-r0001.json
       - name: Raster readability regressions
         run: |
