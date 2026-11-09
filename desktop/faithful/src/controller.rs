@@ -68,6 +68,7 @@ pub struct Controller {
     pub interval_playback: Option<IntervalPlayback>,
     pub resume_requested: bool,
     pub replace_requested: bool,
+    pub replace_sent: bool,
     pub squad: Option<SquadSelection>,
     pending_replacement: Option<crate::timeline::ExecutedReplacement>,
     awaiting_continuation: bool,
@@ -101,6 +102,7 @@ impl Default for Controller {
             interval_playback: None,
             resume_requested: false,
             replace_requested: false,
+            replace_sent: false,
             squad: None,
             pending_replacement: None,
             awaiting_continuation: false,
@@ -220,6 +222,7 @@ impl Controller {
                 self.awaiting_continuation = false;
                 self.resume_requested = false;
                 self.replace_requested = false;
+                self.replace_sent = false;
                 self.squad = None;
                 self.screen = Screen::Pitch;
                 true
@@ -406,6 +409,7 @@ impl Controller {
         self.interval_playback = None;
         self.resume_requested = false;
         self.replace_requested = false;
+        self.replace_sent = false;
         self.squad = None;
         self.pending_replacement = None;
         self.awaiting_continuation = false;
@@ -687,6 +691,8 @@ impl Controller {
                     self.interval_playback = None;
                     self.playback = None;
                     self.resume_requested = false;
+                    self.replace_requested = false;
+                    self.replace_sent = false;
                     self.awaiting_continuation = false;
                     self.prepare_requested = false;
                     self.screen = Screen::Preparation;

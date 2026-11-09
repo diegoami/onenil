@@ -217,21 +217,28 @@ impl Application {
                 }
             }
         }
-        if self.controller.resume_requested || self.controller.replace_requested {
-            self.controller.resume_requested = false;
-            let replace = self.controller.replace_requested;
-            self.controller.replace_requested = false;
+        // [designed:T78] The request flag survives until the continuation arrives:
+        // accept_continuation checks the completion against it.
+        if self.controller.replace_requested && !self.controller.replace_sent {
+            self.controller.replace_sent = true;
             let id = self.controller.job_id;
-            let decision = if replace {
-                Decision::ReplaceVerified
-            } else {
-                Decision::Continue
-            };
             let result = self
                 .live_job
                 .as_mut()
                 .ok_or_else(|| "missing live match worker".to_owned())
-                .and_then(|job| job.decide(decision));
+                .and_then(|job| job.decide(Decision::ReplaceVerified));
+            if let Err(error) = result {
+                self.controller.accept_live_error(id, error);
+                self.sync_jobs();
+            }
+        } else if self.controller.resume_requested && !self.controller.replace_requested {
+            self.controller.resume_requested = false;
+            let id = self.controller.job_id;
+            let result = self
+                .live_job
+                .as_mut()
+                .ok_or_else(|| "missing live match worker".to_owned())
+                .and_then(|job| job.decide(Decision::Continue));
             if let Err(error) = result {
                 self.controller.accept_live_error(id, error);
                 self.sync_jobs();
