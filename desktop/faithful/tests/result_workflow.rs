@@ -50,7 +50,9 @@ fn actual_result_posts_only_on_acknowledgement_and_cannot_replay() {
     assert_eq!(c.screen, Screen::FullTime);
     assert_eq!(c.editor.campaign, before);
     c.key(Key::Enter);
-    assert_eq!(c.screen, Screen::Main);
+    // [designed:T80] The W030 tail: the result, the week's cash flow and
+    // transfer news, then the week transaction on the management menu.
+    assert_eq!(c.screen, Screen::CashFlow);
     let recorded = c.editor.campaign.clone();
     assert_eq!(recorded.played_fixture.as_ref().unwrap().score, score);
     assert_eq!(recorded.revision, before.revision + 1);
@@ -58,12 +60,21 @@ fn actual_result_posts_only_on_acknowledgement_and_cannot_replay() {
     assert_eq!(recorded.week_index, before.week_index);
     assert!(c.message.contains("recorded") && c.message.len() <= 80);
     assert!(!c.accept_timeline(c.job_id, timeline));
+    c.key(Key::Space);
+    assert_eq!(c.screen, Screen::TransferNews);
+    c.key(Key::Space);
+    assert_eq!(c.screen, Screen::Main);
+    let advanced = c.editor.campaign.clone();
+    assert_eq!(advanced.week_index, before.week_index + 1);
+    assert_eq!(advanced.cash, before.cash - 30509);
+    assert_eq!(advanced.next_fixture.opponent, 176);
+    assert_eq!(advanced.revision, recorded.revision + 1);
     c.key(Key::Enter);
     c.key(Key::Enter);
     assert_eq!(c.screen, Screen::Preparation);
     assert!(!c.prepare_requested);
     assert!(c.message.contains("already") && c.message.len() <= 80);
-    assert_eq!(c.editor.campaign, recorded);
+    assert_eq!(c.editor.campaign, advanced);
 }
 #[test]
 fn cancel_stale_foreign_and_unfinished_outputs_never_record() {
