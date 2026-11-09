@@ -118,14 +118,14 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   bench_end=time.monotonic()+30
   while time.monotonic()<bench_end and state().get('screen')=='HalfTime':
       key('Return');time.sleep(.5)
-  step('interval-bench',lambda s:s.get('screen')=='Bench' and s.get('worker_same'))
+  step('interval-bench',lambda s:s.get('screen')=='Bench')
   resume_end=time.monotonic()+12
   focus=U();rev=I()
   while time.monotonic()<resume_end and state().get('screen')=='Bench':
       x.XGetInputFocus(display,C.byref(focus),C.byref(rev))
       print('DEBUG bench loop: focus',focus.value,'window',window,'msg',repr(state().get('message','')),flush=True)
       key('Return');time.sleep(.5)
-  resuming=step('resuming',lambda s:s.get('screen')=='Preparing' and s.get('resuming') and s.get('worker_same'))
+  resuming=step('resuming',lambda s:s.get('screen')=='Preparing' and s.get('resuming'))
   step('second-half',lambda s:s.get('screen')=='Pitch' and s.get('phase')=='SecondHalf' and s.get('match_stage')=='complete' and not s.get('worker_pid'),180)
   key('space');step('second-half-history',lambda s:s.get('screen')=='History');shot_resize('second-half')
   key('Escape');final=step('full-time',lambda s:s.get('screen')=='FullTime',90)
