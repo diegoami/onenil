@@ -156,6 +156,14 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   close_window();assert process.wait(timeout=3)==0
  except BaseException as exc:
   error=f'{type(exc).__name__}: {exc}'
+  import glob
+  keep=Path('/tmp/t80-forensics');keep.mkdir(exist_ok=True)
+  for f in glob.glob(str(directory/'**'),recursive=True):
+   src=Path(f)
+   if src.is_file():
+    try:(keep/src.relative_to(directory)).parent.mkdir(parents=True,exist_ok=True);shutil.copy2(src,keep/src.relative_to(directory))
+    except Exception:pass
+  print('FORENSICS kept at',keep,flush=True)
  finally:
   if process is not None and process.poll() is None:
    if window:close_window()
