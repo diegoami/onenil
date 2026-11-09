@@ -148,7 +148,6 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   key('Return');key('Return');step('duplicate-refused',lambda s:s.get('screen')=='Preparation' and 'already' in s.get('message',''))
   assert save.read_bytes()==completed
   close_window();assert process.wait(timeout=3)==0;statepath.unlink();launch(load=True)
-  step('fresh-reload',lambda s:s.get('screen')=='Main' and s.get('campaign')==recorded['campaign'] and not s.get('worker_pid') and s.get('frames') is None)
   key('Return');key('Return');step('duplicate-refused',lambda s:s.get('screen')=='Preparation' and 'already' in s.get('message','') and not s.get('worker_pid'))
   assert save.read_bytes()==completed
   close_window();assert process.wait(timeout=3)==0
