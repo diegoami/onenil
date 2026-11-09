@@ -145,6 +145,7 @@ impl Controller {
                     | Screen::Pitch
                     | Screen::History
                     | Screen::Bench
+                    | Screen::MatchSquad
                     | Screen::HalfTime
             )
     }
