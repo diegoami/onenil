@@ -286,11 +286,11 @@ impl Renderer {
         self.text(4, 4, "PLAYER", CYAN, GROUND, 16);
         self.text(22, 4, "FROM", CYAN, GROUND, 16);
         self.text(40, 4, "TO", CYAN, GROUND, 16);
-        for (i, row) in receipt.transfer_rows.iter().enumerate() {
+        for (i, transfer) in receipt.transfer_rows.iter().enumerate() {
             let row = 6 + i;
-            self.text(4, row, &row.player, TEXT, GROUND, 18);
-            self.text(22, row, &row.from, TEXT, GROUND, 17);
-            self.text(40, row, &row.to, TEXT, GROUND, 17);
+            self.text(4, row, &transfer.player, TEXT, GROUND, 18);
+            self.text(22, row, &transfer.from, TEXT, GROUND, 17);
+            self.text(40, row, &transfer.to, TEXT, GROUND, 17);
         }
         self.text(
             2,

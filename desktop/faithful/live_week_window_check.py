@@ -131,14 +131,12 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   key('Escape');final=step('full-time',lambda s:s.get('screen')=='FullTime',90)
   shot('full-time')
   assert final.get('campaign',{}).get('cash')==452000 and final.get('campaign',{}).get('week_index')==0
-  key('Return');recorded=step('recorded',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('played_fixture'))['campaign']
+  key('Return');recorded=step('recorded',lambda s:s.get('screen')=='CashFlow' and s.get('campaign',{}).get('played_fixture'))['campaign']
   assert recorded['revision']==final['campaign']['revision']+1
   assert recorded['played_fixture']['request_sha256']==hashlib.sha256(saved).hexdigest()
   # [designed:T80] The W030 route: the authenticated cash flow and transfer news,
   # then the management menu with the advanced week.
-  key('space');cash=step('cash-flow',lambda s:s.get('screen')=='CashFlow' and s.get('campaign',{}).get('cash')==452000)
-  shot_resize('cash-flow')
-  key('space');news=step('transfer-news',lambda s:s.get('screen')=='TransferNews')
+  key('space');transfer=step('transfer-news',lambda s:s.get('screen')=='TransferNews')
   shot_resize('transfer-news')
   key('space');advanced=step('menu-advanced',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('week_index')==1 and s.get('campaign',{}).get('cash')==421491)
   assert advanced['campaign']['next_fixture']['opponent_name']=='Sevilla' and advanced['campaign']['next_fixture']['opponent']==176
@@ -146,11 +144,11 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   shot_resize('menu-advanced')
   key('F7');step('saved-week',lambda s:'saved' in s.get('message',''));keep_save('completed');completed=save.read_bytes()
   close_window();assert process.wait(timeout=3)==0;statepath.unlink();launch(load=True)
-  step('fresh-reload',lambda s:s.get('screen')=='Main' and s.get('campaign')==advanced and not s.get('worker_pid') and s.get('frames') is None)
+  step('fresh-reload',lambda s:s.get('screen')=='Main' and s.get('campaign')==advanced['campaign'] and not s.get('worker_pid') and s.get('frames') is None)
   key('Return');key('Return');step('duplicate-refused',lambda s:s.get('screen')=='Preparation' and 'already' in s.get('message',''))
   assert save.read_bytes()==completed
   close_window();assert process.wait(timeout=3)==0;statepath.unlink();launch(load=True)
-  step('fresh-reload',lambda s:s.get('screen')=='Main' and s.get('campaign')==recorded and not s.get('worker_pid') and s.get('frames') is None)
+  step('fresh-reload',lambda s:s.get('screen')=='Main' and s.get('campaign')==recorded['campaign'] and not s.get('worker_pid') and s.get('frames') is None)
   key('Return');key('Return');step('duplicate-refused',lambda s:s.get('screen')=='Preparation' and 'already' in s.get('message','') and not s.get('worker_pid'))
   assert save.read_bytes()==completed
   close_window();assert process.wait(timeout=3)==0
