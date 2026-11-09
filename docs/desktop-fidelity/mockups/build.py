@@ -12,6 +12,8 @@ import io
 import json
 from pathlib import Path
 import subprocess
+import time
+import urllib.error
 import urllib.request
 import zipfile
 
@@ -43,10 +45,21 @@ def original(research, name):
 
 def font_bytes(path, fetch=False):
     if not path.exists() and fetch:
-        request=urllib.request.Request(PACK_URL, headers={'User-Agent':'OneNil-Design-Study/1.0'})
-        with urllib.request.urlopen(request, timeout=90) as response:
-            archive = response.read()
-        assert sha(archive) == PACK_SHA, 'font pack checksum differs'
+        # The 20MB vendor download flaked once in CI (a truncated or mid-transfer
+        # response failed the checksum); retry, accepting only the pinned bytes.
+        archive = None
+        for attempt in range(3):
+            request = urllib.request.Request(PACK_URL, headers={'User-Agent':'OneNil-Design-Study/1.0'})
+            try:
+                with urllib.request.urlopen(request, timeout=300) as response:
+                    archive = response.read()
+                if sha(archive) == PACK_SHA:
+                    break
+            except (urllib.error.URLError, OSError):
+                pass
+            archive = None
+            time.sleep(5 * (attempt + 1))
+        assert archive is not None and sha(archive) == PACK_SHA, 'font pack checksum differs'
         with zipfile.ZipFile(io.BytesIO(archive)) as pack:
             data = pack.read(FONT_MEMBER)
         assert sha(data) == FONT_SHA
