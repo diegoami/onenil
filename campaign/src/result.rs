@@ -65,6 +65,49 @@ impl Campaign {
         score: [u16; 2],
         native_return: &str,
     ) -> Result<(), String> {
+        self.record_match_inner(ticket, score, native_return, None)
+    }
+
+    /// [confirmed:archaeology 3f6fd50 T80] The researched persisted policy: the executed
+    /// interval replacement's durable effect is the roster slot exchange in the managed
+    /// club's first team (save block [DS:D7C2] equivalent), committed together with the
+    /// recorded result in this single save transaction. The in-match status flag and the
+    /// players' condition are week-processing outputs and are not written here.
+    pub fn record_match_with_replacement(
+        &mut self,
+        ticket: &MatchTicket,
+        score: [u16; 2],
+        native_return: &str,
+        out_slot: usize,
+        in_slot: usize,
+        out_id: u16,
+        in_id: u16,
+    ) -> Result<(), String> {
+        // The original exchange requires the two slots on opposite sides of
+        // slot 12: zero-based first team 0..=10, bench 11..=19 (research T74).
+        if out_slot >= 11 || in_slot < 11 || in_slot > 19 {
+            return Err("replacement slots must lie on opposite sides of slot 12".into());
+        }
+        if self.club.first_team.get(out_slot).copied().flatten() != Some(out_id)
+            || self.club.first_team.get(in_slot).copied().flatten() != Some(in_id)
+        {
+            return Err("replacement slots do not hold the executed players".into());
+        }
+        self.record_match_inner(
+            ticket,
+            score,
+            native_return,
+            Some((out_slot, in_id, in_slot, out_id)),
+        )
+    }
+
+    fn record_match_inner(
+        &mut self,
+        ticket: &MatchTicket,
+        score: [u16; 2],
+        native_return: &str,
+        exchange: Option<(usize, u16, usize, u16)>,
+    ) -> Result<(), String> {
         self.validate()?;
         if self.played_fixture.is_some() {
             return Err("this fixture already has a recorded result".into());
@@ -73,6 +116,10 @@ impl Campaign {
             return Err("match completion is stale, foreign or unfinished".into());
         }
         self.transaction(|next| {
+            if let Some((out_slot, in_id, in_slot, out_id)) = exchange {
+                next.club.first_team[out_slot] = Some(in_id);
+                next.club.first_team[in_slot] = Some(out_id);
+            }
             next.played_fixture = Some(PlayedFixture {
                 fixture: ticket.campaign.next_fixture.clone(),
                 season: ticket.campaign.season.clone(),

@@ -217,7 +217,21 @@ impl Application {
                 }
             }
         }
-        if self.controller.resume_requested {
+        // [designed:T78] The request flag survives until the continuation arrives:
+        // accept_continuation checks the completion against it.
+        if self.controller.replace_requested && !self.controller.replace_sent {
+            self.controller.replace_sent = true;
+            let id = self.controller.job_id;
+            let result = self
+                .live_job
+                .as_mut()
+                .ok_or_else(|| "missing live match worker".to_owned())
+                .and_then(|job| job.decide(Decision::ReplaceVerified));
+            if let Err(error) = result {
+                self.controller.accept_live_error(id, error);
+                self.sync_jobs();
+            }
+        } else if self.controller.resume_requested && !self.controller.replace_requested {
             self.controller.resume_requested = false;
             let id = self.controller.job_id;
             let result = self
@@ -276,7 +290,7 @@ impl Application {
     pub fn snapshot(&self) -> serde_json::Value {
         let c = &self.controller;
         let playback = c.match_view();
-        serde_json::json!({"history_top":c.history_top,"visible_history":if c.screen == Screen::History {Some(c.visible_history())} else {None},"pitch_markers":playback.map(|p| p.view().players.iter().zip(p.markers()).map(|(player,m)|serde_json::json!({"scene":player.scene,"player":player.player,"selector":m[0],"attribute":m[1],"position":player.position,"label":crate::timeline::numbered_marker(m[0]).to_string()})).collect::<Vec<_>>()),"match_clubs":playback.map(|p|p.club_names),"recent_actions":playback.map(|p|p.events.iter().rev().take(8).rev().map(|e|serde_json::json!({"text":e.text,"native":e.native})).collect::<Vec<_>>()),"instruction":c.instruction,"option_available":(0..8).map(|i|c.option_available(i)).collect::<Vec<_>>(),"save_path":self.save_path,"game_name":c.game_name,"load_entries":c.load_entries,"load_index":c.load_index,"menus":[c.menu,c.preparation_menu,c.option],"speed":c.speed,"close_requested":c.close_requested,"screen":format!("{:?}",c.screen),"panel":format!("{:?}",c.editor.panel),"selected":format!("{:?}",c.editor.selected),"card":c.editor.card(),"carried":c.editor.carried_player(),"first":c.editor.campaign.club.first_team,"reserve":c.editor.campaign.club.reserves,"campaign":c.editor.campaign,"exhibition":c.exhibition,"job":c.job_id,"worker_pid":self.job.as_ref().map(|j|j.pid()).or_else(||self.live_job.as_ref().map(|j|j.pid())),"live_worker":self.live_job.is_some(),"match_stage":if c.interval_playback.is_some(){Some("incomplete")}else if c.playback.is_some(){Some("complete")}else{None},"resuming":c.is_resuming(),"loaded_frames":playback.map(|p|p.loaded_frames),"phase":playback.map(|p|format!("{:?}",p.phase)),"frames":playback.map(|p|p.cursor),"events":playback.map(|p|p.events.len()),"clock":playback.map(|p|p.view().clock),"score":playback.map(|p|p.view().score),"players":playback.map(|p|p.view().players.len()),"message":c.message})
+        serde_json::json!({"squad_open":c.squad.is_some(),"squad_highlight":c.squad.as_ref().map(|s|s.highlight),"squad_picked":c.squad.as_ref().and_then(|s|s.picked),"interval_roster":c.interval_playback.as_ref().map(|p|p.timeline.snapshot.roster.clone()),"remaining_subs":c.interval_playback.as_ref().map(|p|p.timeline.snapshot.remaining_subs),"history_top":c.history_top,"visible_history":if c.screen == Screen::History {Some(c.visible_history())} else {None},"pitch_markers":playback.map(|p| p.view().players.iter().zip(p.markers()).map(|(player,m)|serde_json::json!({"scene":player.scene,"player":player.player,"selector":m[0],"attribute":m[1],"position":player.position,"label":crate::timeline::numbered_marker(m[0]).to_string()})).collect::<Vec<_>>()),"match_clubs":playback.map(|p|p.club_names),"recent_actions":playback.map(|p|p.events.iter().rev().take(8).rev().map(|e|serde_json::json!({"text":e.text,"native":e.native})).collect::<Vec<_>>()),"instruction":c.instruction,"option_available":(0..8).map(|i|c.option_available(i)).collect::<Vec<_>>(),"save_path":self.save_path,"game_name":c.game_name,"load_entries":c.load_entries,"load_index":c.load_index,"menus":[c.menu,c.preparation_menu,c.option],"speed":c.speed,"close_requested":c.close_requested,"screen":format!("{:?}",c.screen),"panel":format!("{:?}",c.editor.panel),"selected":format!("{:?}",c.editor.selected),"card":c.editor.card(),"carried":c.editor.carried_player(),"first":c.editor.campaign.club.first_team,"reserve":c.editor.campaign.club.reserves,"campaign":c.editor.campaign,"exhibition":c.exhibition,"job":c.job_id,"worker_pid":self.job.as_ref().map(|j|j.pid()).or_else(||self.live_job.as_ref().map(|j|j.pid())),"live_worker":self.live_job.is_some(),"match_stage":if c.interval_playback.is_some(){Some("incomplete")}else if c.playback.is_some(){Some("complete")}else{None},"resuming":c.is_resuming(),"loaded_frames":playback.map(|p|p.loaded_frames),"phase":playback.map(|p|format!("{:?}",p.phase)),"frames":playback.map(|p|p.cursor),"events":playback.map(|p|p.events.len()),"clock":playback.map(|p|p.view().clock),"score":playback.map(|p|p.view().score),"players":playback.map(|p|p.view().players.len()),"message":c.message})
     }
 }
 
