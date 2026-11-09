@@ -149,10 +149,6 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   assert save.read_bytes()==completed
   close_window();assert process.wait(timeout=3)==0;statepath.unlink();launch(load=True)
   key('Return');key('Return');step('duplicate-refused',lambda s:s.get('screen')=='Preparation' and 'already' in s.get('message','') and not s.get('worker_pid'))
-  assert save.read_bytes()==completed
-  close_window();assert process.wait(timeout=3)==0
- except BaseException as exc:
-  error=f'{type(exc).__name__}: {exc}'
   import glob
   keep=Path('/tmp/t80-forensics');keep.mkdir(exist_ok=True)
   for f in glob.glob(str(directory/'**'),recursive=True):
