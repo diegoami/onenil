@@ -161,9 +161,21 @@ fn edited_child_worker_computes_owned_result_and_native_save() {
         .err()
         .unwrap()
         .contains("already"));
+    // [designed:T80] The W030 tail applies the researched week transaction.
+    c.key(Key::Space);
+    assert_eq!(c.screen, Screen::TransferNews);
+    c.key(Key::Space);
+    assert_eq!(c.screen, Screen::Main);
+    let advanced = c.editor.campaign.clone();
+    assert_eq!(advanced.week_index, 1);
+    assert_eq!(advanced.cash, 421491);
+    assert_eq!(advanced.next_fixture.opponent, 176);
+    assert_eq!(advanced.next_fixture.opponent_name, "Sevilla");
+    assert_eq!(advanced.revision, result.revision + 1);
+    assert!(advanced.played_fixture.is_some());
     c.key(Key::Enter);
     c.key(Key::Enter);
     assert_eq!(c.screen, Screen::Preparation);
     assert!(!c.prepare_requested);
-    assert_eq!(c.editor.campaign, result);
+    assert_eq!(c.editor.campaign, advanced);
 }

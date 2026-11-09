@@ -107,9 +107,17 @@ fn witnessed_confirmation_persists_the_exchange_exactly_once() {
     assert_eq!(recorded.revision, before.revision + 1);
     assert_eq!(recorded.club.first_team[1], Some(2592));
     assert_eq!(recorded.club.first_team[11], Some(2582));
-    c.screen = Screen::FullTime;
-    c.key(Key::Enter);
-    assert_eq!(c.editor.campaign, recorded);
+    // The W030 tail: the week transaction applies after the result.
+    c.key(Key::Space);
+    assert_eq!(c.screen, Screen::TransferNews);
+    c.key(Key::Space);
+    assert_eq!(c.screen, Screen::Main);
+    let advanced = c.editor.campaign.clone();
+    assert_eq!(advanced.week_index, 1);
+    assert_eq!(advanced.cash, 421491);
+    assert_eq!(advanced.next_fixture.opponent, 176);
+    assert_eq!(advanced.next_fixture.opponent_name, "Sevilla");
+    assert_eq!(advanced.revision, recorded.revision + 1);
 }
 #[test]
 fn cancelled_selection_continues_clean_and_persists_no_exchange() {
@@ -135,6 +143,10 @@ fn cancelled_selection_continues_clean_and_persists_no_exchange() {
     assert!(recorded.played_fixture.is_some());
     assert_eq!(recorded.club.first_team[1], Some(2582));
     assert_eq!(recorded.club.first_team[11], Some(2592));
+    // The cancelled case: the clean result records with no roster change.
+    c.key(Key::Space);
+    c.key(Key::Space);
+    assert_eq!(c.screen, Screen::Main);
 }
 #[test]
 fn decision_mismatch_stale_and_duplicate_completions_never_mutate() {

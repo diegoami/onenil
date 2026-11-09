@@ -27,9 +27,14 @@ pub struct PlayedFixture {
 
 impl PlayedFixture {
     pub(crate) fn validate(&self, campaign: &Campaign) -> Result<(), String> {
-        if self.fixture != campaign.next_fixture
-            || self.season != campaign.season
-            || self.week_index != campaign.week_index
+        // [designed:T80] The recorded result validates against the pinned source
+        // context, not the live next_fixture: the researched week completion
+        // (research T82 c13195a) advances the fixture and the week after the
+        // result is stored, and the stored request stays bound to its week.
+        let source = Campaign::initial()?;
+        if self.fixture != source.next_fixture
+            || self.season != source.season
+            || self.week_index != source.week_index
             || self.request_revision >= campaign.revision
             || self.request_sha256.len() != 64
             || !self
@@ -66,6 +71,59 @@ impl Campaign {
         native_return: &str,
     ) -> Result<(), String> {
         self.record_match_inner(ticket, score, native_return, None)
+    }
+
+    /// [confirmed:research T81 dc54fe9/T82 c13195a] The observed friendly week's
+    /// transaction: the club's cash moves by the authenticated gate receipts and
+    /// weekly outgoings, the week index advances exactly once, and the following
+    /// fixture (competition 1, opponent 176, Sevilla) becomes the next fixture.
+    /// One atomic save transaction, gated on the recorded result; the original's
+    /// week condition refresh is NOT applied here (research T81 names it a
+    /// follow-up: it depends on the match's own events).
+    pub fn record_week_completion(
+        &mut self,
+        total_in: i32,
+        total_out: i32,
+        following_competition: u8,
+        following_opponent: u16,
+        following_flags: u8,
+        following_name: &str,
+    ) -> Result<(), String> {
+        self.validate()?;
+        let played = self
+            .played_fixture
+            .as_ref()
+            .ok_or("the friendly result must be recorded before the week completes")?;
+        if self.week_index != 0 {
+            return Err("this campaign has already completed its first week".into());
+        }
+        let following_slot = played
+            .fixture
+            .slot
+            .checked_add(1)
+            .ok_or("fixture slot exhausted")?;
+        self.transaction(|next| {
+            next.cash = next
+                .cash
+                .checked_add(total_in)
+                .and_then(|v| v.checked_sub(total_out))
+                .ok_or("cash overflow")?;
+            next.week_index = next
+                .week_index
+                .checked_add(1)
+                .ok_or("week index exhausted")?;
+            next.next_fixture = Fixture {
+                slot: following_slot,
+                club: next.club.id,
+                opponent: following_opponent,
+                opponent_name: following_name.to_owned(),
+                competition_code: following_competition,
+                flags: following_flags,
+                venue_code: 0,
+                opponent_flags: 0,
+            };
+            Ok(())
+        })
     }
 
     /// [confirmed:archaeology 3f6fd50 T80] The researched persisted policy: the executed

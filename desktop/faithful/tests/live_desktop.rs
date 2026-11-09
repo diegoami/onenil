@@ -288,10 +288,22 @@ fn real_application_retains_worker_through_inspection_halftime_and_saved_complet
         let recorded = a.controller.editor.campaign.clone();
         assert_eq!(recorded.revision, before.revision + 1);
         assert!(recorded.played_fixture.is_some());
+        // [designed:T80] The W030 tail applies the researched week transaction
+        // before the save: cash, week index and the following fixture.
+        a.key(Key::Space);
+        assert_eq!(a.controller.screen, Screen::TransferNews);
+        a.key(Key::Space);
+        assert_eq!(a.controller.screen, Screen::Main);
+        let advanced = a.controller.editor.campaign.clone();
+        assert_eq!(advanced.week_index, 1);
+        assert_eq!(advanced.cash, 421491);
+        assert_eq!(advanced.next_fixture.opponent, 176);
+        assert_eq!(advanced.next_fixture.opponent_name, "Sevilla");
+        assert_eq!(advanced.revision, recorded.revision + 1);
         a.key(Key::F7);
         assert!(a.save_path.exists());
         a.key(Key::F9);
-        assert_eq!(a.controller.editor.campaign, recorded);
+        assert_eq!(a.controller.editor.campaign, advanced);
         assert_eq!(a.controller.screen, Screen::Main);
         assert!(a.live_job.is_none());
     }
