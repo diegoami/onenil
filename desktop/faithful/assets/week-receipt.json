@@ -1,0 +1,77 @@
+{
+ "schema": "friendly-week-receipt/1",
+ "source_research": {
+  "session": "runs/T81/session-r0007.json",
+  "session_sha256": "825f1b3945a863d35886ff74f1e0d8f4dd91085c4cfa58f4bcc89d490ad7ba27",
+  "fixtures": "records/T82/next-fixture-r0001.json",
+  "fixtures_sha256": "f85e03433c4cb2e9c83ba73cc9493914b5f88785cd3c5d05b0d1858b52afe68b"
+ },
+ "club": 130,
+ "manager": 1,
+ "week": {
+  "index_before": 0,
+  "index_after": 1
+ },
+ "cash": {
+  "before": 452000,
+  "gate_receipts": 38761,
+  "prize_money": 0,
+  "total_in": 38761,
+  "player_salaries": 57320,
+  "win_bonuses": 0,
+  "staff_salaries": 4200,
+  "total_out": 69270,
+  "after": 421491
+ },
+ "transfer_rows": [
+  {
+   "player": "M.Kree",
+   "from": "Bor. Dortmund",
+   "to": "Werder Bremen"
+  },
+  {
+   "player": "D.May",
+   "from": "Manchester Utd",
+   "to": "Wimbledon"
+  },
+  {
+   "player": "M.Carruthers",
+   "from": "Stoke City",
+   "to": "Sheffield Utd"
+  },
+  {
+   "player": "F.Digby",
+   "from": "Swindon Town",
+   "to": "W.B.A"
+  },
+  {
+   "player": "L.Martin",
+   "from": "Blackpool",
+   "to": "York City"
+  },
+  {
+   "player": "J.Vaughan",
+   "from": "Preston NE",
+   "to": "Fulham"
+  },
+  {
+   "player": "M.Frydek",
+   "from": "Sparta Prague",
+   "to": "Kosice"
+  },
+  {
+   "player": "A.Millen",
+   "from": "Hibernian",
+   "to": "Panathinaikos"
+  }
+ ],
+ "following_fixture": {
+  "competition": 1,
+  "opponent": 176,
+  "flags": 0,
+  "name": "Sevilla",
+  "manager": "Aragones"
+ },
+ "roster_unchanged": true,
+ "interpretation": "one observed friendly week: the authenticated movement and rows of this week only; not a general finance or transfer formula"
+}

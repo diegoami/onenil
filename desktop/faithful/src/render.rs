@@ -240,6 +240,67 @@ impl Renderer {
             self.cell(x + 15, row, role, TEXT, GROUND);
         }
     }
+    /// [designed:T80] The week's cash flow, from the pinned research receipt.
+    fn cash_flow(&mut self, c: &Controller) {
+        self.pixels.fill(GROUND);
+        self.text(2, 1, "CASH FLOW FOR Blackburn R----", CYAN, GROUND, 60);
+        let receipt = crate::week::WeekReceipt::pinned();
+        let cash = receipt.cash;
+        self.text(4, 5, "Cash in", CYAN, GROUND, 20);
+        self.text(6, 7, "Gate receipts", TEXT, GROUND, 40);
+        self.text(38, 7, &format!("{}", cash.gate_receipts), TEXT, GROUND, 12);
+        self.text(6, 9, "Prize money", TEXT, GROUND, 40);
+        self.text(38, 9, &format!("{}", cash.prize_money), TEXT, GROUND, 12);
+        self.text(4, 12, "TOTAL IN", CYAN, GROUND, 20);
+        self.text(38, 12, &format!("{}", cash.total_in), TEXT, GROUND, 12);
+        self.text(4, 15, "Cash out", CYAN, GROUND, 20);
+        self.text(6, 17, "Player salaries", TEXT, GROUND, 40);
+        self.text(
+            38,
+            17,
+            &format!("{}", cash.player_salaries),
+            TEXT,
+            GROUND,
+            12,
+        );
+        self.text(6, 19, "Win bonuses", TEXT, GROUND, 40);
+        self.text(38, 19, &format!("{}", cash.win_bonuses), TEXT, GROUND, 12);
+        self.text(6, 21, "Staff salaries", TEXT, GROUND, 40);
+        self.text(
+            38,
+            21,
+            &format!("{}", cash.staff_salaries),
+            TEXT,
+            GROUND,
+            12,
+        );
+        self.text(4, 23, "TOTAL OUT", CYAN, GROUND, 20);
+        self.text(38, 23, &format!("{}", cash.total_out), TEXT, GROUND, 12);
+        self.text(2, 24, "Space: transfer news", TEXT, GROUND, 76);
+    }
+    /// [designed:T80] The week's transfer news rows, from the pinned receipt.
+    fn transfer_news(&mut self, c: &Controller) {
+        self.pixels.fill(GROUND);
+        self.text(2, 1, "TRANSFER NEWS", CYAN, GROUND, 60);
+        let receipt = crate::week::WeekReceipt::pinned();
+        self.text(4, 4, "PLAYER", CYAN, GROUND, 16);
+        self.text(22, 4, "FROM", CYAN, GROUND, 16);
+        self.text(40, 4, "TO", CYAN, GROUND, 16);
+        for (i, row) in receipt.transfer_rows.iter().enumerate() {
+            let row = 6 + i;
+            self.text(4, row, &row.player, TEXT, GROUND, 18);
+            self.text(22, row, &row.from, TEXT, GROUND, 17);
+            self.text(40, row, &row.to, TEXT, GROUND, 17);
+        }
+        self.text(
+            2,
+            24,
+            "Space: management menu   F7 saves the week",
+            TEXT,
+            GROUND,
+            76,
+        );
+    }
     /// [designed:T78] The interval squad view over the engine-owned snapshot:
     /// W028 pick/put-here keys, readable refusals, nothing writable.
     fn match_squad(&mut self, c: &Controller) {
@@ -741,6 +802,8 @@ impl Renderer {
             }
             Screen::Players | Screen::Options | Screen::Instructions => self.players(c),
             Screen::MatchSquad => self.match_squad(c),
+            Screen::CashFlow => self.cash_flow(c),
+            Screen::TransferNews => self.transfer_news(c),
             Screen::Preparing if c.is_resuming() => self.match_view(c),
             Screen::Pitch | Screen::History | Screen::HalfTime | Screen::FullTime => {
                 self.match_view(c)

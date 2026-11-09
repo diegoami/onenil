@@ -179,12 +179,23 @@ impl Campaign {
         if self.origin != origin() || self.namespace != source.namespace {
             return Err("campaign source/league namespace differs".into());
         }
+        // [designed:T80, research T82 c13195a] The supported context is the
+        // source week and, after the researched friendly-week completion, the
+        // following fixture (competition 1, opponent 176, Sevilla) with the
+        // week advanced exactly once. Anything else refuses.
+        let week_zero =
+            self.week_index == source.week_index && self.next_fixture == source.next_fixture;
+        let week_one = self.week_index == 1
+            && self.next_fixture.slot == 2
+            && self.next_fixture.competition_code == 1
+            && self.next_fixture.opponent == 176
+            && self.next_fixture.flags == 0
+            && self.next_fixture.opponent_name == "Sevilla";
         if self.season != source.season
-            || self.week_index != source.week_index
             || self.manager != source.manager
             || self.club.id != source.club.id
             || self.club.name != source.club.name
-            || self.next_fixture != source.next_fixture
+            || !(week_zero || week_one)
         {
             return Err("campaign context outside the supported saved club/fixture".into());
         }

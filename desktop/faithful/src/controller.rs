@@ -21,6 +21,8 @@ pub enum Screen {
     MatchSquad,
     HalfTime,
     FullTime,
+    CashFlow,
+    TransferNews,
     Quit,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -788,13 +790,20 @@ impl Controller {
                 self.screen = Screen::Bench;
             }
             Screen::FullTime => {
-                self.screen = Screen::Main;
                 self.message = if self.exhibition {
+                    self.screen = Screen::Main;
                     "Exhibition complete. No campaign result was posted.".into()
                 } else {
                     match self.record_completion() {
-                        Ok(()) => self.recorded_result_text().unwrap(),
+                        Ok(()) => {
+                            // [designed:T80] The W030 tail: the recorded result is
+                            // followed by the week's cash flow and transfer news,
+                            // and the management menu carries the advanced week.
+                            self.screen = Screen::CashFlow;
+                            self.recorded_result_text().unwrap()
+                        }
                         Err(_) => {
+                            self.screen = Screen::Main;
                             "Result not recorded: missing, changed or unfinished match request."
                                 .into()
                         }
@@ -802,6 +811,39 @@ impl Controller {
                 };
                 self.exhibition = false;
             }
+            // [designed:T80] The W030 route continues with the authenticated week
+            // transaction: the pinned receipt's movement and following fixture
+            // apply once, in one campaign save transaction.
+            Screen::CashFlow => match key {
+                Key::Space => self.screen = Screen::TransferNews,
+                _ => self.unsupported(),
+            },
+            Screen::TransferNews => match key {
+                Key::Space => {
+                    let receipt = crate::week::WeekReceipt::pinned();
+                    let result = self.editor.campaign.record_week_completion(
+                        receipt.cash.total_in,
+                        receipt.cash.total_out,
+                        receipt.following_fixture.competition,
+                        receipt.following_fixture.opponent,
+                        receipt.following_fixture.flags,
+                        &receipt.following_fixture.name,
+                    );
+                    match result {
+                        Ok(()) => {
+                            self.screen = Screen::Main;
+                            self.message = format!(
+                                "Week {} complete. Next: {} ({}). F7 saves.",
+                                receipt.week.index_after,
+                                receipt.following_fixture.name,
+                                receipt.following_fixture.manager
+                            );
+                        }
+                        Err(e) => self.message = e,
+                    }
+                }
+                _ => self.unsupported(),
+            },
             Screen::Quit => match key {
                 Key::Y => self.close_requested = true,
                 Key::N | Key::Escape => self.screen = Screen::Main,

@@ -20,7 +20,7 @@ fn preparing() -> Controller {
 fn interval(engine: &mut LiveCampaign) -> IntervalTimeline {
     engine.pause().unwrap()
 }
-fn fulltime(c: &mut Controller, prefix: &IntervalTimeline) {
+fn fulltime(c: &mut Controller, engine: &mut LiveCampaign, prefix: &IntervalTimeline) {
     assert!(c.accept_interval(c.job_id, prefix.clone()));
     for _ in 0..10000 {
         if c.screen != Screen::Pitch {
@@ -30,6 +30,14 @@ fn fulltime(c: &mut Controller, prefix: &IntervalTimeline) {
     }
     c.key(Key::Enter);
     c.key(Key::Enter);
+    for _ in 0..10000 {
+        if c.screen != Screen::Pitch {
+            break;
+        }
+        c.tick();
+    }
+    let completion = engine.finish(false).unwrap();
+    assert!(c.accept_continuation(c.job_id, completion));
     for _ in 0..100000 {
         if c.screen != Screen::Pitch {
             break;
@@ -44,7 +52,7 @@ fn week_route_posts_result_walks_w030_and_persists_the_week_once() {
     let prefix = interval(&mut engine);
     let mut c = preparing();
     let before = c.editor.campaign.clone();
-    fulltime(&mut c, &prefix);
+    fulltime(&mut c, &mut engine, &prefix);
     c.key(Key::Enter);
     assert_eq!(c.screen, Screen::CashFlow);
     let cash_screen_campaign = c.editor.campaign.clone();
@@ -54,6 +62,7 @@ fn week_route_posts_result_walks_w030_and_persists_the_week_once() {
     c.key(Key::Space);
     assert_eq!(c.screen, Screen::TransferNews);
     c.key(Key::Space);
+    println!("DEBUG message after transfer space: {:?}", c.message);
     assert_eq!(c.screen, Screen::Main);
     let advanced = c.editor.campaign.clone();
     assert_eq!(advanced.cash, 421491);
@@ -65,7 +74,8 @@ fn week_route_posts_result_walks_w030_and_persists_the_week_once() {
     assert_eq!(advanced.club.first_team[1], Some(2582));
     c.screen = Screen::Main;
     c.key(Key::Enter);
-    assert!(c.message.contains("already has a result"));
+    c.key(Key::Enter);
+    assert!(c.message.contains("already has a result"), "{}", c.message);
     assert_eq!(c.editor.campaign, advanced);
     let path = std::env::temp_dir().join(format!("T80-week-{}", std::process::id()));
     c.editor.campaign.save(&path).unwrap();

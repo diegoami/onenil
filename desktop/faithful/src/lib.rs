@@ -9,6 +9,7 @@ pub mod render;
 #[cfg(feature = "software")]
 pub mod software;
 pub mod timeline;
+pub mod week;
 pub mod worker;
 
 #[cfg(feature = "egui")]
