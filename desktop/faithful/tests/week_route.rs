@@ -29,7 +29,7 @@ fn fulltime(c: &mut Controller, prefix: &IntervalTimeline) {
         c.tick();
     }
     c.key(Key::Enter);
-    c.key(Key::Return);
+    c.key(Key::Enter);
     for _ in 0..100000 {
         if c.screen != Screen::Pitch {
             break;
@@ -45,7 +45,7 @@ fn week_route_posts_result_walks_w030_and_persists_the_week_once() {
     let mut c = preparing();
     let before = c.editor.campaign.clone();
     fulltime(&mut c, &prefix);
-    c.key(Key::Return);
+    c.key(Key::Enter);
     assert_eq!(c.screen, Screen::CashFlow);
     let cash_screen_campaign = c.editor.campaign.clone();
     assert!(cash_screen_campaign.played_fixture.is_some());
@@ -59,12 +59,12 @@ fn week_route_posts_result_walks_w030_and_persists_the_week_once() {
     assert_eq!(advanced.cash, 421491);
     assert_eq!(advanced.week_index, 1);
     assert_eq!(advanced.next_fixture.opponent, 176);
-    assert_eq!(advanced.next_fixture.name, "Sevilla");
+    assert_eq!(advanced.next_fixture.opponent_name, "Sevilla");
     assert_eq!(advanced.revision, before.revision + 2);
     assert!(advanced.played_fixture.is_some());
     assert_eq!(advanced.club.first_team[1], Some(2582));
     c.screen = Screen::Main;
-    c.key(Key::Return);
+    c.key(Key::Enter);
     assert!(c.message.contains("already has a result"));
     assert_eq!(c.editor.campaign, advanced);
     let path = std::env::temp_dir().join(format!("T80-week-{}", std::process::id()));
@@ -79,7 +79,7 @@ fn exhibition_full_time_never_advances_the_week() {
     let mut c = Controller::default();
     c.exhibition = true;
     c.screen = Screen::FullTime;
-    c.key(Key::Return);
+    c.key(Key::Enter);
     assert_eq!(c.screen, Screen::Main);
     assert_eq!(c.editor.campaign.week_index, 0);
     assert!(c.editor.campaign.played_fixture.is_none());
