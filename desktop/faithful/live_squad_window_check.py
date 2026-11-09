@@ -136,7 +136,7 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   assert state()['campaign']==squad.get('campaign')
   if args.cancelled:
    key('Return');resuming=step('resuming',lambda s:s.get('screen')=='Preparing' and s.get('resuming'))
-   assert resuming.get('squad_open') is None
+   assert resuming.get('squad_open') is False
    step('second-half',lambda s:s.get('screen')=='Pitch' and s.get('phase')=='SecondHalf' and s.get('match_stage')=='complete' and not s.get('worker_pid'),180)
    key('space');step('second-half-history',lambda s:s.get('screen')=='History');shot('second-half')
    key('Escape');final=step('full-time',lambda s:s.get('screen')=='FullTime',90)
