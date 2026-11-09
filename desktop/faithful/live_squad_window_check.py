@@ -117,6 +117,7 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   held_worker=state()['worker_pid'];worker_pids.append(held_worker)
   step('half-time',lambda s:s.get('screen')=='HalfTime' and s.get('worker_pid')==held_worker,180)
   key('Return');step('interval-bench',lambda s:s.get('screen')=='Bench' and s.get('worker_same'))
+  time.sleep(1.0)  # let the diagnostic writer settle before the bench decision
   key('space');squad=step('match-squad',lambda s:s.get('screen')=='MatchSquad' and s.get('squad_open') and s.get('squad_highlight')==1 and s.get('worker_same'))
   assert squad.get('interval_roster',[0]*20)[1]==2582 and squad.get('interval_roster')[11]==2592
   assert squad.get('interval_roster',[0]*20)[0]==2581 and len(squad.get('interval_roster',[]))==20
