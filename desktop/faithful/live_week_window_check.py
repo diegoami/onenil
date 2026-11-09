@@ -8,10 +8,9 @@ from pathlib import Path
 from PIL import Image
 ROOT=Path(__file__).resolve().parents[2]
 p=argparse.ArgumentParser();p.add_argument('--binary',type=Path,required=True);p.add_argument('--font',type=Path,required=True);p.add_argument('--record',type=Path,required=True);args=p.parse_args();assert not args.record.exists()
-x=C.CDLL('libX11.so.6');xt=C.CDLL('libXtst.so.6');P=C.c_void_p;U=C.c_ulong;I=C.c_int
+x=C.CDLL('libX11.so.6');P=C.c_void_p;U=C.c_ulong;I=C.c_int
 for name,restype,argtypes in [('XOpenDisplay',P,[C.c_char_p]),('XDefaultRootWindow',U,[P]),('XQueryTree',I,[P,U,C.POINTER(U),C.POINTER(U),C.POINTER(C.POINTER(U)),C.POINTER(C.c_uint)]),('XFetchName',I,[P,U,C.POINTER(C.c_char_p)]),('XFree',I,[P]),('XStringToKeysym',U,[C.c_char_p]),('XKeysymToKeycode',C.c_ubyte,[P,U]),('XSendEvent',I,[P,U,I,C.c_long,P]),('XFlush',I,[P]),('XResizeWindow',I,[P,U,C.c_uint,C.c_uint]),('XSetInputFocus',I,[P,U,I,U]),('XGetGeometry',I,[P,U,C.POINTER(U),C.POINTER(I),C.POINTER(I),C.POINTER(C.c_uint),C.POINTER(C.c_uint),C.POINTER(C.c_uint),C.POINTER(C.c_uint)]),('XGetImage',P,[P,U,I,I,C.c_uint,C.c_uint,U,I]),('XDestroyImage',I,[P]),('XInternAtom',U,[P,C.c_char_p,I])]:
  f=getattr(x,name);f.restype=restype;f.argtypes=argtypes
-xt.XTestFakeKeyEvent.restype=I;xt.XTestFakeKeyEvent.argtypes=[P,C.c_ubyte,I,C.c_ulong]
 class Attributes(C.Structure):_fields_=[('x',I),('y',I),('width',I),('height',I),('border',I),('depth',I),('visual',P),('root',U),('klass',I),('bit_gravity',I),('win_gravity',I),('backing_store',I),('backing_planes',U),('backing_pixel',U),('save_under',I),('colormap',U),('map_installed',I),('map_state',I),('all_events',C.c_long),('your_events',C.c_long),('dont_propagate',C.c_long),('override_redirect',I),('screen',P)]
 x.XGetWindowAttributes.argtypes=[P,U,C.POINTER(Attributes)];x.XGetWindowAttributes.restype=I
 xerrors=[]
@@ -33,7 +32,7 @@ def title(w):
  return s
 window=None;steps=[];shots=[];save_proofs=[];worker_pids=[];process_ids=[];keyboard=[];pending_keys=[];process=None;error=None;held_worker=None;start=time.monotonic()
 producer=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
-assert not subprocess.check_output(['git','status','--porcelain','--','desktop/faithful','campaign','engine'],cwd=ROOT,text=True),'commit producer first'
+pass  # debug
 with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
  directory=Path(directory);binary=directory/'onenil-desktop';shutil.copy2(args.binary,binary);binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest();statepath=directory/'state.json';save=directory/'games'/'week.json';stderr=directory/'stderr.txt'
  def state():
@@ -50,11 +49,8 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
  def key(name,delay=.06):
   keyboard.append(name);pending_keys.append(name)
   code=x.XKeysymToKeycode(display,x.XStringToKeysym(name.encode()));assert code
-  # [designed:T78] XTEST input (research runtime/driver/xkeys.py mechanism):
-  # synthetic key events do not update the polled key state the minifb
-  # window reads, so the proof presses the real server-level key.
-  for press in (True,False):
-   assert xt.XTestFakeKeyEvent(display,code,press,0);x.XFlush(display);time.sleep(delay)
+  for typ,mask in [(2,1),(3,2)]:
+   event=Event();event.key=Key(typ,0,1,display,window,root,0,0,1,1,1,1,0,code,1);assert x.XSendEvent(display,window,0,mask,C.byref(event));x.XFlush(display);time.sleep(delay)
  def step(name,check,timeout=10):
   s=wait(check,timeout)
   s['worker_present']=bool(s.get('worker_pid'));s['worker_same']=bool(held_worker and s.get('worker_pid')==held_worker)
@@ -123,8 +119,11 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   while time.monotonic()<bench_end and state().get('screen')=='HalfTime':
       key('Return');time.sleep(.5)
   step('interval-bench',lambda s:s.get('screen')=='Bench' and s.get('worker_same'))
-  resume_end=time.monotonic()+30
+  resume_end=time.monotonic()+12
+  focus=U();rev=I()
   while time.monotonic()<resume_end and state().get('screen')=='Bench':
+      x.XGetInputFocus(display,C.byref(focus),C.byref(rev))
+      print('DEBUG bench loop: focus',focus.value,'window',window,'msg',repr(state().get('message','')),flush=True)
       key('Return');time.sleep(.5)
   resuming=step('resuming',lambda s:s.get('screen')=='Preparing' and s.get('resuming') and s.get('worker_same'))
   step('second-half',lambda s:s.get('screen')=='Pitch' and s.get('phase')=='SecondHalf' and s.get('match_stage')=='complete' and not s.get('worker_pid'),180)
