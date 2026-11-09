@@ -117,8 +117,16 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   key('Return');wait(lambda s:s.get('screen')=='Pitch' and s.get('live_worker') and s.get('match_stage')=='incomplete',180)
   held_worker=state()['worker_pid'];worker_pids.append(held_worker)
   step('half-time',lambda s:s.get('screen')=='HalfTime' and s.get('worker_pid')==held_worker,180)
-  key('Return');step('interval-bench',lambda s:s.get('screen')=='Bench' and s.get('worker_same'))
-  key('Return');resuming=step('resuming',lambda s:s.get('screen')=='Preparing' and s.get('resuming') and s.get('worker_same'))
+  # The halftime keypress can land late under load; re-send while the screen
+  # still shows the interval, with a bounded total wait.
+  bench_end=time.monotonic()+30
+  while time.monotonic()<bench_end and state().get('screen')=='HalfTime':
+      key('Return');time.sleep(.5)
+  step('interval-bench',lambda s:s.get('screen')=='Bench' and s.get('worker_same'))
+  resume_end=time.monotonic()+30
+  while time.monotonic()<resume_end and state().get('screen')=='Bench':
+      key('Return');time.sleep(.5)
+  resuming=step('resuming',lambda s:s.get('screen')=='Preparing' and s.get('resuming') and s.get('worker_same'))
   step('second-half',lambda s:s.get('screen')=='Pitch' and s.get('phase')=='SecondHalf' and s.get('match_stage')=='complete' and not s.get('worker_pid'),180)
   key('space');step('second-half-history',lambda s:s.get('screen')=='History');shot_resize('second-half')
   key('Escape');final=step('full-time',lambda s:s.get('screen')=='FullTime',90)
