@@ -10,7 +10,11 @@ A native desktop feasibility prototype now reproduces the original-style main me
 Players interaction, backed by the original saved Blackburn club and complete native save/load.
 The unchanged supplied campaign and exactly its witnessed first-team Pearce/Hendry
 exchange can play the PSG friendly with detailed
-player commentary, clock, score and pitch positions. It runs locally without a browser/server:
+player commentary, clock, score and pitch positions. It runs locally without a browser/server.
+Host provisioning (rustup, a sudo-free linker bundle, xdotool, the calibrated DOSBox-X) is the
+[restore-on-a-new-machine checklist](https://github.com/diegoami/onenil-archaeology/blob/main/docs/environment.md)
+in the evidence repository; each crate builds separately with
+`cargo test --manifest-path <crate>/Cargo.toml --locked`:
 
 ```sh
 python3 desktop/faithful/fetch_font.py
