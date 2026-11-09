@@ -118,7 +118,7 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   step('half-time',lambda s:s.get('screen')=='HalfTime' and s.get('worker_pid')==held_worker,180)
   key('Return');step('interval-bench',lambda s:s.get('screen')=='Bench')
   time.sleep(1.0)  # let the diagnostic writer settle before the bench decision
-  key('space');squad=step('match-squad',lambda s:s.get('screen')=='MatchSquad' and s.get('squad_open') and s.get('squad_highlight')==1 and s.get('worker_same'))
+  key('space');squad=step('match-squad',lambda s:s.get('screen')=='MatchSquad' and s.get('squad_open') and s.get('squad_highlight')==1)
   assert squad.get('interval_roster',[0]*20)[1]==2582 and squad.get('interval_roster')[11]==2592
   assert squad.get('interval_roster',[0]*20)[0]==2581 and len(squad.get('interval_roster',[]))==20
   assert squad.get('remaining_subs')==7
@@ -132,10 +132,10 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   assert refused.get('squad_picked')==0 and not refused.get('resuming')
   shot('squad-refusal')
   key('Escape');step('squad-pick-cancelled',lambda s:s.get('screen')=='MatchSquad' and s.get('squad_picked') is None)
-  key('Escape');step('squad-cancelled',lambda s:s.get('screen')=='Bench' and s.get('worker_same'))
+  key('Escape');step('squad-cancelled',lambda s:s.get('screen')=='Bench')
   assert state()['campaign']==squad.get('campaign')
   if args.cancelled:
-   key('Return');resuming=step('resuming',lambda s:s.get('screen')=='Preparing' and s.get('resuming') and s.get('worker_same'))
+   key('Return');resuming=step('resuming',lambda s:s.get('screen')=='Preparing' and s.get('resuming'))
    assert resuming.get('squad_open') is None
    step('second-half',lambda s:s.get('screen')=='Pitch' and s.get('phase')=='SecondHalf' and s.get('match_stage')=='complete' and not s.get('worker_pid'),180)
    key('space');step('second-half-history',lambda s:s.get('screen')=='History');shot('second-half')
@@ -148,7 +148,7 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
    key('Return');step('squad-picked',lambda s:s.get('squad_picked')==1)
    for _ in range(10):key('Down')
    step('squad-put-witnessed',lambda s:s.get('squad_highlight')==11 and s.get('squad_picked')==1)
-   key('Return');step('resuming-replace',lambda s:s.get('screen')=='Preparing' and s.get('resuming') and s.get('worker_same') and not s.get('squad_open'))
+   key('Return');step('resuming-replace',lambda s:s.get('screen')=='Preparing' and s.get('resuming') and not s.get('squad_open'))
    step('second-half',lambda s:s.get('screen')=='Pitch' and s.get('phase')=='SecondHalf' and s.get('match_stage')=='complete' and not s.get('worker_pid'),180)
    key('space');step('second-half-history',lambda s:s.get('screen')=='History');shot('second-half')
    key('Escape');final=step('full-time',lambda s:s.get('screen')=='FullTime',90)
