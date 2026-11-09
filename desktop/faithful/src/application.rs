@@ -217,14 +217,21 @@ impl Application {
                 }
             }
         }
-        if self.controller.resume_requested {
+        if self.controller.resume_requested || self.controller.replace_requested {
             self.controller.resume_requested = false;
+            let replace = self.controller.replace_requested;
+            self.controller.replace_requested = false;
             let id = self.controller.job_id;
+            let decision = if replace {
+                Decision::ReplaceVerified
+            } else {
+                Decision::Continue
+            };
             let result = self
                 .live_job
                 .as_mut()
                 .ok_or_else(|| "missing live match worker".to_owned())
-                .and_then(|job| job.decide(Decision::Continue));
+                .and_then(|job| job.decide(decision));
             if let Err(error) = result {
                 self.controller.accept_live_error(id, error);
                 self.sync_jobs();

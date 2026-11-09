@@ -156,9 +156,14 @@ fn decision_mismatch_stale_and_duplicate_completions_never_mutate() {
         other.finish(false).unwrap()
     };
     assert!(continue_completion.replacement.is_none());
-    assert!(!c.accept_continuation(c.job_id, continue_completion));
+    // The mismatch refuses via the owned live error path: handled, but the
+    // campaign stays clean and no pending exchange survives it.
+    assert!(c.accept_continuation(c.job_id, continue_completion));
     assert_eq!(c.screen, Screen::Preparation);
+    assert_eq!(c.editor.campaign, before);
     assert!(before.played_fixture.is_none());
+    assert!(!c.replace_requested);
+    assert!(!c.is_resuming());
     // A replacement completion without a request refuses the same way.
     let mut c = preparing();
     halftime(&mut c, &prefix);
@@ -169,7 +174,8 @@ fn decision_mismatch_stale_and_duplicate_completions_never_mutate() {
     other.pause().unwrap();
     let replaced = other.finish(true).unwrap();
     assert!(replaced.replacement.is_some());
-    assert!(!c.accept_continuation(c.job_id, replaced));
+    assert!(c.accept_continuation(c.job_id, replaced));
     assert_eq!(c.screen, Screen::Preparation);
     assert!(c.editor.campaign.played_fixture.is_none());
+    assert_eq!(c.editor.campaign, campaign());
 }

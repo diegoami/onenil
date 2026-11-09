@@ -213,6 +213,43 @@ pub fn compute_campaign(campaign: &onenil_campaign::Campaign) -> Result<Timeline
         [first?, second?],
     )
 }
+/// [designed:T78] Bounded read-only interval snapshot, produced by the engine
+/// from the owned live image: the managed club's roster order, the displayed
+/// remaining substitutions and the case players' availability fields. The UI
+/// reads it; nothing writes through it.
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct IntervalSnapshotPlayer {
+    pub current_position: u8,
+    pub club_position: u8,
+    pub condition: u8,
+    pub instructions: u8,
+    pub status: u8,
+}
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct IntervalSnapshot {
+    pub club: u64,
+    pub remaining_subs: u8,
+    pub roster: Vec<u64>,
+    pub players: BTreeMap<String, IntervalSnapshotPlayer>,
+}
+impl IntervalSnapshot {
+    pub fn player(&self, slot: usize) -> Option<u64> {
+        self.roster.get(slot).copied().filter(|id| *id != 0)
+    }
+}
+/// [confirmed:T80,faba987..3f6fd50] The engine's executed exchange is the only
+/// durable substitution effect: incoming into the vacated first-team slot,
+/// outgoing into the opposite bench slot, committed once with the result.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ExecutedReplacement {
+    pub out_slot: usize,
+    pub in_slot: usize,
+    pub out_id: u64,
+    pub in_id: u64,
+}
 /// [designed:T76] Incomplete reached views. This type has no completed-return field.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -228,6 +265,7 @@ pub struct IntervalTimeline {
     pub seed: u64,
     pub clubs: Vec<u64>,
     pub marker_rows: Vec<Vec<[u16; 2]>>,
+    pub snapshot: IntervalSnapshot,
 }
 impl IntervalTimeline {
     pub fn validate(&self) -> Result<(), String> {
@@ -287,6 +325,9 @@ impl IntervalTimeline {
 pub struct Completion {
     pub timeline: Timeline,
     pub native_sha256: String,
+    /// [designed:T78] Present only when the worker executed the witnessed
+    /// exchange; the campaign commits it once, with the result ticket.
+    pub replacement: Option<ExecutedReplacement>,
 }
 struct TimelineContext {
     initial: Value,
@@ -360,6 +401,8 @@ impl ViewData {
             marker_rows,
             boundary: "0AB9:7E4A".into(),
             control: 1,
+            // pause() replaces this placeholder with the engine's owned snapshot.
+            snapshot: IntervalSnapshot::default(),
         }
     }
 }
@@ -619,7 +662,10 @@ impl LiveCampaign {
         }
         let result = (|| {
             self.session.pause_at_interval()?;
-            self.context.interval(&self.session.interval_history()?)
+            let mut prefix = self.context.interval(&self.session.interval_history()?)?;
+            prefix.snapshot = serde_json::from_value(self.session.interval_snapshot()?)
+                .map_err(|e| e.to_string())?;
+            Ok(prefix)
         })();
         match result {
             Ok(prefix) => {
@@ -640,11 +686,17 @@ impl LiveCampaign {
             return Err("replacement is supported only in the verified original campaign".into());
         }
         self.ended = true;
-        let output = if replace {
+        let (output, replacement) = if replace {
             let mut result = self.session.finish_with_interval_replacement(false)?;
-            result["match"].take()
+            let executed = result
+                .get("executed")
+                .cloned()
+                .ok_or("replacement output lacks the executed exchange")?;
+            let replacement: ExecutedReplacement =
+                serde_json::from_value(executed).map_err(|e| e.to_string())?;
+            (result["match"].take(), Some(replacement))
         } else {
-            self.session.finish().map_err(|e| e.fault.message)?
+            (self.session.finish().map_err(|e| e.fault.message)?, None)
         };
         let native_sha256 = format!(
             "{:x}",
@@ -653,6 +705,7 @@ impl LiveCampaign {
         Ok(Completion {
             timeline: self.context.complete(&output)?,
             native_sha256,
+            replacement,
         })
     }
 }

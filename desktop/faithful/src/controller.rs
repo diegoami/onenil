@@ -18,6 +18,7 @@ pub enum Screen {
     Pitch,
     History,
     Bench,
+    MatchSquad,
     HalfTime,
     FullTime,
     Quit,
@@ -43,6 +44,15 @@ pub enum Key {
     N,
     Exhibition,
 }
+/// [designed:T78] Read-only interval bench selection state. The highlight and
+/// pending pick live here; the roster itself stays in the engine-owned snapshot.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct SquadSelection {
+    pub highlight: usize,
+    pub picked: Option<usize>,
+}
+/// The witnessed fresh exchange (research T74/T75; archaeology T80 policy).
+const WITNESSED: (usize, u16, usize, u16) = (1, 2582, 11, 2592);
 pub struct Controller {
     pub editor: Editor,
     pub screen: Screen,
@@ -57,6 +67,9 @@ pub struct Controller {
     pub playback: Option<Playback>,
     pub interval_playback: Option<IntervalPlayback>,
     pub resume_requested: bool,
+    pub replace_requested: bool,
+    pub squad: Option<SquadSelection>,
+    pending_replacement: Option<crate::timeline::ExecutedReplacement>,
     awaiting_continuation: bool,
     request_campaign: Option<onenil_campaign::Campaign>,
     pub save_requested: bool,
@@ -87,6 +100,9 @@ impl Default for Controller {
             playback: None,
             interval_playback: None,
             resume_requested: false,
+            replace_requested: false,
+            squad: None,
+            pending_replacement: None,
             awaiting_continuation: false,
             request_campaign: None,
             save_requested: false,
@@ -112,6 +128,11 @@ impl Controller {
     }
     pub fn is_resuming(&self) -> bool {
         self.awaiting_continuation
+    }
+    pub fn interval_halftime(&self) -> bool {
+        self.interval_playback
+            .as_ref()
+            .is_some_and(|p| p.phase == Phase::HalfTime)
     }
     pub fn owns_live_request(&self, id: u64) -> bool {
         id == self.job_id
@@ -183,11 +204,22 @@ impl Controller {
         let Some(prefix) = self.interval_playback.take() else {
             return self.accept_live_error(id, "missing owned interval".into());
         };
+        // [designed:T78] The completion must carry the executed exchange exactly
+        // when this controller requested one; stale or duplicate decisions refuse.
+        if completion.replacement.is_some() != self.replace_requested {
+            return self.accept_live_error(
+                id,
+                "completed continuation differs from the owned decision".into(),
+            );
+        }
         match prefix.attach(completion.timeline) {
             Ok(playback) => {
                 self.playback = Some(playback);
+                self.pending_replacement = completion.replacement;
                 self.awaiting_continuation = false;
                 self.resume_requested = false;
+                self.replace_requested = false;
+                self.squad = None;
                 self.screen = Screen::Pitch;
                 true
             }
@@ -227,6 +259,29 @@ impl Controller {
     }
     fn unsupported(&mut self) {
         self.message = "This action is outside the desktop feasibility slice.".into();
+    }
+    /// [designed:T78] Confirmation sends the witnessed exchange to the owned
+    /// worker; every other pair refuses here with readable feedback, before any
+    /// engine contact. The snapshot stays read-only either way.
+    fn confirm_replacement(&mut self, out_slot: usize, in_slot: usize) {
+        let Some(playback) = self.interval_playback.as_ref() else {
+            self.message = "The owned interval is gone.".into();
+            return;
+        };
+        let roster = &playback.timeline.snapshot.roster;
+        let (w_out_slot, w_out, w_in_slot, w_in) = WITNESSED;
+        let ids = (out_slot, in_slot) == (w_out_slot, w_in_slot)
+            && roster.get(out_slot) == Some(&(u64::from(w_out)))
+            && roster.get(in_slot) == Some(&(u64::from(w_in)));
+        if !ids {
+            self.message =
+                "Only the witnessed Pearce/Gale exchange is admitted in this build.".into();
+            return;
+        }
+        self.squad = None;
+        self.replace_requested = true;
+        self.awaiting_continuation = true;
+        self.screen = Screen::Preparing;
     }
     /// [designed] Supported prototype actions; original keeper/age guards preserved.
     pub fn option_available(&self, option: usize) -> bool {
@@ -310,26 +365,48 @@ impl Controller {
     }
     fn record_completion(&mut self) -> Result<(), String> {
         let ticket = self.match_ticket.take().ok_or("missing match request")?;
+        let replacement = self.pending_replacement.take();
         let playback = self.playback.as_ref().ok_or("missing match playback")?;
         if playback.phase != Phase::FullTime || playback.cursor != playback.timeline.frames.len() {
             return Err("match has not completed".into());
         }
         let score = playback.view().score.map(u16::try_from);
         let [first, second] = score;
-        self.editor.campaign.record_match(
-            &ticket,
-            [
-                first.map_err(|_| "score outside native storage")?,
-                second.map_err(|_| "score outside native storage")?,
-            ],
-            &playback.timeline.native_return,
-        )
+        let native_return = playback.timeline.native_return.as_str();
+        match replacement {
+            // [designed:T78] One campaign transaction: result ticket plus the
+            // researched persisted roster exchange (archaeology T80 policy).
+            Some(replacement) => self.editor.campaign.record_match_with_replacement(
+                &ticket,
+                [
+                    first.map_err(|_| "score outside native storage")?,
+                    second.map_err(|_| "score outside native storage")?,
+                ],
+                native_return,
+                replacement.out_slot,
+                replacement.in_slot,
+                u16::try_from(replacement.out_id)
+                    .map_err(|_| "player id outside native storage")?,
+                u16::try_from(replacement.in_id).map_err(|_| "player id outside native storage")?,
+            ),
+            None => self.editor.campaign.record_match(
+                &ticket,
+                [
+                    first.map_err(|_| "score outside native storage")?,
+                    second.map_err(|_| "score outside native storage")?,
+                ],
+                native_return,
+            ),
+        }
     }
     pub(crate) fn clear_match(&mut self) {
         self.match_ticket = None;
         self.playback = None;
         self.interval_playback = None;
         self.resume_requested = false;
+        self.replace_requested = false;
+        self.squad = None;
+        self.pending_replacement = None;
         self.awaiting_continuation = false;
         self.request_campaign = None;
         self.prepare_requested = false;
@@ -520,6 +597,15 @@ impl Controller {
                 _ => self.unsupported(),
             },
             Screen::Preparation | Screen::Bench => match key {
+                Key::Space if self.screen == Screen::Bench && self.interval_halftime() => {
+                    // [designed:T78] The original W028 bench: SPACE opens the squad
+                    // view over the owned interval snapshot. Read-only until confirm.
+                    self.squad = Some(SquadSelection {
+                        highlight: WITNESSED.0,
+                        picked: None,
+                    });
+                    self.screen = Screen::MatchSquad;
+                }
                 Key::Up => self.preparation_menu = self.preparation_menu.saturating_sub(1),
                 Key::Down => self.preparation_menu = (self.preparation_menu + 1).min(3),
                 Key::Space if self.screen == Screen::Preparation && !self.exhibition => {
@@ -643,6 +729,50 @@ impl Controller {
                     Key::Home => self.history_top = 0,
                     Key::End => self.history_top = end,
                     Key::Space | Key::Escape => self.screen = Screen::Pitch,
+                    _ => self.unsupported(),
+                }
+            }
+            // [designed:T78] The interval squad view: W028 pick/put-here keys
+            // over the read-only snapshot; only the witnessed exchange is admitted.
+            Screen::MatchSquad => {
+                let Some(squad) = self.squad.as_mut() else {
+                    self.screen = Screen::Bench;
+                    return;
+                };
+                match key {
+                    Key::Up => squad.highlight = squad.highlight.saturating_sub(1),
+                    Key::Down => squad.highlight = (squad.highlight + 1).min(19),
+                    Key::Left | Key::Right => {
+                        let row = if squad.highlight < 11 {
+                            squad.highlight.min(8)
+                        } else {
+                            squad.highlight - 11
+                        };
+                        squad.highlight = if squad.highlight < 11 { 11 + row } else { row };
+                    }
+                    Key::Enter if squad.picked.is_none() => {
+                        if squad.highlight >= 11 {
+                            self.message = "Pick a first-team player first.".into();
+                            return;
+                        }
+                        squad.picked = Some(squad.highlight);
+                    }
+                    Key::Enter if squad.highlight < 11 => {
+                        self.message = "Choose a bench player to put here.".into();
+                    }
+                    Key::Enter => {
+                        let out_slot = squad.picked.unwrap_or_default();
+                        let in_slot = squad.highlight;
+                        self.confirm_replacement(out_slot, in_slot);
+                    }
+                    Key::Escape => {
+                        if squad.picked.is_some() {
+                            squad.picked = None;
+                        } else {
+                            self.squad = None;
+                            self.screen = Screen::Bench;
+                        }
+                    }
                     _ => self.unsupported(),
                 }
             }

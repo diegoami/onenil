@@ -240,6 +240,69 @@ impl Renderer {
             self.cell(x + 15, row, role, TEXT, GROUND);
         }
     }
+    /// [designed:T78] The interval squad view over the engine-owned snapshot:
+    /// W028 pick/put-here keys, readable refusals, nothing writable.
+    fn match_squad(&mut self, c: &Controller) {
+        self.pixels.fill(GROUND);
+        self.match_header(c);
+        self.text(2, 6, "FIRST TEAM", CYAN, GROUND, 14);
+        self.text(42, 6, "BENCH", CYAN, GROUND, 14);
+        let Some(selection) = c.squad.as_ref() else {
+            return;
+        };
+        let Some(playback) = c.interval_playback.as_ref() else {
+            return;
+        };
+        let snapshot = &playback.timeline.snapshot;
+        for i in 0..20usize {
+            let (x, row) = if i < 11 { (2, 8 + i) } else { (42, 8 + i - 11) };
+            let id = snapshot.roster.get(i).copied().unwrap_or(0);
+            let player = if id == 0 {
+                None
+            } else {
+                c.editor.player(u16::try_from(id).unwrap_or(u16::MAX))
+            };
+            let name = player.map(|p| p.name.as_str()).unwrap_or("");
+            let role = player
+                .map(|p| {
+                    self.labels.role_glyphs[p.current_position as usize]
+                        .chars()
+                        .next()
+                        .unwrap_or('?')
+                })
+                .unwrap_or(' ');
+            let picked = selection.picked == Some(i);
+            let (fg, bg) = if selection.highlight == i {
+                (GROUND, TEXT)
+            } else {
+                (TEXT, GROUND)
+            };
+            let marker = if picked { "> " } else { "  " };
+            self.text(x, row, &format!("{marker}{name}"), fg, bg, 18);
+            self.cell(x + 16, row, role, fg, bg);
+        }
+        self.text(
+            42,
+            20,
+            &format!("Remaining subs {}", snapshot.remaining_subs),
+            TEXT,
+            GROUND,
+            20,
+        );
+        if selection.picked.is_some() {
+            self.text(2, 21, "PUT HERE: choose a bench player", CYAN, GROUND, 40);
+        } else {
+            self.text(2, 21, "Pick the player to replace", TEXT, GROUND, 40);
+        }
+        self.text(
+            2,
+            24,
+            "Up/Down: move   Left/Right: panes   Enter: pick / put here   Esc: cancel",
+            TEXT,
+            GROUND,
+            76,
+        );
+    }
     pub fn instruction_text(
         &self,
         c: &Controller,
@@ -677,6 +740,7 @@ impl Renderer {
                 );
             }
             Screen::Players | Screen::Options | Screen::Instructions => self.players(c),
+            Screen::MatchSquad => self.match_squad(c),
             Screen::Preparing if c.is_resuming() => self.match_view(c),
             Screen::Pitch | Screen::History | Screen::HalfTime | Screen::FullTime => {
                 self.match_view(c)
@@ -773,14 +837,26 @@ impl Renderer {
                 self.match_header(c);
                 self.text(2, 7, "BENCH", CYAN, GROUND, 25);
                 self.text(2, 10, "PLAY GAME", GROUND, TEXT, 20);
-                self.text(
-                    2,
-                    13,
-                    "Player changes are not available in this build yet.",
-                    TEXT,
-                    GROUND,
-                    76,
-                );
+                if c.interval_halftime() {
+                    // [designed:T78] The witnessed exchange is reachable from here.
+                    self.text(
+                        2,
+                        13,
+                        "Space: squad (witnessed Pearce/Gale exchange)",
+                        TEXT,
+                        GROUND,
+                        76,
+                    );
+                } else {
+                    self.text(
+                        2,
+                        13,
+                        "Player changes are not available in this build yet.",
+                        TEXT,
+                        GROUND,
+                        76,
+                    );
+                }
                 self.text(2, 24, "Enter: PLAY GAME / continue match", TEXT, GROUND, 76);
             }
             Screen::Main | Screen::Quit => {

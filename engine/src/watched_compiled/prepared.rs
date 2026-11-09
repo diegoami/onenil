@@ -470,6 +470,37 @@ impl Session {
             "live_goals":[c.read(c.r[11],0xD0C4,8)?,c.read(c.r[11],0xD0C5,8)?]}),
         )
     }
+    /// [designed:T78] Bounded read-only snapshot for the desktop bench: the
+    /// managed club's roster order, the displayed remaining substitutions and
+    /// the case players' availability fields at the owned interval. Reads go
+    /// through known-memory checks; no guest memory or setter escapes.
+    pub fn interval_snapshot(&self) -> Result<Value, String> {
+        let view = super::interval_replacement::projection(&self.cpu)?;
+        let side = view["clubs"]
+            .as_array()
+            .and_then(|clubs| clubs.iter().position(|club| club["id"] == 130))
+            .ok_or("managed club missing from the owned interval")?;
+        let club = &view["clubs"][side];
+        // [confirmed:archaeology T74] The displayed remaining substitutions are
+        // allowance + reserves - used sub flags for the managed side, not the
+        // match clock's remaining time the projection also carries.
+        let remaining_subs = view["allowance"].as_u64().unwrap_or(0)
+            + view["reserves"][side].as_u64().unwrap_or(0)
+            - view["sub_flags"][side].as_u64().unwrap_or(0);
+        let player = |id: u64| -> Result<Value, String> {
+            let row = view["players"]
+                .as_array()
+                .and_then(|players| players.iter().find(|p| p["id"] == id))
+                .cloned()
+                .ok_or_else(|| format!("owned interval lacks player {id}"))?;
+            Ok(json!({"current_position":row["current_position"],
+            "club_position":row["club_position"],"condition":row["condition"],
+            "instructions":row["instructions"],"status":row["status"]}))
+        };
+        Ok(json!({"club": club["id"], "remaining_subs": remaining_subs,
+        "roster": club["roster"],
+        "players": {"2582": player(2582)?, "2592": player(2592)?}}))
+    }
     /// [confirmed:archaeology1d6b5b9,T74] Only the witnessed fresh Pearce/Gale
     /// decision is admitted. Original source procedures own every game mutation.
     pub fn finish_with_interval_replacement(
@@ -499,7 +530,15 @@ impl Session {
         if !intent.closed || !intent.keys.is_empty() {
             return Err("original replacement input sequence did not complete".into());
         }
-        Ok(json!({"match":got,"transaction":intent.samples}))
+        // [designed:T78] The executed exchange is engine-owned fact, verified
+        // against the live image after the original closure ran.
+        let after = super::interval_replacement::projection(&self.cpu)?;
+        if after["clubs"][1]["roster"][1] != 2592 || after["clubs"][1]["roster"][11] != 2582 {
+            return Err("replacement transaction did not exchange the witnessed slots".into());
+        }
+        Ok(
+            json!({"match":got,"executed":{"out_slot":1,"in_slot":11,"out_id":2582,"in_id":2592},"transaction":intent.samples}),
+        )
     }
     /// Continue the already owned source frames through the actual outer return.
     pub fn finish(&mut self) -> Result<Value, watched_match::MatchFault> {
