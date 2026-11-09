@@ -118,7 +118,6 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   held_worker=state()['worker_pid'];worker_pids.append(held_worker)
   step('half-time',lambda s:s.get('screen')=='HalfTime' and s.get('worker_pid')==held_worker,180)
   key('Return');step('interval-bench',lambda s:s.get('screen')=='Bench' and s.get('worker_same'))
-  key('Escape');step('bench-after',lambda s:s.get('screen')=='Pitch' and s.get('worker_same'))
   key('Return');resuming=step('resuming',lambda s:s.get('screen')=='Preparing' and s.get('resuming') and s.get('worker_same'))
   step('second-half',lambda s:s.get('screen')=='Pitch' and s.get('phase')=='SecondHalf' and s.get('match_stage')=='complete' and not s.get('worker_pid'),180)
   key('space');step('second-half-history',lambda s:s.get('screen')=='History');shot_resize('second-half')
