@@ -37,6 +37,7 @@ def main():
     stages = {s['name']: s for s in session['payload']['stages']}
     decoded = session['payload']['decoded_saves']
     boot, saved = decoded['boot'], decoded['saved']
+    cash_before = boot['cash']
     cash_text = stages['cash']['text']
 
     gate = cash_number(cash_text, 'Gate receipts', 'Win bonuses')
@@ -44,12 +45,18 @@ def main():
     salaries = cash_number(cash_text, 'Player salaries', 'Win bonuses')
     win = cash_number(cash_text, 'Win bonuses')
     staff = cash_number(cash_text, 'Staff salaries')
+    ground = cash_number(cash_text, 'Ground maintenance')
     total_in = cash_number(cash_text, 'TOTAL IN', 'TOTAL OUT')
     total_out = cash_number(cash_text, 'TOTAL OUT')
     funds = cash_number(cash_text, 'Club funds', 'Overdraft')
+    overdraft = cash_number(cash_text, 'Overdraft facility')
     assert total_in == gate + prize, 'cash-in rows disagree with the total'
-    assert total_out >= salaries + win + staff, 'cash-out rows are short of the total'
+    # [review #176 F4] The outgoings reconcile exactly: every category row the
+    # original shows sums to TOTAL OUT, and the funds line is the source cash
+    # moved by the net.
+    assert total_out == salaries + win + staff + ground, 'cash-out rows do not reconcile'
     assert funds == saved['cash'], 'the displayed club funds differ from the decoded cash'
+    assert funds == cash_before + total_in - total_out, 'the week net disagrees with the funds'
 
     rows = []
     for line in stages['transfer']['text'].splitlines():
@@ -81,7 +88,8 @@ def main():
         week=dict(index_before=week_byte_pre, index_after=week_byte_post),
         cash=dict(before=boot['cash'], gate_receipts=gate, prize_money=prize,
                   total_in=total_in, player_salaries=salaries, win_bonuses=win,
-                  staff_salaries=staff, total_out=total_out, after=funds),
+                  staff_salaries=staff, ground_maintenance=ground,
+                  total_out=total_out, after=funds, overdraft_facility=overdraft),
         transfer_rows=rows,
         following_fixture=dict(competition=following['competition'], opponent=following['opponent'],
                                flags=following['flags'], name='Sevilla', manager='Aragones'),

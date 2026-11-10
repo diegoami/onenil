@@ -181,16 +181,29 @@ impl Campaign {
         }
         // [designed:T80, research T82 c13195a] The supported context is the
         // source week and, after the researched friendly-week completion, the
-        // following fixture (competition 1, opponent 176, Sevilla) with the
-        // week advanced exactly once. Anything else refuses.
-        let week_zero =
-            self.week_index == source.week_index && self.next_fixture == source.next_fixture;
+        // authenticated week-one state. [review #176 F1] Both contexts bind
+        // every value the research recorded: the source week binds the source
+        // cash and fixture whole; the week-one state binds the moved funds
+        // (421,491; T81 dc54fe9, the receipt's cash.after) and the complete
+        // following fixture (slot 2, Blackburn R, opponent 176, Sevilla,
+        // competition 1, flags 0, away; T82 c13195a and the original's W030
+        // "away" advertisement). Anything else refuses.
+        let week_one_fixture = Fixture {
+            slot: 2,
+            club: source.club.id,
+            opponent: 176,
+            opponent_name: "Sevilla".to_owned(),
+            competition_code: 1,
+            flags: 0,
+            venue_code: 0,
+            opponent_flags: 0,
+        };
+        let week_zero = self.week_index == source.week_index
+            && self.cash == source.cash
+            && self.next_fixture == source.next_fixture;
         let week_one = self.week_index == 1
-            && self.next_fixture.slot == 2
-            && self.next_fixture.competition_code == 1
-            && self.next_fixture.opponent == 176
-            && self.next_fixture.flags == 0
-            && self.next_fixture.opponent_name == "Sevilla";
+            && self.cash == crate::result::WEEK_ONE_CASH
+            && self.next_fixture == week_one_fixture;
         if self.season != source.season
             || self.manager != source.manager
             || self.club.id != source.club.id

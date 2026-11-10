@@ -13,16 +13,16 @@ fn the_week_one_context_binds_the_authenticated_cash_and_full_fixture() {
     let advanced = c.clone();
     let edits: [(&str, fn(&mut Campaign)); 5] = [
         ("cash", |p: &mut Campaign| p.cash = 999_999_999),
-        ("venue_code", |p: &mut Campaign| p.next_fixture.venue_code = 7),
-        (
-            "opponent_flags",
-            |p: &mut Campaign| p.next_fixture.opponent_flags = 3,
-        ),
+        ("venue_code", |p: &mut Campaign| {
+            p.next_fixture.venue_code = 7
+        }),
+        ("opponent_flags", |p: &mut Campaign| {
+            p.next_fixture.opponent_flags = 3
+        }),
         ("fixture_club", |p: &mut Campaign| p.next_fixture.club = 999),
-        (
-            "opponent_name",
-            |p: &mut Campaign| p.next_fixture.opponent_name = "Sevilla B".into(),
-        ),
+        ("opponent_name", |p: &mut Campaign| {
+            p.next_fixture.opponent_name = "Sevilla B".into()
+        }),
     ];
     for (name, edit) in edits {
         let mut probe = advanced.clone();

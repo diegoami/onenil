@@ -27,6 +27,10 @@ struct Assets {
 }
 pub struct Renderer {
     pub pixels: Vec<u32>,
+    /// [review #176 F2] The last drawn 80x25 character grid, an observable of
+    /// what the screens actually show (tests and diagnostics read it through
+    /// [`Renderer::screen_text`]).
+    grid: Vec<char>,
     font: Font,
     glyphs: HashMap<char, (fontdue::Metrics, Vec<u8>)>,
     assets: Assets,
@@ -34,6 +38,13 @@ pub struct Renderer {
     initial: onenil_campaign::Campaign,
 }
 impl Renderer {
+    /// The drawn screen as text, one 80-column line per row.
+    pub fn screen_text(&self) -> String {
+        (0..25)
+            .map(|y| (0..80).map(|x| self.grid[y * 80 + x]).collect::<String>())
+            .collect::<Vec<_>>()
+            .join("\n")
+    }
     pub fn new(font: &Path) -> Result<Self, String> {
         let bytes = std::fs::read(font).map_err(|e| e.to_string())?;
         if format!("{:x}", Sha256::digest(&bytes))
@@ -43,6 +54,7 @@ impl Renderer {
         }
         Ok(Self {
             pixels: vec![GROUND; WIDTH * HEIGHT],
+            grid: vec![' '; 80 * 25],
             glyphs: HashMap::new(),
             font: Font::from_bytes(bytes, FontSettings::default()).map_err(|e| e.to_string())?,
             assets: serde_json::from_str(include_str!("../assets/cells.json"))
@@ -71,6 +83,9 @@ impl Renderer {
         }
     }
     fn cell(&mut self, x: usize, y: usize, ch: char, fg: u32, bg: u32) {
+        if x < 80 && y < 25 {
+            self.grid[y * 80 + x] = ch;
+        }
         let (px, py) = (x as i32 * 9, y as i32 * 16);
         self.rect(px, py, 9, 16, bg);
         let all = "─│┌┐└┘├┤┬┴┼═║╔╗╚╝╠╣╦╩╬";
@@ -241,42 +256,80 @@ impl Renderer {
         }
     }
     /// [designed:T80] The week's cash flow, from the pinned research receipt.
+    /// [review #176 F4] Every category the original shows renders, including
+    /// the non-zero Ground maintenance, so the displayed outgoings visibly
+    /// reconcile with TOTAL OUT; the funds and overdraft lines render too.
     fn cash_flow(&mut self, c: &Controller) {
         self.pixels.fill(GROUND);
         self.text(2, 1, "CASH FLOW FOR Blackburn R----", CYAN, GROUND, 60);
         let receipt = crate::week::WeekReceipt::pinned();
         let cash = receipt.cash;
-        self.text(4, 5, "Cash in", CYAN, GROUND, 20);
-        self.text(6, 7, "Gate receipts", TEXT, GROUND, 40);
-        self.text(38, 7, &format!("{}", cash.gate_receipts), TEXT, GROUND, 12);
-        self.text(6, 9, "Prize money", TEXT, GROUND, 40);
-        self.text(38, 9, &format!("{}", cash.prize_money), TEXT, GROUND, 12);
-        self.text(4, 12, "TOTAL IN", CYAN, GROUND, 20);
-        self.text(38, 12, &format!("{}", cash.total_in), TEXT, GROUND, 12);
-        self.text(4, 15, "Cash out", CYAN, GROUND, 20);
-        self.text(6, 17, "Player salaries", TEXT, GROUND, 40);
+        self.text(4, 3, "Cash in", CYAN, GROUND, 20);
+        self.text(6, 4, "Gate receipts", TEXT, GROUND, 30);
+        self.text(38, 4, &Self::grouped(cash.gate_receipts), TEXT, GROUND, 12);
+        self.text(6, 5, "Prize money", TEXT, GROUND, 30);
+        self.text(38, 5, &Self::grouped(cash.prize_money), TEXT, GROUND, 12);
+        self.text(4, 6, "TOTAL IN", CYAN, GROUND, 20);
+        self.text(38, 6, &Self::grouped(cash.total_in), TEXT, GROUND, 12);
+        self.text(4, 8, "Cash out", CYAN, GROUND, 20);
+        self.text(6, 9, "Player salaries", TEXT, GROUND, 30);
         self.text(
             38,
-            17,
-            &format!("{}", cash.player_salaries),
+            9,
+            &Self::grouped(cash.player_salaries),
             TEXT,
             GROUND,
             12,
         );
-        self.text(6, 19, "Win bonuses", TEXT, GROUND, 40);
-        self.text(38, 19, &format!("{}", cash.win_bonuses), TEXT, GROUND, 12);
-        self.text(6, 21, "Staff salaries", TEXT, GROUND, 40);
+        self.text(6, 10, "Win bonuses", TEXT, GROUND, 30);
+        self.text(38, 10, &Self::grouped(cash.win_bonuses), TEXT, GROUND, 12);
+        self.text(6, 11, "Staff salaries", TEXT, GROUND, 30);
         self.text(
             38,
-            21,
-            &format!("{}", cash.staff_salaries),
+            11,
+            &Self::grouped(cash.staff_salaries),
             TEXT,
             GROUND,
             12,
         );
-        self.text(4, 23, "TOTAL OUT", CYAN, GROUND, 20);
-        self.text(38, 23, &format!("{}", cash.total_out), TEXT, GROUND, 12);
-        self.text(2, 24, "Space: transfer news", TEXT, GROUND, 76);
+        self.text(6, 12, "Ground maintenance", TEXT, GROUND, 30);
+        self.text(
+            38,
+            12,
+            &Self::grouped(cash.ground_maintenance),
+            TEXT,
+            GROUND,
+            12,
+        );
+        self.text(4, 13, "TOTAL OUT", CYAN, GROUND, 20);
+        self.text(38, 13, &Self::grouped(cash.total_out), TEXT, GROUND, 12);
+        self.text(4, 15, "Club funds", CYAN, GROUND, 30);
+        self.text(38, 15, &Self::grouped(cash.after), TEXT, GROUND, 12);
+        self.text(4, 16, "Overdraft facility", CYAN, GROUND, 30);
+        self.text(
+            38,
+            16,
+            &Self::grouped(cash.overdraft_facility),
+            TEXT,
+            GROUND,
+            12,
+        );
+        self.text(2, 18, "Space: transfer news", TEXT, GROUND, 76);
+    }
+    /// Grouped decimal digits, as the original's money cells show them.
+    fn grouped(n: i32) -> String {
+        let digits = n.abs().to_string();
+        let mut out = String::new();
+        for (i, ch) in digits.chars().enumerate() {
+            if i > 0 && (digits.len() - i) % 3 == 0 {
+                out.push(',');
+            }
+            out.push(ch);
+        }
+        if n < 0 {
+            out.insert(0, '-');
+        }
+        out
     }
     /// [designed:T80] The week's transfer news rows, from the pinned receipt.
     fn transfer_news(&mut self, c: &Controller) {
@@ -292,14 +345,9 @@ impl Renderer {
             self.text(22, row, &transfer.from, TEXT, GROUND, 17);
             self.text(40, row, &transfer.to, TEXT, GROUND, 17);
         }
-        self.text(
-            2,
-            24,
-            "Space: management menu   F7 saves the week",
-            TEXT,
-            GROUND,
-            76,
-        );
+        // [review #176 F3] The footer advertises only what the screen does:
+        // F7 saves from the management menu, not here.
+        self.text(2, 24, "Space: management menu", TEXT, GROUND, 76);
     }
     /// [designed:T78] The interval squad view over the engine-owned snapshot:
     /// W028 pick/put-here keys, readable refusals, nothing writable.
@@ -965,6 +1013,29 @@ impl Renderer {
                     GROUND,
                     16,
                 );
+                // [review #176 F2] After the authenticated week the panel shows
+                // the following fixture consistently — the original's menu-after
+                // stage shows Aragones, "Friendly #2" and away (runs/T81 session
+                // r0007; records/T82 menu_markers) — where the static sheet still
+                // carries the played opponent's manager, competition and venue.
+                if c.editor.campaign.week_index == 1 {
+                    let receipt = crate::week::WeekReceipt::pinned();
+                    self.text(2, 14, &receipt.following_fixture.manager, TEXT, GROUND, 16);
+                    self.text(
+                        1,
+                        20,
+                        &format!("Friendly #{}", c.editor.campaign.week_index + 1),
+                        TEXT,
+                        GROUND,
+                        17,
+                    );
+                    let venue = if c.editor.campaign.next_fixture.venue_code == 0 {
+                        "away"
+                    } else {
+                        "home"
+                    };
+                    self.text(13, 21, venue, TEXT, GROUND, 4);
+                }
                 self.text(
                     0,
                     24,

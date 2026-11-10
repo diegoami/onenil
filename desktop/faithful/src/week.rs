@@ -6,7 +6,7 @@ use sha2::{Digest, Sha256};
 
 pub const WEEK_RECEIPT: &str = include_str!("../assets/week-receipt.json");
 pub const WEEK_RECEIPT_SHA256: &str =
-    "c2e5b0b54da56e3b037f52cb4f2612bf4d08a66897c6392fe5fd0b973dd0f381";
+    "821dd0c1fce2dd5024ec332aa3a3ff7c02bfb53cd37978f9b1991aa958536332";
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -62,8 +62,10 @@ pub struct WeekCash {
     pub player_salaries: i32,
     pub win_bonuses: i32,
     pub staff_salaries: i32,
+    pub ground_maintenance: i32,
     pub total_out: i32,
     pub after: i32,
+    pub overdraft_facility: i32,
 }
 impl WeekReceipt {
     /// Panic-free construction: the pinned digest guards every field, so a

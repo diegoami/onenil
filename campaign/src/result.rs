@@ -25,6 +25,13 @@ pub struct PlayedFixture {
     pub native_return: String,
 }
 
+/// [confirmed:research T81 dc54fe9] The completed friendly week's authenticated
+/// movement and funds (runs/T81/session-r0007.json): the recorded in/out totals
+/// and the resulting club funds. These are research values, not caller policy.
+pub const AUTHENTICATED_WEEK_TOTAL_IN: i32 = 38_761;
+pub const AUTHENTICATED_WEEK_TOTAL_OUT: i32 = 69_270;
+pub const WEEK_ONE_CASH: i32 = 421_491;
+
 impl PlayedFixture {
     pub(crate) fn validate(&self, campaign: &Campaign) -> Result<(), String> {
         // [designed:T80] The recorded result validates against the pinned source
@@ -96,6 +103,19 @@ impl Campaign {
             .ok_or("the friendly result must be recorded before the week completes")?;
         if self.week_index != 0 {
             return Err("this campaign has already completed its first week".into());
+        }
+        // [review #176 F1] The week's movement and following fixture are the
+        // authenticated research values (T81 dc54fe9, T82 c13195a): any other
+        // argument set refuses before the transaction, and the post-state is
+        // bound again by validate().
+        if total_in != AUTHENTICATED_WEEK_TOTAL_IN
+            || total_out != AUTHENTICATED_WEEK_TOTAL_OUT
+            || following_competition != 1
+            || following_opponent != 176
+            || following_flags != 0
+            || following_name != "Sevilla"
+        {
+            return Err("the friendly week's authenticated movement differs".into());
         }
         let following_slot = played
             .fixture
