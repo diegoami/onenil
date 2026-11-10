@@ -4,7 +4,7 @@ import argparse,hashlib,json,re
 from pathlib import Path
 from check_numbered_pitch_records import native_rgb
 ROOT=Path(__file__).resolve().parents[2]
-PINS={'window-r0001.json': {'sha256': '3ca5b2f7e3313350c67fb721b6bc2e0168c26698c22c6c37f54b0c41e3c6d06d', 'producer': '9498322455ccef6ef6ce023e498ec0dc3b47343d', 'binary': '93829e2be5bbe206ab6adadabdd8d51b8ee14a2f333caf8963cc9a4dcaf00f4f'}, 'window-r0002.json': {'sha256': '0df1cac17c7b194bbf5309fac7431614309e5765ce87f54e13581d734b291b6a', 'producer': '9498322455ccef6ef6ce023e498ec0dc3b47343d', 'binary': '93829e2be5bbe206ab6adadabdd8d51b8ee14a2f333caf8963cc9a4dcaf00f4f'}}
+PINS={'window-r0001.json': {'sha256': '3ca5b2f7e3313350c67fb721b6bc2e0168c26698c22c6c37f54b0c41e3c6d06d', 'producer': '9498322455ccef6ef6ce023e498ec0dc3b47343d', 'binary': '93829e2be5bbe206ab6adadabdd8d51b8ee14a2f333caf8963cc9a4dcaf00f4f'}, 'window-r0002.json': {'sha256': '0df1cac17c7b194bbf5309fac7431614309e5765ce87f54e13581d734b291b6a', 'producer': '9498322455ccef6ef6ce023e498ec0dc3b47343d', 'binary': '93829e2be5bbe206ab6adadabdd8d51b8ee14a2f333caf8963cc9a4dcaf00f4f'}, 'window-r0003.json': {'sha256': 'a693908e7ba614171cc3d82d2aceb0ee77943dc9734745eed03d59354c6530e4', 'producer': 'aa9df9b684ab3030f15d532f5f251b94f6bb6295', 'binary': 'b88b18a4a7da782ac37ba604e04be375d6556dd0ccaac6f69c73e1bb6deb7e5c'}, 'window-r0004.json': {'sha256': '5197ade4be9dc051d9071ecd1abc19326503d084c5d992c09cd30083e666dcb1', 'producer': 'aa9df9b684ab3030f15d532f5f251b94f6bb6295', 'binary': 'b88b18a4a7da782ac37ba604e04be375d6556dd0ccaac6f69c73e1bb6deb7e5c'}}
 FONT='c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f'
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def check(r,directory):
