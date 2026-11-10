@@ -32,7 +32,7 @@ def title(w):
  return s
 window=None;steps=[];shots=[];save_proofs=[];worker_pids=[];process_ids=[];keyboard=[];pending_keys=[];process=None;error=None;held_worker=None;start=time.monotonic()
 producer=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
-pass  # debug
+assert not subprocess.check_output(["git","status","--porcelain","--","desktop/faithful","campaign","engine"],cwd=ROOT,text=True),"commit producer first"
 with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
  directory=Path(directory);binary=directory/'onenil-desktop';shutil.copy2(args.binary,binary);binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest();statepath=directory/'state.json';save=directory/'games'/'week.json';stderr=directory/'stderr.txt'
  def state():
@@ -132,6 +132,7 @@ with tempfile.TemporaryDirectory(prefix='T78-window-') as directory:
   shot('full-time')
   assert final.get('campaign',{}).get('cash')==452000 and final.get('campaign',{}).get('week_index')==0
   key('Return');recorded=step('recorded',lambda s:s.get('screen')=='CashFlow' and s.get('campaign',{}).get('played_fixture'))['campaign']
+  shot_resize('cash-flow')
   assert recorded['revision']==final['campaign']['revision']+1
   assert recorded['played_fixture']['request_sha256']==hashlib.sha256(saved).hexdigest()
   # [designed:T80] The W030 route: the authenticated cash flow and transfer news,
