@@ -131,3 +131,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T79 Refresh launch guidance and historical worker limits](T79.md)
 
 - [T80 One persisted friendly management week (B5)](T80.md)
+- [T81 Native original condition-refresh routine](T81.md)
