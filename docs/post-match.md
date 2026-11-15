@@ -31,7 +31,7 @@ reproducibility. They do **not** establish original-record execution parity,
 new branch support, input admission or campaign behavior. There is no public
 entry into this module. Existing desktop and weekly transitions do not call it.
 
-[designed:next slice] Before exposing an execution entry, add an adapter from
+[designed:next slice, native issue #186] Before exposing an execution entry, add an adapter from
 the actual Cpu image/pointers and current seed to the proven T81 kernel.
 Expected outputs and recorded exit seeds must never enter execution. Respect
 ABI returns, shared-image aliasing and store order. Capture a genuine failing

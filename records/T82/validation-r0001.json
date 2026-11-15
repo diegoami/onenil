@@ -1,0 +1,28 @@
+{
+  "task": "T82",
+  "scope": "Static closure generation and compile checks; no execution parity claim.",
+  "implementation_head": "deece234551996fb9b5cd7f82e3253f88dccaa42",
+  "frozen_task_commit": "c7eb314b",
+  "fail_before_commit": "041e6e25",
+  "research_commit": "ba499b9a678254d6a14497153581f85f93ee4e18",
+  "checks": {
+    "post_match_graph_tests": {
+      "passed": 10,
+      "command": "python3 tools/test_post_match_graph.py --research-root <archaeology>"
+    },
+    "prior_interval_regeneration": "passed byte-identical",
+    "cargo_fmt": "passed",
+    "original_file_check": "passed",
+    "git_diff_check": "passed",
+    "campaign_tests": "passed"
+  },
+  "full_regression_gate": "Full engine tests and all existing exact-head PR CI checks must pass before merge. Their completion is recorded on PR #185 and in checkpoint comments, not asserted by this receipt.",
+  "followup_issue": "https://github.com/diegoami/onenil/issues/186",
+  "sha256": {
+    "engine/src/watched_compiled/post_match_graph.rs": "cb07a9e6c2b1473d605e3c35f41a5c52201554d4b963ba5240e751cfef19f925",
+    "tools/compile_watched.py": "29bd3f056bc1a7ed56207d1dca87afee0fd1ca23aefd8e7153a6a3f17c8ceb5f",
+    "tools/generate_post_match.py": "13ab15c556d2ab1798f15ce481961923273522590fcf9d99328fa3c138f9ae88",
+    "tools/test_post_match_graph.py": "c13b5b19ab19172102ccde369282e1728baafbc60471beb693cee96b98977c4c",
+    "records/T82/graph.json": "6469cb591522b3a3ae1c0bab8e1c5474dde48a0913c7b4fdc6db73d2c0859c48"
+  }
+}
