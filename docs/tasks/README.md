@@ -132,3 +132,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 
 - [T80 One persisted friendly management week (B5)](T80.md)
 - [T81 Native original condition-refresh routine](T81.md)
+
+- [T82 Compile the enclosing post-match control-flow closure](T82.md)
