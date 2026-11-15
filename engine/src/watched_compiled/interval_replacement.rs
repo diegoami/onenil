@@ -4,6 +4,7 @@ use super::compiled::Cpu;
 use serde_json::{json, Value};
 use std::collections::{BTreeSet, VecDeque};
 
+#[derive(Clone)]
 pub(super) struct Intent {
     pub keys: VecDeque<u16>,
     pub samples: Vec<Value>,

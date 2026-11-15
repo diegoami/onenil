@@ -1,0 +1,34 @@
+{
+  "task": "T83",
+  "scope": "Original E679 caller execution on the supported watched league performance path; isolated caller-entry adapter only.",
+  "frozen_task_commit": "32d1a8e9",
+  "fail_before_commit": "06d8a772",
+  "research_commit": "ba499b9a678254d6a14497153581f85f93ee4e18",
+  "original_fixture_sha256_each": "1163ecc7f55c46d35a3cc74d80792e8e0bb7511ea21b301792effceef1a7d4d0",
+  "original_parity": {
+    "repeats": 2,
+    "final_observations_each": 482,
+    "rng_draws_each": 103,
+    "ordered_writes_each": 439,
+    "returned_registers_each": 12
+  },
+  "focused_checks": {
+    "post_match_integration_tests": 6,
+    "prior_condition_integration_tests": 4,
+    "static_generation_corruption_tests": 10,
+    "missing_initial_observation_cases": 482,
+    "original_file_check": "passed",
+    "prior_interval_regeneration": "byte-identical",
+    "format_and_diff": "passed"
+  },
+  "sha256": {
+    "engine/src/condition_refresh.rs": "fc156231e950ab37bb2e4b04b52dc5e5a812f849587b785de4236b66284ab82c",
+    "engine/src/watched_compiled/post_match.rs": "63edb458f023ab5e929428dfb5439bbc60219271b5c8665a3e9ae76294b1bf24",
+    "engine/src/watched_compiled/compiled.rs": "2f60457e9521f48525ca70bab252f602e709ddc3fb59ae7aa3f3d8eb2f81b701",
+    "engine/src/watched_compiled/post_match_graph.rs": "9172825243965191a91a7aca756465fa9ef80a29bef9ca95dc1b9b2fd013e541",
+    "engine/tests/post_match.rs": "47c32a868eedd08369bde72e82ea8f233e4c2308d1687f40eb5227e7f8c40db8",
+    "records/T83/graph.json": "2e3f88006003f7a5779d1cfe69fbd21822916eb970933c7c34ef9f3a3e46c44f"
+  },
+  "merge_gate": "Full engine/campaign/bridge/desktop and all existing CI checks must pass on the final PR #188 head. Completion is recorded in PR checks and both checkpoint issues, not asserted by this receipt.",
+  "remaining": "Authenticated pre-match admission and the actual EBE2 caller handoff; atomic save/reload and exactly-once campaign integration. No desktop/week enabling."
+}

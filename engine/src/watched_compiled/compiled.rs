@@ -10,6 +10,7 @@ pub struct Missing {
     pub pc: (u16, u16),
 }
 pub(super) type Proc = fn(&mut Cpu) -> Result<(), String>;
+#[derive(Clone)]
 pub(super) struct Cpu {
     pub r: [u16; 12],
     pub upper: [u16; 8],
@@ -21,6 +22,7 @@ pub(super) struct Cpu {
     pub pf: bool,
     pub e: Engine,
     pub draws: Vec<Draw>,
+    pub post_writes: Option<Vec<super::post_match::Write>>,
     pub known: Vec<bool>,
     pub missing: Cell<Option<Missing>>,
     pub require_write_baseline: bool,
@@ -61,6 +63,7 @@ impl Cpu {
             pf: false,
             e,
             draws: vec![],
+            post_writes: None,
             known: vec![false; n],
             missing: Cell::new(None),
             require_write_baseline: false,
@@ -406,6 +409,27 @@ impl Cpu {
                     ));
                 }
             }
+        }
+        // [designed:T83] Optional ordered observable-store audit. Scratch is
+        // excluded by the same declared bounds as the original observer.
+        let a = 16 * usize::from(s) + usize::from(o);
+        let scratch = self
+            .stack_bounds
+            .map(|(lo, hi)| lo <= a && a < hi)
+            .unwrap_or(false);
+        if self.flat_memory && !scratch && self.post_writes.is_some() {
+            let before = self.read(s, o, w)?;
+            self.post_writes
+                .as_mut()
+                .unwrap()
+                .push(super::post_match::Write {
+                    address: a,
+                    size: w / 8,
+                    before,
+                    value: if w == 8 { v & 255 } else { v },
+                    site: format!("{:04X}:{:04X}", self.pc.0, self.pc.1),
+                    draw: self.draws.len(),
+                });
         }
         for i in 0..usize::from(w / 8) {
             let at = usize::from(o) + i;

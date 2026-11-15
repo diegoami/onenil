@@ -4012,8 +4012,8 @@ pub(super) fn p_1998_12be(c: &mut Cpu) -> Result<(), String> {
         }
     }
 }
-pub(super) fn p_1998_14a5(_c: &mut Cpu) -> Result<(), String> {
-    Err("unported original 1998:14A5".into())
+pub(super) fn p_1998_14a5(c: &mut Cpu) -> Result<(), String> {
+    super::projections::post_match_condition(c)
 }
 pub(super) fn p_1998_154e(c: &mut Cpu) -> Result<(), String> {
     let mut label = 5454u16;

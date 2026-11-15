@@ -1,0 +1,38 @@
+{
+  "roots": [
+    "0AB9:E679"
+  ],
+  "procedures": 22,
+  "instructions": 1640,
+  "listing_digests": {
+    "static/1-0-exe/code/seg_0AB9_21.asm": "7c17869e3fb606da7bb5f0d9644b77f1712e6b10ee05e87a9f98f074459e479f",
+    "static/1-0-exe/code/seg_1998_02.asm": "7db3b484368ec70c2187ce4c90906d3e863cb20034e7c94bed8bacf188d61f05",
+    "static/1-0-exe/code/seg_1998_03.asm": "daac0506f4491550991231d970245024b56288c47c266c930951ea1f798054dd",
+    "static/1-0-exe/code/seg_1B55_03.asm": "2e33c838935757b9bccc6558fe851e2d4e9cc59cc0668ce1e907c536be659869",
+    "static/1-0-exe/code/seg_1B55_04.asm": "7422445a132ffab5b97a621c0c89328abd1eac6f493268f749acd5e50cd16506",
+    "static/1-0-exe/code/seg_1B55_07.asm": "d8833764fa016ce3218d8c7f8a2d3f2e65d28e54bbb966b7dbc2e0f602a6797a",
+    "static/1-0-exe/code/seg_232A_01.asm": "dc40af4154df75bc213cd40c381184d4dca28d2b3fb34ddba414407a6c9dfa6a"
+  },
+  "generated_sha256": "9172825243965191a91a7aca756465fa9ef80a29bef9ca95dc1b9b2fd013e541",
+  "boundaries": {
+    "1998:14A5": {
+      "kind": "projection",
+      "function": "post_match_condition"
+    }
+  },
+  "reused": [
+    {
+      "module": "action_graph",
+      "sha256": "ff84f648a1926229a245172b16d158b5303b899da32b3679bcdc84c0de2acea6",
+      "procedures": 373
+    },
+    {
+      "module": "match_graph",
+      "sha256": "2671582c71fdf52c2063c0473a32d0bae76cfc484d1fafd4faeb49554600c057",
+      "procedures": 43
+    }
+  ],
+  "source_addresses": true,
+  "research_commit": "ba499b9a678254d6a14497153581f85f93ee4e18",
+  "execution_validated": false
+}

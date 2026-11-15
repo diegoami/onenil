@@ -1,4 +1,4 @@
-"""T82 static translation and corruption controls; no execution parity claim."""
+"""T82/T83 static translation and corruption controls; no execution parity claim."""
 import argparse
 import copy
 import json
@@ -36,9 +36,9 @@ class PostMatchGraphTests(unittest.TestCase):
         self.assertFalse(definitions & reused)
         self.assertFalse(calls - definitions - reused)
         self.assertEqual(re.findall(r'Err\("(unported[^"]*)"', text),
-                         ['unported original 1998:14A5'])
+                         [])
         self.assertEqual(text.count('invalid compiled label'), len(definitions) - 1)
-        self.assertIn('Err("unported original 1998:14A5".into())', text)
+        self.assertIn('super::projections::post_match_condition(c)', text)
         # The scalar condition kernel and its descendants are not retranslated.
         self.assertNotIn('p_1998_13f9', definitions)
 
@@ -87,7 +87,7 @@ class PostMatchGraphTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'regeneration differs'):
             graph.verify(self.source, metadata, RESEARCH_ROOT)
 
-    def test_boundary_cannot_be_silently_enabled_or_extended(self):
+    def test_projection_contract_cannot_be_silently_changed_or_extended(self):
         for field, value in [('execution_validated', True), ('boundaries', {}),
                              ('roots', ['0AB9:E532']), ('source_addresses', False)]:
             metadata = copy.deepcopy(self.metadata)

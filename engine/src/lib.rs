@@ -87,6 +87,7 @@ pub struct Outcome {
     pub draws: Vec<Draw>,
 }
 
+#[derive(Clone)]
 pub struct Engine {
     image: native_image::Image,
 }

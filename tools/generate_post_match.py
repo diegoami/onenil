@@ -2,7 +2,7 @@
 """[derived: archaeology ba499b9/T86] Compile the E679 post-match closure.
 
 This is a translation check, not an original-record execution parity check.
-The condition boundary deliberately refuses pending a live-image adapter.
+The condition boundary delegates to the shared live-image kernel (T83).
 """
 import argparse
 import hashlib
@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / 'engine/src/watched_compiled'
 GRAPH = BASE / 'post_match_graph.rs'
-MANIFEST = ROOT / 'records/T82/graph.json'
+MANIFEST = ROOT / 'records/T83/graph.json'
 RESEARCH = 'ba499b9a678254d6a14497153581f85f93ee4e18'
 EVIDENCE = f'archaeology {RESEARCH}/T86,E679 static closure'
 REUSED = ['action_graph', 'match_graph']
@@ -28,7 +28,7 @@ def generate(research_root):
         command = [sys.executable, str(ROOT / 'tools/compile_watched.py'),
                    '--research-root', str(research_root), '--out', str(output),
                    '--root', '0AB9:E679', '--source-addresses',
-                   '--defer', '1998:14A5', '--evidence', EVIDENCE]
+                   '--projection', '1998:14A5=post_match_condition', '--evidence', EVIDENCE]
         for module in REUSED:
             command += ['--reuse-existing', str(BASE / (module + '.rs'))]
         result = subprocess.run(command, check=True, capture_output=True, text=True)
@@ -45,7 +45,7 @@ def verify(source, metadata, research_root):
     if metadata['roots'] != ['0AB9:E679'] or metadata['source_addresses'] is not True:
         raise ValueError('invalid translation root/address contract')
     if metadata.get('boundaries') != {'1998:14A5': {
-            'kind': 'unported', 'reason': 'explicit unported boundary'}}:
+            'kind': 'projection', 'function': 'post_match_condition'}}:
         raise ValueError('unexpected translation boundary')
     if hashlib.sha256(source).hexdigest() != metadata['generated_sha256']:
         raise ValueError('generated graph digest differs')
