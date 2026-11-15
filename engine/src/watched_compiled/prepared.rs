@@ -85,6 +85,16 @@ enum Profile {
     Edited,
 }
 impl Session {
+    pub fn new_with_post_match(
+        _input: Input,
+        _admission: super::owned_post_match::Admission,
+    ) -> Result<Self, String> {
+        Err("unimplemented continuing post-match caller".into())
+    }
+    pub fn finish_with_post_match(&mut self) -> Result<Value, String> {
+        Err("unimplemented continuing post-match caller".into())
+    }
+
     pub fn new(input: Input) -> Result<Self, String> {
         Self::new_profile(input, Profile::Exhibition)
     }
