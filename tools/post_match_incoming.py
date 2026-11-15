@@ -11,7 +11,18 @@ DIRECTORY=ROOT/'engine/tests/fixtures/post_match_incoming'
 COMMIT='ef8dad0ea8a7a20cdfa86ea048cf319a02b3a163'
 PINS={'incoming-r0001.json':'d301ca8d2cb507522b8f2ab8882520e86047bb43671a957714ede0f5138d435a',
       'incoming-r0002.json':'e84b5c800cf6bdfd8ac6bc6873514accef954df24bf237b86d68dd6281bdd4f0'}
+def verify_local(directory=None):
+    directory=DIRECTORY if directory is None else directory
+    if {p.name for p in directory.glob('*.json')}!=set(PINS):raise ValueError('early leaf census differs')
+    payloads=[]
+    for name,digest in PINS.items():
+        data=(directory/name).read_bytes()
+        if hashlib.sha256(data).hexdigest()!=digest:raise ValueError('early original fixture digest differs: '+name)
+        payloads.append(json.loads(data)['payload'])
+    if payloads[0]!=payloads[1]:raise ValueError('early original payloads differ')
+
 def verify(research):
+    verify_local()
     recorder='runtime/emul/postmatch_incoming.py'
     accepted=subprocess.check_output(['git','-C',str(research),'show',COMMIT+':'+recorder])
     if (research/recorder).read_bytes()!=accepted:raise ValueError('accepted source checker differs')

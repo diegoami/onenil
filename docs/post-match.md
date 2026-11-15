@@ -66,17 +66,91 @@ The fixture SHA256 is1163ecc7f55c46d35a3cc74d80792e8e0bb7511ea21b301792effceef1a
 for each retained original repeat. The committed original-reference test at
 06d8a772 fails with an explicit unimplemented caller before translation.
 
-[designed:next admission slice] A continuing native match needs authenticated
-pre-match values for the new incoming dependencies and the real EBE2→E679
-frame handoff. The isolated caller-entry initializer is a test adapter; it must
-never inject late snapshots into a continuing engine. Campaign schema, atomic
-save/reload and exactly-once week integration remain separate gates before
-weekly updates. T85's quick friendly has44 prefix draws while this T86 league
-performance specimen has zero: retain selectors and real current state.
-Desktop and campaign routes do not call the new transition yet.
+[designed:T84 scope] The source-matched continuing league admission and
+handoff are described below. Other native profiles and campaign persistence
+remain separate acceptance gates. T85's quick-friendly44 prefix draws must
+not be transplanted into this T86 league performance path's0 prefix.
 
 ```sh
 python3 tools/test_post_match_graph.py --research-root ../onenil-archaeology
 cargo test --manifest-path engine/Cargo.toml --locked --test post_match
 cargo test --manifest-path engine/Cargo.toml --locked --test condition_refresh
 ```
+
+## Continuing source-matched league profile (T84)
+
+[confirmed: archaeology ef8dad0/T87; native T45 source842f1453]
+`prepared::Session::new_with_post_match(input, admission)` now admits the exact
+existing4199-tick selected league profile with sealed pre19CA evidence. The
+public input packet has a source digest and482 numeric field observations;
+its schema accepts no expected output or exit seed. Both original early leaves
+are byte-pinned and agree. The input profile is checked against the prior
+sealed selected admission, so fresh/edited friendly data refuses.
+
+[designed:T84] Admission occurs after existing input loading and before19CA.
+Known values remain owned by the native input/setup pipeline. All but three
+reached known bytes agree with the raw early observations. The prior selected
+admission already owns its roster/position choices: club134's slot10/16 low
+bytes and player2677's position differ from the earlier raw squad. Those
+locations are validated against the sealed selected input and preserved;
+the raw early values never overwrite them. Other known-value conflicts refuse.
+Only unknown logical bytes are added from the early witness, with a complete
+preflight before stores. The read-only admission report separates known,
+newly admitted, binding and frame bytes and counts the three selected bytes.
+Early/late equality is not used as ownership evidence.
+
+[designed:T84] Pool/header values are canonical layout bindings. Original
+physical pointer words are checked as source evidence and never copied into
+native headers. Existing canonical header values must agree; missing headers
+for club statistics and club auxiliary data are constructed at0x70000 and
+0x72000. Other pools retain their existing layout. Frame context is constructed
+before the compiled match starts. E1F2's native frame atFE00 retains its real
+parent22 bytes above it (FE16), rather than the old synthetic zero sentinel.
+The parent week/schedule/detailed fields and explicit write-only before-context
+come from the early ABI witness. The before-context word is not dereferenced
+as an original host/guest pointer. No later frame snapshot enters execution.
+
+[confirmed: original0AB9:EBE2–EBE6, archaeology ef8dad0]
+`finish_with_post_match()` finishes the retained match frames toEBE2, pushes
+the actual retained parent link and EBE6 near return, then invokes T83 from
+that owned image and its already advanced seed. It does not assign scores,
+reconstruct a match end, consume a ledger or reset the seed. The original
+raw-address replay keeps its existing strict geometry; a separate internal
+canonical gate requires DS0, SSB000, CSE255, parentFE16, childSPFE04 and the
+exact declared native pool bindings. Missing/stale/aliased contexts refuse.
+The transaction clones the existing owned session, executes the match and
+caller, and commits on complete success. This retains logical state continuity
+and leaves the original session unchanged on refusal; it is not initialization
+from an observed outcome. The ordinary `finish()` API remains match-only.
+
+[confirmed:T84 continuing original-reference test]
+New and retained171-step starts reproduce every original4199 ticks,182811
+setup/match draws,831 actions andEBE2 return, then all103 post-match draws,
+439 ordered stores and482 final field observations throughEBE6. The comparison
+normalizes only declared pointer/frame coordinates; numeric game fields,
+requests, seeds, values, before-values, store widths/sites and draw positions
+must agree. All12 returned registers match under those explicit bindings.
+Production normalization reads only actual outputs and the early layout
+witness; expected late results are used solely by tests. Isolated late-state
+fixtures are confined to fault-injection unit tests and never construct a
+continuing session.
+
+[designed:T84 verification] `tools/post_match_incoming.py` authenticates the
+upstream accepted checker and original leaves before comparison with native
+copies. CI fetches the accepted research commit with its producer history.
+The Rust constructor also verifies both embedded leaf SHA256 values and their
+independent equality. The retained failure atb9af94c4 visits the real
+continuing-reference constructor before implementation and fails explicitly.
+
+```sh
+python3 tools/post_match_incoming.py --research-root ../onenil-archaeology --check
+python3 tools/test_post_match_incoming.py
+cargo test --manifest-path engine/Cargo.toml --locked --test owned_post_match
+```
+
+[designed:remaining work] This entry serves the matching historical league
+exhibition. It is not admission for the current fresh-friendly campaign route.
+That route needs corresponding original caller evidence, guarded incoming
+values and continuing parity before changing its existing branch/profile
+guards. Atomic campaign save/reload and exactly-once week integration remain
+subsequent gates. Desktop and campaign code still do not call this transition.

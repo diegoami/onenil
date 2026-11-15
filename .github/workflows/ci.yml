@@ -36,6 +36,7 @@ jobs:
         run: |
           python3 -m pip install -r .cache/post-match-source/requirements.txt
           python3 tools/post_match_incoming.py --research-root .cache/post-match-source --check
+          python3 tools/test_post_match_incoming.py
       - run: cargo fmt --manifest-path engine/Cargo.toml -- --check
       - run: cargo test --manifest-path engine/Cargo.toml --locked
       - name: Replay the owned interval against both original streams

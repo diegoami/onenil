@@ -10,7 +10,7 @@ fn input() -> Input {
     serde_json::from_value(v["input"].clone()).unwrap()
 }
 #[test]
-fn continuing_fresh_and_retained_source_matches_original_match_then_caller() {
+fn new_and_retained_source_matches_original_match_then_caller() {
     for prefix in [0, 171] {
         let mut s = Session::new_with_post_match(input(), owned::original_admission())
             .expect("source-matched continuing caller");

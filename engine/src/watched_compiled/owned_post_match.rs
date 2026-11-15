@@ -93,7 +93,8 @@ fn selected_profile() -> Result<Value, String> {
     }
     serde_json::from_slice(BASELINE).map_err(|e| e.to_string())
 }
-// [confirmed:T28/T44/T45] The selected-squad constructor already owns its
+// [confirmed:archaeology ef8dad0/T87; selected admission842f1453/T45]
+// The selected-squad constructor already owns its
 // roster/position inputs. Three bytes differ from T87's earlier raw squad.
 // Validate these against that sealed prior admission; never replace them with
 // the earlier observations. Complete original-stream parity remains required.
