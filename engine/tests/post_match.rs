@@ -86,6 +86,7 @@ fn unsupported_branches_and_injury_refuse_after_no_committed_changes() {
     let record: Value = serde_json::from_slice(RUNS[0]).unwrap();
     for (field, value) in [
         ("DS:D075", 1),
+        ("DS:D6E4", 149),
         ("DS:D6DD", 0),
         ("frame:3ED5", 0),
         ("fixture[134]+15", 6),
@@ -150,4 +151,25 @@ fn input_schema_has_no_expected_state_or_rng_ledger_and_completed_frame_cannot_r
     let after = session.snapshot().unwrap();
     assert!(session.advance().is_err());
     assert_eq!(session.snapshot().unwrap(), after);
+}
+
+#[test]
+fn unwatched_random_path_refuses_even_with_its_new_selector_data_present() {
+    let record: Value = serde_json::from_slice(RUNS[0]).unwrap();
+    let mut bad = input(&record);
+    replace(&mut bad, "club[134]+58", 0);
+    let region = bad.regions.iter().find(|r| r.name == "club").unwrap();
+    bad.initial.push(post_match::Fact {
+        address: region.base + 62 * 129 + 58,
+        field: "club[130]+58".into(),
+        size: 1,
+        value: 0,
+    });
+    let mut session = post_match::Session::new(&bad).unwrap();
+    let before = session.snapshot().unwrap();
+    assert!(session
+        .advance()
+        .unwrap_err()
+        .contains("unwatched random branch"));
+    assert_eq!(session.snapshot().unwrap(), before);
 }

@@ -262,6 +262,19 @@ fn guard(c: &Cpu) -> Result<(), String> {
     {
         return Err("unsupported post-match competition/draw/club pair".into());
     }
+    // [confirmed:ba499b9,1998:11C9/1B99] A club's watched flag selects
+    // performance processing. D075 alone does not rule out the random branch.
+    let (co, cs) = c.far(ds, 0xD7C2)?;
+    if c.read(cs, co.wrapping_add(62 * (club - 1) + 58), 8)? == 0
+        && c.read(cs, co.wrapping_add(62 * (opponent - 1) + 58), 8)? == 0
+    {
+        return Err("unsupported post-match unwatched random branch".into());
+    }
+    let a = c.read(ds, 0xD6E4, 16)?;
+    let b = c.read(ds, 0xD6E6, 16)?;
+    if !((a == club && b == opponent) || (a == opponent && b == club)) {
+        return Err("post-match live club pair differs from fixture".into());
+    }
     Ok(())
 }
 /// [designed:T83] Owned caller state; failures commit no bytes/registers/RNG.
