@@ -1,0 +1,39 @@
+{
+  "task": "T84",
+  "frozen_task_commit": "eda6c4f6",
+  "fail_before_commit": "b9af94c4",
+  "focused_results": {
+    "continuing_and_refusal_integration_tests": 3,
+    "atomic_ownership_unit_tests": 2,
+    "sealed_source_tool_tests": 3,
+    "missing_or_changed_observation_cases": 964,
+    "source_authentication": "passed",
+    "original_file_check": "passed"
+  },
+  "parity_per_start": {
+    "starts": [
+      "new",
+      "retained171"
+    ],
+    "ticks": 4199,
+    "match_draws": 182811,
+    "actions": 831,
+    "match_return": "0AB9:EBE2",
+    "post_draws": 103,
+    "post_writes": 439,
+    "final_fields": 482,
+    "normalized_registers": 12,
+    "final_return": "0AB9:EBE6"
+  },
+  "ownership": "Three previously selected roster/position bytes are validated against the sealed prior admission and preserved; other known conflicts refuse. Only unknown logical bytes come from the early source. Bindings/parent frame are explicit.",
+  "sha256": {
+    "engine/src/watched_compiled/owned_post_match.rs": "96edeca2d14b02b055d071aef13d695b86b70a4a1e57bf67230533846211219a",
+    "engine/src/watched_compiled/prepared.rs": "c0625a87a0ff89a61963d9513a80fef3fd6e8f44f2673bcf304ff9d2a912148f",
+    "engine/src/watched_compiled/post_match.rs": "58539e54dd318e232743a2d5aecf0a3a38a1c51deac15ef9c7e4d52808bba143",
+    "engine/src/setup.rs": "6bc8c1d4d230a367228a66087839aa1e332ce3d1f132201815da0787fabb680c",
+    "engine/tests/owned_post_match.rs": "3183d9e6956bc81ef3481529c49b12a245cc54bdb81c5d543d883c52a61646be",
+    "tools/post_match_incoming.py": "c7ead7881e0ac65a3eada68583c15af631bbe19f9ea958ad7f8b807f6b1fac6a"
+  },
+  "merge_gate": "Full engine/campaign/bridge/desktop and exact-head CI must pass before pinned squash PR #190. Complete outcomes are recorded in PR/checkpoint status.",
+  "remaining": "Fresh/edited friendly caller evidence/admission and atomic campaign persistence; desktop routes remain unchanged."
+}

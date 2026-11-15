@@ -14,19 +14,21 @@ use serde_json::{json, Value};
 // source entry,including roles not visited by the original reference session.
 const ROLE_LOOKUP: [u8; 14] = [2, 12, 12, 12, 12, 3, 3, 3, 3, 3, 3, 3, 14, 14];
 
-#[derive(Deserialize, Serialize)]
+#[derive(Clone, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Input {
     pub preparation: watched_setup::Input,
     pub support: Vec<ByteFact>,
     pub no_pending_key: bool,
 }
+#[derive(Clone)]
 pub struct Session {
     cpu: Cpu,
     failed: bool,
     finished: bool,
     interval: bool,
     profile: Profile,
+    post_report: Option<super::owned_post_match::Report>,
 }
 fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
     let mut cells = Cells::new();
@@ -85,6 +87,24 @@ enum Profile {
     Edited,
 }
 impl Session {
+    pub fn new_with_post_match(
+        input: Input,
+        admission: super::owned_post_match::Admission,
+    ) -> Result<Self, String> {
+        super::owned_post_match::validate_profile(&input, &admission)?;
+        Self::new_profile_with_post(input, Profile::Exhibition, Some(&admission))
+    }
+    pub fn finish_with_post_match(&mut self) -> Result<Value, String> {
+        if self.post_report.is_none() || self.finished || self.failed {
+            return Err("unsupported or completed continuing caller".into());
+        }
+        let mut trial = self.clone();
+        let matched = trial.finish().map_err(|e| e.fault.message)?;
+        let post = super::owned_post_match::handoff(&mut trial.cpu)?;
+        let out = json!({"match":matched,"post_match":post,"admission":trial.post_report});
+        *self = trial;
+        Ok(out)
+    }
     pub fn new(input: Input) -> Result<Self, String> {
         Self::new_profile(input, Profile::Exhibition)
     }
@@ -95,6 +115,13 @@ impl Session {
         Self::new_profile(input, Profile::Edited)
     }
     fn new_profile(input: Input, profile: Profile) -> Result<Self, String> {
+        Self::new_profile_with_post(input, profile, None)
+    }
+    fn new_profile_with_post(
+        input: Input,
+        profile: Profile,
+        post: Option<&super::owned_post_match::Admission>,
+    ) -> Result<Self, String> {
         let fresh = profile != Profile::Exhibition;
         let edited = profile == Profile::Edited;
         if !input.no_pending_key {
@@ -159,7 +186,14 @@ impl Session {
                 return Err("fresh incoming support differs from original witnesses".into());
             }
         }
-        let mut prepared = if edited {
+        let mut prepared = if let Some(post) = post {
+            setup::Session::before_post_match_call(
+                input.preparation.setup,
+                input.preparation.incoming,
+                &support,
+                post,
+            )?
+        } else if edited {
             setup::Session::before_edited_watched_call(
                 input.preparation.setup,
                 input.preparation.incoming,
@@ -179,6 +213,7 @@ impl Session {
             )?
         };
         let preparation = prepared.preparation();
+        let post_report = prepared.post_report.take();
         let e = &mut prepared.match_state.inner.e;
         e.image[0x8708..0x8716].copy_from_slice(&ROLE_LOOKUP);
         if e.word(0xD6E6) != caller_club || e.image[0xD29] != u8::from(fixture_flags & 15 == 1) {
@@ -278,12 +313,22 @@ impl Session {
         c.draws =
             serde_json::from_value(preparation["draws"].clone()).map_err(|e| e.to_string())?;
         for (offset, value) in [
-            (0xFE00, 0),
+            (
+                0xFE00,
+                if post_report.is_some() {
+                    super::owned_post_match::PARENT
+                } else {
+                    0
+                },
+            ),
             (0xFE02, 0xEBE2),
             (0xFE04, week),
             (0xFE06, club),
         ] {
             c.write(c.r[10], offset, 16, value)?;
+        }
+        if post_report.is_some() {
+            super::owned_post_match::initialize_abi(&mut c)?;
         }
         // [confirmed] D5D6 presentation preparation computes marker glyphs via033E.
         c.invoke(
@@ -332,6 +377,7 @@ impl Session {
             finished: false,
             interval: false,
             profile,
+            post_report,
         };
         out.validate_abi()?;
         Ok(out)
@@ -577,7 +623,12 @@ impl Session {
             }
             if c.watch_pending.is_some()
                 || c.r[4] != 0xFE08
-                || c.r[5] != 0
+                || c.r[5]
+                    != if self.post_report.is_some() {
+                        super::owned_post_match::PARENT
+                    } else {
+                        0
+                    }
                 || c.r[11] != 0
                 || c.r[10] != 0xB000
                 || c.r[9] != 0xE255

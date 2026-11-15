@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """[designed:T72] Authenticate original-style numbers in actual native window pixels."""
+from capture_lock import capture_lock_digest
 import argparse
 import hashlib
 import json
@@ -75,7 +76,7 @@ def verify(path):
     assert r['source_research']=='011a341464dfbf4f419cd0eefad8553a37002dca'
     assert r['marker_contract_sha256']==digest((ROOT/'engine/tests/fixtures/scene_codes/provenance.json').read_bytes())
     assert r['runtime']['window_backend']=='software/minifb'
-    assert r['runtime']['cargo_lock_sha256']==digest((ROOT/'desktop/faithful/Cargo.lock').read_bytes())
+    assert r['runtime']['cargo_lock_sha256']==capture_lock_digest(r)
     assert r['fresh_process_count']==1 and r['cancelled_and_closed_workers_reaped'] is True
     steps={s['name']:s['state'] for s in r['steps']}
     assert list(steps)==['main','preparation','worker','pitch','slow-numbered-pitch','commentary']

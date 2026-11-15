@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """T77: authenticate the actual live desktop phase/ownership/raster/save workflow."""
+from capture_lock import capture_lock_digest
 import argparse,copy,hashlib,json,re
 from pathlib import Path
 from check_numbered_pitch_records import native_rgb
@@ -12,7 +13,7 @@ def check(r,directory,images=True):
  assert r['status']=='passed' and not r['error'] and not r['x11_errors']
  assert r['owned_windows_closed'] and r['cancelled_and_closed_workers_reaped'] and r['fresh_process_count']==3
  assert r['font_sha256']==FONT and r['runtime']['window_backend']=='software/minifb'
- assert r['runtime']['cargo_lock_sha256']==sha((ROOT/'desktop/faithful/Cargo.lock').read_bytes())
+ assert r['runtime']['cargo_lock_sha256']==capture_lock_digest(r)
  assert r['names_sha256']==sha((ROOT/'desktop/faithful/assets/campaign-match-names.json').read_bytes())
  deps={'desktop/faithful/live_desktop_window_check.py','desktop/faithful/src/application.rs','desktop/faithful/src/controller.rs','desktop/faithful/src/timeline.rs','desktop/faithful/src/render.rs'}
  assert set(r['producer_files'])==deps and all(re.fullmatch('[0-9a-f]{64}',v) for v in r['producer_files'].values())

@@ -264,6 +264,7 @@ pub struct Session {
     points: Vec<Value>,
     draws: Vec<Draw>,
     income_results: Vec<u32>,
+    pub(crate) post_report: Option<crate::watched_compiled::owned_post_match::Report>,
 }
 impl Session {
     pub fn new(data: Data) -> Result<Self, String> {
@@ -344,6 +345,24 @@ impl Session {
         before_call: bool,
         fresh: bool,
     ) -> Result<Self, String> {
+        Self::new_mode_with_post(data, incoming, initial, before_call, fresh, None)
+    }
+    pub(crate) fn before_post_match_call(
+        data: Data,
+        incoming: WatchedIncoming,
+        initial: &crate::role_scores::Cells,
+        post: &crate::watched_compiled::owned_post_match::Admission,
+    ) -> Result<Self, String> {
+        Self::new_mode_with_post(data, Some(incoming), Some(initial), true, false, Some(post))
+    }
+    fn new_mode_with_post(
+        data: Data,
+        incoming: Option<WatchedIncoming>,
+        initial: Option<&crate::role_scores::Cells>,
+        before_call: bool,
+        fresh: bool,
+        post: Option<&crate::watched_compiled::owned_post_match::Admission>,
+    ) -> Result<Self, String> {
         if !fresh {
             Self::validate(&data)?;
         }
@@ -381,6 +400,7 @@ impl Session {
             points: vec![],
             draws: vec![],
             income_results: vec![],
+            post_report: None,
         };
         out.match_state.inner.e.image[layout::CONFIG + 0xF6] = managed_selection_mode;
         put(
@@ -418,6 +438,12 @@ impl Session {
             e.image[0xCF4C] = initial.ball_byte6;
             put(e, 0xCF4D, initial.ball_word7);
             put(e, 0xCF4F, initial.ball_word9);
+        }
+        if let Some(admission) = post {
+            out.post_report = Some(crate::watched_compiled::owned_post_match::admit(
+                &mut out.match_state.inner.e,
+                admission,
+            )?);
         }
         let result = out.prepare(
             &setup_cells,

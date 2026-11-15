@@ -127,6 +127,13 @@ impl<I: Span> IndexMut<I> for Image {
     }
 }
 impl Image {
+    /// Read provenance without observing an unknown value (T84 admission).
+    pub(crate) fn is_initialized(&self, address: usize) -> bool {
+        self.initialized
+            .as_ref()
+            .map(|m| m.get(address).copied().unwrap_or(false))
+            .unwrap_or(address < self.bytes.len())
+    }
     pub(crate) fn tracked(len: usize) -> Self {
         Self {
             bytes: vec![0; len].into_boxed_slice(),
