@@ -629,3 +629,8 @@ mod replacement_tests {
         }
     }
 }
+
+// [designed:T83] Shared live-image condition kernel boundary.
+pub(super) fn post_match_condition(c: &mut Cpu) -> Result<(), String> {
+    super::post_match::condition(c)
+}

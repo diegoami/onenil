@@ -105,28 +105,84 @@ fn project(e: &Engine, player: u16) -> Output {
     }
 }
 
-fn store(e: &mut Engine, address: usize, value: u8, field: &str, writes: &mut Vec<Write>) {
-    writes.push(Write {
-        field: field.into(),
-        before: u16::from(e.image[address]),
-        after: u16::from(value),
-        size: 1,
-    });
-    e.image[address] = value;
+// [designed:T83] A shared transition over explicit fields. The Cpu backend
+// resolves live far pointers; the isolated backend retains its canonical layout.
+#[derive(Clone, Copy)]
+pub(crate) enum Field {
+    Player8(u16, u8),
+    Player15(u16, u8),
+    Cap(u8),
+    ClubStaff(u8),
+    Facility(u16),
+    Seed,
 }
-
-fn draw(e: &mut Engine, n: u16, site: &str, draws: &mut Vec<Draw>, writes: &mut Vec<Write>) -> i16 {
-    let before = e.word(SEED);
-    let value = e.draw(n, site, draws);
-    writes.push(Write {
-        field: "seed".into(),
-        before,
-        after: e.word(SEED),
-        size: 2,
-    });
-    value as i16
+pub(crate) trait Memory {
+    fn read(&mut self, field: Field) -> Result<u16, String>;
+    fn write(&mut self, field: Field, value: u8, site: u16) -> Result<(), String>;
+    fn draw(&mut self, n: u16, site: u16) -> Result<i16, String>;
 }
-
+struct Canonical<'a> {
+    e: &'a mut Engine,
+    draws: Vec<Draw>,
+    writes: Vec<Write>,
+}
+fn address(field: Field) -> (usize, u8, &'static str) {
+    match field {
+        Field::Player8(p, o) => (
+            layout::P8 + 8 * usize::from(p) + usize::from(o),
+            1,
+            "player8",
+        ),
+        Field::Player15(p, o) => (
+            layout::P15 + 15 * usize::from(p) + usize::from(o),
+            1,
+            match o {
+                7 => "base_condition",
+                8 => "condition",
+                14 => "recovery",
+                _ => "player15",
+            },
+        ),
+        Field::Cap(o) => (0xD72 + usize::from(o), 1, "cap"),
+        Field::ClubStaff(c) => (layout::CLUB + 62 * usize::from(c - 1) + 44, 2, "staff"),
+        Field::Facility(s) => (layout::STAFF + 4 * usize::from(s) + 2, 1, "facility"),
+        Field::Seed => (usize::from(SEED), 2, "seed"),
+    }
+}
+impl Memory for Canonical<'_> {
+    fn read(&mut self, field: Field) -> Result<u16, String> {
+        let (a, width, _) = address(field);
+        let value = if width == 2 {
+            u16::from_le_bytes([self.e.image[a], self.e.image[a + 1]])
+        } else {
+            u16::from(self.e.image[a])
+        };
+        self.e.image.check_initialized()?;
+        Ok(value)
+    }
+    fn write(&mut self, field: Field, value: u8, _site: u16) -> Result<(), String> {
+        let (a, _, name) = address(field);
+        self.writes.push(Write {
+            field: name.into(),
+            before: u16::from(self.e.image[a]),
+            after: u16::from(value),
+            size: 1,
+        });
+        self.e.image[a] = value;
+        Ok(())
+    }
+    fn draw(&mut self, n: u16, site: u16) -> Result<i16, String> {
+        let before = self.e.word(SEED);
+        let value = self.e.draw(n, &format!("1998:{site:04X}"), &mut self.draws);
+        self.writes.push(Write {
+            field: "seed".into(),
+            before,
+            after: self.e.word(SEED),
+            size: 2,
+        });
+        Ok(value as i16)
+    }
+}
 // [confirmed: T83/T84 83b7ef7] 11EC receives only the signed low byte.
 fn clamp(candidate: i16, age: u8, reference: u8, facility: u8, caps: [u8; 2]) -> u8 {
     let mut value = (candidate as i8).max(1);
@@ -137,89 +193,86 @@ fn clamp(candidate: i16, age: u8, reference: u8, facility: u8, caps: [u8; 2]) ->
     }
     value as u8
 }
-
-/// [confirmed: archaeology 83b7ef7] 14A5 + bounded 11EC/13F9 effects.
-/// The caller owns admission and RNG sequencing; no fixture is consulted here.
-pub(crate) fn refresh_image(e: &mut Engine, player: u16, flag: u8) -> Result<Outcome, String> {
+/// [confirmed: archaeology83b7ef7] The one shared 14A5/11EC/13F9 algorithm.
+/// Preflight reached dependencies; output-only recovery projection belongs to
+/// the isolated API, not the positive-path caller's semantic read set.
+pub(crate) fn apply(m: &mut impl Memory, player: u16, flag: u8) -> Result<(), String> {
     if !(1..=3920).contains(&player) {
         return Err("condition player outside original domain".into());
     }
-    let p8 = layout::P8 + 8 * usize::from(player);
-    let p15 = layout::P15 + 15 * usize::from(player);
-    let club = e.image[p8];
-    let age = e.image[p8 + 1];
-    let reference = e.image[p8 + 2];
-    let caps = [e.image[0xD72], e.image[0xD73]];
-    let condition = e.image[p15 + 8] as i8;
-    let base = i16::from(e.image[p15 + 7] as i8);
+    let club = m.read(Field::Player8(player, 0))? as u8;
+    let age = m.read(Field::Player8(player, 1))? as u8;
+    let reference = m.read(Field::Player8(player, 2))? as u8;
+    let caps = [m.read(Field::Cap(0))? as u8, m.read(Field::Cap(1))? as u8];
+    let condition = m.read(Field::Player15(player, 8))? as i8;
+    let base = i16::from(m.read(Field::Player15(player, 7))? as i8);
     if !(1..=176).contains(&club) || caps != [32, 25] {
         return Err("condition image club/cap identity differs".into());
     }
     let mut facility = 0;
     if age > 19 || condition <= 0 {
-        let address = layout::CLUB + 62 * usize::from(club - 1) + 44;
-        let staff = u16::from_le_bytes([e.image[address], e.image[address + 1]]);
+        let staff = m.read(Field::ClubStaff(club))?;
         if staff > 1000 {
             return Err("condition staff outside original domain".into());
         }
-        facility = e.image[layout::STAFF + 4 * usize::from(staff) + 2];
+        facility = m.read(Field::Facility(staff))? as u8;
     }
-    // Resolve all reached input dependencies before any mutation or RNG draw.
-    // The output also projects the preserved recovery byte on positive calls.
-    let recovery = e.image[p15 + 14];
-    let _seed = e.word(SEED);
-    e.image.check_initialized()?;
-    let mut draws = Vec::new();
-    let mut writes = Vec::new();
+    let recovery = if condition <= 0 {
+        m.read(Field::Player15(player, 14))? as u8
+    } else {
+        0
+    };
+    m.read(Field::Seed)?;
     if condition > 0 {
         let (a, b) = if flag != 0 {
-            (
-                draw(e, 2, "1998:14D0", &mut draws, &mut writes),
-                draw(e, 8, "1998:14D8", &mut draws, &mut writes),
-            )
+            (m.draw(2, 0x14D0)?, m.draw(8, 0x14D8)?)
         } else {
-            (
-                draw(e, 3, "1998:14FE", &mut draws, &mut writes),
-                draw(e, 2, "1998:1506", &mut draws, &mut writes),
-            )
+            (m.draw(3, 0x14FE)?, m.draw(2, 0x1506)?)
         };
         let value = clamp(base + b - a, age, reference, facility, caps);
-        store(e, p15 + 7, value, "base_condition", &mut writes);
+        m.write(
+            Field::Player15(player, 7),
+            value,
+            if flag != 0 { 0x14EE } else { 0x151C },
+        )?;
         if flag == 0 && (value as i8) < 25 {
-            store(
-                e,
-                p15 + 7,
-                value.wrapping_add(1),
-                "base_condition",
-                &mut writes,
-            );
+            m.write(Field::Player15(player, 7), value.wrapping_add(1), 0x1527)?;
         }
     } else {
-        let a = draw(e, 2, "1998:1429", &mut draws, &mut writes);
-        let b = draw(e, 8, "1998:1431", &mut draws, &mut writes);
+        let a = m.draw(2, 0x1429)?;
+        let b = m.draw(8, 0x1431)?;
         let value = clamp(base + a - b, age, reference, facility, caps);
-        store(e, p15 + 7, value, "base_condition", &mut writes);
-        let decrement = draw(
-            e,
-            u16::from((facility >> 5) + 1),
-            "1998:147B",
-            &mut draws,
-            &mut writes,
-        );
+        m.write(Field::Player15(player, 7), value, 0x1449)?;
+        let decrement = m.draw(u16::from((facility >> 5) + 1), 0x147B)?;
         let value = recovery.wrapping_sub(decrement as u8);
-        store(e, p15 + 14, value, "recovery", &mut writes);
+        m.write(Field::Player15(player, 14), value, 0x147E)?;
         if (value as i8) < 0 {
-            store(e, p15 + 14, 0, "recovery", &mut writes);
+            m.write(Field::Player15(player, 14), 0, 0x1489)?;
         }
     }
-    if condition > 0 || e.image[p15 + 14] == 0 {
-        let value = e.image[p15 + 7];
-        store(e, p15 + 8, value, "condition", &mut writes);
+    if condition > 0 || m.read(Field::Player15(player, 14))? == 0 {
+        let value = m.read(Field::Player15(player, 7))? as u8;
+        m.write(Field::Player15(player, 8), value, 0x1546)?;
     }
+    Ok(())
+}
+pub(crate) fn refresh_image(e: &mut Engine, player: u16, flag: u8) -> Result<Outcome, String> {
+    if !(1..=3920).contains(&player) {
+        return Err("condition player outside original domain".into());
+    }
+    // This API returns recovery even when the transition preserves it.
+    let _recovery = e.image[layout::P15 + 15 * usize::from(player) + 14];
+    e.image.check_initialized()?;
+    let mut m = Canonical {
+        e,
+        draws: vec![],
+        writes: vec![],
+    };
+    apply(&mut m, player, flag)?;
     Ok(Outcome {
-        output: project(e, player),
-        draws,
-        writes,
+        output: project(m.e, player),
+        draws: m.draws,
+        writes: m.writes,
     })
 }
 
