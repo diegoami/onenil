@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Authenticate the actual campaign window, named actions and unmodified campaign."""
+from capture_lock import capture_lock_digest
 import argparse
 import copy
 import hashlib
@@ -73,6 +74,7 @@ def verify(path):
     # Native tasks squash; public proof transport must not depend on dangling
     # implementation commits. The pinned record binds producer/binary identity.
     assert record['runtime']['cargo_lock_sha256'] == 'f05fd7af2e7c9a2b6a7e328274ca4c7759bc2f62aa1a41f0a1a14aa8306279c0'
+    assert record['runtime']['cargo_lock_sha256'] == capture_lock_digest(record)
     seen = set()
     for shot in record['screenshots']:
         assert Path(shot['path']).name == shot['path'] and shot['name'] not in seen

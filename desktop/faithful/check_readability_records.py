@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """[designed:T70] Authenticate the actual readable desktop and resize evidence."""
+from capture_lock import capture_lock_digest
 import argparse
 import hashlib
 import json
@@ -20,7 +21,7 @@ def verify(path):
     assert r['producer']==PRODUCER and r['binary_sha256']==BINARY_SHA
     assert r['font_sha256']==FONT_SHA
     assert r['runtime']['window_backend']=='software/minifb'
-    assert r['runtime']['cargo_lock_sha256']==digest((ROOT/'desktop/faithful/Cargo.lock').read_bytes())
+    assert r['runtime']['cargo_lock_sha256']==capture_lock_digest(r)
     assert r['fresh_process_count']==1 and r['cancelled_and_closed_workers_reaped'] is True
     steps={s['name']:s['state'] for s in r['steps']}
     assert list(steps)==['main','players','preparation','worker','pitch','commentary']

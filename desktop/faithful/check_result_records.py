@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """[designed:T65] Authenticate computed fixture ownership and fresh-process saved result."""
+from capture_lock import capture_lock_digest
 import argparse
 import copy
 import json
@@ -19,7 +20,7 @@ def check(record, initial_raw, completed_raw):
     assert record['font_sha256'] == 'c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f'
     assert record['names_sha256'] == digest((ROOT/'desktop/faithful/assets/campaign-match-names.json').read_bytes())
     assert record['runtime']['window_backend'] == 'software/minifb'
-    assert record['runtime']['cargo_lock_sha256'] == digest((ROOT/'desktop/faithful/Cargo.lock').read_bytes())
+    assert record['runtime']['cargo_lock_sha256'] == capture_lock_digest(record)
     initial, completed = json.loads(initial_raw), json.loads(completed_raw)
     source = json.loads((ROOT/'campaign/fixtures/research-seed.json').read_text())['initial']
     projected = copy.deepcopy(initial)
