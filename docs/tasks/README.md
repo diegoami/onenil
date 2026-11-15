@@ -134,3 +134,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T81 Native original condition-refresh routine](T81.md)
 
 - [T82 Compile the enclosing post-match control-flow closure](T82.md)
+
+- [T83 Execute the original post-match caller from its live image](T83.md)
