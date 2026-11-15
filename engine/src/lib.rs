@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 pub mod ai_selection;
 pub mod cache_helpers;
 pub mod cache_selection;
+pub mod condition_refresh;
 pub mod continuous;
 pub mod event_effects;
 pub mod extra_event;

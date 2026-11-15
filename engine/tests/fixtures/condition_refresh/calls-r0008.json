@@ -1,0 +1,2067 @@
+{
+  "cases": [
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 17,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 172,
+      "name": "active",
+      "output": {
+        "base_condition": 17,
+        "condition": 17,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 2,
+        "caps": 1,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 17,
+          "before": 17,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 17,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 3,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 2
+        },
+        {
+          "n": 2,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 17,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 0,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 174,
+      "name": "unused",
+      "output": {
+        "base_condition": 17,
+        "condition": 17,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 4,
+        "caps": 1,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:14F4",
+        "1998:1527",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 16,
+          "before": 17,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 17,
+          "before": 16,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 17,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 19,
+        "age_reference": 25,
+        "base_condition": 40,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 160,
+      "name": "cap32",
+      "output": {
+        "base_condition": 32,
+        "condition": 32,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 3,
+        "age_reference": 2,
+        "base_condition": 2,
+        "caps": 2,
+        "condition": 2,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:125C",
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 32,
+          "before": 40,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 32,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 20,
+        "age_reference": 25,
+        "base_condition": 40,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 0,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 188,
+      "name": "age20_facility",
+      "output": {
+        "base_condition": 27,
+        "condition": 27,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 3,
+        "age_reference": 2,
+        "base_condition": 2,
+        "caps": 2,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:125C",
+        "1998:12AE",
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 27,
+          "before": 40,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 27,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 28,
+        "age_reference": 25,
+        "base_condition": 40,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 224,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 186,
+      "name": "age_reference_equal",
+      "output": {
+        "base_condition": 32,
+        "condition": 32,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 3,
+        "age_reference": 2,
+        "base_condition": 2,
+        "caps": 2,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:125C",
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 32,
+          "before": 40,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 32,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 29,
+        "age_reference": 25,
+        "base_condition": 40,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 224,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 188,
+      "name": "age_reference_above",
+      "output": {
+        "base_condition": 25,
+        "condition": 25,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 3,
+        "age_reference": 2,
+        "base_condition": 2,
+        "caps": 2,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:125C",
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 25,
+          "before": 40,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 25,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 30,
+        "age_reference": 20,
+        "base_condition": 40,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 188,
+      "name": "cap25",
+      "output": {
+        "base_condition": 25,
+        "condition": 25,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 3,
+        "age_reference": 2,
+        "base_condition": 2,
+        "caps": 2,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:125C",
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 25,
+          "before": 40,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 25,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 40,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 0,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 188,
+      "name": "facility_cap",
+      "output": {
+        "base_condition": 27,
+        "condition": 27,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 3,
+        "age_reference": 2,
+        "base_condition": 2,
+        "caps": 2,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:125C",
+        "1998:12AE",
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 27,
+          "before": 40,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 27,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 6927,
+          "seed_before": 0,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 15138,
+          "seed_before": 6927,
+          "value": 2
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 127,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 0
+      },
+      "instructions": 173,
+      "name": "signed_max",
+      "output": {
+        "base_condition": 1,
+        "condition": 1,
+        "recovery": 0,
+        "seed": 15138
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 2,
+        "caps": 1,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:1208",
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 6927,
+          "before": 0,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 15138,
+          "before": 6927,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 1,
+          "before": 127,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 1,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": -128,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 173,
+      "name": "signed_min",
+      "output": {
+        "base_condition": 1,
+        "condition": 1,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 2,
+        "caps": 1,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:1208",
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 1,
+          "before": 128,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 1,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 3,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 2
+        },
+        {
+          "n": 2,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": -128,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 0,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 189,
+      "name": "signed_underflow",
+      "output": {
+        "base_condition": 31,
+        "condition": 31,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 3,
+        "age_reference": 2,
+        "base_condition": 3,
+        "caps": 2,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:125C",
+        "1998:12AE",
+        "1998:14F4",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 31,
+          "before": 128,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 31,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 3,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 2
+        },
+        {
+          "n": 2,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": -20,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 0,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 175,
+      "name": "unused_floor",
+      "output": {
+        "base_condition": 2,
+        "condition": 2,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 4,
+        "caps": 1,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:1208",
+        "1998:14F4",
+        "1998:1527",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 1,
+          "before": 236,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 2,
+          "before": 1,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 2,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 3,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 2
+        },
+        {
+          "n": 2,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 23,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 0,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 174,
+      "name": "unused_below25",
+      "output": {
+        "base_condition": 23,
+        "condition": 23,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 4,
+        "caps": 1,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:14F4",
+        "1998:1527",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 22,
+          "before": 23,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 23,
+          "before": 22,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 23,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 3,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 2
+        },
+        {
+          "n": 2,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 26,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 0,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 173,
+      "name": "unused_at25",
+      "output": {
+        "base_condition": 25,
+        "condition": 25,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 3,
+        "caps": 1,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:14F4",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 25,
+          "before": 26,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 25,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        },
+        {
+          "n": 5,
+          "seed_after": 9772,
+          "seed_before": 2017,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 17,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 0,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 253,
+      "name": "zero_recovered",
+      "output": {
+        "base_condition": 17,
+        "condition": 17,
+        "recovery": 0,
+        "seed": 9772
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 2,
+        "caps": 1,
+        "club": 2,
+        "clubs_pointer": 4,
+        "condition": 2,
+        "facility": 2,
+        "player15_pointer": 4,
+        "player8_pointer": 4,
+        "recovery": 3,
+        "seed": 3,
+        "seed_pointer": 6,
+        "staff_id": 2,
+        "staff_pointer": 4
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:1489",
+        "1998:1535",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 17,
+          "before": 17,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 9772,
+          "before": 2017,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 255,
+          "before": 0,
+          "field": "recovery",
+          "size": 1
+        },
+        {
+          "after": 0,
+          "before": 255,
+          "field": "recovery",
+          "size": 1
+        },
+        {
+          "after": 17,
+          "before": 0,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        },
+        {
+          "n": 5,
+          "seed_after": 9772,
+          "seed_before": 2017,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 17,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 0,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": 20,
+        "seed": 7
+      },
+      "instructions": 248,
+      "name": "zero_blocked",
+      "output": {
+        "base_condition": 17,
+        "condition": 0,
+        "recovery": 19,
+        "seed": 9772
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 1,
+        "caps": 1,
+        "club": 2,
+        "clubs_pointer": 4,
+        "condition": 2,
+        "facility": 2,
+        "player15_pointer": 4,
+        "player8_pointer": 4,
+        "recovery": 3,
+        "seed": 3,
+        "seed_pointer": 6,
+        "staff_id": 2,
+        "staff_pointer": 4
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:1535"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 17,
+          "before": 17,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 9772,
+          "before": 2017,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 19,
+          "before": 20,
+          "field": "recovery",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        },
+        {
+          "n": 5,
+          "seed_after": 9772,
+          "seed_before": 2017,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 17,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": -1,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 253,
+      "name": "negative_recovered",
+      "output": {
+        "base_condition": 17,
+        "condition": 17,
+        "recovery": 0,
+        "seed": 9772
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 2,
+        "caps": 1,
+        "club": 2,
+        "clubs_pointer": 4,
+        "condition": 2,
+        "facility": 2,
+        "player15_pointer": 4,
+        "player8_pointer": 4,
+        "recovery": 3,
+        "seed": 3,
+        "seed_pointer": 6,
+        "staff_id": 2,
+        "staff_pointer": 4
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:1489",
+        "1998:1535",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 17,
+          "before": 17,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 9772,
+          "before": 2017,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 255,
+          "before": 0,
+          "field": "recovery",
+          "size": 1
+        },
+        {
+          "after": 0,
+          "before": 255,
+          "field": "recovery",
+          "size": 1
+        },
+        {
+          "after": 17,
+          "before": 255,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        },
+        {
+          "n": 5,
+          "seed_after": 9772,
+          "seed_before": 2017,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 17,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 0,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": -5,
+        "seed": 7
+      },
+      "instructions": 253,
+      "name": "negative_counter",
+      "output": {
+        "base_condition": 17,
+        "condition": 17,
+        "recovery": 0,
+        "seed": 9772
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 2,
+        "caps": 1,
+        "club": 2,
+        "clubs_pointer": 4,
+        "condition": 2,
+        "facility": 2,
+        "player15_pointer": 4,
+        "player8_pointer": 4,
+        "recovery": 3,
+        "seed": 3,
+        "seed_pointer": 6,
+        "staff_id": 2,
+        "staff_pointer": 4
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:1489",
+        "1998:1535",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 17,
+          "before": 17,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 9772,
+          "before": 2017,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 250,
+          "before": 251,
+          "field": "recovery",
+          "size": 1
+        },
+        {
+          "after": 0,
+          "before": 250,
+          "field": "recovery",
+          "size": 1
+        },
+        {
+          "after": 17,
+          "before": 0,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        },
+        {
+          "n": 5,
+          "seed_after": 9772,
+          "seed_before": 2017,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 17,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 0,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": -128,
+        "seed": 7
+      },
+      "instructions": 248,
+      "name": "counter_wrap",
+      "output": {
+        "base_condition": 17,
+        "condition": 0,
+        "recovery": 127,
+        "seed": 9772
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 1,
+        "caps": 1,
+        "club": 2,
+        "clubs_pointer": 4,
+        "condition": 2,
+        "facility": 2,
+        "player15_pointer": 4,
+        "player8_pointer": 4,
+        "recovery": 3,
+        "seed": 3,
+        "seed_pointer": 6,
+        "staff_id": 2,
+        "staff_pointer": 4
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:1535"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 17,
+          "before": 17,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 9772,
+          "before": 2017,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 127,
+          "before": 128,
+          "field": "recovery",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 30266,
+          "seed_before": 7,
+          "value": 1
+        },
+        {
+          "n": 8,
+          "seed_after": 2017,
+          "seed_before": 30266,
+          "value": 1
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 17,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 255,
+        "player": 1,
+        "recovery": 0,
+        "seed": 7
+      },
+      "instructions": 172,
+      "name": "byte_flag",
+      "output": {
+        "base_condition": 17,
+        "condition": 17,
+        "recovery": 0,
+        "seed": 2017
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 2,
+        "caps": 1,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 30266,
+          "before": 7,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 2017,
+          "before": 30266,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 17,
+          "before": 17,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 17,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    },
+    {
+      "draws": [
+        {
+          "n": 2,
+          "seed_after": 41042,
+          "seed_before": 65535,
+          "value": 2
+        },
+        {
+          "n": 8,
+          "seed_after": 35737,
+          "seed_before": 41042,
+          "value": 5
+        }
+      ],
+      "input": {
+        "age": 25,
+        "age_reference": 25,
+        "base_condition": 17,
+        "caps": [
+          32,
+          25
+        ],
+        "club": 1,
+        "condition": 10,
+        "facility": 128,
+        "flag": 1,
+        "player": 1,
+        "recovery": 0,
+        "seed": 65535
+      },
+      "instructions": 172,
+      "name": "seed_max",
+      "output": {
+        "base_condition": 20,
+        "condition": 20,
+        "recovery": 0,
+        "seed": 35737
+      },
+      "reads": {
+        "age": 2,
+        "age_reference": 1,
+        "base_condition": 2,
+        "caps": 1,
+        "club": 1,
+        "clubs_pointer": 2,
+        "condition": 2,
+        "facility": 1,
+        "player15_pointer": 2,
+        "player8_pointer": 2,
+        "seed": 2,
+        "seed_pointer": 4,
+        "staff_id": 1,
+        "staff_pointer": 2
+      },
+      "returned": {
+        "cs": "1998",
+        "ip": 65280,
+        "sp": 65286
+      },
+      "sites": [
+        "1998:14C6",
+        "1998:1546"
+      ],
+      "writes": [
+        {
+          "after": 41042,
+          "before": 65535,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 35737,
+          "before": 41042,
+          "field": "seed",
+          "size": 2
+        },
+        {
+          "after": 20,
+          "before": 17,
+          "field": "base_condition",
+          "size": 1
+        },
+        {
+          "after": 20,
+          "before": 10,
+          "field": "condition",
+          "size": 1
+        }
+      ]
+    }
+  ],
+  "error": null,
+  "intervention": "controlled isolated near calls; no naturally reached caller claim",
+  "payload_sha256": "c007046daba1e6c22a11742c05434a145567833784a6d574119a9e421810632e",
+  "producer": "e04ca817177b892f47fed040244f0ddc881cb152",
+  "producer_files": {
+    "runtime/driver/savestate.py": "3fb1e0d68424ce9ad8076c2b76ed46e080263474f765a829792e52cc24c6c169",
+    "runtime/emul/condition_refresh.py": "0130cd0c2564a80889bc2ff058ae2bb8bbdb55b7667707120541e10511e64f98",
+    "runtime/emul/guest.py": "45b12121ad07d29f4ee82270cf55515317477dc7c9fa4feee24e68f7e559ecb3",
+    "tools/static/onilexe.py": "ecfe6139be0f542986650afda558a5dac15f945297054c0f5c33dc8413be4fab",
+    "tools/static/unlzexe.py": "52ba9c42e5651e1bafa1e4bd97a0124c01a5692c30dbf85b98d2aeda548fdd49"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "unicorn": "2.1.4"
+  },
+  "schema": "original-condition-calls/1",
+  "source": {
+    "packed_sha256": "89ff9c5f238f24e81a0c2440a46cdd8997280a65fc3cc3d97cb974f55280a80a",
+    "unpacked_sha256": "887ed2a92767950e5309b2052409f875668605939b69e00737aa3047022b9f51"
+  },
+  "status": "completed"
+}
