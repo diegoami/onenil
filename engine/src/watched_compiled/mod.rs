@@ -10,6 +10,7 @@ mod interval_graph;
 mod lineup_validation;
 mod match_graph;
 // [designed:T82] Compile-check the closure before exposing a live-image entry.
+pub mod post_match;
 #[allow(dead_code)]
 mod post_match_graph;
 pub mod prepared;
