@@ -57,3 +57,54 @@ fn immutable_original_source_identity_and_repeat() {
     assert_eq!(a["cases"], b["cases"]);
     assert_eq!(a["producer"], "e04ca817177b892f47fed040244f0ddc881cb152");
 }
+
+#[test]
+fn incomplete_or_foreign_input_cannot_enter_execution() {
+    let record: Value = serde_json::from_slice(RUN).unwrap();
+    let input = record["cases"][0]["input"].clone();
+    for key in input.as_object().unwrap().keys() {
+        let mut bad = input.clone();
+        bad.as_object_mut().unwrap().remove(key);
+        assert!(serde_json::from_value::<Input>(bad).is_err(), "{key}");
+    }
+    let mut steered = input.clone();
+    steered["expected_output"] = json!({"condition":31});
+    assert!(serde_json::from_value::<Input>(steered).is_err());
+    for (key, value) in [("player", 0), ("player", 3921), ("club", 0), ("club", 177)] {
+        let mut bad = input.clone();
+        bad[key] = json!(value);
+        assert!(condition_refresh::replay(&serde_json::from_value(bad).unwrap()).is_err());
+    }
+    let mut bad = input;
+    bad["caps"] = json!([31, 25]);
+    assert!(condition_refresh::replay(&serde_json::from_value(bad).unwrap()).is_err());
+}
+
+#[test]
+fn consecutive_calls_retain_the_advanced_seed_and_updated_fields() {
+    let record: Value = serde_json::from_slice(RUN).unwrap();
+    let original = record["cases"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|case| case["name"] == "seed_max")
+        .unwrap();
+    let input: Input = serde_json::from_value(original["input"].clone()).unwrap();
+    let mut session = condition_refresh::Session::new(&input).unwrap();
+    let first = session.refresh(input.flag).unwrap();
+    assert_eq!(
+        serde_json::to_value(&first.output).unwrap(),
+        original["output"]
+    );
+    let second = session.refresh(0).unwrap();
+    assert_eq!(second.draws[0].seed_before, first.output.seed);
+    assert_ne!(second.draws[0].seed_before, input.seed);
+    let write = second
+        .writes
+        .iter()
+        .find(|w| w.field == "base_condition")
+        .unwrap();
+    assert_eq!(write.before, first.output.base_condition as u8 as u16);
+    assert_ne!(write.before, input.base_condition as u8 as u16);
+    assert_eq!(session.snapshot(), second.output);
+}
