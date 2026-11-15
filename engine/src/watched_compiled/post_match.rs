@@ -119,8 +119,19 @@ fn coordinate(f: &Fact, input: &Input) -> Result<usize, String> {
     Err(format!("unclassified post-match field {}", f.field))
 }
 fn geometry(r: [u16; 12], regions: &[Region]) -> Result<(usize, usize), String> {
-    if r[11] < 0x2864
-        || r[9] != 0x0AB9u16.wrapping_add(r[11] - 0x2864)
+    geometry_mode(r, regions, false)
+}
+fn geometry_mode(r: [u16; 12], regions: &[Region], native: bool) -> Result<(usize, usize), String> {
+    let binding = if native {
+        r[11] == 0
+            && r[9] == 0xE255
+            && r[10] == 0xB000
+            && r[4] == 0xFE04
+            && r[5] == super::owned_post_match::PARENT
+    } else {
+        r[11] >= 0x2864 && r[9] == 0x0AB9u16.wrapping_add(r[11] - 0x2864)
+    };
+    if !binding
         || r[4] < 1024
         || usize::from(r[5]) < usize::from(r[4]) + 6
         || usize::from(r[5]) + 8 > 65536
@@ -324,6 +335,30 @@ pub(super) fn advance_image(
     c: &mut Cpu,
     regions: &[Region],
 ) -> Result<(Vec<Draw>, Vec<Write>), String> {
+    advance_mode(c, regions, false)
+}
+pub(super) fn advance_native_image(
+    c: &mut Cpu,
+    regions: &[Region],
+) -> Result<(Vec<Draw>, Vec<Write>), String> {
+    if regions
+        .iter()
+        .map(|r| (&r.name, r.base, r.count, r.stride, r.origin))
+        .collect::<Vec<_>>()
+        != super::owned_post_match::regions()
+            .iter()
+            .map(|r| (&r.name, r.base, r.count, r.stride, r.origin))
+            .collect::<Vec<_>>()
+    {
+        return Err("canonical post-match pool bindings differ".into());
+    }
+    advance_mode(c, regions, true)
+}
+fn advance_mode(
+    c: &mut Cpu,
+    regions: &[Region],
+    native: bool,
+) -> Result<(Vec<Draw>, Vec<Write>), String> {
     let mut trial = c.clone();
     if !trial.flat_memory
         || trial.e.image.len() != 0x110000
@@ -333,7 +368,7 @@ pub(super) fn advance_image(
         return Err("post-match live image/audit contract differs".into());
     }
     trial.e.image.check_initialized()?;
-    trial.stack_bounds = Some(geometry(trial.r, regions)?);
+    trial.stack_bounds = Some(geometry_mode(trial.r, regions, native)?);
     trial.require_write_baseline = true;
     validate_bindings(&trial, regions)?;
     guard(&trial)?;

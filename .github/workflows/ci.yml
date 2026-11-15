@@ -26,11 +26,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: diegoami/onenil-archaeology
-          ref: ba499b9a678254d6a14497153581f85f93ee4e18
+          ref: ef8dad0ea8a7a20cdfa86ea048cf319a02b3a163
+          fetch-depth: 0
           path: .cache/post-match-source
           persist-credentials: false
       - name: Check post-match graph and explicit condition boundary
         run: python3 tools/test_post_match_graph.py --research-root .cache/post-match-source
+      - name: Authenticate original pre-match admission
+        run: |
+          python3 -m pip install -r .cache/post-match-source/requirements.txt
+          python3 tools/post_match_incoming.py --research-root .cache/post-match-source --check
       - run: cargo fmt --manifest-path engine/Cargo.toml -- --check
       - run: cargo test --manifest-path engine/Cargo.toml --locked
       - name: Replay the owned interval against both original streams

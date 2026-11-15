@@ -21,6 +21,20 @@ fn continuing_fresh_and_retained_source_matches_original_match_then_caller() {
         assert!(s.finish_with_post_match().is_err());
         assert!(s.finish().is_err());
         assert!(s.advance().is_err());
+        assert_eq!(got["admission"]["selected_bytes"], 3);
+        let report = &got["admission"];
+        assert_eq!(
+            [
+                "known_bytes",
+                "admitted_bytes",
+                "binding_bytes",
+                "frame_bytes"
+            ]
+            .iter()
+            .map(|k| report[*k].as_u64().unwrap())
+            .sum::<u64>(),
+            583
+        );
         compare_match(&got["match"]);
         compare_post(&got["post_match"]);
     }
@@ -88,4 +102,59 @@ fn compare_post(got: &Value) {
     ] {
         assert_eq!(got["source_registers"][name], c["returned"][name]);
     }
+}
+
+#[test]
+fn every_missing_or_changed_early_observation_refuses_before_a_session_exists() {
+    let base = input();
+    let original = owned::original_admission();
+    for i in 0..original.fields.len() {
+        let mut bad = original.clone();
+        bad.fields.remove(i);
+        assert!(
+            Session::new_with_post_match(base.clone(), bad).is_err(),
+            "missing field {i}"
+        );
+        let mut bad = original.clone();
+        bad.fields[i].value ^= 1;
+        assert!(
+            Session::new_with_post_match(base.clone(), bad).is_err(),
+            "changed field {i}"
+        );
+    }
+}
+#[test]
+fn foreign_provenance_duplicate_data_and_other_profiles_refuse() {
+    let base = input();
+    let original = owned::original_admission();
+    let mut bad = original.clone();
+    bad.source_sha256 = "0".repeat(64);
+    assert!(Session::new_with_post_match(base.clone(), bad).is_err());
+    let mut bad = original.clone();
+    bad.fields[0] = bad.fields[1].clone();
+    assert!(Session::new_with_post_match(base.clone(), bad).is_err());
+    let mut bad = base.clone();
+    bad.preparation.setup.legacy.contest.seed ^= 1;
+    assert!(Session::new_with_post_match(bad, original.clone()).is_err());
+    for profile in ["fresh", "edited"] {
+        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures");
+        let prep: Value = serde_json::from_slice(
+            &std::fs::read(root.join(format!("{profile}_preparation/admission.json"))).unwrap(),
+        )
+        .unwrap();
+        let facts: Value = serde_json::from_slice(
+            &std::fs::read(root.join(format!("{profile}_watched/incoming.json"))).unwrap(),
+        )
+        .unwrap();
+        let fresh: Input = serde_json::from_value(
+            json!({"preparation":prep["input"],"support":facts["support"],"no_pending_key":true}),
+        )
+        .unwrap();
+        assert!(Session::new_with_post_match(fresh, original.clone()).is_err());
+    }
+    let mut ordinary = Session::new(base).unwrap();
+    assert!(ordinary.finish_with_post_match().is_err());
+    let mut raw = serde_json::to_value(original).unwrap();
+    raw["exit_seed"] = json!(51682);
+    assert!(serde_json::from_value::<owned::Admission>(raw).is_err());
 }
