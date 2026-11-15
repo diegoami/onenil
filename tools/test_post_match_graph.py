@@ -35,7 +35,9 @@ class PostMatchGraphTests(unittest.TestCase):
                                      (graph.BASE / (module + '.rs')).read_text()))
         self.assertFalse(definitions & reused)
         self.assertFalse(calls - definitions - reused)
-        self.assertEqual(text.count('Err('), 1)
+        self.assertEqual(re.findall(r'Err\("(unported[^"]*)"', text),
+                         ['unported original 1998:14A5'])
+        self.assertEqual(text.count('invalid compiled label'), len(definitions) - 1)
         self.assertIn('Err("unported original 1998:14A5".into())', text)
         # The scalar condition kernel and its descendants are not retranslated.
         self.assertNotIn('p_1998_13f9', definitions)

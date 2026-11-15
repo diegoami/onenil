@@ -22,6 +22,15 @@ jobs:
           path: .cache/interval-source
           persist-credentials: false
       - run: python3 tools/generate_interval.py --research-root .cache/interval-source --check
+      - name: Fetch accepted post-match evidence
+        uses: actions/checkout@v4
+        with:
+          repository: diegoami/onenil-archaeology
+          ref: ba499b9a678254d6a14497153581f85f93ee4e18
+          path: .cache/post-match-source
+          persist-credentials: false
+      - name: Check post-match graph and explicit condition boundary
+        run: python3 tools/test_post_match_graph.py --research-root .cache/post-match-source
       - run: cargo fmt --manifest-path engine/Cargo.toml -- --check
       - run: cargo test --manifest-path engine/Cargo.toml --locked
       - name: Replay the owned interval against both original streams
