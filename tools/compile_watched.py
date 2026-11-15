@@ -193,8 +193,8 @@ def compile_procedure(seg,entry,rows,partial_errors=None):
     out.append('_=>return Err(format!("invalid compiled label {label:04X}")),}}}')
     return out
 
-def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roots=None,partial=None,external=None,module=None):
-    out=['//! [confirmed] Mechanically compiled numeric control flow;F39/c7637bd,static d9e20a4.','//! [designed] Direct Rust calls/blocks;no runtime decoder or original executable.','use super::compiled::Cpu;']
+def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roots=None,partial=None,external=None,module=None,evidence="F39/c7637bd,static d9e20a4"):
+    out=[f'//! [confirmed] Mechanically compiled numeric control flow;{evidence}.','//! [designed] Direct Rust calls/blocks;no runtime decoder or original executable.','use super::compiled::Cpu;']
     if module:
         for entry in module:out.append(f'use super::{entry}::*;')
     deferred=deferred or set();adapters=adapters or {};report=report if report is not None else {};bodies={}
@@ -230,7 +230,7 @@ def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roo
 
 def main():
     global SOURCE_ADDRESSES,RELOCATED
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',action='append');p.add_argument('--defer',action='append',default=[]);p.add_argument('--partial',action='append',default=[]);p.add_argument('--projection',action='append',default=[]);p.add_argument('--defer-unsupported',action='store_true');p.add_argument('--reuse-existing',type=Path,action='append');p.add_argument('--source-addresses',action='store_true');args=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--research-root',type=Path,required=True);p.add_argument('--out',type=Path,default=ROOT/'engine/src/watched_compiled/adjustment.rs');p.add_argument('--check',action='store_true');p.add_argument('--root',action='append');p.add_argument('--defer',action='append',default=[]);p.add_argument('--partial',action='append',default=[]);p.add_argument('--projection',action='append',default=[]);p.add_argument('--defer-unsupported',action='store_true');p.add_argument('--reuse-existing',type=Path,action='append');p.add_argument('--source-addresses',action='store_true');p.add_argument('--evidence',default='F39/c7637bd,static d9e20a4');args=p.parse_args()
     code,files=listing(args.research_root);roots=args.root or ['0AB9:35F8'];parse=lambda value:tuple(int(v,16)for v in value.split(':'))
     SOURCE_ADDRESSES=args.source_addresses
     if SOURCE_ADDRESSES:
@@ -253,7 +253,7 @@ def main():
             functions={(int(a,16),int(b,16))for a,b in re.findall(r'pub\(super\) fn p_([0-9a-f]{4})_([0-9a-f]{4})',path.read_text())}
             if external.intersection(functions):raise ValueError('duplicate reused procedure')
             external.update(functions);module.append(name);reused.append({'module':name,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'procedures':len(functions)})
-    g=graph(code,[parse(v)for v in roots],external,set(adapters)if args.reuse_existing else None);report={};source=compile_graph(g,deferred,adapters,args.defer_unsupported,report,[parse(v)for v in roots],{parse(v)for v in args.partial},external,module)
+    g=graph(code,[parse(v)for v in roots],external,set(adapters)|deferred if args.reuse_existing else None);report={};source=compile_graph(g,deferred,adapters,args.defer_unsupported,report,[parse(v)for v in roots],{parse(v)for v in args.partial},external,module,args.evidence)
     import subprocess,tempfile
     with tempfile.TemporaryDirectory()as d:
         temp=Path(d)/'generated.rs';temp.write_text(source);subprocess.run(['rustfmt','--edition','2021',str(temp)],check=True);source=temp.read_bytes()
