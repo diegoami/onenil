@@ -36,6 +36,14 @@ pub struct Write {
     pub site: String,
     pub draw: usize,
 }
+#[derive(Clone, Debug, Serialize, PartialEq, Eq)]
+pub struct Read {
+    pub address: usize,
+    pub size: u8,
+    pub value: u16,
+    pub site: String,
+    pub draw: usize,
+}
 #[derive(Debug, Serialize)]
 pub struct Outcome {
     pub final_fields: Vec<Fact>,
@@ -214,10 +222,10 @@ fn machine(input: &Input) -> Result<Cpu, String> {
         c.e.image[a..a + 2].copy_from_slice(&value.to_le_bytes());
         c.known[a..a + 2].fill(true);
     }
-    validate_bindings(&c, &input.regions)?;
+    validate_bindings(&mut c, &input.regions)?;
     Ok(c)
 }
-fn validate_bindings(c: &Cpu, regions: &[Region]) -> Result<(), String> {
+fn validate_bindings(c: &mut Cpu, regions: &[Region]) -> Result<(), String> {
     for &(name, slot, _, _, _) in &POOLS {
         let (o, s) = c.far(c.r[11], slot)?;
         let a = 16 * usize::from(s) + usize::from(o);
@@ -236,7 +244,7 @@ fn validate_bindings(c: &Cpu, regions: &[Region]) -> Result<(), String> {
     }
     Ok(())
 }
-fn guard(c: &Cpu) -> Result<(), String> {
+fn guard(c: &mut Cpu, fresh: bool) -> Result<(), String> {
     let ds = c.r[11];
     let ss = c.r[10];
     let sp = c.r[4];
@@ -251,11 +259,17 @@ fn guard(c: &Cpu) -> Result<(), String> {
     }
     let week = c.read(ss, bp + 6, 16)?;
     let schedule = c.read(ss, bp - 2, 16)?;
+    // [confirmed:ba499b9/T86 league;18ce483/T88 fresh] Each witnessed route
+    // has exactly one observed selector pair: the league ran with the
+    // statistics flag set and a league fixture (0); the fresh friendly ran
+    // with the flag clear and competition 1. Unwitnessed branches refuse.
+    let stat = c.read(ds, 0xD6DD, 8)?;
+    let wanted_stat = if fresh { 0 } else { 1 };
     if !(1..=58).contains(&week)
         || schedule >= 123
         || c.read(ss, bp - 7, 8)? != 1
         || c.read(ds, 0xD075, 8)? != 0
-        || c.read(ds, 0xD6DD, 8)? != 1
+        || stat != wanted_stat
     {
         return Err("unsupported post-match branch/frame selectors".into());
     }
@@ -266,7 +280,9 @@ fn guard(c: &Cpu) -> Result<(), String> {
     let (o, s) = c.far(ds, 0xD7CA)?;
     let fixture = o.wrapping_add(174 * (club - 1) + 3 * (week - 1));
     let opponent = c.read(s, fixture + 1, 8)?;
-    if c.read(s, fixture, 8)? != 0
+    let competition = c.read(s, fixture, 8)?;
+    let wanted_competition = if fresh { 1 } else { 0 };
+    if competition != wanted_competition
         || !(1..=176).contains(&opponent)
         || opponent == club
         || c.read(ds, 0xD086, 8)? == c.read(ds, 0xD087, 8)?
@@ -335,12 +351,15 @@ pub(super) fn advance_image(
     c: &mut Cpu,
     regions: &[Region],
 ) -> Result<(Vec<Draw>, Vec<Write>), String> {
-    advance_mode(c, regions, false)
+    let (draws, writes, _) = advance_mode(c, regions, false, false, false)?;
+    Ok((draws, writes))
 }
 pub(super) fn advance_native_image(
     c: &mut Cpu,
     regions: &[Region],
-) -> Result<(Vec<Draw>, Vec<Write>), String> {
+    observe_reads: bool,
+    fresh: bool,
+) -> Result<(Vec<Draw>, Vec<Write>, Vec<Read>), String> {
     if regions
         .iter()
         .map(|r| (&r.name, r.base, r.count, r.stride, r.origin))
@@ -352,28 +371,38 @@ pub(super) fn advance_native_image(
     {
         return Err("canonical post-match pool bindings differ".into());
     }
-    advance_mode(c, regions, true)
+    let (draws, writes, reads) = advance_mode(c, regions, true, observe_reads, fresh)?;
+    Ok((draws, writes, reads))
 }
 fn advance_mode(
     c: &mut Cpu,
     regions: &[Region],
     native: bool,
-) -> Result<(Vec<Draw>, Vec<Write>), String> {
+    observe_reads: bool,
+    fresh: bool,
+) -> Result<(Vec<Draw>, Vec<Write>, Vec<Read>), String> {
     let mut trial = c.clone();
     if !trial.flat_memory
         || trial.e.image.len() != 0x110000
         || trial.known.len() != 0x110000
         || trial.post_writes.is_some()
+        || trial.post_reads.is_some()
     {
         return Err("post-match live image/audit contract differs".into());
     }
     trial.e.image.check_initialized()?;
     trial.stack_bounds = Some(geometry_mode(trial.r, regions, native)?);
     trial.require_write_baseline = true;
-    validate_bindings(&trial, regions)?;
-    guard(&trial)?;
+    validate_bindings(&mut trial, regions)?;
+    guard(&mut trial, fresh)?;
     let draw_start = trial.draws.len();
     trial.post_writes = Some(vec![]);
+    // [designed:T89] Reads are armed before the span executes, so the observed
+    // set is complete regardless of any prior execution of the same code; the
+    // per-draw seed reads stay part of the footprint (research #209).
+    if observe_reads {
+        trial.post_reads = Some(vec![]);
+    }
     trial.reset_root_budget();
     let original_bp = trial.r[5];
     let original_sp = trial.r[4];
@@ -389,14 +418,18 @@ fn advance_mode(
     for w in &mut writes {
         w.draw -= draw_start;
     }
+    let mut reads = trial.post_reads.take().unwrap_or_default();
+    for r in &mut reads {
+        r.draw -= draw_start;
+    }
     trial.e.image.check_initialized()?;
     *c = trial;
-    Ok((draws, writes))
+    Ok((draws, writes, reads))
 }
 struct Live<'a>(&'a mut Cpu);
 impl Live<'_> {
-    fn location(&self, field: Field) -> Result<(u16, u16, u8), String> {
-        let c = &self.0;
+    fn location(&mut self, field: Field) -> Result<(u16, u16, u8), String> {
+        let c = &mut *self.0;
         let ds = c.r[11];
         let (slot, index, offset, width) = match field {
             Field::Player8(p, o) => (0xD7BA, 8 * p, u16::from(o), 8),
@@ -442,6 +475,11 @@ pub(super) fn condition(c: &mut Cpu) -> Result<(), String> {
     }
     condition_refresh::apply(&mut m, player, flag)?;
     let c = m.0;
+    // [confirmed:ba499b9/T86 + 18ce483/T88] The original routine leaves BX=0
+    // at every service return (36/36 fresh calls and the league record); the
+    // canonical service restores that observable register discipline so the
+    // enclosing caller's EBE6 registers match.
+    c.r[3] = 0;
     c.r[4] = c.r[5];
     c.r[5] = c.pop()?;
     c.ret(false, 4)

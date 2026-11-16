@@ -23,6 +23,7 @@ pub(super) struct Cpu {
     pub e: Engine,
     pub draws: Vec<Draw>,
     pub post_writes: Option<Vec<super::post_match::Write>>,
+    pub(super) post_reads: Option<Vec<super::post_match::Read>>,
     pub known: Vec<bool>,
     pub missing: Cell<Option<Missing>>,
     pub require_write_baseline: bool,
@@ -64,6 +65,7 @@ impl Cpu {
             e,
             draws: vec![],
             post_writes: None,
+            post_reads: None,
             known: vec![false; n],
             missing: Cell::new(None),
             require_write_baseline: false,
@@ -301,11 +303,13 @@ impl Cpu {
             ("phase", 0xD0AC, 8),
             ("hold", 0xD0B9, 8),
         ] {
-            clock[name] = serde_json::json!(self.read(self.r[11], offset, width)?);
+            clock[name] = serde_json::json!(self.peek(self.r[11], offset, width)?);
         }
         Ok(clock)
     }
-    pub fn read(&self, s: u16, o: u16, w: u8) -> Result<u16, String> {
+    /// Pure read without the post-span read audit; read-only observers use
+    /// this so no observation can mutate a session.
+    pub fn peek(&self, s: u16, o: u16, w: u8) -> Result<u16, String> {
         let mut value = 0u16;
         for i in 0..usize::from(w / 8) {
             let at = usize::from(o) + i;
@@ -347,8 +351,34 @@ impl Cpu {
         }
         Ok(value)
     }
+    /// Audited read: identical to [`Cpu::peek`] plus the ordered observable
+    /// read record when armed across the post-match span.
+    pub fn read(&mut self, s: u16, o: u16, w: u8) -> Result<u16, String> {
+        let value = self.peek(s, o, w)?;
+        // [designed:T89] Optional ordered observable-read audit, mirroring the
+        // store audit; armed only across the observed span and never in
+        // scratch/stack segments, like the original observer's bounds.
+        let a = 16 * usize::from(s) + usize::from(o);
+        let scratch = self
+            .stack_bounds
+            .map(|(lo, hi)| lo <= a && a < hi)
+            .unwrap_or(false);
+        if self.flat_memory && !scratch && self.post_reads.is_some() {
+            self.post_reads
+                .as_mut()
+                .unwrap()
+                .push(super::post_match::Read {
+                    address: a,
+                    size: w / 8,
+                    value,
+                    site: format!("{:04X}:{:04X}", self.pc.0, self.pc.1),
+                    draw: self.draws.len(),
+                });
+        }
+        Ok(value)
+    }
     pub fn far(&self, s: u16, o: u16) -> Result<(u16, u16), String> {
-        let first = self.read(s, o, 16)?;
+        let first = self.peek(s, o, 16)?;
         let at = usize::from(o) + 2;
         let mut second = 0;
         for i in 0..2 {
@@ -499,10 +529,9 @@ impl Cpu {
                 tick["after"] = after;
                 self.watch_trace.as_mut().unwrap().push(tick);
                 // [confirmed] Original live counters;D086/87 are scratch during play.
-                self.watch_live_goals.push([
-                    self.read(self.r[11], 0xD0C4, 8)?,
-                    self.read(self.r[11], 0xD0C5, 8)?,
-                ]);
+                let live0 = self.read(self.r[11], 0xD0C4, 8)?;
+                let live1 = self.read(self.r[11], 0xD0C5, 8)?;
+                self.watch_live_goals.push([live0, live1]);
             }
         }
         if self.pc == (0x0AB9, 0x7C94) && self.watch_clocks.is_some() {
@@ -602,14 +631,13 @@ impl Cpu {
             } else {
                 self.frames[count - 3]
             };
+            let (offset, segment) = seed_pointer.unwrap();
+            let seed_after = self.read(segment, offset, 16)?;
             self.draws.push(Draw {
                 site: format!("{:04X}:{:04X}", site.0, site.1),
                 n,
                 seed_before: before,
-                seed_after: {
-                    let (offset, segment) = seed_pointer.unwrap();
-                    self.read(segment, offset, 16)?
-                },
+                seed_after,
                 value: self.r[0],
             });
         }
@@ -620,17 +648,17 @@ impl Cpu {
         let ss = self.r[10];
         let sp = self.r[4];
         let ds = self.r[11];
-        let code = self.read(ss, sp.wrapping_add(2), 8)?;
-        let actor = self.read(ss, sp.wrapping_add(6), 16)?;
-        let secondary = self.read(ss, sp.wrapping_add(4), 16)?;
-        let side = self.read(ss, sp.wrapping_add(8), 8)?;
-        let club = self.read(ds, 0xD6E4u16.wrapping_add(2 * side), 16)?;
+        let code = self.peek(ss, sp.wrapping_add(2), 8)?;
+        let actor = self.peek(ss, sp.wrapping_add(6), 16)?;
+        let secondary = self.peek(ss, sp.wrapping_add(4), 16)?;
+        let side = self.peek(ss, sp.wrapping_add(8), 8)?;
+        let club = self.peek(ds, 0xD6E4u16.wrapping_add(2 * side), 16)?;
         let (off, seg) = self.far(ds, 0xD7C2)?;
         let player = |slot: u16| -> Result<u16, String> {
             if slot == 0 {
                 Ok(0)
             } else {
-                self.read(
+                self.peek(
                     seg,
                     off.wrapping_add(62u16.wrapping_mul(club.wrapping_sub(1)))
                         .wrapping_add(2u16.wrapping_mul(slot.wrapping_sub(1))),
@@ -639,7 +667,7 @@ impl Cpu {
             }
         };
         Ok(
-            serde_json::json!({"code":code,"actor_slot":actor,"secondary_slot":secondary,"side":side,"club":club,"player":player(actor)?,"secondary":player(secondary)?,"minute":self.read(ds,0xD0B2,16)?,"head_before":self.read(ds,0x380,16)?,"caller":format!("{caller:04X}:{ret:04X}"),"draw_start":self.draws.len(),"seed_before":self.read(ds,crate::SEED,16)?}),
+            serde_json::json!({"code":code,"actor_slot":actor,"secondary_slot":secondary,"side":side,"club":club,"player":player(actor)?,"secondary":player(secondary)?,"minute":self.peek(ds,0xD0B2,16)?,"head_before":self.peek(ds,0x380,16)?,"caller":format!("{caller:04X}:{ret:04X}"),"draw_start":self.draws.len(),"seed_before":self.peek(ds,crate::SEED,16)?}),
         )
     }
     fn mask(w: u8) -> u32 {
@@ -975,7 +1003,7 @@ mod tests {
     }
     #[test]
     fn missing_diagnostics_identify_actual_data_and_scratch_bytes() {
-        let c = cpu();
+        let mut c = cpu();
         assert!(c.read(0, 42, 8).is_err());
         assert_eq!(c.missing.get().unwrap().address, 42);
         assert!(!c.missing.get().unwrap().scratch);

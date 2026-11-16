@@ -26,7 +26,7 @@ pub fn original_admission() -> Admission {
 // lineage. Its caller-initial operands are the fresh caller-early dependencies.
 const FRESH_SOURCE: &[u8] =
     include_bytes!("../../tests/fixtures/post_match/fresh-result-r0004.json");
-const FRESH_SOURCE_SHA: &str =
+pub(crate) const FRESH_SOURCE_SHA: &str =
     "9064243194d1bbbdd4dba1602d784c41e4bcba034e4ddbd94cc68b1e718d7c29";
 pub fn fresh_original_admission() -> Admission {
     Admission {
@@ -54,6 +54,155 @@ fn fresh_fields(v: &Value) -> Result<Vec<Field>, String> {
             })
         })
         .collect()
+}
+pub(crate) fn fresh_validate(admission: &Admission) -> Result<Value, String> {
+    if admission.source_sha256 != FRESH_SOURCE_SHA {
+        return Err("foreign fresh caller source identity".into());
+    }
+    let v = fresh_source()?;
+    let expected = fresh_fields(&v)?;
+    let mut seen = BTreeSet::new();
+    if admission.fields.len() != expected.len() {
+        return Err("incomplete fresh caller field census".into());
+    }
+    for f in &admission.fields {
+        if !seen.insert(&f.field) || !expected.contains(f) {
+            return Err(format!("fresh caller field differs: {}", f.field));
+        }
+    }
+    Ok(v)
+}
+// [confirmed:archaeology 18ce483/T88] The fresh caller's original frame is
+// ss-relative with retained parent 16092 (0x3EEC); clubs 130/17, score 1-4.
+fn fresh_parent(v: &Value) -> Result<u16, String> {
+    let parent = v["caller"]["frame"]["parent_bp"]
+        .as_u64()
+        .ok_or("missing fresh parent frame")? as u16;
+    if parent == PARENT {
+        return Err("fresh parent frame collides with the league anchor".into());
+    }
+    Ok(parent)
+}
+fn fresh_pool(regions: &[post_match::Region], name: &str) -> Result<post_match::Region, String> {
+    regions
+        .iter()
+        .find(|r| r.name == name)
+        .cloned()
+        .ok_or_else(|| "unknown fresh pool".into())
+}
+/// Canonical native address of a T88 typed operand string.
+fn fresh_location(v: &Value, field: &str) -> Result<usize, String> {
+    if let Some(rest) = field.strip_prefix("DS:") {
+        return usize::from_str_radix(rest, 16).map_err(|_| "bad fresh DS field".into());
+    }
+    if let Some(rest) = field.strip_prefix("seed+") {
+        let o: usize = rest
+            .parse()
+            .map_err(|_: std::num::ParseIntError| "bad fresh seed field".to_string())?;
+        return Ok(usize::from(crate::SEED) + o);
+    }
+    if let Some(rest) = field.strip_prefix("frame:") {
+        let off = u16::from_str_radix(rest, 16)
+            .map_err(|_: std::num::ParseIntError| "bad fresh frame field".to_string())?;
+        let rel = off.wrapping_sub(fresh_parent(v)?);
+        return Ok((0xB0000i32 + i32::from(PARENT) + i32::from(rel as i16)) as usize);
+    }
+    let (name, rest) = field
+        .split_once('[')
+        .ok_or_else(|| format!("unclassified fresh operand {field}"))?;
+    let (idx, off) = rest
+        .split_once("]+")
+        .ok_or_else(|| format!("unclassified fresh operand {field}"))?;
+    let index: usize = idx.parse().map_err(|_| "bad fresh pool row")?;
+    let offset: usize = off.parse().map_err(|_| "bad fresh pool offset")?;
+    let r = fresh_pool(&regions(), name)?;
+    if index < r.origin || index >= r.origin + r.count || offset >= r.stride {
+        return Err(format!("fresh operand escapes pool {field}"));
+    }
+    Ok(r.base + (index - r.origin) * r.stride + offset)
+}
+fn fresh_binding(field: &str) -> Option<(usize, u16)> {
+    // DS pointer-header slots are canonical bindings: the value is verified
+    // against native geometry, never copied. The live seed value ("seed+*")
+    // is match-computed state and an ordinary observed field.
+    const POOLS: [&str; 10] = [
+        "player8",
+        "player15",
+        "club",
+        "club_stats",
+        "fixture",
+        "history",
+        "game",
+        "club_aux",
+        "staff",
+        "seed",
+    ];
+    let rest = field.strip_prefix("DS:")?;
+    let off = u16::from_str_radix(rest, 16).ok()?;
+    for name in POOLS {
+        let slot = POINTERS.iter().find(|&(n, _)| *n == name)?.1;
+        let a = if name == "seed" {
+            usize::from(crate::SEED)
+        } else {
+            regions().iter().find(|r| r.name == name)?.base
+        };
+        let (low, high) = if a < 0x10000 {
+            (a as u16, 0u16)
+        } else {
+            ((a & 15) as u16, (a >> 4) as u16)
+        };
+        if off == slot {
+            return Some((usize::from(off), low));
+        }
+        if off == slot + 2 {
+            return Some((usize::from(off), high));
+        }
+    }
+    None
+}
+/// [designed:T89] Fresh admission at pre19CA: identity is authenticated and
+/// only caller-early dependencies the fresh image does not already own enter.
+/// Match-derived fields (seed, scores, conditions) are initialized by the
+/// preparation/match machinery, so they are never filled; a wrong fill would
+/// diverge the natural T67 stream and fail loudly. Strict initialized-read
+/// tracking catches any remaining unowned dependency at its consumer.
+fn fresh_admit(e: &mut Engine, admission: &Admission) -> Result<Report, String> {
+    let v = fresh_validate(admission)?;
+    let mut report = Report {
+        known_bytes: 0,
+        selected_bytes: 0,
+        admitted_bytes: 0,
+        binding_bytes: 0,
+        frame_bytes: 0,
+    };
+    let mut pending = vec![];
+    for field in v["caller"]["initial"].as_array().unwrap() {
+        let name = field["field"].as_str().ok_or("missing fresh field")?;
+        let size = field["size"].as_u64().unwrap() as usize;
+        if fresh_binding(name).is_some() {
+            report.binding_bytes += size;
+            continue;
+        }
+        if name.starts_with("frame:") {
+            report.frame_bytes += size;
+            continue;
+        }
+        let a = fresh_location(&v, name)?;
+        let value = field["value"].as_u64().unwrap() as u16;
+        for i in 0..size {
+            let byte = (value >> (8 * i)) as u8;
+            if e.image.is_initialized(a + i) {
+                report.known_bytes += 1;
+            } else {
+                pending.push((a + i, byte));
+                report.admitted_bytes += 1;
+            }
+        }
+    }
+    for (a, byte) in pending {
+        e.image[a] = byte;
+    }
+    Ok(report)
 }
 
 use super::{compiled::Cpu, post_match};
@@ -173,6 +322,29 @@ pub(crate) fn validate_profile(
     input: &super::prepared::Input,
     admission: &Admission,
 ) -> Result<(), String> {
+    if admission.source_sha256 == FRESH_SOURCE_SHA {
+        fresh_validate(admission)?;
+        // [confirmed:archaeology 18ce483/T88] Only the witnessed fresh
+        // Pearce/Gale friendly profile may enter its continuing caller.
+        let prep: Value = serde_json::from_str(include_str!(
+            "../../tests/fixtures/fresh_preparation/admission.json"
+        ))
+        .map_err(|e| e.to_string())?;
+        let witness: Value = serde_json::from_str(include_str!(
+            "../../tests/fixtures/fresh_watched/incoming.json"
+        ))
+        .map_err(|e| e.to_string())?;
+        let original: super::prepared::Input = serde_json::from_value(
+            json!({"preparation":prep["input"],"support":witness["support"],"no_pending_key":true}),
+        )
+        .map_err(|e| e.to_string())?;
+        if serde_json::to_value(input).map_err(|e| e.to_string())?
+            != serde_json::to_value(&original).map_err(|e| e.to_string())?
+        {
+            return Err("unsupported source/profile for continuing fresh caller".into());
+        }
+        return Ok(());
+    }
     validate(admission)?;
     let original = selected_profile()?;
     let original: super::prepared::Input =
@@ -275,6 +447,9 @@ fn location(field: &Value) -> Result<usize, String> {
 /// [designed:T84] Runs after existing input loading, before19CA. Known bytes
 /// are compared, never overwritten. Only sealed early unknown fields enter.
 pub(crate) fn admit(e: &mut Engine, admission: &Admission) -> Result<Report, String> {
+    if admission.source_sha256 == FRESH_SOURCE_SHA {
+        return fresh_admit(e, admission);
+    }
     let v = validate(admission)?;
     let mut report = Report {
         known_bytes: 0,
@@ -442,7 +617,7 @@ fn outcome(
     for field in v["payload"]["fields"].as_array().unwrap() {
         let a = location(field)?;
         let width = field["size"].as_u64().unwrap() as u8 * 8;
-        let actual = c.read((a >> 4) as u16, (a & 15) as u16, width)?;
+        let actual = c.peek((a >> 4) as u16, (a & 15) as u16, width)?;
         let value = if let Some((_, want)) = binding(field) {
             if usize::from(actual) != want {
                 return Err("computed native pointer differs".into());
@@ -495,8 +670,165 @@ pub(super) fn handoff(c: &mut Cpu) -> Result<Value, String> {
     let mut trial = c.clone();
     trial.push(trial.r[5])?;
     trial.push(0xEBE6)?;
-    let (draws, writes) = post_match::advance_native_image(&mut trial, &regions())?;
+    let (draws, writes, _) =
+        post_match::advance_native_image(&mut trial, &regions(), false, false)?;
     let out = outcome(&trial, draws, writes)?;
+    *c = trial;
+    Ok(out)
+}
+/// [designed:T89] Fresh retained parent: the same canonical anchor and pool
+/// headers, with the fresh frame context placed from the sealed record.
+/// Existing canonical values conflict loudly; nothing original is copied.
+pub(super) fn fresh_initialize_abi(c: &mut Cpu) -> Result<(), String> {
+    let source = fresh_source()?;
+    if c.read(c.r[10], 0xFE00, 16)? != PARENT {
+        return Err("initial retained parent link differs".into());
+    }
+    let parent = fresh_parent(&source)?;
+    let mut pending = vec![];
+    for field in source["caller"]["initial"].as_array().unwrap() {
+        let name = field["field"].as_str().ok_or("missing fresh field")?;
+        if let Some(rest) = name.strip_prefix("frame:") {
+            let off = u16::from_str_radix(rest, 16)
+                .map_err(|_: std::num::ParseIntError| "bad fresh frame field".to_string())?;
+            let rel = off.wrapping_sub(parent) as i16;
+            let o = (i32::from(PARENT) + i32::from(rel)) as u16;
+            queue_binding(
+                c,
+                c.r[10],
+                o,
+                field["size"].as_u64().unwrap() as u8 * 8,
+                field["value"].as_u64().unwrap() as u16,
+                &mut pending,
+            )?;
+        }
+    }
+    // New canonical pool headers are layout bindings, never original pointers.
+    for &(name, slot) in &POINTERS {
+        let a = if name == "seed" {
+            usize::from(crate::SEED)
+        } else {
+            regions().iter().find(|r| r.name == name).unwrap().base
+        };
+        let (o, s) = if a < 0x10000 {
+            (a as u16, 0)
+        } else {
+            ((a & 15) as u16, (a >> 4) as u16)
+        };
+        queue_binding(c, 0, slot, 16, o, &mut pending)?;
+        queue_binding(c, 0, slot + 2, 16, s, &mut pending)?;
+    }
+    for (s, o, w, value) in pending {
+        c.write(s, o, w, value)?;
+    }
+    Ok(())
+}
+fn fresh_original_address(a: usize, v: &Value) -> Result<usize, String> {
+    let entry = &v["caller"]["entry"];
+    if a < 0x10000 {
+        return Ok(entry["ds"].as_u64().unwrap() as usize * 16 + a);
+    }
+    let parent = usize::from(fresh_parent(&v)?);
+    if (0xB0000 + usize::from(PARENT) - 7..0xB0000 + usize::from(PARENT) + 8).contains(&a) {
+        return Ok(entry["ss"].as_u64().unwrap() as usize * 16 + parent + a
+            - (0xB0000 + usize::from(PARENT)));
+    }
+    for r in regions() {
+        if (r.base..r.base + r.count * r.stride).contains(&a) {
+            let old = v["caller"]["regions"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|o| o["name"] == r.name)
+                .unwrap();
+            return Ok(old["base"].as_u64().unwrap() as usize + a - r.base);
+        }
+    }
+    Err(format!(
+        "unclassified native fresh post-match address {a:05X}"
+    ))
+}
+/// Output-only coordinate normalization from the sealed fresh record. No
+/// reference output enters execution.
+fn fresh_outcome(
+    c: &Cpu,
+    draws: Vec<crate::Draw>,
+    writes: Vec<post_match::Write>,
+    reads: Vec<post_match::Read>,
+) -> Result<Value, String> {
+    let v = fresh_source()?;
+    let entry = &v["caller"]["entry"];
+    let mut final_fields = vec![];
+    for field in v["caller"]["initial"].as_array().unwrap() {
+        let name = field["field"].as_str().ok_or("missing fresh field")?;
+        let a = fresh_location(&v, name)?;
+        let width = field["size"].as_u64().unwrap() as u8 * 8;
+        let actual = c.peek((a >> 4) as u16, (a & 15) as u16, width)?;
+        let value = if let Some((_, expect)) = fresh_binding(name) {
+            if usize::from(actual) != usize::from(expect) {
+                return Err("computed native pointer differs".into());
+            }
+            field["value"].as_u64().unwrap() as u16
+        } else {
+            actual
+        };
+        final_fields.push(
+            json!({"field":name,"address":field["address"],"size":field["size"],"value":value}),
+        );
+    }
+    let mut normalized = vec![];
+    for mut w in writes {
+        w.address = fresh_original_address(w.address, &v)?;
+        normalized.push(w);
+    }
+    let mut observed = vec![];
+    for mut r in reads {
+        r.address = fresh_original_address(r.address, &v)?;
+        observed.push(r);
+    }
+    let parent = usize::from(fresh_parent(&v)?);
+    let mut r = c.r;
+    r[4] = (parent as u16).wrapping_add(r[4].wrapping_sub(PARENT));
+    r[5] = (parent as u16).wrapping_add(r[5].wrapping_sub(PARENT));
+    r[9] = r[9]
+        .wrapping_sub(c.code_base)
+        .wrapping_add(entry["ds"].as_u64().unwrap() as u16 - 0x2864);
+    r[10] = entry["ss"].as_u64().unwrap() as u16;
+    r[11] = entry["ds"].as_u64().unwrap() as u16;
+    let far = 16 * usize::from(r[8]) + usize::from(r[7]);
+    let native = regions();
+    let region = native
+        .iter()
+        .find(|x| (x.base..x.base + x.count * x.stride).contains(&far))
+        .ok_or("unsupported fresh returned far register")?;
+    let old = v["caller"]["regions"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|o| o["name"] == region.name)
+        .unwrap();
+    r[8] = (old["base"].as_u64().unwrap() as usize / 16) as u16;
+    r[7] = (old["base"].as_u64().unwrap() as usize % 16 + far - region.base) as u16;
+    let regs = json!({"ax":r[0],"cx":r[1],"dx":r[2],"bx":r[3],"sp":r[4],"bp":r[5],"si":r[6],"di":r[7],"es":r[8],"cs":r[9],"ss":r[10],"ds":r[11]});
+    Ok(
+        json!({"return":"0AB9:EBE6","source_final":final_fields,"draws":draws,
+               "source_writes":normalized,"source_reads":observed,"source_registers":regs}),
+    )
+}
+pub(super) fn fresh_handoff(c: &mut Cpu) -> Result<Value, String> {
+    if c.last_return != Some((0x0AB9, 0xEBE2))
+        || c.r[4] != 0xFE08
+        || c.r[5] != PARENT
+        || !c.call_chain().is_empty()
+    {
+        return Err("missing or stale owned fresh EBE2 parent frame".into());
+    }
+    let mut trial = c.clone();
+    trial.push(trial.r[5])?;
+    trial.push(0xEBE6)?;
+    let (draws, writes, reads) =
+        post_match::advance_native_image(&mut trial, &regions(), true, true)?;
+    let out = fresh_outcome(&trial, draws, writes, reads)?;
     *c = trial;
     Ok(out)
 }

@@ -579,9 +579,11 @@ pub(super) fn replacement_warning_suffix(c: &mut Cpu) -> Result<(), String> {
 mod replacement_tests {
     use super::*;
     fn warning_parent(c: &mut Cpu) -> Result<(), String> {
-        c.push(c.read(0, 0x1000, 8)?)?;
+        let first = c.read(0, 0x1000, 8)?;
+        c.push(first)?;
         c.push(c.r[9])?;
-        c.push(c.read(0, 0x1002, 16)?)?;
+        let second = c.read(0, 0x1002, 16)?;
+        c.push(second)?;
         let ret = c.read(0, 0x1004, 16)?;
         c.invoke(
             super::super::action_graph::p_232a_0098,

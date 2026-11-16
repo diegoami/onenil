@@ -187,7 +187,7 @@ impl CallerSession {
                 c,
             ));
         }
-        let read = |o, w| c.read(s.regs[11], o, w).map_err(|e| fault(e, c));
+        let mut read = |o, w| c.read(s.regs[11], o, w).map_err(|e| fault(e, c));
         let clock = Clock {
             active: read(0xD0B8, 8)? as u8,
             counter: read(0xD0B0, 16)?,
