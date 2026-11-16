@@ -138,3 +138,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T83 Execute the original post-match caller from its live image](T83.md)
 
 - [T84 Continue the authenticated league match through post-match processing](T84.md)
+
+- [T89 Compose the witnessed fresh-friendly match through post-match processing](T89.md)
