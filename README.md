@@ -35,14 +35,22 @@ Player options now implement Reposition, Club position and the observed goalkeep
 Positioning cycle under Change tactics. Save/reload retains those edits. Other
 instruction rows and management actions remain unavailable.
 Acknowledge full time to record the computed fixture result, then use F7 to save it.
-Reload retains the recorded score and blocks replay of that completed fixture.
-Week progression is not available yet.
+Reload retains the recorded score, funds, lineup, instructions, week and the
+advertised next fixture (Sevilla/Aragones, Friendly #2), and blocks replay of
+that completed fixture. Advancing the week to play that next fixture, and
+applying friendly post-match condition updates, remain unavailable: the
+friendly post-match caller exists as a research-verified bounded route
+([archaeology T88/T89](https://github.com/diegoami/onenil-archaeology/pull/193))
+that this desktop flow does not call yet. See the
+[persisted week route](records/T80/README.md).
 
 Campaign play now uses the live halftime flow. Space opens reached commentary;
 Esc or Enter opens the bench. At HALF TIME, press a key to review the bench,
 then Enter on PLAY GAME to continue the same match into its second half.
-Reached commentary and pitch state are preserved across Continue. Player
-changes during a watched match are not enabled yet. See the
+Reached commentary and pitch state are preserved across Continue. The witnessed
+Pearce→Gale halftime exchange is admitted and retained in saved state; other
+in-match player changes stay disabled. See the
+[persisted halftime exchange](records/T78/README.md) and the
 [live desktop flow and real-window checks](records/T77/README.md).
 
 The pitch uses the original numbered variant (outfield0–9), with an independent
