@@ -140,3 +140,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T84 Continue the authenticated league match through post-match processing](T84.md)
 
 - [T89 Compose the witnessed fresh-friendly match through post-match processing](T89.md)
+
+- [T90 Refuse the following fixture's match at an honest unwitnessed boundary](T90.md)
