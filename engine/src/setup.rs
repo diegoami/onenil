@@ -355,6 +355,15 @@ impl Session {
     ) -> Result<Self, String> {
         Self::new_mode_with_post(data, Some(incoming), Some(initial), true, false, Some(post))
     }
+    pub(crate) fn before_fresh_post_call(
+        data: Data,
+        incoming: WatchedIncoming,
+        initial: &crate::role_scores::Cells,
+        post: &crate::watched_compiled::owned_post_match::Admission,
+    ) -> Result<Self, String> {
+        Self::validate_fresh(&data, incoming)?;
+        Self::new_mode_with_post(data, Some(incoming), Some(initial), true, true, Some(post))
+    }
     fn new_mode_with_post(
         data: Data,
         incoming: Option<WatchedIncoming>,

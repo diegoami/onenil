@@ -148,9 +148,26 @@ python3 tools/test_post_match_incoming.py
 cargo test --manifest-path engine/Cargo.toml --locked --test owned_post_match
 ```
 
-[designed:remaining work] This entry serves the matching historical league
-exhibition. It is not admission for the current fresh-friendly campaign route.
-That route needs corresponding original caller evidence, guarded incoming
-values and continuing parity before changing its existing branch/profile
-guards. Atomic campaign save/reload and exactly-once week integration remain
-subsequent gates. Desktop and campaign code still do not call this transition.
+[designed:T89 witnessed fresh continuation] research T88 (archaeology
+18ce483) sealed the natural fresh-friendly caller from the accepted T67
+lineage: two byte-identical restored repeats (result-r0004/r0005). The
+continuing constructor admits the witnessed fresh Pearce/Gale profile only:
+its sealed caller-early admission (431 typed operands) is authenticated
+against the embedded record digest, unknown-image gaps at pre19CA are filled
+from those leaves, and match-derived values are never initialized - the full
+natural 3825-tick/158992-draw/748-action stream is compared against the
+committed T61/T67 reference before the caller runs. The fresh caller then
+matches all107 draws,407 ordered stores,431 final fields, the107 per-draw
+seed reads (the observation gap research #209 exposed) and all12 returned
+registers throughEBE6 under explicit relocation. The observed fresh selector
+pair (statistics flag clear, competition 1) is admitted for this route only;
+the league route keeps its own witnessed pair and every other branch refuses.
+Edited lineups, halftime replacement in this route, campaign persistence and
+weekly enabling remain unwitnessed and refuse.
+
+[designed:remaining work] The witnessed fresh-friendly continuation above is
+still not desktop/week integration: the desktop and campaign code do not call
+this transition, and the witnessed halftime replacement and edited-lineup
+routes need their own source coverage before any player updates are enabled
+there. Atomic campaign save/reload and exactly-once week integration remain
+subsequent gates.

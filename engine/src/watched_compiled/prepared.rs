@@ -91,8 +91,17 @@ impl Session {
         input: Input,
         admission: super::owned_post_match::Admission,
     ) -> Result<Self, String> {
+        let fresh = admission.source_sha256 == super::owned_post_match::FRESH_SOURCE_SHA;
         super::owned_post_match::validate_profile(&input, &admission)?;
-        Self::new_profile_with_post(input, Profile::Exhibition, Some(&admission))
+        Self::new_profile_with_post(
+            input,
+            if fresh {
+                Profile::Fresh
+            } else {
+                Profile::Exhibition
+            },
+            Some(&admission),
+        )
     }
     pub fn finish_with_post_match(&mut self) -> Result<Value, String> {
         if self.post_report.is_none() || self.finished || self.failed {
@@ -100,7 +109,10 @@ impl Session {
         }
         let mut trial = self.clone();
         let matched = trial.finish().map_err(|e| e.fault.message)?;
-        let post = super::owned_post_match::handoff(&mut trial.cpu)?;
+        let post = match self.profile {
+            Profile::Fresh => super::owned_post_match::fresh_handoff(&mut trial.cpu)?,
+            _ => super::owned_post_match::handoff(&mut trial.cpu)?,
+        };
         let out = json!({"match":matched,"post_match":post,"admission":trial.post_report});
         *self = trial;
         Ok(out)
@@ -187,12 +199,21 @@ impl Session {
             }
         }
         let mut prepared = if let Some(post) = post {
-            setup::Session::before_post_match_call(
-                input.preparation.setup,
-                input.preparation.incoming,
-                &support,
-                post,
-            )?
+            if fresh {
+                setup::Session::before_fresh_post_call(
+                    input.preparation.setup,
+                    input.preparation.incoming,
+                    &support,
+                    post,
+                )?
+            } else {
+                setup::Session::before_post_match_call(
+                    input.preparation.setup,
+                    input.preparation.incoming,
+                    &support,
+                    post,
+                )?
+            }
         } else if edited {
             setup::Session::before_edited_watched_call(
                 input.preparation.setup,
@@ -328,7 +349,11 @@ impl Session {
             c.write(c.r[10], offset, 16, value)?;
         }
         if post_report.is_some() {
-            super::owned_post_match::initialize_abi(&mut c)?;
+            if fresh {
+                super::owned_post_match::fresh_initialize_abi(&mut c)?;
+            } else {
+                super::owned_post_match::initialize_abi(&mut c)?;
+            }
         }
         // [confirmed] D5D6 presentation preparation computes marker glyphs via033E.
         c.invoke(
@@ -379,11 +404,12 @@ impl Session {
             profile,
             post_report,
         };
+        let mut out = out;
         out.validate_abi()?;
         Ok(out)
     }
-    fn validate_abi(&self) -> Result<(), String> {
-        let c = &self.cpu;
+    fn validate_abi(&mut self) -> Result<(), String> {
+        let c = &mut self.cpu;
         if c.r[11] != 0
             || c.r[10] != 0xB000
             || c.r[9] != 0xE255
@@ -484,12 +510,12 @@ impl Session {
             || c.call_chain() != [(0x0AB9, 0xE435), (0x0AB9, 0xE064)]
             || c.r[10] != 0xB000
             || c.r[11] != 0
-            || c.read(c.r[10], c.r[5].wrapping_add(2), 16)? != 0xE064
+            || c.peek(c.r[10], c.r[5].wrapping_add(2), 16)? != 0xE064
         {
             return Err("prepared session has no owned interval observation".into());
         }
         Ok(
-            json!({"site":"0AB9:7E4A","control":c.read(c.r[11],0xD0BA,8)?,
+            json!({"site":"0AB9:7E4A","control":c.peek(c.r[11],0xD0BA,8)?,
             "state":self.snapshot()?,"clock":c.watched_clock()?,"regs":c.r,
             "call_chain":c.call_chain(),"ticks":c.watch_tick,"draws":c.draws.len(),"events":c.events.len()}),
         )
@@ -510,10 +536,10 @@ impl Session {
             .filter(|e| e["tick"] != 0)
             .collect::<Vec<_>>();
         Ok(
-            json!({"boundary":"0AB9:7E4A","control":c.read(c.r[11],0xD0BA,8)?,
+            json!({"boundary":"0AB9:7E4A","control":c.peek(c.r[11],0xD0BA,8)?,
             "ticks":c.watch_trace,"draws":c.draws,"events":events,"setup_events":setup_events,
             "tick_live_goals":c.watch_live_goals,"caller_clocks":c.watch_clocks,
-            "live_goals":[c.read(c.r[11],0xD0C4,8)?,c.read(c.r[11],0xD0C5,8)?]}),
+            "live_goals":[c.peek(c.r[11],0xD0C4,8)?,c.peek(c.r[11],0xD0C5,8)?]}),
         )
     }
     /// [designed:T78] Bounded read-only snapshot for the desktop bench: the
@@ -931,7 +957,7 @@ mod tests {
                 .find(|row| row.club == club)
                 .unwrap()
                 .fixture_flags = flags;
-            let session = Session::new(value).unwrap();
+            let mut session = Session::new(value).unwrap();
             assert_eq!(session.cpu.read(0, 0x0D2A, 8).unwrap(), expected);
             assert!(session.cpu.known[0x0D2A]);
         }
@@ -967,7 +993,7 @@ mod tests {
     }
     #[test]
     fn native_editor_owns_both_bytes_of_normalized_key_words() {
-        let session = Session::new(input()).unwrap();
+        let mut session = Session::new(input()).unwrap();
         for address in [0xDE88, 0xDE8A] {
             assert_eq!(session.cpu.read(0, address, 16).unwrap(), 2);
             assert!(

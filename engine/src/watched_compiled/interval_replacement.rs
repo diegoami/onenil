@@ -31,7 +31,7 @@ impl Intent {
 // through known-memory checks; no output or expected state enters the engine.
 pub(super) fn projection(c: &Cpu) -> Result<Value, String> {
     let ds = c.r[11];
-    let rd = |at, width| c.read(ds, at, width);
+    let rd = |at, width| c.peek(ds, at, width);
     let mut clubs = vec![];
     let mut ids = BTreeSet::new();
     let (club_off, club_seg) = c.far(ds, 0xD7C2)?;
@@ -40,7 +40,7 @@ pub(super) fn projection(c: &Cpu) -> Result<Value, String> {
         let base = club_off.wrapping_add(id.wrapping_sub(1).wrapping_mul(62));
         let mut roster = vec![];
         for i in 0..20 {
-            let p = c.read(club_seg, base.wrapping_add(2 * i), 16)?;
+            let p = c.peek(club_seg, base.wrapping_add(2 * i), 16)?;
             roster.push(p);
             if p != 0 {
                 ids.insert(p);
@@ -54,7 +54,7 @@ pub(super) fn projection(c: &Cpu) -> Result<Value, String> {
     for id in ids {
         let a = p8.wrapping_add(id.wrapping_mul(8));
         let b = p15.wrapping_add(id.wrapping_mul(15));
-        players.push(json!({"id":id,"current_position":c.read(s8,a.wrapping_add(6),8)?,"club_position":c.read(s8,a.wrapping_add(7),8)?,"condition":c.read(s15,b.wrapping_add(8),8)?,"instructions":c.read(s15,b.wrapping_add(10),8)?,"status":c.read(s15,b.wrapping_add(11),8)?}));
+        players.push(json!({"id":id,"current_position":c.peek(s8,a.wrapping_add(6),8)?,"club_position":c.peek(s8,a.wrapping_add(7),8)?,"condition":c.peek(s15,b.wrapping_add(8),8)?,"instructions":c.peek(s15,b.wrapping_add(10),8)?,"status":c.peek(s15,b.wrapping_add(11),8)?}));
     }
     let (seed, seedseg) = c.far(ds, 0xDE84)?;
     let state = super::watched_match::snapshot(c)?;
@@ -73,7 +73,7 @@ pub(super) fn projection(c: &Cpu) -> Result<Value, String> {
         );
     }
     Ok(
-        json!({"seed":c.read(seedseg,seed,16)?,"clubs":clubs,"players":players,"scenes":state["scenes"],"elapsed":state["elapsed"],"remaining":state["remaining"],"stoppage":state["stoppage"],"active":state["active"],"phase":state["phase"],"live_goals":[rd(0xD0C4,8)?,rd(0xD0C5,8)?],"allowance":rd(0xD6DD,8)?,"sub_flags":[rd(0xD6DE,8)?,rd(0xD6DF,8)?],"reserves":[rd(0xD6E0,8)?,rd(0xD6E1,8)?],"pending":rd(0xD6E2,8)?,"control":rd(0xD0BA,8)?,"event_totals":totals,"event_flags":flags}),
+        json!({"seed":c.peek(seedseg,seed,16)?,"clubs":clubs,"players":players,"scenes":state["scenes"],"elapsed":state["elapsed"],"remaining":state["remaining"],"stoppage":state["stoppage"],"active":state["active"],"phase":state["phase"],"live_goals":[rd(0xD0C4,8)?,rd(0xD0C5,8)?],"allowance":rd(0xD6DD,8)?,"sub_flags":[rd(0xD6DE,8)?,rd(0xD6DF,8)?],"reserves":[rd(0xD6E0,8)?,rd(0xD6E1,8)?],"pending":rd(0xD6E2,8)?,"control":rd(0xD0BA,8)?,"event_totals":totals,"event_flags":flags}),
     )
 }
 

@@ -7,7 +7,7 @@ use super::{
 use serde_json::{json, Value};
 pub(super) fn snapshot(c: &Cpu) -> Result<Value, String> {
     let ds = c.r[11];
-    snapshot_with(|offset, width| c.read(ds, offset, width))
+    snapshot_with(|offset, width| c.peek(ds, offset, width))
 }
 pub(crate) fn logical_snapshot(e: &crate::Engine) -> Result<Value, String> {
     snapshot_with(|offset, width| {
