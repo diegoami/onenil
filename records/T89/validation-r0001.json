@@ -1,0 +1,31 @@
+{
+  "task": "T89",
+  "frozen_task_commit": "cb2c9c4f",
+  "fail_before_commit": "5520089e",
+  "focused_results": {
+    "continuing_fresh_integration_test": "passed",
+    "fresh_route_refusal_test": "passed (missing/changed/foreign/edited/league-pairing)",
+    "league_continuing_regression": "passed (byte-identical route)",
+    "post_match_t83_refusal_contract": "passed (6 tests)",
+    "full_engine_suite": "572 passed, 0 failed"
+  },
+  "parity_per_start": {
+    "starts": ["fresh"],
+    "ticks": 3825,
+    "match_draws": 158992,
+    "actions": 748,
+    "match_return": "0AB9:EBE2",
+    "post_draws": 107,
+    "post_writes": 407,
+    "post_reads": 2022,
+    "per_draw_seed_reads": 107,
+    "final_fields": 431,
+    "condition_calls": 36,
+    "condition_draws": 72,
+    "normalized_registers": 12
+  },
+  "selector_contract": {
+    "league": {"statistics_flag": 1, "competition": 0},
+    "fresh": {"statistics_flag": 0, "competition": 1}
+  }
+}
