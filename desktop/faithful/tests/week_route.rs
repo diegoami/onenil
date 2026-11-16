@@ -75,7 +75,13 @@ fn week_route_posts_result_walks_w030_and_persists_the_week_once() {
     c.screen = Screen::Main;
     c.key(Key::Enter);
     c.key(Key::Enter);
-    assert!(c.message.contains("already has a result"), "{}", c.message);
+    // [T90] The advertised following fixture refuses at the honest boundary:
+    // it is exposed from state, but no accepted original match evidence exists.
+    assert!(
+        c.message.contains("unwitnessed") && c.message.contains("Sevilla"),
+        "{}",
+        c.message
+    );
     assert_eq!(c.editor.campaign, advanced);
     let path = std::env::temp_dir().join(format!("T80-week-{}", std::process::id()));
     c.editor.campaign.save(&path).unwrap();

@@ -60,6 +60,14 @@ impl Campaign {
     pub fn match_ticket(&self) -> Result<MatchTicket, String> {
         self.validate()?;
         if self.played_fixture.is_some() {
+            if self.week_index >= 1 {
+                // [confirmed:archaeology #196/T82 c13195a] The advertised
+                // following fixture has no authenticated original match
+                // evidence - no accepted reference capture exists for it - so
+                // a native run would be unwitnessed. Name that boundary
+                // instead of the stale recorded-result text.
+                return Err("the following fixture has no authenticated original match evidence; playing it is unwitnessed".into());
+            }
             return Err("this fixture already has a recorded result".into());
         }
         let digest = format!("{:x}", Sha256::digest(self.encode()?));

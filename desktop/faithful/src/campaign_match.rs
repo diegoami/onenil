@@ -16,9 +16,17 @@ pub const REFUSAL: &str = "Use original team or swap Pearce and Hendry. Reload t
 pub fn profile(campaign: &Campaign) -> Result<Profile, String> {
     campaign.validate()?;
     if campaign.played_fixture.is_some() {
-        return Err(
-            "This fixture already has a result. Week progression is not available yet.".into(),
-        );
+        if campaign.week_index >= 1 {
+            // [confirmed:archaeology #196/T82 c13195a] The advertised following
+            // fixture has no accepted original reference capture, so a native
+            // run would be unwitnessed. Name the honest boundary and the
+            // fixture itself.
+            return Err(format!(
+                "The next fixture ({}) has no authenticated original match evidence; playing it is unwitnessed.",
+                campaign.next_fixture.opponent_name
+            ));
+        }
+        return Err("This fixture already has a result.".into());
     }
     let mut initial = Campaign::initial()?;
     if campaign == &initial {
