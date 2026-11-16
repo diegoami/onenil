@@ -21,6 +21,40 @@ pub fn original_admission() -> Admission {
         fields: fields(&source().expect("sealed early source")).expect("early fields"),
     }
 }
+// [confirmed: archaeology 18ce483/T88] Sealed natural fresh-friendly caller:
+// result-r0004 (byte-identical to restored repeat r0005) from the accepted T67
+// lineage. Its caller-initial operands are the fresh caller-early dependencies.
+const FRESH_SOURCE: &[u8] =
+    include_bytes!("../../tests/fixtures/post_match/fresh-result-r0004.json");
+const FRESH_SOURCE_SHA: &str =
+    "9064243194d1bbbdd4dba1602d784c41e4bcba034e4ddbd94cc68b1e718d7c29";
+pub fn fresh_original_admission() -> Admission {
+    Admission {
+        source_sha256: FRESH_SOURCE_SHA.into(),
+        fields: fresh_fields(&fresh_source().expect("sealed fresh caller source"))
+            .expect("fresh caller fields"),
+    }
+}
+fn fresh_source() -> Result<Value, String> {
+    if format!("{:x}", Sha256::digest(FRESH_SOURCE)) != FRESH_SOURCE_SHA {
+        return Err("sealed fresh caller source digest differs".into());
+    }
+    serde_json::from_slice(FRESH_SOURCE).map_err(|e| e.to_string())
+}
+fn fresh_fields(v: &Value) -> Result<Vec<Field>, String> {
+    v["caller"]["initial"]
+        .as_array()
+        .ok_or("missing fresh caller initial operands")?
+        .iter()
+        .map(|f| {
+            Ok(Field {
+                field: f["field"].as_str().ok_or("missing field")?.into(),
+                size: f["size"].as_u64().ok_or("missing width")? as u8,
+                value: f["value"].as_u64().ok_or("missing value")? as u16,
+            })
+        })
+        .collect()
+}
 
 use super::{compiled::Cpu, post_match};
 use crate::{layout, Engine};
