@@ -73,7 +73,13 @@ fn actual_result_posts_only_on_acknowledgement_and_cannot_replay() {
     c.key(Key::Enter);
     assert_eq!(c.screen, Screen::Preparation);
     assert!(!c.prepare_requested);
-    assert!(c.message.contains("already") && c.message.len() <= 80);
+    // [T90] The advanced week's following fixture refuses at the honest
+    // unwitnessed boundary, reached through the exposed preparation entry.
+    assert!(
+        c.message.contains("unwitnessed") && c.message.contains("Sevilla"),
+        "{}",
+        c.message
+    );
     assert_eq!(c.editor.campaign, advanced);
 }
 #[test]

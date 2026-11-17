@@ -68,3 +68,42 @@ fn the_week_one_context_binds_the_authenticated_cash_and_full_fixture() {
         .is_err());
     assert_eq!(c2, before);
 }
+
+#[test]
+fn the_following_fixture_refuses_at_the_honest_unwitnessed_boundary() {
+    // [T90; archaeology #196/T82 c13195a] After the authenticated week
+    // completes, the advertised Sevilla fixture is exposed from campaign
+    // state, but its match has no accepted original reference capture:
+    // requesting it names that boundary, not the stale recorded-result text.
+    let mut c = Campaign::initial().unwrap();
+    let ticket = c.match_ticket().unwrap();
+    c.record_match(&ticket, [1, 4], "0AB9:EBE2").unwrap();
+    // Before the week completes, re-requesting the played fixture keeps the
+    // accurate recorded-result refusal.
+    assert_eq!(
+        c.match_ticket().err().unwrap(),
+        "this fixture already has a recorded result"
+    );
+    c.record_week_completion(38_761, 69_270, 1, 176, 0, "Sevilla")
+        .unwrap();
+    assert_eq!(
+        c.match_ticket().err().unwrap(),
+        "the following fixture has no authenticated original match evidence; playing it is unwitnessed"
+    );
+    // The boundary persists across a save/reload round trip, together with
+    // the whole advanced state.
+    let image = serde_json::to_vec(&c).unwrap();
+    let mut reloaded = Campaign::initial().unwrap();
+    reloaded.replace_from_bytes(&image).unwrap();
+    assert_eq!(reloaded, c);
+    assert_eq!(
+        reloaded.match_ticket().err().unwrap(),
+        "the following fixture has no authenticated original match evidence; playing it is unwitnessed"
+    );
+    // A second week completion still refuses, leaving the state untouched.
+    let before = reloaded.clone();
+    assert!(reloaded
+        .record_week_completion(38_761, 69_270, 1, 176, 0, "Sevilla")
+        .is_err());
+    assert_eq!(reloaded, before);
+}
