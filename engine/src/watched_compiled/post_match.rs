@@ -55,6 +55,12 @@ pub fn replay(input: &Input) -> Result<Outcome, String> {
     Session::new(input)?.advance()
 }
 
+/// [confirmed:3d41a0db/T89] The witnessed Sevilla caller: the recorded-fields
+/// replay under the witnessed friendly selector pair.
+pub fn replay_friendly(input: &Input) -> Result<Outcome, String> {
+    Session::new(input)?.advance_friendly()
+}
+
 use super::{action_graph, compiled::Cpu, post_match_graph};
 use crate::condition_refresh::{self, Field, Memory};
 use std::collections::BTreeSet;
@@ -244,7 +250,19 @@ fn validate_bindings(c: &mut Cpu, regions: &[Region]) -> Result<(), String> {
     }
     Ok(())
 }
-fn guard(c: &mut Cpu, fresh: bool) -> Result<(), String> {
+/// The witnessed caller routes and their selector pairs. Each route admits
+/// exactly the selector pair its capture observed; everything else refuses.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub(super) enum Route {
+    /// The league fixture caller (T86), continued on the live machine.
+    League,
+    /// The fresh friendly caller (T88), continued on the live machine.
+    Fresh,
+    /// The Sevilla friendly caller (T89): replayed from recorded fields.
+    Sevilla,
+}
+
+fn guard(c: &mut Cpu, route: Route) -> Result<(), String> {
     let ds = c.r[11];
     let ss = c.r[10];
     let sp = c.r[4];
@@ -259,12 +277,13 @@ fn guard(c: &mut Cpu, fresh: bool) -> Result<(), String> {
     }
     let week = c.read(ss, bp + 6, 16)?;
     let schedule = c.read(ss, bp - 2, 16)?;
-    // [confirmed:ba499b9/T86 league;18ce483/T88 fresh] Each witnessed route
-    // has exactly one observed selector pair: the league ran with the
-    // statistics flag set and a league fixture (0); the fresh friendly ran
-    // with the flag clear and competition 1. Unwitnessed branches refuse.
+    // [confirmed:ba499b9/T86 league;18ce483/T88 fresh;3d41a0db/T89 sevilla]
+    // Each witnessed route has exactly one observed selector pair: the league
+    // ran with the statistics flag set and a league fixture (0); the fresh
+    // friendly and the Sevilla friendly both ran with the flag clear and
+    // competition 1. Unwitnessed branches refuse.
     let stat = c.read(ds, 0xD6DD, 8)?;
-    let wanted_stat = if fresh { 0 } else { 1 };
+    let wanted_stat = if route == Route::League { 1 } else { 0 };
     if !(1..=58).contains(&week)
         || schedule >= 123
         || c.read(ss, bp - 7, 8)? != 1
@@ -281,11 +300,16 @@ fn guard(c: &mut Cpu, fresh: bool) -> Result<(), String> {
     let fixture = o.wrapping_add(174 * (club - 1) + 3 * (week - 1));
     let opponent = c.read(s, fixture + 1, 8)?;
     let competition = c.read(s, fixture, 8)?;
-    let wanted_competition = if fresh { 1 } else { 0 };
+    let wanted_competition = if route == Route::League { 0 } else { 1 };
     if competition != wanted_competition
         || !(1..=176).contains(&opponent)
         || opponent == club
-        || c.read(ds, 0xD086, 8)? == c.read(ds, 0xD087, 8)?
+        // [confirmed:ba499b9/T86;18ce483/T88] On a live machine, equal result
+        // bytes mean an aliased or uninitialized score pair and refuse. The
+        // Sevilla route replays recorded fields, where the witnessed 1/1 draw
+        // is the captured fact itself.
+        || (route != Route::Sevilla
+            && c.read(ds, 0xD086, 8)? == c.read(ds, 0xD087, 8)?)
     {
         return Err("unsupported post-match competition/draw/club pair".into());
     }
@@ -330,6 +354,18 @@ impl Session {
             writes,
         })
     }
+    /// [confirmed:3d41a0db/T89] The witnessed Sevilla friendly replays from its
+    /// recorded fields with the witnessed friendly selectors (statistics flag
+    /// clear, competition 1); the league route keeps its own guard.
+    pub fn advance_friendly(&mut self) -> Result<Outcome, String> {
+        let (draws, writes, _) = advance_mode(&mut self.cpu, &self.regions, false, false, Route::Sevilla)?;
+        Ok(Outcome {
+            final_fields: project(&self.cpu, &self.initial)?,
+            registers: self.cpu.r,
+            draws,
+            writes,
+        })
+    }
 }
 fn project(c: &Cpu, fields: &[Fact]) -> Result<Vec<Fact>, String> {
     fields
@@ -351,7 +387,7 @@ pub(super) fn advance_image(
     c: &mut Cpu,
     regions: &[Region],
 ) -> Result<(Vec<Draw>, Vec<Write>), String> {
-    let (draws, writes, _) = advance_mode(c, regions, false, false, false)?;
+    let (draws, writes, _) = advance_mode(c, regions, false, false, Route::League)?;
     Ok((draws, writes))
 }
 pub(super) fn advance_native_image(
@@ -371,7 +407,8 @@ pub(super) fn advance_native_image(
     {
         return Err("canonical post-match pool bindings differ".into());
     }
-    let (draws, writes, reads) = advance_mode(c, regions, true, observe_reads, fresh)?;
+    let route = if fresh { Route::Fresh } else { Route::League };
+    let (draws, writes, reads) = advance_mode(c, regions, true, observe_reads, route)?;
     Ok((draws, writes, reads))
 }
 fn advance_mode(
@@ -379,7 +416,7 @@ fn advance_mode(
     regions: &[Region],
     native: bool,
     observe_reads: bool,
-    fresh: bool,
+    route: Route,
 ) -> Result<(Vec<Draw>, Vec<Write>, Vec<Read>), String> {
     let mut trial = c.clone();
     if !trial.flat_memory
@@ -394,7 +431,7 @@ fn advance_mode(
     trial.stack_bounds = Some(geometry_mode(trial.r, regions, native)?);
     trial.require_write_baseline = true;
     validate_bindings(&mut trial, regions)?;
-    guard(&mut trial, fresh)?;
+    guard(&mut trial, route)?;
     let draw_start = trial.draws.len();
     trial.post_writes = Some(vec![]);
     // [designed:T89] Reads are armed before the span executes, so the observed
