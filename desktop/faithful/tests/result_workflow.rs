@@ -71,15 +71,11 @@ fn actual_result_posts_only_on_acknowledgement_and_cannot_replay() {
     assert_eq!(advanced.revision, recorded.revision + 1);
     c.key(Key::Enter);
     c.key(Key::Enter);
-    assert_eq!(c.screen, Screen::Preparation);
-    assert!(!c.prepare_requested);
-    // [T90] The advanced week's following fixture refuses at the honest
-    // unwitnessed boundary, reached through the exposed preparation entry.
-    assert!(
-        c.message.contains("unwitnessed") && c.message.contains("Sevilla"),
-        "{}",
-        c.message
-    );
+    // [T91] The advanced week's advertised fixture is the witnessed Sevilla
+    // friendly: the exposed preparation entry requests the witnessed match,
+    // bound to the prepared match's own context.
+    assert_eq!(c.screen, Screen::Preparing);
+    assert!(c.prepare_requested);
     assert_eq!(c.editor.campaign, advanced);
 }
 #[test]

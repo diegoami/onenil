@@ -75,13 +75,11 @@ fn week_route_posts_result_walks_w030_and_persists_the_week_once() {
     c.screen = Screen::Main;
     c.key(Key::Enter);
     c.key(Key::Enter);
-    // [T90] The advertised following fixture refuses at the honest boundary:
-    // it is exposed from state, but no accepted original match evidence exists.
-    assert!(
-        c.message.contains("unwitnessed") && c.message.contains("Sevilla"),
-        "{}",
-        c.message
-    );
+    // [T91] The advertised following fixture is the witnessed Sevilla
+    // friendly: the exposed preparation entry requests the witnessed match,
+    // bound to the prepared match's own context - no stale refusal remains.
+    assert_eq!(c.screen, Screen::Preparing);
+    assert!(c.prepare_requested);
     assert_eq!(c.editor.campaign, advanced);
     let path = std::env::temp_dir().join(format!("T80-week-{}", std::process::id()));
     c.editor.campaign.save(&path).unwrap();

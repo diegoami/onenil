@@ -7,8 +7,12 @@ use sha2::{Digest, Sha256};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Profile {
+    /// The week-0 fresh friendly (research T66/T88), computed live.
     Original,
+    /// The week-0 edited friendly (T68/T69), computed live.
     Edited,
+    /// [T91] The week-1 witnessed Sevilla friendly: the pinned evidence plays.
+    Sevilla,
 }
 
 pub const REFUSAL: &str = "Use original team or swap Pearce and Hendry. Reload the original save.";
@@ -17,14 +21,20 @@ pub fn profile(campaign: &Campaign) -> Result<Profile, String> {
     campaign.validate()?;
     if campaign.played_fixture.is_some() {
         if campaign.week_index >= 1 {
-            // [confirmed:archaeology #196/T82 c13195a] The advertised following
-            // fixture has no accepted original reference capture, so a native
-            // run would be unwitnessed. Name the honest boundary and the
-            // fixture itself.
-            return Err(format!(
-                "The next fixture ({}) has no authenticated original match evidence; playing it is unwitnessed.",
-                campaign.next_fixture.opponent_name
-            ));
+            if campaign.second_fixture.is_some() {
+                // [T91] The completed fixture replays nothing: the accurate
+                // recorded-result refusal. The week transaction afterwards
+                // refuses at the unwitnessed cash boundary, so no state can
+                // ever advertise a third fixture through this route.
+                return Err("This fixture already has a result.".into());
+            }
+            // [confirmed:archaeology 3d41a0db T89] The advertised following
+            // fixture IS the witnessed Sevilla friendly; validate has already
+            // pinned the complete week-one context (cash 421,491, the Sevilla
+            // fixture whole). Any other week-1 fixture cannot validate, and a
+            // week-2/Celtic state is unwitnessed at its cash movement, so no
+            // match request can ever reach this branch for it.
+            return Ok(Profile::Sevilla);
         }
         return Err("This fixture already has a result.".into());
     }
@@ -68,6 +78,12 @@ pub fn admission(campaign: &Campaign) -> Result<Input, String> {
             include_str!("../../../engine/tests/fixtures/edited_preparation/admission.json"),
             include_str!("../../../engine/tests/fixtures/edited_watched/incoming.json"),
         ),
+        // [designed:T91] The witnessed Sevilla route presents the pinned
+        // evidence through the live witnessed session; no preparation input
+        // exists for it and none may be synthesized.
+        Profile::Sevilla => {
+            return Err("the witnessed Sevilla route has no computed preparation".into())
+        }
     };
     let source: Value = serde_json::from_str(source_raw).map_err(|e| e.to_string())?;
     let support: Value = serde_json::from_str(support_raw).map_err(|e| e.to_string())?;

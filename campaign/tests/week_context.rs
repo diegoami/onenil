@@ -82,11 +82,10 @@ fn the_witnessed_sevilla_fixture_admits_and_the_week_stays_unwitnessed() {
     c.record_match(&ticket, [1, 4], "0AB9:EBE2").unwrap();
     c.record_week_completion(38_761, 69_270, 1, 176, 0, "Sevilla")
         .unwrap();
-    let witnessed: serde_json::Value =
-        serde_json::from_str::<serde_json::Value>(include_str!(
-            "../fixtures/sevilla-post-match.json"
-        ))
-        .unwrap();
+    let witnessed: serde_json::Value = serde_json::from_str::<serde_json::Value>(include_str!(
+        "../fixtures/sevilla-post-match.json"
+    ))
+    .unwrap();
     let conditions: Vec<(u16, i8)> = witnessed["witnessed"]["conditions"]
         .as_array()
         .unwrap()
@@ -106,7 +105,11 @@ fn the_witnessed_sevilla_fixture_admits_and_the_week_stays_unwitnessed() {
         .is_err());
     // Foreign condition outcomes refuse: the PSG-era wholesale values and a
     // single-byte tamper both.
-    let psg: Vec<(u16, i8)> = c.players.iter().map(|p| (p.id, p.availability.condition_signed)).collect();
+    let psg: Vec<(u16, i8)> = c
+        .players
+        .iter()
+        .map(|p| (p.id, p.availability.condition_signed))
+        .collect();
     assert!(c
         .record_sevilla_result(&ticket, [1, 1], "0AB9:EBE2", &psg)
         .is_err());
@@ -131,7 +134,10 @@ fn the_witnessed_sevilla_fixture_admits_and_the_week_stays_unwitnessed() {
             .iter()
             .find(|witnessed| witnessed["player"] == row.id)
             .unwrap();
-        assert_eq!(row.availability.condition_signed, witnessed_row["condition_after"]);
+        assert_eq!(
+            row.availability.condition_signed,
+            witnessed_row["condition_after"]
+        );
     }
     // The replay attempt of the completed fixture refuses accurately, and the
     // week transaction names the unwitnessed second-week cash movement.

@@ -39,6 +39,17 @@ jobs:
           python3 -m pip install -r .cache/post-match-source/requirements.txt
           python3 tools/post_match_incoming.py --research-root .cache/post-match-source --check
           python3 tools/test_post_match_incoming.py
+      - name: Fetch the witnessed Sevilla capture
+        uses: actions/checkout@v4
+        with:
+          repository: diegoami/onenil-archaeology
+          ref: 3d41a0dbf6b0a5ccd5cb7fe2d0076f5bce1ab58e
+          path: .cache/sevilla-source
+          persist-credentials: false
+      - name: Check the witnessed Sevilla reference assets
+        run: |
+          python3 tools/sevilla_reference_inputs.py --research-root .cache/sevilla-source --check
+          python3 tools/test_sevilla_reference_inputs.py
       - run: cargo fmt --manifest-path engine/Cargo.toml -- --check
       - run: cargo test --manifest-path engine/Cargo.toml --locked
       - name: Replay the owned interval against both original streams

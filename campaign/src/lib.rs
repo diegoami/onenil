@@ -225,7 +225,9 @@ impl Campaign {
             // [T91] The witnessed Sevilla result exists only in the week-one
             // context; the week transaction after it refuses, so week stays 1.
             if self.week_index != 1 {
-                return Err("recorded result has a foreign or invalid fixture/request context".into());
+                return Err(
+                    "recorded result has a foreign or invalid fixture/request context".into(),
+                );
             }
             second.validate_second(self)?;
         }

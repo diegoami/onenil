@@ -358,7 +358,8 @@ impl Session {
     /// recorded fields with the witnessed friendly selectors (statistics flag
     /// clear, competition 1); the league route keeps its own guard.
     pub fn advance_friendly(&mut self) -> Result<Outcome, String> {
-        let (draws, writes, _) = advance_mode(&mut self.cpu, &self.regions, false, false, Route::Sevilla)?;
+        let (draws, writes, _) =
+            advance_mode(&mut self.cpu, &self.regions, false, false, Route::Sevilla)?;
         Ok(Outcome {
             final_fields: project(&self.cpu, &self.initial)?,
             registers: self.cpu.r,

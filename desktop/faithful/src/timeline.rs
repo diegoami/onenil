@@ -1,6 +1,6 @@
 //! [derived] Presentation adapter from tools/play_watched.py at a1599a4; no engine rules.
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, path::Path};
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -328,6 +328,11 @@ pub struct Completion {
     /// [designed:T78] Present only when the worker executed the witnessed
     /// exchange; the campaign commits it once, with the result ticket.
     pub replacement: Option<ExecutedReplacement>,
+    /// [designed:T91] The witnessed caller's condition outcomes, present only
+    /// on the witnessed Sevilla completion; the campaign validates them
+    /// against its own pinned record.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub condition_updates: Option<Vec<(u16, i8)>>,
 }
 struct TimelineContext {
     initial: Value,
@@ -438,6 +443,12 @@ fn prepare_input(
         }
         Some(crate::campaign_match::Profile::Edited) => {
             onenil_engine::watched_compiled::prepared::Session::new_edited(input)?
+        }
+        // [designed:T91] The witnessed Sevilla route never prepares; it plays
+        // the pinned evidence through the live witnessed session, and the
+        // exhibition path owns the None profile.
+        Some(crate::campaign_match::Profile::Sevilla) => {
+            return Err("the witnessed Sevilla route has no computed preparation".into())
         }
         None => onenil_engine::watched_compiled::prepared::Session::new(input)?,
     };
@@ -614,6 +625,218 @@ pub struct LiveCampaign {
     ended: bool,
     replacement_allowed: bool,
 }
+/// [designed:T91] The witnessed Sevilla session: the pinned identity and
+/// presentation present the natural match the original played, and the sealed
+/// caller record supplies the witnessed condition facts. Nothing here computes
+/// or re-simulates the match; every frame is the captured fact. The half-time
+/// decision continues only - the witnessed route has no replacement.
+pub struct LiveWitnessed {
+    full: Timeline,
+    split: usize,
+}
+impl LiveWitnessed {
+    pub fn new(campaign: &onenil_campaign::Campaign) -> Result<Self, String> {
+        if crate::campaign_match::profile(campaign)? != crate::campaign_match::Profile::Sevilla {
+            return Err("the witnessed route admits only the Sevilla campaign".into());
+        }
+        let identity = onenil_engine::watched_compiled::sevilla_reference::identity()?;
+        let presentation = onenil_engine::watched_compiled::sevilla_reference::presentation()?;
+        let ticks = presentation["ticks"]
+            .as_array()
+            .ok_or("witnessed presentation ticks differ")?;
+        let actions = presentation["actions"]
+            .as_array()
+            .ok_or("witnessed presentation actions differ")?;
+        let metadata = crate::campaign_match::metadata()?;
+        let clubs = [campaign.club.id, campaign.next_fixture.opponent];
+        let club_names = [
+            campaign.club.name.clone(),
+            campaign.next_fixture.opponent_name.clone(),
+        ];
+        // [designed:T91] The witnessed squads: managed names carry the
+        // witnessed metadata; the opposition squad's names are not witnessed
+        // anywhere in the records, so those players render as their witnessed
+        // identities. Fabricated names would be dishonest.
+        let mut names = metadata["players"].clone();
+        for player in identity["roster"]["opponent"]
+            .as_array()
+            .ok_or("witnessed roster differs")?
+        {
+            let id = player.as_u64().ok_or("witnessed roster differs")?;
+            names[id.to_string()] = json!(format!("#{}", id));
+        }
+        let mut player_clubs = BTreeMap::new();
+        for player in &campaign.players {
+            player_clubs.insert(u64::from(player.id), u64::from(campaign.club.id));
+        }
+        for player in identity["roster"]["opponent"]
+            .as_array()
+            .ok_or("witnessed roster differs")?
+        {
+            let id = player.as_u64().ok_or("witnessed roster differs")?;
+            player_clubs.insert(id, u64::from(campaign.next_fixture.opponent));
+        }
+        // [confirmed:T89] Witnessed side identities: side 0 is the managed
+        // club, side 1 the opponent; the display order follows the campaign.
+        let goals: BTreeMap<u64, [u64; 2]> = {
+            let mut goals = BTreeMap::new();
+            let mut live = [0u64; 2];
+            for action in actions {
+                let side = action["side"]
+                    .as_u64()
+                    .ok_or("witnessed action side differs")?;
+                let tick = action["tick"]
+                    .as_u64()
+                    .ok_or("witnessed action tick differs")?;
+                let code = action["code"]
+                    .as_u64()
+                    .ok_or("witnessed action code differs")?;
+                if matches!(code, 38 | 39) {
+                    let slot =
+                        usize::try_from(side).map_err(|_| "witnessed action side differs")?;
+                    live[slot] += 1;
+                }
+                goals.insert(tick, live);
+            }
+            goals
+        };
+        let messages: Vec<(String, String)> =
+            serde_json::from_str(include_str!("../messages.json")).map_err(|e| e.to_string())?;
+        let first = &presentation["first_entry"];
+        let display: Vec<u64> = clubs.iter().map(|club| u64::from(*club)).collect();
+        let initial = view(
+            first,
+            &first["scores"],
+            n(&first["elapsed"])?,
+            &names,
+            &player_clubs,
+            &display,
+        )?;
+        let mut events: BTreeMap<u64, Vec<Event>> = BTreeMap::new();
+        for (index, action) in actions.iter().enumerate() {
+            let tick = n(&action["tick"])?;
+            events
+                .entry(tick)
+                .or_default()
+                .push(describe(action, index, &names, &messages)?);
+        }
+        let mut frames = Vec::with_capacity(ticks.len());
+        let mut marker_rows = vec![marker_row(first)?];
+        for row in ticks {
+            let tick = n(&row["tick"])?;
+            let scored = goals
+                .range(..=tick)
+                .next_back()
+                .map(|(_, value)| *value)
+                .unwrap_or([0, 0]);
+            // [designed:T91] The computed route observes caller clocks because
+            // the snapshot clock can lag the referee's minute by one tick (the
+            // witnessed half-time whistle carries minute 46 on the elapsed-45
+            // snapshot). The witnessed route has no separate clock witness, so
+            // the frame clock is the snapshot's, never behind its own events.
+            let frame_events = events.remove(&tick).unwrap_or_default();
+            let clock = frame_events
+                .iter()
+                .filter_map(|event| event.native["minute"].as_u64())
+                .fold(n(&row["elapsed"])?, |clock, minute| clock.max(minute));
+            marker_rows.push(marker_row(row)?);
+            frames.push(Frame {
+                view: view(row, &json!(scored), clock, &names, &player_clubs, &display)?,
+                events: frame_events,
+            });
+        }
+        if !events.is_empty()
+            || frames.last().ok_or("empty witnessed timeline")?.view.score != [1, 1]
+        {
+            return Err("incomplete witnessed timeline".into());
+        }
+        let split = frames
+            .iter()
+            .position(|frame| frame.events.iter().any(|event| event.kind == "half-time"))
+            .ok_or("witnessed half-time event missing")?;
+        let full = Timeline {
+            club_names,
+            initial,
+            frames,
+            setup_events: Vec::new(),
+            native_return: identity["match_return"]["site"]
+                .as_str()
+                .ok_or("witnessed return differs")?
+                .to_owned(),
+            draws: identity["counts"]["draws"]
+                .as_u64()
+                .ok_or("witnessed draws differ")? as usize,
+            clock_rows: ticks.len(),
+            seed: identity["entry"]["seed"]
+                .as_u64()
+                .ok_or("witnessed seed differs")?,
+            clubs: clubs.iter().map(|club| u64::from(*club)).collect(),
+            marker_rows,
+        };
+        full.validate_markers()?;
+        Ok(Self { full, split })
+    }
+    pub fn pause(&mut self) -> Result<IntervalTimeline, String> {
+        let split = self.split;
+        let full = &self.full;
+        Ok(IntervalTimeline {
+            club_names: full.club_names.clone(),
+            initial: full.initial.clone(),
+            frames: full.frames[..=split].to_vec(),
+            setup_events: Vec::new(),
+            draws: full.draws,
+            clock_rows: full.clock_rows,
+            seed: full.seed,
+            clubs: full.clubs.clone(),
+            marker_rows: full.marker_rows[..=split + 1].to_vec(),
+            boundary: "0AB9:7E4A".into(),
+            control: 1,
+            snapshot: IntervalSnapshot::default(),
+        })
+    }
+    pub fn finish(&mut self, replace: bool) -> Result<Completion, String> {
+        if replace {
+            return Err("replacement is supported only in the verified original campaign".into());
+        }
+        let timeline = std::mem::replace(
+            &mut self.full,
+            Timeline {
+                club_names: [String::new(), String::new()],
+                initial: View {
+                    clock: 0,
+                    score: [0, 0],
+                    ball: Position { x: 0, y: 0 },
+                    players: Vec::new(),
+                },
+                frames: Vec::new(),
+                setup_events: Vec::new(),
+                native_return: String::new(),
+                draws: 0,
+                clock_rows: 0,
+                seed: 0,
+                clubs: Vec::new(),
+                marker_rows: Vec::new(),
+            },
+        );
+        Ok(Completion {
+            timeline,
+            native_sha256: onenil_engine::watched_compiled::sevilla_reference::completion_digest(),
+            replacement: None,
+            condition_updates: Some(self.condition_updates()?),
+        })
+    }
+    /// [designed:T91] The witnessed condition facts for the campaign record.
+    pub fn condition_updates(&self) -> Result<Vec<(u16, i8)>, String> {
+        onenil_engine::watched_compiled::sevilla_reference::managed_condition_updates()?
+            .into_iter()
+            .map(|(player, condition)| {
+                let condition = i8::try_from(condition)
+                    .map_err(|_| "witnessed condition outside native storage".to_string())?;
+                Ok((player, condition))
+            })
+            .collect()
+    }
+}
 impl LiveCampaign {
     pub fn new(campaign: &onenil_campaign::Campaign) -> Result<Self, String> {
         let profile = crate::campaign_match::profile(campaign)?;
@@ -706,6 +929,7 @@ impl LiveCampaign {
             timeline: self.context.complete(&output)?,
             native_sha256,
             replacement,
+            condition_updates: None,
         })
     }
 }

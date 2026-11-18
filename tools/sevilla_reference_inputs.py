@@ -109,7 +109,8 @@ def stream(research):
 
 
 def compact_snapshot(snapshot):
-    """Only the fields the desktop witnessed adaptation consumes."""
+    """Only the fields the desktop witnessed adaptation consumes, in the
+    engine's own logical-snapshot shape."""
     scenes = []
     for scene in snapshot['scenes']:
         for key in SCENE_KEYS:
@@ -120,7 +121,7 @@ def compact_snapshot(snapshot):
         'elapsed': snapshot['elapsed'],
         'actor': snapshot['actor'],
         'scores': snapshot['scores'],
-        'ball': snapshot['ball']['word0'],
+        'ball': {'word0': snapshot['ball']['word0']},
         'scenes': scenes,
     }
 

@@ -15,11 +15,13 @@ use sha2::{Digest, Sha256};
 const IDENTITY: &[u8] = include_bytes!("../../tests/fixtures/sevilla_watched/identity.json");
 const PRESENTATION: &[u8] =
     include_bytes!("../../tests/fixtures/sevilla_watched/presentation-r0001.json");
-const CALLER: &[u8] = include_bytes!("../../tests/fixtures/sevilla_post_match/sevilla-result-r0001.json");
+const CALLER: &[u8] =
+    include_bytes!("../../tests/fixtures/sevilla_post_match/sevilla-result-r0001.json");
 
-pub const IDENTITY_SHA256: &str = "a8afa6e30882b7a6ccd6a8c677b002d2c9ea2a68de1ea4fd5120f36b61a753a0";
+pub const IDENTITY_SHA256: &str =
+    "316583caaaa639cd037eb2026b142f7a510bf2fc922608ec7466bea04577316c";
 pub const PRESENTATION_SHA256: &str =
-    "9d650f161b823854a3c7f512718e250de07e28561e2ed806bc2e94bda22afa02";
+    "939938d33d5b9cc4682cc285ead3c71270de6b2f438f159747bde59c30065053";
 pub const CALLER_SHA256: &str = "b33901b1d30ceb2a7e9907982bdbe539172dabbec025bd113e313f47fccff509";
 
 /// The DS pool-pointer header slots, as `binding` canonicalises them for the
@@ -73,8 +75,12 @@ pub fn presentation() -> Result<Value, String> {
     if presentation["schema"] != "sevilla-watched-presentation/1" {
         return Err("sealed Sevilla presentation schema differs".into());
     }
-    let ticks = presentation["ticks"].as_array().ok_or("presentation ticks differ")?;
-    let actions = presentation["actions"].as_array().ok_or("presentation actions differ")?;
+    let ticks = presentation["ticks"]
+        .as_array()
+        .ok_or("presentation ticks differ")?;
+    let actions = presentation["actions"]
+        .as_array()
+        .ok_or("presentation actions differ")?;
     if ticks.len() != counts["ticks"].as_u64().unwrap() as usize
         || actions.len() != counts["actions"].as_u64().unwrap() as usize
     {
@@ -105,8 +111,7 @@ fn pointer_headers(regions: &Value) -> Result<Vec<(u16, u16, u16)>, String> {
             .ok_or_else(|| "caller regions differ".to_string())?
             .iter()
             .find(|region| region["name"] == name)
-            .ok_or_else(|| "caller region declaration lacks a witnessed pool".to_string())?
-            ["base"]
+            .ok_or_else(|| "caller region declaration lacks a witnessed pool".to_string())?["base"]
             .as_u64()
             .ok_or_else(|| "caller region base differs".to_string())
     };
@@ -128,7 +133,9 @@ fn pointer_headers(regions: &Value) -> Result<Vec<(u16, u16, u16)>, String> {
 /// declaration refuses; nothing else is added.
 fn caller_input(caller: &Value) -> Result<Input, String> {
     let entry = &caller["entry"];
-    let order = ["ax", "cx", "dx", "bx", "sp", "bp", "si", "di", "es", "cs", "ss", "ds"];
+    let order = [
+        "ax", "cx", "dx", "bx", "sp", "bp", "si", "di", "es", "cs", "ss", "ds",
+    ];
     let mut registers = [0u16; 12];
     for (index, name) in order.iter().enumerate() {
         registers[index] = entry[name]
@@ -141,8 +148,7 @@ fn caller_input(caller: &Value) -> Result<Input, String> {
         .ok_or("caller regions differ")?
         .iter()
         .find(|region| region["name"] == "player8")
-        .ok_or("caller regions lack the player pool")?
-        ["base"]
+        .ok_or("caller regions lack the player pool")?["base"]
         .as_u64()
         .ok_or("caller region base differs")?;
     let mut initial = caller["initial"].clone();
@@ -179,9 +185,15 @@ fn caller_input(caller: &Value) -> Result<Input, String> {
     // context refuses; match-derived bytes are never synthesized.
     let condition = sealed(CALLER, CALLER_SHA256, "caller record")?["condition"].clone();
     let mut club_of: std::collections::BTreeMap<u64, u64> = std::collections::BTreeMap::new();
-    for context in condition["contexts"].as_array().ok_or("condition contexts differ")? {
+    for context in condition["contexts"]
+        .as_array()
+        .ok_or("condition contexts differ")?
+    {
         let club = context["club"].as_u64().ok_or("condition club differs")?;
-        for player in context["roster"].as_array().ok_or("condition roster differs")? {
+        for player in context["roster"]
+            .as_array()
+            .ok_or("condition roster differs")?
+        {
             let player = player.as_u64().unwrap_or(0);
             if player != 0 {
                 club_of.insert(player, club);
@@ -207,9 +219,10 @@ fn caller_input(caller: &Value) -> Result<Input, String> {
             }));
         }
     }
-    for (offset, value) in pointer_headers(&regions)?.iter().flat_map(|&(slot, low, high)| {
-        [(slot, low), (slot + 2, high)]
-    }) {
+    for (offset, value) in pointer_headers(&regions)?
+        .iter()
+        .flat_map(|&(slot, low, high)| [(slot, low), (slot + 2, high)])
+    {
         let cells = initial.as_array_mut().ok_or("caller initial differs")?;
         if let Some(cell) = cells
             .iter_mut()
@@ -258,7 +271,9 @@ pub fn caller_replay() -> Result<post_match::Outcome, String> {
         return Err("sealed Sevilla caller preservation differs".into());
     }
     let outcome = post_match::replay_friendly(&caller_input(caller)?)?;
-    let start = caller["draw_start"].as_u64().ok_or("caller draw span differs")?;
+    let start = caller["draw_start"]
+        .as_u64()
+        .ok_or("caller draw span differs")?;
     let outcome_final = serde_json::to_value(&outcome.final_fields).map_err(|e| e.to_string())?;
     let replayed: std::collections::BTreeMap<String, u64> = outcome_final
         .as_array()
@@ -309,8 +324,7 @@ pub fn caller_replay() -> Result<post_match::Outcome, String> {
             })
         })
         .collect();
-    if serde_json::to_value(&outcome.writes).map_err(|e| e.to_string())? != json!(expected_writes)
-    {
+    if serde_json::to_value(&outcome.writes).map_err(|e| e.to_string())? != json!(expected_writes) {
         return Err("replayed caller writes differ".into());
     }
     let expected_draws: Vec<_> = source["post_draws"]
@@ -335,11 +349,7 @@ pub fn caller_replay() -> Result<post_match::Outcome, String> {
         })
         .collect();
     let mut draw_mismatch = Vec::new();
-    for (index, (expected, actual)) in expected_draws
-        .iter()
-        .zip(outcome_draws.iter())
-        .enumerate()
-    {
+    for (index, (expected, actual)) in expected_draws.iter().zip(outcome_draws.iter()).enumerate() {
         if expected != actual {
             if draw_mismatch.len() < 4 {
                 draw_mismatch.push(format!("#{index}: recorded {expected} replayed {actual}"));
@@ -384,8 +394,12 @@ pub fn managed_condition_updates() -> Result<Vec<(u16, u8)>, String> {
         .iter()
         .filter(|call| call["context"] == managed["index"])
         .map(|call| {
-            let player = call["input"]["player"].as_u64().ok_or("condition player differs")?;
-            let value = call["output"]["condition"].as_u64().ok_or("condition value differs")?;
+            let player = call["input"]["player"]
+                .as_u64()
+                .ok_or("condition player differs")?;
+            let value = call["output"]["condition"]
+                .as_u64()
+                .ok_or("condition value differs")?;
             Ok((
                 u16::try_from(player).map_err(|_| "condition player differs")?,
                 u8::try_from(value).map_err(|_| "condition value differs")?,

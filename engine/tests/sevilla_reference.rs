@@ -7,8 +7,10 @@ use onenil_engine::watched_compiled::{post_match, sevilla_reference as reference
 use serde_json::{json, Value};
 
 fn source() -> Value {
-    serde_json::from_str(include_str!("fixtures/sevilla_post_match/sevilla-result-r0001.json"))
-        .unwrap()
+    serde_json::from_str(include_str!(
+        "fixtures/sevilla_post_match/sevilla-result-r0001.json"
+    ))
+    .unwrap()
 }
 #[test]
 fn the_witnessed_sevilla_caller_replays_to_the_recorded_outcome() {
@@ -17,18 +19,19 @@ fn the_witnessed_sevilla_caller_replays_to_the_recorded_outcome() {
     // caller_replay refuses unless every recorded final field, write, draw and
     // returned register is reproduced; reaching Ok proves the parity set.
     let outcome = reference::caller_replay().unwrap();
-    let replayed: std::collections::BTreeMap<String, u64> = serde_json::to_value(&outcome.final_fields)
-        .unwrap()
-        .as_array()
-        .unwrap()
-        .iter()
-        .map(|field| {
-            (
-                field["field"].as_str().unwrap_or("").to_owned(),
-                field["value"].as_u64().unwrap_or(0),
-            )
-        })
-        .collect();
+    let replayed: std::collections::BTreeMap<String, u64> =
+        serde_json::to_value(&outcome.final_fields)
+            .unwrap()
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|field| {
+                (
+                    field["field"].as_str().unwrap_or("").to_owned(),
+                    field["value"].as_u64().unwrap_or(0),
+                )
+            })
+            .collect();
     for expected in caller["final"].as_array().unwrap() {
         let name = expected["field"].as_str().unwrap();
         assert_eq!(
@@ -39,9 +42,18 @@ fn the_witnessed_sevilla_caller_replays_to_the_recorded_outcome() {
     }
     assert_eq!(outcome.writes.len(), 409);
     assert_eq!(outcome.draws.len(), 107);
-    assert_eq!(outcome.registers[0], caller["returned"]["ax"].as_u64().unwrap() as u16);
-    assert_eq!(outcome.registers[1], caller["returned"]["cx"].as_u64().unwrap() as u16);
-    assert_eq!(outcome.registers[3], caller["returned"]["bx"].as_u64().unwrap() as u16);
+    assert_eq!(
+        outcome.registers[0],
+        caller["returned"]["ax"].as_u64().unwrap() as u16
+    );
+    assert_eq!(
+        outcome.registers[1],
+        caller["returned"]["cx"].as_u64().unwrap() as u16
+    );
+    assert_eq!(
+        outcome.registers[3],
+        caller["returned"]["bx"].as_u64().unwrap() as u16
+    );
 }
 #[test]
 fn the_witnessed_friendly_selectors_refuse_on_the_league_route() {
@@ -50,8 +62,10 @@ fn the_witnessed_friendly_selectors_refuse_on_the_league_route() {
     // the same recorded fields must refuse there - no route confusion.
     let caller = &source()["caller"];
     let entry = &caller["entry"];
-    let registers: [u16; 12] = ["ax", "cx", "dx", "bx", "sp", "bp", "si", "di", "es", "cs", "ss", "ds"]
-        .map(|name| entry[name].as_u64().unwrap() as u16);
+    let registers: [u16; 12] = [
+        "ax", "cx", "dx", "bx", "sp", "bp", "si", "di", "es", "cs", "ss", "ds",
+    ]
+    .map(|name| entry[name].as_u64().unwrap() as u16);
     let input: post_match::Input = serde_json::from_value(json!({
         "registers": registers,
         "flags": entry["eflags"],
@@ -110,7 +124,13 @@ fn managed_condition_updates_carry_only_the_witnessed_roster() {
     let updates = reference::managed_condition_updates().unwrap();
     let mut ids: Vec<u16> = updates.iter().map(|(id, _)| *id).collect();
     ids.sort_unstable();
-    assert_eq!(ids, [2581, 2582, 2583, 2584, 2585, 2586, 2587, 2588, 2589, 2590, 2591, 2592, 2593, 2594, 2595, 2596, 2597, 2598]);
+    assert_eq!(
+        ids,
+        [
+            2581, 2582, 2583, 2584, 2585, 2586, 2587, 2588, 2589, 2590, 2591, 2592, 2593, 2594,
+            2595, 2596, 2597, 2598
+        ]
+    );
     let source = source();
     let calls: Vec<(u64, u64)> = source["condition"]["calls"]
         .as_array()

@@ -73,6 +73,9 @@ pub struct Controller {
     pub replace_sent: bool,
     pub squad: Option<SquadSelection>,
     pending_replacement: Option<crate::timeline::ExecutedReplacement>,
+    /// [designed:T91] The witnessed caller's condition facts, delivered with
+    /// the completion and consumed by the campaign's witnessed recording API.
+    pending_conditions: Option<Vec<(u16, i8)>>,
     awaiting_continuation: bool,
     request_campaign: Option<onenil_campaign::Campaign>,
     pub save_requested: bool,
@@ -107,6 +110,7 @@ impl Default for Controller {
             replace_sent: false,
             squad: None,
             pending_replacement: None,
+            pending_conditions: None,
             awaiting_continuation: false,
             request_campaign: None,
             save_requested: false,
@@ -221,6 +225,7 @@ impl Controller {
             Ok(playback) => {
                 self.playback = Some(playback);
                 self.pending_replacement = completion.replacement;
+                self.pending_conditions = completion.condition_updates;
                 self.awaiting_continuation = false;
                 self.resume_requested = false;
                 self.replace_requested = false;
@@ -358,20 +363,41 @@ impl Controller {
         true
     }
     /// [designed:T65] Keep the computed receipt visible without claiming week progression.
+    /// [designed:T91] The witnessed Sevilla result names itself once recorded.
     pub fn recorded_result_text(&self) -> Option<String> {
-        self.editor.campaign.played_fixture.as_ref().map(|result| {
-            format!(
-                "Result recorded: {} {}-{} {}. F7 saves.",
-                self.editor.campaign.club.name,
-                result.score[0],
-                result.score[1],
-                result.fixture.opponent_name
-            )
+        let (club, opponent, score, week) = match self.editor.campaign.second_fixture.as_ref() {
+            Some(second) => (
+                self.editor.campaign.club.name.clone(),
+                second.fixture.opponent_name.clone(),
+                second.score,
+                second.week_index,
+            ),
+            None => {
+                let played = self.editor.campaign.played_fixture.as_ref()?;
+                (
+                    self.editor.campaign.club.name.clone(),
+                    played.fixture.opponent_name.clone(),
+                    played.score,
+                    played.week_index,
+                )
+            }
+        };
+        Some(format!(
+            "Result recorded: {} {}-{} {}. F7 saves.",
+            club, score[0], score[1], opponent
+        ))
+        .map(|text| {
+            if week >= 1 {
+                format!("{text} The week's cash movement is unwitnessed.")
+            } else {
+                text
+            }
         })
     }
     fn record_completion(&mut self) -> Result<(), String> {
         let ticket = self.match_ticket.take().ok_or("missing match request")?;
         let replacement = self.pending_replacement.take();
+        let condition_updates = self.pending_conditions.take();
         let playback = self.playback.as_ref().ok_or("missing match playback")?;
         if playback.phase != Phase::FullTime || playback.cursor != playback.timeline.frames.len() {
             return Err("match has not completed".into());
@@ -379,15 +405,28 @@ impl Controller {
         let score = playback.view().score.map(u16::try_from);
         let [first, second] = score;
         let native_return = playback.timeline.native_return.as_str();
-        match replacement {
+        let score = [
+            first.map_err(|_| "score outside native storage")?,
+            second.map_err(|_| "score outside native storage")?,
+        ];
+        match (ticket.is_sevilla(), replacement) {
+            // [designed:T91] The witnessed Sevilla result posts with the
+            // caller's own condition outcomes; the campaign validates them
+            // against its pinned record before anything commits.
+            (true, None) => self.editor.campaign.record_sevilla_result(
+                &ticket,
+                score,
+                native_return,
+                condition_updates
+                    .as_deref()
+                    .ok_or("missing witnessed condition facts")?,
+            ),
+            (true, Some(_)) => Err("the witnessed Sevilla route admits no replacement".into()),
             // [designed:T78] One campaign transaction: result ticket plus the
             // researched persisted roster exchange (archaeology T80 policy).
-            Some(replacement) => self.editor.campaign.record_match_with_replacement(
+            (false, Some(replacement)) => self.editor.campaign.record_match_with_replacement(
                 &ticket,
-                [
-                    first.map_err(|_| "score outside native storage")?,
-                    second.map_err(|_| "score outside native storage")?,
-                ],
+                score,
                 native_return,
                 replacement.out_slot,
                 replacement.in_slot,
@@ -395,14 +434,10 @@ impl Controller {
                     .map_err(|_| "player id outside native storage")?,
                 u16::try_from(replacement.in_id).map_err(|_| "player id outside native storage")?,
             ),
-            None => self.editor.campaign.record_match(
-                &ticket,
-                [
-                    first.map_err(|_| "score outside native storage")?,
-                    second.map_err(|_| "score outside native storage")?,
-                ],
-                native_return,
-            ),
+            (false, None) => self
+                .editor
+                .campaign
+                .record_match(&ticket, score, native_return),
         }
     }
     pub(crate) fn clear_match(&mut self) {
@@ -414,6 +449,7 @@ impl Controller {
         self.replace_sent = false;
         self.squad = None;
         self.pending_replacement = None;
+        self.pending_conditions = None;
         self.awaiting_continuation = false;
         self.request_campaign = None;
         self.prepare_requested = false;

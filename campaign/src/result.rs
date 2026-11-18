@@ -15,6 +15,13 @@ pub struct MatchTicket {
     /// vice versa.
     pub(crate) kind: TicketKind,
 }
+impl MatchTicket {
+    /// [designed:T91] Whether this ticket admits the witnessed Sevilla route;
+    /// the recording API must match it.
+    pub fn is_sevilla(&self) -> bool {
+        self.kind == TicketKind::SevillaFriendly
+    }
+}
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(crate) enum TicketKind {
     /// The week-0 fresh friendly (research T66/T88).
