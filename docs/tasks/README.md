@@ -142,3 +142,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T89 Compose the witnessed fresh-friendly match through post-match processing](T89.md)
 
 - [T90 Refuse the following fixture's match at an honest unwitnessed boundary](T90.md)
+
+- [T91 Admit the authenticated Sevilla friendly as the second playable match](T91.md)
