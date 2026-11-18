@@ -107,7 +107,11 @@ fn the_witnessed_sevilla_route_plays_records_and_refuses_the_week() {
             .iter()
             .find(|(player, _)| u64::from(*player) == u64::from(row.id))
             .unwrap();
-        assert_eq!(row.availability.condition_signed, expected.1, "player {}", row.id);
+        assert_eq!(
+            row.availability.condition_signed, expected.1,
+            "player {}",
+            row.id
+        );
     }
     assert_eq!(c.message, "Result recorded: Blackburn R 1-1 Sevilla. F7 saves. The week's cash movement is unwitnessed.");
     // The witnessed week's news screen carries no receipt rows, and the week
@@ -197,9 +201,7 @@ fn the_witnessed_route_refuses_every_other_campaign() {
         "This fixture already has a result."
     );
 }
-fn crate_profile_message(
-    campaign: &onenil_campaign::Campaign,
-) -> String {
+fn crate_profile_message(campaign: &onenil_campaign::Campaign) -> String {
     onenil_desktop::campaign_match::profile(campaign)
         .err()
         .unwrap()
