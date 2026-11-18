@@ -12,18 +12,17 @@ import io
 import json
 from pathlib import Path
 import subprocess
-import time
-import urllib.error
-import urllib.request
-import zipfile
-
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
 PIN = '6aca98caeebc1b9b5410852139fa305462224a05'
 FONT_SHA = 'c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f'
-PACK_SHA = '21b3c0a3770ef0afc46564760613d7b078f4fcc9ed93db4b829a440b68822e08'
-PACK_URL = 'https://int10h.org/oldschool-pc-fonts/download/oldschool_pc_font_pack_v2.2_FULL.zip'
-FONT_MEMBER = 'ttf - Px (pixel outline)/PxPlus_IBM_VGA_8x16.ttf'
+# The font is tracked beside this script and digest-checked at every use; the
+# vendor pack it was extracted from (int10h.org OldSchool PC Font Pack v2.2,
+# pack sha256 21b3c0a3770ef0afc46564760613d7b078f4fcc9ed93db4b829a440b68822e08,
+# member 'ttf - Px (pixel outline)/PxPlus_IBM_VGA_8x16.ttf') stays documented
+# provenance, not a build dependency (research #187: runner egress to the
+# vendor no longer serves the pinned bytes).
+VENDORED_FONT = HERE / 'PxPlus_IBM_VGA_8x16.ttf'
 REQUIRED = {'main', 'skills', 'details', 'put-here', 'preparation', 'pitch',
             'history', 'bench', 'halftime', 'fulltime'}
 BOX_ARMS = dict(zip('─│┌┐└┘├┤┬┴┼═║╔╗╚╝╠╣╦╩╬',
@@ -44,30 +43,16 @@ def original(research, name):
 
 
 def font_bytes(path, fetch=False):
-    if not path.exists() and fetch:
-        # The 20MB vendor download flaked once in CI (a truncated or mid-transfer
-        # response failed the checksum); retry, accepting only the pinned bytes.
-        archive = None
-        for attempt in range(3):
-            request = urllib.request.Request(PACK_URL, headers={'User-Agent':'OneNil-Design-Study/1.0'})
-            try:
-                with urllib.request.urlopen(request, timeout=300) as response:
-                    archive = response.read()
-                if sha(archive) == PACK_SHA:
-                    break
-            except (urllib.error.URLError, OSError):
-                pass
-            archive = None
-            time.sleep(5 * (attempt + 1))
-        assert archive is not None and sha(archive) == PACK_SHA, 'font pack checksum differs'
-        with zipfile.ZipFile(io.BytesIO(archive)) as pack:
-            data = pack.read(FONT_MEMBER)
-        assert sha(data) == FONT_SHA
+    # [designed:T92] The pinned font is tracked beside this script and verified
+    # against FONT_SHA at every use; nothing is fetched over the network and
+    # no unchecked bytes are accepted (#187). `fetch` keeps its signature for
+    # existing reproducers and changes nothing here.
+    data = VENDORED_FONT.read_bytes()
+    assert sha(data) == FONT_SHA, 'vendored replacement font checksum differs'
+    if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open('xb') as output:
-            output.write(data)
-    data = path.read_bytes()
-    assert sha(data) == FONT_SHA, 'replacement font checksum differs'
+        path.write_bytes(data)
+    assert sha(path.read_bytes()) == FONT_SHA, 'replacement font checksum differs'
     return data
 
 

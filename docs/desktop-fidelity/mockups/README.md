@@ -15,9 +15,15 @@ Oldschool PC Font Pack v2.2, [int10h.org](https://int10h.org/oldschool-pc-fonts/
 CC BY-SA4.0. [FONT-LICENSE.TXT](FONT-LICENSE.TXT) is retained unchanged from the
 pack. Font SHA256:
 `c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f`.
-Public pack URL and SHA256 are pinned in [build.py](build.py); `--fetch-font`
-downloads/verifies it into the ignored cache. The font binary is a build input,
-not tracked. Its independent provenance was cross-checked against goal2 at
+[T92] The font binary itself is now tracked beside the generator
+([PxPlus_IBM_VGA_8x16.ttf](PxPlus_IBM_VGA_8x16.ttf)) and digest-checked against
+the SHA above at every use — research #187's runner-egress fetch of the vendor
+pack stopped matching the pinned pack sha (`21b3c0a3…`) five reruns running, so
+the transport died and the licensed, digest-pinned bytes moved into the
+repository. The vendor pack URL stays documented provenance; `--fetch-font`
+keeps its signature for local reproducers and no longer touches the network.
+The font binary is a build input, not an original One-Nil artifact. Its
+independent provenance was cross-checked against goal2 at
 `98860065cf928e52e43453a0c827e7ad2a564688`; no One-Nil font or palette file is used.
 
 [designed] P01–P04 in the plan explain the proposed/unknown differences: font,
