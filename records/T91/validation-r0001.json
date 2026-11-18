@@ -1,0 +1,37 @@
+{
+  "task": "T91",
+  "head": "98f1297d03b456c0e9df8224894e7dcabbff42a3",
+  "branch": "task/T91-admit-sevilla",
+  "validates": {
+    "source_assets": {
+      "generator": "tools/sevilla_reference_inputs.py --research-root ../onenil-archaeology --check",
+      "result": "committed fixtures byte-match the archaeology capture runs/T89/sevilla-r0001 at 3d41a0db",
+      "tool_tests": "tools/test_sevilla_reference_inputs.py: 7 passed",
+      "original_file_check": "tools/check_originals.py: ok"
+    },
+    "engine": {
+      "sealed_digests": "identity 316583ca…, presentation 939938d3…, caller b33901b1…; campaign fixture 91fc66e7…",
+      "caller_replay": "the sealed caller reproduces every recorded final field, all 409 ordered writes, the 107-draw RNG ledger (n/seed_before/seed_after/value) and all 12 returned registers through the compiled E679→EBE6 closure",
+      "route_guards": "the Sevilla selector pair refuses on the league route; league/fresh guards unchanged (448 lib tests + all integration suites green)",
+      "suite": "cargo test --manifest-path engine/Cargo.toml --locked: all green"
+    },
+    "campaign": {
+      "admission": "the week-1 Sevilla-next request admits (TicketKind::SevillaFriendly); the witnessed posting records result + condition outcomes exactly once; wrong score, PSG-era conditions and a tampered condition byte all refuse before anything commits",
+      "refusals": "replay attempt: this fixture already has a recorded result; week transaction at week 1: the second week's cash movement is unwitnessed…; doctored week-2/Celtic: campaign context outside the supported saved club/fixture",
+      "persistence": "the post-caller state saves and reloads identically",
+      "suite": "cargo test --manifest-path campaign/Cargo.toml --locked: all green"
+    },
+    "desktop": {
+      "acceptance": "sevilla_route: the real controller walks the completed-week save through preparation into the witnessed match (prefix 1949 frames, seed 50238), half-time continues only, full time 3927 frames / 169,996 draws / 1-1, the result and witnessed conditions record once, the week surfaces name the unwitnessed movement, the week transaction refuses, restart/reload retains everything",
+      "regressions": "all desktop suites green (result_workflow, week_route, edited_match, campaign_match, live_desktop, live_protocol, live_worker, history, pitch_markers, squad_selection, week_screens, navigation, chooser, controls, editor, campaign)",
+      "fmt": "cargo fmt -- --check clean on engine, campaign and desktop"
+    },
+    "hazards": {
+      "pre_advanced_pointer": "not bound: the admission binds the week-one fixture (the prepared match's own context); no week-2/Celtic state validates",
+      "third_match": "never enabled: the week transaction refuses and week 2 stays outside validate",
+      "psg_transplants": "refused both directions (route-kind guard, score/condition pins)",
+      "timer_concept": "absent: no pit/divisor/timer string in any native asset or module (tool-tested)"
+    }
+  },
+  "ci": "exact-head run on the pushed head recorded in the PR before the pinned squash"
+}
