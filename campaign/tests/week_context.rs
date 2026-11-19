@@ -70,13 +70,13 @@ fn the_week_one_context_binds_the_authenticated_cash_and_full_fixture() {
 }
 
 #[test]
-fn the_witnessed_sevilla_fixture_admits_and_the_week_stays_unwitnessed() {
+fn the_witnessed_sevilla_fixture_admits_and_rejects_foreign_week_totals() {
     // [T91; archaeology 3d41a0db T89, runs/T89/sevilla-r0001] The advertised
     // following fixture IS the witnessed Sevilla friendly: the request admits
     // and binds the prepared match's own context, the caller's witnessed facts
     // record exactly once, the replay attempt refuses accurately, and the week
-    // transaction afterwards refuses naming the unwitnessed second-week cash
-    // movement. No PSG value transplants into the Sevilla path or vice versa.
+    // transaction afterwards rejects week-0 totals. No PSG value transplants
+    // into the Sevilla path or vice versa (T93 admits only its own receipt).
     let mut c = Campaign::initial().unwrap();
     let ticket = c.match_ticket().unwrap();
     c.record_match(&ticket, [1, 4], "0AB9:EBE2").unwrap();
@@ -140,7 +140,7 @@ fn the_witnessed_sevilla_fixture_admits_and_the_week_stays_unwitnessed() {
         );
     }
     // The replay attempt of the completed fixture refuses accurately, and the
-    // week transaction names the unwitnessed second-week cash movement.
+    // week transaction rejects transplanted week-0 totals.
     assert_eq!(
         c.match_ticket().err().unwrap(),
         "this fixture already has a recorded result"
@@ -149,7 +149,7 @@ fn the_witnessed_sevilla_fixture_admits_and_the_week_stays_unwitnessed() {
         c.record_week_completion(38_761, 69_270, 1, 28, 0, "Celtic")
             .err()
             .unwrap(),
-        "the second week's cash movement is unwitnessed; the Sevilla week's full-time cash/news route has no accepted original evidence"
+        "the Sevilla week's authenticated movement, fixture or conditions differ"
     );
     assert_eq!(c, recorded);
     // The post-caller state saves and reloads identically.
@@ -162,8 +162,7 @@ fn the_witnessed_sevilla_fixture_admits_and_the_week_stays_unwitnessed() {
         "this fixture already has a recorded result"
     );
     // A doctored week-two/Celtic state stays outside the supported saved
-    // context: the second week's movement is unwitnessed, so no native route
-    // can produce or admit it.
+    // context: this doctored image omits the authenticated cash and flags.
     let mut celtic = recorded.clone();
     celtic.week_index = 2;
     celtic.next_fixture.opponent = 28;
