@@ -175,10 +175,23 @@ fn edited_child_worker_computes_owned_result_and_native_save() {
     assert!(advanced.played_fixture.is_some());
     c.key(Key::Enter);
     c.key(Key::Enter);
-    // [T91] The advanced week's advertised fixture is the witnessed Sevilla
-    // friendly: the preparation entry now requests the witnessed match and
-    // binds its own context, instead of the T90 unwitnessed refusal.
+    // [designed:T94; #202] The first edited match/week remains supported,
+    // but its changed lineup cannot silently play the unchanged Sevilla capture.
+    assert_eq!(c.screen, Screen::Preparation);
+    assert!(!c.prepare_requested);
+    assert!(c.message.contains("Sevilla") && c.message.contains("Undo"));
+    assert_eq!(c.editor.campaign, advanced);
+    c.editor
+        .campaign
+        .exchange(
+            onenil_campaign::Location::First(1),
+            onenil_campaign::Location::First(2),
+        )
+        .unwrap();
+    let restored = c.editor.campaign.clone();
+    c.key(Key::Enter);
     assert_eq!(c.screen, Screen::Preparing);
     assert!(c.prepare_requested);
-    assert_eq!(c.editor.campaign, advanced);
+    assert_eq!(c.editor.campaign, restored);
+    assert_eq!(c.editor.campaign.played_fixture, advanced.played_fixture);
 }

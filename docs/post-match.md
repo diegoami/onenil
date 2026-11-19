@@ -230,3 +230,14 @@ transfer rules, later weeks and the Celtic match need their own evidence.
 T91's generated fixtures keep their historical scope text and source pins;
 T93's separate receipt extends only the week boundary. The native Sevilla
 presentation still renders opponent identities as their witnessed numbers.
+
+[designed:T94; native #202] Sevilla playback admits only the unchanged native
+week-one club arrangement, reserves, team instructions and player fields from
+the pinned native source. This bounds the existing presentation; it does not
+claim that native pre-match conditions reproduce the original preparation.
+Ticket admission owns the check, and desktop profile, witnessed playback and
+worker launch share it. Unsupported changes remain editable and save/reload
+normally, but starting their match refuses with undo/reload guidance. Undoing
+edits restores admission regardless of revision; player storage order does
+not change the setup. Existing completed results and the Celtic boundary keep
+their own refusals. Edited Sevilla matches still require original evidence.
