@@ -5,6 +5,7 @@ use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, path::Path};
 mod result;
+pub mod sevilla_week;
 pub mod storage;
 pub use result::{MatchTicket, PlayedFixture};
 const SOURCE_SHA: &str = "ebafc57db43544adcf13d3c002f372e587d8cc201e4a1ae8aa1a74dd37e31483";
@@ -91,8 +92,7 @@ pub struct Campaign {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub played_fixture: Option<PlayedFixture>,
     /// [designed:T91] The witnessed Sevilla friendly's recorded result, bound
-    /// to the week-one context; the week transaction after it refuses, so the
-    /// campaign stays at week 1 with Sevilla played.
+    /// to its week-one context, retained after the witnessed week transaction.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub second_fixture: Option<PlayedFixture>,
     pub next_fixture: Fixture,
@@ -210,11 +210,22 @@ impl Campaign {
         let week_one = self.week_index == 1
             && self.cash == crate::result::WEEK_ONE_CASH
             && self.next_fixture == week_one_fixture;
+        // [confirmed:archaeology 788b833 T93] The complete week-2 projection.
+        let receipt = crate::sevilla_week::SevillaWeek::pinned()?;
+        let week_two = self.week_index == 2
+            && self.cash as i64
+                == receipt.presentation["cash"]["after"]
+                    .as_i64()
+                    .ok_or("missing week cash")?
+            && self.next_fixture == receipt.following_fixture
+            && self.played_fixture.is_some()
+            && self.second_fixture.is_some()
+            && receipt.conditions_match(self);
         if self.season != source.season
             || self.manager != source.manager
             || self.club.id != source.club.id
             || self.club.name != source.club.name
-            || !(week_zero || week_one)
+            || !(week_zero || week_one || week_two)
         {
             return Err("campaign context outside the supported saved club/fixture".into());
         }
@@ -222,9 +233,9 @@ impl Campaign {
             result.validate(self)?;
         }
         if let Some(second) = &self.second_fixture {
-            // [T91] The witnessed Sevilla result exists only in the week-one
-            // context; the week transaction after it refuses, so week stays 1.
-            if self.week_index != 1 {
+            // [designed:T93] History retains the played week-one context after
+            // the authenticated transition to management week 2.
+            if !matches!(self.week_index, 1 | 2) || self.played_fixture.is_none() {
                 return Err(
                     "recorded result has a foreign or invalid fixture/request context".into(),
                 );

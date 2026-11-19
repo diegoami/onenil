@@ -1,0 +1,117 @@
+{
+ "schema": "sevilla-week-receipt/1",
+ "research_commit": "788b8332db4a9aab8304f5d9abef80c091dde3ee",
+ "sources": {
+  "runs/T93/sevilla-week-r0003/finish.json": "7d95a5e941c1d1268779626589315e741fa6854626a7cee9b3b12e1abe55edc9",
+  "runs/T93/week-suffix-r0003/finish.json": "a3e5b0269493a20f45bc01aecef4118af8bd57fae22fdfa7df7f882457e3d1b4",
+  "records/T89/boot-r0001.json": "4fee511149ba1e1b08a28e60c24b2408ecf16a07da1445cf378c8f44cda109ba"
+ },
+ "presentation": {
+  "schema": "friendly-week-receipt/1",
+  "source_research": {
+   "session": "runs/T93/sevilla-week-r0003/finish.json",
+   "session_sha256": "7d95a5e941c1d1268779626589315e741fa6854626a7cee9b3b12e1abe55edc9",
+   "fixtures": "runs/T93/week-suffix-r0003/finish.json",
+   "fixtures_sha256": "a3e5b0269493a20f45bc01aecef4118af8bd57fae22fdfa7df7f882457e3d1b4"
+  },
+  "club": 130,
+  "manager": 1,
+  "week": {
+   "index_before": 1,
+   "index_after": 2
+  },
+  "cash": {
+   "before": 421491,
+   "gate_receipts": 69410,
+   "prize_money": 0,
+   "tv_coverage": 0,
+   "radio_coverage": 0,
+   "players_sold": 0,
+   "sponsorship": 0,
+   "directors_handout": 0,
+   "total_in": 69410,
+   "player_salaries": 57320,
+   "win_bonuses": 0,
+   "staff_salaries": 4200,
+   "ground_maintenance": 7750,
+   "players_bought": 0,
+   "contracts": 0,
+   "interest": 0,
+   "sundries": 0,
+   "total_out": 69270,
+   "after": 421631,
+   "overdraft_facility": 2920000
+  },
+  "transfer_rows": [
+   {
+    "player": "G.Popescu",
+    "from": "Tottenham H",
+    "to": "Chelsea"
+   },
+   {
+    "player": "S.Smith",
+    "from": "Crewe Alexandra",
+    "to": "Huddersfield T"
+   },
+   {
+    "player": "L.Howarth",
+    "from": "Mansfield T",
+    "to": "Walsall"
+   },
+   {
+    "player": "J.Byrne",
+    "from": "Dundalk",
+    "to": "Southend Utd"
+   },
+   {
+    "player": "K.Ing'risten",
+    "from": "Lillestrom",
+    "to": "Viking"
+   }
+  ],
+  "following_fixture": {
+   "competition": 1,
+   "opponent": 28,
+   "flags": 0,
+   "name": "Celtic",
+   "manager": ""
+  },
+  "roster_unchanged": true,
+  "interpretation": "One witnessed week only; transfer rows are output, not executed rules."
+ },
+ "following_fixture": {
+  "slot": 3,
+  "club": 130,
+  "opponent": 28,
+  "opponent_name": "Celtic",
+  "competition_code": 1,
+  "flags": 0,
+  "venue_code": 0,
+  "opponent_flags": 1
+ },
+ "conditions": {
+  "2581": 15,
+  "2582": 31,
+  "2583": 28,
+  "2584": 18,
+  "2585": 31,
+  "2586": 25,
+  "2587": 12,
+  "2588": 31,
+  "2589": 21,
+  "2590": 31,
+  "2591": 31,
+  "2592": 19,
+  "2593": 6,
+  "2594": 11,
+  "2595": 25,
+  "2596": 7,
+  "2597": 26,
+  "2598": 14
+ },
+ "original_save": {
+  "name": "SAVE1.1-0",
+  "size": 194426,
+  "sha256": "c0c3a6a336e4cc8c53f947fff6f4058a0fd3e37b3977fa9a1fc5863f154c4e7e"
+ }
+}

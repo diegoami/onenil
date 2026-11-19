@@ -1,0 +1,66 @@
+{
+ "schema": "native-sevilla-week-validation/1",
+ "code_commit": "aa86864b3c078a6fc33a4bee235c2b38b12443de",
+ "research_commit": "788b8332db4a9aab8304f5d9abef80c091dde3ee",
+ "receipt_sha256": "fe51b0a36de636ca3ccb4bcd645395ce87a2183171fcdaddd5c7e9897d261990",
+ "checks": [
+  {
+   "command": "CARGO_BUILD_JOBS=4 cargo test --manifest-path campaign/Cargo.toml --locked",
+   "status": "passed",
+   "test_binaries_including_doc_tests": 8,
+   "tests_passed": 9
+  },
+  {
+   "command": "CARGO_BUILD_JOBS=4 cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked",
+   "status": "passed",
+   "test_binaries_including_doc_tests": 25,
+   "tests_passed": 54
+  },
+  {
+   "command": "ONENIL_DESKTOP_FONT=docs/desktop-fidelity/mockups/PxPlus_IBM_VGA_8x16.ttf CARGO_BUILD_JOBS=4 RUST_TEST_THREADS=1 cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --features raster --lib --test history --test week_screens --test sevilla_week_route",
+   "status": "passed",
+   "test_binaries_including_doc_tests": 4,
+   "tests_passed": 19
+  },
+  {
+   "command": "python3 tools/sevilla_week_inputs.py --research-root ../onenil-archaeology --check",
+   "status": "passed"
+  },
+  {
+   "command": "python3 tools/test_sevilla_week_inputs.py",
+   "status": "passed"
+  },
+  {
+   "command": "python3 tools/check_originals.py",
+   "status": "passed"
+  },
+  {
+   "command": "cargo fmt --manifest-path engine/Cargo.toml -- --check",
+   "status": "passed"
+  },
+  {
+   "command": "cargo fmt --manifest-path campaign/Cargo.toml -- --check",
+   "status": "passed"
+  },
+  {
+   "command": "cargo fmt --manifest-path desktop/faithful/Cargo.toml -- --check",
+   "status": "passed"
+  },
+  {
+   "command": "git diff --check",
+   "status": "passed"
+  }
+ ],
+ "still_running_at_this_snapshot": [
+  "full engine release test suite",
+  "GitHub exact-head CI"
+ ],
+ "assertions": [
+  "cash 421491 -> 421631; total in 69410; total out 69270",
+  "complete week-2 Celtic projection; both results retained; no second condition refresh",
+  "one revision; duplicate and foreign receipts refuse atomically",
+  "automatic native week-end save/restart without explicit Save; visible failure and F7 retry",
+  "third-match request refuses explicitly for missing Celtic evidence after reload"
+ ],
+ "operation": "Host-wide ps/free checked; no capture running; sequential Rust builds with CARGO_BUILD_JOBS=4."
+}

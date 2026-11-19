@@ -53,9 +53,8 @@ pub const WEEK_ONE_CASH: i32 = 421_491;
 /// [confirmed:archaeology 3d41a0db T89] The witnessed Sevilla friendly's own
 /// facts (runs/T89/sevilla-r0001): the witnessed result and the caller's own
 /// condition outcomes for the managed roster, digest-pinned from
-/// campaign/fixtures/sevilla-post-match.json. Weekly recovery remains
-/// unwitnessed and is not modeled; the week transaction after this caller
-/// refuses (the second week's cash movement was not witnessed).
+/// campaign/fixtures/sevilla-post-match.json. [confirmed:archaeology 788b833 T93]
+/// The following week route preserves these conditions without another refresh.
 const SEVILLA_POST_MATCH_SHA: &str =
     "91fc66e730b3a6d382982d8258d528f88b174756c0257d386a18535631e9efe7";
 
@@ -122,7 +121,7 @@ impl PlayedFixture {
     }
     /// [designed:T91] The witnessed Sevilla result binds the authenticated
     /// week-one context itself: the fixture is the week-one fixture, the week
-    /// index stays 1 (the week transaction after the caller refuses), and the
+    /// index in the history stays 1 after week completion, and the
     /// request digest is a valid native identity.
     pub(crate) fn validate_second(&self, campaign: &Campaign) -> Result<(), String> {
         let source = Campaign::initial()?;
@@ -156,6 +155,9 @@ impl PlayedFixture {
 impl Campaign {
     pub fn match_ticket(&self) -> Result<MatchTicket, String> {
         self.validate()?;
+        if self.week_index == 2 {
+            return Err(crate::sevilla_week::THIRD_MATCH_REFUSAL.into());
+        }
         if self.played_fixture.is_some() {
             if self.week_index >= 1 {
                 if self.second_fixture.is_some() {
@@ -198,7 +200,7 @@ impl Campaign {
     /// result posts through the caller's own facts: the witnessed score and the
     /// caller's condition outcomes for the managed roster. The values must be
     /// exactly the witnessed ones - no PSG value transplants into the Sevilla
-    /// path - and the week transaction afterwards stays unwitnessed and refuses.
+    /// path. T93 admits the separately authenticated week transaction afterwards.
     /// The recorded week-0 result and the updated conditions persist together.
     pub fn record_sevilla_result(
         &mut self,
@@ -285,17 +287,18 @@ impl Campaign {
             .played_fixture
             .as_ref()
             .ok_or("the friendly result must be recorded before the week completes")?;
-        if self.week_index != 0 {
-            // [confirmed:T91 freeze; archaeology 3d41a0db T89] The capture ends
-            // at the caller: the second week's cash movement was not witnessed
-            // (the week-1 values 38,761/69,270 are week-specific and do not
-            // transfer). The campaign stays at week 1 with Sevilla played until
-            // a future archaeology capture witnesses the Sevilla week's
-            // full-time cash/news route.
-            return Err(
-                "the second week's cash movement is unwitnessed; the Sevilla week's full-time cash/news route has no accepted original evidence"
-                    .into(),
+        if self.week_index == 1 {
+            return self.complete_sevilla_week(
+                total_in,
+                total_out,
+                following_competition,
+                following_opponent,
+                following_flags,
+                following_name,
             );
+        }
+        if self.week_index == 2 {
+            return Err("this week's transaction is already complete".into());
         }
         // [review #176 F1] The week's movement and following fixture are the
         // authenticated research values (T81 dc54fe9, T82 c13195a): any other

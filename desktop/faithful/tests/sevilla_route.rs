@@ -1,8 +1,8 @@
 //! [designed:T91] The witnessed Sevilla route through the real controller:
 //! the completed-week save requests the witnessed match, the pinned evidence
 //! plays to the natural 1-1, the caller's condition outcomes record with the
-//! result, the week transaction refuses naming the unwitnessed second-week
-//! cash movement, and the post-caller state survives restart and reload.
+//! result; T93 completes the authenticated week while retaining the result.
+//! The post-caller state also survives restart and reload before completion.
 use onenil_desktop::{
     controller::{Controller, Key, Screen},
     timeline::{LiveWitnessed, Phase},
@@ -61,7 +61,7 @@ fn full_time(c: &mut Controller) {
     assert_eq!(c.screen, Screen::FullTime);
 }
 #[test]
-fn the_witnessed_sevilla_route_plays_records_and_refuses_the_week() {
+fn the_witnessed_sevilla_route_plays_records_and_completes_the_week() {
     let mut c = preparing();
     let before = c.editor.campaign.clone();
     let mut engine = LiveWitnessed::new(&before).unwrap();
@@ -113,19 +113,16 @@ fn the_witnessed_sevilla_route_plays_records_and_refuses_the_week() {
             row.id
         );
     }
-    assert_eq!(c.message, "Result recorded: Blackburn R 1-1 Sevilla. F7 saves. The week's cash movement is unwitnessed.");
-    // The witnessed week's news screen carries no receipt rows, and the week
-    // transaction refuses naming the unwitnessed second-week cash movement;
-    // the state keeps week 1 with Sevilla played.
+    assert_eq!(c.message, "Result recorded: Blackburn R 1-1 Sevilla. F7 saves. Continue through cash flow and transfer news.");
+    // [confirmed:archaeology 788b833 T93] The witnessed week now completes.
     c.key(Key::Space);
     assert_eq!(c.screen, Screen::TransferNews);
     c.key(Key::Space);
-    assert_eq!(c.screen, Screen::TransferNews);
-    assert_eq!(
-        c.message,
-        "the second week's cash movement is unwitnessed; the Sevilla week's full-time cash/news route has no accepted original evidence"
-    );
-    assert_eq!(c.editor.campaign, recorded);
+    assert_eq!(c.screen, Screen::Main);
+    assert_eq!(c.editor.campaign.week_index, 2);
+    assert_eq!(c.editor.campaign.cash, 421631);
+    assert_eq!(c.editor.campaign.players, recorded.players);
+    assert!(c.save_requested);
     assert_eq!(
         recorded.match_ticket().err().unwrap(),
         "this fixture already has a recorded result"
@@ -162,9 +159,8 @@ fn the_post_caller_state_survives_restart_and_reload_and_stays_refused() {
     assert!(!c2.prepare_requested);
     assert!(c2.message.contains("already has a result"));
     assert_eq!(c2.editor.campaign, recorded);
-    // The week transaction still refuses after the reload, and the witnessed
-    // route never enables a third match: a doctored week-2/Celtic state is
-    // outside the supported saved context.
+    // [T93] A doctored week-2 state without the authenticated cash/flags
+    // remains invalid; the real completion/refusal is in sevilla_week_route.
     let mut celtic = recorded.clone();
     celtic.week_index = 2;
     celtic.next_fixture.opponent = 28;

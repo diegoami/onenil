@@ -58,16 +58,46 @@ pub struct WeekCash {
     pub before: i32,
     pub gate_receipts: i32,
     pub prize_money: i32,
+    #[serde(default)]
+    pub tv_coverage: i32,
+    #[serde(default)]
+    pub radio_coverage: i32,
+    #[serde(default)]
+    pub players_sold: i32,
+    #[serde(default)]
+    pub sponsorship: i32,
+    #[serde(default)]
+    pub directors_handout: i32,
     pub total_in: i32,
     pub player_salaries: i32,
     pub win_bonuses: i32,
     pub staff_salaries: i32,
     pub ground_maintenance: i32,
+    #[serde(default)]
+    pub players_bought: i32,
+    #[serde(default)]
+    pub contracts: i32,
+    #[serde(default)]
+    pub interest: i32,
+    #[serde(default)]
+    pub sundries: i32,
     pub total_out: i32,
     pub after: i32,
     pub overdraft_facility: i32,
 }
 impl WeekReceipt {
+    /// [confirmed:archaeology 788b833 T93] Choose the completed match's week
+    /// receipt. A persisted second result retains its own receipt after advance.
+    pub fn for_campaign(campaign: &onenil_campaign::Campaign) -> Self {
+        if campaign.second_fixture.is_some() {
+            let receipt = onenil_campaign::sevilla_week::SevillaWeek::pinned()
+                .expect("the pinned Sevilla week receipt authenticates");
+            serde_json::from_value(receipt.presentation).expect("the pinned presentation parses")
+        } else {
+            Self::pinned()
+        }
+    }
+
     /// Panic-free construction: the pinned digest guards every field, so a
     /// mismatch is a build/runtime invariant, not a recoverable error.
     pub fn pinned() -> Self {

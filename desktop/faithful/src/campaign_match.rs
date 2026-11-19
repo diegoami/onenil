@@ -19,21 +19,20 @@ pub const REFUSAL: &str = "Use original team or swap Pearce and Hendry. Reload t
 
 pub fn profile(campaign: &Campaign) -> Result<Profile, String> {
     campaign.validate()?;
+    if campaign.week_index == 2 {
+        return Err(onenil_campaign::sevilla_week::THIRD_MATCH_REFUSAL.into());
+    }
     if campaign.played_fixture.is_some() {
         if campaign.week_index >= 1 {
             if campaign.second_fixture.is_some() {
                 // [T91] The completed fixture replays nothing: the accurate
-                // recorded-result refusal. The week transaction afterwards
-                // refuses at the unwitnessed cash boundary, so no state can
-                // ever advertise a third fixture through this route.
+                // recorded-result refusal before the week transaction.
                 return Err("This fixture already has a result.".into());
             }
             // [confirmed:archaeology 3d41a0db T89] The advertised following
             // fixture IS the witnessed Sevilla friendly; validate has already
             // pinned the complete week-one context (cash 421,491, the Sevilla
-            // fixture whole). Any other week-1 fixture cannot validate, and a
-            // week-2/Celtic state is unwitnessed at its cash movement, so no
-            // match request can ever reach this branch for it.
+            // fixture whole). Week 2 is refused above before a worker starts.
             return Ok(Profile::Sevilla);
         }
         return Err("This fixture already has a result.".into());
