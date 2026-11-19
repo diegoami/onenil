@@ -1,0 +1,10 @@
+{
+ "schema": "sevilla-admission-fail-before/1",
+ "base_commit": "0f725f3",
+ "issue": 202,
+ "campaign_command": "CARGO_BUILD_JOBS=4 cargo test --manifest-path campaign/Cargo.toml --locked --test sevilla_admission",
+ "campaign_result": "1 failed, 1 passed: edited lineup receives a ticket; unchanged/reverted/reordered state admits",
+ "desktop_command": "CARGO_BUILD_JOBS=4 cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --test sevilla_admission",
+ "desktop_result": "4 failed, 1 passed: profile and LiveWitnessed admit edits; controller enters Preparing; worker launch reaches executable lookup instead of refusing setup",
+ "scope": "Native synthetic inputs only; no original capture or record changes; separate fix worktree, one Rust build at a time with four jobs."
+}

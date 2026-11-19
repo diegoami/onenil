@@ -33,6 +33,10 @@ pub fn profile(campaign: &Campaign) -> Result<Profile, String> {
             // fixture IS the witnessed Sevilla friendly; validate has already
             // pinned the complete week-one context (cash 421,491, the Sevilla
             // fixture whole). Week 2 is refused above before a worker starts.
+            // [designed:T94; #202] Share ticket admission's unchanged-setup
+            // gate before any witnessed playback or child process is created.
+            // Keep the recorded-result and Celtic refusals above unchanged.
+            campaign.match_ticket()?;
             return Ok(Profile::Sevilla);
         }
         return Err("This fixture already has a result.".into());

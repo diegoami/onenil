@@ -153,6 +153,30 @@ impl PlayedFixture {
 }
 
 impl Campaign {
+    /// [designed:T94; #202] The witnessed presentation supports the unchanged
+    /// native setup only. This does not equate native pre-match conditions
+    /// with the original's preparation image. History/revision and player
+    /// storage order are not setup inputs; undoing edits restores admission.
+    fn validate_sevilla_setup(&self) -> Result<(), String> {
+        let source = Self::initial()?;
+        if self.club != source.club
+            || self.players.len() != source.players.len()
+            || self.players.iter().any(|player| {
+                source
+                    .players
+                    .iter()
+                    .find(|original| original.id == player.id)
+                    != Some(player)
+            })
+        {
+            return Err(
+                "Sevilla needs the unchanged team. Undo edits or reload your pre-Sevilla save."
+                    .into(),
+            );
+        }
+        Ok(())
+    }
+
     pub fn match_ticket(&self) -> Result<MatchTicket, String> {
         self.validate()?;
         if self.week_index == 2 {
@@ -169,6 +193,7 @@ impl Campaign {
                 // fixture IS the witnessed Sevilla friendly; its request admits
                 // and binds the prepared match's own context. Any other week-1
                 // fixture keeps the honest unwitnessed boundary.
+                self.validate_sevilla_setup()?;
                 return Ok(MatchTicket {
                     campaign: self.clone(),
                     digest: format!("{:x}", Sha256::digest(self.encode()?)),
