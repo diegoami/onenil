@@ -144,3 +144,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T90 Refuse the following fixture's match at an honest unwitnessed boundary](T90.md)
 
 - [T91 Admit the authenticated Sevilla friendly as the second playable match](T91.md)
+
+- [T92 Vendored pinned font — the raster gate stops fetching from the vendor](T92.md)
