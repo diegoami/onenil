@@ -262,26 +262,50 @@ impl Renderer {
     fn cash_flow(&mut self, c: &Controller) {
         self.pixels.fill(GROUND);
         self.text(2, 1, "CASH FLOW FOR Blackburn R----", CYAN, GROUND, 60);
+        let receipt = crate::week::WeekReceipt::for_campaign(&c.editor.campaign);
+        let cash = receipt.cash;
         if c.editor.campaign.second_fixture.is_some() {
-            // [designed:T91] The Sevilla week's cash route is unwitnessed: the
-            // capture ends at the caller, so the week-one receipt's movement
-            // must not render here. The screen names the boundary instead.
-            self.text(4, 6, "The second week's cash movement is", TEXT, GROUND, 20);
-            self.text(
-                4,
-                8,
-                "unwitnessed; the Sevilla week's full-time",
-                TEXT,
-                GROUND,
-                20,
-            );
-            self.text(4, 10, "cash/news route has no accepted", TEXT, GROUND, 20);
-            self.text(4, 12, "original evidence.", TEXT, GROUND, 20);
-            self.text(2, 24, "Space: management menu", TEXT, GROUND, 76);
+            // [confirmed:archaeology 788b833 T93, CASH FLOW stage] All of this
+            // week's categories, including zeros; totals are receipt values.
+            self.text(4, 3, "Cash in", CYAN, GROUND, 30);
+            self.text(42, 3, "Cash out", CYAN, GROUND, 30);
+            let incoming = [
+                ("Gate receipts", cash.gate_receipts),
+                ("Prize money", cash.prize_money),
+                ("TV coverage", cash.tv_coverage),
+                ("Radio coverage", cash.radio_coverage),
+                ("Players sold", cash.players_sold),
+                ("Sponsorship", cash.sponsorship),
+                ("Directors hand-out", cash.directors_handout),
+            ];
+            let outgoing = [
+                ("Player salaries", cash.player_salaries),
+                ("Win bonuses", cash.win_bonuses),
+                ("Staff salaries", cash.staff_salaries),
+                ("Ground maintenance", cash.ground_maintenance),
+                ("Players bought", cash.players_bought),
+                ("Contracts", cash.contracts),
+                ("Interest", cash.interest),
+                ("Sundries", cash.sundries),
+            ];
+            for (column, rows) in [(4, incoming.as_slice()), (42, outgoing.as_slice())] {
+                for (i, (label, value)) in rows.iter().enumerate() {
+                    self.text(column, 5 + i, label, TEXT, GROUND, 22);
+                    self.text(column + 24, 5 + i, &Self::grouped(*value), TEXT, GROUND, 10);
+                }
+            }
+            for (x, y, label, value) in [
+                (4, 14, "TOTAL IN", cash.total_in),
+                (42, 14, "TOTAL OUT", cash.total_out),
+                (4, 17, "Club funds", cash.after),
+                (42, 17, "Overdraft facility", cash.overdraft_facility),
+            ] {
+                self.text(x, y, label, CYAN, GROUND, 22);
+                self.text(x + 24, y, &Self::grouped(value), TEXT, GROUND, 10);
+            }
+            self.text(2, 21, "Space: transfer news", TEXT, GROUND, 76);
             return;
         }
-        let receipt = crate::week::WeekReceipt::pinned();
-        let cash = receipt.cash;
         self.text(4, 3, "Cash in", CYAN, GROUND, 20);
         self.text(6, 4, "Gate receipts", TEXT, GROUND, 30);
         self.text(38, 4, &Self::grouped(cash.gate_receipts), TEXT, GROUND, 12);
@@ -353,16 +377,7 @@ impl Renderer {
     fn transfer_news(&mut self, c: &Controller) {
         self.pixels.fill(GROUND);
         self.text(2, 1, "TRANSFER NEWS", CYAN, GROUND, 60);
-        if c.editor.campaign.second_fixture.is_some() {
-            // [designed:T91] Unwitnessed week: no receipt rows render. The
-            // Space key still reaches the management menu, where the week
-            // transaction refuses naming the same boundary.
-            self.text(4, 6, "No witnessed transfer news for the", TEXT, GROUND, 20);
-            self.text(4, 8, "Sevilla week.", TEXT, GROUND, 20);
-            self.text(2, 24, "Space: management menu", TEXT, GROUND, 76);
-            return;
-        }
-        let receipt = crate::week::WeekReceipt::pinned();
+        let receipt = crate::week::WeekReceipt::for_campaign(&c.editor.campaign);
         self.text(4, 4, "PLAYER", CYAN, GROUND, 16);
         self.text(22, 4, "FROM", CYAN, GROUND, 16);
         self.text(40, 4, "TO", CYAN, GROUND, 16);
@@ -1045,8 +1060,12 @@ impl Renderer {
                 // stage shows Aragones, "Friendly #2" and away (runs/T81 session
                 // r0007; records/T82 menu_markers) — where the static sheet still
                 // carries the played opponent's manager, competition and venue.
-                if c.editor.campaign.week_index == 1 {
-                    let receipt = crate::week::WeekReceipt::pinned();
+                if c.editor.campaign.week_index >= 1 {
+                    let receipt = if c.editor.campaign.week_index == 2 {
+                        crate::week::WeekReceipt::for_campaign(&c.editor.campaign)
+                    } else {
+                        crate::week::WeekReceipt::pinned()
+                    };
                     self.text(2, 14, &receipt.following_fixture.manager, TEXT, GROUND, 16);
                     self.text(
                         1,

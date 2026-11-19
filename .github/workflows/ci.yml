@@ -46,6 +46,18 @@ jobs:
           ref: 3d41a0dbf6b0a5ccd5cb7fe2d0076f5bce1ab58e
           path: .cache/sevilla-source
           persist-credentials: false
+      - name: Fetch the witnessed Sevilla week
+        uses: actions/checkout@v4
+        with:
+          repository: diegoami/onenil-archaeology
+          ref: 788b8332db4a9aab8304f5d9abef80c091dde3ee
+          path: .cache/sevilla-week-source
+          persist-credentials: false
+      - name: Authenticate the witnessed Sevilla week receipt
+        run: |
+          python3 tools/sevilla_week_inputs.py --research-root .cache/sevilla-week-source --check
+          python3 tools/test_sevilla_week_inputs.py
+      - run: cargo test --manifest-path campaign/Cargo.toml --locked
       - name: Check the witnessed Sevilla reference assets
         run: |
           python3 tools/sevilla_reference_inputs.py --research-root .cache/sevilla-source --check
@@ -100,7 +112,7 @@ jobs:
           runpy.run_path('docs/desktop-fidelity/mockups/build.py')['font_bytes'](
               Path('.cache/T51-font/PxPlus_IBM_VGA_8x16.ttf'), fetch=True)
           PYFONT
-          ONENIL_DESKTOP_FONT="$PWD/.cache/T51-font/PxPlus_IBM_VGA_8x16.ttf" cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --features raster --lib --test history
+          ONENIL_DESKTOP_FONT="$PWD/.cache/T51-font/PxPlus_IBM_VGA_8x16.ttf" cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --features raster --lib --test history --test sevilla_week_route
       - run: python3 desktop/faithful/check_numbered_pitch_records.py records/T72/window-r0001.json
       - run: python3 desktop/faithful/check_numbered_pitch_records.py records/T72/window-r0002.json
       - run: python3 desktop/faithful/check_history_records.py records/T73/window-r0001.json

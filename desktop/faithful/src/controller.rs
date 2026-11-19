@@ -387,8 +387,8 @@ impl Controller {
             club, score[0], score[1], opponent
         ))
         .map(|text| {
-            if week >= 1 {
-                format!("{text} The week's cash movement is unwitnessed.")
+            if week >= 1 && self.editor.campaign.week_index < 2 {
+                format!("{text} Continue through cash flow and transfer news.")
             } else {
                 text
             }
@@ -856,7 +856,7 @@ impl Controller {
             },
             Screen::TransferNews => match key {
                 Key::Space => {
-                    let receipt = crate::week::WeekReceipt::pinned();
+                    let receipt = crate::week::WeekReceipt::for_campaign(&self.editor.campaign);
                     let result = self.editor.campaign.record_week_completion(
                         receipt.cash.total_in,
                         receipt.cash.total_out,
@@ -868,6 +868,12 @@ impl Controller {
                     match result {
                         Ok(()) => {
                             self.screen = Screen::Main;
+                            // [confirmed:archaeology 788b833 T93] The original
+                            // saves at week end; the adapter writes the native
+                            // format through its existing atomic storage path.
+                            if self.editor.campaign.week_index == 2 {
+                                self.save_requested = true;
+                            }
                             self.message = format!(
                                 "Week {} complete. Next: {} ({}). F7 saves.",
                                 receipt.week.index_after,

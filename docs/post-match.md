@@ -198,16 +198,35 @@ restoration belongs to the research capture alone and appears nowhere native.
 The desktop plays the pinned evidence through the live witnessed session
 (half-time continues only - the route admits no replacement), and the result
 posts with the caller's own condition outcomes for the managed roster, which
-the campaign validates against its own digest-pinned record. The week
-transaction after the caller refuses: the second week's cash movement was not
-witnessed (the capture ends at the caller), so the campaign stays at week 1
-with Sevilla played. Edited-lineup and halftime variants of the Sevilla
-match, the week-2/Celtic fixture, PSG-value transplants in either direction
-and every other fixture remain refused.
+the campaign validates against its own digest-pinned record. [confirmed:archaeology 788b833 T93] The week transaction after this caller is
+now witnessed by `runs/T93/sevilla-week-r0003` and the independent restored
+`runs/T93/week-suffix-r0003`. Native T93 authenticates their finish records
+and the T89 preparation projection by pinned digests; the generated
+`campaign/fixtures/sevilla-week.json` holds the movement, all cash categories,
+five displayed transfer-news rows, complete following fixture, all 18
+post-caller conditions and the original week-end save's digest. Regenerate
+and verify with `python3 tools/sevilla_week_inputs.py --research-root
+../onenil-archaeology --check` and `python3 tools/test_sevilla_week_inputs.py`.
 
-[designed:remaining work] The witnessed Sevilla week's full-time cash/news
-route (the second week transaction), the campaign's weekly condition refresh
-and the week-2 fixture chain need their own archaeology captures before any
-native week progression beyond week 1. The Sevilla squad's player names are
-not witnessed in any committed record; the witnessed presentation renders
-those identities as their witnessed numbers.
+[confirmed:same records] Cash moves 421,491 -> 421,631 (in 69,410; out
+69,270). The original's week byte is already 2 at preparation, and its route
+keeps that value. Ten of 18 conditions change from preparation to the menu;
+none changes after the caller returns. [designed:T93] The native campaign
+commits management week 2 once, after its recorded Sevilla result, with that
+cash and the full Celtic advertisement (slot 3, opponent 28, competition 1,
+flags 0, away, opponent flags 1). The transaction preserves both results,
+lineup, instructions and conditions; no extra weekly refresh is applied.
+The receipt's transfer rows are displayed output, never executed transfers.
+The week-end route automatically saves through the native atomic JSON storage
+path; the original save bytes are never imported or used as a native format.
+A storage failure remains visible and F7 retries saving the completed state.
+Celtic's manager name is not decoded in this receipt, so the old opponent's
+manager is cleared rather than reused.
+
+[designed:remaining work] A match request at week 2 still refuses, explicitly
+naming Celtic's missing original match evidence; this holds across reload.
+Edited-lineup and halftime variants of Sevilla, generalized finance or
+transfer rules, later weeks and the Celtic match need their own evidence.
+T91's generated fixtures keep their historical scope text and source pins;
+T93's separate receipt extends only the week boundary. The native Sevilla
+presentation still renders opponent identities as their witnessed numbers.
