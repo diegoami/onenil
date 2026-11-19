@@ -169,7 +169,10 @@ impl Campaign {
                     != Some(player)
             })
         {
-            return Err("Sevilla needs the unchanged team. Undo edits or reload your pre-Sevilla save.".into());
+            return Err(
+                "Sevilla needs the unchanged team. Undo edits or reload your pre-Sevilla save."
+                    .into(),
+            );
         }
         Ok(())
     }
