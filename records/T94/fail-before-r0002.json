@@ -1,0 +1,8 @@
+{
+ "schema": "sevilla-admission-footer-fail-before/1",
+ "code_commit": "e3e134939e44492219ce012ab4454ccf291f6524",
+ "command": "CARGO_BUILD_JOBS=4 cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --test sevilla_admission",
+ "result": "1 failed, 4 passed: controller recovery guidance exceeds the renderer's 80-column footer and clips the reload instruction",
+ "source": "desktop/faithful/src/render.rs draws c.message at (0,24) with width 80",
+ "operation": "Focused native test only; no original capture or record edits."
+}

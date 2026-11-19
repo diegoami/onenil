@@ -169,7 +169,7 @@ impl Campaign {
                     != Some(player)
             })
         {
-            return Err("Sevilla supports only the unchanged team and player settings. Undo your changes or reload the unedited save from before Sevilla.".into());
+            return Err("Sevilla needs the unchanged team. Undo edits or reload your pre-Sevilla save.".into());
         }
         Ok(())
     }

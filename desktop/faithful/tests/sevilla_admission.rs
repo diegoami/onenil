@@ -63,6 +63,12 @@ fn real_preparation_refuses_before_a_worker_request_without_resetting_edits() {
             assert_eq!(controller.screen, Screen::Preparation, "edit {kind}");
             assert!(!controller.prepare_requested);
             assert!(controller.message.contains("Sevilla") && controller.message.contains("Undo"));
+            assert!(controller.message.contains("reload"));
+            assert!(
+                controller.message.chars().count() <= 80,
+                "recovery guidance is clipped by the 80-column footer: {}",
+                controller.message
+            );
             assert_eq!(controller.editor.campaign, c);
         }
     }
