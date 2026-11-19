@@ -175,7 +175,10 @@ fn edited_child_worker_computes_owned_result_and_native_save() {
     assert!(advanced.played_fixture.is_some());
     c.key(Key::Enter);
     c.key(Key::Enter);
-    assert_eq!(c.screen, Screen::Preparation);
-    assert!(!c.prepare_requested);
+    // [T91] The advanced week's advertised fixture is the witnessed Sevilla
+    // friendly: the preparation entry now requests the witnessed match and
+    // binds its own context, instead of the T90 unwitnessed refusal.
+    assert_eq!(c.screen, Screen::Preparing);
+    assert!(c.prepare_requested);
     assert_eq!(c.editor.campaign, advanced);
 }

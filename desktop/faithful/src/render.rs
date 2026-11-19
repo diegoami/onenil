@@ -262,6 +262,24 @@ impl Renderer {
     fn cash_flow(&mut self, c: &Controller) {
         self.pixels.fill(GROUND);
         self.text(2, 1, "CASH FLOW FOR Blackburn R----", CYAN, GROUND, 60);
+        if c.editor.campaign.second_fixture.is_some() {
+            // [designed:T91] The Sevilla week's cash route is unwitnessed: the
+            // capture ends at the caller, so the week-one receipt's movement
+            // must not render here. The screen names the boundary instead.
+            self.text(4, 6, "The second week's cash movement is", TEXT, GROUND, 20);
+            self.text(
+                4,
+                8,
+                "unwitnessed; the Sevilla week's full-time",
+                TEXT,
+                GROUND,
+                20,
+            );
+            self.text(4, 10, "cash/news route has no accepted", TEXT, GROUND, 20);
+            self.text(4, 12, "original evidence.", TEXT, GROUND, 20);
+            self.text(2, 24, "Space: management menu", TEXT, GROUND, 76);
+            return;
+        }
         let receipt = crate::week::WeekReceipt::pinned();
         let cash = receipt.cash;
         self.text(4, 3, "Cash in", CYAN, GROUND, 20);
@@ -335,6 +353,15 @@ impl Renderer {
     fn transfer_news(&mut self, c: &Controller) {
         self.pixels.fill(GROUND);
         self.text(2, 1, "TRANSFER NEWS", CYAN, GROUND, 60);
+        if c.editor.campaign.second_fixture.is_some() {
+            // [designed:T91] Unwitnessed week: no receipt rows render. The
+            // Space key still reaches the management menu, where the week
+            // transaction refuses naming the same boundary.
+            self.text(4, 6, "No witnessed transfer news for the", TEXT, GROUND, 20);
+            self.text(4, 8, "Sevilla week.", TEXT, GROUND, 20);
+            self.text(2, 24, "Space: management menu", TEXT, GROUND, 76);
+            return;
+        }
         let receipt = crate::week::WeekReceipt::pinned();
         self.text(4, 4, "PLAYER", CYAN, GROUND, 16);
         self.text(22, 4, "FROM", CYAN, GROUND, 16);

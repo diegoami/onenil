@@ -1,0 +1,42 @@
+{
+  "task": "T91",
+  "research_commit": "3d41a0dbf6b0a5ccd5cb7fe2d0076f5bce1ab58e",
+  "research_repo": "diegoami/onenil-archaeology",
+  "sources": {
+    "capture": {
+      "path": "runs/T89/sevilla-r0001",
+      "sha256_note": "the capture directory is digest-chained; the identity fixture pins index/start/finish and every chunk digest"
+    },
+    "boot_record": {
+      "path": "records/T89/boot-r0001.json",
+      "sha256": "4fee511149ba1e1b08a28e60c24b2408ecf16a07da1445cf378c8f44cda109ba"
+    },
+    "entry_record": {
+      "path": "records/T89/entry-r0001.json",
+      "note": "the digest-pinned post-week save f3aa2e4f… and the preparation savestate 98275eb5… are private; only their digests enter native assets"
+    }
+  },
+  "fixtures": {
+    "identity": {
+      "path": "engine/tests/fixtures/sevilla_watched/identity.json",
+      "sha256": "316583caaaa639cd037eb2026b142f7a510bf2fc922608ec7466bea04577316c",
+      "generator": "tools/sevilla_reference_inputs.py --check"
+    },
+    "presentation": {
+      "path": "engine/tests/fixtures/sevilla_watched/presentation-r0001.json",
+      "sha256": "939938d33d5b9cc4682cc285ead3c71270de6b2f438f159747bde59c30065053",
+      "note": "the compact witnessed playback fields only; the raw capture chunks never enter this repository"
+    },
+    "caller": {
+      "path": "engine/tests/fixtures/sevilla_post_match/sevilla-result-r0001.json",
+      "sha256": "b33901b1d30ceb2a7e9907982bdbe539172dabbec025bd113e313f47fccff509",
+      "note": "the sealed caller, condition and post-caller RNG record; research emulation bookkeeping (timer effects) is deliberately absent"
+    },
+    "campaign": {
+      "path": "campaign/fixtures/sevilla-post-match.json",
+      "sha256": "91fc66e730b3a6d382982d8258d528f88b174756c0257d386a18535631e9efe7",
+      "note": "the witnessed post-caller facts the campaign pins: the managed roster's caller condition outcomes and the witnessed score/return"
+    }
+  },
+  "scope": "The witnessed second match only: identity, presentation and caller records pin what the original did. No machine-state admission exists for this fixture; the native route replays the witnessed evidence and refuses everything else. No PSG value transplants in either direction; no native timer concept; the second week's cash movement stays unwitnessed."
+}

@@ -10,6 +10,24 @@ use sha2::{Digest, Sha256};
 pub struct MatchTicket {
     campaign: Campaign,
     digest: String,
+    /// [designed:T91] The witnessed route the ticket admits; the recording API
+    /// must match it, so a PSG result can never post into the Sevilla path or
+    /// vice versa.
+    pub(crate) kind: TicketKind,
+}
+impl MatchTicket {
+    /// [designed:T91] Whether this ticket admits the witnessed Sevilla route;
+    /// the recording API must match it.
+    pub fn is_sevilla(&self) -> bool {
+        self.kind == TicketKind::SevillaFriendly
+    }
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum TicketKind {
+    /// The week-0 fresh friendly (research T66/T88).
+    FirstFriendly,
+    /// The week-1 Sevilla friendly (archaeology T89, runs/T89/sevilla-r0001).
+    SevillaFriendly,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -31,6 +49,54 @@ pub struct PlayedFixture {
 pub const AUTHENTICATED_WEEK_TOTAL_IN: i32 = 38_761;
 pub const AUTHENTICATED_WEEK_TOTAL_OUT: i32 = 69_270;
 pub const WEEK_ONE_CASH: i32 = 421_491;
+
+/// [confirmed:archaeology 3d41a0db T89] The witnessed Sevilla friendly's own
+/// facts (runs/T89/sevilla-r0001): the witnessed result and the caller's own
+/// condition outcomes for the managed roster, digest-pinned from
+/// campaign/fixtures/sevilla-post-match.json. Weekly recovery remains
+/// unwitnessed and is not modeled; the week transaction after this caller
+/// refuses (the second week's cash movement was not witnessed).
+const SEVILLA_POST_MATCH_SHA: &str =
+    "91fc66e730b3a6d382982d8258d528f88b174756c0257d386a18535631e9efe7";
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct SevillaPostMatch {
+    schema: String,
+    #[allow(dead_code)]
+    research_commit: String,
+    #[allow(dead_code)]
+    caller_fixture_sha256: String,
+    managed_club: u16,
+    witnessed: SevillaWitnessed,
+    #[allow(dead_code)]
+    scope: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct SevillaWitnessed {
+    score: [u16; 2],
+    native_return: String,
+    conditions: Vec<SevillaCondition>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(deny_unknown_fields)]
+struct SevillaCondition {
+    player: u16,
+    #[allow(dead_code)]
+    condition_before: i8,
+    condition_after: i8,
+}
+
+fn sevilla_post_match() -> Result<SevillaPostMatch, String> {
+    let raw = include_bytes!("../fixtures/sevilla-post-match.json");
+    if format!("{:x}", Sha256::digest(raw)) != SEVILLA_POST_MATCH_SHA {
+        return Err("witnessed Sevilla post-match identity differs".into());
+    }
+    serde_json::from_slice(raw).map_err(|e| e.to_string())
+}
 
 impl PlayedFixture {
     pub(crate) fn validate(&self, campaign: &Campaign) -> Result<(), String> {
@@ -54,6 +120,37 @@ impl PlayedFixture {
         }
         Ok(())
     }
+    /// [designed:T91] The witnessed Sevilla result binds the authenticated
+    /// week-one context itself: the fixture is the week-one fixture, the week
+    /// index stays 1 (the week transaction after the caller refuses), and the
+    /// request digest is a valid native identity.
+    pub(crate) fn validate_second(&self, campaign: &Campaign) -> Result<(), String> {
+        let source = Campaign::initial()?;
+        let week_one_fixture = Fixture {
+            slot: 2,
+            club: source.club.id,
+            opponent: 176,
+            opponent_name: "Sevilla".to_owned(),
+            competition_code: 1,
+            flags: 0,
+            venue_code: 0,
+            opponent_flags: 0,
+        };
+        if self.fixture != week_one_fixture
+            || self.season != source.season
+            || self.week_index != 1
+            || self.request_revision >= campaign.revision
+            || self.request_sha256.len() != 64
+            || !self
+                .request_sha256
+                .bytes()
+                .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
+            || self.native_return != "0AB9:EBE2"
+        {
+            return Err("recorded result has a foreign or invalid fixture/request context".into());
+        }
+        Ok(())
+    }
 }
 
 impl Campaign {
@@ -61,12 +158,20 @@ impl Campaign {
         self.validate()?;
         if self.played_fixture.is_some() {
             if self.week_index >= 1 {
-                // [confirmed:archaeology #196/T82 c13195a] The advertised
-                // following fixture has no authenticated original match
-                // evidence - no accepted reference capture exists for it - so
-                // a native run would be unwitnessed. Name that boundary
-                // instead of the stale recorded-result text.
-                return Err("the following fixture has no authenticated original match evidence; playing it is unwitnessed".into());
+                if self.second_fixture.is_some() {
+                    // [T91] The completed fixture replays nothing: the accurate
+                    // recorded-result refusal names the state, not a gap.
+                    return Err("this fixture already has a recorded result".into());
+                }
+                // [confirmed:archaeology 3d41a0db T89] The advertised following
+                // fixture IS the witnessed Sevilla friendly; its request admits
+                // and binds the prepared match's own context. Any other week-1
+                // fixture keeps the honest unwitnessed boundary.
+                return Ok(MatchTicket {
+                    campaign: self.clone(),
+                    digest: format!("{:x}", Sha256::digest(self.encode()?)),
+                    kind: TicketKind::SevillaFriendly,
+                });
             }
             return Err("this fixture already has a recorded result".into());
         }
@@ -74,6 +179,7 @@ impl Campaign {
         Ok(MatchTicket {
             campaign: self.clone(),
             digest,
+            kind: TicketKind::FirstFriendly,
         })
     }
 
@@ -86,6 +192,76 @@ impl Campaign {
         native_return: &str,
     ) -> Result<(), String> {
         self.record_match_inner(ticket, score, native_return, None)
+    }
+
+    /// [confirmed:archaeology 3d41a0db T89] The witnessed Sevilla friendly's
+    /// result posts through the caller's own facts: the witnessed score and the
+    /// caller's condition outcomes for the managed roster. The values must be
+    /// exactly the witnessed ones - no PSG value transplants into the Sevilla
+    /// path - and the week transaction afterwards stays unwitnessed and refuses.
+    /// The recorded week-0 result and the updated conditions persist together.
+    pub fn record_sevilla_result(
+        &mut self,
+        ticket: &MatchTicket,
+        score: [u16; 2],
+        native_return: &str,
+        conditions: &[(u16, i8)],
+    ) -> Result<(), String> {
+        if ticket.kind != TicketKind::SevillaFriendly {
+            return Err("match completion is stale, foreign or unfinished".into());
+        }
+        let witnessed = sevilla_post_match()?;
+        if witnessed.witnessed.score != score || witnessed.witnessed.native_return != native_return
+        {
+            return Err("the witnessed Sevilla result differs".into());
+        }
+        let expected: Vec<(u16, i8)> = witnessed
+            .witnessed
+            .conditions
+            .iter()
+            .map(|condition| (condition.player, condition.condition_after))
+            .collect();
+        let mut supplied = conditions.to_vec();
+        supplied.sort_unstable();
+        let mut expected_sorted = expected.clone();
+        expected_sorted.sort_unstable();
+        if supplied != expected_sorted {
+            return Err("the witnessed Sevilla condition outcomes differ".into());
+        }
+        self.validate()?;
+        if self.second_fixture.is_some() {
+            return Err("this fixture already has a recorded result".into());
+        }
+        if self != &ticket.campaign || native_return != "0AB9:EBE2" {
+            return Err("match completion is stale, foreign or unfinished".into());
+        }
+        let mut conditions_by_player = conditions.to_vec();
+        conditions_by_player.sort_unstable_by_key(|&(player, _)| player);
+        self.transaction(|next| {
+            next.second_fixture = Some(PlayedFixture {
+                fixture: ticket.campaign.next_fixture.clone(),
+                season: ticket.campaign.season.clone(),
+                week_index: ticket.campaign.week_index,
+                request_revision: ticket.campaign.revision,
+                request_sha256: ticket.digest.clone(),
+                score,
+                native_return: native_return.into(),
+            });
+            // [designed:T91] The caller's witnessed outcomes are authoritative
+            // for the managed roster: the native campaign's own pre-caller
+            // conditions are its week-0 state, and the original's weekly
+            // recovery between the two matches is unwitnessed. Nothing here
+            // models it; the witnessed outcomes apply exactly.
+            for (player, condition) in conditions_by_player.iter() {
+                let row = next
+                    .players
+                    .iter_mut()
+                    .find(|row| row.id == *player)
+                    .ok_or("witnessed condition names a foreign player")?;
+                row.availability.condition_signed = *condition;
+            }
+            Ok(())
+        })
     }
 
     /// [confirmed:research T81 dc54fe9/T82 c13195a] The observed friendly week's
@@ -110,7 +286,16 @@ impl Campaign {
             .as_ref()
             .ok_or("the friendly result must be recorded before the week completes")?;
         if self.week_index != 0 {
-            return Err("this campaign has already completed its first week".into());
+            // [confirmed:T91 freeze; archaeology 3d41a0db T89] The capture ends
+            // at the caller: the second week's cash movement was not witnessed
+            // (the week-1 values 38,761/69,270 are week-specific and do not
+            // transfer). The campaign stays at week 1 with Sevilla played until
+            // a future archaeology capture witnesses the Sevilla week's
+            // full-time cash/news route.
+            return Err(
+                "the second week's cash movement is unwitnessed; the Sevilla week's full-time cash/news route has no accepted original evidence"
+                    .into(),
+            );
         }
         // [review #176 F1] The week's movement and following fixture are the
         // authenticated research values (T81 dc54fe9, T82 c13195a): any other

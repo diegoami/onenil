@@ -70,40 +70,105 @@ fn the_week_one_context_binds_the_authenticated_cash_and_full_fixture() {
 }
 
 #[test]
-fn the_following_fixture_refuses_at_the_honest_unwitnessed_boundary() {
-    // [T90; archaeology #196/T82 c13195a] After the authenticated week
-    // completes, the advertised Sevilla fixture is exposed from campaign
-    // state, but its match has no accepted original reference capture:
-    // requesting it names that boundary, not the stale recorded-result text.
+fn the_witnessed_sevilla_fixture_admits_and_the_week_stays_unwitnessed() {
+    // [T91; archaeology 3d41a0db T89, runs/T89/sevilla-r0001] The advertised
+    // following fixture IS the witnessed Sevilla friendly: the request admits
+    // and binds the prepared match's own context, the caller's witnessed facts
+    // record exactly once, the replay attempt refuses accurately, and the week
+    // transaction afterwards refuses naming the unwitnessed second-week cash
+    // movement. No PSG value transplants into the Sevilla path or vice versa.
     let mut c = Campaign::initial().unwrap();
     let ticket = c.match_ticket().unwrap();
     c.record_match(&ticket, [1, 4], "0AB9:EBE2").unwrap();
-    // Before the week completes, re-requesting the played fixture keeps the
-    // accurate recorded-result refusal.
+    c.record_week_completion(38_761, 69_270, 1, 176, 0, "Sevilla")
+        .unwrap();
+    let witnessed: serde_json::Value = serde_json::from_str::<serde_json::Value>(include_str!(
+        "../fixtures/sevilla-post-match.json"
+    ))
+    .unwrap();
+    let conditions: Vec<(u16, i8)> = witnessed["witnessed"]["conditions"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|row| {
+            (
+                row["player"].as_u64().unwrap() as u16,
+                row["condition_after"].as_i64().unwrap() as i8,
+            )
+        })
+        .collect();
+    // The witnessed request admits.
+    let ticket = c.match_ticket().unwrap();
+    // A PSG-score transplant refuses before anything records.
+    assert!(c
+        .record_sevilla_result(&ticket, [1, 4], "0AB9:EBE2", &conditions)
+        .is_err());
+    // Foreign condition outcomes refuse: the PSG-era wholesale values and a
+    // single-byte tamper both.
+    let psg: Vec<(u16, i8)> = c
+        .players
+        .iter()
+        .map(|p| (p.id, p.availability.condition_signed))
+        .collect();
+    assert!(c
+        .record_sevilla_result(&ticket, [1, 1], "0AB9:EBE2", &psg)
+        .is_err());
+    let mut tampered = conditions.clone();
+    tampered[3].1 ^= 1;
+    assert!(c
+        .record_sevilla_result(&ticket, [1, 1], "0AB9:EBE2", &tampered)
+        .is_err());
+    assert!(c.second_fixture.is_none());
+    // The witnessed posting records exactly once, result and conditions.
+    c.record_sevilla_result(&ticket, [1, 1], "0AB9:EBE2", &conditions)
+        .unwrap();
+    let recorded = c.clone();
+    let second = recorded.second_fixture.as_ref().unwrap();
+    assert_eq!(second.score, [1, 1]);
+    assert_eq!(second.week_index, 1);
+    assert_eq!(second.native_return, "0AB9:EBE2");
+    for row in &recorded.players {
+        let witnessed_row = witnessed["witnessed"]["conditions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|witnessed| witnessed["player"] == row.id)
+            .unwrap();
+        assert_eq!(
+            row.availability.condition_signed,
+            witnessed_row["condition_after"]
+        );
+    }
+    // The replay attempt of the completed fixture refuses accurately, and the
+    // week transaction names the unwitnessed second-week cash movement.
     assert_eq!(
         c.match_ticket().err().unwrap(),
         "this fixture already has a recorded result"
     );
-    c.record_week_completion(38_761, 69_270, 1, 176, 0, "Sevilla")
-        .unwrap();
     assert_eq!(
-        c.match_ticket().err().unwrap(),
-        "the following fixture has no authenticated original match evidence; playing it is unwitnessed"
+        c.record_week_completion(38_761, 69_270, 1, 28, 0, "Celtic")
+            .err()
+            .unwrap(),
+        "the second week's cash movement is unwitnessed; the Sevilla week's full-time cash/news route has no accepted original evidence"
     );
-    // The boundary persists across a save/reload round trip, together with
-    // the whole advanced state.
+    assert_eq!(c, recorded);
+    // The post-caller state saves and reloads identically.
     let image = serde_json::to_vec(&c).unwrap();
     let mut reloaded = Campaign::initial().unwrap();
     reloaded.replace_from_bytes(&image).unwrap();
     assert_eq!(reloaded, c);
     assert_eq!(
         reloaded.match_ticket().err().unwrap(),
-        "the following fixture has no authenticated original match evidence; playing it is unwitnessed"
+        "this fixture already has a recorded result"
     );
-    // A second week completion still refuses, leaving the state untouched.
-    let before = reloaded.clone();
-    assert!(reloaded
-        .record_week_completion(38_761, 69_270, 1, 176, 0, "Sevilla")
-        .is_err());
-    assert_eq!(reloaded, before);
+    // A doctored week-two/Celtic state stays outside the supported saved
+    // context: the second week's movement is unwitnessed, so no native route
+    // can produce or admit it.
+    let mut celtic = recorded.clone();
+    celtic.week_index = 2;
+    celtic.next_fixture.opponent = 28;
+    celtic.next_fixture.opponent_name = "Celtic".into();
+    celtic.next_fixture.slot = 3;
+    assert!(celtic.validate().is_err());
+    assert!(celtic.match_ticket().is_err());
 }

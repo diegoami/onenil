@@ -90,6 +90,11 @@ pub struct Campaign {
     pub cash: i32,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub played_fixture: Option<PlayedFixture>,
+    /// [designed:T91] The witnessed Sevilla friendly's recorded result, bound
+    /// to the week-one context; the week transaction after it refuses, so the
+    /// campaign stays at week 1 with Sevilla played.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub second_fixture: Option<PlayedFixture>,
     pub next_fixture: Fixture,
     pub players: Vec<Player>,
 }
@@ -166,6 +171,7 @@ impl Campaign {
             cash: s.cash,
             next_fixture: s.next_fixture,
             played_fixture: None,
+            second_fixture: None,
             players: s.players,
         };
         c.validate()?;
@@ -214,6 +220,16 @@ impl Campaign {
         }
         if let Some(result) = &self.played_fixture {
             result.validate(self)?;
+        }
+        if let Some(second) = &self.second_fixture {
+            // [T91] The witnessed Sevilla result exists only in the week-one
+            // context; the week transaction after it refuses, so week stays 1.
+            if self.week_index != 1 {
+                return Err(
+                    "recorded result has a foreign or invalid fixture/request context".into(),
+                );
+            }
+            second.validate_second(self)?;
         }
         let expected: BTreeSet<_> = source.players.iter().map(|p| p.id).collect();
         let roster: Vec<_> = self

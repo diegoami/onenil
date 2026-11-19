@@ -1,7 +1,7 @@
 //! [designed:T76] Bounded local transport for one retained native campaign image.
 use crate::{
     campaign_match,
-    timeline::{Completion, IntervalTimeline, LiveCampaign},
+    timeline::{Completion, IntervalTimeline, LiveCampaign, LiveWitnessed},
 };
 use onenil_campaign::Campaign;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
@@ -124,8 +124,24 @@ pub fn run(id: u64) -> Result<(), String> {
         let campaign =
             Campaign::decode(&serde_json::to_vec(&start.campaign).map_err(|e| e.to_string())?)?;
         binding = identity(&campaign)?;
-        let mut session = LiveCampaign::new(&campaign)?;
-        let prefix = session.pause()?;
+        // [designed:T91] The witnessed Sevilla route presents the pinned
+        // evidence; every other admitted profile computes on the owned engine
+        // image as before.
+        let witnessed =
+            crate::campaign_match::profile(&campaign)? == crate::campaign_match::Profile::Sevilla;
+        enum OwnedSession {
+            Computed(LiveCampaign),
+            Witnessed(LiveWitnessed),
+        }
+        let mut session = if witnessed {
+            OwnedSession::Witnessed(LiveWitnessed::new(&campaign)?)
+        } else {
+            OwnedSession::Computed(LiveCampaign::new(&campaign)?)
+        };
+        let prefix = match &mut session {
+            OwnedSession::Computed(live) => live.pause()?,
+            OwnedSession::Witnessed(witnessed) => witnessed.pause()?,
+        };
         write_frame(
             &mut writer,
             &Packet {
@@ -150,7 +166,11 @@ pub fn run(id: u64) -> Result<(), String> {
         // Parent closes the command pipe after one decision. Refuse queued extras
         // before consuming the engine, rather than executing one and ignoring more.
         require_eof(&mut reader)?;
-        let complete = session.finish(choice.decision == Decision::ReplaceVerified)?;
+        let replace = choice.decision == Decision::ReplaceVerified;
+        let complete = match &mut session {
+            OwnedSession::Computed(live) => live.finish(replace)?,
+            OwnedSession::Witnessed(witnessed) => witnessed.finish(replace)?,
+        };
         write_frame(
             &mut writer,
             &Packet {

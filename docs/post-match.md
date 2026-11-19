@@ -167,7 +167,47 @@ weekly enabling remain unwitnessed and refuse.
 
 [designed:remaining work] The witnessed fresh-friendly continuation above is
 still not desktop/week integration: the desktop and campaign code do not call
-this transition, and the witnessed halftime replacement and edited-lineup
-routes need their own source coverage before any player updates are enabled
-there. Atomic campaign save/reload and exactly-once week integration remain
-subsequent gates.
+that transition (the fresh friendly's post-match caller continues only in
+engine tests; the desktop's week-0 route records the computed result without
+it), and the witnessed halftime replacement and edited-lineup routes need
+their own source coverage before any player updates are enabled there. The
+witnessed Sevilla route below is the first desktop caller of the post-match
+machinery.
+
+[designed:T91 witnessed Sevilla route] research T89 (archaeology 3d41a0db)
+captured the full natural Sevilla friendly - the second match of the campaign
+chain - from the digest-pinned post-week save: 3927 ticks, 169996 draws, 855
+actions, Blackburn 1-1 Sevilla, plus the original's own post-match caller
+under the sealed observer (2275 reads, 409 writes, 431 initial fields, 36
+condition calls in 2 contexts, preservation 169 changed bytes zero
+unexpected). The capture recorded no machine-state admission for this fixture,
+so the native route presents the witnessed evidence instead of re-simulating
+it: the pinned identity (counts, boundaries, clubs, caller census) and the
+compact witnessed presentation (the playback fields only; the raw capture
+chunks never enter this repository) carry the match, and the sealed caller
+replays from its recorded initial fields through the compiled E679->EBE6
+closure under `Route::Sevilla` - the witnessed friendly selector pair
+(statistics flag clear, competition 1) now covers both friendly routes, and
+the witnessed 1/1 result bytes are accepted only on this recorded-fields
+route. The replay reproduces every recorded final field, all409 ordered
+writes, the107-draw RNG ledger and all12 returned registers; the only
+synthesized cells are the record's own machine declaration (pool-pointer
+headers from the declared region bases, the managed-club cell, one club byte
+completing a uniformly witnessed field), never match state. The emulated PIT
+restoration belongs to the research capture alone and appears nowhere native.
+The desktop plays the pinned evidence through the live witnessed session
+(half-time continues only - the route admits no replacement), and the result
+posts with the caller's own condition outcomes for the managed roster, which
+the campaign validates against its own digest-pinned record. The week
+transaction after the caller refuses: the second week's cash movement was not
+witnessed (the capture ends at the caller), so the campaign stays at week 1
+with Sevilla played. Edited-lineup and halftime variants of the Sevilla
+match, the week-2/Celtic fixture, PSG-value transplants in either direction
+and every other fixture remain refused.
+
+[designed:remaining work] The witnessed Sevilla week's full-time cash/news
+route (the second week transaction), the campaign's weekly condition refresh
+and the week-2 fixture chain need their own archaeology captures before any
+native week progression beyond week 1. The Sevilla squad's player names are
+not witnessed in any committed record; the witnessed presentation renders
+those identities as their witnessed numbers.

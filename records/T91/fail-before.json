@@ -1,0 +1,21 @@
+{
+  "task": "T91",
+  "record": "the observed failing states before the implementation landed, in order",
+  "red_states": [
+    {
+      "milestone": "frozen task",
+      "observed": "the native boundary refused the witnessed fixture: at the completed-week save (week 1, cash 421491, Sevilla next), campaign match_ticket returned 'the following fixture has no authenticated original match evidence; playing it is unwitnessed' (T90 c0546abb), and desktop campaign_match::profile returned 'The next fixture (Sevilla) has no authenticated original match evidence; playing it is unwitnessed.'",
+      "evidence": "campaign/tests/week_context.rs the_following_fixture_refuses_at_the_honest_unwitnessed_boundary, desktop/faithful/tests/result_workflow.rs, desktop/faithful/tests/week_route.rs"
+    },
+    {
+      "milestone": "reference assets pinned; caller replay red",
+      "observed": "the compiled E679->EBE6 closure could not run on the raw recorded fields: 'missing reached native data at 0000:0000 3087:D7C6' (the club_stats pool-pointer header the capture never read), then 'missing reached native data at 1B55:0E7E 3087:DCBA' (the managed-club cell), then 'missing reached native data at 1998:19F8 4AC3:6DE8' (player8[3516]+0, the club byte the witnessed siblings all carry), then 'unsupported post-match branch/frame selectors' (the witnessed friendly selector pair on the league route), then 'unsupported post-match competition/draw/club pair' (the witnessed 1/1 result bytes)",
+      "evidence": "engine/tests/sevilla_reference.rs and the module test, run before each corresponding admission landed"
+    },
+    {
+      "milestone": "admission green",
+      "observed": "after Route::Sevilla and the machine-declared completions, the replay reproduced every recorded final field, all 409 writes, the 107-draw ledger and the registers; the campaign admission test against the witnessed facts passed only after the witnessed posting existed"
+    }
+  ],
+  "note": "The witnessed route admits no initialization from expected match state: the synthesized cells are the record's own machine declaration (pool-pointer headers from the declared region bases; the managed-club cell 130 bound by the witnessed condition contexts; one club byte completing a uniformly witnessed field), and the parity checks pin the outcome against the sealed record."
+}
