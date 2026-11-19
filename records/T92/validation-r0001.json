@@ -1,0 +1,18 @@
+{
+  "task": "T92",
+  "branch": "task/T92-vendored-font",
+  "validates": {
+    "vendored_font": {
+      "path": "docs/desktop-fidelity/mockups/PxPlus_IBM_VGA_8x16.ttf",
+      "bytes": 70640,
+      "sha256": "c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f",
+      "provenance": "extracted from the int10h OldSchool PC Font Pack v2.2 (pack sha256 21b3c0a3…, member 'ttf - Px (pixel outline)/PxPlus_IBM_VGA_8x16.ttf'); license retained unchanged at docs/desktop-fidelity/mockups/FONT-LICENSE.TXT (CC BY-SA 4.0, VileR)"
+    },
+    "transport": "build.py font_bytes reads the tracked font, asserts FONT_SHA, materializes the cache path; the 20 MB vendor download machinery is removed; --fetch-font keeps its signature and no longer touches the network",
+    "tamper_refusal": "a one-byte-corrupted vendored font refuses with 'vendored replacement font checksum differs' (observed locally, then restored and re-verified)",
+    "materialization": "desktop/faithful/fetch_font.py materializes the cache copy with sha256 c99fb740… (observed locally)",
+    "original_file_check": "tools/check_originals.py: ok with the vendored font tracked",
+    "raster_assertions": "unchanged: FONT_SHA pin, the raster test assertions and the CI raster step invocation all hold"
+  },
+  "ci": "the checks job must pass on the exact head with no network font fetch before the pinned squash"
+}
