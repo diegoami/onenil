@@ -1,0 +1,11 @@
+{
+ "schema": "native-sevilla-week-fail-before/1",
+ "implementation_base": "29850535a684075a3c02e7ced1f86e5d58d39625",
+ "research_commit": "788b8332db4a9aab8304f5d9abef80c091dde3ee",
+ "checks": [
+  {"command": "python3 tools/test_sevilla_week_inputs.py", "exit": 1, "observed": "ModuleNotFoundError: No module named 'sevilla_week_inputs'"},
+  {"command": "CARGO_BUILD_JOBS=4 cargo test --manifest-path campaign/Cargo.toml --locked --test sevilla_week", "exit": 101, "observed": "1 failed, 1 passed; completes_once_preserves_conditions_and_refuses_celtic_after_reload refused: the second week's cash movement is unwitnessed"},
+  {"command": "CARGO_BUILD_JOBS=4 cargo test --manifest-path desktop/faithful/Cargo.toml --release --locked --test sevilla_week_route", "exit": 101, "observed": "1 failed; after Space on TransferNews, screen remains TransferNews instead of Main"}
+ ],
+ "operation": "One Rust build at a time, CARGO_BUILD_JOBS=4; process and memory check first, no capture running."
+}
