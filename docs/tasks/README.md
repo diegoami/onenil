@@ -148,3 +148,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T92 Vendored pinned font — the raster gate stops fetching from the vendor](T92.md)
 
 - [T93 Admit the witnessed Sevilla week transaction](T93.md) (#200).
+
+- [T94 Refuse unsupported edited Sevilla match requests](T94.md) (#202).
