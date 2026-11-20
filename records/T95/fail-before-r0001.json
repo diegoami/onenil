@@ -1,0 +1,17 @@
+{
+ "schema": "saved-history-fail-before/1",
+ "base_commit": "bca208f",
+ "issue": 204,
+ "command": "CARGO_BUILD_JOBS=4 cargo test --manifest-path campaign/Cargo.toml --locked --test saved_history",
+ "result": "1 passed; 5 failed",
+ "accepted_forgeries": [
+  "forged score: the witnessed Sevilla result changed from [1, 1] to [1, 4] loads and validates",
+  "edited condition: one of the 18 witnessed post-Sevilla conditions changed loads in week one",
+  "equal revisions: the first result's request_revision set equal to the second's loads",
+  "reversed revisions: the first result's request_revision set past the second's loads",
+  "missing first result: a week-one cash/fixture context with no recorded first result loads",
+  "missing week revision: the completed week-two revision lowered to second.request_revision + 1 loads"
+ ],
+ "legitimate_control": "the edited-history case passes before the fix: edits between the matches, undone before Sevilla, reload at week two; higher and gapped revisions stay legal",
+ "scope": "Native synthetic inputs only; no original capture, record or fixture byte changed; separate fix worktree, one Rust build at a time with four jobs."
+}

@@ -209,7 +209,11 @@ impl Campaign {
             && self.next_fixture == source.next_fixture;
         let week_one = self.week_index == 1
             && self.cash == crate::result::WEEK_ONE_CASH
-            && self.next_fixture == week_one_fixture;
+            && self.next_fixture == week_one_fixture
+            // [designed:T95; #204] The week-one cash/fixture state is only
+            // reachable through the week completion, which requires the recorded
+            // first result; a save without it is a state no API produced.
+            && self.played_fixture.is_some();
         // [confirmed:archaeology 788b833 T93] The complete week-2 projection.
         let receipt = crate::sevilla_week::SevillaWeek::pinned()?;
         let week_two = self.week_index == 2
@@ -241,6 +245,27 @@ impl Campaign {
                 );
             }
             second.validate_second(self)?;
+            // [designed:T95; #204] The recorded history chain, not just each
+            // entry: the second result follows the first, the week transaction's
+            // increment is present (week one holds the second result's own
+            // increment, week two one more for the completion), and the
+            // caller's witnessed conditions are unchanged. Edits before or
+            // between the matches raise the revisions legitimately, so these
+            // are lower bounds, never equalities.
+            let first = self
+                .played_fixture
+                .as_ref()
+                .ok_or("the second result has no preceding result")?;
+            if first.request_revision >= second.request_revision {
+                return Err("the recorded results are out of their original order".into());
+            }
+            let week_increment = if self.week_index == 2 { 2 } else { 1 };
+            if self.revision < second.request_revision.saturating_add(week_increment) {
+                return Err("the completed week's revision is missing".into());
+            }
+            if !crate::result::witnessed_conditions_match(self)? {
+                return Err("the witnessed Sevilla condition outcomes differ".into());
+            }
         }
         let expected: BTreeSet<_> = source.players.iter().map(|p| p.id).collect();
         let roster: Vec<_> = self
