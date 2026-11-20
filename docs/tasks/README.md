@@ -150,3 +150,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T93 Admit the witnessed Sevilla week transaction](T93.md) (#200).
 
 - [T94 Refuse unsupported edited Sevilla match requests](T94.md) (#202).
+
+- [T95 Reject forged saved campaign histories](T95.md) (#204).
