@@ -5,7 +5,7 @@
 //! league week's own cash movement and result. The native line admits exactly
 //! the seed's pre- and post-week states; the table stays in T104's model and
 //! the week transaction validates it through that model.
-use crate::{Club, Campaign, Origin, Source, Season};
+use crate::{result::TicketKind, Campaign, Club, MatchTicket, Origin, Season, Source};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
@@ -205,5 +205,70 @@ impl Campaign {
             return Err("campaign context outside the supported saved club/fixture".into());
         }
         self.validate_roster_and_players(source)
+    }
+
+    /// [confirmed:archaeology T102 472badb; T105 3a0f14d] The one witnessed
+    /// league week, atomically: the ticket admits the pre-week machine, the
+    /// score, return, cash movement and following fixture must be exactly the
+    /// witnessed values, the table must reproduce through the model, and one
+    /// transaction records the result and moves the cash. The live pointer was
+    /// already pre-advanced to Chelsea at preparation (T101), so the week stays
+    /// 54 and the next fixture stays the Chelsea row - T93's lesson: never
+    /// advance an already-advanced projection.
+    pub fn record_league_week(
+        &mut self,
+        ticket: &MatchTicket,
+        score: [u16; 2],
+        native_return: &str,
+        total_in: i32,
+        total_out: i32,
+        following_competition: u8,
+        following_opponent: u16,
+        following_flags: u8,
+        following_name: &str,
+    ) -> Result<(), String> {
+        if ticket.kind != TicketKind::LeagueFixture {
+            return Err("match completion is stale, foreign or unfinished".into());
+        }
+        let seed = LeagueSeed::pinned()?;
+        if seed.witnessed.score != score || native_return != LEAGUE_NATIVE_RETURN {
+            return Err("the witnessed league result differs".into());
+        }
+        if total_in != seed.cash.total_in || total_out != seed.cash.total_out {
+            return Err("the league week's authenticated movement differs".into());
+        }
+        let following = &seed.campaign.next_fixture;
+        if following.competition_code != following_competition
+            || following.opponent != following_opponent
+            || following.flags != following_flags
+            || following.opponent_name != following_name
+        {
+            return Err("the league week's following fixture differs".into());
+        }
+        league_table_reproduces()?;
+        self.validate()?;
+        if self.league_played.is_some() {
+            return Err("this fixture already has a recorded result".into());
+        }
+        if self != &ticket.campaign {
+            return Err("match completion is stale, foreign or unfinished".into());
+        }
+        self.transaction(|next| {
+            next.league_played = Some(LeaguePlayed {
+                prepared: seed.prepared_fixture.clone(),
+                season: ticket.campaign.season.clone(),
+                week_index: ticket.campaign.week_index,
+                request_revision: ticket.campaign.revision,
+                request_sha256: ticket.digest.clone(),
+                score,
+                native_return: native_return.into(),
+            });
+            next.cash = next
+                .cash
+                .checked_add(total_in)
+                .and_then(|v| v.checked_sub(total_out))
+                .ok_or("cash overflow")?;
+            Ok(())
+        })
     }
 }
