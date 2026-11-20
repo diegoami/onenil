@@ -154,3 +154,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T95 Reject forged saved campaign histories](T95.md) (#204).
 
 - [T104 The league table model and the two-point rule](T104.md) (#206).
+
+- [T107 A warning-free release build](T107.md) (#208).
