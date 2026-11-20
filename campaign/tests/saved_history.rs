@@ -153,10 +153,10 @@ fn legitimate_edited_histories_and_higher_revisions_still_load() {
     // A later edit raises the revision above the week transaction's increment and
     // an earlier edit gap stays legal: only the lower bound is bound.
     let mut raised = c.clone();
-    raised.set_position(raised.players[0].id, raised.players[0].current_position).unwrap();
-    if raised.revision == c.revision {
-        raised.set_instructions(raised.players[0].id, 0x02).unwrap();
-    }
+    let original = raised.players[0].individual_instructions;
+    raised
+        .set_instructions(raised.players[0].id, original ^ 0x02)
+        .unwrap();
     assert!(raised.revision > c.revision);
     assert!(raised.validate().is_ok());
     assert_eq!(Campaign::decode(&raised.encode().unwrap()).unwrap(), raised);

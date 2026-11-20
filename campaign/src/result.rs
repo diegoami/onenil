@@ -97,6 +97,32 @@ fn sevilla_post_match() -> Result<SevillaPostMatch, String> {
     serde_json::from_slice(raw).map_err(|e| e.to_string())
 }
 
+/// [confirmed:archaeology 788b833 T93; #204] The witnessed result's own facts.
+pub(crate) fn witnessed_sevilla_score() -> Result<[u16; 2], String> {
+    Ok(sevilla_post_match()?.witnessed.score)
+}
+
+/// [confirmed:archaeology 788b833 T93; #204] The caller's 18 witnessed post-match
+/// conditions, which the week route preserves unchanged. No native API edits a
+/// condition afterwards, so a campaign holding the recorded Sevilla result must
+/// carry exactly these outcomes.
+pub(crate) fn witnessed_conditions_match(campaign: &Campaign) -> Result<bool, String> {
+    let witnessed = sevilla_post_match()?;
+    Ok(
+        campaign.players.len() == witnessed.witnessed.conditions.len()
+            && campaign.players.iter().all(|player| {
+                witnessed
+                    .witnessed
+                    .conditions
+                    .iter()
+                    .find(|condition| condition.player == player.id)
+                    .is_some_and(|condition| {
+                        condition.condition_after == player.availability.condition_signed
+                    })
+            }),
+    )
+}
+
 impl PlayedFixture {
     pub(crate) fn validate(&self, campaign: &Campaign) -> Result<(), String> {
         // [designed:T80] The recorded result validates against the pinned source
@@ -121,8 +147,10 @@ impl PlayedFixture {
     }
     /// [designed:T91] The witnessed Sevilla result binds the authenticated
     /// week-one context itself: the fixture is the week-one fixture, the week
-    /// index in the history stays 1 after week completion, and the
-    /// request digest is a valid native identity.
+    /// index in the history stays 1 after week completion, the score is the
+    /// witnessed game, and the request digest is a valid native identity.
+    /// [designed:T95; #204] The score was previously unbound, so a forged save
+    /// could present and complete a week the original never played.
     pub(crate) fn validate_second(&self, campaign: &Campaign) -> Result<(), String> {
         let source = Campaign::initial()?;
         let week_one_fixture = Fixture {
@@ -138,6 +166,7 @@ impl PlayedFixture {
         if self.fixture != week_one_fixture
             || self.season != source.season
             || self.week_index != 1
+            || self.score != witnessed_sevilla_score()?
             || self.request_revision >= campaign.revision
             || self.request_sha256.len() != 64
             || !self
