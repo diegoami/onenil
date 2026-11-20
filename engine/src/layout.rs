@@ -19,6 +19,7 @@ pub(crate) const PITCH_PRESENT: usize = 0x42000;
 // [designed] Decoded background words used by original ball transport.
 pub(crate) const PITCH_BACKGROUND: usize = 0x45000;
 pub(crate) const PITCH_BACKGROUND_PRESENT: usize = 0x46000;
+#[cfg(test)] // [T107] used by the disjoint-pool test only
 pub(crate) const PITCH_CELLS: usize = 17 * 75;
 // [confirmed] Ratings4A37 and assignment4A37 share original DCC8.
 pub(crate) const STAFF: usize = CLUB_COUNTS;

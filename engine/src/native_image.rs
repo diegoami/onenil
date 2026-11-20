@@ -173,6 +173,7 @@ impl Image {
             present.resize(len, false);
         }
     }
+    #[cfg(test)] // [T107] exercised by the range test below
     pub(crate) fn copy_within(&mut self, source: Range<usize>, destination: usize) {
         self.bytes.copy_within(source.clone(), destination);
         if let Some(present) = &mut self.initialized {
