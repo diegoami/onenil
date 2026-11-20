@@ -1,23 +1,63 @@
 //! [confirmed] F39/c7637bd;compiled original35F8 numeric helper graph.
 //! [designed] Typed root facts and temporary Pascal frames;no runtime decoding.
 pub mod action;
+// [T107] Machine-translated graph pinned by record digests (T35-T83): its
+// unused `mut`, dead tail after an unported-instruction return and unused
+// sibling globs are generator artefacts, and rewriting them would invalidate
+// those records. The lints are allowed here, with this reason, instead.
+#[allow(unused_mut, unreachable_code, unused_imports)]
 mod action_graph;
+// [T107] Machine-translated graph pinned by record digests (T35-T83): its
+// unused `mut`, dead tail after an unported-instruction return and unused
+// sibling globs are generator artefacts, and rewriting them would invalidate
+// those records. The lints are allowed here, with this reason, instead.
+#[allow(unused_mut, unreachable_code, unused_imports)]
 mod adjustment;
 pub mod caller;
+// [T107] Machine-translated graph pinned by record digests (T35-T83): its
+// unused `mut`, dead tail after an unported-instruction return and unused
+// sibling globs are generator artefacts, and rewriting them would invalidate
+// those records. The lints are allowed here, with this reason, instead.
+#[allow(unused_mut, unreachable_code, unused_imports)]
 mod caller_graph;
 mod compiled;
 mod interval_graph;
 mod lineup_validation;
+// [T107] Machine-translated graph pinned by record digests (T35-T83): its
+// unused `mut`, dead tail after an unported-instruction return and unused
+// sibling globs are generator artefacts, and rewriting them would invalidate
+// those records. The lints are allowed here, with this reason, instead.
+#[allow(unused_mut, unreachable_code, unused_imports)]
 mod match_graph;
 // [designed:T82] Compile-check the closure before exposing a live-image entry.
 pub mod post_match;
 #[allow(dead_code)]
+// [T107] Machine-translated graph pinned by record digests (T35-T83): its
+// unused `mut`, dead tail after an unported-instruction return and unused
+// sibling globs are generator artefacts, and rewriting them would invalidate
+// those records. The lints are allowed here, with this reason, instead.
+#[allow(unused_mut, unreachable_code, unused_imports)]
 mod post_match_graph;
 pub mod prepared;
+// [T107] Machine-translated graph pinned by record digests (T35-T83): its
+// unused `mut`, dead tail after an unported-instruction return and unused
+// sibling globs are generator artefacts, and rewriting them would invalidate
+// those records. The lints are allowed here, with this reason, instead.
+#[allow(unused_mut, unreachable_code, unused_imports)]
 mod prepared_graph;
 mod projections;
+// [T107] Machine-translated graph pinned by record digests (T35-T83): its
+// unused `mut`, dead tail after an unported-instruction return and unused
+// sibling globs are generator artefacts, and rewriting them would invalidate
+// those records. The lints are allowed here, with this reason, instead.
+#[allow(unused_mut, unreachable_code, unused_imports)]
 mod selection;
 pub mod tick;
+// [T107] Machine-translated graph pinned by record digests (T35-T83): its
+// unused `mut`, dead tail after an unported-instruction return and unused
+// sibling globs are generator artefacts, and rewriting them would invalidate
+// those records. The lints are allowed here, with this reason, instead.
+#[allow(unused_mut, unreachable_code, unused_imports)]
 mod tick_graph;
 pub mod watched_match;
 use crate::{terminal::Scene, Draw};

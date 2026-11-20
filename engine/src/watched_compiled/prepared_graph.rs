@@ -1,11 +1,9 @@
 //! [confirmed] Mechanically compiled numeric control flow;F39/c7637bd,static d9e20a4.
 //! [designed] Direct Rust calls/blocks;no runtime decoder or original executable.
 use super::action_graph::*;
-#[allow(unused_imports)] // generated module glob
 use super::caller_graph::*;
 use super::compiled::Cpu;
 use super::match_graph::*;
-#[allow(unused_imports)] // generated module glob
 use super::tick_graph::*;
 pub(super) fn p_0ab9_7d86(c: &mut Cpu) -> Result<(), String> {
     let mut label = 32134u16;

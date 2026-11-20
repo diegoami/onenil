@@ -2,7 +2,6 @@
 //! [designed] Direct Rust calls/blocks;no runtime decoder or original executable.
 use super::action_graph::*;
 use super::compiled::Cpu;
-#[allow(unused_imports)] // generated module glob
 use super::tick_graph::*;
 pub(super) fn p_0ab9_00d6(c: &mut Cpu) -> Result<(), String> {
     super::projections::clock_display(c)

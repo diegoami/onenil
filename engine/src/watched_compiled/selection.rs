@@ -4483,7 +4483,7 @@ pub(super) fn p_0ab9_3846(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_0ab9_9f6e(c: &mut Cpu) -> Result<(), String> {
-    let label = 40814u16;
+    let mut label = 40814u16;
     loop {
         match label {
             40814 => {
@@ -4971,7 +4971,7 @@ pub(super) fn p_232a_076d(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_24bc_0259(c: &mut Cpu) -> Result<(), String> {
-    let label = 601u16;
+    let mut label = 601u16;
     loop {
         match label {
             601 => {
@@ -5033,7 +5033,7 @@ pub(super) fn p_24bc_0259(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_24bc_0cdc(c: &mut Cpu) -> Result<(), String> {
-    let label = 3292u16;
+    let mut label = 3292u16;
     loop {
         match label {
             3292 => {
