@@ -156,3 +156,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T104 The league table model and the two-point rule](T104.md) (#206).
 
 - [T107 A warning-free release build](T107.md) (#208).
+
+- [T108 The league campaign week transaction](T108.md) (#210).
