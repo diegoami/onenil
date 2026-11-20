@@ -152,3 +152,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T94 Refuse unsupported edited Sevilla match requests](T94.md) (#202).
 
 - [T95 Reject forged saved campaign histories](T95.md) (#204).
+
+- [T104 The league table model and the two-point rule](T104.md) (#206).
