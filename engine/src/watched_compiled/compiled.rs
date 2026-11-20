@@ -776,6 +776,7 @@ impl Cpu {
         }
         v
     }
+    #[cfg(test)] // [T107] exercised by the arithmetic test below
     pub fn sar(&mut self, x: u16, y: u16, w: u8) -> u16 {
         let n = y & 31;
         let mut v = x & (Self::mask(w) as u16);

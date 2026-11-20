@@ -142,6 +142,7 @@ impl Session {
             points: vec![],
         })
     }
+    #[cfg(test)] // [T107] the admission fixture test is its only caller
     pub(crate) fn from_legacy(
         legacy: continuous::Admission,
         replacement: ai_selection::ReadSet,

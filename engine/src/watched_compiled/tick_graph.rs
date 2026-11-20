@@ -9023,7 +9023,7 @@ pub(super) fn p_1b55_17f9(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_232a_01e3(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 483u16;
+    let label = 483u16;
     loop {
         match label {
             483 => {

@@ -2,7 +2,7 @@
 //! consistency, and the researched persisted roster policy (archaeology T80).
 use onenil_desktop::{
     controller::{Controller, Key, Screen},
-    timeline::{Completion, IntervalTimeline, LiveCampaign, Phase},
+    timeline::{IntervalTimeline, LiveCampaign, Phase},
 };
 fn campaign() -> onenil_campaign::Campaign {
     onenil_campaign::Campaign::initial().unwrap()
@@ -124,7 +124,7 @@ fn cancelled_selection_continues_clean_and_persists_no_exchange() {
     let mut engine = LiveCampaign::new(&campaign()).unwrap();
     let prefix = interval(&mut engine);
     let mut c = preparing();
-    let before = c.editor.campaign.clone();
+    let _before = c.editor.campaign.clone();
     halftime(&mut c, &prefix);
     c.key(Key::Space);
     c.squad.as_mut().unwrap().highlight = 1;

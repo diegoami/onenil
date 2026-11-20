@@ -2459,7 +2459,7 @@ pub(super) fn p_0ab9_0e45(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_0ab9_0f42(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 3906u16;
+    let label = 3906u16;
     loop {
         match label {
             3906 => {
@@ -51431,7 +51431,7 @@ pub(super) fn p_0ab9_6e28(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_0ab9_6f6e(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 28526u16;
+    let label = 28526u16;
     loop {
         match label {
             28526 => {
@@ -63126,7 +63126,7 @@ pub(super) fn p_0ab9_9882(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_0ab9_9f6e(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 40814u16;
+    let label = 40814u16;
     loop {
         match label {
             40814 => {
@@ -78129,7 +78129,7 @@ pub(super) fn p_0ab9_c3c6(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_0ab9_c4b3(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 50355u16;
+    let label = 50355u16;
     loop {
         match label {
             50355 => {
@@ -86425,14 +86425,6 @@ pub(super) fn p_1998_0100(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (6552, 297);
                 return Err("unported original instruction 1998:0129".into());
-                c.pc = (6552, 299);
-                c.step()?;
-                let v = c.read(c.r[10], 0u16.wrapping_add(c.r[5]).wrapping_add(5u16), 8)?;
-                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
-                c.pc = (6552, 302);
-                return Err("unported original instruction 1998:012E".into());
-                label = 304;
-                continue;
             }
             304 => {
                 c.pc = (6552, 304);
@@ -88012,7 +88004,7 @@ pub(super) fn p_1998_0b3f(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_1998_0b76(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 2934u16;
+    let label = 2934u16;
     loop {
         match label {
             2934 => {
@@ -94257,7 +94249,7 @@ pub(super) fn p_1b55_364e(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_1b55_3673(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 13939u16;
+    let label = 13939u16;
     loop {
         match label {
             13939 => {
@@ -94999,7 +94991,7 @@ pub(super) fn p_1b55_44dc(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_1b55_4759(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 18265u16;
+    let label = 18265u16;
     loop {
         match label {
             18265 => {
@@ -95429,7 +95421,7 @@ pub(super) fn p_1b55_478c(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_1b55_483c(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 18492u16;
+    let label = 18492u16;
     loop {
         match label {
             18492 => {
@@ -96499,7 +96491,7 @@ pub(super) fn p_1b55_49d7(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_1b55_4a37(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 18999u16;
+    let label = 18999u16;
     loop {
         match label {
             18999 => {
@@ -97850,7 +97842,7 @@ pub(super) fn p_1b55_4d0c(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_1b55_4dc2(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 19906u16;
+    let label = 19906u16;
     loop {
         match label {
             19906 => {
@@ -98235,7 +98227,7 @@ pub(super) fn p_1b55_4e0c(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_1b55_4e81(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 20097u16;
+    let label = 20097u16;
     loop {
         match label {
             20097 => {
@@ -104901,7 +104893,7 @@ pub(super) fn p_1b55_5e79(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_1b55_6308(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 25352u16;
+    let label = 25352u16;
     loop {
         match label {
             25352 => {
@@ -108540,7 +108532,7 @@ pub(super) fn p_232a_0098(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_232a_00d5(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 213u16;
+    let label = 213u16;
     loop {
         match label {
             213 => {
@@ -108624,7 +108616,7 @@ pub(super) fn p_232a_00d5(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_232a_00f8(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 248u16;
+    let label = 248u16;
     loop {
         match label {
             248 => {
@@ -108817,7 +108809,7 @@ pub(super) fn p_232a_011d(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_232a_0144(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 324u16;
+    let label = 324u16;
     loop {
         match label {
             324 => {
@@ -109021,16 +109013,6 @@ pub(super) fn p_232a_022e(c: &mut Cpu) -> Result<(), String> {
             568 => {
                 c.pc = (9002, 568);
                 return Err("unported original instruction 232A:0238".into());
-                c.pc = (9002, 570);
-                c.step()?;
-                let x = (c.r[0] >> 0) & 255;
-                let y = 252u16;
-                let v = c.and(x, y, 8);
-                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
-                c.pc = (9002, 572);
-                return Err("unported original instruction 232A:023C".into());
-                label = 574;
-                continue;
             }
             574 => {
                 c.pc = (9002, 574);
@@ -109077,18 +109059,6 @@ pub(super) fn p_232a_0240(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
                 c.pc = (9002, 588);
                 return Err("unported original instruction 232A:024C".into());
-                c.pc = (9002, 590);
-                return Err("unported original instruction 232A:024E".into());
-                c.pc = (9002, 592);
-                c.step()?;
-                let x = (c.r[0] >> 0) & 255;
-                let y = 3u16;
-                let v = c.or(x, y, 8);
-                c.r[0] = (c.r[0] & 65280) | ((v & 255) << 0);
-                c.pc = (9002, 594);
-                return Err("unported original instruction 232A:0252".into());
-                label = 596;
-                continue;
             }
             596 => {
                 c.pc = (9002, 596);
@@ -112991,7 +112961,7 @@ pub(super) fn p_24bc_0203(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_24bc_0222(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 546u16;
+    let label = 546u16;
     loop {
         match label {
             546 => {
@@ -113065,7 +113035,7 @@ pub(super) fn p_24bc_0222(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_24bc_0259(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 601u16;
+    let label = 601u16;
     loop {
         match label {
             601 => {
@@ -116387,7 +116357,7 @@ pub(super) fn p_24bc_0c58(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_24bc_0cdc(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 3292u16;
+    let label = 3292u16;
     loop {
         match label {
             3292 => {
@@ -118150,7 +118120,7 @@ pub(super) fn p_26c9_0602(_c: &mut Cpu) -> Result<(), String> {
     Err("unported original 26C9:0602".into())
 }
 pub(super) fn p_26c9_0a12(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 2578u16;
+    let label = 2578u16;
     loop {
         match label {
             2578 => {
@@ -118361,24 +118331,6 @@ pub(super) fn p_26c9_0a67(c: &mut Cpu) -> Result<(), String> {
                 c.r[11] = v;
                 c.pc = (9929, 287);
                 return Err("unported original instruction 26C9:011F".into());
-                c.pc = (9929, 288);
-                c.step()?;
-                let v = c.r[0];
-                c.write(c.r[11], 0u16.wrapping_add(42256u16), 16, v)?;
-                c.pc = (9929, 291);
-                c.step()?;
-                let v = c.r[1];
-                c.r[0] = v;
-                c.pc = (9929, 293);
-                c.step()?;
-                let x = c.r[0];
-                let y = c.r[3];
-                let v = c.or(x, y, 16);
-                c.r[0] = v;
-                c.pc = (9929, 295);
-                c.step()?;
-                label = if c.z { 358 } else { 297 };
-                continue;
             }
             297 => {
                 c.pc = (9929, 297);
@@ -118682,21 +118634,6 @@ pub(super) fn p_26c9_0a67(c: &mut Cpu) -> Result<(), String> {
                 c.r[11] = g;
                 c.pc = (9929, 431);
                 return Err("unported original instruction 26C9:01AF".into());
-                c.pc = (9929, 433);
-                c.step()?;
-                let v = c.pop()?;
-                c.r[11] = v;
-                c.pc = (9929, 434);
-                c.step()?;
-                let x = c.r[7];
-                let y = 4u16;
-                let v = c.add(x, y, 16);
-                c.r[7] = v;
-                c.pc = (9929, 437);
-                c.step()?;
-                c.r[1] = c.r[1].wrapping_sub(1);
-                label = if c.r[1] != 0 { 423 } else { 439 };
-                continue;
             }
             439 => {
                 c.pc = (9929, 439);
@@ -118802,8 +118739,6 @@ pub(super) fn p_26c9_0a67(c: &mut Cpu) -> Result<(), String> {
                 c.r[0] = (c.r[0] & 255) | ((v & 255) << 8);
                 c.pc = (9929, 494);
                 return Err("unported original instruction 26C9:01EE".into());
-                label = 496;
-                continue;
             }
             496 => {
                 c.pc = (9929, 496);
@@ -119289,7 +119224,7 @@ pub(super) fn p_26c9_0a67(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_26c9_0b53(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 2899u16;
+    let label = 2899u16;
     loop {
         match label {
             2899 => {
@@ -119740,7 +119675,7 @@ pub(super) fn p_26c9_0bfe(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_26c9_0c6f(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 3183u16;
+    let label = 3183u16;
     loop {
         match label {
             3183 => {
@@ -119782,7 +119717,7 @@ pub(super) fn p_26c9_0c6f(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_26c9_0d94(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 3476u16;
+    let label = 3476u16;
     loop {
         match label {
             3476 => {
@@ -119830,7 +119765,7 @@ pub(super) fn p_26c9_0d94(c: &mut Cpu) -> Result<(), String> {
     }
 }
 pub(super) fn p_26c9_0daa(c: &mut Cpu) -> Result<(), String> {
-    let mut label = 3498u16;
+    let label = 3498u16;
     loop {
         match label {
             3498 => {

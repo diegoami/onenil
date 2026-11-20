@@ -165,7 +165,7 @@ def emit_instruction(seg,ip,row):
     raise ValueError(f'unsupported {seg:04X}:{ip:04X} {op} {args}')
 
 def compile_procedure(seg,entry,rows,partial_errors=None):
-    out=[]
+    body=[]
     leaders={entry}
     for ip,(op,args,nxt,path) in rows.items():
         if op.startswith('j') or op in('call','loop'):
@@ -173,30 +173,38 @@ def compile_procedure(seg,entry,rows,partial_errors=None):
                 dest=target(seg,args)[0][1]
                 if dest in rows:leaders.add(dest)
             if nxt in rows:leaders.add(nxt)
-    out.append(f'pub(super) fn {name(seg,entry)}(c:&mut Cpu)->Result<(),String>{{let mut label={entry}u16;loop{{match label{{')
     for start in sorted(leaders):
-        out.append(f'{start}=>{{');ip=start
+        body.append(f'{start}=>{{');ip=start
         while True:
             row=rows[ip]
             try:
                 if row[0]=='loop'and target(seg,row[1])[0][1]not in rows:raise ValueError('counted-loop target absent from checked listing')
-                out.append(emit_instruction(seg,ip,row))
+                body.append(emit_instruction(seg,ip,row))
             except ValueError as error:
                 if partial_errors is None:raise
                 partial_errors[f'{seg:04X}:{ip:04X}']=str(error)
-                out.append(f'c.pc=({seg},{ip});return Err("unported original instruction {seg:04X}:{ip:04X}".into());')
+                # [T107] The unported boundary ends this arm: nothing after an
+                # unconditional error return is reachable or emitted.
+                body.append(f'c.pc=({seg},{ip});return Err("unported original instruction {seg:04X}:{ip:04X}".into());')
+                break
             op,args,nxt,_=row
             if op.startswith('j') or op in ('call','ret','retf','loop'):break
-            if nxt in leaders:out.append(f'label={nxt};continue;');break
+            if nxt in leaders:body.append(f'label={nxt};continue;');break
             ip=nxt
-        out.append('}')
-    out.append('_=>return Err(format!("invalid compiled label {label:04X}")),}}}')
+        body.append('}')
+    body.append('_=>return Err(format!("invalid compiled label {label:04X}")),}}}')
+    # [T107] Emit `mut` only when an arm assigns the dispatch label.
+    mutable = any('label=' in line or 'label =' in line for line in body)
+    out=[f'pub(super) fn {name(seg,entry)}(c:&mut Cpu)->Result<(),String>{{let {"mut " if mutable else ""}label={entry}u16;loop{{match label{{']
+    out.extend(body)
     return out
 
 def compile_graph(g,deferred=None,adapters=None,auto_defer=False,report=None,roots=None,partial=None,external=None,module=None,evidence="F39/c7637bd,static d9e20a4"):
     out=[f'//! [confirmed] Mechanically compiled numeric control flow;{evidence}.','//! [designed] Direct Rust calls/blocks;no runtime decoder or original executable.','use super::compiled::Cpu;']
     if module:
-        for entry in module:out.append(f'use super::{entry}::*;')
+        # [T107] Not every generated module uses every sibling glob; the import
+        # stays for the paths a generated call may need, with its reason.
+        for entry in module:out.append(f'#[allow(unused_imports)] // generated module glob\nuse super::{entry}::*;')
     deferred=deferred or set();adapters=adapters or {};report=report if report is not None else {};bodies={}
     for (seg,entry),rows in sorted(g.items()):
         key=(seg,entry)
