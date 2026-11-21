@@ -200,18 +200,25 @@ pub struct OrderRow {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct OrderSource {
+    #[allow(dead_code)]
     research: String,
+    #[allow(dead_code)]
     receipt: String,
+    #[allow(dead_code)]
     receipt_sha256: String,
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 struct OrderWeekSource {
+    #[allow(dead_code)]
     receipt: String,
+    #[allow(dead_code)]
     receipt_sha256: String,
+    #[allow(dead_code)]
     #[serde(default)]
     round_results: Option<String>,
+    #[allow(dead_code)]
     #[serde(default)]
     round_results_sha256: Option<String>,
 }
@@ -220,6 +227,7 @@ struct OrderWeekSource {
 #[serde(deny_unknown_fields)]
 struct OrderWeekFixture {
     week: u8,
+    #[allow(dead_code)]
     source: OrderWeekSource,
     rows: Vec<OrderRow>,
 }
@@ -228,6 +236,7 @@ struct OrderWeekFixture {
 #[serde(deny_unknown_fields)]
 struct OrderFixture {
     schema: String,
+    #[allow(dead_code)]
     source: OrderSource,
     divisions: u8,
     per_division: u8,
