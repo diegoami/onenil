@@ -5,7 +5,7 @@
 //! league week's own cash movement and result. The native line admits exactly
 //! the seed's pre- and post-week states; the table stays in T104's model and
 //! the week transaction validates it through that model.
-use crate::{result::TicketKind, Campaign, Club, MatchTicket, Origin, Season, Source};
+use crate::{result::TicketKind, Campaign, Club, Fixture, MatchTicket, Origin, Season, Source};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::BTreeMap;
@@ -39,6 +39,83 @@ pub struct LeagueCash {
     pub total_in: i32,
     pub total_out: i32,
     pub after: i32,
+}
+
+/// The committed week-2 fixture's own identity, pinned so a drifted value is refused.
+const LEAGUE_WEEK2_SHA: &str = "9ce163a42223072f350ea54c5819be4b15d0715a05f10ec74fb41ad771ebc666";
+
+/// [confirmed:archaeology T106 8d1edcd] The game's own answer to PLAY GAME with
+/// a flagged player fielded.
+pub(crate) const LEAGUE_INELIGIBLE: &str =
+    "Blackburn R has an ineligible player in the first team : hit any key";
+
+/// [designed:T109] The third league week has no witnessed capture; the post-week
+/// machine advertises it, and the native line refuses it (the T90 boundary).
+pub(crate) const LEAGUE_THIRD_MATCH_REFUSAL: &str =
+    "The next fixture (Wimbledon) has no authenticated original match evidence; playing it is unwitnessed.";
+
+/// The suspension bit the week-28 processing set on the two flagged defenders
+/// and the week-29 processing cleared once it was served.
+const SUSPENSION_BIT: u8 = 0b10;
+
+#[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct LeagueWeek2 {
+    pub schema: String,
+    #[allow(dead_code)]
+    pub research_commit: String,
+    #[allow(dead_code)]
+    pub receipt: BTreeMap<String, String>,
+    #[allow(dead_code)]
+    pub sources: BTreeMap<String, String>,
+    pub witnessed: LeagueWitnessed2,
+    pub(crate) source: Source,
+    pub(crate) target: Source,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct LeagueWitnessed2 {
+    pub match_no: u8,
+    /// Managed club first: Blackburn R drew 3-3 at Chelsea.
+    pub score: [u16; 2],
+    pub attendance: u32,
+    pub cash: LeagueCash,
+    pub following_fixture: Fixture,
+    pub exchanges: Vec<LeagueExchange>,
+    pub exchanged_first_team: [u16; 20],
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct LeagueExchange {
+    pub player: u16,
+    pub name: String,
+    pub from_slot: usize,
+    pub to_slot: usize,
+}
+
+impl LeagueWeek2 {
+    pub fn pinned() -> Result<Self, String> {
+        let raw = include_bytes!("../fixtures/league-week-2.json");
+        if format!("{:x}", Sha256::digest(raw)) != LEAGUE_WEEK2_SHA {
+            return Err("league week-2 fixture identity differs".into());
+        }
+        serde_json::from_slice(raw).map_err(|e| e.to_string())
+    }
+}
+
+/// The prepared row the second witnessed result binds: the live Chelsea fixture
+/// at the machine's own week, derived from the pinned projection.
+fn prepared_row_for_week2(seed2: &LeagueWeek2) -> PreparedRow {
+    let s = &seed2.source;
+    PreparedRow {
+        week: s.week_index,
+        competition: s.next_fixture.competition_code,
+        opponent: s.next_fixture.opponent,
+        flags: s.next_fixture.flags,
+        name: s.next_fixture.opponent_name.clone(),
+    }
 }
 
 /// [confirmed:archaeology T101 868a012; T105 3a0f14d] The prepared fixture is
@@ -98,10 +175,42 @@ impl LeaguePlayed {
     /// and a valid native request identity. The revision is a lower bound:
     /// legitimate edits before the match raise it further.
     pub(crate) fn binds(&self, campaign: &Campaign, seed: &LeagueSeed) -> Result<bool, String> {
+        self.binds_at(campaign, seed, campaign.week_index)
+    }
+
+    /// The binding against an explicit week: the recorded result stays bound
+    /// to the machine it was recorded at, even after the week byte moves.
+    pub(crate) fn binds_at(
+        &self,
+        campaign: &Campaign,
+        seed: &LeagueSeed,
+        week_index: u8,
+    ) -> Result<bool, String> {
         Ok(self.prepared == seed.prepared_fixture
             && self.season == campaign.season
-            && self.week_index == campaign.week_index
+            && self.week_index == week_index
             && self.score == seed.witnessed.score
+            && self.native_return == LEAGUE_NATIVE_RETURN
+            && self.request_revision < campaign.revision
+            && self.request_sha256.len() == 64
+            && self
+                .request_sha256
+                .bytes()
+                .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b)))
+    }
+
+    /// [designed:T109] The second result binds the live Chelsea fixture at the
+    /// machine's own week, derived from the pinned projection.
+    pub(crate) fn binds_week2(
+        &self,
+        campaign: &Campaign,
+        seed2: &LeagueWeek2,
+    ) -> Result<bool, String> {
+        let s = &seed2.source;
+        Ok(self.prepared == prepared_row_for_week2(seed2)
+            && self.season == campaign.season
+            && self.week_index == s.week_index
+            && self.score == seed2.witnessed.score
             && self.native_return == LEAGUE_NATIVE_RETURN
             && self.request_revision < campaign.revision
             && self.request_sha256.len() == 64
@@ -125,6 +234,22 @@ pub(crate) fn league_origin() -> Origin {
 
 pub(crate) fn league_source() -> Result<Source, String> {
     Ok(LeagueSeed::pinned()?.campaign)
+}
+
+/// [designed:T109] The exchanged machine admits the second witnessed week; every
+/// other league state keeps its own refusal (the eligibility refusal binds W0,
+/// the T108 already-recorded refusal binds the unexchanged machine).
+pub(crate) fn is_exchanged_week2(campaign: &Campaign) -> bool {
+    match LeagueWeek2::pinned() {
+        Ok(seed2) => {
+            campaign.week2_context(&seed2) == Some(&seed2.source)
+                && campaign.players_equal(&seed2.source)
+                && campaign.club.first_team.map(|p| p.unwrap_or(0))
+                    == seed2.witnessed.exchanged_first_team
+                && campaign.league_played.is_some()
+        }
+        Err(_) => false,
+    }
 }
 
 /// [confirmed:archaeology T103 17cf78c; native T104 ec4611b] The captured
@@ -172,14 +297,26 @@ impl Campaign {
             played_fixture: None,
             second_fixture: None,
             league_played: None,
+            second_league_played: None,
             players: s.players.clone(),
         };
         c.validate()?;
         Ok(c)
     }
 
-    pub(crate) fn validate_league_context(&self, source: &Source) -> Result<(), String> {
+    pub(crate) fn validate_league_line(&self) -> Result<(), String> {
+        // [designed:T109] The week-2 projections bind their own three states
+        // first; the T108 seed states keep their own pins underneath.
+        if let Ok(seed2) = LeagueWeek2::pinned() {
+            if let Some(source) = self.week2_context(&seed2) {
+                return self.validate_week2_state(&seed2, source);
+            }
+        }
+        let source = league_source()?;
         let seed = LeagueSeed::pinned()?;
+        if self.origin != league_origin() || self.namespace != source.namespace {
+            return Err("campaign source/league namespace differs".into());
+        }
         if self.week_index != source.week_index
             || self.season != source.season
             || self.manager != source.manager
@@ -193,18 +330,236 @@ impl Campaign {
             return Err("campaign context outside the supported saved club/fixture".into());
         }
         let admitted = match self.league_played.as_ref() {
-            // [confirmed:archaeology T105 3a0f14d] The pre-week machine.
-            None => self.cash == seed.cash.before,
-            // [confirmed:archaeology T102 472badb] The completed week: the
-            // recorded result and the moved cash, together. A result without
-            // the cash movement, or cash without the result, is a state no
-            // native API produced (T95's principle).
-            Some(played) => self.cash == seed.cash.after && played.binds(self, &seed)?,
+            None if self.second_league_played.is_none() => self.cash == seed.cash.before,
+            Some(played) if self.second_league_played.is_none() => {
+                self.cash == seed.cash.after && played.binds(self, &seed)?
+            }
+            _ => false,
         };
         if !admitted {
             return Err("campaign context outside the supported saved club/fixture".into());
         }
+        self.validate_roster_and_players(&source)
+    }
+
+    /// Which week-2 projection the state's header and body match, if either:
+    /// W0/W1 against the post-league28 machine, W2 against the post-league29 one.
+    fn week2_context<'a>(&self, seed2: &'a LeagueWeek2) -> Option<&'a Source> {
+        let s = &seed2.source;
+        let t = &seed2.target;
+        let header = |src: &Source| {
+            self.week_index == src.week_index
+                && self.cash == src.cash
+                && self.next_fixture == src.next_fixture
+        };
+        let original = self.club.first_team.map(|p| p.unwrap_or(0)) == s.club.first_team;
+        let exchanged =
+            self.club.first_team.map(|p| p.unwrap_or(0)) == seed2.witnessed.exchanged_first_team;
+        if header(s) && self.players_equal(s) && (original || exchanged) {
+            Some(s)
+        } else if header(t) && self.players_equal(t) && exchanged {
+            Some(t)
+        } else {
+            None
+        }
+    }
+
+    fn players_equal(&self, s: &Source) -> bool {
+        self.players.len() == s.players.len()
+            && self
+                .players
+                .iter()
+                .zip(s.players.iter())
+                .all(|(a, b)| a == b)
+    }
+
+    fn validate_week2_state(&self, seed2: &LeagueWeek2, source: &Source) -> Result<(), String> {
+        let seed = LeagueSeed::pinned()?;
+        let s = &seed2.source;
+        if self.origin != league_origin()
+            || self.namespace != source.namespace
+            || self.season != s.season
+            || self.manager != s.manager
+            || self.club.id != s.club.id
+            || self.club.name != s.club.name
+            || self.prepared_fixture.as_ref() != Some(&seed.prepared_fixture)
+            || self.played_fixture.is_some()
+            || self.second_fixture.is_some()
+        {
+            return Err("campaign context outside the supported saved club/fixture".into());
+        }
+        let refused = "campaign context outside the supported saved club/fixture";
+        let original_roster = self.club.first_team.map(|p| p.unwrap_or(0)) == s.club.first_team;
+        let played = self.league_played.as_ref().ok_or(refused)?;
+        if !played.binds_at(self, &seed, s.week_index)? {
+            return Err(refused.into());
+        }
+        if original_roster {
+            // W0: the flagged, unexchanged machine; the second week unplayed.
+            if self.second_league_played.is_some() {
+                return Err(refused.into());
+            }
+        } else {
+            // W1/W2: the exchanged roster.
+            match self.second_league_played.as_ref() {
+                None => {
+                    // W1: the exchanged machine, the second week unplayed.
+                    if self.week_index != s.week_index || self.cash != s.cash {
+                        return Err(refused.into());
+                    }
+                }
+                Some(second) => {
+                    // W2: the completed second week.
+                    if !second.binds_week2(self, seed2)? {
+                        return Err(refused.into());
+                    }
+                }
+            }
+        }
         self.validate_roster_and_players(source)
+    }
+
+    fn is_week2_source_header(&self, seed2: &LeagueWeek2) -> bool {
+        let s = &seed2.source;
+        self.week_index == s.week_index
+            && self.cash == s.cash
+            && self.next_fixture == s.next_fixture
+            && self.season == s.season
+            && self.manager == s.manager
+            && self.club.id == s.club.id
+            && self.club.name == s.club.name
+    }
+
+    pub(crate) fn first_team_has_suspended_player(&self) -> bool {
+        // The fielded XI is slots 0..=10; the bench 11..=19 (research T74/T80)
+        // - a suspended player on the bench is what the original allowed.
+        self.club.first_team.iter().take(11).flatten().any(|id| {
+            self.players
+                .iter()
+                .find(|p| p.id == *id)
+                .is_some_and(|p| p.availability.status_bits & SUSPENSION_BIT != 0)
+        })
+    }
+
+    /// [confirmed:archaeology T106 8d1edcd] The week-28 processing's own
+    /// availability output, pinned by the post-league28 projection: the two
+    /// flagged defenders and Wright's recovered condition.
+    pub fn apply_league_week_processing(&mut self) -> Result<(), String> {
+        let seed2 = LeagueWeek2::pinned()?;
+        let source = &seed2.source;
+        if !self.is_week2_source_header(&seed2)
+            || self.league_played.is_none()
+            || self.second_league_played.is_some()
+            || self.players_equal(source)
+            || self.club.first_team.map(|p| p.unwrap_or(0)) != source.club.first_team
+        {
+            return Err("the week processing applies to the completed week-28 machine".into());
+        }
+        self.transaction(|next| {
+            next.players = source.players.clone();
+            Ok(())
+        })
+    }
+
+    /// [confirmed:archaeology T106 8d1edcd] The manager's witnessed squad
+    /// exchange, one atomic transaction: Wright for Berg, Newell for Hendry -
+    /// the arrangement the save itself holds afterwards (T80's DS:D7C2 slot
+    /// exchange; the game re-fits the incoming players by role).
+    pub fn record_league_exchange(&mut self) -> Result<(), String> {
+        let seed2 = LeagueWeek2::pinned()?;
+        let source = &seed2.source;
+        if !self.is_week2_source_header(&seed2)
+            || !self.players_equal(source)
+            || self.club.first_team.map(|p| p.unwrap_or(0)) != source.club.first_team
+            || self.league_played.is_none()
+            || self.second_league_played.is_some()
+        {
+            return Err("the exchange applies to the flagged, unexchanged week-28 machine".into());
+        }
+        self.transaction(|next| {
+            next.club.first_team =
+                seed2
+                    .witnessed
+                    .exchanged_first_team
+                    .map(|p| if p == 0 { None } else { Some(p) });
+            Ok(())
+        })
+    }
+
+    /// [confirmed:archaeology T106 8d1edcd] The witnessed second league week:
+    /// the 3-3 draw at Chelsea, the cash movement, and the advance to
+    /// Wimbledon at home with the week byte at 55 (this pointer was not
+    /// pre-advanced - T93's no-advance rule bound week 28, not this one).
+    pub fn record_league_week_2(
+        &mut self,
+        ticket: &MatchTicket,
+        score: [u16; 2],
+        native_return: &str,
+        total_in: i32,
+        total_out: i32,
+        following_competition: u8,
+        following_opponent: u16,
+        following_flags: u8,
+        following_name: &str,
+    ) -> Result<(), String> {
+        if ticket.kind != TicketKind::LeagueFixture {
+            return Err("match completion is stale, foreign or unfinished".into());
+        }
+        let seed2 = LeagueWeek2::pinned()?;
+        let w = &seed2.witnessed;
+        if w.score != score || native_return != LEAGUE_NATIVE_RETURN {
+            return Err("the witnessed league result differs".into());
+        }
+        if total_in != w.cash.total_in || total_out != w.cash.total_out {
+            return Err("the league week's authenticated movement differs".into());
+        }
+        if seed2
+            .source
+            .cash
+            .checked_add(total_in)
+            .and_then(|v| v.checked_sub(total_out))
+            != Some(w.cash.after)
+        {
+            return Err("the league week's authenticated movement differs".into());
+        }
+        let following = &w.following_fixture;
+        if following.competition_code != following_competition
+            || following.opponent != following_opponent
+            || following.flags != following_flags
+            || following.opponent_name != following_name
+        {
+            return Err("the league week's following fixture differs".into());
+        }
+        league_table_reproduces()?;
+        self.validate()?;
+        if self.second_league_played.is_some() {
+            return Err("this fixture already has a recorded result".into());
+        }
+        if self != &ticket.campaign {
+            return Err("match completion is stale, foreign or unfinished".into());
+        }
+        let target = seed2.target.clone();
+        let request_revision = ticket.campaign.revision;
+        let request_sha256 = ticket.digest.clone();
+        let prepared = prepared_row_for_week2(&seed2);
+        let season = ticket.campaign.season.clone();
+        let week_index = seed2.source.week_index;
+        self.transaction(|next| {
+            next.week_index = target.week_index;
+            next.cash = target.cash;
+            next.next_fixture = target.next_fixture.clone();
+            next.players = target.players.clone();
+            next.second_league_played = Some(LeaguePlayed {
+                prepared,
+                season,
+                week_index,
+                request_revision,
+                request_sha256,
+                score,
+                native_return: native_return.into(),
+            });
+            Ok(())
+        })
     }
 
     /// [confirmed:archaeology T102 472badb; T105 3a0f14d] The one witnessed
