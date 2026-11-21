@@ -8,8 +8,8 @@ use sha2::{Digest, Sha256};
 /// It cannot be deserialized from a worker packet or synthesized from an expected score.
 #[derive(Debug, Clone)]
 pub struct MatchTicket {
-    campaign: Campaign,
-    digest: String,
+    pub(crate) campaign: Campaign,
+    pub(crate) digest: String,
     /// [designed:T91] The witnessed route the ticket admits; the recording API
     /// must match it, so a PSG result can never post into the Sevilla path or
     /// vice versa.
@@ -28,6 +28,8 @@ pub(crate) enum TicketKind {
     FirstFriendly,
     /// The week-1 Sevilla friendly (archaeology T89, runs/T89/sevilla-r0001).
     SevillaFriendly,
+    /// [designed:T108] The late-season league fixture (archaeology T105 3a0f14d).
+    LeagueFixture,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -208,6 +210,19 @@ impl Campaign {
 
     pub fn match_ticket(&self) -> Result<MatchTicket, String> {
         self.validate()?;
+        // [designed:T108, archaeology T105 3a0f14d] The league line admits the
+        // pre-week machine only; its witnessed week posts through its own API.
+        if self.origin == crate::league_campaign::league_origin() {
+            if self.league_played.is_some() {
+                return Err("this fixture already has a recorded result".into());
+            }
+            let digest = format!("{:x}", Sha256::digest(self.encode()?));
+            return Ok(MatchTicket {
+                campaign: self.clone(),
+                digest,
+                kind: TicketKind::LeagueFixture,
+            });
+        }
         if self.week_index == 2 {
             return Err(crate::sevilla_week::THIRD_MATCH_REFUSAL.into());
         }

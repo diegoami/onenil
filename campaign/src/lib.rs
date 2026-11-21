@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeSet, path::Path};
+pub mod league_campaign;
 pub mod league_table;
 mod result;
 pub mod sevilla_week;
@@ -96,30 +97,39 @@ pub struct Campaign {
     /// to its week-one context, retained after the witnessed week transaction.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub second_fixture: Option<PlayedFixture>,
+    /// [designed:T108, archaeology T101/T105] The original's pre-advanced
+    /// preparation row: the fixture the machine is about to play, published
+    /// only in the fields the receipts carry.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub prepared_fixture: Option<crate::league_campaign::PreparedRow>,
+    /// [designed:T108] The witnessed league week's recorded result, bound to
+    /// its prepared row; the league analogue of played_fixture.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub league_played: Option<crate::league_campaign::LeaguePlayed>,
     pub next_fixture: Fixture,
     pub players: Vec<Player>,
 }
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(deny_unknown_fields)]
-struct SourceClub {
-    id: u16,
-    name: String,
-    first_team: [u16; 20],
-    reserves: [u16; 20],
-    team_instructions: u8,
+pub(crate) struct SourceClub {
+    pub(crate) id: u16,
+    pub(crate) name: String,
+    pub(crate) first_team: [u16; 20],
+    pub(crate) reserves: [u16; 20],
+    pub(crate) team_instructions: u8,
 }
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(deny_unknown_fields)]
-struct Source {
-    schema: String,
-    namespace: Namespace,
-    season: Season,
-    week_index: u8,
-    manager: Manager,
-    club: SourceClub,
-    cash: i32,
-    next_fixture: Fixture,
-    players: Vec<Player>,
+pub(crate) struct Source {
+    pub(crate) schema: String,
+    pub(crate) namespace: Namespace,
+    pub(crate) season: Season,
+    pub(crate) week_index: u8,
+    pub(crate) manager: Manager,
+    pub(crate) club: SourceClub,
+    pub(crate) cash: i32,
+    pub(crate) next_fixture: Fixture,
+    pub(crate) players: Vec<Player>,
 }
 fn source_record() -> Result<Value, String> {
     let raw = include_bytes!("../fixtures/research-seed.json");
@@ -173,6 +183,8 @@ impl Campaign {
             next_fixture: s.next_fixture,
             played_fixture: None,
             second_fixture: None,
+            prepared_fixture: None,
+            league_played: None,
             players: s.players,
         };
         c.validate()?;
@@ -182,9 +194,31 @@ impl Campaign {
         if self.schema != "onenil-campaign" || self.version != 1 {
             return Err("unsupported native campaign schema/version".into());
         }
-        let source = initial_source()?;
-        if self.origin != origin() || self.namespace != source.namespace {
+        // [designed:T108, archaeology T105 3a0f14d] Two authenticated source
+        // lines: the Sevilla research seed and the late-season league seed.
+        // The origin identifies the line; everything else is pinned inside its
+        // own branch, and neither branch loosens the other's pins.
+        let league = self.origin == crate::league_campaign::league_origin();
+        let source = if league {
+            crate::league_campaign::league_source()?
+        } else {
+            initial_source()?
+        };
+        let expected_origin = if league {
+            crate::league_campaign::league_origin()
+        } else {
+            origin()
+        };
+        if self.origin != expected_origin || self.namespace != source.namespace {
             return Err("campaign source/league namespace differs".into());
+        }
+        if league {
+            return self.validate_league_context(&source);
+        }
+        // [designed:T108] The Sevilla line carries no league field: a save
+        // presenting one is a state no native API produced.
+        if self.prepared_fixture.is_some() || self.league_played.is_some() {
+            return Err("recorded result has a foreign or invalid fixture/request context".into());
         }
         // [designed:T80, research T82 c13195a] The supported context is the
         // source week and, after the researched friendly-week completion, the
@@ -268,6 +302,12 @@ impl Campaign {
                 return Err("the witnessed Sevilla condition outcomes differ".into());
             }
         }
+        self.validate_roster_and_players(&source)
+    }
+    /// The roster and player-record identity checks, shared by both source
+    /// lines: the roster carries exactly the source's ids, and every player
+    /// record keeps its canonical name and club position.
+    fn validate_roster_and_players(&self, source: &Source) -> Result<(), String> {
         let expected: BTreeSet<_> = source.players.iter().map(|p| p.id).collect();
         let roster: Vec<_> = self
             .club
