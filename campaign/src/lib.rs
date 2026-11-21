@@ -106,6 +106,10 @@ pub struct Campaign {
     /// its prepared row; the league analogue of played_fixture.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub league_played: Option<crate::league_campaign::LeaguePlayed>,
+    /// [designed:T109] The second witnessed league result, bound to its own
+    /// prepared fixture; the league analogue of second_fixture.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub second_league_played: Option<crate::league_campaign::LeaguePlayed>,
     pub next_fixture: Fixture,
     pub players: Vec<Player>,
 }
@@ -185,6 +189,7 @@ impl Campaign {
             second_fixture: None,
             prepared_fixture: None,
             league_played: None,
+            second_league_played: None,
             players: s.players,
         };
         c.validate()?;
@@ -198,26 +203,19 @@ impl Campaign {
         // lines: the Sevilla research seed and the late-season league seed.
         // The origin identifies the line; everything else is pinned inside its
         // own branch, and neither branch loosens the other's pins.
-        let league = self.origin == crate::league_campaign::league_origin();
-        let source = if league {
-            crate::league_campaign::league_source()?
-        } else {
-            initial_source()?
-        };
-        let expected_origin = if league {
-            crate::league_campaign::league_origin()
-        } else {
-            origin()
-        };
-        if self.origin != expected_origin || self.namespace != source.namespace {
-            return Err("campaign source/league namespace differs".into());
+        if self.origin == crate::league_campaign::league_origin() {
+            return self.validate_league_line();
         }
-        if league {
-            return self.validate_league_context(&source);
+        let source = initial_source()?;
+        if self.origin != origin() || self.namespace != source.namespace {
+            return Err("campaign source/league namespace differs".into());
         }
         // [designed:T108] The Sevilla line carries no league field: a save
         // presenting one is a state no native API produced.
-        if self.prepared_fixture.is_some() || self.league_played.is_some() {
+        if self.prepared_fixture.is_some()
+            || self.league_played.is_some()
+            || self.second_league_played.is_some()
+        {
             return Err("recorded result has a foreign or invalid fixture/request context".into());
         }
         // [designed:T80, research T82 c13195a] The supported context is the

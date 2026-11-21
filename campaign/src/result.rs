@@ -213,6 +213,23 @@ impl Campaign {
         // [designed:T108, archaeology T105 3a0f14d] The league line admits the
         // pre-week machine only; its witnessed week posts through its own API.
         if self.origin == crate::league_campaign::league_origin() {
+            if self.second_league_played.is_some() {
+                return Err(crate::league_campaign::LEAGUE_THIRD_MATCH_REFUSAL.into());
+            }
+            // [confirmed:archaeology T106 8d1edcd] A flagged player fielded
+            // refuses PLAY GAME with the game's own message.
+            if self.first_team_has_suspended_player() {
+                return Err(crate::league_campaign::LEAGUE_INELIGIBLE.into());
+            }
+            // [designed:T109] The exchanged machine admits the second week.
+            if crate::league_campaign::is_exchanged_week2(self) {
+                let digest = format!("{:x}", Sha256::digest(self.encode()?));
+                return Ok(MatchTicket {
+                    campaign: self.clone(),
+                    digest,
+                    kind: TicketKind::LeagueFixture,
+                });
+            }
             if self.league_played.is_some() {
                 return Err("this fixture already has a recorded result".into());
             }
