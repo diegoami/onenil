@@ -158,3 +158,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T107 A warning-free release build](T107.md) (#208).
 
 - [T108 The league campaign week transaction](T108.md) (#210).
+
+- [T109 The second witnessed league week](T109.md) (#212).
