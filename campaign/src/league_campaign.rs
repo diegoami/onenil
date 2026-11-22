@@ -901,7 +901,10 @@ impl Campaign {
                     .iter_mut()
                     .find(|p| p.name == change.name)
                     .ok_or_else(|| {
-                        format!("the condition change names an unknown player: {}", change.name)
+                        format!(
+                            "the condition change names an unknown player: {}",
+                            change.name
+                        )
                     })?;
                 player.availability.condition_signed = change.condition_signed;
             }

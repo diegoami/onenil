@@ -170,10 +170,17 @@ fn the_roster_is_unchanged_through_the_third_week() {
     // [review #219] the witnessed condition refreshes apply: the six players
     // whose condition_signed the post-league30 projection carries change,
     // while the arrangement and every other field stay as they were.
-    let changed: Vec<&str> = ["H Berg", "T Sherwood", "S Ripley", "T Gale", "A Wright", "B Mimms"]
-        .iter()
-        .copied()
-        .collect();
+    let changed: Vec<&str> = [
+        "H Berg",
+        "T Sherwood",
+        "S Ripley",
+        "T Gale",
+        "A Wright",
+        "B Mimms",
+    ]
+    .iter()
+    .copied()
+    .collect();
     for (after, was) in c.players.iter().zip(before.players.iter()) {
         assert_eq!(after.id, was.id);
         assert_eq!(after.name, was.name);
@@ -226,8 +233,14 @@ fn the_third_result_stores_the_request_week() {
     c.record_league_week_3(&ticket, [5, 3], RETURN, 58_332, 90_827)
         .expect("the witnessed week completes");
     let played = c.third_league_played.as_ref().unwrap();
-    assert_eq!(played.week_index, 55, "the result stores the request's week");
-    assert_eq!(c.week_index, 56, "the machine's own week index is post-week");
+    assert_eq!(
+        played.week_index, 55,
+        "the result stores the request's week"
+    );
+    assert_eq!(
+        c.week_index, 56,
+        "the machine's own week index is post-week"
+    );
 }
 
 #[test]
