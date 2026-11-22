@@ -6,8 +6,6 @@ use onenil_campaign::league_campaign::LeagueWeek2;
 use onenil_campaign::Campaign;
 
 const INELIGIBLE: &str = "Blackburn R has an ineligible player in the first team : hit any key";
-const THIRD_WEEK: &str = "The next fixture (Wimbledon) has no authenticated original match evidence; playing it is unwitnessed.";
-
 fn committed() -> serde_json::Value {
     serde_json::from_str(include_str!("../fixtures/league-week-2.json"))
         .expect("the committed fixture parses")
@@ -258,7 +256,11 @@ fn exchanging_before_the_processing_is_refused() {
 }
 
 #[test]
-fn the_third_week_is_refused() {
+fn the_third_week_is_now_admitted() {
+    // [designed:T113, archaeology T112 7192873] T109 refused the third week
+    // because it was unwitnessed; T112 has since witnessed match #30 (5-3
+    // Wimbledon) and the boundary moved forward: the completed second week
+    // now admits the ticket.
     let mut c = exchanged();
     let ticket = c.match_ticket().unwrap();
     c.record_league_week_2(
@@ -273,11 +275,8 @@ fn the_third_week_is_refused() {
         "Wimbledon",
     )
     .expect("the witnessed week completes");
-    let refused = c.match_ticket();
-    assert_eq!(
-        refused.err().map(|e| e.to_string()),
-        Some(THIRD_WEEK.to_string())
-    );
+    c.match_ticket()
+        .expect("the witnessed third week admits the ticket");
 }
 
 #[test]
