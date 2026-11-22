@@ -80,7 +80,9 @@ fn the_third_week_applies_to_the_second_played_machine() {
     assert!(c.third_league_played.is_some());
     let played = c.third_league_played.as_ref().unwrap();
     assert_eq!(played.score, [5, 3]);
-    assert_eq!(played.week_index, 56);
+    // [review #218] the result stores the REQUEST's week (55, the pre-match
+    // value); the machine's own week index (56) lives on the campaign.
+    assert_eq!(played.week_index, 55);
 }
 
 #[test]
@@ -165,7 +167,33 @@ fn the_roster_is_unchanged_through_the_third_week() {
         c.club.first_team, before.club.first_team,
         "the substitution was declined: the arrangement is unchanged"
     );
-    assert_eq!(c.players, before.players);
+    // [review #219] the witnessed condition refreshes apply: the six players
+    // whose condition_signed the post-league30 projection carries change,
+    // while the arrangement and every other field stay as they were.
+    let changed: Vec<&str> = [
+        "H Berg",
+        "T Sherwood",
+        "S Ripley",
+        "T Gale",
+        "A Wright",
+        "B Mimms",
+    ]
+    .iter()
+    .copied()
+    .collect();
+    for (after, was) in c.players.iter().zip(before.players.iter()) {
+        assert_eq!(after.id, was.id);
+        assert_eq!(after.name, was.name);
+        if changed.contains(&after.name.as_str()) {
+            assert_ne!(
+                after.availability.condition_signed, was.availability.condition_signed,
+                "{}'s witnessed condition refresh applies",
+                after.name
+            );
+        } else {
+            assert_eq!(after.availability, was.availability);
+        }
+    }
 }
 
 #[test]
@@ -179,4 +207,67 @@ fn the_fourth_week_is_refused() {
         refused.err().map(|e| e.to_string()),
         Some(FOURTH_WEEK.to_string())
     );
+}
+
+#[test]
+fn a_foreign_ticket_completing_week_30_is_refused() {
+    // [review #218] record_league_week_3 must require the ticket to be this
+    // machine's: a pre-week-28 ticket completing week 30 on the
+    // second-league-played machine is refused.
+    let foreign = Campaign::initial_league().expect("the league seed machine is admitted");
+    let foreign_ticket = foreign
+        .match_ticket()
+        .expect("the pre-week machine admits its own ticket");
+    let mut c = week29_played();
+    assert!(c
+        .record_league_week_3(&foreign_ticket, [5, 3], RETURN, 58_332, 90_827)
+        .is_err());
+}
+
+#[test]
+fn the_third_result_stores_the_request_week() {
+    // [review #218] the third result binds the REQUEST's week (55, the
+    // pre-match value), the way week 29's result stored 54.
+    let mut c = week29_played();
+    let ticket = c.match_ticket().unwrap();
+    c.record_league_week_3(&ticket, [5, 3], RETURN, 58_332, 90_827)
+        .expect("the witnessed week completes");
+    let played = c.third_league_played.as_ref().unwrap();
+    assert_eq!(
+        played.week_index, 55,
+        "the result stores the request's week"
+    );
+    assert_eq!(
+        c.week_index, 56,
+        "the machine's own week index is post-week"
+    );
+}
+
+#[test]
+fn the_witnessed_condition_refreshes_apply() {
+    // [review #219] the six witnessed condition refreshes: the transaction
+    // applies the post-league30 projection's condition_signed values.
+    let mut c = week29_played();
+    let ticket = c.match_ticket().unwrap();
+    c.record_league_week_3(&ticket, [5, 3], RETURN, 58_332, 90_827)
+        .expect("the witnessed week completes");
+    let expected = [
+        ("H Berg", 28),
+        ("T Sherwood", 27),
+        ("S Ripley", 23),
+        ("T Gale", 24),
+        ("A Wright", 28),
+        ("B Mimms", 25),
+    ];
+    for (name, condition) in expected {
+        let player = c
+            .players
+            .iter()
+            .find(|p| p.name == name)
+            .unwrap_or_else(|| panic!("the squad carries {name}"));
+        assert_eq!(
+            player.availability.condition_signed, condition,
+            "{name}'s witnessed condition applies"
+        );
+    }
 }
