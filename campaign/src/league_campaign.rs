@@ -128,9 +128,6 @@ pub struct LeagueWeek3 {
     #[allow(dead_code)]
     pub sources: BTreeMap<String, String>,
     pub witnessed: LeagueWitnessed3,
-    pub week_29_row: Week29Row,
-    pub condition_changes: Vec<ConditionChange>,
-    pub third_request: ThirdRequest,
     pub(crate) target: LeagueTarget3,
     pub table: Vec<LeagueTableRow3>,
 }
@@ -141,6 +138,14 @@ pub struct LeagueWitnessed3 {
     pub match_no: u8,
     /// Managed club first: Blackburn R beat Wimbledon 5-3 at home.
     pub score: [u16; 2],
+    /// The week-29 row as the T106 receipt records it (no display position).
+    pub week_29_row: Week29Row,
+    /// The witnessed condition refreshes (the post-league30 projection).
+    pub condition_changes: Vec<ConditionChange>,
+    /// The witnessed request values; the ticket identity is not witnessed.
+    pub third_request: ThirdRequest,
+    #[allow(dead_code)]
+    pub week_29_row_source: String,
     #[allow(dead_code)]
     pub home_club: u16,
     #[allow(dead_code)]
@@ -533,22 +538,69 @@ impl Campaign {
         {
             return Err(refused.into());
         }
+        let second = self.second_league_played.as_ref().ok_or(refused)?;
+        if self.league_played.is_none()
+            || second.week_index != 54
+            || second.score != seed2.witnessed.score
+            || second.native_return != LEAGUE_NATIVE_RETURN
+        {
+            return Err(refused.into());
+        }
         let third = self.third_league_played.as_ref().ok_or(refused)?;
-        if third.week_index != t.week_index
+        // [review #218] the result stores the REQUEST's week (55, the
+        // pre-match value); the machine's post-week value (56) lives in the
+        // campaign's own week index, checked after the walk below.
+        if third.week_index != 55
             || third.score != seed3.witnessed.score
             || third.native_return != LEAGUE_NATIVE_RETURN
         {
             return Err(refused.into());
         }
-        // the roster is unchanged through the third week: the substitution was
-        // declined, so the exchanged arrangement survives (W1/W2's roster).
+        if third.prepared.week != 55
+            || third.prepared.competition != 0
+            || third.prepared.opponent != seed3.witnessed.away_club
+            || third.prepared.flags != 1
+            || third.prepared.name != seed3.witnessed.away_name
+            || third.season.counter != seed3.target.season_counter
+        {
+            return Err(refused.into());
+        }
+        // the roster arrangement is unchanged through the third week: the
+        // injury substitution was declined, so the exchanged arrangement
+        // survives (the T112 capture's own state).
         if self.club.first_team.map(|p| p.unwrap_or(0)) != seed2.witnessed.exchanged_first_team {
             return Err(refused.into());
         }
         if self.week_index != t.week_index || self.cash != t.cash {
             return Err(refused.into());
         }
-        self.validate_roster_and_players(source)
+        // [review #221] the following fixture binds whole: the fixture table's
+        // opponent-free slot 57 (competition 5, opponent 0, no name).
+        let end = &seed3.witnessed.fixture_table_end;
+        if self.next_fixture.slot != end.slot
+            || self.next_fixture.club != seed3.witnessed.home_club
+            || self.next_fixture.opponent != u16::from(end.raw_bytes[1])
+            || !self.next_fixture.opponent_name.is_empty()
+            || self.next_fixture.competition_code != end.raw_bytes[0]
+            || self.next_fixture.flags != end.raw_bytes[2]
+            || self.next_fixture.venue_code != 0
+            || self.next_fixture.opponent_flags != 0
+        {
+            return Err(refused.into());
+        }
+        // [review #219] the six witnessed condition refreshes bind: the
+        // players whose condition_signed the post-league30 projection carries.
+        for change in &seed3.witnessed.condition_changes {
+            let player = self
+                .players
+                .iter()
+                .find(|p| p.name == change.name)
+                .ok_or_else(|| refused.to_string())?;
+            if player.availability.condition_signed != change.condition_signed {
+                return Err(refused.into());
+            }
+        }
+        Ok(())
     }
 
     fn week2_context<'a>(&self, seed2: &'a LeagueWeek2) -> Option<&'a Source> {
@@ -804,6 +856,11 @@ impl Campaign {
         if ticket.kind != TicketKind::LeagueFixture {
             return Err("match completion is stale, foreign or unfinished".into());
         }
+        // [review #218] the ticket must be THIS machine's: a foreign ticket
+        // (any other campaign's) completing week 30 is refused.
+        if self != &ticket.campaign {
+            return Err("match completion is stale, foreign or unfinished".into());
+        }
         let seed3 = LeagueWeek3::pinned()?;
         let w = &seed3.witnessed;
         if w.score != score || native_return != LEAGUE_NATIVE_RETURN {
@@ -828,10 +885,26 @@ impl Campaign {
         let request_revision = ticket.campaign.revision;
         let request_sha256 = ticket.digest.clone();
         let season = ticket.campaign.season.clone();
-        let week_index = target.week_index;
+        // the result binds the REQUEST's week (55, the pre-match value), the
+        // way week 29's result stored 54 - the machine's post-week value (56)
+        // lives in the campaign's own week index
+        let week_index = ticket.campaign.week_index;
+        let condition_changes = seed3.witnessed.condition_changes.clone();
         self.transaction(|next| {
             next.week_index = target.week_index;
             next.cash = target.cash;
+            // [review #219] the witnessed condition refreshes: the six players
+            // whose condition_signed the post-league30 projection carries
+            for change in &condition_changes {
+                let player = next
+                    .players
+                    .iter_mut()
+                    .find(|p| p.name == change.name)
+                    .ok_or_else(|| {
+                        format!("the condition change names an unknown player: {}", change.name)
+                    })?;
+                player.availability.condition_signed = change.condition_signed;
+            }
             next.next_fixture = crate::Fixture {
                 slot: end.slot,
                 club: w.home_club,
