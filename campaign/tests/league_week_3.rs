@@ -11,11 +11,6 @@ const RETURN: &str = "0AB9:EBE2";
 const FOURTH_WEEK: &str =
     "The league season's 30 matches are complete; a fourth week is unwitnessed.";
 
-fn committed() -> serde_json::Value {
-    serde_json::from_str(include_str!("../fixtures/league-week-3.json"))
-        .expect("the committed fixture parses")
-}
-
 fn week29_played() -> Campaign {
     let mut c = Campaign::initial_league().expect("the league seed machine is admitted");
     let ticket = c
