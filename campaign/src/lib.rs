@@ -110,6 +110,10 @@ pub struct Campaign {
     /// prepared fixture; the league analogue of second_fixture.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub second_league_played: Option<crate::league_campaign::LeaguePlayed>,
+    /// [designed:T113] The third witnessed league result; its week leaves
+    /// `next_fixture` without an opponent (the 16-club schedule is complete).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub third_league_played: Option<crate::league_campaign::LeaguePlayed>,
     pub next_fixture: Fixture,
     pub players: Vec<Player>,
 }
@@ -190,6 +194,7 @@ impl Campaign {
             prepared_fixture: None,
             league_played: None,
             second_league_played: None,
+            third_league_played: None,
             players: s.players,
         };
         c.validate()?;
@@ -215,6 +220,7 @@ impl Campaign {
         if self.prepared_fixture.is_some()
             || self.league_played.is_some()
             || self.second_league_played.is_some()
+            || self.third_league_played.is_some()
         {
             return Err("recorded result has a foreign or invalid fixture/request context".into());
         }
