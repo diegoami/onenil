@@ -374,6 +374,38 @@ impl LeaguePlayed {
                 .bytes()
                 .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b)))
     }
+
+    /// [review #220] The third result binds the witnessed week-30 request the
+    /// way the first two bind theirs: the prepared row and season come from the
+    /// committed projection, the week is the REQUEST's (55), and the ticket's
+    /// own identity is admitted only in shape and order. The digest itself is
+    /// the capture ticket's, not the archaeology receipt's (the seed's note),
+    /// so it is never compared with a pinned value - but a forged-length or
+    /// out-of-order identity is refused like the earlier results'.
+    pub(crate) fn binds_week3(
+        &self,
+        campaign: &Campaign,
+        seed3: &LeagueWeek3,
+    ) -> Result<bool, String> {
+        let request = &seed3.witnessed.third_request;
+        let prepared = &request.prepared;
+        Ok(self.prepared.week == prepared.week
+            && self.prepared.competition == prepared.competition
+            && self.prepared.opponent == prepared.opponent
+            && self.prepared.flags == prepared.flags
+            && self.prepared.name == prepared.name
+            && self.season.counter == request.season_counter
+            && self.season == campaign.season
+            && self.week_index == prepared.week
+            && self.score == seed3.witnessed.score
+            && self.native_return == LEAGUE_NATIVE_RETURN
+            && self.request_revision < campaign.revision
+            && self.request_sha256.len() == 64
+            && self
+                .request_sha256
+                .bytes()
+                .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b)))
+    }
 }
 
 /// The league line's own origin: the seed record, the preparation savestate it
@@ -538,31 +570,23 @@ impl Campaign {
         {
             return Err(refused.into());
         }
+        // [review #220] The dispatch into this state must not cheapen the
+        // history chain: the first two results bind through their own
+        // validators, exactly as the week-2 path binds them, and the third
+        // binds its witnessed request and recorded identity here.
+        let first = self.league_played.as_ref().ok_or(refused)?;
+        if !first.binds_at(self, &seed, seed2.source.week_index)? {
+            return Err(refused.into());
+        }
         let second = self.second_league_played.as_ref().ok_or(refused)?;
-        if self.league_played.is_none()
-            || second.week_index != 54
-            || second.score != seed2.witnessed.score
-            || second.native_return != LEAGUE_NATIVE_RETURN
-        {
+        if !second.binds_week2(self, &seed2)? {
             return Err(refused.into());
         }
         let third = self.third_league_played.as_ref().ok_or(refused)?;
         // [review #218] the result stores the REQUEST's week (55, the
         // pre-match value); the machine's post-week value (56) lives in the
         // campaign's own week index, checked after the walk below.
-        if third.week_index != 55
-            || third.score != seed3.witnessed.score
-            || third.native_return != LEAGUE_NATIVE_RETURN
-        {
-            return Err(refused.into());
-        }
-        if third.prepared.week != 55
-            || third.prepared.competition != 0
-            || third.prepared.opponent != seed3.witnessed.away_club
-            || third.prepared.flags != 1
-            || third.prepared.name != seed3.witnessed.away_name
-            || third.season.counter != seed3.target.season_counter
-        {
+        if !third.binds_week3(self, seed3)? {
             return Err(refused.into());
         }
         // the roster arrangement is unchanged through the third week: the
@@ -600,7 +624,12 @@ impl Campaign {
                 return Err(refused.into());
             }
         }
-        Ok(())
+        // [review #224] the roster and player-record identity checks the
+        // earlier weeks share: the week-3 path returned before them once the
+        // dispatch moved here, so a week-3 save could carry forged ids, names
+        // or role codes. The witnessed roster is unchanged through the
+        // substitution-declined third week; only the arrangement moved (T109).
+        self.validate_roster_and_players(source)
     }
 
     fn week2_context<'a>(&self, seed2: &'a LeagueWeek2) -> Option<&'a Source> {
