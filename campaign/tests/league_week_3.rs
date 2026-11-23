@@ -99,34 +99,31 @@ fn the_cash_chain_joins_the_t106_receipt() {
 #[test]
 fn blackburns_row_is_the_t106_row_plus_one_home_win() {
     let seed3 = LeagueWeek3::pinned().unwrap();
-    let t106 = json_week2();
-    assert_eq!(
-        t106["goals_for"], 63,
-        "the T106 row's goals for, re-read from the committed week-2 fixture chain"
-    );
+    // [review #222] the transition derives from the witnessed week-29 row the
+    // seed carries (the T106 receipt's own row), not from literals; only the
+    // witnessed result supplies the delta.
+    let before = &seed3.witnessed.week_29_row;
+    assert_eq!(before.club, "Blackburn R");
     let blackburn = seed3
         .table
         .iter()
-        .find(|row| row.club == "Blackburn R")
+        .find(|row| row.club == before.club)
         .expect("Blackburn R is in the captured table");
-    assert_eq!(blackburn.played, 30);
-    assert_eq!(blackburn.points, 41, "39 points plus 2 for the home win");
-    assert_eq!(blackburn.goals_for, 68, "63 plus five home goals");
-    assert_eq!(blackburn.goals_against, 41, "38 plus three conceded");
+    let [scored, conceded] = seed3.witnessed.score;
+    assert_eq!(blackburn.played, before.played + 1);
+    assert_eq!(
+        blackburn.points,
+        before.points + 2,
+        "two points for the home win"
+    );
+    assert_eq!(blackburn.goals_for, before.goals_for + scored);
+    assert_eq!(blackburn.goals_against, before.goals_against + conceded);
     assert_eq!(
         blackburn.home,
-        [9, 3, 3],
-        "the home win moves 8-3-3 to 9-3-3"
+        [before.home[0] + 1, before.home[1], before.home[2]],
+        "the home win's column advances by one"
     );
-    assert_eq!(blackburn.away, [9, 2, 4], "the away record is unchanged");
-}
-
-fn json_week2() -> serde_json::Value {
-    serde_json::json!({
-        "goals_for": 63,
-        "goals_against": 38,
-        "points": 39
-    })
+    assert_eq!(blackburn.away, before.away, "the away record is unchanged");
 }
 
 #[test]
@@ -270,4 +267,86 @@ fn the_witnessed_condition_refreshes_apply() {
             "{name}'s witnessed condition applies"
         );
     }
+}
+
+fn week30_played() -> Campaign {
+    let mut c = week29_played();
+    let ticket = c
+        .match_ticket()
+        .expect("the completed second week admits the third");
+    c.record_league_week_3(&ticket, [5, 3], RETURN, 58_332, 90_827)
+        .expect("the witnessed week-30 values complete the week");
+    c
+}
+
+/// [review #220/#224] A week-3 save edited in memory must refuse through both
+/// loaders, exactly as the review's temporary suite exercised them.
+fn refuses(name: &str, forged: Campaign) {
+    let bytes = serde_json::to_vec(&forged).unwrap();
+    assert!(
+        Campaign::decode(&bytes).is_err(),
+        "{name} accepted by decode"
+    );
+    let mut target = week30_played();
+    assert!(
+        target.replace_from_bytes(&bytes).is_err(),
+        "{name} accepted through a save image"
+    );
+    assert_eq!(target, week30_played(), "{name} replaced the live campaign");
+}
+
+#[test]
+fn forged_third_result_identities_refuse() {
+    // [review #220] the re-review's mutations of a valid completed week-30
+    // save: each was accepted before this batch.
+    let mut c = week30_played();
+    c.third_league_played.as_mut().unwrap().request_revision = u64::MAX;
+    refuses("request revision", c);
+
+    let mut c = week30_played();
+    c.third_league_played.as_mut().unwrap().request_sha256 = "forged".into();
+    refuses("request digest", c);
+
+    let mut c = week30_played();
+    c.third_league_played.as_mut().unwrap().prepared.week = 0;
+    refuses("prepared week", c);
+
+    let mut c = week30_played();
+    c.third_league_played.as_mut().unwrap().prepared.name = "Arsenal".into();
+    refuses("prepared opponent name", c);
+
+    let mut c = week30_played();
+    c.third_league_played.as_mut().unwrap().season.counter = 99;
+    refuses("season counter", c);
+}
+
+#[test]
+fn earlier_results_and_roster_identities_refuse_in_week_three() {
+    // [review #220] the week-3 dispatch previously bypassed the earlier
+    // results' binding: the first result's score and the history holes.
+    let mut c = week30_played();
+    c.league_played.as_mut().unwrap().score = [0, 4];
+    refuses("first result score", c);
+
+    let mut c = week30_played();
+    c.league_played = None;
+    refuses("missing first result", c);
+
+    let mut c = week30_played();
+    c.second_league_played = None;
+    refuses("missing second result", c);
+
+    // [review #224] the roster and player-record identity checks must run on
+    // the week-3 path too.
+    let mut c = week30_played();
+    c.players[0].name = "Forged Name".into();
+    refuses("player name", c);
+
+    let mut c = week30_played();
+    c.players[0].id += 10_000;
+    refuses("player id", c);
+
+    let mut c = week30_played();
+    c.players[0].current_position = 14;
+    refuses("role code", c);
 }
