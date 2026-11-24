@@ -57,6 +57,16 @@ jobs:
         run: |
           python3 tools/sevilla_week_inputs.py --research-root .cache/sevilla-week-source --check
           python3 tools/test_sevilla_week_inputs.py
+      - name: Fetch the captured league display
+        uses: actions/checkout@v4
+        with:
+          repository: diegoami/onenil-archaeology
+          ref: 16029c0db43156c138cc115af0291c0251e479a9
+          fetch-depth: 0
+          path: .cache/league-display-source
+          persist-credentials: false
+      - name: Check the captured unplayed divisions and empty notice
+        run: python3 campaign/import_league_display.py --research-root .cache/league-display-source --check
       - run: cargo test --manifest-path campaign/Cargo.toml --locked
       - name: Check the witnessed Sevilla reference assets
         run: |

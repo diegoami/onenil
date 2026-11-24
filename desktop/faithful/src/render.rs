@@ -36,6 +36,7 @@ pub struct Renderer {
     assets: Assets,
     labels: Labels,
     initial: onenil_campaign::Campaign,
+    league: onenil_campaign::league_display::LeagueDisplay,
 }
 impl Renderer {
     /// The drawn screen as text, one 80-column line per row.
@@ -62,6 +63,7 @@ impl Renderer {
             labels: serde_json::from_str(include_str!("../assets/campaign-labels.json"))
                 .map_err(|e| e.to_string())?,
             initial: onenil_campaign::Campaign::initial()?,
+            league: onenil_campaign::league_display::league_display()?,
         })
     }
     fn pixel(&mut self, x: i32, y: i32, color: u32) {
@@ -866,6 +868,46 @@ impl Renderer {
     }
     pub fn draw(&mut self, c: &Controller) {
         match c.screen {
+            // [confirmed: W033] The unplayed division table: the captured club
+            // order and zero counters. No played row is invented here.
+            Screen::LeagueTables => {
+                self.rect(0, 0, WIDTH as i32, HEIGHT as i32, 0x000080);
+                let division = c.league_division.min(self.league.divisions.len() - 1);
+                let table = &self.league.divisions[division];
+                let title = format!("{:^80}", table.name);
+                self.text(0, 1, &title, 0xffff55, 0x000080, 80);
+                let header = format!(
+                    "{:>2} {:<17} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>3} {:>3} {:>3}",
+                    "#", "TEAM", "P", "HW", "HD", "HL", "AW", "AD", "AL", "F", "A", "PTS"
+                );
+                self.text(0, 3, &header, CYAN, 0x000080, 80);
+                for (index, club) in table.clubs.iter().enumerate() {
+                    let row = format!(
+                        "{:>2} {:<17} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>3} {:>3} {:>3}",
+                        index + 1,
+                        club,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0
+                    );
+                    self.text(0, 4 + index, &row, TEXT, 0x000080, 80);
+                }
+                self.text(
+                    0,
+                    24,
+                    "Down-next  Up-previous  Esc-exit",
+                    CYAN,
+                    0x000080,
+                    80,
+                );
+            }
             // [confirmed: W001] The startup question. Text only: no original
             // title art or executable bytes are embedded.
             Screen::Startup => {

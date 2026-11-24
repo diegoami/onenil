@@ -151,6 +151,21 @@ key is ignored because the original's invalid-key behaviour is unvisited.
 `--load` and `--choose-save` keep bypassing the question as explicit entry and
 test modes, which is how the T56/T57 window records keep their route.
 
+## T116 the unplayed league display
+
+[confirmed: W033, runs/T49/session-r0002 steps 23-28] After a friendly the
+original's League tables screen shows the two divisions with every counter on
+zero and the league file's own club order (Blackburn R first, Manchester City
+first in Division One); Down/Up switch division and Escape exits. League
+results reports "No league results to see : hit any key" over the menu, and the
+next key only dismisses it.
+
+[designed] The desktop now renders that captured display: menu item 6 opens the
+table, item 7 the notice. The data is derived by `campaign/import_league_display.py`
+from the pinned committed records (three step files at research commit
+`16029c0`), not from modern tables or from a played state. No match, table
+update, tie-break or scheduling rule is implied; those remain B6 work.
+
 ## T115 the edited XI's campaign fixture in the window
 
 [confirmed:T69/T80] The one witnessed edit (Pearce/Hendry swapped) is the

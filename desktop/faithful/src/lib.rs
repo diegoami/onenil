@@ -1,3 +1,4 @@
+#![recursion_limit = "256"]
 //! [designed] Desktop feasibility controller; original evidence in docs/desktop-feasibility.md.
 pub mod application;
 pub mod campaign_match;

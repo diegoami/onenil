@@ -37,6 +37,15 @@ def state_check(record):
     assert all(s['state']['campaign']==restored for s in record['steps'][start:end])
     assert steps['completed-no-campaign-post']['campaign']['next_fixture']['opponent']==17
     assert len(record['worker_pids'])==2+2*int('campaign-match-start' in steps)
+    if 'league-tables' in steps:
+        # [confirmed:W033] The captured unplayed divisions and the empty notice.
+        assert steps['league-tables']['league_division']==0
+        assert steps['league-division-one']['league_division']==1
+        assert steps['league-premier-again']['league_division']==0
+        assert steps['league-tables-exit']['screen']=='Main'
+        assert steps['league-results-empty']['notice'] and 'No league results' in steps['league-results-empty']['message']
+        assert not steps['league-results-dismissed']['notice'] and steps['league-results-dismissed']['message']==''
+        assert steps['league-results-dismissed']['screen']=='Main'
     if 'campaign-match-start' in steps:
         # [confirmed:T69/T80] The one supported edited XI, its computed result,
         # exactly one posting, the W030 tail and the fresh-process reload.
