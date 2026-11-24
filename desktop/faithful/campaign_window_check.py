@@ -114,6 +114,9 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   step('fresh-desktop-reload',lambda s:s.get('screen')=='Main' and s.get('campaign')==complete);shot('fresh-reload')
   key('space');key('Insert');step('restored-keeper-instructions',lambda s:s.get('card')==2598 and s.get('panel')=='Details');shot('restored-keeper')
   key('Down');step('restored-current-club-position',lambda s:s.get('card')==2582);shot('restored-position');key('Escape')
+  # [designed:T114] The Space shortcut leaves the main menu on Players; return the
+  # highlight to PLAY NEXT GAME before opening preparation.
+  key('Up');step('main-play-next-game',lambda s:s.get('screen')=='Main' and s.get('menus',[None])[0]==0)
   for w,h in [(960,640),(720,450),(1440,900)]:x.XResizeWindow(display,window,w,h);x.XFlush(display);time.sleep(.2);shot(f'resize-{w}x{h}')
   remembered=state()
   key('Return');step('campaign-preparation',lambda s:s.get('screen')=='Preparation' and not s.get('exhibition'));shot('campaign-preparation')
