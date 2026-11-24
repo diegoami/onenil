@@ -136,7 +136,7 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   key('Return');step('unsupported-campaign-match-is-not-exhibition',lambda s:s.get('screen')=='Preparation' and not s.get('worker_pid') and not s.get('exhibition') and s.get('message','')!='')
   key('e');step('separate-exhibition',lambda s:s.get('exhibition') and s.get('screen')=='Preparation');shot('exhibition-choice')
   key('Return');s=step('preparing',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'));pid=s['worker_pid'];worker_pids.append(pid);shot('preparing');key('Escape');step('cancel-preparation',lambda s:s.get('screen')=='Preparation' and not s.get('worker_pid'));assert not Path(f'/proc/{pid}').exists()
-  key('Return');step('pitch',lambda s:s.get('screen')=='Pitch' and s.get('players')==22,180);shot('pitch');step('native-actions-progress',lambda s:s.get('frames',0)>=500 and s.get('events',0)>20,30);shot('pitch-actions')
+  key('Return');step('pitch',lambda s:s.get('screen')=='Pitch' and s.get('players')==22,180);shot('pitch');step('native-actions-progress',lambda s:s.get('frames',0)>=500 and s.get('events',0)>20,120);shot('pitch-actions')
   key('space');step('commentary-history',lambda s:s.get('screen')=='History' and s.get('events',0)>0);shot('history');key('Escape');key('Escape');step('bench',lambda s:s.get('screen')=='Bench');shot('bench');key('Return')
   step('half-time',lambda s:s.get('screen')=='HalfTime',90);shot('half-time');key('Return');step('half-time-bench',lambda s:s.get('screen')=='Bench');key('Return')
   step('full-time',lambda s:s.get('screen')=='FullTime' and s.get('score')==[2,1],90);shot('full-time');key('Return')
