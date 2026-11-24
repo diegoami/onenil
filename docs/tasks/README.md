@@ -164,3 +164,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T111 The league table's display order](T111.md) (#214).
 
 - [T113 The third witnessed league week](T113.md) (#216).
+
+- [T114 The original startup load question in the production window](T114.md) (#108).
