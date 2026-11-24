@@ -143,6 +143,30 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   step('completed-no-campaign-post',lambda s:s.get('screen')=='Main' and s.get('campaign')==complete and not s.get('exhibition'))
   key('e');key('Return');s=step('close-during-preparation',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'));worker_pids.append(s['worker_pid']);close_window();assert process.wait(timeout=3)==0
   assert all(not Path(f'/proc/{pid}').exists() for pid in worker_pids)
+  # [confirmed:T69/T80] The one supported edited XI (Pearce/Hendry) plays its
+  # own campaign fixture: real preparation, computed score, one recorded result,
+  # the W030 tail, and a fresh-process reload of the committed week.
+  save.unlink(missing_ok=True);statepath.unlink(missing_ok=True)
+  launch()
+  step('campaign-match-start',lambda s:s.get('screen')=='Startup')
+  key('y');step('campaign-match-seed',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('club',{}).get('id')==130)
+  for edit in ['space','Down','Return','Down','Return','Escape','Up']:key(edit)
+  step('campaign-match-edited',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('club',{}).get('first_team',[None,None,None])[1:3]==[2583,2582]);shot('campaign-match-edited')
+  key('Return');step('campaign-match-preparation',lambda s:s.get('screen')=='Preparation' and not s.get('exhibition'))
+  key('Return');s=step('campaign-match-preparing',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'),240);worker_pids.append(s['worker_pid']);shot('campaign-match-preparing')
+  step('campaign-match-pitch',lambda s:s.get('screen')=='Pitch',240);shot('campaign-match-pitch')
+  step('campaign-match-half-time',lambda s:s.get('screen')=='HalfTime',240);shot('campaign-match-half-time');key('Return')
+  step('campaign-match-half-time-bench',lambda s:s.get('screen')=='Bench');key('Return')
+  step('campaign-match-full-time',lambda s:s.get('screen')=='FullTime' and s.get('score')==[0,2],240);shot('campaign-match-full-time')
+  key('Return');recorded=step('campaign-match-recorded',lambda s:s.get('screen')=='CashFlow' and s.get('campaign',{}).get('revision')==2 and s.get('campaign',{}).get('played_fixture',{}).get('score')==[0,2]);shot('campaign-match-recorded')
+  key('Return');step('campaign-match-double-post-refused',lambda s:s.get('screen')=='CashFlow' and s.get('campaign')==recorded['campaign'])
+  key('space');step('campaign-match-transfer-news',lambda s:s.get('screen')=='TransferNews')
+  key('space');advanced=step('campaign-match-week-one',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('week_index')==1 and s.get('campaign',{}).get('cash')==421491 and s.get('campaign',{}).get('next_fixture',{}).get('opponent')==176);shot('campaign-match-week-one')
+  key('F7');step('campaign-match-saved',lambda s:'saved' in s.get('message',''));shot('campaign-match-saved')
+  close_window();assert process.wait(timeout=3)==0
+  statepath.unlink(missing_ok=True);launch(load=True)
+  step('campaign-match-reloaded',lambda s:s.get('screen')=='Main' and s.get('campaign')==advanced['campaign']);shot('campaign-match-reloaded')
+  close_window();assert process.wait(timeout=3)==0
  except FocusComplete:
   pass
  except BaseException:
