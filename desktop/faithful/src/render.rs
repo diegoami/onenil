@@ -873,15 +873,16 @@ impl Renderer {
             Screen::LeagueTables => {
                 self.rect(0, 0, WIDTH as i32, HEIGHT as i32, 0x000080);
                 let division = c.league_division.min(self.league.divisions.len() - 1);
-                let table = &self.league.divisions[division];
-                let title = format!("{:^80}", table.name);
+                let name = self.league.divisions[division].name.clone();
+                let clubs = self.league.divisions[division].clubs.clone();
+                let title = format!("{name:^80}");
                 self.text(0, 1, &title, 0xffff55, 0x000080, 80);
                 let header = format!(
                     "{:>2} {:<17} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>3} {:>3} {:>3}",
                     "#", "TEAM", "P", "HW", "HD", "HL", "AW", "AD", "AL", "F", "A", "PTS"
                 );
                 self.text(0, 3, &header, CYAN, 0x000080, 80);
-                for (index, club) in table.clubs.iter().enumerate() {
+                for (index, club) in clubs.iter().enumerate() {
                     let row = format!(
                         "{:>2} {:<17} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>3} {:>3} {:>3}",
                         index + 1,
