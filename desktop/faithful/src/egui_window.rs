@@ -129,6 +129,8 @@ pub fn run(
     let mut app = Application::new(root, save, load)?;
     if choose {
         app.choose_save();
+    } else if !load {
+        app.startup();
     }
     let candidate = Candidate {
         app,

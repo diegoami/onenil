@@ -79,7 +79,9 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   process_ids.append(process.pid)
  try:
   launch()
-  initial=step('main',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('club',{}).get('id')==130);shot('main')
+  startup=step('startup',lambda s:s.get('screen')=='Startup');shot('startup')
+  key('n');step('new-game-not-implemented',lambda s:s.get('screen')=='Startup' and 'not implemented' in s.get('message','') and s.get('campaign')==startup['campaign'])
+  key('y');initial=step('main',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('club',{}).get('id')==130);shot('main')
   assert initial['campaign']['cash']==452000 and initial['campaign']['week_index']==0 and initial['campaign']['next_fixture']['opponent']==17
   key('Down');step('menu-down',lambda s:s.get('menus',[None])[0]==1);shot('menu-moved');key('Up');step('menu-up',lambda s:s.get('menus',[None])[0]==0)
   key('space');step('players',lambda s:s.get('screen')=='Players' and s.get('card')==2581);shot('skills')
@@ -125,6 +127,20 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   step('full-time',lambda s:s.get('screen')=='FullTime' and s.get('score')==[2,1],90);shot('full-time');key('Return')
   step('completed-no-campaign-post',lambda s:s.get('screen')=='Main' and s.get('campaign')==complete and not s.get('exhibition'))
   key('e');key('Return');s=step('close-during-preparation',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'));worker_pids.append(s['worker_pid']);close_window();assert process.wait(timeout=3)==0
+  # [confirmed: W001] An existing but invalid save must be refused, never replaced
+  # silently by the supplied seed; Y with a valid save opens it.
+  save.write_bytes(b'{')
+  statepath.unlink()
+  launch()
+  step('startup-invalid-save',lambda s:s.get('screen')=='Startup' and s.get('campaign')==startup['campaign']);shot('startup-invalid-save')
+  key('y');step('invalid-save-refused-at-startup',lambda s:s.get('screen')=='Startup' and 'refused' in s.get('message','').lower() and s.get('campaign')==startup['campaign']);shot('startup-refused')
+  close_window();assert process.wait(timeout=3)==0
+  save.write_bytes(complete)
+  statepath.unlink()
+  launch()
+  step('startup-valid-save',lambda s:s.get('screen')=='Startup')
+  key('y');step('startup-loads-saved-campaign',lambda s:s.get('screen')=='Main' and s.get('campaign')==complete);shot('startup-loaded')
+  close_window();assert process.wait(timeout=3)==0
   assert all(not Path(f'/proc/{pid}').exists() for pid in worker_pids)
  except FocusComplete:
   pass
