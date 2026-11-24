@@ -151,7 +151,7 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   step('campaign-match-start',lambda s:s.get('screen')=='Startup')
   key('y');step('campaign-match-seed',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('club',{}).get('id')==130)
   for edit in ['space','Down','Return','Down','Return','Escape','Up']:key(edit)
-  step('campaign-match-edited',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('club',{}).get('first_team',[None,None,None])[1:3]==[2583,2582]);shot('campaign-match-edited')
+  edited=step('campaign-match-edited',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('club',{}).get('first_team',[None,None,None])[1:3]==[2583,2582]);shot('campaign-match-edited')
   key('Return');step('campaign-match-preparation',lambda s:s.get('screen')=='Preparation' and not s.get('exhibition'))
   key('Return');s=step('campaign-match-abandoned-preparing',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'),240);worker_pids.append(s['worker_pid'])
   key('Escape');step('campaign-match-abandoned-preparation',lambda s:s.get('screen')=='Preparation' and s.get('campaign')==edited['campaign'])
