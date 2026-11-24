@@ -151,6 +151,23 @@ key is ignored because the original's invalid-key behaviour is unvisited.
 `--load` and `--choose-save` keep bypassing the question as explicit entry and
 test modes, which is how the T56/T57 window records keep their route.
 
+## T115 the edited XI's campaign fixture in the window
+
+[confirmed:T69/T80] The one witnessed edit (Pearce/Hendry swapped) is the
+supported `Profile::Edited`: its admission equals the pinned edited preparation;
+the owned worker computes 3970 frames to [0, 2] with native return
+`0AB9:EBE2`; Enter at full time records exactly one result; the W030 tail
+advances to week 1 (cash 421,491, Sevilla next); a fresh process reloads both.
+
+[confirmed:T115 record] `records/T115/window-r0003.json` drives that route
+through the real X11 window: the original keys make the swap, PLAY GAME opens
+the campaign preparation (not the separate exhibition), the match runs through
+half time to full time, the recorded state shows revision 2 with the played
+fixture, a second Enter at CashFlow changes nothing, and the F7 save reloaded
+in a new process still has the result and the advanced week. This is the
+product-level route behind the controller tests; arbitrary edited XIs remain
+outside it.
+
 ## T58 original player controls
 
 [confirmed] Research W015–W017 at68cd3396 and the original handlers/listings
