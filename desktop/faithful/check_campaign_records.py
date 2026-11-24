@@ -36,11 +36,12 @@ def state_check(record):
     end=next((i for i,s in enumerate(record['steps']) if s['name']=='campaign-match-start'),len(record['steps']))
     assert all(s['state']['campaign']==restored for s in record['steps'][start:end])
     assert steps['completed-no-campaign-post']['campaign']['next_fixture']['opponent']==17
-    assert len(record['worker_pids'])==2+int('campaign-match-start' in steps)
+    assert len(record['worker_pids'])==2+2*int('campaign-match-start' in steps)
     if 'campaign-match-start' in steps:
         # [confirmed:T69/T80] The one supported edited XI, its computed result,
         # exactly one posting, the W030 tail and the fresh-process reload.
         assert steps['campaign-match-edited']['campaign']['club']['first_team'][1:3]==[2583,2582]
+        assert steps['campaign-match-abandoned-preparation']['campaign']==steps['campaign-match-edited']['campaign']
         assert not steps['campaign-match-preparation']['exhibition']
         assert steps['campaign-match-full-time']['score']==[0,2]
         recorded=steps['campaign-match-recorded']['campaign']
