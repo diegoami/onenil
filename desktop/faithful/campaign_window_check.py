@@ -169,6 +169,17 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   assert all(not Path(f'/proc/{pid}').exists() for pid in worker_pids)
   statepath.unlink(missing_ok=True);launch(load=True)
   step('campaign-match-reloaded',lambda s:s.get('screen')=='Main' and s.get('campaign')==advanced['campaign']);shot('campaign-match-reloaded')
+  # [confirmed:W033] League tables shows the captured unplayed divisions; League
+  # results shows its empty notice, and the next key only dismisses it.
+  for _ in range(6):key('Down')
+  step('league-menu',lambda s:s.get('screen')=='Main' and s.get('menus',[None])[0]==6)
+  key('Return');step('league-tables',lambda s:s.get('screen')=='LeagueTables' and s.get('league_division')==0);shot('league-tables')
+  key('Down');step('league-division-one',lambda s:s.get('screen')=='LeagueTables' and s.get('league_division')==1);shot('league-division-one')
+  key('Up');step('league-premier-again',lambda s:s.get('screen')=='LeagueTables' and s.get('league_division')==0)
+  key('Escape');step('league-tables-exit',lambda s:s.get('screen')=='Main' and s.get('menus',[None])[0]==6)
+  key('Down');step('league-results-menu',lambda s:s.get('screen')=='Main' and s.get('menus',[None])[0]==7)
+  key('Return');step('league-results-empty',lambda s:s.get('screen')=='Main' and s.get('notice') and 'No league results' in s.get('message',''));shot('league-results-empty')
+  key('space');step('league-results-dismissed',lambda s:s.get('screen')=='Main' and not s.get('notice') and s.get('message','')=='' and s.get('menus',[None])[0]==7);shot('league-results-dismissed')
   close_window();assert process.wait(timeout=3)==0
  except FocusComplete:
   pass

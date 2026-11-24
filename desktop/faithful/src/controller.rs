@@ -10,6 +10,7 @@ use crate::{
 pub enum Screen {
     Startup,
     Main,
+    LeagueTables,
     SavedGames,
     Players,
     Options,
@@ -89,6 +90,10 @@ pub struct Controller {
     pub close_requested: bool,
     pub speed: u8,
     pub history_top: usize,
+    /// [confirmed: W033] 0 is PREMIER LEAGUE, 1 is DIVISION ONE.
+    pub league_division: usize,
+    /// [confirmed: W033] The empty-results notice: the next key only dismisses it.
+    pub notice: bool,
     pub exhibition: bool,
     match_ticket: Option<onenil_campaign::MatchTicket>,
     remembered_first: usize,
@@ -126,6 +131,8 @@ impl Default for Controller {
             close_requested: false,
             speed: 23,
             history_top: 0,
+            league_division: 0,
+            notice: false,
             exhibition: false,
             match_ticket: None,
             remembered_first: 0,
@@ -484,6 +491,13 @@ impl Controller {
         }
     }
     pub fn key(&mut self, key: Key) {
+        // [confirmed: W033] "hit any key" dismisses the notice; it does not also
+        // act on the menu underneath.
+        if self.notice {
+            self.notice = false;
+            self.message.clear();
+            return;
+        }
         self.message.clear();
         match self.screen {
             // [confirmed: W001] Y loads the saved game; [confirmed: W002] N continues
@@ -492,6 +506,14 @@ impl Controller {
             Screen::Startup => match key {
                 Key::Y => self.startup_load_requested = true,
                 Key::N => self.startup_new_requested = true,
+                _ => (),
+            },
+            // [confirmed: W033] Down moves to DIVISION ONE, Up returns; the
+            // capture exercises one step in each direction, so the edges clamp.
+            Screen::LeagueTables => match key {
+                Key::Up => self.league_division = self.league_division.saturating_sub(1),
+                Key::Down => self.league_division = (self.league_division + 1).min(1),
+                Key::Escape => self.screen = Screen::Main,
                 _ => (),
             },
             // [designed] Clamp at list edges; W006 establishes interior movement only.
@@ -530,6 +552,18 @@ impl Controller {
                     self.preparation_menu = 2;
                 }
                 Key::Enter if self.menu == 1 => self.players(),
+                // [confirmed: W033] League tables opens the unplayed division
+                // table; League results reports the captured empty notice.
+                Key::Enter if self.menu == 6 => {
+                    self.league_division = 0;
+                    self.screen = Screen::LeagueTables;
+                }
+                Key::Enter if self.menu == 7 => {
+                    self.notice = true;
+                    self.message = onenil_campaign::league_display::league_display()
+                        .map(|display| display.empty_results)
+                        .unwrap_or_else(|error| error);
+                }
                 Key::F7 => self.save_requested = true,
                 Key::F9 => {
                     self.load_requested = true;
@@ -929,5 +963,36 @@ mod startup_tests {
         c.key(Key::Y);
         assert!(c.startup_load_requested && !c.startup_new_requested);
         assert_eq!(c.screen, Screen::Startup);
+    }
+}
+
+#[cfg(test)]
+mod league_tests {
+    use super::*;
+
+    #[test]
+    fn league_tables_and_results_follow_the_captured_route() {
+        let mut c = Controller::default();
+        c.menu = 6;
+        c.key(Key::Enter);
+        assert_eq!(c.screen, Screen::LeagueTables);
+        assert_eq!(c.league_division, 0);
+        c.key(Key::Down);
+        assert_eq!(c.league_division, 1);
+        c.key(Key::Down);
+        assert_eq!(c.league_division, 1);
+        c.key(Key::Up);
+        assert_eq!(c.league_division, 0);
+        c.key(Key::Escape);
+        assert_eq!(c.screen, Screen::Main);
+        c.menu = 7;
+        c.key(Key::Enter);
+        assert!(c.notice);
+        assert_eq!(c.screen, Screen::Main);
+        assert!(c.message.contains("No league results"));
+        c.key(Key::Space);
+        assert!(!c.notice && c.message.is_empty());
+        assert_eq!(c.screen, Screen::Main);
+        assert_eq!(c.menu, 7);
     }
 }
