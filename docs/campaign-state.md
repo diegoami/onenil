@@ -159,7 +159,7 @@ the owned worker computes 3970 frames to [0, 2] with native return
 `0AB9:EBE2`; Enter at full time records exactly one result; the W030 tail
 advances to week 1 (cash 421,491, Sevilla next); a fresh process reloads both.
 
-[confirmed:T115 record] `records/T115/window-r0003.json` drives that route
+[confirmed:T115 record] `records/T115/window-r0006.json` drives that route
 through the real X11 window: the original keys make the swap, PLAY GAME opens
 the campaign preparation (not the separate exhibition), the match runs through
 half time to full time, the recorded state shows revision 2 with the played
