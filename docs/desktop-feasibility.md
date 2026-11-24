@@ -1,7 +1,10 @@
 # Desktop feasibility
 
 [designed] T52–T54 are experiments for #118 and the owner's toolkit decision #103.
-Desktop priority and original-led UI fidelity are settled. Toolkit selection is pending.
+Desktop priority and original-led UI fidelity are settled. [designed: owner, 2026-11-24,
+decision #103] The production toolkit is the **software-window candidate** (minifb + fontdue,
+the `software` feature of `desktop/faithful`); egui/glow stays a measured alternative and a later
+change is a new owner decision, never a silent one.
 
 T52 is a shared Rust controller, captured example squad editor, versioned experiment save
 and owned child-process match preparation. The captured eighteen rows have experiment IDs,
