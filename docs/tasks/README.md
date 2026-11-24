@@ -168,3 +168,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T114 The original startup load question in the production window](T114.md) (#108).
 
 - [T115 The edited saved XI plays its campaign fixture in the real window](T115.md) (#110).
+
+- [T116 The original League tables and League results screens](T116.md) (#112).
