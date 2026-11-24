@@ -1,0 +1,19 @@
+{
+  "schema": "native-campaign-window-check/1",
+  "scope": "real campaign save/edit/reload in fresh desktop processes; explicitly separate native exhibition",
+  "producer": "ddebc73e73b626062c79c37fca62a8faeb80a4b9",
+  "binary_sha256": "ce3f155080e2df3f0a5ef280acc2509b72b87321b3f79a477cbc6589264a8d11",
+  "font_sha256": "c99fb740581471c2bd239a200c9f7a6c12f60a7099b0f0af795e405281bc2c5f",
+  "display": ":100",
+  "elapsed_seconds": 15.350521468000807,
+  "steps": [],
+  "screenshots": [],
+  "worker_pids": [],
+  "desktop_process_ids": [],
+  "native_edit_probe": [],
+  "native_editor_binary_sha256": "7ff7753f110e28e429f35a396ee5c2280b60246497f47fa2c71e3dc562792ade",
+  "status": "failed",
+  "x11_errors": [],
+  "error": "Traceback (most recent call last):\n  File \"/home/diego/projects/onenil/desktop/faithful/campaign_window_check.py\", line 81, in <module>\n    launch()\n  File \"/home/diego/projects/onenil/desktop/faithful/campaign_window_check.py\", line 70, in launch\n    assert window,'native window missing'\n           ^^^^^^\nAssertionError: native window missing\n",
+  "stderr": "Build with --features software for the native window.\n"
+}

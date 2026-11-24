@@ -23,18 +23,33 @@ def state_check(record):
     for kind in ['malformed','version','namespace','legacy-experiment']:assert steps[kind+'-load-preserves-campaign']['campaign']==steps['saved']['campaign']
     restored=steps['fresh-desktop-reload']['campaign'];assert projection(restored)==source['changed'] and restored['revision']==3
     assert steps['restored-keeper-instructions']['card']==2598 and steps['restored-current-club-position']['card']==2582
-    # T56/T57 records have two launches; T114's startup scenarios add two more.
-    assert len(set(record['desktop_process_ids']))>=2 and len(record['native_edit_probe'])==2
+    # T56/T57 records have two launches; T114's startup scenarios and T115's
+    # campaign-match route add two each.
+    launches=2+2*int('startup' in steps)+2*int('campaign-match-start' in steps)
+    assert len(set(record['desktop_process_ids']))==launches and len(record['native_edit_probe'])==2
     if 'startup' in steps:
         assert {'startup','new-game-not-implemented','startup-invalid-save','invalid-save-refused-at-startup','startup-valid-save','startup-loads-saved-campaign'}<=set(steps)
-        assert len(set(record['desktop_process_ids']))==4
     blocked=steps['unsupported-campaign-match-is-not-exhibition'];assert not blocked['worker_pid'] and not blocked['exhibition'] and blocked['campaign']==restored
     assert steps['separate-exhibition']['exhibition']
     assert steps['full-time']['score']==[2,1] and steps['full-time']['frames']==4199 and steps['full-time']['events']==832
     start=next(i for i,s in enumerate(record['steps']) if s['name']=='fresh-desktop-reload')
-    assert all(s['state']['campaign']==restored for s in record['steps'][start:])
+    end=next((i for i,s in enumerate(record['steps']) if s['name']=='campaign-match-start'),len(record['steps']))
+    assert all(s['state']['campaign']==restored for s in record['steps'][start:end])
     assert steps['completed-no-campaign-post']['campaign']['next_fixture']['opponent']==17
-    assert len(record['worker_pids'])==2
+    assert len(record['worker_pids'])==2+2*int('campaign-match-start' in steps)
+    if 'campaign-match-start' in steps:
+        # [confirmed:T69/T80] The one supported edited XI, its computed result,
+        # exactly one posting, the W030 tail and the fresh-process reload.
+        assert steps['campaign-match-edited']['campaign']['club']['first_team'][1:3]==[2583,2582]
+        assert steps['campaign-match-abandoned-preparation']['campaign']==steps['campaign-match-edited']['campaign']
+        assert not steps['campaign-match-preparation']['exhibition']
+        assert steps['campaign-match-full-time']['score']==[0,2]
+        recorded=steps['campaign-match-recorded']['campaign']
+        assert recorded['played_fixture']['score']==[0,2] and recorded['revision']==2
+        assert steps['campaign-match-double-post-refused']['campaign']==recorded
+        advanced=steps['campaign-match-week-one']['campaign']
+        assert advanced['week_index']==1 and advanced['cash']==421491 and advanced['next_fixture']['opponent']==176
+        assert steps['campaign-match-reloaded']['screen']=='Main' and steps['campaign-match-reloaded']['campaign']==advanced
 
 def verify(path):
     r=json.loads(path.read_text());state_check(r)
