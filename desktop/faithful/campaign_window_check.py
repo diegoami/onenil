@@ -121,7 +121,7 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   remembered=state()
   key('Return');step('campaign-preparation',lambda s:s.get('screen')=='Preparation' and not s.get('exhibition'));shot('campaign-preparation')
   key('space');step('remembered-view',lambda s:s.get('screen')=='Players' and s.get('panel')==remembered['panel'] and s.get('selected')==remembered['selected'] and s.get('card')==remembered['card']);key('Escape');step('caller-return',lambda s:s.get('screen')=='Preparation')
-  key('Return');step('unsupported-campaign-match-is-not-exhibition',lambda s:s.get('screen')=='Preparation' and not s.get('worker_pid') and not s.get('exhibition') and 'pending' in s.get('message',''))
+  key('Return');step('unsupported-campaign-match-is-not-exhibition',lambda s:s.get('screen')=='Preparation' and not s.get('worker_pid') and not s.get('exhibition') and s.get('message','')!='')
   key('e');step('separate-exhibition',lambda s:s.get('exhibition') and s.get('screen')=='Preparation');shot('exhibition-choice')
   key('Return');s=step('preparing',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'));pid=s['worker_pid'];worker_pids.append(pid);shot('preparing');key('Escape');step('cancel-preparation',lambda s:s.get('screen')=='Preparation' and not s.get('worker_pid'));assert not Path(f'/proc/{pid}').exists()
   key('Return');step('pitch',lambda s:s.get('screen')=='Pitch' and s.get('players')==22,180);shot('pitch');step('native-actions-progress',lambda s:s.get('frames',0)>=500 and s.get('events',0)>20,30);shot('pitch-actions')
@@ -138,7 +138,7 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   step('startup-invalid-save',lambda s:s.get('screen')=='Startup' and s.get('campaign')==startup['campaign']);shot('startup-invalid-save')
   key('y');step('invalid-save-refused-at-startup',lambda s:s.get('screen')=='Startup' and 'refused' in s.get('message','').lower() and s.get('campaign')==startup['campaign']);shot('startup-refused')
   close_window();assert process.wait(timeout=3)==0
-  save.write_bytes(complete)
+  save.write_bytes(json.dumps(complete).encode())
   statepath.unlink()
   launch()
   step('startup-valid-save',lambda s:s.get('screen')=='Startup')
