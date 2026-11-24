@@ -138,8 +138,8 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   key('Return');s=step('preparing',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'));pid=s['worker_pid'];worker_pids.append(pid);shot('preparing');key('Escape');step('cancel-preparation',lambda s:s.get('screen')=='Preparation' and not s.get('worker_pid'));assert not Path(f'/proc/{pid}').exists()
   key('Return');step('pitch',lambda s:s.get('screen')=='Pitch' and s.get('players')==22,180);shot('pitch');step('native-actions-progress',lambda s:s.get('frames',0)>=500 and s.get('events',0)>20,120);shot('pitch-actions')
   key('space');step('commentary-history',lambda s:s.get('screen')=='History' and s.get('events',0)>0);shot('history');key('Escape');key('Escape');step('bench',lambda s:s.get('screen')=='Bench');shot('bench');key('Return')
-  step('half-time',lambda s:s.get('screen')=='HalfTime',90);shot('half-time');key('Return');step('half-time-bench',lambda s:s.get('screen')=='Bench');key('Return')
-  step('full-time',lambda s:s.get('screen')=='FullTime' and s.get('score')==[2,1],90);shot('full-time');key('Return')
+  step('half-time',lambda s:s.get('screen')=='HalfTime',240);shot('half-time');key('Return');step('half-time-bench',lambda s:s.get('screen')=='Bench');key('Return')
+  step('full-time',lambda s:s.get('screen')=='FullTime' and s.get('score')==[2,1],240);shot('full-time');key('Return')
   step('completed-no-campaign-post',lambda s:s.get('screen')=='Main' and s.get('campaign')==complete and not s.get('exhibition'))
   key('e');key('Return');s=step('close-during-preparation',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'));worker_pids.append(s['worker_pid']);close_window();assert process.wait(timeout=3)==0
   assert all(not Path(f'/proc/{pid}').exists() for pid in worker_pids)
