@@ -166,3 +166,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T113 The third witnessed league week](T113.md) (#216).
 
 - [T114 The original startup load question in the production window](T114.md) (#108).
+
+- [T115 The edited saved XI plays its campaign fixture in the real window](T115.md) (#110).
