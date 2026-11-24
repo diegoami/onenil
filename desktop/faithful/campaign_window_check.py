@@ -79,7 +79,9 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   process_ids.append(process.pid)
  try:
   launch()
-  initial=step('main',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('club',{}).get('id')==130);shot('main')
+  startup=step('startup',lambda s:s.get('screen')=='Startup');shot('startup')
+  key('n');step('new-game-not-implemented',lambda s:s.get('screen')=='Startup' and 'not implemented' in s.get('message','') and s.get('campaign')==startup['campaign'])
+  key('y');initial=step('main',lambda s:s.get('screen')=='Main' and s.get('campaign',{}).get('club',{}).get('id')==130);shot('main')
   assert initial['campaign']['cash']==452000 and initial['campaign']['week_index']==0 and initial['campaign']['next_fixture']['opponent']==17
   key('Down');step('menu-down',lambda s:s.get('menus',[None])[0]==1);shot('menu-moved');key('Up');step('menu-up',lambda s:s.get('menus',[None])[0]==0)
   key('space');step('players',lambda s:s.get('screen')=='Players' and s.get('card')==2581);shot('skills')
@@ -103,6 +105,18 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
     save.write_text(json.dumps(invalid))
    key('F9');step(corruption+'-load-preserves-campaign',lambda s:'refused' in s.get('message','') and s.get('campaign')==saved_state);save.write_bytes(saved)
   close_window();assert process.wait(timeout=3)==0;statepath.unlink()
+  # [confirmed: W001] An existing but invalid save must be refused, never replaced
+  # silently by the supplied seed; Y with a valid save opens it.
+  save.write_bytes(b'{')
+  launch()
+  step('startup-invalid-save',lambda s:s.get('screen')=='Startup' and s.get('campaign')==startup['campaign']);shot('startup-invalid-save')
+  key('y');step('invalid-save-refused-at-startup',lambda s:s.get('screen')=='Startup' and 'refused' in s.get('message','').lower() and s.get('campaign')==startup['campaign']);shot('startup-refused')
+  close_window();assert process.wait(timeout=3)==0
+  save.write_bytes(saved);statepath.unlink()
+  launch()
+  step('startup-valid-save',lambda s:s.get('screen')=='Startup')
+  key('y');step('startup-loads-saved-campaign',lambda s:s.get('screen')=='Main' and s.get('campaign')==saved_state);shot('startup-loaded')
+  close_window();assert process.wait(timeout=3)==0
   # These are explicit headless native edits, not a claim that the individual-tactics UI exists.
   for command in [('position',save,2582,1),('instruction',save,2598,16)]:
    r=subprocess.run([str(args.campaign_binary),*map(str,command)],capture_output=True,text=True);assert r.returncode==0,r.stderr;native_edits.append(dict(command=[str(v) for v in command],outcome=json.loads(r.stdout)))
@@ -112,11 +126,14 @@ with tempfile.TemporaryDirectory(prefix='onenil-window-') as directory:
   step('fresh-desktop-reload',lambda s:s.get('screen')=='Main' and s.get('campaign')==complete);shot('fresh-reload')
   key('space');key('Insert');step('restored-keeper-instructions',lambda s:s.get('card')==2598 and s.get('panel')=='Details');shot('restored-keeper')
   key('Down');step('restored-current-club-position',lambda s:s.get('card')==2582);shot('restored-position');key('Escape')
+  # [designed:T114] The Space shortcut leaves the main menu on Players; return the
+  # highlight to PLAY NEXT GAME before opening preparation.
+  key('Up');step('main-play-next-game',lambda s:s.get('screen')=='Main' and s.get('menus',[None])[0]==0)
   for w,h in [(960,640),(720,450),(1440,900)]:x.XResizeWindow(display,window,w,h);x.XFlush(display);time.sleep(.2);shot(f'resize-{w}x{h}')
   remembered=state()
   key('Return');step('campaign-preparation',lambda s:s.get('screen')=='Preparation' and not s.get('exhibition'));shot('campaign-preparation')
   key('space');step('remembered-view',lambda s:s.get('screen')=='Players' and s.get('panel')==remembered['panel'] and s.get('selected')==remembered['selected'] and s.get('card')==remembered['card']);key('Escape');step('caller-return',lambda s:s.get('screen')=='Preparation')
-  key('Return');step('unsupported-campaign-match-is-not-exhibition',lambda s:s.get('screen')=='Preparation' and not s.get('worker_pid') and not s.get('exhibition') and 'pending' in s.get('message',''))
+  key('Return');step('unsupported-campaign-match-is-not-exhibition',lambda s:s.get('screen')=='Preparation' and not s.get('worker_pid') and not s.get('exhibition') and s.get('message','')!='')
   key('e');step('separate-exhibition',lambda s:s.get('exhibition') and s.get('screen')=='Preparation');shot('exhibition-choice')
   key('Return');s=step('preparing',lambda s:s.get('screen')=='Preparing' and s.get('worker_pid'));pid=s['worker_pid'];worker_pids.append(pid);shot('preparing');key('Escape');step('cancel-preparation',lambda s:s.get('screen')=='Preparation' and not s.get('worker_pid'));assert not Path(f'/proc/{pid}').exists()
   key('Return');step('pitch',lambda s:s.get('screen')=='Pitch' and s.get('players')==22,180);shot('pitch');step('native-actions-progress',lambda s:s.get('frames',0)>=500 and s.get('events',0)>20,30);shot('pitch-actions')

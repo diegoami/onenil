@@ -40,6 +40,18 @@ impl Application {
     }
     pub fn key(&mut self, key: Key) {
         self.controller.key(key);
+        if self.controller.startup_load_requested {
+            self.controller.startup_load_requested = false;
+            self.startup_load();
+        }
+        if self.controller.startup_new_requested {
+            self.controller.startup_new_requested = false;
+            // [confirmed: W002] N continues to new-game setup in the original; this
+            // rebuild has no such route, so it says so instead of inventing one.
+            self.controller.message =
+                "New-game setup (W002-W004) is not implemented in this rebuild; Y loads the supplied campaign."
+                    .into();
+        }
         self.sync_jobs();
         if self.controller.save_requested {
             self.controller.save_requested = false;
@@ -286,6 +298,27 @@ impl Application {
     }
 }
 impl Application {
+    /// [confirmed: W001] A fresh launch shows the load question before any campaign.
+    pub fn startup(&mut self) {
+        self.controller.screen = Screen::Startup;
+        self.controller.message.clear();
+    }
+    /// [confirmed: W001] Y opens the saved game directly. The shipped native
+    /// analogue of SAVE1.1-0 is the supplied-campaign seed: when no native save
+    /// exists yet, Y opens that seed. An existing but invalid save is refused
+    /// and never silently replaced by the seed.
+    fn startup_load(&mut self) {
+        if self.save_path.exists() {
+            self.restore(self.save_path.clone());
+            if self.controller.screen != Screen::Startup {
+                self.controller.message = "Saved campaign loaded.".into();
+            }
+        } else {
+            self.controller.editor = crate::editor::Editor::default();
+            self.controller.screen = Screen::Main;
+            self.controller.message = "Supplied campaign loaded (no native save yet).".into();
+        }
+    }
     /// [designed] Optional read-only diagnostic snapshot; never accepts state or commands.
     pub fn snapshot(&self) -> serde_json::Value {
         let c = &self.controller;

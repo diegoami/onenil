@@ -23,7 +23,11 @@ def state_check(record):
     for kind in ['malformed','version','namespace','legacy-experiment']:assert steps[kind+'-load-preserves-campaign']['campaign']==steps['saved']['campaign']
     restored=steps['fresh-desktop-reload']['campaign'];assert projection(restored)==source['changed'] and restored['revision']==3
     assert steps['restored-keeper-instructions']['card']==2598 and steps['restored-current-club-position']['card']==2582
-    assert len(set(record['desktop_process_ids']))==2 and len(record['native_edit_probe'])==2
+    # T56/T57 records have two launches; T114's startup scenarios add two more.
+    assert len(set(record['desktop_process_ids']))>=2 and len(record['native_edit_probe'])==2
+    if 'startup' in steps:
+        assert {'startup','new-game-not-implemented','startup-invalid-save','invalid-save-refused-at-startup','startup-valid-save','startup-loads-saved-campaign'}<=set(steps)
+        assert len(set(record['desktop_process_ids']))==4
     blocked=steps['unsupported-campaign-match-is-not-exhibition'];assert not blocked['worker_pid'] and not blocked['exhibition'] and blocked['campaign']==restored
     assert steps['separate-exhibition']['exhibition']
     assert steps['full-time']['score']==[2,1] and steps['full-time']['frames']==4199 and steps['full-time']['events']==832

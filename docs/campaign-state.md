@@ -131,6 +131,26 @@ prototype entry still opens the supplied saved-club seed. The original Y/N start
 N/new-game filename/league/manager/club setup, club creation and DOS-save loading
 remain B2 work. No final toolkit choice or campaign progression is implied.
 
+## T114 startup load question
+
+[confirmed: W001, runs/T41/T41-r0002] The original opens on S001, "Do you want
+to load a saved game? (Y/N)"; `y` opens the supplied `SAVE1.1-0` directly at the
+weekly menu. [confirmed: W002, runs/T42/session-r0003] `N` continues to new-game
+setup, which this rebuild does not implement.
+
+[designed] The default launch now enters a startup screen that renders that
+question in the native font; no original title art or bytes are used. `Y` loads
+the configured native save when it exists and validates; **when no native save
+exists it opens the supplied-campaign seed**, the native analogue of the shipped
+`SAVE1.1-0`. That is a native design choice, not a DOS claim: the original always
+finds its supplied save in the game folder, while the native app ships the seed
+as code. An existing but invalid save is refused with a useful reason and is
+neither replaced nor silently superseded by the seed. `N` states that new-game
+setup (W002-W004) is not implemented and leaves the state unchanged; any other
+key is ignored because the original's invalid-key behaviour is unvisited.
+`--load` and `--choose-save` keep bypassing the question as explicit entry and
+test modes, which is how the T56/T57 window records keep their route.
+
 ## T58 original player controls
 
 [confirmed] Research W015–W017 at68cd3396 and the original handlers/listings

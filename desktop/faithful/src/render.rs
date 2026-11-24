@@ -866,6 +866,28 @@ impl Renderer {
     }
     pub fn draw(&mut self, c: &Controller) {
         match c.screen {
+            // [confirmed: W001] The startup question. Text only: no original
+            // title art or executable bytes are embedded.
+            Screen::Startup => {
+                self.rect(0, 0, WIDTH as i32, HEIGHT as i32, 0x000080);
+                self.text(26, 9, "ONE-NIL '96", 0xffff55, 0x000080, 28);
+                self.text(
+                    13,
+                    12,
+                    "Do you want to load a saved game? (Y/N)",
+                    TEXT,
+                    0x000080,
+                    54,
+                );
+                self.text(
+                    0,
+                    24,
+                    "Y-load   N-new game (not implemented in this rebuild)",
+                    CYAN,
+                    0x000080,
+                    60,
+                );
+            }
             Screen::SavedGames => {
                 self.sheet("saved-games");
                 self.rect(26 * 9, 14 * 16, 18 * 9, 9 * 16, 0x280082);

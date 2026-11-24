@@ -8,6 +8,7 @@ use crate::{
 };
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Screen {
+    Startup,
     Main,
     SavedGames,
     Players,
@@ -79,6 +80,8 @@ pub struct Controller {
     awaiting_continuation: bool,
     request_campaign: Option<onenil_campaign::Campaign>,
     pub save_requested: bool,
+    pub startup_load_requested: bool,
+    pub startup_new_requested: bool,
     pub load_requested: bool,
     pub load_entries: Vec<String>,
     pub load_index: usize,
@@ -114,6 +117,8 @@ impl Default for Controller {
             awaiting_continuation: false,
             request_campaign: None,
             save_requested: false,
+            startup_load_requested: false,
+            startup_new_requested: false,
             load_requested: false,
             load_entries: Vec::new(),
             load_index: 0,
@@ -481,6 +486,14 @@ impl Controller {
     pub fn key(&mut self, key: Key) {
         self.message.clear();
         match self.screen {
+            // [confirmed: W001] Y loads the saved game; [confirmed: W002] N continues
+            // to new-game setup, which this rebuild does not implement. The
+            // original's invalid-key behaviour is unvisited, so other keys are ignored.
+            Screen::Startup => match key {
+                Key::Y => self.startup_load_requested = true,
+                Key::N => self.startup_new_requested = true,
+                _ => (),
+            },
             // [designed] Clamp at list edges; W006 establishes interior movement only.
             Screen::SavedGames => match key {
                 Key::Up => self.load_index = self.load_index.saturating_sub(1),
@@ -892,5 +905,29 @@ impl Controller {
                 _ => (),
             },
         }
+    }
+}
+
+#[cfg(test)]
+mod startup_tests {
+    use super::*;
+
+    #[test]
+    fn the_startup_question_accepts_only_y_and_n() {
+        let mut c = Controller::default();
+        c.screen = Screen::Startup;
+        c.key(Key::Enter);
+        c.key(Key::Space);
+        c.key(Key::Escape);
+        assert_eq!(c.screen, Screen::Startup);
+        assert!(!c.startup_load_requested && !c.startup_new_requested);
+        c.key(Key::N);
+        assert!(c.startup_new_requested && !c.startup_load_requested);
+        assert_eq!(c.screen, Screen::Startup);
+        let mut c = Controller::default();
+        c.screen = Screen::Startup;
+        c.key(Key::Y);
+        assert!(c.startup_load_requested && !c.startup_new_requested);
+        assert_eq!(c.screen, Screen::Startup);
     }
 }
