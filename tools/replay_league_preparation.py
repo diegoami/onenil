@@ -25,6 +25,9 @@ SOURCE_NAME = 'admission-r0004.json'
 SOURCE_SHA = 'bacaf4c5adba07499a4d7086091ab1edf59e1a442bf77c24007b2921d1f7770b'
 SOURCE_DIR = ROOT / 'records/T117/source-r0001'
 FIXTURE = ROOT / 'engine/tests/fixtures/league_preparation/admission.json'
+SUPPORT_NAME = 'support-r0001.json'
+SUPPORT_SHA = '395b4de94dcdd9a2e023394e29a069977199702d659ae8e06755991829473c41'
+SUPPORT_FIXTURE = ROOT / 'engine/tests/fixtures/league_watched/incoming.json'
 
 
 def sha(data):
@@ -73,22 +76,60 @@ def build():
         raise ValueError('native setup roster differs from the recorded admission')
     if value['managed_selection_mode'] != payload['incoming_fields']['managed_selection_mode']:
         raise ValueError('native selection mode differs from the recorded field')
+    support = load_support()
+    incoming = dict(schema='league-watched-incoming/1',
+                    sources={SUPPORT_NAME: SUPPORT_SHA}, support=support['facts'])
     return dict(schema='league-campaign-watched-preparation/1', research_commit=RESEARCH_COMMIT,
-                sources={SOURCE_NAME: SOURCE_SHA},
-                input=dict(setup=value, incoming=payload['incoming']))
+                sources={SOURCE_NAME: SOURCE_SHA, SUPPORT_NAME: SUPPORT_SHA},
+                input=dict(setup=value, incoming=payload['incoming']),
+                support=incoming, entry=dict(site=support['entry']['site'],
+                                             screen_sha256=support['entry']['screen_sha256']))
+
+
+def validate_support(record):
+    if record['schema'] != 'league-incoming-support/1' or record['status'] != 'completed':
+        raise ValueError('incomplete league support source')
+    if record['entry']['site'] != '0AB9:7C67':
+        raise ValueError('league support entry site differs')
+    facts = record['facts']
+    if not facts:
+        raise ValueError('league support facts are empty')
+    seen = set()
+    for fact in facts:
+        if set(fact) != {'area', 'offset', 'value'}:
+            raise ValueError('league support fact shape differs')
+        if fact['area'] not in ('ds', 'config', 'counts') or fact['offset'] < 0:
+            raise ValueError('league support fact area differs')
+        if not isinstance(fact['value'], int) or not 0 <= fact['value'] <= 255:
+            raise ValueError('league support fact value differs')
+        key = fact['area'], fact['offset']
+        if key in seen:
+            raise ValueError('duplicate league support fact')
+        seen.add(key)
+
+
+def load_support():
+    raw = (SOURCE_DIR / SUPPORT_NAME).read_bytes()
+    if sha(raw) != SUPPORT_SHA:
+        raise ValueError('league support source digest differs')
+    record = json.loads(raw)
+    validate_support(record)
+    return record
 
 
 def import_sources(research):
-    source = research / 'runs/T119/admission-r0004.json'
-    data = source.read_bytes()
-    if sha(data) != SOURCE_SHA:
-        raise ValueError('the archaeology record digest differs')
-    validate_source(json.loads(data))
+    sources = [(research / 'runs/T119/admission-r0004.json', SOURCE_SHA, SOURCE_NAME, validate_source),
+               (research / 'runs/T121/support-r0001.json', SUPPORT_SHA, SUPPORT_NAME, validate_support)]
     if SOURCE_DIR.exists():
         raise ValueError('refusing to overwrite the imported source evidence')
     SOURCE_DIR.mkdir(parents=True)
-    (SOURCE_DIR / SOURCE_NAME).write_bytes(data)
-    print('imported', SOURCE_DIR.relative_to(ROOT), SOURCE_SHA[:12])
+    for path, digest, name, validate in sources:
+        data = path.read_bytes()
+        if sha(data) != digest:
+            raise ValueError('the archaeology record digest differs: ' + name)
+        validate(json.loads(data))
+        (SOURCE_DIR / name).write_bytes(data)
+    print('imported', SOURCE_DIR.relative_to(ROOT), SOURCE_SHA[:12], SUPPORT_SHA[:12])
 
 
 def main():
@@ -101,13 +142,18 @@ def main():
         import_sources(args.import_from.resolve())
     if args.freeze or args.check:
         value = build()
+        documents = [(FIXTURE, dict(schema=value['schema'], research_commit=value['research_commit'],
+                                    sources=value['sources'], input=value['input'])),
+                     (SUPPORT_FIXTURE, value['support'])]
         if args.freeze:
-            FIXTURE.parent.mkdir(parents=True, exist_ok=True)
-            with FIXTURE.open('x') as handle:
-                json.dump(value, handle, indent=2)
-                handle.write('\n')
-        if FIXTURE.read_bytes() != (json.dumps(value, indent=2) + '\n').encode():
-            raise ValueError('the league preparation fixture differs from its source')
+            for path, document in documents:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                with path.open('x') as handle:
+                    json.dump(document, handle, indent=2)
+                    handle.write('\n')
+        for path, document in documents:
+            if path.read_bytes() != (json.dumps(document, indent=2) + '\n').encode():
+                raise ValueError('the league preparation fixture differs from its source')
         count = len(value['input']['setup']['legacy']['players'])
         print('PASS league preparation fixture:', count, 'players, clubs 130/122')
 
