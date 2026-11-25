@@ -170,3 +170,5 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T115 The edited saved XI plays its campaign fixture in the real window](T115.md) (#110).
 
 - [T116 The original League tables and League results screens](T116.md) (#112).
+
+- [T117 The league fixture's native preparation from T119's admission](T117.md) (#230).
