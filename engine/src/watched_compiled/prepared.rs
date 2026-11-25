@@ -85,6 +85,7 @@ enum Profile {
     Exhibition,
     Fresh,
     Edited,
+    League,
 }
 impl Session {
     pub fn new_with_post_match(
@@ -126,6 +127,9 @@ impl Session {
     pub fn new_edited(input: Input) -> Result<Self, String> {
         Self::new_profile(input, Profile::Edited)
     }
+    pub fn new_league(input: Input) -> Result<Self, String> {
+        Self::new_profile(input, Profile::League)
+    }
     fn new_profile(input: Input, profile: Profile) -> Result<Self, String> {
         Self::new_profile_with_post(input, profile, None)
     }
@@ -136,6 +140,7 @@ impl Session {
     ) -> Result<Self, String> {
         let fresh = profile != Profile::Exhibition;
         let edited = profile == Profile::Edited;
+        let league = profile == Profile::League;
         if !input.no_pending_key {
             return Err("prepared watched session requires no pending key".into());
         }
@@ -214,6 +219,12 @@ impl Session {
                     post,
                 )?
             }
+        } else if league {
+            setup::Session::before_league_watched_call(
+                input.preparation.setup,
+                input.preparation.incoming,
+                &support,
+            )?
         } else if edited {
             setup::Session::before_edited_watched_call(
                 input.preparation.setup,

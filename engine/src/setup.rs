@@ -306,6 +306,18 @@ impl Session {
         Self::validate_edited(&data, incoming)?;
         Self::new_mode(data, Some(incoming), Some(initial), true, true)
     }
+    fn validate_league(data: &Data, incoming: WatchedIncoming) -> Result<(), String> {
+        // [confirmed: archaeology T119/T100] The league admission is the
+        // decoded T100 preparation state; only that exact input is admitted.
+        let reference: Value = serde_json::from_str(include_str!(
+            "../tests/fixtures/league_preparation/admission.json"
+        ))
+        .map_err(|error| error.to_string())?;
+        if json!({"setup": data, "incoming": incoming}) != reference["input"] {
+            return Err("unsupported or conflicting league campaign incoming profile".into());
+        }
+        Ok(())
+    }
     fn validate_fresh(data: &Data, incoming: WatchedIncoming) -> Result<(), String> {
         // [confirmed:archaeology T66] This first fresh profile admits only its
         // authenticated incoming values, including unused zero scene scratch.
@@ -319,6 +331,14 @@ impl Session {
             return Err("unsupported or conflicting fresh campaign incoming profile".into());
         }
         Ok(())
+    }
+    pub(crate) fn before_league_watched_call(
+        data: Data,
+        incoming: WatchedIncoming,
+        initial: &crate::role_scores::Cells,
+    ) -> Result<Self, String> {
+        Self::validate_league(&data, incoming)?;
+        Self::new_mode(data, Some(incoming), Some(initial), true, true)
     }
     pub(crate) fn before_fresh_watched_call(
         data: Data,
