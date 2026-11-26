@@ -214,8 +214,16 @@ fn score(
 ) -> Result<(u16, Value), String> {
     let row = Scene::read(e, index);
     let id = row.word14;
-    if e.image[P15 + 15 * usize::from(id) + 6] > 31 {
-        return Err("unsupported role score P15+6 domain".into());
+    // [confirmed:T120, archaeology 607195c] Raw P15+6 32..127 takes the
+    // club/flag branch: a nonzero selected flag (P8+0 == D6E6, indexed into
+    // D1CE/D1CF) sets the baseline to 0 - every witnessed league case. The
+    // zero-flag path adds to an uninitialized local and stays refused.
+    let raw = e.image[P15 + 15 * usize::from(id) + 6];
+    if raw > 31 {
+        let selected = usize::from(u16::from(e.image[P8 + 8 * usize::from(id)]) == e.word(0xD6E6));
+        if e.image[0xD1CE + selected] == 0 {
+            return Err("unsupported role score P15+6 domain".into());
+        }
     }
     let score = role_scores::scene_image(e, index, criterion);
     let child = json!({"site":"0AB9:1B60","kind":"table","arguments":[criterion,id],"draw_start":0,"children":[],"input":lookup(e,id,criterion),"result":score.table.output.value,"draw_end":0});

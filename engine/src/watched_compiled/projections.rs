@@ -364,7 +364,9 @@ pub(super) fn grouped_integer(c: &mut Cpu) -> Result<(), String> {
 // scratch and title output,which D75D passes only to projected MainShown text.
 // [derived:T66;static1B55:142B..153F] Fresh week1/stage1 uses the same
 // Pascal-string helpers and output-only path;its week<23 excludes1334.
-// Admit this exact source case alongside6/0,keeping caller/output ABI guards.
+// [confirmed:T122 archaeology af34416] The league machine's first title call is
+// (week 54, stage 0) from the same D75D caller with the output at SS:BP-0x106;
+// admit that exact pair alongside6/0,keeping caller/output ABI guards.
 pub(super) fn menu_fixture_title(c: &mut Cpu) -> Result<(), String> {
     let ss = c.r[10];
     let sp = c.r[4];
@@ -373,7 +375,7 @@ pub(super) fn menu_fixture_title(c: &mut Cpu) -> Result<(), String> {
     let (output, segment) = c.far(ss, sp.wrapping_add(8))?;
     if c.watch_trace.is_none()
         || c.call_chain().last().copied() != Some((0x0AB9, 0xD75D))
-        || !matches!((week, stage), (6, 0) | (1, 1))
+        || !matches!((week, stage), (6, 0) | (1, 1) | (54, 0))
         || segment != ss
         || output != c.r[5].wrapping_sub(0x106)
     {

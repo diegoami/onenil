@@ -85,6 +85,7 @@ enum Profile {
     Exhibition,
     Fresh,
     Edited,
+    League,
 }
 impl Session {
     pub fn new_with_post_match(
@@ -126,6 +127,9 @@ impl Session {
     pub fn new_edited(input: Input) -> Result<Self, String> {
         Self::new_profile(input, Profile::Edited)
     }
+    pub fn new_league(input: Input) -> Result<Self, String> {
+        Self::new_profile(input, Profile::League)
+    }
     fn new_profile(input: Input, profile: Profile) -> Result<Self, String> {
         Self::new_profile_with_post(input, profile, None)
     }
@@ -136,6 +140,7 @@ impl Session {
     ) -> Result<Self, String> {
         let fresh = profile != Profile::Exhibition;
         let edited = profile == Profile::Edited;
+        let league = profile == Profile::League;
         if !input.no_pending_key {
             return Err("prepared watched session requires no pending key".into());
         }
@@ -166,7 +171,9 @@ impl Session {
             // incoming facts may enter this exact fresh profile. A subset is
             // allowed so unknown reads still fail at their actual consumer.
             // No watched tick, action, score or other expected output is loaded.
-            let witness: Value = serde_json::from_str(if edited {
+            let witness: Value = serde_json::from_str(if league {
+                include_str!("../../tests/fixtures/league_watched/incoming.json")
+            } else if edited {
                 include_str!("../../tests/fixtures/edited_watched/incoming.json")
             } else {
                 include_str!("../../tests/fixtures/fresh_watched/incoming.json")
@@ -175,7 +182,7 @@ impl Session {
             let facts: Vec<ByteFact> = serde_json::from_value(witness["support"].clone())
                 .map_err(|_| "invalid fresh incoming facts")?;
             let mut allowed = support_cells(&facts)?;
-            if !edited {
+            if !edited && !league {
                 // [confirmed:research T75/1187bce; acceptance required] Only
                 // explicitly supplied, authenticated editor input facts enter.
                 // Old no-decision callers supply none and remain unchanged.
@@ -214,6 +221,12 @@ impl Session {
                     post,
                 )?
             }
+        } else if league {
+            setup::Session::before_league_watched_call(
+                input.preparation.setup,
+                input.preparation.incoming,
+                &support,
+            )?
         } else if edited {
             setup::Session::before_edited_watched_call(
                 input.preparation.setup,

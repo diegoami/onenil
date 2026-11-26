@@ -151,7 +151,15 @@ fn table_image(e: &Engine, id: u16, criterion: u16) -> TableOutcome {
 pub(crate) fn scene_image(e: &Engine, index: u8, criterion: u16) -> SceneOutcome {
     let row = Scene::read(e, index);
     let a = crate::layout::P15 + 15 * usize::from(row.word14);
-    let mut baseline = (i16::from(e.image[a + 6] as i8) + 1) as u16;
+    // [confirmed:T120] Raw 32..127 takes the club/flag branch: the caller has
+    // established the selected flag is nonzero, so the baseline is 0. The
+    // zero-flag path (uninitialized local + 32) is refused before this call.
+    let raw = e.image[a + 6];
+    let mut baseline = if raw > 31 {
+        0u16
+    } else {
+        (i16::from(raw as i8) + 1) as u16
+    };
     baseline = baseline.wrapping_add(if criterion >= 21 {
         32
     } else {
