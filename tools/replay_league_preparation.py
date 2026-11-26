@@ -9,6 +9,7 @@ rosters and managed positions against the record's own admission projection.
     python3 tools/replay_league_preparation.py --import-from <archaeology checkout>
     python3 tools/replay_league_preparation.py --freeze
     python3 tools/replay_league_preparation.py --check
+    python3 tools/replay_league_preparation.py --replay
 """
 import argparse
 import hashlib
@@ -132,14 +133,42 @@ def import_sources(research):
     print('imported', SOURCE_DIR.relative_to(ROOT), SOURCE_SHA[:12], SUPPORT_SHA[:12])
 
 
+def replay():
+    value = build()
+    legacy = value['input']['setup']['legacy']
+    context = legacy['substitution']['context']
+    print('preparation: clubs', [club['id'] for club in context['clubs']],
+          'managed roster', context['clubs'][0]['roster'],
+          'players', len(legacy['players']))
+    import onenil_engine
+    request = json.dumps({'preparation': value['input'],
+                          'support': value['support']['support'],
+                          'no_pending_key': True}, sort_keys=True, separators=(',', ':'))
+    out = json.loads(onenil_engine.NativePreparedWatchedSession.league(request).finish())
+    if 'ok' not in out:
+        raise ValueError('the native watched league session failed: '
+                         + out.get('error', {}).get('message', '?'))
+    ok = out['ok']
+    if ok['return'] != '0AB9:EBE2':
+        raise ValueError('the native watched return differs')
+    final = ok['final']
+    print('watched completion:', final['scores'], 'return', ok['return'],
+          'ticks', len(ok['ticks']), 'draws', len(ok['draws']), 'events', len(ok['events']))
+    print('the T102 2-0 quick result is checked by tools/replay_quick_match.py (T118)')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--import-from', type=Path)
     parser.add_argument('--freeze', action='store_true')
     parser.add_argument('--check', action='store_true')
+    parser.add_argument('--replay', action='store_true')
     args = parser.parse_args()
     if args.import_from:
         import_sources(args.import_from.resolve())
+    if args.replay:
+        replay()
+        return
     if args.freeze or args.check:
         value = build()
         documents = [(FIXTURE, dict(schema=value['schema'], research_commit=value['research_commit'],
