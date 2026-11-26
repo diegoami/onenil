@@ -268,17 +268,17 @@ pub struct Session {
 }
 impl Session {
     pub fn new(data: Data) -> Result<Self, String> {
-        Self::new_mode(data, None, None, false, false)
+        Self::new_mode(data, None, None, false, false, false)
     }
     pub(crate) fn new_watched(data: Data, incoming: WatchedIncoming) -> Result<Self, String> {
         if incoming.scores != data.legacy.contest.goals {
             return Err("incoming watched scratch-score alias differs".into());
         }
-        Self::new_mode(data, Some(incoming), None, false, false)
+        Self::new_mode(data, Some(incoming), None, false, false, true)
     }
     pub(crate) fn new_fresh_watched(data: Data, incoming: WatchedIncoming) -> Result<Self, String> {
         Self::validate_fresh(&data, incoming)?;
-        Self::new_mode(data, Some(incoming), None, false, true)
+        Self::new_mode(data, Some(incoming), None, false, true, true)
     }
     pub(crate) fn new_edited_watched(
         data: Data,
@@ -286,7 +286,7 @@ impl Session {
     ) -> Result<Self, String> {
         // [confirmed: archaeology T69/T72@f646ac2] Exact supplied edited input.
         Self::validate_edited(&data, incoming)?;
-        Self::new_mode(data, Some(incoming), None, false, true)
+        Self::new_mode(data, Some(incoming), None, false, true, true)
     }
     fn validate_edited(data: &Data, incoming: WatchedIncoming) -> Result<(), String> {
         let reference: Value = serde_json::from_str(include_str!(
@@ -304,7 +304,7 @@ impl Session {
         initial: &crate::role_scores::Cells,
     ) -> Result<Self, String> {
         Self::validate_edited(&data, incoming)?;
-        Self::new_mode(data, Some(incoming), Some(initial), true, true)
+        Self::new_mode(data, Some(incoming), Some(initial), true, true, true)
     }
     fn validate_league(data: &Data, incoming: WatchedIncoming) -> Result<(), String> {
         // [confirmed: archaeology T119/T100] The league admission is the
@@ -338,7 +338,26 @@ impl Session {
         initial: &crate::role_scores::Cells,
     ) -> Result<Self, String> {
         Self::validate_league(&data, incoming)?;
-        Self::new_mode(data, Some(incoming), Some(initial), true, true)
+        Self::new_mode(data, Some(incoming), Some(initial), true, true, true)
+    }
+    /// [confirmed:archaeology T100/T123] The same league admission with Watch
+    /// off: the original quick-result start writes D074/D075 instead of the
+    /// watched scene state. Only the game's own `CONFIG+0xF2` gate decides.
+    pub(crate) fn before_league_quick_call(
+        data: Data,
+        incoming: WatchedIncoming,
+        initial: &crate::role_scores::Cells,
+    ) -> Result<Self, String> {
+        Self::validate_league(&data, incoming)?;
+        Self::new_mode(data, Some(incoming), Some(initial), false, true, false)
+    }
+    pub(crate) fn before_fresh_quick_call(
+        data: Data,
+        incoming: WatchedIncoming,
+        initial: &crate::role_scores::Cells,
+    ) -> Result<Self, String> {
+        Self::validate_fresh(&data, incoming)?;
+        Self::new_mode(data, Some(incoming), Some(initial), false, true, false)
     }
     pub(crate) fn before_fresh_watched_call(
         data: Data,
@@ -346,7 +365,7 @@ impl Session {
         initial: &crate::role_scores::Cells,
     ) -> Result<Self, String> {
         Self::validate_fresh(&data, incoming)?;
-        Self::new_mode(data, Some(incoming), Some(initial), true, true)
+        Self::new_mode(data, Some(incoming), Some(initial), true, true, true)
     }
     pub(crate) fn before_watched_call(
         data: Data,
@@ -356,7 +375,7 @@ impl Session {
         if incoming.scores != data.legacy.contest.goals {
             return Err("incoming watched scratch-score alias differs".into());
         }
-        Self::new_mode(data, Some(incoming), Some(initial), true, false)
+        Self::new_mode(data, Some(incoming), Some(initial), true, false, true)
     }
     fn new_mode(
         data: Data,
@@ -364,8 +383,9 @@ impl Session {
         initial: Option<&crate::role_scores::Cells>,
         before_call: bool,
         fresh: bool,
+        watched: bool,
     ) -> Result<Self, String> {
-        Self::new_mode_with_post(data, incoming, initial, before_call, fresh, None)
+        Self::new_mode_with_post(data, incoming, initial, before_call, fresh, watched, None)
     }
     pub(crate) fn before_post_match_call(
         data: Data,
@@ -373,7 +393,15 @@ impl Session {
         initial: &crate::role_scores::Cells,
         post: &crate::watched_compiled::owned_post_match::Admission,
     ) -> Result<Self, String> {
-        Self::new_mode_with_post(data, Some(incoming), Some(initial), true, false, Some(post))
+        Self::new_mode_with_post(
+            data,
+            Some(incoming),
+            Some(initial),
+            true,
+            false,
+            true,
+            Some(post),
+        )
     }
     pub(crate) fn before_fresh_post_call(
         data: Data,
@@ -382,7 +410,15 @@ impl Session {
         post: &crate::watched_compiled::owned_post_match::Admission,
     ) -> Result<Self, String> {
         Self::validate_fresh(&data, incoming)?;
-        Self::new_mode_with_post(data, Some(incoming), Some(initial), true, true, Some(post))
+        Self::new_mode_with_post(
+            data,
+            Some(incoming),
+            Some(initial),
+            true,
+            true,
+            true,
+            Some(post),
+        )
     }
     fn new_mode_with_post(
         data: Data,
@@ -390,6 +426,7 @@ impl Session {
         initial: Option<&crate::role_scores::Cells>,
         before_call: bool,
         fresh: bool,
+        watched: bool,
         post: Option<&crate::watched_compiled::owned_post_match::Admission>,
     ) -> Result<Self, String> {
         if !fresh {
@@ -451,6 +488,11 @@ impl Session {
         put(e, 0xA52D, legacy_queue_zero.second_player);
         e.image[0xA52F] = legacy_queue_zero.side;
         out.load_inputs(&setup_cells, &income, &supplement, fresh)?;
+        if !watched {
+            // [confirmed:archaeology T49/T66] The quick replay selects Watch off;
+            // the supplied preparation may have been captured with Watch on.
+            out.match_state.inner.e.image[layout::CONFIG + 0xF2] = 0;
+        }
         if let Some(support) = initial {
             for (&address, &value) in support {
                 if out.match_state.inner.e.image[address] != value {
@@ -462,8 +504,10 @@ impl Session {
         }
         if let Some(initial) = incoming {
             let e = &mut out.match_state.inner.e;
-            // [designed] Select watched mode before19CA;original T39 intervention.
-            e.image[layout::CONFIG + 0xF2] = 1;
+            if watched {
+                // [designed] Select watched mode before19CA;original T39 intervention.
+                e.image[layout::CONFIG + 0xF2] = 1;
+            }
             e.image[0xCF4C] = initial.ball_byte6;
             put(e, 0xCF4D, initial.ball_word7);
             put(e, 0xCF4F, initial.ball_word9);
@@ -474,13 +518,7 @@ impl Session {
                 admission,
             )?);
         }
-        let result = out.prepare(
-            &setup_cells,
-            &income,
-            &supplement,
-            incoming.is_some(),
-            before_call,
-        );
+        let result = out.prepare(&setup_cells, &income, &supplement, watched, before_call);
         out.match_state.inner.e.image.check_initialized()?;
         result?;
         Ok(out)
@@ -999,6 +1037,10 @@ impl Session {
             put(e, 0xCF43, value);
             self.mark("0AB9:7C67");
         } else {
+            // [confirmed:archaeology T12/T13/F26] The fixed reference's contest
+            // chance input is 8 at every measured step (the 0CFE cell selected by
+            // D0AC=45); the preparation snapshot does not carry it.
+            self.match_state.inner.a.contest.k = 8;
             self.mark("0AB9:DD02");
         }
         Ok(())

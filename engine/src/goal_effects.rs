@@ -303,7 +303,10 @@ fn validate(state: &State, request: &GoalEffectRequest) -> Result<(), String> {
     }
     let mut ids = BTreeSet::new();
     for p in &state.players {
-        if p.id > 3920 || p.p8_position > 13 || !ids.insert(p.id) {
+        // [confirmed:archaeology T119/T100] The null record (id 0) carries the
+        // unused-position sentinel 14 in the league save; real players stay in
+        // the observed 0..13 position domain.
+        if p.id > 3920 || (p.id != 0 && p.p8_position > 13) || !ids.insert(p.id) {
             return Err("invalid or duplicate player input".into());
         }
     }

@@ -419,3 +419,33 @@ Public checks: `python3 tools/test_edited_watched_reference.py` and
 `python3 tools/replay_edited_watched.py --check`; replay uses the release PyO3 build with
 `python3 tools/replay_edited_watched.py --replay`. Neither needs original game assets. Official
 immutable verification requires a clean committed producer and a new `--record` directory.
+
+## T118 the quick-result match engine
+
+[confirmed: archaeology F07/F12–F23, T12/T13/T16/T21/T36; T100/T119; T123 and T102]
+The prepared quick match now runs from the same admission as the watched session. Watch off is
+the admitted setting: the league preparation already carries `CONFIG+0xF2=0`, while the supplied
+fresh preparation was captured with Watch on, so the quick constructor clears only that gate
+before setup; every other supplied byte is retained. Setup performs the original 258/259-draw
+bootstrap (255 `1A01`, one `8750`, two `1B55:27B1`, plus the `1B55:28C2` week draw when present),
+writes the quick-start `D074/D075/D0B8` state and enters DD02. The 0CFE chance count is the T12
+reference datum 8; the preparation snapshot does not export the cell.
+
+[confirmed] The friendly admission (T66 fresh preparation, final setup seed 49333) plays 92 steps,
+5,595 DD02 draws and 258 setup draws — the T06 match span of 5,853. It ends Blackburn130 0
+P St Germain17 2 with goals at 27 and 45 scored by player records 333 and 325, exactly the T12/T13
+step corpus for that match; its four minute-57 substitutions produce the corpus's step-58 player
+set. The T49 screen shows the same 0-2 at 27/45 (D Bravo, J Cobos).
+
+[confirmed] The league admission (T100/T119, final setup seed 18521, 259 setup draws) plays 92
+steps and 5,493 step draws. It ends Newcastle122 2 Blackburn130 0 with goals at 29 and 33 by
+players 2429 and 2426, and substitutions 2434 for 2427 and 2423 for 2435 at minute 57 — the exact
+player records in T123's original league action stream; the match-relative draw cursor is 5,493 at
+full time in both. T102's board names those records R Fox, S Howey and the substitutions Clark
+for Venison and Watson for Albert; player *names* are the renderer's lookup, not engine state, so
+the engine check compares the original player records and minutes.
+
+Public checks: `python3 tools/replay_quick_match.py --check` prints `PASS`;
+`--replay` prints both results, scorers and substitutions. The Rust tests are
+`engine/tests/quick_match.rs`. The watched caller/session, the week transaction, table/cash
+progression and the desktop flow remain outside this engine.

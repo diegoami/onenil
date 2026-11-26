@@ -30,7 +30,7 @@ pub struct Session {
     profile: Profile,
     post_report: Option<super::owned_post_match::Report>,
 }
-fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
+pub(crate) fn support_cells(facts: &[ByteFact]) -> Result<Cells, String> {
     let mut cells = Cells::new();
     for fact in facts {
         let o = usize::try_from(fact.offset).map_err(|_| "negative initial support offset")?;

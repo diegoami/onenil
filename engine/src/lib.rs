@@ -22,6 +22,7 @@ pub mod neutral_input;
 pub mod placement;
 pub mod player_cache;
 pub mod post_score;
+pub mod quick_match;
 pub mod quick_reset;
 pub mod ratings;
 pub mod rearrangement;
@@ -456,6 +457,40 @@ mod python {
                 session: crate::setup::Session::new(a).map_err(PyValueError::new_err)?,
             })
         }
+        /// [confirmed:archaeology T100/T119/T123] The league preparation with
+        /// Watch off, admitted from the same preparation/support as the watched
+        /// session; the game's `CONFIG+0xF2` gate stays zero and setup selects
+        /// the quick-start writes.
+        #[staticmethod]
+        fn league_quick(input_json: &str) -> PyResult<Self> {
+            let input: watched_compiled::prepared::Input = serde_json::from_str(input_json)
+                .map_err(|e| PyValueError::new_err(e.to_string()))?;
+            let cells = watched_compiled::prepared::support_cells(&input.support)
+                .map_err(PyValueError::new_err)?;
+            Ok(Self {
+                session: crate::setup::Session::before_league_quick_call(
+                    input.preparation.setup,
+                    input.preparation.incoming,
+                    &cells,
+                )
+                .map_err(PyValueError::new_err)?,
+            })
+        }
+        #[staticmethod]
+        fn fresh_quick(input_json: &str) -> PyResult<Self> {
+            let input: watched_compiled::prepared::Input = serde_json::from_str(input_json)
+                .map_err(|e| PyValueError::new_err(e.to_string()))?;
+            let cells = watched_compiled::prepared::support_cells(&input.support)
+                .map_err(PyValueError::new_err)?;
+            Ok(Self {
+                session: crate::setup::Session::before_fresh_quick_call(
+                    input.preparation.setup,
+                    input.preparation.incoming,
+                    &cells,
+                )
+                .map_err(PyValueError::new_err)?,
+            })
+        }
         fn phase(&self) -> &'static str {
             self.session.match_state.phase()
         }
@@ -546,6 +581,30 @@ mod python {
             serde_json::to_string(&v).map_err(|e| PyValueError::new_err(e.to_string()))
         }
     }
+    #[pyclass]
+    struct NativeQuickMatch;
+    #[pymethods]
+    impl NativeQuickMatch {
+        /// Play the admitted quick match from the preparation/support JSON and
+        /// return the complete report (steps, draws, goals, events, score).
+        #[staticmethod]
+        fn play(profile: &str, input_json: &str) -> PyResult<String> {
+            let profile = match profile {
+                "league" => quick_match::Profile::League,
+                "fresh" => quick_match::Profile::Fresh,
+                other => {
+                    return Err(PyValueError::new_err(format!(
+                        "unknown quick-match profile {other}"
+                    )))
+                }
+            };
+            let mut session =
+                quick_match::session(profile, input_json).map_err(PyValueError::new_err)?;
+            let report = quick_match::play(&mut session).map_err(PyValueError::new_err)?;
+            serde_json::to_string(&report).map_err(|error| PyValueError::new_err(error.to_string()))
+        }
+    }
+
     #[pyclass]
     struct NativeQuickSession {
         session: continuous::Session,
@@ -1184,6 +1243,7 @@ mod python {
     #[pymodule]
     fn onenil_engine(module: &Bound<'_, PyModule>) -> PyResult<()> {
         module.add_class::<NativeQuickSession>()?;
+        module.add_class::<NativeQuickMatch>()?;
         module.add_class::<NativeWatchedCallerSession>()?;
         module.add_class::<NativeMatchSession>()?;
         module.add_class::<NativeExhibitionSession>()?;
