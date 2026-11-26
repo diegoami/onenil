@@ -174,3 +174,4 @@ One line per task: `- [T<nn>](T<nn>.md): <title> (#<issue>).`
 - [T117 The league fixture's native preparation from T119's admission](T117.md) (#230).
 
 - [T118 The quick-result match engine](T118.md) (#232).
+- [T119 The desktop quick-result league week](T119.md) (#234).
