@@ -1,0 +1,58 @@
+{
+  "schema": "quick-match-corpus/1",
+  "description": "The prepared quick match from the committed preparation admissions. The friendly record is the T04 week r0001 quick match (T06 trace span 258+5595=5853; T12/T13 goals 27/45, players 333/325 and the four step-58 changes); its T49 screen shows the same 0-2 at 27/45. The league record is the T100 week-28 match: T102's 2-0 and T123's action stream give the exact scorer and substitution player records (29/2429, 33/2426; 2434 for 2427, 2423 for 2435 at minute 57) and the full-time draw cursor 5493.",
+  "sources": {
+    "engine/tests/fixtures/fresh_preparation/admission.json": "a8ae81c300a36835d3554687ef7ef87d12f4b563d560ec85f77a6e5abb9ecdad",
+    "engine/tests/fixtures/fresh_watched/incoming.json": "e47131f606129cdae8491f53465b6e5456da90c835b5402d4bf5d565657995bf",
+    "engine/tests/fixtures/league_preparation/admission.json": "299043edb15c57bca74b4f38c8deb4b827322b4714cd0ae3ca5a73943d4a6e0a",
+    "engine/tests/fixtures/league_watched/incoming.json": "da7d8e74d1f26d0b2282efff39e823b49fddfbafa33bfba3f788a5de903a74fb"
+  },
+  "matches": {
+    "fresh": {
+      "preparation": "fresh_preparation/admission.json",
+      "support": "fresh_watched/incoming.json",
+      "steps": 92,
+      "setup_draws": 258,
+      "step_draws": 5595,
+      "total_draws": 5853,
+      "half_time": 46,
+      "score": {"clubs": [130, 17], "goals": [0, 2]},
+      "goals": [
+        {"minute": 27, "actor": 19, "side_flag": 0, "player": 333},
+        {"minute": 45, "actor": 16, "side_flag": 0, "player": 325}
+      ],
+      "substitutions": [
+        {"elapsed": 57, "signatures": [[0, 13, 11, 0], [0, 18, 9, 0], [0, 14, 7, 0], [0, 16, 3, 0]]}
+      ],
+      "scene_players": [2581, 2582, 2583, 2584, 2585, 2586, 2587, 2588, 2589, 2590, 2591,
+                        321, 322, 335, 324, 325, 326, 334, 333, 332, 330, 336],
+      "evidence": {
+        "result": "T49 runs/T49/session-r0002/step-0012.json: Blackburn 0-2 P St Germain, D Bravo 27, J Cobos 45.",
+        "corpus": "traces/T06 cf7eb2d04211ba88 week r0003 match span 5,853 draws; traces/T12 r0001 and traces/T13 r0001: 92 steps, 5,595 DD02 draws, goals at 27/45 by players 333/325, step-58 player set change."
+      }
+    },
+    "league": {
+      "preparation": "league_preparation/admission.json",
+      "support": "league_watched/incoming.json",
+      "steps": 92,
+      "setup_draws": 259,
+      "step_draws": 5493,
+      "total_draws": 5752,
+      "half_time": 46,
+      "score": {"clubs": [122, 130], "goals": [2, 0]},
+      "goals": [
+        {"minute": 29, "actor": 9, "side_flag": 1, "player": 2429},
+        {"minute": 33, "actor": 6, "side_flag": 1, "player": 2426}
+      ],
+      "substitutions": [
+        {"elapsed": 57, "signatures": [[0, 14, 7, 1], [0, 13, 3, 1]]}
+      ],
+      "scene_players": [2438, 2422, 2423, 2424, 2425, 2426, 2434, 2428, 2429, 2430, 2436,
+                        2581, 2582, 2592, 2583, 2584, 2585, 2586, 2587, 2588, 2593, 2591],
+      "evidence": {
+        "result": "T102 runs/T102/week-r0001.json: Newcastle Utd 2-0 Blackburn, R Fox 29, S Howey 33; Clark on for Venison, Watson on for Albert.",
+        "actions": "T123 runs/T123/actions-r0001.json: goal actions at 29 (player 2429, club 122) and 33 (2426); half time at 46; substitutions 2434 for 2427 and 2423 for 2435 at minute 57; full-time draw cursor 5493."
+      }
+    }
+  }
+}
