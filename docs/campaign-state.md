@@ -487,22 +487,28 @@ The committed post-week save (`desktop/faithful/fixtures/league-week28-played.js
 real-X11 harness is `desktop/faithful/played_window_check.py`. Engine tests:
 `desktop/faithful/tests/league_quick_match.rs`.
 
-## The watched league engine's divergence (review #238/#239)
+## The quick-vs-watched league difference (review #238/#239, corrected by T124)
 
-[confirmed:archaeology T123; native review probe 2026-11-27] The native watched league admission
+[confirmed:archaeology T123 `000fe17`; native probe 2026-11-27] The native watched league admission
 (`prepared::Session::new_league` on the T119 fixture) completes 839 events and returns `0AB9:EBE2`,
-with `live_goals` `[1,2]` and `scores` `[2,1]` — Newcastle Utd 2 Blackburn R 1 — against the original
-T102 witness of **2-0** (R Fox 29, S Howey 33). T123 records the same divergence (Blackburn 56',
-Newcastle 79'/83'). The 839-event count matches T123 exactly, so this is a fidelity divergence in
-the watched engine, not a missing route. The witnessed league week is therefore reproduced by the
-**quick (Watch-off)** engine (T118/T119); the watched league presentation remains an open gate, and
-the desktop refuses it rather than showing the divergent result.
+with `live_goals` `[1,2]` and `scores` `[2,1]` — Newcastle Utd 2 Blackburn R 1. The original
+T102/T123 witness is the **quick (Watch-off)** path: T123's unforced run ends **2-0** in 20,734
+draws with seven dispatcher actions, exactly T102/T117, and T49's Watch-off board shares the
+commentary panel. So the 2-1-vs-2-0 comparison is a difference between the watched and quick paths,
+**not** a demonstrated watched-engine divergence; there is no original watched league reference yet.
+The witnessed league week is reproduced by the quick engine (T118/T119); the watched league
+presentation remains an open gate, and the desktop refuses it rather than showing an unverified
+result.
 
-[review #244] `python3 tools/compare_league_actions.py` is the comparison instrument: it aligns the
-original's `score_changes` and dispatcher actions (kickoff, goal, half time, substitution, full time)
-against the native `tick_live_goals`, goal events and substitution records, and prints the first real
-difference after the shared 0-0 opening. `--check` asserts this documented divergence and CI runs it,
-so a change on either side fails the watched-path gate instead of silently changing the record. The
-original substitutes at 57' (2434 for 2427, 2423 for 2435); the native watched stream records no
-substitution action and no scene-player change.
+[archaeology T124 #283] captures the missing reference: the T100 preparation state with the
+recorded `0AB9:E24C`/`config+F2` watch intervention, the full accepted action/RNG/tick stream to
+`E1F2`. Its watched score replaces the quick 2-0 as the comparison target.
+
+[review #244] `python3 tools/compare_league_actions.py` compares the T123 quick dispatcher record
+with the native watched match: it aligns `score_changes` and dispatcher actions against
+`tick_live_goals`, goal events and substitution records, and prints the first real difference after
+the shared 0-0 opening. `--check` pins that quick-vs-watched difference and CI runs it, so neither
+side changes silently. The original quick record substitutes at 57' (2434 for 2427, 2423 for 2435);
+the native watched stream records no substitution action and no scene-player change. The
+watched-vs-watched comparison waits for T124.
 
