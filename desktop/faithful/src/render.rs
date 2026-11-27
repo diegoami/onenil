@@ -266,7 +266,8 @@ impl Renderer {
         self.text(2, 1, "CASH FLOW FOR Blackburn R----", CYAN, GROUND, 60);
         let receipt = crate::week::WeekReceipt::for_campaign(&c.editor.campaign);
         let cash = receipt.cash;
-        if c.editor.campaign.second_fixture.is_some() {
+        if c.editor.campaign.second_fixture.is_some() || crate::week::is_league(&c.editor.campaign)
+        {
             // [confirmed:archaeology 788b833 T93, CASH FLOW stage] All of this
             // week's categories, including zeros; totals are receipt values.
             self.text(4, 3, "Cash in", CYAN, GROUND, 30);

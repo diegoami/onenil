@@ -201,3 +201,38 @@ fn the_application_computes_the_quick_match_at_its_real_boundaries() {
     assert_eq!(app.controller.editor.campaign.cash, 1_691_393);
     assert_eq!(app.controller.editor.campaign.week_index, 54);
 }
+
+#[test]
+fn the_league_week_uses_the_witnessed_cash_flow_and_returns_to_management() {
+    use onenil_desktop::controller::{Controller, Key, Screen};
+    let mut controller = Controller::default();
+    controller.editor.campaign = Campaign::initial_league().unwrap();
+    controller.watch_match = false;
+    controller.key(Key::Enter);
+    controller.key(Key::Enter);
+    let id = controller.job_id;
+    controller.accept_quick(id, quick_board("HALF TIME"));
+    controller.key(Key::Space);
+    controller.accept_quick(id, quick_board("FULL TIME"));
+    controller.key(Key::Enter);
+    assert_eq!(controller.screen, Screen::CashFlow);
+    controller.key(Key::Space);
+    assert_eq!(controller.screen, Screen::TransferNews);
+    let receipt = onenil_desktop::week::WeekReceipt::for_campaign(&controller.editor.campaign);
+    assert_eq!(receipt.cash.gate_receipts, 73_972);
+    assert_eq!(receipt.cash.players_sold, 590_000);
+    assert_eq!(receipt.cash.sponsorship, 63_000);
+    assert_eq!(receipt.cash.total_in, 726_972);
+    assert_eq!(receipt.cash.sundries, 17_333);
+    assert_eq!(receipt.cash.total_out, 80_639);
+    assert_eq!(receipt.cash.after, 1_691_393);
+    assert_eq!(receipt.transfer_rows.len(), 3);
+    assert_eq!(receipt.transfer_rows[0].player, "A.Thompson");
+    assert_eq!(receipt.following_fixture.opponent, 103);
+    let before = controller.editor.campaign.clone();
+    controller.key(Key::Space);
+    assert_eq!(controller.screen, Screen::Main);
+    assert_eq!(controller.editor.campaign, before);
+    assert!(controller.message.contains("Week 54 complete"));
+    assert!(controller.message.contains("Chelsea"));
+}

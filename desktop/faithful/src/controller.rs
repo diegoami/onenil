@@ -1027,6 +1027,17 @@ impl Controller {
                 _ => self.unsupported(),
             },
             Screen::TransferNews => match key {
+                Key::Space if crate::week::is_league(&self.editor.campaign) => {
+                    // [confirmed:T102/T108] The league week was posted by
+                    // record_league_week; the tail returns to management rather
+                    // than running the friendly week transaction again.
+                    self.screen = Screen::Main;
+                    self.message = format!(
+                        "Week {} complete. Next: {}. F7 saves.",
+                        self.editor.campaign.week_index,
+                        self.editor.campaign.next_fixture.opponent_name
+                    );
+                }
                 Key::Space => {
                     let receipt = crate::week::WeekReceipt::for_campaign(&self.editor.campaign);
                     let result = self.editor.campaign.record_week_completion(
