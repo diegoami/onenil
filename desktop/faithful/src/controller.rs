@@ -17,6 +17,7 @@ pub enum Screen {
     Instructions,
     Preparation,
     Preparing,
+    Configuration,
     Pitch,
     History,
     Bench,
@@ -89,6 +90,13 @@ pub struct Controller {
     pub game_name: String,
     pub close_requested: bool,
     pub speed: u8,
+    /// [confirmed:T49 W031] The configuration panel's Watch match choice.
+    pub watch_match: bool,
+    pub configuration_menu: usize,
+    /// [confirmed:T49/T102] The league quick board at its real boundary.
+    pub quick: Option<crate::quick::Board>,
+    pub quick_requested: bool,
+    pub quick_resume_requested: bool,
     pub history_top: usize,
     /// [confirmed: W033] 0 is PREMIER LEAGUE, 1 is DIVISION ONE.
     pub league_division: usize,
@@ -130,6 +138,11 @@ impl Default for Controller {
             game_name: "SAVE1".into(),
             close_requested: false,
             speed: 23,
+            watch_match: true,
+            configuration_menu: 0,
+            quick: None,
+            quick_requested: false,
+            quick_resume_requested: false,
             history_top: 0,
             league_division: 0,
             notice: false,
@@ -332,6 +345,58 @@ impl Controller {
         self.prepare_requested = false;
         true
     }
+    /// [confirmed:T49/T102] Accept the quick board at its actual boundary.
+    pub fn accept_quick(&mut self, id: u64, board: crate::quick::Board) -> bool {
+        if id != self.job_id || self.screen != Screen::Preparing {
+            return false;
+        }
+        let stage = board.stage;
+        self.quick = Some(board);
+        self.quick_requested = false;
+        self.quick_resume_requested = false;
+        self.screen = if stage == "HALF TIME" {
+            Screen::HalfTime
+        } else {
+            Screen::FullTime
+        };
+        true
+    }
+    pub fn accept_quick_error(&mut self, id: u64, error: String) -> bool {
+        if id != self.job_id {
+            return false;
+        }
+        self.quick = None;
+        self.quick_requested = false;
+        self.quick_resume_requested = false;
+        self.match_ticket = None;
+        self.message = error;
+        self.screen = Screen::Preparation;
+        true
+    }
+    fn record_quick_league(&mut self) -> Result<String, String> {
+        let board = self.quick.as_ref().ok_or("missing quick board")?;
+        let ticket = self.match_ticket.take().ok_or("missing match request")?;
+        let own = board.clubs[0] == self.editor.campaign.club.id;
+        let goals = if own {
+            [u16::from(board.score[0]), u16::from(board.score[1])]
+        } else {
+            [u16::from(board.score[1]), u16::from(board.score[0])]
+        };
+        let seed = onenil_campaign::league_campaign::LeagueSeed::pinned()?;
+        let following = self.editor.campaign.next_fixture.clone();
+        self.editor.campaign.record_league_week(
+            &ticket,
+            goals,
+            "0AB9:EBE2",
+            seed.cash.total_in,
+            seed.cash.total_out,
+            following.competition_code,
+            following.opponent,
+            following.flags,
+            &following.opponent_name,
+        )?;
+        Ok("Result recorded. Continue through cash flow and transfer news.".into())
+    }
     pub fn accept_timeline(&mut self, id: u64, timeline: Timeline) -> bool {
         if id != self.job_id
             || self.screen != Screen::Preparing
@@ -465,6 +530,9 @@ impl Controller {
         self.awaiting_continuation = false;
         self.request_campaign = None;
         self.prepare_requested = false;
+        self.quick = None;
+        self.quick_requested = false;
+        self.quick_resume_requested = false;
         self.exhibition = false;
     }
     pub fn tick(&mut self) {
@@ -558,6 +626,12 @@ impl Controller {
                     self.league_division = 0;
                     self.screen = Screen::LeagueTables;
                 }
+                // [confirmed:T49 W031] Game configuration opens the settings
+                // panel; only the Watch match switch changes in this build.
+                Key::Enter if self.menu == 15 => {
+                    self.configuration_menu = 0;
+                    self.screen = Screen::Configuration;
+                }
                 Key::Enter if self.menu == 7 => {
                     self.notice = true;
                     self.message = onenil_campaign::league_display::league_display()
@@ -633,6 +707,16 @@ impl Controller {
                     self.editor.panel = Panel::Details;
                     self.screen = Screen::Options
                 }
+                _ => self.unsupported(),
+            },
+            Screen::Configuration => match key {
+                Key::Up => self.configuration_menu = self.configuration_menu.saturating_sub(1),
+                Key::Down => self.configuration_menu = (self.configuration_menu + 1).min(5),
+                Key::Enter if self.configuration_menu == 0 => {
+                    self.watch_match = !self.watch_match;
+                }
+                Key::Enter => self.message = "Only Watch match changes in this build.".into(),
+                Key::Escape => self.screen = Screen::Main,
                 _ => self.unsupported(),
             },
             // [confirmed] B271 disables the fifth Mark selection in management (0D91=0).
@@ -735,6 +819,22 @@ impl Controller {
                         self.interval_playback = None;
                         self.resume_requested = false;
                         self.awaiting_continuation = false;
+                        if !self.exhibition
+                            && crate::campaign_match::profile(&self.editor.campaign)
+                                == Ok(crate::campaign_match::Profile::League)
+                        {
+                            if self.watch_match {
+                                self.message = "The watched league match is not available in this build; turn Watch match off in Game configuration.".into();
+                                self.match_ticket = None;
+                                return;
+                            }
+                            self.quick = None;
+                            self.request_campaign = None;
+                            self.job_id += 1;
+                            self.quick_requested = true;
+                            self.screen = Screen::Preparing;
+                            return;
+                        }
                         self.request_campaign = if self.exhibition {
                             None
                         } else {
@@ -780,6 +880,9 @@ impl Controller {
                     self.replace_sent = false;
                     self.awaiting_continuation = false;
                     self.prepare_requested = false;
+                    self.quick = None;
+                    self.quick_requested = false;
+                    self.quick_resume_requested = false;
                     self.screen = Screen::Preparation;
                 }
             }
@@ -869,10 +972,32 @@ impl Controller {
                 }
             }
             Screen::HalfTime => {
+                if self.quick.is_some() {
+                    // [confirmed:T49] The quick result stops at halftime; the
+                    // next key resumes the same match.
+                    self.quick_resume_requested = true;
+                    self.screen = Screen::Preparing;
+                    return;
+                }
                 self.preparation_menu = 2;
                 self.screen = Screen::Bench;
             }
             Screen::FullTime => {
+                if self.quick.is_some() {
+                    self.message = match self.record_quick_league() {
+                        Ok(text) => {
+                            self.quick = None;
+                            self.screen = Screen::CashFlow;
+                            text
+                        }
+                        Err(error) => {
+                            self.quick = None;
+                            self.screen = Screen::Main;
+                            error
+                        }
+                    };
+                    return;
+                }
                 self.message = if self.exhibition {
                     self.screen = Screen::Main;
                     "Exhibition complete. No campaign result was posted.".into()

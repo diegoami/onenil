@@ -112,3 +112,92 @@ fn the_league_campaign_admits_the_preparation_and_the_quick_result_completes_the
     assert_eq!(played.score, [0, 2]);
     assert_eq!(played.prepared.name, "Newcastle Utd");
 }
+
+fn quick_board(stage: &'static str) -> onenil_desktop::quick::Board {
+    onenil_desktop::quick::Board {
+        clubs: [122, 130],
+        club_names: ["Newcastle Utd".into(), "Blackburn R".into()],
+        score: [2, 0],
+        lines: vec!["---- HALF TIME ----".into()],
+        scorers: vec![onenil_desktop::quick::Scorer {
+            name: "R Fox".into(),
+            minute: 29,
+            side: 0,
+        }],
+        attendance: 36_986,
+        stage,
+    }
+}
+
+#[test]
+fn the_configuration_panel_toggles_watch_off_and_back() {
+    let mut controller = onenil_desktop::controller::Controller::default();
+    controller.menu = 15;
+    controller.key(onenil_desktop::controller::Key::Enter);
+    assert_eq!(
+        controller.screen,
+        onenil_desktop::controller::Screen::Configuration
+    );
+    assert!(controller.watch_match);
+    controller.key(onenil_desktop::controller::Key::Enter);
+    assert!(!controller.watch_match);
+    controller.key(onenil_desktop::controller::Key::Escape);
+    assert_eq!(controller.screen, onenil_desktop::controller::Screen::Main);
+}
+
+#[test]
+fn the_league_preparation_requires_watch_off_and_records_the_quick_week() {
+    use onenil_desktop::controller::{Controller, Key, Screen};
+    let mut controller = Controller::default();
+    controller.editor.campaign = Campaign::initial_league().unwrap();
+    controller.key(Key::Enter);
+    assert_eq!(controller.screen, Screen::Preparation);
+    controller.key(Key::Enter);
+    assert_eq!(controller.screen, Screen::Preparation);
+    assert!(controller.message.contains("Watch match off"));
+    controller.watch_match = false;
+    controller.key(Key::Enter);
+    assert_eq!(controller.screen, Screen::Preparing);
+    assert!(controller.quick_requested);
+    let id = controller.job_id;
+    assert!(controller.accept_quick(id, quick_board("HALF TIME")));
+    assert_eq!(controller.screen, Screen::HalfTime);
+    controller.key(Key::Space);
+    assert_eq!(controller.screen, Screen::Preparing);
+    assert!(controller.quick_resume_requested);
+    assert!(controller.accept_quick(id, quick_board("FULL TIME")));
+    assert_eq!(controller.screen, Screen::FullTime);
+    controller.key(Key::Enter);
+    assert_eq!(controller.screen, Screen::CashFlow);
+    assert_eq!(controller.editor.campaign.cash, 1_691_393);
+    assert!(controller.editor.campaign.league_played.is_some());
+}
+
+#[test]
+fn the_application_computes_the_quick_match_at_its_real_boundaries() {
+    use onenil_desktop::application::Application;
+    use onenil_desktop::controller::{Key, Screen};
+    use std::path::{Path, PathBuf};
+    let mut app = Application::new(PathBuf::new(), PathBuf::from("league.1-0"), false).unwrap();
+    app.controller.editor.campaign = Campaign::initial_league().unwrap();
+    app.controller.watch_match = false;
+    app.key(Key::Enter);
+    assert_eq!(app.controller.screen, Screen::Preparation);
+    app.key(Key::Enter);
+    assert_eq!(app.controller.screen, Screen::Preparing);
+    app.update_with_executable(Path::new("unused"));
+    assert_eq!(app.controller.screen, Screen::HalfTime);
+    let half = app.controller.quick.as_ref().unwrap();
+    assert_eq!(half.score, [2, 0]);
+    assert_eq!(half.stage, "HALF TIME");
+    app.key(Key::Space);
+    app.update_with_executable(Path::new("unused"));
+    assert_eq!(app.controller.screen, Screen::FullTime);
+    let full = app.controller.quick.as_ref().unwrap();
+    assert_eq!(full.stage, "FULL TIME");
+    assert!(full.lines.iter().any(|line| line == "Clark on for Venison"));
+    app.key(Key::Enter);
+    assert_eq!(app.controller.screen, Screen::CashFlow);
+    assert_eq!(app.controller.editor.campaign.cash, 1_691_393);
+    assert_eq!(app.controller.editor.campaign.week_index, 54);
+}

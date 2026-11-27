@@ -796,6 +796,8 @@ impl Renderer {
                 GROUND,
                 78,
             );
+        } else if let Some(board) = &c.quick {
+            self.quick_board(board);
         } else if c.screen == Screen::History {
             for (i, line) in c.visible_history().iter().enumerate() {
                 self.text(1, 5 + i, line, TEXT, GROUND, 78);
@@ -865,6 +867,90 @@ impl Renderer {
                 40,
             );
         }
+    }
+    /// [confirmed:T49 W031] The configuration panel: the original's six
+    /// switches; only Watch match changes in this build.
+    fn configuration_panel(&mut self, c: &Controller) {
+        let items = [
+            "Watch match",
+            "Sacking",
+            "Auto save game",
+            "Friendlies",
+            "Auto player select",
+            "Continue",
+        ];
+        let x = 55;
+        for (i, label) in items.iter().enumerate() {
+            let selected = i == c.configuration_menu;
+            let (fg, bg) = if selected {
+                (GROUND, TEXT)
+            } else {
+                (TEXT, GROUND)
+            };
+            self.text(x, 5 + 2 * i, &format!("{label:<18}"), fg, bg, 18);
+            let value = if i == 0 && !c.watch_match { "N" } else { "Y" };
+            self.text(x + 18, 5 + 2 * i, value, fg, bg, 1);
+        }
+        self.text(55, 18, "Up/Down-move  Enter-select", TEXT, GROUND, 24);
+    }
+    /// [confirmed:T49/T102] The quick-result board: scoreboard, commentary and
+    /// the scorer lists with minutes.
+    fn quick_board(&mut self, board: &crate::quick::Board) {
+        self.text(1, 1, "ONE", CYAN, GROUND, 10);
+        self.text(40, 1, board.stage, CYAN, GROUND, 12);
+        let names = [
+            board.club_names[0].to_uppercase(),
+            board.club_names[1].to_uppercase(),
+        ];
+        self.text(
+            1,
+            4,
+            &format!("{:<16}{:>2}", names[0], board.score[0]),
+            TEXT,
+            GROUND,
+            20,
+        );
+        self.text(1, 5, "versus", TEXT, GROUND, 8);
+        self.text(
+            1,
+            6,
+            &format!("{:<16}{:>2}", names[1], board.score[1]),
+            TEXT,
+            GROUND,
+            20,
+        );
+        self.text(1, 8, &board.attendance.to_string(), TEXT, GROUND, 10);
+        self.text(40, 4, "commentary", CYAN, GROUND, 30);
+        for (i, line) in board.lines.iter().rev().take(3).rev().enumerate() {
+            self.text(40, 6 + i, line, TEXT, GROUND, 37);
+        }
+        self.text(2, 12, "Scorers", CYAN, GROUND, 10);
+        self.text(46, 12, "Scorers", CYAN, GROUND, 10);
+        let mut rows = [13usize, 13usize];
+        for scorer in &board.scorers {
+            let side = usize::from(scorer.side).min(1);
+            self.text(
+                if side == 0 { 2 } else { 46 },
+                rows[side],
+                &format!("{:<16}{:>3}", scorer.name, scorer.minute),
+                TEXT,
+                GROUND,
+                20,
+            );
+            rows[side] += 1;
+        }
+        self.text(
+            20,
+            24,
+            if board.stage == "HALF TIME" {
+                "press any key to play the second half"
+            } else {
+                "press a key to record the result"
+            },
+            TEXT,
+            GROUND,
+            50,
+        );
     }
     pub fn draw(&mut self, c: &Controller) {
         match c.screen {
@@ -1077,7 +1163,7 @@ impl Renderer {
                 }
                 self.text(2, 24, "Enter: PLAY GAME / continue match", TEXT, GROUND, 76);
             }
-            Screen::Main | Screen::Quit => {
+            Screen::Main | Screen::Configuration | Screen::Quit => {
                 self.sheet("main");
                 self.team_panel(c);
                 self.text(70, 1, &c.game_name, TEXT, GROUND, 8);
@@ -1191,6 +1277,9 @@ impl Renderer {
                         if i == c.menu { TEXT } else { GROUND },
                         20,
                     );
+                }
+                if c.screen == Screen::Configuration {
+                    self.configuration_panel(c);
                 }
                 if c.screen == Screen::Quit {
                     self.rect(180, 144, 360, 80, 0);

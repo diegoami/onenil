@@ -16,6 +16,8 @@ pub struct Scorer {
 
 #[derive(Clone, Debug, Serialize, PartialEq, Eq)]
 pub struct Board {
+    /// Club ids in the admission's club order (`legacy.goal.clubs`).
+    pub clubs: [u16; 2],
     /// Club names in the admission's club order (`legacy.goal.clubs`).
     pub club_names: [String; 2],
     /// Goals in the same club order.
@@ -260,6 +262,7 @@ impl Match {
         }
         lines.push(format!("---- {stage} ----"));
         Board {
+            clubs: self.clubs,
             club_names: self.club_names.clone(),
             score: self.score(),
             lines,
