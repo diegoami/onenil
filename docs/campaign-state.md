@@ -498,3 +498,11 @@ the watched engine, not a missing route. The witnessed league week is therefore 
 **quick (Watch-off)** engine (T118/T119); the watched league presentation remains an open gate, and
 the desktop refuses it rather than showing the divergent result.
 
+[review #244] `python3 tools/compare_league_actions.py` is the comparison instrument: it aligns the
+original's `score_changes` and dispatcher actions (kickoff, goal, half time, substitution, full time)
+against the native `tick_live_goals`, goal events and substitution records, and prints the first real
+difference after the shared 0-0 opening. `--check` asserts this documented divergence and CI runs it,
+so a change on either side fails the watched-path gate instead of silently changing the record. The
+original substitutes at 57' (2434 for 2427, 2423 for 2435); the native watched stream records no
+substitution action and no scene-player change.
+
