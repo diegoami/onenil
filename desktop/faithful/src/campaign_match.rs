@@ -13,6 +13,9 @@ pub enum Profile {
     Edited,
     /// [T91] The week-1 witnessed Sevilla friendly: the pinned evidence plays.
     Sevilla,
+    /// [T119] The week-54 league machine's Newcastle fixture: the T119
+    /// preparation admission, played by the native quick engine (Watch off).
+    League,
 }
 
 pub const REFUSAL: &str = "Use original team or swap Pearce and Hendry. Reload the original save.";
@@ -40,6 +43,15 @@ pub fn profile(campaign: &Campaign) -> Result<Profile, String> {
             return Ok(Profile::Sevilla);
         }
         return Err("This fixture already has a result.".into());
+    }
+    // [confirmed:archaeology T100/T119] The league machine's pre-advanced
+    // preparation row exists only for the one witnessed week-28 fixture. Other
+    // league states have their own transactions and are not admitted here.
+    if campaign.prepared_fixture.is_some() {
+        if campaign == &Campaign::initial_league()? && campaign.league_played.is_none() {
+            return Ok(Profile::League);
+        }
+        return Err("This league fixture is outside the witnessed week-28 admission.".into());
     }
     let mut initial = Campaign::initial()?;
     if campaign == &initial {
@@ -72,6 +84,28 @@ pub fn metadata() -> Result<Value, String> {
 
 pub fn admission(campaign: &Campaign) -> Result<Input, String> {
     let profile = profile(campaign)?;
+    // [confirmed:archaeology T100/T119] The league preparation is the whole
+    // admitted machine; the campaign must be the pinned pre-week seed, so no
+    // campaign edit is applied to the exact fixture.
+    if profile == Profile::League {
+        if campaign != &Campaign::initial_league()? {
+            return Err("the league campaign differs from the pinned pre-week seed".into());
+        }
+        let source: Value = serde_json::from_str(include_str!(
+            "../../../engine/tests/fixtures/league_preparation/admission.json"
+        ))
+        .map_err(|error| error.to_string())?;
+        let support: Value = serde_json::from_str(include_str!(
+            "../../../engine/tests/fixtures/league_watched/incoming.json"
+        ))
+        .map_err(|error| error.to_string())?;
+        return serde_json::from_value(json!({
+            "preparation": source["input"],
+            "support": support["support"],
+            "no_pending_key": true
+        }))
+        .map_err(|error| error.to_string());
+    }
     let (source_raw, support_raw) = match profile {
         Profile::Original => (
             include_str!("../../../engine/tests/fixtures/fresh_preparation/admission.json"),
@@ -87,6 +121,7 @@ pub fn admission(campaign: &Campaign) -> Result<Input, String> {
         Profile::Sevilla => {
             return Err("the witnessed Sevilla route has no computed preparation".into())
         }
+        Profile::League => unreachable!("the league admission returned above"),
     };
     let source: Value = serde_json::from_str(source_raw).map_err(|e| e.to_string())?;
     let support: Value = serde_json::from_str(support_raw).map_err(|e| e.to_string())?;
