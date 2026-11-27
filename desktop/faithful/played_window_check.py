@@ -18,6 +18,7 @@ p.add_argument('--font', type=Path, required=True)
 p.add_argument('--record', type=Path, required=True)
 args = p.parse_args()
 assert not args.record.exists()
+args.record.parent.mkdir(parents=True, exist_ok=True)
 
 x = C.CDLL('libX11.so.6'); P = C.c_void_p; U = C.c_ulong; I = C.c_int
 for name, restype, argtypes in [('XOpenDisplay', P, [C.c_char_p]),
