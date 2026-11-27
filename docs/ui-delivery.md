@@ -1,4 +1,29 @@
-# UI delivery comparison for owner decision
+# UI delivery comparison
+
+[designed: owner, 2026-11-06; updated 2026-11-27 after the B1–B6 milestone] **Desktop primary;
+browser secondary.** The selected production toolkit is the **software window** (`minifb` +
+`fontdue`, #103). The native Rust engine, campaign and desktop deliver B1–B6; the T48
+Electron/browser spike below is retained as superseded historical comparison, not the delivery.
+
+## Delivered: the native software window (B1–B6)
+
+| Gate | Delivered | Evidence |
+| --- | --- | --- |
+| B1 persisted state, save/load, invalid-load atomicity | T55 #122, T56 #123 | fresh-process campaign records, four corrupted records rejected |
+| B2 club load route (original W001/W002 load) | T114 #226 → `442260f` | `records/T114/startup-r0005.json` (41 steps, 24 images, 4 negative controls), `check_campaign_records.py` |
+| B3 squad/detail/pick/move/cancel and player controls | T56/T58 #125, T113 #217/#223, T114 #226, T115 #227 | T114/T115 records; arbitrary-XI admission is #228, outside this milestone |
+| B4 edited XI feeds preparation and posts once | T115 #227 → `db727dd` | `records/T115/window-r0006.json` (58 steps, 33 images), fresh-process reload |
+| B5 one complete friendly week | PR #175 → `efd7fc5` | settled full time, exactly-once result, cash flow (38,761 / 69,270), transfer news |
+| B6 one league result/table/next fixture | T116 #229, T117 #231, T118 #233, T119 #235, T120 #237 | `records/T119/window-r0007.json`, `records/T120/window-r0003.json`, `tools/replay_quick_match.py --check` |
+
+The product runs the Rust engine and campaign in the native window, loads the original **load**
+route, edits the real squad, plays the computed match, posts the result exactly once and persists
+cash/week/result/table/next fixture across a fresh process. The witnessed league week is the quick
+(Watch-off) path; the native watched league engine currently diverges from the original on that
+fixture (2-1 against 2-0, recorded in `campaign-state.md`), so the desktop refuses it as an open
+gate. Browser delivery remains a separate later track.
+
+## Historical: the T48 spike (superseded)
 
 [designed: owner clarification, 2026-11-06] **Desktop primary; browser secondary.**
 The owner rejected the browser-first recommendation and requested an original-led,

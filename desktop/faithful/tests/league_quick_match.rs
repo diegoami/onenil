@@ -323,3 +323,27 @@ fn the_played_league_opens_the_round_tables_and_results() {
     assert!(fresh.notice);
     assert!(fresh.message.contains("No league results"));
 }
+
+#[test]
+fn the_played_table_fixture_is_the_model_output() {
+    use onenil_desktop::played_league;
+    let mut campaign = Campaign::initial_league().unwrap();
+    let ticket = campaign.match_ticket().unwrap();
+    campaign
+        .record_league_week(
+            &ticket,
+            [0, 2],
+            "0AB9:EBE2",
+            726_972,
+            80_639,
+            0,
+            103,
+            0,
+            "Chelsea",
+        )
+        .unwrap();
+    let played = played_league::played_league(&campaign).unwrap();
+    let fixture: serde_json::Value =
+        serde_json::from_str(include_str!("../fixtures/league-week28-table.json")).unwrap();
+    assert_eq!(serde_json::to_value(played).unwrap(), fixture);
+}

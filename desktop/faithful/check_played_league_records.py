@@ -11,6 +11,8 @@ from capture_lock import capture_lock_digest
 ROOT = Path(__file__).resolve().parents[2]
 PLAYED = ROOT / 'desktop/faithful/fixtures/league-week28-played.json'
 PRE = ROOT / 'desktop/faithful/fixtures/league-week28.json'
+TABLE = ROOT / 'desktop/faithful/fixtures/league-week28-table.json'
+TABLE_SHA = 'aa2ff306d159ba936a655f0b17d1642dc1e2e079eb4d45ac945b14d06cab634e'
 STEPS = ['played-main', 'played-tables', 'division-one', 'main-after-tables',
          'played-results', 'main-after-results', 'unplayed-main', 'unplayed-tables',
          'main-before-notice', 'unplayed-notice']
@@ -28,13 +30,15 @@ def check(path):
     capture_lock_digest(record)
     assert sha(PLAYED.read_bytes()) == record['saves']['played']
     assert sha(PRE.read_bytes()) == record['saves']['pre']
+    assert sha(TABLE.read_bytes()) == TABLE_SHA
+    table = json.loads(TABLE.read_text())
     assert [step['name'] for step in record['steps']] == STEPS
     steps = {step['name']: step['state'] for step in record['steps']}
 
     main = steps['played-main']
     assert main['screen'] == 'Main'
     played = main['league_played']
-    assert played is not None
+    assert played == table, 'the recorded table is not T104\'s full model output'
     rows = played['rows']
     assert len(rows) == 16
     assert [row['position'] for row in rows] == list(range(1, 17))
