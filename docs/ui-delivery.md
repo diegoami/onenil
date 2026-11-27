@@ -19,9 +19,10 @@ Electron/browser spike below is retained as superseded historical comparison, no
 The product runs the Rust engine and campaign in the native window, loads the original **load**
 route, edits the real squad, plays the computed match, posts the result exactly once and persists
 cash/week/result/table/next fixture across a fresh process. The witnessed league week is the quick
-(Watch-off) path; the native watched league engine currently diverges from the original on that
-fixture (2-1 against 2-0, recorded in `campaign-state.md`), so the desktop refuses it as an open
-gate. Browser delivery remains a separate later track.
+(Watch-off) path; the only original league witness (T102/T123) is that quick path, so the native
+watched 2-1 has no watched reference yet (recorded in `campaign-state.md`). The desktop refuses it
+as an open gate until archaeology T124 captures the original watched league match. Browser delivery
+remains a separate later track.
 
 ## Historical: the T48 spike (superseded)
 

@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Compare the native watched league match with the original's T123 record.
+"""Compare the native watched league match with the original's T123 quick record.
+
+T123 is the *quick* (Watch-off) dispatcher stream, not a watched match: the
+unforced T100 run ends 2-0 in 20,734 draws, exactly T102/T117. This tool
+therefore compares two different paths, not two watched engines. T124 captures
+the actual original watched league match for the later watched-vs-watched check.
 
 The original's T123 dispatcher actions and the native watched event stream are
 different vocabularies: the original records seven dispatcher actions (kickoff,
@@ -32,8 +37,8 @@ DEFAULT_ORIGINAL = ROOT / 'engine/tests/fixtures/league_watched/t123-actions.jso
 ACTIONS_SHA256 = '3d1d772f689344ef5c3f99270882c048ab5195ffe3fb1dabdfe178b0e127bda3'
 DISPATCH = {59: 'kickoff', 38: 'goal', 64: 'half time', 0: 'substitution', 63: 'full time'}
 
-# The documented divergence (docs/campaign-state.md, "The watched league
-# engine's divergence"), pinned so a change on either side fails --check.
+# The documented quick-vs-watched difference (docs/campaign-state.md), pinned
+# so a change on either side fails --check. T124 supplies the watched reference.
 EXPECTED_ORIGINAL_DISPATCH = {59: 1, 38: 2, 64: 1, 0: 2, 63: 1}
 EXPECTED_NATIVE_DISPATCH = {59: 0, 38: 3, 64: 1, 0: 0, 63: 1}
 EXPECTED_ORIGINAL_SCORES = [[1, 2], [1, 1], [2, 0]]
@@ -255,7 +260,7 @@ def check(original, native):
     for label, got, want in checks:
         if got != want:
             raise SystemExit(f'{label}: {got} against the documented {want}')
-    print('PASS: the watched league divergence is the documented one: '
+    print('PASS: the quick-vs-watched league difference is the documented one: '
           f'original {EXPECTED_ORIGINAL_FINAL[0]}-{EXPECTED_ORIGINAL_FINAL[1]} '
           f'against native {EXPECTED_NATIVE_FINAL[0]}-{EXPECTED_NATIVE_FINAL[1]}, '
           f'first at score change 0 ({EXPECTED_ORIGINAL_SCORES[0]} at '
