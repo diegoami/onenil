@@ -82,6 +82,22 @@ pub fn metadata() -> Result<Value, String> {
     serde_json::from_slice(raw).map_err(|error| error.to_string())
 }
 
+/// [confirmed:archaeology T117 display-name milestone] The league fixture's
+/// club and display names: save id = 1995 league pool index + 1.
+pub fn league_metadata() -> Result<Value, String> {
+    let raw = include_bytes!("../assets/league-match-names.json");
+    if format!("{:x}", Sha256::digest(raw))
+        != "9584ca69d01b50c29fa4d1e4e48115aab58a585cc61e5129cff4a4ba6b97c221"
+    {
+        return Err("league match name identity differs".into());
+    }
+    let value: Value = serde_json::from_slice(raw).map_err(|error| error.to_string())?;
+    if value["schema"] != "league-match-names/1" {
+        return Err("league match name schema differs".into());
+    }
+    Ok(value)
+}
+
 pub fn admission(campaign: &Campaign) -> Result<Input, String> {
     let profile = profile(campaign)?;
     // [confirmed:archaeology T100/T119] The league preparation is the whole

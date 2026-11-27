@@ -6,6 +6,55 @@ use onenil_desktop::campaign_match::{self, Profile};
 use onenil_engine::quick_match;
 
 #[test]
+fn the_quick_board_shows_the_witnessed_goals_and_substitutions() {
+    let mut campaign = Campaign::initial_league().unwrap();
+    let ticket = campaign.match_ticket().unwrap();
+    let mut quick = onenil_desktop::quick::Match::start(&campaign).unwrap();
+    let half = quick.to_half_time().unwrap();
+    assert_eq!(half.score, [2, 0]);
+    assert_eq!(half.club_names, ["Newcastle Utd", "Blackburn R"]);
+    assert_eq!(half.attendance, 36_986);
+    assert_eq!(
+        half.lines,
+        vec![
+            "**** GOAL **** by R Fox",
+            "**** GOAL **** by S Howey",
+            "---- HALF TIME ----"
+        ]
+    );
+    assert_eq!(
+        half.scorers,
+        vec![
+            onenil_desktop::quick::Scorer {
+                name: "R Fox".into(),
+                minute: 29,
+                side: 0
+            },
+            onenil_desktop::quick::Scorer {
+                name: "S Howey".into(),
+                minute: 33,
+                side: 0
+            },
+        ]
+    );
+    let full = quick.from_half_time().unwrap();
+    assert_eq!(full.score, [2, 0]);
+    assert_eq!(
+        full.lines,
+        vec![
+            "**** GOAL **** by R Fox",
+            "**** GOAL **** by S Howey",
+            "Clark on for Venison",
+            "Watson on for Albert",
+            "---- FULL TIME ----"
+        ]
+    );
+    quick.complete(&mut campaign, &ticket).unwrap();
+    assert_eq!(campaign.cash, 1_691_393);
+    assert_eq!(campaign.league_played.as_ref().unwrap().score, [0, 2]);
+}
+
+#[test]
 fn the_league_campaign_admits_the_preparation_and_the_quick_result_completes_the_week() {
     let mut campaign = Campaign::initial_league().unwrap();
     assert_eq!(campaign_match::profile(&campaign).unwrap(), Profile::League);

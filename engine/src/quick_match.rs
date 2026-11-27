@@ -37,6 +37,31 @@ pub fn session(profile: Profile, input_json: &str) -> Result<setup::Session, Str
 }
 
 #[derive(Serialize)]
+pub struct GoalRecord {
+    pub minute: u16,
+    pub actor: u8,
+    pub side_flag: u8,
+    pub player: u16,
+    pub club: u16,
+}
+
+#[derive(Serialize)]
+pub struct SubstitutionRecord {
+    pub step: usize,
+    pub minute: u16,
+    pub scene: u8,
+    pub off: u16,
+    pub on: u16,
+    pub club: u16,
+}
+
+#[derive(Serialize)]
+pub struct Records {
+    pub goals: Vec<GoalRecord>,
+    pub substitutions: Vec<SubstitutionRecord>,
+}
+
+#[derive(Serialize)]
 pub struct Report {
     pub steps: usize,
     pub setup_draws: usize,
@@ -46,8 +71,29 @@ pub struct Report {
     pub events: Vec<Value>,
     /// One row per accepted step: elapsed minute, score pair and events.
     pub timeline: Vec<Value>,
+    /// [confirmed:T123/T49] The original scorer and substitution player records.
+    pub records: Records,
     pub score: Value,
     pub snapshot: Value,
+}
+
+fn scene_players(session: &setup::Session) -> Result<std::collections::BTreeMap<u8, u16>, String> {
+    let snapshot = session.match_state.snapshot();
+    let mut players = std::collections::BTreeMap::new();
+    for row in snapshot["players"]
+        .as_array()
+        .ok_or("missing scene players")?
+    {
+        let scene = row["scene_slot"].as_u64().ok_or("missing scene slot")? as u8;
+        let player = row["player"].as_u64().ok_or("missing scene player")? as u16;
+        players.insert(scene, player);
+    }
+    Ok(players)
+}
+
+fn player_club(session: &setup::Session, player: u16) -> u16 {
+    let e = &session.match_state.inner.e;
+    u16::from(e.image[crate::layout::P8 + 8 * usize::from(player)])
 }
 
 /// Play the admitted quick match to full time. The halftime board is answered
@@ -61,6 +107,8 @@ pub fn play(session: &mut setup::Session) -> Result<Report, String> {
     let mut goals = vec![];
     let mut events = vec![];
     let mut timeline = vec![];
+    let mut substitutions: Vec<SubstitutionRecord> = vec![];
+    let mut players = scene_players(session)?;
     loop {
         match session.match_state.phase() {
             "full-time" => break,
@@ -75,6 +123,23 @@ pub fn play(session: &mut setup::Session) -> Result<Report, String> {
         steps += 1;
         let draws = out["draws"].as_array().map_or(0, Vec::len);
         step_draws += draws;
+        let elapsed = out["input"]["clock"]["elapsed"].as_u64().unwrap_or(0) as u16;
+        let after = scene_players(session)?;
+        for (scene, on) in &after {
+            if let Some(off) = players.get(scene) {
+                if off != on {
+                    substitutions.push(SubstitutionRecord {
+                        step: steps,
+                        minute: elapsed,
+                        scene: *scene,
+                        off: *off,
+                        on: *on,
+                        club: player_club(session, *on),
+                    });
+                }
+            }
+        }
+        players = after;
         let step_events = out["events"].as_array().cloned().unwrap_or_default();
         for event in &step_events {
             if event["kind"] == "goal" {
@@ -90,6 +155,33 @@ pub fn play(session: &mut setup::Session) -> Result<Report, String> {
         }));
         events.extend(step_events);
     }
+    let snapshot = session.match_state.snapshot();
+    let logs = &snapshot["scorer_logs"];
+    let mut records = Records {
+        goals: vec![],
+        substitutions,
+    };
+    for goal in &goals {
+        let minute = goal["event"]["minute"].as_u64().unwrap_or(0) as u16;
+        let actor = goal["event"]["actor"].as_u64().unwrap_or(0) as u8;
+        let side = goal["event"]["side_flag"].as_u64().unwrap_or(0) as usize;
+        let player = logs[side]
+            .as_array()
+            .and_then(|entries| {
+                entries
+                    .iter()
+                    .find(|entry| entry["minute_byte"].as_u64() == Some(u64::from(minute)))
+            })
+            .and_then(|entry| entry["player"].as_u64())
+            .unwrap_or(0) as u16;
+        records.goals.push(GoalRecord {
+            minute,
+            actor,
+            side_flag: side as u8,
+            player,
+            club: player_club(session, player),
+        });
+    }
     Ok(Report {
         steps,
         setup_draws,
@@ -98,7 +190,8 @@ pub fn play(session: &mut setup::Session) -> Result<Report, String> {
         goals,
         events,
         timeline,
+        records,
         score: session.match_state.result()?,
-        snapshot: session.match_state.snapshot(),
+        snapshot,
     })
 }
