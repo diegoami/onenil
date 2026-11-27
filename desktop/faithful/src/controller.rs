@@ -11,6 +11,7 @@ pub enum Screen {
     Startup,
     Main,
     LeagueTables,
+    LeagueResults,
     SavedGames,
     Players,
     Options,
@@ -584,6 +585,10 @@ impl Controller {
                 Key::Escape => self.screen = Screen::Main,
                 _ => (),
             },
+            Screen::LeagueResults => match key {
+                Key::Escape => self.screen = Screen::Main,
+                _ => (),
+            },
             // [designed] Clamp at list edges; W006 establishes interior movement only.
             Screen::SavedGames => match key {
                 Key::Up => self.load_index = self.load_index.saturating_sub(1),
@@ -631,6 +636,14 @@ impl Controller {
                 Key::Enter if self.menu == 15 => {
                     self.configuration_menu = 0;
                     self.screen = Screen::Configuration;
+                }
+                // [confirmed:T102] The played league shows the round's results
+                // instead of the unplayed empty notice.
+                Key::Enter
+                    if self.menu == 7
+                        && crate::played_league::played_league(&self.editor.campaign).is_some() =>
+                {
+                    self.screen = Screen::LeagueResults;
                 }
                 Key::Enter if self.menu == 7 => {
                     self.notice = true;

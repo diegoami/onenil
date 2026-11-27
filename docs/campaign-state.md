@@ -472,3 +472,18 @@ Public checks: `python3 desktop/faithful/check_quick_week_records.py records/T11
 and `python3 desktop/faithful/quick_window_check.py ...` under a real X11 display. Engine tests:
 `desktop/faithful/tests/league_quick_match.rs`.
 
+## T120 the played league table and results
+
+[confirmed:archaeology T102/T103/T104] After the T119 league week, management item 6 shows the
+played round-28 table in T104's captured order: Newcastle Utd 45, Blackburn R 2nd with P28,
+home 8/3/3, away 9/1/4, 60/35 and 38 points; item 7 shows the round's eight results, including
+Newcastle Utd 2v0 Blackburn R. The rows come from `league_table::LeagueRound` and
+`OrderWeek::captured(28)`; nothing is hardcoded and no other week or points rule is claimed.
+Division One and the unplayed campaign keep T116's zero rows and empty-results notice unchanged.
+
+The committed post-week save (`desktop/faithful/fixtures/league-week28-played.json`) is produced by
+`campaign/examples/league_played_save.rs` through T108's transaction. Public check:
+`python3 desktop/faithful/check_played_league_records.py records/T120/window-r0003.json`; the
+real-X11 harness is `desktop/faithful/played_window_check.py`. Engine tests:
+`desktop/faithful/tests/league_quick_match.rs`.
+

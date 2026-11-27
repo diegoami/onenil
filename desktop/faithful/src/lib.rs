@@ -17,4 +17,5 @@ pub mod worker;
 pub mod egui_window;
 
 pub mod live_worker;
+pub mod played_league;
 pub mod quick;
