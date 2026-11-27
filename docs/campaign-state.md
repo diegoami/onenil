@@ -468,7 +468,7 @@ league pool index +1, committed as `desktop/faithful/assets/league-match-names.j
 league table/results *display* remains T116/T104's unplayed/played screen integration; the table
 row itself is T104's model, already reproduced by T108's week.
 
-Public checks: `python3 desktop/faithful/check_quick_week_records.py records/T119/window-r0006.json`
+Public checks: `python3 desktop/faithful/check_quick_week_records.py records/T119/window-r0007.json`
 and `python3 desktop/faithful/quick_window_check.py ...` under a real X11 display. Engine tests:
 `desktop/faithful/tests/league_quick_match.rs`.
 

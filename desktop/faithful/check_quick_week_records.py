@@ -12,7 +12,8 @@ ROOT = Path(__file__).resolve().parents[2]
 SAVE = ROOT / 'desktop/faithful/fixtures/league-week28.json'
 SAVE_SHA = '8f97f0ad04f6e1943483f0f93b0e63fb28f4c2124d8f315645e6d6060db213e3'
 STEPS = ['league-main', 'configuration', 'watch-off', 'main-after-configuration',
-         'preparation', 'half-time', 'full-time', 'cash-flow', 'transfer-news']
+         'preparation', 'half-time', 'full-time', 'cash-flow', 'transfer-news',
+         'management-after-week']
 
 
 def sha(data):
@@ -73,6 +74,9 @@ def check(path):
     assert played['score'] == [0, 2] and played['prepared']['name'] == 'Newcastle Utd'
     assert steps['transfer-news']['screen'] == 'TransferNews'
     assert steps['transfer-news']['campaign'] == campaign
+    end = steps['management-after-week']
+    assert end['screen'] == 'Main' and end['campaign'] == campaign
+    assert 'Week 54 complete' in end['message'] and 'Chelsea' in end['message']
 
     assert record['screenshots']
     for shot in record['screenshots']:

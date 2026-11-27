@@ -146,6 +146,9 @@ with tempfile.TemporaryDirectory(prefix='onenil-t119-') as directory:
         key('space')
         step('transfer-news', lambda s: s.get('screen') == 'TransferNews')
         shot('transfer-news')
+        key('space')
+        step('management-after-week', lambda s: s.get('screen') == 'Main' and s.get('campaign', {}).get('cash') == 1691393)
+        shot('management-after-week')
         close_window()
         process.wait(timeout=10)
         status = 'passed' if not stderr.read_text() else 'stderr'
