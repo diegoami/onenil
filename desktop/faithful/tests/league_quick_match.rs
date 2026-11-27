@@ -236,3 +236,90 @@ fn the_league_week_uses_the_witnessed_cash_flow_and_returns_to_management() {
     assert!(controller.message.contains("Week 54 complete"));
     assert!(controller.message.contains("Chelsea"));
 }
+
+#[test]
+fn the_played_league_uses_the_captured_round_rows_and_results() {
+    use onenil_desktop::played_league;
+    let pre = Campaign::initial_league().unwrap();
+    assert!(played_league::played_league(&pre).is_none());
+    assert!(played_league::played_league(&Campaign::initial().unwrap()).is_none());
+    let mut campaign = Campaign::initial_league().unwrap();
+    let ticket = campaign.match_ticket().unwrap();
+    campaign
+        .record_league_week(
+            &ticket,
+            [0, 2],
+            "0AB9:EBE2",
+            726_972,
+            80_639,
+            0,
+            103,
+            0,
+            "Chelsea",
+        )
+        .unwrap();
+    let played = played_league::played_league(&campaign).unwrap();
+    assert_eq!(played.rows.len(), 16);
+    assert_eq!(played.rows[0].position, 1);
+    assert_eq!(played.rows[0].club, "Newcastle Utd");
+    assert_eq!(played.rows[0].row.points, 45);
+    let blackburn = &played.rows[1];
+    assert_eq!(blackburn.position, 2);
+    assert_eq!(blackburn.club, "Blackburn R");
+    assert_eq!(blackburn.row.played, 28);
+    assert_eq!(blackburn.row.home, [8, 3, 3]);
+    assert_eq!(blackburn.row.away, [9, 1, 4]);
+    assert_eq!(blackburn.row.goals_for, 60);
+    assert_eq!(blackburn.row.goals_against, 35);
+    assert_eq!(blackburn.row.points, 38);
+    assert_eq!(played.results.len(), 8);
+    assert!(played
+        .results
+        .iter()
+        .any(|score| score.home == "Newcastle Utd"
+            && score.away == "Blackburn R"
+            && score.home_goals == 2
+            && score.away_goals == 0));
+}
+
+#[test]
+fn the_played_league_opens_the_round_tables_and_results() {
+    use onenil_desktop::controller::{Controller, Key, Screen};
+    let mut campaign = Campaign::initial_league().unwrap();
+    let ticket = campaign.match_ticket().unwrap();
+    campaign
+        .record_league_week(
+            &ticket,
+            [0, 2],
+            "0AB9:EBE2",
+            726_972,
+            80_639,
+            0,
+            103,
+            0,
+            "Chelsea",
+        )
+        .unwrap();
+    let mut controller = Controller::default();
+    controller.editor.campaign = campaign;
+    controller.menu = 6;
+    controller.key(Key::Enter);
+    assert_eq!(controller.screen, Screen::LeagueTables);
+    assert_eq!(controller.league_division, 0);
+    controller.key(Key::Down);
+    assert_eq!(controller.league_division, 1);
+    controller.key(Key::Escape);
+    assert_eq!(controller.screen, Screen::Main);
+    controller.key(Key::Down);
+    controller.key(Key::Enter);
+    assert_eq!(controller.screen, Screen::LeagueResults);
+    controller.key(Key::Escape);
+    assert_eq!(controller.screen, Screen::Main);
+    // The unplayed campaign keeps T116's notice.
+    let mut fresh = Controller::default();
+    fresh.menu = 7;
+    fresh.key(Key::Enter);
+    assert_eq!(fresh.screen, Screen::Main);
+    assert!(fresh.notice);
+    assert!(fresh.message.contains("No league results"));
+}

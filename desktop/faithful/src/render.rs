@@ -953,11 +953,92 @@ impl Renderer {
             50,
         );
     }
+    /// [confirmed:T102/T104] The played round-28 table in the captured order.
+    fn played_table(&mut self, played: &crate::played_league::PlayedLeague) {
+        self.rect(0, 0, WIDTH as i32, HEIGHT as i32, 0x000080);
+        self.text(
+            0,
+            1,
+            &format!("{:^80}", "PREMIER LEAGUE"),
+            0xffff55,
+            0x000080,
+            80,
+        );
+        let header = format!(
+            "{:>2} {:<17} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>3} {:>3} {:>3}",
+            "#", "TEAM", "P", "HW", "HD", "HL", "AW", "AD", "AL", "F", "A", "PTS"
+        );
+        self.text(0, 3, &header, CYAN, 0x000080, 80);
+        for (index, row) in played.rows.iter().enumerate() {
+            let data = &row.row;
+            let line = format!(
+                "{:>2} {:<17} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>3} {:>3} {:>3}",
+                row.position,
+                row.club,
+                data.played,
+                data.home[0],
+                data.home[1],
+                data.home[2],
+                data.away[0],
+                data.away[1],
+                data.away[2],
+                data.goals_for,
+                data.goals_against,
+                data.points
+            );
+            self.text(0, 4 + index, &line, TEXT, 0x000080, 80);
+        }
+        self.text(
+            0,
+            21,
+            "Up/Down: division   Escape: management menu",
+            TEXT,
+            0x000080,
+            80,
+        );
+    }
+    /// [confirmed:T102/T103] The played round's eight results.
+    fn played_results(&mut self, c: &Controller) {
+        self.rect(0, 0, WIDTH as i32, HEIGHT as i32, 0x000080);
+        self.text(
+            0,
+            1,
+            &format!("{:^80}", "LEAGUE RESULTS"),
+            0xffff55,
+            0x000080,
+            80,
+        );
+        if let Some(played) = crate::played_league::played_league(&c.editor.campaign) {
+            for (index, score) in played.results.iter().enumerate() {
+                self.text(
+                    8,
+                    4 + 2 * index,
+                    &format!(
+                        "{:<17} {:>1}v{:<1} {:<17}",
+                        score.home, score.home_goals, score.away_goals, score.away
+                    ),
+                    TEXT,
+                    0x000080,
+                    60,
+                );
+            }
+        }
+        self.text(0, 23, "Any key: management menu", TEXT, 0x000080, 80);
+    }
     pub fn draw(&mut self, c: &Controller) {
         match c.screen {
             // [confirmed: W033] The unplayed division table: the captured club
             // order and zero counters. No played row is invented here.
             Screen::LeagueTables => {
+                // [confirmed:T102/T103/T104] The played league shows the
+                // captured round-28 rows; Division One keeps the unplayed T116
+                // zeros.
+                if c.league_division == 0 {
+                    if let Some(played) = crate::played_league::played_league(&c.editor.campaign) {
+                        self.played_table(&played);
+                        return;
+                    }
+                }
                 self.rect(0, 0, WIDTH as i32, HEIGHT as i32, 0x000080);
                 let division = c.league_division.min(self.league.divisions.len() - 1);
                 let name = self.league.divisions[division].name.clone();
@@ -1163,6 +1244,9 @@ impl Renderer {
                     );
                 }
                 self.text(2, 24, "Enter: PLAY GAME / continue match", TEXT, GROUND, 76);
+            }
+            Screen::LeagueResults => {
+                self.played_results(&c);
             }
             Screen::Main | Screen::Configuration | Screen::Quit => {
                 self.sheet("main");
