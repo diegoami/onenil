@@ -487,3 +487,14 @@ The committed post-week save (`desktop/faithful/fixtures/league-week28-played.js
 real-X11 harness is `desktop/faithful/played_window_check.py`. Engine tests:
 `desktop/faithful/tests/league_quick_match.rs`.
 
+## The watched league engine's divergence (review #238/#239)
+
+[confirmed:archaeology T123; native review probe 2026-11-27] The native watched league admission
+(`prepared::Session::new_league` on the T119 fixture) completes 839 events and returns `0AB9:EBE2`,
+with `live_goals` `[1,2]` and `scores` `[2,1]` — Newcastle Utd 2 Blackburn R 1 — against the original
+T102 witness of **2-0** (R Fox 29, S Howey 33). T123 records the same divergence (Blackburn 56',
+Newcastle 79'/83'). The 839-event count matches T123 exactly, so this is a fidelity divergence in
+the watched engine, not a missing route. The witnessed league week is therefore reproduced by the
+**quick (Watch-off)** engine (T118/T119); the watched league presentation remains an open gate, and
+the desktop refuses it rather than showing the divergent result.
+

@@ -112,7 +112,11 @@ jobs:
       - run: python3 tools/check_originals.py
       - run: python3 desktop/faithful/test_capture_lock.py
       - run: python3 desktop/faithful/export_match_names.py --check
+      - run: python3 -m pip install Pillow
       - run: python3 desktop/faithful/check_match_records.py records/T62/window-r0003.json
+      - run: python3 desktop/faithful/check_campaign_records.py records/T114/startup-r0005.json
+      - run: python3 desktop/faithful/check_campaign_records.py records/T115/window-r0006.json
+      - run: python3 desktop/faithful/check_campaign_records.py records/T116/window-r0002.json
       - run: python3 desktop/faithful/check_quick_week_records.py records/T119/window-r0007.json
       - run: python3 desktop/faithful/check_played_league_records.py records/T120/window-r0003.json
       - run: python3 desktop/faithful/check_edited_result_records.py records/T69/window-r0001.json
