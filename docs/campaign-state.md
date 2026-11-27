@@ -449,3 +449,26 @@ Public checks: `python3 tools/replay_quick_match.py --check` prints `PASS`;
 `--replay` prints both results, scorers and substitutions. The Rust tests are
 `engine/tests/quick_match.rs`. The watched caller/session, the week transaction, table/cash
 progression and the desktop flow remain outside this engine.
+
+## T119 the desktop quick-result league week
+
+[confirmed:archaeology T100/T102/T123; native T117/T118] The committed late-season league save
+(`Campaign::initial_league`, `desktop/faithful/fixtures/league-week28.json`) loads through the
+ordinary path. Game configuration (management item15) exposes the original's six switches; only
+Watch match changes, and the league preparation refuses while it is on (the watched league match
+is not presented in this build). With Watch off, the desktop computes the T118 quick match in
+process and stops at the game's own halftime boundary: Newcastle Utd 2 Blackburn R 0, R Fox 29,
+S Howey 33, 36,986. Space resumes to full time; the substitution panel shows Clark on for Venison
+and Watson on for Albert (player records 2434/2427 and 2423/2435). Enter posts the witnessed T108
+week: cash 1,691,393, week 54, the recorded result bound to Newcastle Utd and the following Chelsea
+fixture slot 55.
+
+[confirmed] The display names are the archaeology T117 display-name milestone, save id = 1995
+league pool index +1, committed as `desktop/faithful/assets/league-match-names.json`. The played
+league table/results *display* remains T116/T104's unplayed/played screen integration; the table
+row itself is T104's model, already reproduced by T108's week.
+
+Public checks: `python3 desktop/faithful/check_quick_week_records.py records/T119/window-r0007.json`
+and `python3 desktop/faithful/quick_window_check.py ...` under a real X11 display. Engine tests:
+`desktop/faithful/tests/league_quick_match.rs`.
+

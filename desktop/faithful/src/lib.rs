@@ -17,3 +17,4 @@ pub mod worker;
 pub mod egui_window;
 
 pub mod live_worker;
+pub mod quick;

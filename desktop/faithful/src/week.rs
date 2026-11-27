@@ -8,6 +8,26 @@ pub const WEEK_RECEIPT: &str = include_str!("../assets/week-receipt.json");
 pub const WEEK_RECEIPT_SHA256: &str =
     "821dd0c1fce2dd5024ec332aa3a3ff7c02bfb53cd37978f9b1991aa958536332";
 
+/// [confirmed:archaeology T102] The witnessed week-28 cash flow and transfer
+/// news of the late-season league campaign.
+pub const LEAGUE_RECEIPT: &str = include_str!("../assets/league-week-receipt.json");
+pub const LEAGUE_RECEIPT_SHA256: &str =
+    "f4445d243e67e3bcc1ed693658831bd604bcd5567b9aa29b8edc51d0957b16a3";
+
+/// The late-season league campaign (prepared or played week 28).
+pub fn is_league(campaign: &onenil_campaign::Campaign) -> bool {
+    campaign.prepared_fixture.is_some() || campaign.league_played.is_some()
+}
+
+pub fn league_receipt() -> WeekReceipt {
+    let digest = format!("{:x}", Sha256::digest(LEAGUE_RECEIPT.as_bytes()));
+    assert_eq!(
+        digest, LEAGUE_RECEIPT_SHA256,
+        "league receipt identity differs"
+    );
+    serde_json::from_str(LEAGUE_RECEIPT).expect("the league receipt parses")
+}
+
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct TransferRow {
@@ -89,7 +109,9 @@ impl WeekReceipt {
     /// [confirmed:archaeology 788b833 T93] Choose the completed match's week
     /// receipt. A persisted second result retains its own receipt after advance.
     pub fn for_campaign(campaign: &onenil_campaign::Campaign) -> Self {
-        if campaign.second_fixture.is_some() {
+        if is_league(campaign) {
+            league_receipt()
+        } else if campaign.second_fixture.is_some() {
             let receipt = onenil_campaign::sevilla_week::SevillaWeek::pinned()
                 .expect("the pinned Sevilla week receipt authenticates");
             serde_json::from_value(receipt.presentation).expect("the pinned presentation parses")

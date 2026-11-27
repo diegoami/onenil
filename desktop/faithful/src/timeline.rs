@@ -450,6 +450,11 @@ fn prepare_input(
         Some(crate::campaign_match::Profile::Sevilla) => {
             return Err("the witnessed Sevilla route has no computed preparation".into())
         }
+        Some(crate::campaign_match::Profile::League) => {
+            return Err(
+                "the league fixture plays the quick result, not the watched timeline".into(),
+            )
+        }
         None => onenil_engine::watched_compiled::prepared::Session::new(input)?,
     };
     let initial = session.snapshot()?;

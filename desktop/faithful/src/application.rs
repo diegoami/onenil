@@ -14,6 +14,7 @@ pub struct Application {
     pub save_path: PathBuf,
     pub job: Option<Job>,
     pub live_job: Option<LiveJob>,
+    quick: Option<(u64, crate::quick::Match)>,
     live_id: Option<u64>,
     last_step: Instant,
     save_candidates: Vec<PathBuf>,
@@ -33,6 +34,7 @@ impl Application {
             save_path,
             job: None,
             live_job: None,
+            quick: None,
             live_id: None,
             save_candidates: Vec::new(),
             last_step: Instant::now(),
@@ -202,6 +204,49 @@ impl Application {
     }
     fn update_worker(&mut self, executable: Result<PathBuf, String>) {
         self.sync_jobs();
+        // [confirmed:T49/T102/T118] The league quick match is fast enough to
+        // compute in-process; it stops at the original halftime boundary.
+        if self.controller.quick_requested {
+            let id = self.controller.job_id;
+            let campaign = self.controller.editor.campaign.clone();
+            let outcome = crate::quick::Match::start(&campaign)
+                .and_then(|mut session| session.to_half_time().map(|board| (session, board)));
+            match outcome {
+                Ok((session, board)) => {
+                    self.quick = Some((id, session));
+                    self.controller.accept_quick(id, board);
+                }
+                Err(error) => {
+                    self.controller.accept_quick_error(id, error);
+                }
+            }
+        }
+        if self.controller.quick_resume_requested {
+            let id = self.controller.job_id;
+            let outcome = self
+                .quick
+                .as_mut()
+                .filter(|(quick_id, _)| *quick_id == id)
+                .ok_or_else(|| "missing quick match".to_owned())
+                .and_then(|(_, session)| session.from_half_time());
+            match outcome {
+                Ok(board) => {
+                    self.controller.accept_quick(id, board);
+                }
+                Err(error) => {
+                    self.quick = None;
+                    self.controller.accept_quick_error(id, error);
+                }
+            }
+        }
+        if self.quick.is_some()
+            && !matches!(
+                self.controller.screen,
+                Screen::Preparing | Screen::HalfTime | Screen::FullTime
+            )
+        {
+            self.quick = None;
+        }
         if self.controller.prepare_requested && self.job.is_none() && self.live_job.is_none() {
             let id = self.controller.job_id;
             if self.controller.exhibition {
@@ -323,7 +368,7 @@ impl Application {
     pub fn snapshot(&self) -> serde_json::Value {
         let c = &self.controller;
         let playback = c.match_view();
-        serde_json::json!({"squad_open":c.squad.is_some(),"squad_highlight":c.squad.as_ref().map(|s|s.highlight),"squad_picked":c.squad.as_ref().and_then(|s|s.picked),"interval_roster":c.interval_playback.as_ref().map(|p|p.timeline.snapshot.roster.clone()),"remaining_subs":c.interval_playback.as_ref().map(|p|p.timeline.snapshot.remaining_subs),"history_top":c.history_top,"visible_history":if c.screen == Screen::History {Some(c.visible_history())} else {None},"pitch_markers":playback.map(|p| p.view().players.iter().zip(p.markers()).map(|(player,m)|serde_json::json!({"scene":player.scene,"player":player.player,"selector":m[0],"attribute":m[1],"position":player.position,"label":crate::timeline::numbered_marker(m[0]).to_string()})).collect::<Vec<_>>()),"match_clubs":playback.map(|p|p.club_names),"recent_actions":playback.map(|p|p.events.iter().rev().take(8).rev().map(|e|serde_json::json!({"text":e.text,"native":e.native})).collect::<Vec<_>>()),"instruction":c.instruction,"option_available":(0..8).map(|i|c.option_available(i)).collect::<Vec<_>>(),"save_path":self.save_path,"game_name":c.game_name,"load_entries":c.load_entries,"load_index":c.load_index,"menus":[c.menu,c.preparation_menu,c.option],"speed":c.speed,"close_requested":c.close_requested,"screen":format!("{:?}",c.screen),"league_division":c.league_division,"notice":c.notice,"panel":format!("{:?}",c.editor.panel),"selected":format!("{:?}",c.editor.selected),"card":c.editor.card(),"carried":c.editor.carried_player(),"first":c.editor.campaign.club.first_team,"reserve":c.editor.campaign.club.reserves,"campaign":c.editor.campaign,"exhibition":c.exhibition,"job":c.job_id,"worker_pid":self.job.as_ref().map(|j|j.pid()).or_else(||self.live_job.as_ref().map(|j|j.pid())),"live_worker":self.live_job.is_some(),"match_stage":if c.interval_playback.is_some(){Some("incomplete")}else if c.playback.is_some(){Some("complete")}else{None},"resuming":c.is_resuming(),"loaded_frames":playback.map(|p|p.loaded_frames),"phase":playback.map(|p|format!("{:?}",p.phase)),"frames":playback.map(|p|p.cursor),"events":playback.map(|p|p.events.len()),"clock":playback.map(|p|p.view().clock),"score":playback.map(|p|p.view().score),"players":playback.map(|p|p.view().players.len()),"message":c.message})
+        serde_json::json!({"squad_open":c.squad.is_some(),"squad_highlight":c.squad.as_ref().map(|s|s.highlight),"squad_picked":c.squad.as_ref().and_then(|s|s.picked),"interval_roster":c.interval_playback.as_ref().map(|p|p.timeline.snapshot.roster.clone()),"remaining_subs":c.interval_playback.as_ref().map(|p|p.timeline.snapshot.remaining_subs),"history_top":c.history_top,"visible_history":if c.screen == Screen::History {Some(c.visible_history())} else {None},"pitch_markers":playback.map(|p| p.view().players.iter().zip(p.markers()).map(|(player,m)|serde_json::json!({"scene":player.scene,"player":player.player,"selector":m[0],"attribute":m[1],"position":player.position,"label":crate::timeline::numbered_marker(m[0]).to_string()})).collect::<Vec<_>>()),"match_clubs":playback.map(|p|p.club_names),"recent_actions":playback.map(|p|p.events.iter().rev().take(8).rev().map(|e|serde_json::json!({"text":e.text,"native":e.native})).collect::<Vec<_>>()),"instruction":c.instruction,"option_available":(0..8).map(|i|c.option_available(i)).collect::<Vec<_>>(),"save_path":self.save_path,"game_name":c.game_name,"load_entries":c.load_entries,"load_index":c.load_index,"menus":[c.menu,c.preparation_menu,c.option],"speed":c.speed,"close_requested":c.close_requested,"screen":format!("{:?}",c.screen),"league_division":c.league_division,"notice":c.notice,"panel":format!("{:?}",c.editor.panel),"selected":format!("{:?}",c.editor.selected),"card":c.editor.card(),"carried":c.editor.carried_player(),"first":c.editor.campaign.club.first_team,"reserve":c.editor.campaign.club.reserves,"campaign":c.editor.campaign,"exhibition":c.exhibition,"job":c.job_id,"worker_pid":self.job.as_ref().map(|j|j.pid()).or_else(||self.live_job.as_ref().map(|j|j.pid())),"live_worker":self.live_job.is_some(),"match_stage":if c.interval_playback.is_some(){Some("incomplete")}else if c.playback.is_some(){Some("complete")}else{None},"resuming":c.is_resuming(),"loaded_frames":playback.map(|p|p.loaded_frames),"phase":playback.map(|p|format!("{:?}",p.phase)),"frames":playback.map(|p|p.cursor),"events":playback.map(|p|p.events.len()),"clock":playback.map(|p|p.view().clock),"score":playback.map(|p|p.view().score),"quick":c.quick.as_ref().map(|b|serde_json::json!({"stage":b.stage,"clubs":b.clubs,"score":b.score,"lines":b.lines,"scorers":b.scorers,"attendance":b.attendance})),"watch_match":c.watch_match,"players":playback.map(|p|p.view().players.len()),"message":c.message})
     }
 }
 
