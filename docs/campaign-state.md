@@ -483,7 +483,7 @@ Division One and the unplayed campaign keep T116's zero rows and empty-results n
 
 The committed post-week save (`desktop/faithful/fixtures/league-week28-played.json`) is produced by
 `campaign/examples/league_played_save.rs` through T108's transaction. Public check:
-`python3 desktop/faithful/check_played_league_records.py records/T120/window-r0002.json`; the
+`python3 desktop/faithful/check_played_league_records.py records/T120/window-r0003.json`; the
 real-X11 harness is `desktop/faithful/played_window_check.py`. Engine tests:
 `desktop/faithful/tests/league_quick_match.rs`.
 
